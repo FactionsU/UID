@@ -111,6 +111,7 @@ public class CmdTop extends FCommand {
             });
         } else {
             context.msg(TL.COMMAND_TOP_INVALID, criteria);
+            return;
         }
 
         ArrayList<String> lines = new ArrayList<>();
