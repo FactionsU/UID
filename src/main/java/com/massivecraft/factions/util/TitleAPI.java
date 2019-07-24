@@ -5,6 +5,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,8 +17,17 @@ public class TitleAPI {
 
     private static TitleAPI instance;
     private boolean supportsAPI = false;
+    private boolean bailOut = true;
 
     private Map<String, Class> classCache = new HashMap<>();
+
+    private Method methodChatTitle;
+    private Method methodGetHandle;
+    private Method methodSendPacket;
+    private Constructor<?> titleConstructor;
+    private Field fieldTitle;
+    private Field fieldSubTitle;
+    private Field fieldPlayerConnection;
 
     public TitleAPI() {
         instance = this;
@@ -26,7 +37,18 @@ public class TitleAPI {
             supportsAPI = true;
             P.p.getLogger().info("Found API support for sending player titles :D");
         } catch (NoSuchMethodException e) {
-            P.p.getLogger().info("Didn't find API support for sending titles :( Will attempt reflection. No promises.");
+            try {
+                this.methodChatTitle = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class);
+                this.titleConstructor = getNMSClass("PacketPlayOutTitle").getConstructor(getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], getNMSClass("IChatBaseComponent"), int.class, int.class, int.class);
+                this.fieldTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE");
+                this.fieldSubTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE");
+
+                P.p.getLogger().info("Didn't find API support for sending titles, using reflection instead.");
+            } catch (NoSuchMethodException | NoSuchFieldException ex) {
+                P.p.getLogger().info("Failed to use reflection.");
+                bailOut = false;
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -46,14 +68,17 @@ public class TitleAPI {
             return;
         }
 
+        if (bailOut) {
+            return;
+        }
+
         try {
-            Object chatTitle = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\": \"" + title + "\"}");
-            Object chatsubTitle = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\": \"" + subtitle + "\"}");
+            Object chatTitle = methodChatTitle.invoke(null, "{\"text\": \"" + title + "\"}");
+            Object chatsubTitle = methodChatTitle.invoke(null, "{\"text\": \"" + subtitle + "\"}");
 
 
-            Constructor<?> titleConstructor = getNMSClass("PacketPlayOutTitle").getConstructor(getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], getNMSClass("IChatBaseComponent"), int.class, int.class, int.class);
-            Object titlePacket = titleConstructor.newInstance(getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE").get(null), chatTitle, fadeInTime, showTime, fadeOutTime);
-            Object subTitlePacket = titleConstructor.newInstance(getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE").get(null), chatsubTitle, fadeInTime, showTime, fadeOutTime);
+            Object titlePacket = titleConstructor.newInstance(fieldTitle.get(null), chatTitle, fadeInTime, showTime, fadeOutTime);
+            Object subTitlePacket = titleConstructor.newInstance(fieldSubTitle.get(null), chatsubTitle, fadeInTime, showTime, fadeOutTime);
 
             sendPacket(player, titlePacket);
             sendPacket(player, subTitlePacket);
@@ -64,9 +89,18 @@ public class TitleAPI {
 
     private void sendPacket(Player player, Object packet) {
         try {
-            Object handle = player.getClass().getMethod("getHandle").invoke(player);
-            Object playerConnection = handle.getClass().getField("playerConnection").get(handle);
-            playerConnection.getClass().getMethod("sendPacket", getNMSClass("Packet")).invoke(playerConnection, packet);
+            if (this.methodGetHandle == null) {
+                this.methodGetHandle = player.getClass().getMethod("getHandle");
+            }
+            Object handle = this.methodGetHandle.invoke(player);
+            if (this.fieldPlayerConnection == null) {
+                this.fieldPlayerConnection = handle.getClass().getField("playerConnection");
+            }
+            Object playerConnection = this.fieldPlayerConnection.get(handle);
+            if (this.methodSendPacket == null) {
+                this.methodSendPacket = playerConnection.getClass().getMethod("sendPacket", getNMSClass("Packet"));
+            }
+            this.methodSendPacket.invoke(playerConnection, packet);
         } catch (Exception e) {
             e.printStackTrace();
         }
