@@ -2,7 +2,7 @@ package com.massivecraft.factions.config.transition.oldclass;
 
 import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.struct.Role;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 
 public enum OldRole implements OldPermissable {
     ADMIN(4, TL.ROLE_ADMIN, Role.ADMIN),

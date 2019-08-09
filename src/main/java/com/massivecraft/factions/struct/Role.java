@@ -2,7 +2,7 @@ package com.massivecraft.factions.struct;
 
 import com.massivecraft.factions.P;
 import com.massivecraft.factions.perms.Permissible;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import org.bukkit.ChatColor;
 
 public enum Role implements Permissible {

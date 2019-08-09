@@ -1,4 +1,4 @@
-package com.massivecraft.factions.zcore.util;
+package com.massivecraft.factions.util;
 
 import com.massivecraft.factions.P;
 import org.bukkit.scheduler.BukkitRunnable;

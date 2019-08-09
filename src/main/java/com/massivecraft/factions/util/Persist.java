@@ -1,6 +1,6 @@
-package com.massivecraft.factions.zcore.util;
+package com.massivecraft.factions.util;
 
-import com.massivecraft.factions.zcore.MPlugin;
+import com.massivecraft.factions.P;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -10,9 +10,9 @@ import java.util.logging.Level;
 
 public class Persist {
 
-    private MPlugin p;
+    private P p;
 
-    public Persist(MPlugin p) {
+    public Persist(P p) {
         this.p = p;
     }
 

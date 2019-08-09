@@ -2,7 +2,7 @@ package com.massivecraft.factions.cmd.money;
 
 import com.massivecraft.factions.P;
 import com.massivecraft.factions.cmd.CommandContext;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 
 public class CmdMoney extends MoneyCommand {
 

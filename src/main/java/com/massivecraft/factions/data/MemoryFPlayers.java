@@ -1,4 +1,4 @@
-package com.massivecraft.factions.zcore.persist;
+package com.massivecraft.factions.data;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;

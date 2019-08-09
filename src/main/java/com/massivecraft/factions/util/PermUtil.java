@@ -1,6 +1,6 @@
-package com.massivecraft.factions.zcore.util;
+package com.massivecraft.factions.util;
 
-import com.massivecraft.factions.zcore.MPlugin;
+import com.massivecraft.factions.P;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -13,9 +13,9 @@ public class PermUtil {
 
     public Map<String, String> permissionDescriptions = new HashMap<>();
 
-    protected MPlugin p;
+    protected P p;
 
-    public PermUtil(MPlugin p) {
+    public PermUtil(P p) {
         this.p = p;
         this.setup();
     }

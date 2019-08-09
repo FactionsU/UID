@@ -7,7 +7,7 @@ import com.massivecraft.factions.P;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.util.WarmUpUtil;
 import com.massivecraft.factions.util.material.FactionMaterial;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.conversations.*;

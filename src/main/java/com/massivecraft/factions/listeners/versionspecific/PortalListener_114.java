@@ -2,7 +2,7 @@ package com.massivecraft.factions.listeners.versionspecific;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.struct.Relation;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

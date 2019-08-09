@@ -1,4 +1,4 @@
-package com.massivecraft.factions.zcore.util;
+package com.massivecraft.factions.util;
 
 import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONArray;

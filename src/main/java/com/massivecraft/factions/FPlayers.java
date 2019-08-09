@@ -1,6 +1,6 @@
 package com.massivecraft.factions;
 
-import com.massivecraft.factions.zcore.persist.json.JSONFPlayers;
+import com.massivecraft.factions.data.json.JSONFPlayers;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 

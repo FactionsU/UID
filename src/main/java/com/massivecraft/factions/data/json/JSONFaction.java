@@ -1,6 +1,6 @@
-package com.massivecraft.factions.zcore.persist.json;
+package com.massivecraft.factions.data.json;
 
-import com.massivecraft.factions.zcore.persist.MemoryFaction;
+import com.massivecraft.factions.data.MemoryFaction;
 
 public class JSONFaction extends MemoryFaction {
 

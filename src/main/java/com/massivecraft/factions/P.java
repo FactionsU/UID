@@ -2,12 +2,14 @@ package com.massivecraft.factions;
 
 import com.earth2me.essentials.IEssentials;
 import com.google.common.base.Charsets;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.cmd.CmdAutoHelp;
 import com.massivecraft.factions.cmd.FCmdRoot;
 import com.massivecraft.factions.config.ConfigManager;
 import com.massivecraft.factions.config.file.MainConfig;
+import com.massivecraft.factions.data.SaveTask;
 import com.massivecraft.factions.event.FactionCreateEvent;
 import com.massivecraft.factions.event.FactionEvent;
 import com.massivecraft.factions.event.FactionRelationEvent;
@@ -29,11 +31,11 @@ import com.massivecraft.factions.util.material.adapter.MaterialAdapter;
 import com.massivecraft.factions.util.particle.BukkitParticleProvider;
 import com.massivecraft.factions.util.particle.PacketParticleProvider;
 import com.massivecraft.factions.util.particle.ParticleProvider;
-import com.massivecraft.factions.zcore.MPlugin;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -41,8 +43,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -55,7 +58,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class P extends MPlugin {
+public class P extends JavaPlugin {
 
     // Our single plugin instance.
     // Single 4 life.
@@ -69,17 +72,28 @@ public class P extends MPlugin {
 
     private ConfigManager configManager = new ConfigManager(this);
 
+    private Integer saveTask = null;
+    private boolean autoSave = true;
+    protected boolean loadSuccessful = false;
+
+    // Some utils
+    public Persist persist;
+    public TextUtil txt;
+    public PermUtil perm;
+
+    // Persist related
+    public final Gson gson = this.getGsonBuilder().create();
+
+    public String refCommand = "";
+
+    // holds f stuck start times
+    private Map<UUID, Long> timers = new HashMap<>();
+
+    //holds f stuck taskids
+    public Map<UUID, Integer> stuckMap = new HashMap<>();
+
     // Persistence related
     private boolean locked = false;
-
-    public boolean getLocked() {
-        return this.locked;
-    }
-
-    public void setLocked(boolean val) {
-        this.locked = val;
-        this.setAutoSave(val);
-    }
 
     private Integer AutoLeaveTask = null;
 
@@ -105,6 +119,11 @@ public class P extends MPlugin {
 
     @Override
     public void onEnable() {
+        getLogger().info("=== Starting up! ===");
+        long timeEnableStart = System.currentTimeMillis();
+
+        // Ensure basefolder exists!
+        this.getDataFolder().mkdirs();
         try {
             List<String> allLines = Files.readAllLines(this.getDataFolder().toPath().resolve("config.yml"), Charsets.UTF_8);
             if (allLines.size() > 3 && allLines.get(2).contains("ive support") && allLines.get(2).contains("esper")) {
@@ -142,9 +161,33 @@ public class P extends MPlugin {
 
         // Load Material database
         MaterialDb.load();
-        if (!preEnable()) {
-            return;
+
+        // Create Utility Instances
+        this.perm = new PermUtil(this);
+        this.persist = new Persist(this);
+
+        this.txt = new TextUtil();
+        initTXT();
+
+        // attempt to get first command defined in plugin.yml as reference command, if any commands are defined in there
+        // reference command will be used to prevent "unknown command" console messages
+        try {
+            Map<String, Map<String, Object>> refCmd = this.getDescription().getCommands();
+            if (refCmd != null && !refCmd.isEmpty()) {
+                this.refCommand = (String) (refCmd.keySet().toArray()[0]);
+            }
+        } catch (ClassCastException ex) {
         }
+
+        // Register recurring tasks
+        if (saveTask == null && ((P) this).conf().factions().getSaveToFileEveryXMinutes() > 0.0) {
+            long saveTicks = (long) (20 * 60 * ((P) this).conf().factions().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
+            saveTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new SaveTask(this), saveTicks, saveTicks);
+        }
+
+        loadLang();
+
+        loadSuccessful = true;
         this.loadSuccessful = false;
         saveDefaultConfig();
 
@@ -250,7 +293,7 @@ public class P extends MPlugin {
         // Grand metrics adventure!
         this.setupMetrics();
 
-        postEnable();
+        getLogger().info("=== Ready to go after " + (System.currentTimeMillis() - timeEnableStart) + "ms! ===");
         this.loadSuccessful = true;
     }
 
@@ -457,6 +500,153 @@ public class P extends MPlugin {
         }
     }
 
+    public void loadLang() {
+        File lang = new File(getDataFolder(), "lang.yml");
+        OutputStream out = null;
+        InputStream defLangStream = this.getResource("lang.yml");
+        if (!lang.exists()) {
+            try {
+                getDataFolder().mkdir();
+                lang.createNewFile();
+                if (defLangStream != null) {
+                    out = new FileOutputStream(lang);
+                    int read;
+                    byte[] bytes = new byte[1024];
+
+                    while ((read = defLangStream.read(bytes)) != -1) {
+                        out.write(bytes, 0, read);
+                    }
+                    YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new BufferedReader(new InputStreamReader(defLangStream)));
+                    TL.setFile(defConfig);
+                }
+            } catch (IOException e) {
+                e.printStackTrace(); // So they notice
+                getLogger().severe("[Factions] Couldn't create language file.");
+                getLogger().severe("[Factions] This is a fatal error. Now disabling");
+                this.setEnabled(false); // Without it loaded, we can't send them messages
+            } finally {
+                if (defLangStream != null) {
+                    try {
+                        defLangStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+
+        YamlConfiguration conf = YamlConfiguration.loadConfiguration(lang);
+        for (TL item : TL.values()) {
+            if (conf.getString(item.getPath()) == null) {
+                conf.set(item.getPath(), item.getDefault());
+            }
+        }
+
+        // Remove this here because I'm sick of dealing with bug reports due to bad decisions on my part.
+        if (conf.getString(TL.COMMAND_SHOW_POWER.getPath(), "").contains("%5$s")) {
+            conf.set(TL.COMMAND_SHOW_POWER.getPath(), TL.COMMAND_SHOW_POWER.getDefault());
+            log(Level.INFO, "Removed errant format specifier from f show power.");
+        }
+
+        TL.setFile(conf);
+        try {
+            conf.save(lang);
+        } catch (IOException e) {
+            getLogger().log(Level.WARNING, "Factions: Failed to save lang.yml.");
+            getLogger().log(Level.WARNING, "Factions: Report this stack trace to drtshock.");
+            e.printStackTrace();
+        }
+    }
+
+    // -------------------------------------------- //
+    // LANG AND TAGS
+    // -------------------------------------------- //
+
+    // These are not supposed to be used directly.
+    // They are loaded and used through the TextUtil instance for the plugin.
+    public Map<String, String> rawTags = new LinkedHashMap<>();
+
+    public void addRawTags() {
+        this.rawTags.put("l", "<green>"); // logo
+        this.rawTags.put("a", "<gold>"); // art
+        this.rawTags.put("n", "<silver>"); // notice
+        this.rawTags.put("i", "<yellow>"); // info
+        this.rawTags.put("g", "<lime>"); // good
+        this.rawTags.put("b", "<rose>"); // bad
+        this.rawTags.put("h", "<pink>"); // highligh
+        this.rawTags.put("c", "<aqua>"); // command
+        this.rawTags.put("p", "<teal>"); // parameter
+    }
+
+    public void initTXT() {
+        this.addRawTags();
+
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
+
+        Map<String, String> tagsFromFile = this.persist.load(type, "tags");
+        if (tagsFromFile != null) {
+            this.rawTags.putAll(tagsFromFile);
+        }
+        this.persist.save(this.rawTags, "tags");
+
+        for (Map.Entry<String, String> rawTag : this.rawTags.entrySet()) {
+            this.txt.tags.put(rawTag.getKey(), TextUtil.parseColor(rawTag.getValue()));
+        }
+    }
+
+    public Map<UUID, Integer> getStuckMap() {
+        return this.stuckMap;
+    }
+
+    public Map<UUID, Long> getTimers() {
+        return this.timers;
+    }
+
+    // -------------------------------------------- //
+    // LOGGING
+    // -------------------------------------------- //
+    public void log(Object msg) {
+        log(Level.INFO, msg);
+    }
+
+    public void log(String str, Object... args) {
+        log(Level.INFO, this.txt.parse(str, args));
+    }
+
+    public void log(Level level, String str, Object... args) {
+        log(level, this.txt.parse(str, args));
+    }
+
+    public void log(Level level, Object msg) {
+        Bukkit.getLogger().log(level, "[" + this.getDescription().getFullName() + "] " + msg);
+    }
+
+    public boolean getLocked() {
+        return this.locked;
+    }
+
+    public void setLocked(boolean val) {
+        this.locked = val;
+        this.setAutoSave(val);
+    }
+
+    public boolean getAutoSave() {
+        return this.autoSave;
+    }
+
+    public void setAutoSave(boolean val) {
+        this.autoSave = val;
+    }
+
     public ConfigManager getConfigManager() {
         return this.configManager;
     }
@@ -514,7 +704,6 @@ public class P extends MPlugin {
         return plugin != null && plugin.isEnabled();
     }
 
-    @Override
     public GsonBuilder getGsonBuilder() {
         Type mapFLocToStringSetType = new TypeToken<Map<FLocation, Set<String>>>() {
         }.getType();
@@ -543,16 +732,22 @@ public class P extends MPlugin {
 
     @Override
     public void onDisable() {
-        // only save data if plugin actually completely loaded successfully
-        if (this.loadSuccessful) {
-            // TODO save data
-        }
         if (AutoLeaveTask != null) {
             this.getServer().getScheduler().cancelTask(AutoLeaveTask);
             AutoLeaveTask = null;
         }
 
-        super.onDisable();
+        if (saveTask != null) {
+            this.getServer().getScheduler().cancelTask(saveTask);
+            saveTask = null;
+        }
+        // only save data if plugin actually loaded successfully
+        if (loadSuccessful) {
+            Factions.getInstance().forceSave();
+            FPlayers.getInstance().forceSave();
+            Board.getInstance().forceSave();
+        }
+        log("Disabled");
     }
 
     public void startAutoLeaveTask(boolean restartIfRunning) {
@@ -569,12 +764,6 @@ public class P extends MPlugin {
         }
     }
 
-    @Override
-    public void postAutoSave() {
-        //Board.getInstance().forceSave(); Not sure why this was there as it's called after the board is already saved.
-    }
-
-    @Override
     public boolean logPlayerCommands() {
         return this.conf().logging().isPlayerCommands();
     }
@@ -585,6 +774,7 @@ public class P extends MPlugin {
 
     // This value will be updated whenever new hooks are added
     public int hookSupportVersion() {
+        // Updated from 4 to 5 for version 0.5.0
         return 4;
     }
 

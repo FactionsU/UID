@@ -5,8 +5,8 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.P;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.struct.Role;
-import com.massivecraft.factions.zcore.util.TL;
-import com.massivecraft.factions.zcore.util.TextUtil;
+import com.massivecraft.factions.util.TL;
+import com.massivecraft.factions.util.TextUtil;
 
 public class CmdDescription extends FCommand {
 

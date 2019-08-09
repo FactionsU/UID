@@ -10,7 +10,7 @@ import com.massivecraft.factions.tag.FactionTag;
 import com.massivecraft.factions.tag.FancyTag;
 import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.MiscUtil;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

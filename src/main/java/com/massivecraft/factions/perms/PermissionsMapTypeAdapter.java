@@ -4,7 +4,7 @@ import com.google.gson.*;
 import com.massivecraft.factions.P;
 import com.massivecraft.factions.struct.Relation;
 import com.massivecraft.factions.struct.Role;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
