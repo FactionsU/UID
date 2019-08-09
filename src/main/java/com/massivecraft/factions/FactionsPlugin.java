@@ -78,40 +78,40 @@ public class FactionsPlugin extends JavaPlugin {
 
     private Integer saveTask = null;
     private boolean autoSave = true;
-    protected boolean loadSuccessful = false;
+    private boolean loadSuccessful = false;
 
     // Some utils
     private Persist persist;
-    public TextUtil txt;
+    private TextUtil txt;
+
+    public TextUtil txt() {
+        return txt;
+    }
 
     private PermUtil permUtil;
 
     // Persist related
-    public final Gson gson = this.getGsonBuilder().create();
+    private final Gson gson = this.getGsonBuilder().create();
 
     // holds f stuck start times
     private Map<UUID, Long> timers = new HashMap<>();
 
     //holds f stuck taskids
-    public Map<UUID, Integer> stuckMap = new HashMap<>();
+    private Map<UUID, Integer> stuckMap = new HashMap<>();
 
     // Persistence related
     private boolean locked = false;
 
     private Integer AutoLeaveTask = null;
 
-    // Commands
-    public FCmdRoot cmdBase;
-    public CmdAutoHelp cmdAutoHelp;
-
     private boolean hookedPlayervaults;
     private ClipPlaceholderAPIManager clipPlaceholderAPIManager;
     private boolean mvdwPlaceholderAPIManager = false;
     private boolean anotherPluginChat;
 
-    public SeeChunkUtil seeChunkUtil;
-    public ParticleProvider particleProvider;
-    public IWorldguard worldguard;
+    private SeeChunkUtil seeChunkUtil;
+    private ParticleProvider particleProvider;
+    private IWorldguard worldguard;
     private Set<EntityType> safeZoneNerfedCreatureTypes = EnumSet.noneOf(EntityType.class);
 
     private Metrics metrics;
@@ -229,9 +229,7 @@ public class FactionsPlugin extends JavaPlugin {
         Board.getInstance().clean();
 
         // Add Base Commands
-        this.cmdBase = new FCmdRoot();
-        this.cmdAutoHelp = new CmdAutoHelp();
-        //this.getBaseCommands().add(cmdBase);
+        FCmdRoot cmdBase = new FCmdRoot();
 
         Econ.setup();
         LWC.setup();
@@ -574,15 +572,27 @@ public class FactionsPlugin extends JavaPlugin {
         return permUtil;
     }
 
+    public Gson getGson() {
+        return gson;
+    }
+
+    public SeeChunkUtil getSeeChunkUtil() {
+        return seeChunkUtil;
+    }
+
+    public ParticleProvider getParticleProvider() {
+        return particleProvider;
+    }
+
     // -------------------------------------------- //
     // LANG AND TAGS
     // -------------------------------------------- //
 
     // These are not supposed to be used directly.
     // They are loaded and used through the TextUtil instance for the plugin.
-    public Map<String, String> rawTags = new LinkedHashMap<>();
+    private Map<String, String> rawTags = new LinkedHashMap<>();
 
-    public void addRawTags() {
+    private void addRawTags() {
         this.rawTags.put("l", "<green>"); // logo
         this.rawTags.put("a", "<gold>"); // art
         this.rawTags.put("n", "<silver>"); // notice
@@ -594,7 +604,7 @@ public class FactionsPlugin extends JavaPlugin {
         this.rawTags.put("p", "<teal>"); // parameter
     }
 
-    public void initTXT() {
+    private void initTXT() {
         this.addRawTags();
 
         Type type = new TypeToken<Map<String, String>>() {
@@ -712,7 +722,7 @@ public class FactionsPlugin extends JavaPlugin {
         return plugin != null && plugin.isEnabled();
     }
 
-    public GsonBuilder getGsonBuilder() {
+    private GsonBuilder getGsonBuilder() {
         Type mapFLocToStringSetType = new TypeToken<Map<FLocation, Set<String>>>() {
         }.getType();
 

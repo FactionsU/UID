@@ -71,7 +71,7 @@ public class Transitioner {
             }.getType());
             Map<String, NewMemoryFaction> newData = new HashMap<>();
             data.forEach((id, fac) -> newData.put(id, new NewMemoryFaction(fac)));
-            Files.write(dataFolder.resolve("factions.json"), this.plugin.gson.toJson(newData).getBytes(StandardCharsets.UTF_8));
+            Files.write(dataFolder.resolve("factions.json"), this.plugin.getGson().toJson(newData).getBytes(StandardCharsets.UTF_8));
 
             Files.move(oldFactions, oldConfigFolder.resolve("factions.json"));
             Files.move(oldConf, oldConfigFolder.resolve("conf.json"));

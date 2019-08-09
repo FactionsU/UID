@@ -41,7 +41,7 @@ public class CmdMoneyWithdraw extends MoneyCommand {
         boolean success = Econ.transferMoney(context.fPlayer, faction, context.fPlayer, amount);
 
         if (success && FactionsPlugin.getInstance().conf().logging().isMoneyTransactions()) {
-            FactionsPlugin.getInstance().log(ChatColor.stripColor(FactionsPlugin.getInstance().txt.parse(TL.COMMAND_MONEYWITHDRAW_WITHDRAW.toString(), context.fPlayer.getName(), Econ.moneyString(amount), faction.describeTo(null))));
+            FactionsPlugin.getInstance().log(ChatColor.stripColor(FactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYWITHDRAW_WITHDRAW.toString(), context.fPlayer.getName(), Econ.moneyString(amount), faction.describeTo(null))));
         }
     }
 

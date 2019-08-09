@@ -18,7 +18,7 @@ public enum FancyTag implements Tag {
     TRUCES_LIST("{truces-list}", (target, fme, prefix, gm) -> processRelation(prefix, target, fme, Relation.TRUCE)),
     ONLINE_LIST("{online-list}", (target, fme, prefix, gm) -> {
         List<FancyMessage> fancyMessages = new ArrayList<>();
-        FancyMessage currentOnline = FactionsPlugin.getInstance().txt.parseFancy(prefix);
+        FancyMessage currentOnline = FactionsPlugin.getInstance().txt().parseFancy(prefix);
         boolean firstOnline = true;
         for (FPlayer p : MiscUtil.rankOrder(target.getFPlayersWhereOnline(true, fme))) {
             if (fme.getPlayer() != null && !fme.getPlayer().canSee(p.getPlayer())) {
@@ -38,7 +38,7 @@ public enum FancyTag implements Tag {
     }),
     OFFLINE_LIST("{offline-list}", (target, fme, prefix, gm) -> {
         List<FancyMessage> fancyMessages = new ArrayList<>();
-        FancyMessage currentOffline = FactionsPlugin.getInstance().txt.parseFancy(prefix);
+        FancyMessage currentOffline = FactionsPlugin.getInstance().txt().parseFancy(prefix);
         boolean firstOffline = true;
         for (FPlayer p : MiscUtil.rankOrder(target.getFPlayers())) {
             String name = p.getNameAndTitle();
@@ -63,7 +63,7 @@ public enum FancyTag implements Tag {
 
     private static List<FancyMessage> processRelation(String prefix, Faction faction, FPlayer fPlayer, Relation relation) {
         List<FancyMessage> fancyMessages = new ArrayList<>();
-        FancyMessage message = FactionsPlugin.getInstance().txt.parseFancy(prefix);
+        FancyMessage message = FactionsPlugin.getInstance().txt().parseFancy(prefix);
         boolean first = true;
         for (Faction otherFaction : Factions.getInstance().getAllFactions()) {
             if (otherFaction == faction) {

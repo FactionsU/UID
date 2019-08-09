@@ -47,11 +47,11 @@ public class CommandContext {
     // -------------------------------------------- //
 
     public void msg(String str, Object... args) {
-        sender.sendMessage(FactionsPlugin.getInstance().txt.parse(str, args));
+        sender.sendMessage(FactionsPlugin.getInstance().txt().parse(str, args));
     }
 
     public void msg(TL translation, Object... args) {
-        sender.sendMessage(FactionsPlugin.getInstance().txt.parse(translation.toString(), args));
+        sender.sendMessage(FactionsPlugin.getInstance().txt().parse(translation.toString(), args));
     }
 
     public void sendMessage(String msg) {
@@ -359,7 +359,7 @@ public class CommandContext {
     */
     public boolean canIAdministerYou(FPlayer i, FPlayer you) {
         if (!i.getFaction().equals(you.getFaction())) {
-            i.sendMessage(FactionsPlugin.getInstance().txt.parse("%s <b>is not in the same faction as you.", you.describeTo(i, true)));
+            i.sendMessage(FactionsPlugin.getInstance().txt().parse("%s <b>is not in the same faction as you.", you.describeTo(i, true)));
             return false;
         }
 
@@ -368,15 +368,15 @@ public class CommandContext {
         }
 
         if (you.getRole().equals(Role.ADMIN)) {
-            i.sendMessage(FactionsPlugin.getInstance().txt.parse("<b>Only the faction admin can do that."));
+            i.sendMessage(FactionsPlugin.getInstance().txt().parse("<b>Only the faction admin can do that."));
         } else if (i.getRole().equals(Role.MODERATOR)) {
             if (i == you) {
                 return true; //Moderators can control themselves
             } else {
-                i.sendMessage(FactionsPlugin.getInstance().txt.parse("<b>Moderators can't control each other..."));
+                i.sendMessage(FactionsPlugin.getInstance().txt().parse("<b>Moderators can't control each other..."));
             }
         } else {
-            i.sendMessage(FactionsPlugin.getInstance().txt.parse("<b>You must be a faction moderator to do that."));
+            i.sendMessage(FactionsPlugin.getInstance().txt().parse("<b>You must be a faction moderator to do that."));
         }
 
         return false;
