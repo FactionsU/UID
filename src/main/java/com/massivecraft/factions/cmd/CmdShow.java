@@ -110,7 +110,7 @@ public class CmdShow extends FCommand {
             }
         }
         if (context.fPlayer != null && this.groupPresent()) {
-            new GroupGetter(messageList, context.fPlayer, faction).runTaskAsynchronously(FactionsPlugin.p);
+            new GroupGetter(messageList, context.fPlayer, faction).runTaskAsynchronously(FactionsPlugin.getInstance());
         } else {
             this.sendMessages(messageList, context.sender, faction, context.fPlayer);
         }
@@ -210,7 +210,7 @@ public class CmdShow extends FCommand {
             for (OfflinePlayer player : this.players) {
                 map.put(player.getUniqueId(), FactionsPlugin.getInstance().getPrimaryGroup(player));
             }
-            new Sender(this.messageList, this.sender, this.faction, map).runTask(FactionsPlugin.p);
+            new Sender(this.messageList, this.sender, this.faction, map).runTask(FactionsPlugin.getInstance());
         }
     }
 

@@ -72,7 +72,7 @@ public class FactionsPlayerListener extends AbstractListener {
                     me.getFaction().sendUnreadAnnouncements(me);
                 }
             }
-        }.runTaskLater(FactionsPlugin.p, 33L); // Don't ask me why.
+        }.runTaskLater(FactionsPlugin.getInstance(), 33L); // Don't ask me why.
 
         if (FactionsPlugin.getInstance().getConfig().getBoolean("scoreboard.default-enabled", false)) {
             FScoreboard.init(me);
