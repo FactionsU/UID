@@ -2,7 +2,7 @@ package com.massivecraft.factions.scoreboards;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.tag.Tag;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;

@@ -1,4 +1,4 @@
-package com.massivecraft.factions.zcore.persist;
+package com.massivecraft.factions.data;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.config.file.DefaultPermissionsConfig;
@@ -15,7 +15,7 @@ import com.massivecraft.factions.struct.Role;
 import com.massivecraft.factions.util.LazyLocation;
 import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.RelationUtil;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

@@ -2,7 +2,7 @@ package com.massivecraft.factions.config.transition.oldclass;
 
 import com.google.gson.*;
 import com.massivecraft.factions.P;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

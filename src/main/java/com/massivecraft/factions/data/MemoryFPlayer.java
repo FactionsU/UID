@@ -1,4 +1,4 @@
-package com.massivecraft.factions.zcore.persist;
+package com.massivecraft.factions.data;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
@@ -18,7 +18,7 @@ import com.massivecraft.factions.struct.Role;
 import com.massivecraft.factions.util.RelationUtil;
 import com.massivecraft.factions.util.TitleAPI;
 import com.massivecraft.factions.util.WarmUpUtil;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;

@@ -12,7 +12,7 @@ import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.struct.Role;
 import com.massivecraft.factions.util.SpiralTask;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
 
 public class CmdUnclaim extends FCommand {

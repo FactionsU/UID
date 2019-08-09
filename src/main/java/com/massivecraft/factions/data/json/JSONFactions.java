@@ -1,4 +1,4 @@
-package com.massivecraft.factions.zcore.persist.json;
+package com.massivecraft.factions.data.json;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -7,10 +7,10 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.P;
-import com.massivecraft.factions.zcore.persist.MemoryFaction;
-import com.massivecraft.factions.zcore.persist.MemoryFactions;
-import com.massivecraft.factions.zcore.util.DiscUtil;
-import com.massivecraft.factions.zcore.util.UUIDFetcher;
+import com.massivecraft.factions.data.MemoryFaction;
+import com.massivecraft.factions.data.MemoryFactions;
+import com.massivecraft.factions.util.DiscUtil;
+import com.massivecraft.factions.util.UUIDFetcher;
 import org.bukkit.Bukkit;
 
 import java.io.File;

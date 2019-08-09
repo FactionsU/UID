@@ -9,7 +9,7 @@ import com.massivecraft.factions.cmd.relations.CmdRelationNeutral;
 import com.massivecraft.factions.cmd.relations.CmdRelationTruce;
 import com.massivecraft.factions.cmd.role.CmdDemote;
 import com.massivecraft.factions.cmd.role.CmdPromote;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import me.lucko.commodore.CommodoreProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

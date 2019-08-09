@@ -2,7 +2,7 @@ package com.massivecraft.factions.gui;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.tag.Tag;
-import com.massivecraft.factions.zcore.util.TextUtil;
+import com.massivecraft.factions.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;

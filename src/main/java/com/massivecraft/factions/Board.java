@@ -1,6 +1,6 @@
 package com.massivecraft.factions;
 
-import com.massivecraft.factions.zcore.persist.json.JSONBoard;
+import com.massivecraft.factions.data.json.JSONBoard;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.World;
 

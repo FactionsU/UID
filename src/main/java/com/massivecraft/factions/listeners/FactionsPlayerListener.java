@@ -12,9 +12,10 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.struct.Relation;
 import com.massivecraft.factions.struct.Role;
 import com.massivecraft.factions.util.VisualizeUtil;
-import com.massivecraft.factions.zcore.persist.MemoryFPlayer;
-import com.massivecraft.factions.zcore.util.TL;
-import com.massivecraft.factions.zcore.util.TextUtil;
+import com.massivecraft.factions.data.MemoryFPlayer;
+import com.massivecraft.factions.util.TL;
+import com.massivecraft.factions.util.TextUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -654,5 +655,20 @@ public class FactionsPlayerListener extends AbstractListener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFactionLeave(FPlayerLeaveEvent event) {
         FTeamWrapper.applyUpdatesLater(event.getFaction());
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        if (FactionsPlayerListener.preventCommand(event.getMessage(), event.getPlayer())) {
+            if (p.logPlayerCommands()) {
+                p.getLogger().info("[PLAYER_COMMAND] " + event.getPlayer().getName() + ": " + event.getMessage());
+            }
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerPreLogin(PlayerLoginEvent event) {
+        FPlayers.getInstance().getByPlayer(event.getPlayer());
     }
 }

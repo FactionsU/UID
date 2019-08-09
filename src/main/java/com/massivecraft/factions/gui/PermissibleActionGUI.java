@@ -7,7 +7,7 @@ import com.massivecraft.factions.P;
 import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.util.material.FactionMaterial;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.event.inventory.ClickType;

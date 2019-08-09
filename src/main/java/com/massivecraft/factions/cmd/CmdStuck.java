@@ -7,7 +7,7 @@ import com.massivecraft.factions.P;
 import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.SpiralTask;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Location;
 import org.bukkit.World;

@@ -2,7 +2,7 @@ package com.massivecraft.factions.tag;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.P;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
 
 import java.util.function.Supplier;

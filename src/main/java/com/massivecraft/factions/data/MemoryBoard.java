@@ -1,4 +1,4 @@
-package com.massivecraft.factions.zcore.persist;
+package com.massivecraft.factions.data;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -6,7 +6,7 @@ import com.massivecraft.factions.*;
 import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.struct.Relation;
 import com.massivecraft.factions.util.AsciiCompass;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.World;

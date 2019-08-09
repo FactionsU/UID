@@ -1,11 +1,11 @@
-package com.massivecraft.factions.zcore.persist.json;
+package com.massivecraft.factions.data.json;
 
 import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.P;
-import com.massivecraft.factions.zcore.persist.MemoryBoard;
-import com.massivecraft.factions.zcore.util.DiscUtil;
+import com.massivecraft.factions.data.MemoryBoard;
+import com.massivecraft.factions.util.DiscUtil;
 
 import java.io.File;
 import java.lang.reflect.Type;

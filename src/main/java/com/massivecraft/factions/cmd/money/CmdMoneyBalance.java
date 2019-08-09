@@ -5,7 +5,7 @@ import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.struct.Permission;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 
 public class CmdMoneyBalance extends MoneyCommand {
 

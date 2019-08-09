@@ -1,6 +1,6 @@
 package com.massivecraft.factions.iface;
 
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 
 public interface EconomyParticipator extends RelationParticipator {
 

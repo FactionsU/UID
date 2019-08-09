@@ -1,6 +1,6 @@
 package com.massivecraft.factions;
 
-import com.massivecraft.factions.zcore.persist.json.JSONFactions;
+import com.massivecraft.factions.data.json.JSONFactions;
 
 import java.util.ArrayList;
 import java.util.Set;

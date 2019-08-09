@@ -4,7 +4,7 @@ import com.massivecraft.factions.*;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.struct.Role;
 import com.massivecraft.factions.util.WarmUpUtil;
-import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.factions.util.TL;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
