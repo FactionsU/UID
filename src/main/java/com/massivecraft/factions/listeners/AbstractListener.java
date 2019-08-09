@@ -14,7 +14,7 @@ import org.bukkit.event.Listener;
 
 public abstract class AbstractListener implements Listener {
     public boolean canPlayerUseBlock(Player player, Material material, Location location, boolean justCheck) {
-        if (P.p.conf().factions().protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
+        if (P.getInstance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
             return true;
         }
 
@@ -31,7 +31,7 @@ public abstract class AbstractListener implements Listener {
             return true;
         }
 
-        if (P.p.getConfig().getBoolean("hcf.raidable", false) && otherFaction.getLandRounded() >= otherFaction.getPowerRounded()) {
+        if (P.getInstance().getConfig().getBoolean("hcf.raidable", false) && otherFaction.getLandRounded() >= otherFaction.getPowerRounded()) {
             return true;
         }
 
@@ -122,7 +122,7 @@ public abstract class AbstractListener implements Listener {
         }
 
         // Also cancel if player doesn't have ownership rights for this claim
-        if (P.p.conf().factions().ownedArea().isEnabled() && P.p.conf().factions().ownedArea().isProtectMaterials() && !otherFaction.playerHasOwnershipRights(me, loc)) {
+        if (P.getInstance().conf().factions().ownedArea().isEnabled() && P.getInstance().conf().factions().ownedArea().isProtectMaterials() && !otherFaction.playerHasOwnershipRights(me, loc)) {
             if (!justCheck) {
                 me.msg(TL.PLAYER_USE_OWNED, TextUtil.getMaterialName(material), otherFaction.getOwnerListString(loc));
             }

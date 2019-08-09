@@ -36,8 +36,8 @@ public class CmdMoneyTransferPf extends MoneyCommand {
 
         boolean success = Econ.transferMoney(context.fPlayer, from, to, amount);
 
-        if (success && P.p.conf().logging().isMoneyTransactions()) {
-            P.p.log(ChatColor.stripColor(P.p.txt.parse(TL.COMMAND_MONEYTRANSFERPF_TRANSFER.toString(), context.fPlayer.getName(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
+        if (success && P.getInstance().conf().logging().isMoneyTransactions()) {
+            P.getInstance().log(ChatColor.stripColor(P.getInstance().txt.parse(TL.COMMAND_MONEYTRANSFERPF_TRANSFER.toString(), context.fPlayer.getName(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
         }
     }
 

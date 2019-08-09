@@ -35,7 +35,7 @@ public class TitleAPI {
         try {
             Player.class.getMethod("sendTitle", String.class, String.class, int.class, int.class, int.class);
             supportsAPI = true;
-            P.p.getLogger().info("Found API support for sending player titles :D");
+            P.getInstance().getLogger().info("Found API support for sending player titles :D");
         } catch (NoSuchMethodException e) {
             try {
                 this.methodChatTitle = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class);
@@ -43,9 +43,9 @@ public class TitleAPI {
                 this.fieldTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE");
                 this.fieldSubTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE");
 
-                P.p.getLogger().info("Didn't find API support for sending titles, using reflection instead.");
+                P.getInstance().getLogger().info("Didn't find API support for sending titles, using reflection instead.");
             } catch (NoSuchMethodException | NoSuchFieldException ex) {
-                P.p.getLogger().info("Failed to use reflection.");
+                P.getInstance().getLogger().info("Failed to use reflection.");
                 bailOut = false;
                 ex.printStackTrace();
             }

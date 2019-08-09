@@ -30,7 +30,7 @@ public class FTeamWrapper {
             return;
         }
 
-        if (!P.p.getConfig().getBoolean("scoreboard.default-prefixes", false)) {
+        if (!P.getInstance().getConfig().getBoolean("scoreboard.default-prefixes", false)) {
             return;
         }
 
@@ -55,7 +55,7 @@ public class FTeamWrapper {
             return;
         }
 
-        if (!P.p.getConfig().getBoolean("scoreboard.default-prefixes", false)) {
+        if (!P.getInstance().getConfig().getBoolean("scoreboard.default-prefixes", false)) {
             return;
         }
 
@@ -157,7 +157,7 @@ public class FTeamWrapper {
     }
 
     private void updatePrefixes() {
-        if (P.p.getConfig().getBoolean("scoreboard.default-prefixes", false)) {
+        if (P.getInstance().getConfig().getBoolean("scoreboard.default-prefixes", false)) {
             for (FScoreboard fboard : teams.keySet()) {
                 updatePrefix(fboard);
             }
@@ -165,7 +165,7 @@ public class FTeamWrapper {
     }
 
     private void updatePrefix(FScoreboard fboard) {
-        if (P.p.getConfig().getBoolean("scoreboard.default-prefixes", false)) {
+        if (P.getInstance().getConfig().getBoolean("scoreboard.default-prefixes", false)) {
             FPlayer fplayer = fboard.getFPlayer();
             Team team = teams.get(fboard);
 

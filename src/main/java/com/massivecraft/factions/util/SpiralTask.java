@@ -45,7 +45,7 @@ public abstract class SpiralTask implements Runnable {
 
         this.world = Bukkit.getWorld(fLocation.getWorldName());
         if (this.world == null) {
-            P.p.log(Level.WARNING, "[SpiralTask] A valid world must be specified!");
+            P.getInstance().log(Level.WARNING, "[SpiralTask] A valid world must be specified!");
             this.stop();
             return;
         }
@@ -183,7 +183,7 @@ public abstract class SpiralTask implements Runnable {
 
     // for successful completion
     public void finish() {
-//		P.p.log("SpiralTask successfully completed!");
+//		P.getInstance().log("SpiralTask successfully completed!");
         this.stop();
     }
 

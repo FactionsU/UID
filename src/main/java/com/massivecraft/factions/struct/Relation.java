@@ -89,27 +89,27 @@ public enum Relation implements Permissible {
     public ChatColor getColor() {
         switch (this) {
             case MEMBER:
-                return P.p.conf().colors().relations().getMember();
+                return P.getInstance().conf().colors().relations().getMember();
             case ALLY:
-                return P.p.conf().colors().relations().getAlly();
+                return P.getInstance().conf().colors().relations().getAlly();
             case NEUTRAL:
-                return P.p.conf().colors().relations().getNeutral();
+                return P.getInstance().conf().colors().relations().getNeutral();
             case TRUCE:
-                return P.p.conf().colors().relations().getTruce();
+                return P.getInstance().conf().colors().relations().getTruce();
             default:
-                return P.p.conf().colors().relations().getEnemy();
+                return P.getInstance().conf().colors().relations().getEnemy();
         }
     }
 
     public double getRelationCost() {
         if (isEnemy()) {
-            return P.p.conf().economy().getCostEnemy();
+            return P.getInstance().conf().economy().getCostEnemy();
         } else if (isAlly()) {
-            return P.p.conf().economy().getCostAlly();
+            return P.getInstance().conf().economy().getCostAlly();
         } else if (isTruce()) {
-            return P.p.conf().economy().getCostTruce();
+            return P.getInstance().conf().economy().getCostTruce();
         } else {
-            return P.p.conf().economy().getCostNeutral();
+            return P.getInstance().conf().economy().getCostNeutral();
         }
     }
 }

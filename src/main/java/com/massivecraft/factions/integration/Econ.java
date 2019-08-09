@@ -30,31 +30,31 @@ public class Econ {
             return;
         }
 
-        String integrationFail = "Economy integration is " + (P.p.conf().economy().isEnabled() ? "enabled, but" : "disabled, and") + " the plugin \"Vault\" ";
+        String integrationFail = "Economy integration is " + (P.getInstance().conf().economy().isEnabled() ? "enabled, but" : "disabled, and") + " the plugin \"Vault\" ";
 
         if (Bukkit.getServer().getPluginManager().getPlugin("Vault") == null) {
-            P.p.getLogger().info(integrationFail + "is not installed.");
+            P.getInstance().getLogger().info(integrationFail + "is not installed.");
             return;
         }
 
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-            P.p.getLogger().info(integrationFail + "is not hooked into an economy plugin.");
+            P.getInstance().getLogger().info(integrationFail + "is not hooked into an economy plugin.");
             return;
         }
         econ = rsp.getProvider();
 
-        P.p.getLogger().info("Economy integration through Vault plugin successful.");
+        P.getInstance().getLogger().info("Economy integration through Vault plugin successful.");
 
-        if (!P.p.conf().economy().isEnabled()) {
-            P.p.getLogger().info("NOTE: Economy is disabled. You can enable it with the command: f config econEnabled true");
+        if (!P.getInstance().conf().economy().isEnabled()) {
+            P.getInstance().getLogger().info("NOTE: Economy is disabled. You can enable it with the command: f config econEnabled true");
         }
 
-        //P.p.cmdBase.cmdHelp.updateHelp();
+        //P.getInstance().cmdBase.cmdHelp.updateHelp();
     }
 
     public static boolean shouldBeUsed() {
-        return P.p.conf().economy().isEnabled() && econ != null && econ.isEnabled();
+        return P.getInstance().conf().economy().isEnabled() && econ != null && econ.isEnabled();
     }
 
     public static boolean isSetup() {
@@ -70,22 +70,22 @@ public class Econ {
             return;
         }
 
-        if (P.p.conf().economy().getUniverseAccount() == null) {
+        if (P.getInstance().conf().economy().getUniverseAccount() == null) {
             return;
         }
-        if (P.p.conf().economy().getUniverseAccount().length() == 0) {
+        if (P.getInstance().conf().economy().getUniverseAccount().length() == 0) {
             return;
         }
-        if (!econ.hasAccount(P.p.conf().economy().getUniverseAccount())) {
+        if (!econ.hasAccount(P.getInstance().conf().economy().getUniverseAccount())) {
             return;
         }
 
-        modifyBalance(P.p.conf().economy().getUniverseAccount(), delta);
+        modifyBalance(P.getInstance().conf().economy().getUniverseAccount(), delta);
     }
 
     public static void sendBalanceInfo(FPlayer to, EconomyParticipator about) {
         if (!shouldBeUsed()) {
-            P.p.log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
+            P.getInstance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
         to.msg("<a>%s's<i> balance is <h>%s<i>.", about.describeTo(to, true), Econ.moneyString(econ.getBalance(about.getAccountId())));
@@ -93,7 +93,7 @@ public class Econ {
 
     public static void sendBalanceInfo(CommandSender to, Faction about) {
         if (!shouldBeUsed()) {
-            P.p.log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
+            P.getInstance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
         to.sendMessage(String.format("%s's balance is %s.", about.getTag(), Econ.moneyString(econ.getBalance(about.getAccountId()))));
@@ -131,7 +131,7 @@ public class Econ {
         }
 
         // Factions can be controlled by members that are moderators... or any member if any member can withdraw.
-        if (you instanceof Faction && fI == fYou && (P.p.conf().economy().isBankMembersCanWithdraw() || ((FPlayer) i).getRole().value >= Role.MODERATOR.value)) {
+        if (you instanceof Faction && fI == fYou && (P.getInstance().conf().economy().isBankMembersCanWithdraw() || ((FPlayer) i).getRole().value >= Role.MODERATOR.value)) {
             return true;
         }
 
@@ -370,12 +370,12 @@ public class Econ {
         }
 
         // basic claim cost, plus land inflation cost, minus the potential bonus given for claiming from another faction
-        return P.p.conf().economy().getCostClaimWilderness() + (P.p.conf().economy().getCostClaimWilderness() * P.p.conf().economy().getClaimAdditionalMultiplier() * ownedLand) - (takingFromAnotherFaction ? P.p.conf().economy().getCostClaimFromFactionBonus() : 0);
+        return P.getInstance().conf().economy().getCostClaimWilderness() + (P.getInstance().conf().economy().getCostClaimWilderness() * P.getInstance().conf().economy().getClaimAdditionalMultiplier() * ownedLand) - (takingFromAnotherFaction ? P.getInstance().conf().economy().getCostClaimFromFactionBonus() : 0);
     }
 
     // calculate refund amount for unclaiming land
     public static double calculateClaimRefund(int ownedLand) {
-        return calculateClaimCost(ownedLand - 1, false) * P.p.conf().economy().getClaimRefundMultiplier();
+        return calculateClaimCost(ownedLand - 1, false) * P.getInstance().conf().economy().getClaimRefundMultiplier();
     }
 
     // calculate value of all owned land
@@ -389,7 +389,7 @@ public class Econ {
 
     // calculate refund amount for all owned land
     public static double calculateTotalLandRefund(int ownedLand) {
-        return calculateTotalLandValue(ownedLand) * P.p.conf().economy().getClaimRefundMultiplier();
+        return calculateTotalLandValue(ownedLand) * P.getInstance().conf().economy().getClaimRefundMultiplier();
     }
 
 

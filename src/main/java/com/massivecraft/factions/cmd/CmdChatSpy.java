@@ -24,10 +24,10 @@ public class CmdChatSpy extends FCommand {
 
         if (context.fPlayer.isSpyingChat()) {
             context.fPlayer.msg(TL.COMMAND_CHATSPY_ENABLE);
-            P.p.log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_ENABLELOG.toString());
+            P.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_ENABLELOG.toString());
         } else {
             context.fPlayer.msg(TL.COMMAND_CHATSPY_DISABLE);
-            P.p.log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_DISABLELOG.toString());
+            P.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_DISABLELOG.toString());
         }
     }
 

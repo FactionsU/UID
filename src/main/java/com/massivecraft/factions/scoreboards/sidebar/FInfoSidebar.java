@@ -22,7 +22,7 @@ public class FInfoSidebar extends FSidebarProvider {
 
     @Override
     public List<String> getLines(FPlayer fplayer) {
-        List<String> lines = P.p.getConfig().getStringList("scoreboard.finfo");
+        List<String> lines = P.getInstance().getConfig().getStringList("scoreboard.finfo");
 
         ListIterator<String> it = lines.listIterator();
         while (it.hasNext()) {

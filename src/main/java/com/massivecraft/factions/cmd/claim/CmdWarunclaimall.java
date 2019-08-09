@@ -40,8 +40,8 @@ public class CmdWarunclaimall extends FCommand {
             Board.getInstance().unclaimAllInWorld(id, world);
         }
 
-        if (P.p.conf().logging().isLandUnclaims()) {
-            P.p.log(TL.COMMAND_WARUNCLAIMALL_LOG.format(context.fPlayer.getName()));
+        if (P.getInstance().conf().logging().isLandUnclaims()) {
+            P.getInstance().log(TL.COMMAND_WARUNCLAIMALL_LOG.format(context.fPlayer.getName()));
         }
     }
 

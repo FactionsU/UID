@@ -47,11 +47,11 @@ public class CommandContext {
     // -------------------------------------------- //
 
     public void msg(String str, Object... args) {
-        sender.sendMessage(P.p.txt.parse(str, args));
+        sender.sendMessage(P.getInstance().txt.parse(str, args));
     }
 
     public void msg(TL translation, Object... args) {
-        sender.sendMessage(P.p.txt.parse(translation.toString(), args));
+        sender.sendMessage(P.getInstance().txt.parse(translation.toString(), args));
     }
 
     public void sendMessage(String msg) {
@@ -359,7 +359,7 @@ public class CommandContext {
     */
     public boolean canIAdministerYou(FPlayer i, FPlayer you) {
         if (!i.getFaction().equals(you.getFaction())) {
-            i.sendMessage(P.p.txt.parse("%s <b>is not in the same faction as you.", you.describeTo(i, true)));
+            i.sendMessage(P.getInstance().txt.parse("%s <b>is not in the same faction as you.", you.describeTo(i, true)));
             return false;
         }
 
@@ -368,15 +368,15 @@ public class CommandContext {
         }
 
         if (you.getRole().equals(Role.ADMIN)) {
-            i.sendMessage(P.p.txt.parse("<b>Only the faction admin can do that."));
+            i.sendMessage(P.getInstance().txt.parse("<b>Only the faction admin can do that."));
         } else if (i.getRole().equals(Role.MODERATOR)) {
             if (i == you) {
                 return true; //Moderators can control themselves
             } else {
-                i.sendMessage(P.p.txt.parse("<b>Moderators can't control each other..."));
+                i.sendMessage(P.getInstance().txt.parse("<b>Moderators can't control each other..."));
             }
         } else {
-            i.sendMessage(P.p.txt.parse("<b>You must be a faction moderator to do that."));
+            i.sendMessage(P.getInstance().txt.parse("<b>You must be a faction moderator to do that."));
         }
 
         return false;
@@ -388,7 +388,7 @@ public class CommandContext {
             return true;
         }
 
-        if (P.p.conf().economy().isBankEnabled() && P.p.conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction()) {
+        if (P.getInstance().conf().economy().isBankEnabled() && P.getInstance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction()) {
             return Econ.modifyMoney(faction, -cost, toDoThis, forDoingThis);
         } else {
             return Econ.modifyMoney(fPlayer, -cost, toDoThis, forDoingThis);
@@ -405,7 +405,7 @@ public class CommandContext {
             return true;
         }
 
-        if (P.p.conf().economy().isBankEnabled() && P.p.conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction()) {
+        if (P.getInstance().conf().economy().isBankEnabled() && P.getInstance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction()) {
             return Econ.hasAtLeast(faction, cost, toDoThis);
         } else {
             return Econ.hasAtLeast(fPlayer, cost, toDoThis);

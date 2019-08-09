@@ -35,19 +35,19 @@ public class CmdKick extends FCommand {
             FancyMessage msg = new FancyMessage(TL.COMMAND_KICK_CANDIDATES.toString()).color(ChatColor.GOLD);
             for (FPlayer player : context.faction.getFPlayersWhereRole(Role.NORMAL)) {
                 String s = player.getName();
-                msg.then(s + " ").color(ChatColor.WHITE).tooltip(TL.COMMAND_KICK_CLICKTOKICK.toString() + s).command("/" + P.p.conf().getCommandBase().get(0) + " kick " + s);
+                msg.then(s + " ").color(ChatColor.WHITE).tooltip(TL.COMMAND_KICK_CLICKTOKICK.toString() + s).command("/" + P.getInstance().conf().getCommandBase().get(0) + " kick " + s);
             }
             if (context.fPlayer.getRole().isAtLeast(Role.COLEADER)) {
                 // For both coleader and admin, add mods.
                 for (FPlayer player : context.faction.getFPlayersWhereRole(Role.MODERATOR)) {
                     String s = player.getName();
-                    msg.then(s + " ").color(ChatColor.GRAY).tooltip(TL.COMMAND_KICK_CLICKTOKICK.toString() + s).command("/" + P.p.conf().getCommandBase().get(0) + " kick " + s);
+                    msg.then(s + " ").color(ChatColor.GRAY).tooltip(TL.COMMAND_KICK_CLICKTOKICK.toString() + s).command("/" + P.getInstance().conf().getCommandBase().get(0) + " kick " + s);
                 }
                 if (context.fPlayer.getRole() == Role.ADMIN) {
                     // Only add coleader to this for the leader.
                     for (FPlayer player : context.faction.getFPlayersWhereRole(Role.COLEADER)) {
                         String s = player.getName();
-                        msg.then(s + " ").color(ChatColor.RED).tooltip(TL.COMMAND_KICK_CLICKTOKICK.toString() + s).command("/" + P.p.conf().getCommandBase().get(0) + " kick " + s);
+                        msg.then(s + " ").color(ChatColor.RED).tooltip(TL.COMMAND_KICK_CLICKTOKICK.toString() + s).command("/" + P.getInstance().conf().getCommandBase().get(0) + " kick " + s);
                     }
                 }
             }
@@ -81,14 +81,14 @@ public class CmdKick extends FCommand {
                 return;
             }
 
-            if (!P.p.conf().factions().isCanLeaveWithNegativePower() && toKick.getPower() < 0) {
+            if (!P.getInstance().conf().factions().isCanLeaveWithNegativePower() && toKick.getPower() < 0) {
                 context.msg(TL.COMMAND_KICK_NEGATIVEPOWER);
                 return;
             }
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make sure they can pay
-        if (!context.canAffordCommand(P.p.conf().economy().getCostKick(), TL.COMMAND_KICK_TOKICK.toString())) {
+        if (!context.canAffordCommand(P.getInstance().conf().economy().getCostKick(), TL.COMMAND_KICK_TOKICK.toString())) {
             return;
         }
 
@@ -100,7 +100,7 @@ public class CmdKick extends FCommand {
         }
 
         // then make 'em pay (if applicable)
-        if (!context.payForCommand(P.p.conf().economy().getCostKick(), TL.COMMAND_KICK_TOKICK.toString(), TL.COMMAND_KICK_FORKICK.toString())) {
+        if (!context.payForCommand(P.getInstance().conf().economy().getCostKick(), TL.COMMAND_KICK_TOKICK.toString(), TL.COMMAND_KICK_FORKICK.toString())) {
             return;
         }
 
@@ -110,8 +110,8 @@ public class CmdKick extends FCommand {
             context.msg(TL.COMMAND_KICK_KICKS, toKick.describeTo(context.fPlayer), toKickFaction.describeTo(context.fPlayer));
         }
 
-        if (P.p.conf().logging().isFactionKick()) {
-            P.p.log((context.player == null ? "A console command" : context.fPlayer.getName()) + " kicked " + toKick.getName() + " from the faction: " + toKickFaction.getTag());
+        if (P.getInstance().conf().logging().isFactionKick()) {
+            P.getInstance().log((context.player == null ? "A console command" : context.fPlayer.getName()) + " kicked " + toKick.getName() + " from the faction: " + toKickFaction.getTag());
         }
 
         if (toKick.getRole() == Role.ADMIN) {

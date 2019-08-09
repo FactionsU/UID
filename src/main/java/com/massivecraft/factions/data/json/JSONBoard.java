@@ -17,7 +17,7 @@ import java.util.logging.Level;
 
 
 public class JSONBoard extends MemoryBoard {
-    private static transient File file = new File(P.p.getDataFolder(), "data/board.json");
+    private static transient File file = new File(P.getInstance().getDataFolder(), "data/board.json");
 
     // -------------------------------------------- //
     // Persistance
@@ -68,14 +68,14 @@ public class JSONBoard extends MemoryBoard {
     }
 
     public void forceSave(boolean sync) {
-        DiscUtil.writeCatch(file, P.p.gson.toJson(dumpAsSaveFormat()), sync);
+        DiscUtil.writeCatch(file, P.getInstance().gson.toJson(dumpAsSaveFormat()), sync);
     }
 
     public boolean load() {
-        P.p.getLogger().info("Loading board from disk");
+        P.getInstance().getLogger().info("Loading board from disk");
 
         if (!file.exists()) {
-            P.p.getLogger().info("No board to load from disk. Creating new file.");
+            P.getInstance().getLogger().info("No board to load from disk. Creating new file.");
             forceSave();
             return true;
         }
@@ -83,12 +83,12 @@ public class JSONBoard extends MemoryBoard {
         try {
             Type type = new TypeToken<Map<String, Map<String, String>>>() {
             }.getType();
-            Map<String, Map<String, String>> worldCoordIds = P.p.gson.fromJson(DiscUtil.read(file), type);
+            Map<String, Map<String, String>> worldCoordIds = P.getInstance().gson.fromJson(DiscUtil.read(file), type);
             loadFromSaveFormat(worldCoordIds);
-            P.p.getLogger().info("Loaded " + flocationIds.size() + " board locations");
+            P.getInstance().getLogger().info("Loaded " + flocationIds.size() + " board locations");
         } catch (Exception e) {
             e.printStackTrace();
-            P.p.log(Level.SEVERE, "Failed to load the board from disk.");
+            P.getInstance().log(Level.SEVERE, "Failed to load the board from disk.");
             return false;
         }
 

@@ -14,7 +14,7 @@ public class FactionMaterial {
             // If the name is legacy attempt to match it to 1.13 name and store that
             this.name = MaterialDb.getInstance().provider.fromLegacy(name);
             if (this.name == null) {
-                P.p.log(Level.WARNING, "Material " + name + "does not exist");
+                P.getInstance().log(Level.WARNING, "Material " + name + "does not exist");
             }
         } else {
             this.name = name;

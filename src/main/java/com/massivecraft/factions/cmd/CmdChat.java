@@ -26,7 +26,7 @@ public class CmdChat extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        if (!P.p.conf().factions().chat().isFactionOnlyChat()) {
+        if (!P.getInstance().conf().factions().chat().isFactionOnlyChat()) {
             context.msg(TL.COMMAND_CHAT_DISABLED.toString());
             return;
         }

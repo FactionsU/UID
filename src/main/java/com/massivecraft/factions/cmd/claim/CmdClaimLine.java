@@ -35,8 +35,8 @@ public class CmdClaimLine extends FCommand {
         // Args
         Integer amount = context.argAsInt(0, 1); // Default to 1
 
-        if (amount > P.p.conf().factions().claims().getLineClaimLimit()) {
-            context.msg(TL.COMMAND_CLAIMLINE_ABOVEMAX, P.p.conf().factions().claims().getLineClaimLimit());
+        if (amount > P.getInstance().conf().factions().claims().getLineClaimLimit()) {
+            context.msg(TL.COMMAND_CLAIMLINE_ABOVEMAX, P.getInstance().conf().factions().claims().getLineClaimLimit());
             return;
         }
 

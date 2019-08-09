@@ -64,17 +64,17 @@ public class MiscUtil {
     public static ArrayList<String> validateTag(String str) {
         ArrayList<String> errors = new ArrayList<>();
 
-        if (getComparisonString(str).length() < P.p.conf().factions().getTagLengthMin()) {
-            errors.add(P.p.txt.parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), P.p.conf().factions().getTagLengthMin()));
+        if (getComparisonString(str).length() < P.getInstance().conf().factions().getTagLengthMin()) {
+            errors.add(P.getInstance().txt.parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), P.getInstance().conf().factions().getTagLengthMin()));
         }
 
-        if (str.length() > P.p.conf().factions().getTagLengthMax()) {
-            errors.add(P.p.txt.parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), P.p.conf().factions().getTagLengthMax()));
+        if (str.length() > P.getInstance().conf().factions().getTagLengthMax()) {
+            errors.add(P.getInstance().txt.parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), P.getInstance().conf().factions().getTagLengthMax()));
         }
 
         for (char c : str.toCharArray()) {
             if (!substanceChars.contains(String.valueOf(c))) {
-                errors.add(P.p.txt.parse(TL.GENERIC_FACTIONTAG_ALPHANUMERIC.toString(), c));
+                errors.add(P.getInstance().txt.parse(TL.GENERIC_FACTIONTAG_ALPHANUMERIC.toString(), c));
             }
         }
 
@@ -93,7 +93,7 @@ public class MiscUtil {
             // Fix for some data being broken when we added the recruit rank.
             if (player.getRole() == null) {
                 player.setRole(Role.NORMAL);
-                P.p.log(Level.WARNING, String.format("Player %s had null role. Setting them to normal. This isn't good D:", player.getName()));
+                P.getInstance().log(Level.WARNING, String.format("Player %s had null role. Setting them to normal. This isn't good D:", player.getName()));
             }
 
             switch (player.getRole()) {

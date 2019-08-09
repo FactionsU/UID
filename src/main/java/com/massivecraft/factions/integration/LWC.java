@@ -25,11 +25,11 @@ public class LWC {
         if (!(test instanceof LWCPlugin) || !test.isEnabled()) return;
 
         lwc = ((LWCPlugin) test).getLWC();
-        P.p.log("Successfully hooked into LWC!" + (P.p.getConfig().getBoolean("lwc.integration", false) ? "" : " Integration is currently disabled (\"lwc.integration\")."));
+        P.getInstance().log("Successfully hooked into LWC!" + (P.getInstance().getConfig().getBoolean("lwc.integration", false) ? "" : " Integration is currently disabled (\"lwc.integration\")."));
     }
 
     public static boolean getEnabled() {
-        return lwc != null && P.p.getConfig().getBoolean("lwc.integration", false);
+        return lwc != null && P.getInstance().getConfig().getBoolean("lwc.integration", false);
     }
 
     public static Plugin getLWC() {

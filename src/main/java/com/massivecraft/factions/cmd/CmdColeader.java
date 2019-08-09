@@ -36,7 +36,7 @@ public class CmdColeader extends FCommand {
 
                 msg.then(s + " ").color(ChatColor.WHITE)
                         .tooltip(TL.COMMAND_COLEADER_CLICKTOPROMOTE.toString() + s)
-                        .command("/" + P.p.conf().getCommandBase().get(0) + " coleader " + s);
+                        .command("/" + P.getInstance().conf().getCommandBase().get(0) + " coleader " + s);
             }
 
             context.sendFancyMessage(msg);
@@ -75,7 +75,7 @@ public class CmdColeader extends FCommand {
         }
 
         // Check to see if we should allow multiple coleaders or not.
-        if (!P.p.conf().factions().isAllowMultipleColeaders() && !targetFaction.getFPlayersWhereRole(Role.COLEADER).isEmpty()) {
+        if (!P.getInstance().conf().factions().isAllowMultipleColeaders() && !targetFaction.getFPlayersWhereRole(Role.COLEADER).isEmpty()) {
             context.msg(TL.COMMAND_COLEADER_ALREADY_COLEADER);
             return;
         }

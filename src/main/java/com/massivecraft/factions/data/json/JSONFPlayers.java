@@ -34,8 +34,8 @@ public class JSONFPlayers extends MemoryFPlayers {
     private File file;
 
     public JSONFPlayers() {
-        file = new File(P.p.getDataFolder(), "data/players.json");
-        gson = P.p.gson;
+        file = new File(P.getInstance().getDataFolder(), "data/players.json");
+        gson = P.getInstance().gson;
     }
 
     public void convertFrom(MemoryFPlayers old) {
@@ -70,7 +70,7 @@ public class JSONFPlayers extends MemoryFPlayers {
         }
         this.fPlayers.clear();
         this.fPlayers.putAll(fplayers);
-        P.p.getLogger().info("Loaded " + fPlayers.size() + " players");
+        P.getInstance().getLogger().info("Loaded " + fPlayers.size() + " players");
     }
 
     private Map<String, JSONFPlayer> loadCore() {

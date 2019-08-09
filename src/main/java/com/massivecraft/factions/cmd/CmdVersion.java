@@ -16,7 +16,7 @@ public class CmdVersion extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        context.msg(TL.COMMAND_VERSION_VERSION, P.p.getDescription().getFullName());
+        context.msg(TL.COMMAND_VERSION_VERSION, P.getInstance().getDescription().getFullName());
     }
 
     @Override

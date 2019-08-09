@@ -83,7 +83,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
             // Reload items to reparse placeholders
             buildItem(action);
             user.msg(TL.COMMAND_PERM_SET, action.name(), access ? "allow" : "deny", permissible.name());
-            P.p.log(TL.COMMAND_PERM_SET.format(access ? "allow" : "deny", access ? "Allow" : "Deny", permissible.name()) + " for faction " + user.getTag());
+            P.getInstance().log(TL.COMMAND_PERM_SET.format(access ? "allow" : "deny", access ? "Allow" : "Deny", permissible.name()) + " for faction " + user.getTag());
         } else {
             user.msg(TL.COMMAND_PERM_INVALID_SET);
         }

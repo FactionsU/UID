@@ -52,7 +52,7 @@ public class CmdUnclaim extends FCommand {
 
             new SpiralTask(new FLocation(context.player), radius) {
                 private int failCount = 0;
-                private final int limit = P.p.conf().factions().claims().getRadiusClaimFailureLimit() - 1;
+                private final int limit = P.getInstance().conf().factions().claims().getRadiusClaimFailureLimit() - 1;
 
                 @Override
                 public boolean work() {
@@ -77,8 +77,8 @@ public class CmdUnclaim extends FCommand {
                 Board.getInstance().removeAt(target);
                 context.msg(TL.COMMAND_UNCLAIM_SAFEZONE_SUCCESS);
 
-                if (P.p.conf().logging().isLandUnclaims()) {
-                    P.p.log(TL.COMMAND_UNCLAIM_LOG.format(context.fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
+                if (P.getInstance().conf().logging().isLandUnclaims()) {
+                    P.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(context.fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
                 }
                 return true;
             } else {
@@ -90,8 +90,8 @@ public class CmdUnclaim extends FCommand {
                 Board.getInstance().removeAt(target);
                 context.msg(TL.COMMAND_UNCLAIM_WARZONE_SUCCESS);
 
-                if (P.p.conf().logging().isLandUnclaims()) {
-                    P.p.log(TL.COMMAND_UNCLAIM_LOG.format(context.fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
+                if (P.getInstance().conf().logging().isLandUnclaims()) {
+                    P.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(context.fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
                 }
                 return true;
             } else {
@@ -112,8 +112,8 @@ public class CmdUnclaim extends FCommand {
             targetFaction.msg(TL.COMMAND_UNCLAIM_UNCLAIMED, context.fPlayer.describeTo(targetFaction, true));
             context.msg(TL.COMMAND_UNCLAIM_UNCLAIMS);
 
-            if (P.p.conf().logging().isLandUnclaims()) {
-                P.p.log(TL.COMMAND_UNCLAIM_LOG.format(context.fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
+            if (P.getInstance().conf().logging().isLandUnclaims()) {
+                P.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(context.fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
             }
 
             return true;
@@ -142,7 +142,7 @@ public class CmdUnclaim extends FCommand {
         if (Econ.shouldBeUsed()) {
             double refund = Econ.calculateClaimRefund(context.faction.getLandRounded());
 
-            if (P.p.conf().economy().isBankEnabled() && P.p.conf().economy().isBankFactionPaysLandCosts()) {
+            if (P.getInstance().conf().economy().isBankEnabled() && P.getInstance().conf().economy().isBankFactionPaysLandCosts()) {
                 if (!Econ.modifyMoney(context.faction, refund, TL.COMMAND_UNCLAIM_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIM_FORUNCLAIM.toString())) {
                     return false;
                 }
@@ -156,8 +156,8 @@ public class CmdUnclaim extends FCommand {
         Board.getInstance().removeAt(target);
         context.faction.msg(TL.COMMAND_UNCLAIM_FACTIONUNCLAIMED, context.fPlayer.describeTo(context.faction, true));
 
-        if (P.p.conf().logging().isLandUnclaims()) {
-            P.p.log(TL.COMMAND_UNCLAIM_LOG.format(context.fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
+        if (P.getInstance().conf().logging().isLandUnclaims()) {
+            P.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(context.fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
         }
 
         return true;

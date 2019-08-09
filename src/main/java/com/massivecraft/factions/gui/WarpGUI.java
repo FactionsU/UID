@@ -212,21 +212,21 @@ public class WarpGUI extends GUI<Integer> {
                 player.teleport(user.getFaction().getWarp(warp).getLocation());
                 user.msg(TL.COMMAND_FWARP_WARPED, warp);
             }
-        }, P.p.getConfig().getLong("warmups.f-warp", 0));
+        }, P.getInstance().getConfig().getLong("warmups.f-warp", 0));
     }
 
     private boolean transact() {
-        if (!P.p.getConfig().getBoolean("warp-cost.enabled", false) || user.isAdminBypassing()) {
+        if (!P.getInstance().getConfig().getBoolean("warp-cost.enabled", false) || user.isAdminBypassing()) {
             return true;
         }
 
-        double cost = P.p.getConfig().getDouble("warp-cost.warp", 5);
+        double cost = P.getInstance().getConfig().getDouble("warp-cost.warp", 5);
 
         if (!Econ.shouldBeUsed() || this.user == null || cost == 0.0 || user.isAdminBypassing()) {
             return true;
         }
 
-        if (P.p.conf().economy().isBankEnabled() && P.p.conf().economy().isBankFactionPaysCosts() && user.hasFaction()) {
+        if (P.getInstance().conf().economy().isBankEnabled() && P.getInstance().conf().economy().isBankFactionPaysCosts() && user.hasFaction()) {
             return Econ.modifyMoney(user.getFaction(), -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());
         } else {
             return Econ.modifyMoney(user, -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());

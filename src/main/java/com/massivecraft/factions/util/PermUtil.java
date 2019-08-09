@@ -42,25 +42,13 @@ public class PermUtil {
         return desc;
     }
 
-    /**
-     * This method tests if me has a certain permission and returns true if me has. Otherwise false
-     */
-    public boolean has(CommandSender me, String perm) {
-        if (me == null) {
-            return false;
-        }
-
-        if (!(me instanceof Player)) {
-            return me.hasPermission(perm);
-        }
-
-        return me.hasPermission(perm);
-    }
-
     public boolean has(CommandSender me, String perm, boolean informSenderIfNot) {
-        if (has(me, perm)) {
+        if (me == null) {
+            return false; // What? How?
+        }
+        if (me.hasPermission(perm)) {
             return true;
-        } else if (informSenderIfNot && me != null) {
+        } else if (informSenderIfNot) {
             me.sendMessage(this.getForbiddenMessage(perm));
         }
         return false;

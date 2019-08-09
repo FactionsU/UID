@@ -33,7 +33,7 @@ public class CmdDeinvite extends FCommand {
             for (String id : context.faction.getInvites()) {
                 FPlayer fp = FPlayers.getInstance().getById(id);
                 String name = fp != null ? fp.getName() : id;
-                msg.then(name + " ").color(ChatColor.WHITE).tooltip(TL.COMMAND_DEINVITE_CLICKTODEINVITE.format(name)).command("/" + P.p.conf().getCommandBase().get(0) + " deinvite " + name);
+                msg.then(name + " ").color(ChatColor.WHITE).tooltip(TL.COMMAND_DEINVITE_CLICKTODEINVITE.format(name)).command("/" + P.getInstance().conf().getCommandBase().get(0) + " deinvite " + name);
             }
             context.sendFancyMessage(msg);
             return;

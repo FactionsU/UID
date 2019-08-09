@@ -22,21 +22,21 @@ public class CmdSethome extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        if (!P.p.conf().factions().homes().isEnabled()) {
+        if (!P.getInstance().conf().factions().homes().isEnabled()) {
             context.msg(TL.COMMAND_SETHOME_DISABLED);
             return;
         }
 
         // Can the player set the faction home HERE?
         if (!Permission.BYPASS.has(context.player) &&
-                P.p.conf().factions().homes().isMustBeInClaimedTerritory() &&
+                P.getInstance().conf().factions().homes().isMustBeInClaimedTerritory() &&
                 Board.getInstance().getFactionAt(new FLocation(context.player)) != context.faction) {
             context.msg(TL.COMMAND_SETHOME_NOTCLAIMED);
             return;
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.payForCommand(P.p.conf().economy().getCostHome(), TL.COMMAND_SETHOME_TOSET, TL.COMMAND_SETHOME_FORSET)) {
+        if (!context.payForCommand(P.getInstance().conf().economy().getCostHome(), TL.COMMAND_SETHOME_TOSET, TL.COMMAND_SETHOME_FORSET)) {
             return;
         }
 

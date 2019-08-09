@@ -53,7 +53,7 @@ public class CommandRequirements {
                 return false;
             }
 
-            if (!P.p.perm.has(context.sender, permission.node, informIfNot)) {
+            if (!P.getInstance().getPermUtil().has(context.sender, permission.node, informIfNot)) {
                 return false;
             }
 

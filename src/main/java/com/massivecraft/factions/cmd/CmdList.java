@@ -36,7 +36,7 @@ public class CmdList extends FCommand {
     @Override
     public void perform(CommandContext context) {
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.payForCommand(P.p.conf().economy().getCostList(), "to list the factions", "for listing the factions")) {
+        if (!context.payForCommand(P.getInstance().conf().economy().getCostList(), "to list the factions", "for listing the factions")) {
             return;
         }
 
@@ -47,7 +47,7 @@ public class CmdList extends FCommand {
 
         // remove exempt factions
         if (!context.sender.hasPermission("factions.show.bypassexempt")) {
-            List<String> exemptFactions = P.p.getConfig().getStringList("show-exempt");
+            List<String> exemptFactions = P.getInstance().getConfig().getStringList("show-exempt");
             factionList.removeIf(next -> exemptFactions.contains(next.getTag()));
         }
 

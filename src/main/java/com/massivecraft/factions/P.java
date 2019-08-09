@@ -62,11 +62,15 @@ public class P extends JavaPlugin {
 
     // Our single plugin instance.
     // Single 4 life.
-    public static P p;
-    public static Permission perms = null;
+    private static P instance;
+    private Permission perms = null;
     private static int version;
 
-    public static int getVersion() {
+    public static P getInstance() {
+        return instance;
+    }
+
+    public static int getMCVersion() {
         return version;
     }
 
@@ -77,14 +81,13 @@ public class P extends JavaPlugin {
     protected boolean loadSuccessful = false;
 
     // Some utils
-    public Persist persist;
+    private Persist persist;
     public TextUtil txt;
-    public PermUtil perm;
+
+    private PermUtil permUtil;
 
     // Persist related
     public final Gson gson = this.getGsonBuilder().create();
-
-    public String refCommand = "";
 
     // holds f stuck start times
     private Map<UUID, Long> timers = new HashMap<>();
@@ -114,7 +117,7 @@ public class P extends JavaPlugin {
     private Metrics metrics;
 
     public P() {
-        p = this;
+        instance = this;
     }
 
     @Override
@@ -163,7 +166,7 @@ public class P extends JavaPlugin {
         MaterialDb.load();
 
         // Create Utility Instances
-        this.perm = new PermUtil(this);
+        this.permUtil = new PermUtil(this);
         this.persist = new Persist(this);
 
         this.txt = new TextUtil();
@@ -171,10 +174,11 @@ public class P extends JavaPlugin {
 
         // attempt to get first command defined in plugin.yml as reference command, if any commands are defined in there
         // reference command will be used to prevent "unknown command" console messages
+        String refCommand = "";
         try {
             Map<String, Map<String, Object>> refCmd = this.getDescription().getCommands();
             if (refCmd != null && !refCmd.isEmpty()) {
-                this.refCommand = (String) (refCmd.keySet().toArray()[0]);
+                refCommand = (String) (refCmd.keySet().toArray()[0]);
             }
         } catch (ClassCastException ex) {
         }
@@ -417,25 +421,25 @@ public class P extends JavaPlugin {
         safeZoneNerfedCreatureTypes.add(EntityType.WITCH);
         safeZoneNerfedCreatureTypes.add(EntityType.WITHER);
         safeZoneNerfedCreatureTypes.add(EntityType.ZOMBIE);
-        if (P.getVersion() >= 900) {
+        if (P.getMCVersion() >= 900) {
             safeZoneNerfedCreatureTypes.add(EntityType.SHULKER);
         }
-        if (P.getVersion() >= 1000) {
+        if (P.getMCVersion() >= 1000) {
             safeZoneNerfedCreatureTypes.add(EntityType.HUSK);
             safeZoneNerfedCreatureTypes.add(EntityType.STRAY);
         }
-        if (P.getVersion() >= 1100) {
+        if (P.getMCVersion() >= 1100) {
             safeZoneNerfedCreatureTypes.add(EntityType.ELDER_GUARDIAN);
             safeZoneNerfedCreatureTypes.add(EntityType.EVOKER);
             safeZoneNerfedCreatureTypes.add(EntityType.VEX);
             safeZoneNerfedCreatureTypes.add(EntityType.VINDICATOR);
             safeZoneNerfedCreatureTypes.add(EntityType.ZOMBIE_VILLAGER);
         }
-        if (P.getVersion() >= 1300) {
+        if (P.getMCVersion() >= 1300) {
             safeZoneNerfedCreatureTypes.add(EntityType.DROWNED);
             safeZoneNerfedCreatureTypes.add(EntityType.PHANTOM);
         }
-        if (P.getVersion() >= 1400) {
+        if (P.getMCVersion() >= 1400) {
             safeZoneNerfedCreatureTypes.add(EntityType.PILLAGER);
             safeZoneNerfedCreatureTypes.add(EntityType.RAVAGER);
         }
@@ -564,6 +568,10 @@ public class P extends JavaPlugin {
             getLogger().log(Level.WARNING, "Factions: Report this stack trace to drtshock.");
             e.printStackTrace();
         }
+    }
+
+    public PermUtil getPermUtil() {
+        return permUtil;
     }
 
     // -------------------------------------------- //

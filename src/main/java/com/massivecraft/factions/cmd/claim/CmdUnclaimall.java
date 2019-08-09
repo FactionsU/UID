@@ -28,7 +28,7 @@ public class CmdUnclaimall extends FCommand {
     public void perform(CommandContext context) {
         if (Econ.shouldBeUsed()) {
             double refund = Econ.calculateTotalLandRefund(context.faction.getLandRounded());
-            if (P.p.conf().economy().isBankEnabled() && P.p.conf().economy().isBankFactionPaysLandCosts()) {
+            if (P.getInstance().conf().economy().isBankEnabled() && P.getInstance().conf().economy().isBankFactionPaysLandCosts()) {
                 if (!Econ.modifyMoney(context.faction, refund, TL.COMMAND_UNCLAIMALL_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIMALL_FORUNCLAIM.toString())) {
                     return;
                 }
@@ -48,8 +48,8 @@ public class CmdUnclaimall extends FCommand {
         Board.getInstance().unclaimAll(context.faction.getId());
         context.faction.msg(TL.COMMAND_UNCLAIMALL_UNCLAIMED, context.fPlayer.describeTo(context.faction, true));
 
-        if (P.p.conf().logging().isLandUnclaims()) {
-            P.p.log(TL.COMMAND_UNCLAIMALL_LOG.format(context.fPlayer.getName(), context.faction.getTag()));
+        if (P.getInstance().conf().logging().isLandUnclaims()) {
+            P.getInstance().log(TL.COMMAND_UNCLAIMALL_LOG.format(context.fPlayer.getName(), context.faction.getTag()));
         }
     }
 

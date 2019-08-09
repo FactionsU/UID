@@ -32,7 +32,7 @@ public class MyLocationTypeAdapter implements JsonDeserializer<LazyLocation>, Js
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            P.p.log(Level.WARNING, "Error encountered while deserializing a LazyLocation.");
+            P.getInstance().log(Level.WARNING, "Error encountered while deserializing a LazyLocation.");
             return null;
         }
     }
@@ -52,7 +52,7 @@ public class MyLocationTypeAdapter implements JsonDeserializer<LazyLocation>, Js
             return obj;
         } catch (Exception ex) {
             ex.printStackTrace();
-            P.p.log(Level.WARNING, "Error encountered while serializing a LazyLocation.");
+            P.getInstance().log(Level.WARNING, "Error encountered while serializing a LazyLocation.");
             return obj;
         }
     }

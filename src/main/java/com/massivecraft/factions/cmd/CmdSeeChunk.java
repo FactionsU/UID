@@ -18,7 +18,7 @@ public class CmdSeeChunk extends FCommand {
                 .playerOnly()
                 .build();
 
-        useParticles = P.p.getConfig().getBoolean("see-chunk.particles", true);
+        useParticles = P.getInstance().getConfig().getBoolean("see-chunk.particles", true);
     }
 
     @Override

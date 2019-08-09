@@ -81,7 +81,7 @@ public abstract class FCommand {
     }
 
     public boolean isEnabled(CommandContext context) {
-        if (P.p.getLocked() && requirements.isDisableOnLock()) {
+        if (P.getInstance().getLocked() && requirements.isDisableOnLock()) {
             context.msg("<b>Factions was locked by an admin. Please try again later.");
             return false;
         }
@@ -146,7 +146,7 @@ public abstract class FCommand {
      */
     public List<String> getToolTips(FPlayer player) {
         List<String> lines = new ArrayList<>();
-        for (String s : P.p.getConfig().getStringList("tooltips.show")) {
+        for (String s : P.getInstance().getConfig().getStringList("tooltips.show")) {
             lines.add(ChatColor.translateAlternateColorCodes('&', replaceFPlayerTags(s, player)));
         }
         return lines;
@@ -154,7 +154,7 @@ public abstract class FCommand {
 
     public List<String> getToolTips(Faction faction) {
         List<String> lines = new ArrayList<>();
-        for (String s : P.p.getConfig().getStringList("tooltips.list")) {
+        for (String s : P.getInstance().getConfig().getStringList("tooltips.list")) {
             lines.add(ChatColor.translateAlternateColorCodes('&', replaceFactionTags(s, faction)));
         }
         return lines;
@@ -175,7 +175,7 @@ public abstract class FCommand {
             s = s.replace("{power}", power);
         }
         if (s.contains("{group}")) {
-            String group = P.p.getPrimaryGroup(Bukkit.getOfflinePlayer(UUID.fromString(player.getId())));
+            String group = P.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(UUID.fromString(player.getId())));
             s = s.replace("{group}", group);
         }
         return s;
@@ -211,7 +211,7 @@ public abstract class FCommand {
  */
     public String getUseageTemplate(CommandContext context, boolean addShortHelp) {
         StringBuilder ret = new StringBuilder();
-        ret.append(P.p.txt.parseTags("<c>"));
+        ret.append(P.getInstance().txt.parseTags("<c>"));
         ret.append('/');
 
         for (FCommand fc : context.commandChain) {
@@ -238,12 +238,12 @@ public abstract class FCommand {
         }
 
         if (args.size() > 0) {
-            ret.append(P.p.txt.parseTags("<p> "));
+            ret.append(P.getInstance().txt.parseTags("<p> "));
             ret.append(TextUtil.implode(args, " "));
         }
 
         if (addShortHelp) {
-            ret.append(P.p.txt.parseTags(" <i>"));
+            ret.append(P.getInstance().txt.parseTags(" <i>"));
             ret.append(this.getHelpShort());
         }
 

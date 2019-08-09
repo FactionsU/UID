@@ -11,12 +11,12 @@ public abstract class MoneyCommand extends FCommand {
             return false;
         }
 
-        if (!P.p.conf().economy().isEnabled()) {
+        if (!P.getInstance().conf().economy().isEnabled()) {
             context.msg("<b>Faction economy features are disabled on this server.");
             return false;
         }
 
-        if (!P.p.conf().economy().isBankEnabled()) {
+        if (!P.getInstance().conf().economy().isBankEnabled()) {
             context.msg("<b>The faction bank system is disabled on this server.");
             return false;
         }

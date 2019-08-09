@@ -48,11 +48,11 @@ public interface Tag {
             return line;
         }
 
-        if (P.p.isClipPlaceholderAPIHooked() && player.isOnline()) {
+        if (P.getInstance().isClipPlaceholderAPIHooked() && player.isOnline()) {
             line = PlaceholderAPI.setPlaceholders(player, line);
         }
 
-        if (P.p.isMVdWPlaceholderAPIHooked() && player.isOnline()) {
+        if (P.getInstance().isMVdWPlaceholderAPIHooked() && player.isOnline()) {
             line = be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, line);
         }
 
@@ -60,7 +60,7 @@ public interface Tag {
     }
 
     static boolean isMinimalShow() {
-        return P.p.getConfig().getBoolean("minimal-show", false);
+        return P.getInstance().getConfig().getBoolean("minimal-show", false);
     }
 
     /**

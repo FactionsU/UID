@@ -85,7 +85,7 @@ public abstract class FRelationCommand extends FCommand {
         } else {
             // inform the other faction of your request
             them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + context.faction.getTag(), targetRelation.getColor() + targetRelation.getTranslation());
-            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, P.p.conf().getCommandBase().get(0), targetRelation, context.faction.getTag());
+            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, P.getInstance().conf().getCommandBase().get(0), targetRelation, context.faction.getTag());
             context.faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.getTag(), "" + targetRelation.getColor() + targetRelation);
         }
 
@@ -104,8 +104,8 @@ public abstract class FRelationCommand extends FCommand {
     }
 
     private boolean hasMaxRelations(Faction them, Relation targetRelation, CommandContext context) {
-        if (P.p.getConfig().getBoolean("max-relations.enabled", false)) {
-            int max = P.p.getConfig().getInt("max-relations." + targetRelation.toString(), -1);
+        if (P.getInstance().getConfig().getBoolean("max-relations.enabled", false)) {
+            int max = P.getInstance().getConfig().getInt("max-relations." + targetRelation.toString(), -1);
             if (max != -1) {
                 if (context.faction.getRelationCount(targetRelation) >= max) {
                     context.msg(TL.COMMAND_RELATIONS_EXCEEDS_ME, max, targetRelation.getPluralTranslation());

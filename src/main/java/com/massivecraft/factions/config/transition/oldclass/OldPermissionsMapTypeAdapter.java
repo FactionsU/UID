@@ -57,7 +57,7 @@ public class OldPermissionsMapTypeAdapter implements JsonDeserializer<Map<OldPer
             return permissionsMap;
 
         } catch (Exception ex) {
-            P.p.log(Level.WARNING, "Error encountered while deserializing a PermissionsMap.");
+            P.getInstance().log(Level.WARNING, "Error encountered while deserializing a PermissionsMap.");
             ex.printStackTrace();
             return null;
         }
