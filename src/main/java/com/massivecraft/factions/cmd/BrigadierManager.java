@@ -19,7 +19,7 @@ public class BrigadierManager {
     public LiteralArgumentBuilder<Object> brigadier = LiteralArgumentBuilder.literal("factions");
 
     public BrigadierManager() {
-        commodore = CommodoreProvider.getCommodore(FactionsPlugin.p);
+        commodore = CommodoreProvider.getCommodore(FactionsPlugin.getInstance());
     }
 
     public void build() {

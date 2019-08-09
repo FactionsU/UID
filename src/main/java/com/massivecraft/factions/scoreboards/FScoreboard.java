@@ -109,7 +109,7 @@ public class FScoreboard {
                     updateObjective();
                 }
             }
-        }.runTaskTimer(FactionsPlugin.p, updateInterval, updateInterval);
+        }.runTaskTimer(FactionsPlugin.getInstance(), updateInterval, updateInterval);
     }
 
     public void setTemporarySidebar(final FSidebarProvider provider) {
@@ -132,7 +132,7 @@ public class FScoreboard {
                     updateObjective();
                 }
             }
-        }.runTaskLater(FactionsPlugin.p, FactionsPlugin.getInstance().getConfig().getInt("scoreboard.expiration", 7) * 20);
+        }.runTaskLater(FactionsPlugin.getInstance(), FactionsPlugin.getInstance().getConfig().getInt("scoreboard.expiration", 7) * 20);
     }
 
     private void updateObjective() {

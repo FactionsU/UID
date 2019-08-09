@@ -42,7 +42,7 @@ public class FTeamWrapper {
                     updating.remove(faction);
                     applyUpdates(faction);
                 }
-            }.runTask(FactionsPlugin.p);
+            }.runTask(FactionsPlugin.getInstance());
         }
     }
 

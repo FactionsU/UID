@@ -35,7 +35,7 @@ public abstract class FCommand {
     public CommandRequirements requirements;
 
     public FCommand() {
-        plugin = FactionsPlugin.p;
+        plugin = FactionsPlugin.getInstance();
 
         requirements = new CommandRequirements.Builder(null).build();
 

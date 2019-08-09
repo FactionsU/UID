@@ -101,7 +101,7 @@ public class WarpGUI extends GUI<Integer> {
                 HashMap<Object, Object> sessionData = new HashMap<>();
                 sessionData.put("warp", warp);
                 PasswordPrompt passwordPrompt = new PasswordPrompt();
-                ConversationFactory inputFactory = new ConversationFactory(FactionsPlugin.p)
+                ConversationFactory inputFactory = new ConversationFactory(FactionsPlugin.getInstance())
                         .withModality(false)
                         .withLocalEcho(false)
                         .withInitialSessionData(sessionData)

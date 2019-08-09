@@ -88,7 +88,7 @@ public class CmdStuck extends FCommand {
                         }
                     };
                 }
-            }.runTaskLater(FactionsPlugin.p, delay * 20).getTaskId();
+            }.runTaskLater(FactionsPlugin.getInstance(), delay * 20).getTaskId();
 
             FactionsPlugin.getInstance().getTimers().put(player.getUniqueId(), System.currentTimeMillis() + (delay * 1000));
             long wait = FactionsPlugin.getInstance().getTimers().get(player.getUniqueId()) - System.currentTimeMillis();

@@ -944,7 +944,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                     public void run() {
                         setTakeFallDamage(true);
                     }
-                }.runTaskLater(FactionsPlugin.p, 20L * cooldown);
+                }.runTaskLater(FactionsPlugin.getInstance(), 20L * cooldown);
             }
         }
 

@@ -88,7 +88,7 @@ public class DiscUtil {
                         lock.unlock();
                     }
                 }
-            }.runTaskAsynchronously(FactionsPlugin.p);
+            }.runTaskAsynchronously(FactionsPlugin.getInstance());
         }
 
         return true; // don't really care but for some reason this is a boolean.
