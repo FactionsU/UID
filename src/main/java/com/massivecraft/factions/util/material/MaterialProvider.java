@@ -17,19 +17,19 @@ public class MaterialProvider {
 
     public Material resolve(String name) {
         if (name == null) {
-            P.p.log("Null material name, Skipping");
+            P.getInstance().log("Null material name, Skipping");
             return Material.AIR;
         }
 
         if (!materialData.containsKey(name)) {
-            P.p.log(Level.INFO, "Material does not exist: " + name.toUpperCase());
+            P.getInstance().log(Level.INFO, "Material does not exist: " + name.toUpperCase());
             return Material.AIR;
         }
 
         Material material = materialData.get(name).get();
         if (material == null) {
             // Could not create Material from provided String, return Air
-            P.p.log(Level.INFO, "Invalid material: " + name.toUpperCase());
+            P.getInstance().log(Level.INFO, "Invalid material: " + name.toUpperCase());
             return Material.AIR;
         }
         return material;

@@ -16,9 +16,9 @@ public class CmdReload extends FCommand {
     @Override
     public void perform(CommandContext context) {
         long timeInitStart = System.currentTimeMillis();
-        P.p.getConfigManager().loadConfigs();
-        P.p.reloadConfig();
-        P.p.loadLang();
+        P.getInstance().getConfigManager().loadConfigs();
+        P.getInstance().reloadConfig();
+        P.getInstance().loadLang();
         long timeReload = (System.currentTimeMillis() - timeInitStart);
 
         context.msg(TL.COMMAND_RELOAD_TIME, timeReload);

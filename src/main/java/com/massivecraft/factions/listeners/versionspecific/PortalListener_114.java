@@ -40,7 +40,7 @@ public class PortalListener_114 implements Listener {
                 return;
             }
 
-            String mininumRelation = P.p.getConfig().getString("portals.minimum-relation", "MEMBER");
+            String mininumRelation = P.getInstance().getConfig().getString("portals.minimum-relation", "MEMBER");
 
             // Don't let people portal into nether bases if server owners don't want that.
             if (!fPlayer.getFaction().getRelationTo(faction).isAtLeast(Relation.fromString(mininumRelation))) {

@@ -41,8 +41,8 @@ public class CmdSafeunclaimall extends FCommand {
 
         context.msg(TL.COMMAND_SAFEUNCLAIMALL_UNCLAIMED);
 
-        if (P.p.conf().logging().isLandUnclaims()) {
-            P.p.log(TL.COMMAND_SAFEUNCLAIMALL_UNCLAIMEDLOG.format(context.sender.getName()));
+        if (P.getInstance().conf().logging().isLandUnclaims()) {
+            P.getInstance().log(TL.COMMAND_SAFEUNCLAIMALL_UNCLAIMEDLOG.format(context.sender.getName()));
         }
     }
 

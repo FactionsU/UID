@@ -15,7 +15,7 @@ import java.util.*;
 
 public class Loader {
     public static void load(String file, Object config, String comment) throws IOException, IllegalAccessException {
-        Path configFolder = P.p.getDataFolder().toPath().resolve("config");
+        Path configFolder = P.getInstance().getDataFolder().toPath().resolve("config");
         if (!configFolder.toFile().exists()) {
             configFolder.toFile().mkdir();
         }

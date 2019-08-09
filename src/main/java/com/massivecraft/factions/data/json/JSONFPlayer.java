@@ -20,6 +20,6 @@ public class JSONFPlayer extends MemoryFPlayer {
     }
 
     public boolean shouldBeSaved() {
-        return this.hasFaction() || (this.getPowerRounded() != this.getPowerMaxRounded() && this.getPowerRounded() != (int) Math.round(P.p.conf().factions().landRaidControl().power().getPlayerStarting()));
+        return this.hasFaction() || (this.getPowerRounded() != this.getPowerMaxRounded() && this.getPowerRounded() != (int) Math.round(P.getInstance().conf().factions().landRaidControl().power().getPlayerStarting()));
     }
 }

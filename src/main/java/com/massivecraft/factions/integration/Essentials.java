@@ -27,12 +27,12 @@ public class Essentials {
 
     // return false if feature is disabled or Essentials isn't available
     public static boolean handleTeleport(Player player, Location loc) {
-        if (!P.p.conf().factions().homes().isTeleportCommandEssentialsIntegration() || essentials == null) {
+        if (!P.getInstance().conf().factions().homes().isTeleportCommandEssentialsIntegration() || essentials == null) {
             return false;
         }
 
         Teleport teleport = essentials.getUser(player).getTeleport();
-        Trade trade = new Trade(P.p.conf().economy().getCostHome(), essentials);
+        Trade trade = new Trade(P.getInstance().conf().economy().getCostHome(), essentials);
         try {
             teleport.teleport(loc, trade);
         } catch (Exception e) {

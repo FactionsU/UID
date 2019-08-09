@@ -12,21 +12,21 @@ public class FDefaultSidebar extends FSidebarProvider {
 
     @Override
     public String getTitle(FPlayer fplayer) {
-        return replaceTags(fplayer, P.p.getConfig().getString("scoreboard.default-title", "{name}"));
+        return replaceTags(fplayer, P.getInstance().getConfig().getString("scoreboard.default-title", "{name}"));
     }
 
     @Override
     public List<String> getLines(FPlayer fplayer) {
         if (fplayer.hasFaction()) {
             return getOutput(fplayer, "scoreboard.default");
-        } else if (P.p.getConfig().getBoolean("scoreboard.factionless-enabled", false)) {
+        } else if (P.getInstance().getConfig().getBoolean("scoreboard.factionless-enabled", false)) {
             return getOutput(fplayer, "scoreboard.factionless");
         }
         return getOutput(fplayer, "scoreboard.default"); // no faction, factionless-board disabled
     }
 
     public List<String> getOutput(FPlayer fplayer, String list) {
-        List<String> lines = P.p.getConfig().getStringList(list);
+        List<String> lines = P.getInstance().getConfig().getStringList(list);
 
         if (lines == null || lines.isEmpty()) {
             return new ArrayList<>();

@@ -70,7 +70,7 @@ public class CmdPowerBoost extends FCommand {
         int roundedPower = (int) Math.round(targetPower);
         context.msg(TL.COMMAND_POWERBOOST_BOOST, target, roundedPower);
         if (context.player != null) {
-            P.p.log(TL.COMMAND_POWERBOOST_BOOSTLOG.toString(), context.fPlayer.getName(), target, roundedPower);
+            P.getInstance().log(TL.COMMAND_POWERBOOST_BOOSTLOG.toString(), context.fPlayer.getName(), target, roundedPower);
         }
     }
 

@@ -49,7 +49,7 @@ public class CmdClaim extends FCommand {
 
             new SpiralTask(new FLocation(context.player), radius) {
                 private int failCount = 0;
-                private final int limit = P.p.conf().factions().claims().getRadiusClaimFailureLimit() - 1;
+                private final int limit = P.getInstance().conf().factions().claims().getRadiusClaimFailureLimit() - 1;
 
                 @Override
                 public boolean work() {

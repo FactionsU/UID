@@ -38,14 +38,14 @@ public class MaterialDb {
 
     public static void load() {
         instance = new MaterialDb();
-        instance.legacy = P.getVersion() < 1300; // Before 1.13
-        P.p.getLogger().info(String.format("Using legacy support for materials: %s", instance.legacy));
+        instance.legacy = P.getMCVersion() < 1300; // Before 1.13
+        P.getInstance().getLogger().info(String.format("Using legacy support for materials: %s", instance.legacy));
 
-        InputStreamReader reader = new InputStreamReader(P.p.getResource("materials.json"));
+        InputStreamReader reader = new InputStreamReader(P.getInstance().getResource("materials.json"));
         Type typeToken = new TypeToken<HashMap<String, MaterialProvider.MaterialData>>() {
         }.getType();
-        HashMap<String, MaterialProvider.MaterialData> materialData = P.p.gson.fromJson(reader, typeToken);
-        P.p.getLogger().info(String.format("Found %s material mappings in the materials.json file.", materialData.keySet().size()));
+        HashMap<String, MaterialProvider.MaterialData> materialData = P.getInstance().gson.fromJson(reader, typeToken);
+        P.getInstance().getLogger().info(String.format("Found %s material mappings in the materials.json file.", materialData.keySet().size()));
         instance.provider = new MaterialProvider(materialData);
     }
 

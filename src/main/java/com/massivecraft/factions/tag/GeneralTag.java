@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import java.util.function.Supplier;
 
 public enum GeneralTag implements Tag {
-    MAX_WARPS("{max-warps}", () -> String.valueOf(P.p.getConfig().getInt("max-warps", 5))),
+    MAX_WARPS("{max-warps}", () -> String.valueOf(P.getInstance().getConfig().getInt("max-warps", 5))),
     MAX_ALLIES("{max-allies}", () -> getRelation("ally")),
     MAX_ENEMIES("{max-enemies}", () -> getRelation("enemy")),
     MAX_TRUCES("{max-truces}", () -> getRelation("truce")),
@@ -20,8 +20,8 @@ public enum GeneralTag implements Tag {
     private final Supplier<String> supplier;
 
     private static String getRelation(String relation) {
-        if (P.p.getConfig().getBoolean("max-relations.enabled", true)) {
-            return String.valueOf(P.p.getConfig().getInt("max-relations." + relation, 10));
+        if (P.getInstance().getConfig().getBoolean("max-relations.enabled", true)) {
+            return String.valueOf(P.getInstance().getConfig().getInt("max-relations." + relation, 10));
         }
         return TL.GENERIC_INFINITY.toString();
     }

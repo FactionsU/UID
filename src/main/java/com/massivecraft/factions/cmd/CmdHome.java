@@ -47,12 +47,12 @@ public class CmdHome extends FCommand {
             return;
         }
 
-        if (!P.p.conf().factions().homes().isEnabled()) {
+        if (!P.getInstance().conf().factions().homes().isEnabled()) {
             context.fPlayer.msg(TL.COMMAND_HOME_DISABLED);
             return;
         }
 
-        if (!P.p.conf().factions().homes().isTeleportCommandEnabled()) {
+        if (!P.getInstance().conf().factions().homes().isTeleportCommandEnabled()) {
             context.fPlayer.msg(TL.COMMAND_HOME_TELEPORTDISABLED);
             return;
         }
@@ -63,12 +63,12 @@ public class CmdHome extends FCommand {
             return;
         }
 
-        if (!P.p.conf().factions().homes().isTeleportAllowedFromEnemyTerritory() && context.fPlayer.isInEnemyTerritory()) {
+        if (!P.getInstance().conf().factions().homes().isTeleportAllowedFromEnemyTerritory() && context.fPlayer.isInEnemyTerritory()) {
             context.fPlayer.msg(TL.COMMAND_HOME_INENEMY);
             return;
         }
 
-        if (!P.p.conf().factions().homes().isTeleportAllowedFromDifferentWorld() && context.player.getWorld().getUID() != context.faction.getHome().getWorld().getUID()) {
+        if (!P.getInstance().conf().factions().homes().isTeleportAllowedFromDifferentWorld() && context.player.getWorld().getUID() != context.faction.getHome().getWorld().getUID()) {
             context.fPlayer.msg(TL.COMMAND_HOME_WRONGWORLD);
             return;
         }
@@ -77,9 +77,9 @@ public class CmdHome extends FCommand {
         final Location loc = context.player.getLocation().clone();
 
         // if player is not in a safe zone or their own faction territory, only allow teleport if no enemies are nearby
-        if (P.p.conf().factions().homes().getTeleportAllowedEnemyDistance() > 0 &&
+        if (P.getInstance().conf().factions().homes().getTeleportAllowedEnemyDistance() > 0 &&
                 !faction.isSafeZone() &&
-                (!context.fPlayer.isInOwnTerritory() || (context.fPlayer.isInOwnTerritory() && !P.p.conf().factions().homes().isTeleportIgnoreEnemiesIfInOwnTerritory()))) {
+                (!context.fPlayer.isInOwnTerritory() || (context.fPlayer.isInOwnTerritory() && !P.getInstance().conf().factions().homes().isTeleportIgnoreEnemiesIfInOwnTerritory()))) {
             World w = loc.getWorld();
             double x = loc.getX();
             double y = loc.getY();
@@ -99,20 +99,20 @@ public class CmdHome extends FCommand {
                 double dx = Math.abs(x - l.getX());
                 double dy = Math.abs(y - l.getY());
                 double dz = Math.abs(z - l.getZ());
-                double max = P.p.conf().factions().homes().getTeleportAllowedEnemyDistance();
+                double max = P.getInstance().conf().factions().homes().getTeleportAllowedEnemyDistance();
 
                 // box-shaped distance check
                 if (dx > max || dy > max || dz > max) {
                     continue;
                 }
 
-                context.fPlayer.msg(TL.COMMAND_HOME_ENEMYNEAR, String.valueOf(P.p.conf().factions().homes().getTeleportAllowedEnemyDistance()));
+                context.fPlayer.msg(TL.COMMAND_HOME_ENEMYNEAR, String.valueOf(P.getInstance().conf().factions().homes().getTeleportAllowedEnemyDistance()));
                 return;
             }
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.payForCommand(P.p.conf().economy().getCostHome(), TL.COMMAND_HOME_TOTELEPORT.toString(), TL.COMMAND_HOME_FORTELEPORT.toString())) {
+        if (!context.payForCommand(P.getInstance().conf().economy().getCostHome(), TL.COMMAND_HOME_TOTELEPORT.toString(), TL.COMMAND_HOME_FORTELEPORT.toString())) {
             return;
         }
 
@@ -123,13 +123,13 @@ public class CmdHome extends FCommand {
 
         context.doWarmUp(WarmUpUtil.Warmup.HOME, TL.WARMUPS_NOTIFY_TELEPORT, "Home", () -> {
             // Create a smoke effect
-            if (P.p.conf().factions().homes().isTeleportCommandSmokeEffectEnabled()) {
+            if (P.getInstance().conf().factions().homes().isTeleportCommandSmokeEffectEnabled()) {
                 List<Location> smokeLocations = new ArrayList<>();
                 smokeLocations.add(loc);
                 smokeLocations.add(loc.add(0, 1, 0));
                 smokeLocations.add(context.faction.getHome());
                 smokeLocations.add(context.faction.getHome().clone().add(0, 1, 0));
-                SmokeUtil.spawnCloudRandom(smokeLocations, P.p.conf().factions().homes().getTeleportCommandSmokeEffectThickness());
+                SmokeUtil.spawnCloudRandom(smokeLocations, P.getInstance().conf().factions().homes().getTeleportCommandSmokeEffectThickness());
             }
 
             context.player.teleport(context.faction.getHome());

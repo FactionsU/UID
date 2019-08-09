@@ -25,7 +25,7 @@ public class CmdHelp extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        if (P.p.getConfig().getBoolean("use-old-help", true)) {
+        if (P.getInstance().getConfig().getBoolean("use-old-help", true)) {
             if (helpPages == null) {
                 updateHelp(context);
             }
@@ -42,9 +42,9 @@ public class CmdHelp extends FCommand {
             context.sendMessage(helpPages.get(page));
             return;
         }
-        ConfigurationSection help = P.p.getConfig().getConfigurationSection("help");
+        ConfigurationSection help = P.getInstance().getConfig().getConfigurationSection("help");
         if (help == null) {
-            help = P.p.getConfig().createSection("help"); // create new help section
+            help = P.getInstance().getConfig().createSection("help"); // create new help section
             List<String> error = new ArrayList<>();
             error.add("&cUpdate help messages in config.yml!");
             error.add("&cSet use-old-help for legacy help messages");
@@ -57,7 +57,7 @@ public class CmdHelp extends FCommand {
             return;
         }
         for (String helpLine : page) {
-            context.sendMessage(P.p.txt.parse(helpLine));
+            context.sendMessage(P.getInstance().txt.parse(helpLine));
         }
     }
 
@@ -96,7 +96,7 @@ public class CmdHelp extends FCommand {
         pageLines.add(p.cmdBase.cmdSethome.getUseageTemplate(context, true));
         helpPages.add(pageLines);
 
-        if (Econ.isSetup() && P.p.conf().economy().isEnabled() && P.p.conf().economy().isBankEnabled()) {
+        if (Econ.isSetup() && P.getInstance().conf().economy().isEnabled() && P.getInstance().conf().economy().isBankEnabled()) {
             pageLines = new ArrayList<>();
             pageLines.add("");
             pageLines.add(p.txt.parse(TL.COMMAND_HELP_BANK_1.toString()));
@@ -180,7 +180,7 @@ public class CmdHelp extends FCommand {
         pageLines.add(p.cmdBase.cmdSafeunclaimall.getUseageTemplate(context, true));
         pageLines.add(p.cmdBase.cmdWarunclaimall.getUseageTemplate(context, true));
         //TODO:TL
-        pageLines.add(p.txt.parse("<i>Note: " + p.cmdBase.cmdUnclaim.getUseageTemplate(context, false) + P.p.txt.parse("<i>") + " works on safe/war zones as well."));
+        pageLines.add(p.txt.parse("<i>Note: " + p.cmdBase.cmdUnclaim.getUseageTemplate(context, false) + P.getInstance().txt.parse("<i>") + " works on safe/war zones as well."));
         pageLines.add(p.cmdBase.cmdPeaceful.getUseageTemplate(context, true));
         helpPages.add(pageLines);
 

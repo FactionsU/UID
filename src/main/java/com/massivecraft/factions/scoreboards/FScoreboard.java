@@ -132,7 +132,7 @@ public class FScoreboard {
                     updateObjective();
                 }
             }
-        }.runTaskLater(P.p, P.p.getConfig().getInt("scoreboard.expiration", 7) * 20);
+        }.runTaskLater(P.p, P.getInstance().getConfig().getInt("scoreboard.expiration", 7) * 20);
     }
 
     private void updateObjective() {

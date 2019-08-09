@@ -37,9 +37,9 @@ public class CmdMoneyTransferFf extends MoneyCommand {
 
         boolean success = Econ.transferMoney(context.fPlayer, from, to, amount);
 
-        if (success && P.p.conf().logging().isMoneyTransactions()) {
+        if (success && P.getInstance().conf().logging().isMoneyTransactions()) {
             String name = context.sender instanceof Player ? context.fPlayer.getName() : context.sender.getName();
-            P.p.log(ChatColor.stripColor(P.p.txt.parse(TL.COMMAND_MONEYTRANSFERFF_TRANSFER.toString(), name, Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
+            P.getInstance().log(ChatColor.stripColor(P.getInstance().txt.parse(TL.COMMAND_MONEYTRANSFERFF_TRANSFER.toString(), name, Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
         }
     }
 

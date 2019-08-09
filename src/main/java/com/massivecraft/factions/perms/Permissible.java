@@ -16,7 +16,7 @@ import java.util.List;
 public interface Permissible {
 
     default ItemStack buildGUIItem(FPlayer fme) {
-        final ConfigurationSection RELATION_CONFIG = P.p.getConfig().getConfigurationSection("fperm-gui.relation");
+        final ConfigurationSection RELATION_CONFIG = P.getInstance().getConfig().getConfigurationSection("fperm-gui.relation");
 
         String displayName = replacePlaceholders(RELATION_CONFIG.getString("placeholder-item.name", ""), fme);
         List<String> lore = new ArrayList<>();

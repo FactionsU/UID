@@ -83,23 +83,23 @@ public enum Role implements Permissible {
 
     public String getPrefix() {
         if (this == Role.ADMIN) {
-            return P.p.conf().factions().prefixes().getAdmin();
+            return P.getInstance().conf().factions().prefixes().getAdmin();
         }
 
         if (this == Role.COLEADER) {
-            return P.p.conf().factions().prefixes().getColeader();
+            return P.getInstance().conf().factions().prefixes().getColeader();
         }
 
         if (this == Role.MODERATOR) {
-            return P.p.conf().factions().prefixes().getMod();
+            return P.getInstance().conf().factions().prefixes().getMod();
         }
 
         if (this == Role.NORMAL) {
-            return P.p.conf().factions().prefixes().getNormal();
+            return P.getInstance().conf().factions().prefixes().getNormal();
         }
 
         if (this == Role.RECRUIT) {
-            return P.p.conf().factions().prefixes().getRecruit();
+            return P.getInstance().conf().factions().prefixes().getRecruit();
         }
 
         return "";

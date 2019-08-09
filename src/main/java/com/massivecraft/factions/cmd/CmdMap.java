@@ -28,7 +28,7 @@ public class CmdMap extends FCommand {
                 // Turn on
 
                 // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-                if (!context.payForCommand(P.p.conf().economy().getCostMap(), "to show the map", "for showing the map")) {
+                if (!context.payForCommand(P.getInstance().conf().economy().getCostMap(), "to show the map", "for showing the map")) {
                     return;
                 }
 
@@ -44,7 +44,7 @@ public class CmdMap extends FCommand {
             }
         } else {
             // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-            if (!context.payForCommand(P.p.conf().economy().getCostMap(), TL.COMMAND_MAP_TOSHOW, TL.COMMAND_MAP_FORSHOW)) {
+            if (!context.payForCommand(P.getInstance().conf().economy().getCostMap(), TL.COMMAND_MAP_TOSHOW, TL.COMMAND_MAP_FORSHOW)) {
                 return;
             }
 

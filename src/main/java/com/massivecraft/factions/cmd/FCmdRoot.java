@@ -104,11 +104,11 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
             brigadierManager = new BrigadierManager();
         }
 
-        this.aliases.addAll(P.p.conf().getCommandBase());
+        this.aliases.addAll(P.getInstance().conf().getCommandBase());
         this.aliases.removeAll(Collections.<String>singletonList(null));  // remove any nulls from extra commas
 
         this.setHelpShort("The faction base command");
-        this.helpLong.add(P.p.txt.parseTags("<i>This command contains all faction stuff."));
+        this.helpLong.add(P.getInstance().txt.parseTags("<i>This command contains all faction stuff."));
 
         this.addSubCommand(this.cmdAdmin);
         this.addSubCommand(this.cmdAutoClaim);
@@ -181,22 +181,22 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.addSubCommand(this.cmdColeader);
         this.addSubCommand(this.cmdNear);
         if (Bukkit.getServer().getPluginManager().isPluginEnabled("FactionsTop")) {
-            P.p.getLogger().info("Found FactionsTop plugin. Disabling our own /f top command.");
+            P.getInstance().getLogger().info("Found FactionsTop plugin. Disabling our own /f top command.");
         } else {
             this.addSubCommand(this.cmdTop);
         }
-        if (P.p.isHookedPlayervaults()) {
-            P.p.getLogger().info("Found playervaults hook, adding /f vault and /f setmaxvault commands.");
+        if (P.getInstance().isHookedPlayervaults()) {
+            P.getInstance().getLogger().info("Found playervaults hook, adding /f vault and /f setmaxvault commands.");
             this.addSubCommand(new CmdSetMaxVaults());
             this.addSubCommand(new CmdVault());
         }
 
-        if (P.p.getConfig().getBoolean("f-fly.enable", false)) {
+        if (P.getInstance().getConfig().getBoolean("f-fly.enable", false)) {
             this.addSubCommand(this.cmdFly);
             this.addSubCommand(this.cmdTrail);
-            P.p.getLogger().info("Enabling /f fly command");
+            P.getInstance().getLogger().info("Enabling /f fly command");
         } else {
-            P.p.getLogger().info("Faction flight set to false in config.yml. Not enabling /f fly command.");
+            P.getInstance().getLogger().info("Faction flight set to false in config.yml. Not enabling /f fly command.");
         }
 
         if (CommodoreProvider.isSupported()) {

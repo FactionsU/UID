@@ -8,7 +8,7 @@ public class AutoLeaveTask implements Runnable {
     double rate;
 
     public AutoLeaveTask() {
-        this.rate = P.p.conf().factions().getAutoLeaveRoutineRunsEveryXMinutes();
+        this.rate = P.getInstance().conf().factions().getAutoLeaveRoutineRunsEveryXMinutes();
     }
 
     public synchronized void run() {
@@ -20,8 +20,8 @@ public class AutoLeaveTask implements Runnable {
         task.runTaskTimer(P.p, 1, 1);
 
         // maybe setting has been changed? if so, restart this task at new rate
-        if (this.rate != P.p.conf().factions().getAutoLeaveRoutineRunsEveryXMinutes()) {
-            P.p.startAutoLeaveTask(true);
+        if (this.rate != P.getInstance().conf().factions().getAutoLeaveRoutineRunsEveryXMinutes()) {
+            P.getInstance().startAutoLeaveTask(true);
         }
     }
 }

@@ -32,7 +32,7 @@ public class CmdTrail extends FCommand {
                         return;
                     }
 
-                    if (p.perm.has(context.player, Permission.FLY_TRAILS.node + "." + effectName)) {
+                    if (context.player.hasPermission(Permission.FLY_TRAILS.node + "." + effectName)) {
                         context.fPlayer.setFlyTrailsEffect(effectName);
                     } else {
                         context.fPlayer.msg(TL.COMMAND_FLYTRAILS_PARTICLE_PERMS, effectName);

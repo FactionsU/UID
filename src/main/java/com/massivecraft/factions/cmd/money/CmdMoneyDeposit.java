@@ -34,8 +34,8 @@ public class CmdMoneyDeposit extends MoneyCommand {
         }
         boolean success = Econ.transferMoney(context.fPlayer, context.fPlayer, faction, amount);
 
-        if (success && P.p.conf().logging().isMoneyTransactions()) {
-            P.p.log(ChatColor.stripColor(P.p.txt.parse(TL.COMMAND_MONEYDEPOSIT_DEPOSITED.toString(), context.fPlayer.getName(), Econ.moneyString(amount), faction.describeTo(null))));
+        if (success && P.getInstance().conf().logging().isMoneyTransactions()) {
+            P.getInstance().log(ChatColor.stripColor(P.getInstance().txt.parse(TL.COMMAND_MONEYDEPOSIT_DEPOSITED.toString(), context.fPlayer.getName(), Econ.moneyString(amount), faction.describeTo(null))));
         }
     }
 

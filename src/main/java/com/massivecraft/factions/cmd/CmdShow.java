@@ -60,17 +60,17 @@ public class CmdShow extends FCommand {
         }
 
         if (context.fPlayer != null && !context.player.hasPermission("factions.show.bypassexempt")
-                && P.p.getConfig().getStringList("show-exempt").contains(faction.getTag())) {
+                && P.getInstance().getConfig().getStringList("show-exempt").contains(faction.getTag())) {
             context.msg(TL.COMMAND_SHOW_EXEMPT);
             return;
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.payForCommand(P.p.conf().economy().getCostShow(), TL.COMMAND_SHOW_TOSHOW, TL.COMMAND_SHOW_FORSHOW)) {
+        if (!context.payForCommand(P.getInstance().conf().economy().getCostShow(), TL.COMMAND_SHOW_TOSHOW, TL.COMMAND_SHOW_FORSHOW)) {
             return;
         }
 
-        List<String> show = P.p.getConfig().getStringList("show");
+        List<String> show = P.getInstance().getConfig().getStringList("show");
         if (show == null || show.isEmpty()) {
             show = defaults;
         }
@@ -155,7 +155,7 @@ public class CmdShow extends FCommand {
                     }
                 }
             } else {
-                recipient.sendMessage(P.p.txt.parse(parsed));
+                recipient.sendMessage(P.getInstance().txt.parse(parsed));
             }
         }
     }
@@ -167,7 +167,7 @@ public class CmdShow extends FCommand {
             builder.append(first ? name : ", " + name);
             first = false;
         }
-        recipient.sendMessage(P.p.txt.parse(builder.toString()));
+        recipient.sendMessage(P.getInstance().txt.parse(builder.toString()));
     }
 
     private void relationMessage(StringBuilder builder, CommandSender recipient, Faction faction, Relation relation) {
@@ -179,11 +179,11 @@ public class CmdShow extends FCommand {
                 first = false;
             }
         }
-        recipient.sendMessage(P.p.txt.parse(builder.toString()));
+        recipient.sendMessage(P.getInstance().txt.parse(builder.toString()));
     }
 
     private boolean groupPresent() {
-        for (String line : P.p.getConfig().getStringList("tooltips.show")) {
+        for (String line : P.getInstance().getConfig().getStringList("tooltips.show")) {
             if (line.contains("{group}")) {
                 return true;
             }
@@ -208,7 +208,7 @@ public class CmdShow extends FCommand {
         public void run() {
             Map<UUID, String> map = new HashMap<>();
             for (OfflinePlayer player : this.players) {
-                map.put(player.getUniqueId(), P.p.getPrimaryGroup(player));
+                map.put(player.getUniqueId(), P.getInstance().getPrimaryGroup(player));
             }
             new Sender(this.messageList, this.sender, this.faction, map).runTask(P.p);
         }
