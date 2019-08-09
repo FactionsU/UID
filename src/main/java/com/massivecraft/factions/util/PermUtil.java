@@ -1,8 +1,7 @@
 package com.massivecraft.factions.util;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import java.util.HashMap;
@@ -13,22 +12,22 @@ public class PermUtil {
 
     public Map<String, String> permissionDescriptions = new HashMap<>();
 
-    protected P p;
+    protected FactionsPlugin plugin;
 
-    public PermUtil(P p) {
-        this.p = p;
+    public PermUtil(FactionsPlugin plugin) {
+        this.plugin = plugin;
         this.setup();
     }
 
     public String getForbiddenMessage(String perm) {
-        return p.txt.parse(TL.GENERIC_NOPERMISSION.toString(), getPermissionDescription(perm));
+        return plugin.txt.parse(TL.GENERIC_NOPERMISSION.toString(), getPermissionDescription(perm));
     }
 
     /**
      * This method hooks into all permission plugins we are supporting
      */
     public final void setup() {
-        for (Permission permission : p.getDescription().getPermissions()) {
+        for (Permission permission : plugin.getDescription().getPermissions()) {
             //p.log("\""+permission.getName()+"\" = \""+permission.getDescription()+"\"");
             this.permissionDescriptions.put(permission.getName(), permission.getDescription());
         }

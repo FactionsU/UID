@@ -5,7 +5,7 @@ import com.griefcraft.model.Protection;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -25,11 +25,11 @@ public class LWC {
         if (!(test instanceof LWCPlugin) || !test.isEnabled()) return;
 
         lwc = ((LWCPlugin) test).getLWC();
-        P.getInstance().log("Successfully hooked into LWC!" + (P.getInstance().getConfig().getBoolean("lwc.integration", false) ? "" : " Integration is currently disabled (\"lwc.integration\")."));
+        FactionsPlugin.getInstance().log("Successfully hooked into LWC!" + (FactionsPlugin.getInstance().getConfig().getBoolean("lwc.integration", false) ? "" : " Integration is currently disabled (\"lwc.integration\")."));
     }
 
     public static boolean getEnabled() {
-        return lwc != null && P.getInstance().getConfig().getBoolean("lwc.integration", false);
+        return lwc != null && FactionsPlugin.getInstance().getConfig().getBoolean("lwc.integration", false);
     }
 
     public static Plugin getLWC() {

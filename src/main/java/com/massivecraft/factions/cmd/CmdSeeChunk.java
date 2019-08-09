@@ -1,6 +1,6 @@
 package com.massivecraft.factions.cmd;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.SeeChunkUtil;
 import com.massivecraft.factions.util.TL;
@@ -18,7 +18,7 @@ public class CmdSeeChunk extends FCommand {
                 .playerOnly()
                 .build();
 
-        useParticles = P.getInstance().getConfig().getBoolean("see-chunk.particles", true);
+        useParticles = FactionsPlugin.getInstance().getConfig().getBoolean("see-chunk.particles", true);
     }
 
     @Override

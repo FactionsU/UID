@@ -1,7 +1,7 @@
 package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.struct.Role;
@@ -34,12 +34,12 @@ public class CmdInvite extends FCommand {
 
         if (target.getFaction() == context.faction) {
             context.msg(TL.COMMAND_INVITE_ALREADYMEMBER, target.getName(), context.faction.getTag());
-            context.msg(TL.GENERIC_YOUMAYWANT.toString() + p.cmdBase.cmdKick.getUseageTemplate(context));
+            context.msg(TL.GENERIC_YOUMAYWANT.toString() + plugin.cmdBase.cmdKick.getUseageTemplate(context));
             return;
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.payForCommand(P.getInstance().conf().economy().getCostInvite(), TL.COMMAND_INVITE_TOINVITE.toString(), TL.COMMAND_INVITE_FORINVITE.toString())) {
+        if (!context.payForCommand(FactionsPlugin.getInstance().conf().economy().getCostInvite(), TL.COMMAND_INVITE_TOINVITE.toString(), TL.COMMAND_INVITE_FORINVITE.toString())) {
             return;
         }
 
@@ -56,13 +56,13 @@ public class CmdInvite extends FCommand {
         // Tooltips, colors, and commands only apply to the string immediately before it.
         FancyMessage message = new FancyMessage(context.fPlayer.describeTo(target, true))
                 .tooltip(TL.COMMAND_INVITE_CLICKTOJOIN.toString())
-                .command("/" + P.getInstance().conf().getCommandBase().get(0) + " join " + context.faction.getTag())
+                .command("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " join " + context.faction.getTag())
                 .then(TL.COMMAND_INVITE_INVITEDYOU.toString())
                 .color(ChatColor.YELLOW)
                 .tooltip(TL.COMMAND_INVITE_CLICKTOJOIN.toString())
-                .command("/" + P.getInstance().conf().getCommandBase().get(0) + " join " + context.faction.getTag())
+                .command("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " join " + context.faction.getTag())
                 .then(context.faction.describeTo(target)).tooltip(TL.COMMAND_INVITE_CLICKTOJOIN.toString())
-                .command("/" + P.getInstance().conf().getCommandBase().get(0) + " join " + context.faction.getTag());
+                .command("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " join " + context.faction.getTag());
 
         message.send(target.getPlayer());
 

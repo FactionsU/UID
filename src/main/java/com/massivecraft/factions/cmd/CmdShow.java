@@ -3,7 +3,7 @@ package com.massivecraft.factions.cmd;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.struct.Relation;
 import com.massivecraft.factions.tag.FactionTag;
@@ -60,17 +60,17 @@ public class CmdShow extends FCommand {
         }
 
         if (context.fPlayer != null && !context.player.hasPermission("factions.show.bypassexempt")
-                && P.getInstance().getConfig().getStringList("show-exempt").contains(faction.getTag())) {
+                && FactionsPlugin.getInstance().getConfig().getStringList("show-exempt").contains(faction.getTag())) {
             context.msg(TL.COMMAND_SHOW_EXEMPT);
             return;
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.payForCommand(P.getInstance().conf().economy().getCostShow(), TL.COMMAND_SHOW_TOSHOW, TL.COMMAND_SHOW_FORSHOW)) {
+        if (!context.payForCommand(FactionsPlugin.getInstance().conf().economy().getCostShow(), TL.COMMAND_SHOW_TOSHOW, TL.COMMAND_SHOW_FORSHOW)) {
             return;
         }
 
-        List<String> show = P.getInstance().getConfig().getStringList("show");
+        List<String> show = FactionsPlugin.getInstance().getConfig().getStringList("show");
         if (show == null || show.isEmpty()) {
             show = defaults;
         }
@@ -80,11 +80,11 @@ public class CmdShow extends FCommand {
             // send header and that's all
             String header = show.get(0);
             if (FactionTag.HEADER.foundInString(header)) {
-                context.msg(p.txt.titleize(tag));
+                context.msg(plugin.txt.titleize(tag));
             } else {
                 String message = header.replace(FactionTag.FACTION.getTag(), tag);
                 message = Tag.parsePlain(faction, context.fPlayer, message);
-                context.msg(p.txt.parse(message));
+                context.msg(plugin.txt.parse(message));
             }
             return; // we only show header for non-normal factions
         }
@@ -110,7 +110,7 @@ public class CmdShow extends FCommand {
             }
         }
         if (context.fPlayer != null && this.groupPresent()) {
-            new GroupGetter(messageList, context.fPlayer, faction).runTaskAsynchronously(P.p);
+            new GroupGetter(messageList, context.fPlayer, faction).runTaskAsynchronously(FactionsPlugin.p);
         } else {
             this.sendMessages(messageList, context.sender, faction, context.fPlayer);
         }
@@ -155,7 +155,7 @@ public class CmdShow extends FCommand {
                     }
                 }
             } else {
-                recipient.sendMessage(P.getInstance().txt.parse(parsed));
+                recipient.sendMessage(FactionsPlugin.getInstance().txt.parse(parsed));
             }
         }
     }
@@ -167,7 +167,7 @@ public class CmdShow extends FCommand {
             builder.append(first ? name : ", " + name);
             first = false;
         }
-        recipient.sendMessage(P.getInstance().txt.parse(builder.toString()));
+        recipient.sendMessage(FactionsPlugin.getInstance().txt.parse(builder.toString()));
     }
 
     private void relationMessage(StringBuilder builder, CommandSender recipient, Faction faction, Relation relation) {
@@ -179,11 +179,11 @@ public class CmdShow extends FCommand {
                 first = false;
             }
         }
-        recipient.sendMessage(P.getInstance().txt.parse(builder.toString()));
+        recipient.sendMessage(FactionsPlugin.getInstance().txt.parse(builder.toString()));
     }
 
     private boolean groupPresent() {
-        for (String line : P.getInstance().getConfig().getStringList("tooltips.show")) {
+        for (String line : FactionsPlugin.getInstance().getConfig().getStringList("tooltips.show")) {
             if (line.contains("{group}")) {
                 return true;
             }
@@ -208,9 +208,9 @@ public class CmdShow extends FCommand {
         public void run() {
             Map<UUID, String> map = new HashMap<>();
             for (OfflinePlayer player : this.players) {
-                map.put(player.getUniqueId(), P.getInstance().getPrimaryGroup(player));
+                map.put(player.getUniqueId(), FactionsPlugin.getInstance().getPrimaryGroup(player));
             }
-            new Sender(this.messageList, this.sender, this.faction, map).runTask(P.p);
+            new Sender(this.messageList, this.sender, this.faction, map).runTask(FactionsPlugin.p);
         }
     }
 

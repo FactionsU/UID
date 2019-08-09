@@ -23,8 +23,8 @@ public class CmdLock extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        p.setLocked(context.argAsBool(0, !p.getLocked()));
-        context.msg(p.getLocked() ? TL.COMMAND_LOCK_LOCKED : TL.COMMAND_LOCK_UNLOCKED);
+        plugin.setLocked(context.argAsBool(0, !plugin.getLocked()));
+        context.msg(plugin.getLocked() ? TL.COMMAND_LOCK_LOCKED : TL.COMMAND_LOCK_UNLOCKED);
     }
 
     @Override

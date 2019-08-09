@@ -2,7 +2,7 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
@@ -27,7 +27,7 @@ public class CmdOwnerList extends FCommand {
             return;
         }
 
-        if (!P.getInstance().conf().factions().ownedArea().isEnabled()) {
+        if (!FactionsPlugin.getInstance().conf().factions().ownedArea().isEnabled()) {
             context.msg(TL.COMMAND_OWNERLIST_DISABLED);
             return;
         }

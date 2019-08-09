@@ -2,7 +2,7 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.struct.Role;
 import com.massivecraft.factions.util.TL;
@@ -33,7 +33,7 @@ public class CmdMod extends FCommand {
             FancyMessage msg = new FancyMessage(TL.COMMAND_MOD_CANDIDATES.toString()).color(ChatColor.GOLD);
             for (FPlayer player : context.faction.getFPlayersWhereRole(Role.NORMAL)) {
                 String s = player.getName();
-                msg.then(s + " ").color(ChatColor.WHITE).tooltip(TL.COMMAND_MOD_CLICKTOPROMOTE.toString() + s).command("/" + P.getInstance().conf().getCommandBase().get(0) + " mod " + s);
+                msg.then(s + " ").color(ChatColor.WHITE).tooltip(TL.COMMAND_MOD_CLICKTOPROMOTE.toString() + s).command("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " mod " + s);
             }
 
             context.sendFancyMessage(msg);

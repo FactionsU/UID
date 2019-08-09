@@ -2,7 +2,7 @@ package com.massivecraft.factions.cmd.claim;
 
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.cmd.FCommand;
@@ -41,8 +41,8 @@ public class CmdSafeunclaimall extends FCommand {
 
         context.msg(TL.COMMAND_SAFEUNCLAIMALL_UNCLAIMED);
 
-        if (P.getInstance().conf().logging().isLandUnclaims()) {
-            P.getInstance().log(TL.COMMAND_SAFEUNCLAIMALL_UNCLAIMEDLOG.format(context.sender.getName()));
+        if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
+            FactionsPlugin.getInstance().log(TL.COMMAND_SAFEUNCLAIMALL_UNCLAIMEDLOG.format(context.sender.getName()));
         }
     }
 

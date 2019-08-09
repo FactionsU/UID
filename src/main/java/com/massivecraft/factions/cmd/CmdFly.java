@@ -2,7 +2,7 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.FlightUtil;
 import com.massivecraft.factions.util.WarmUpUtil;
@@ -51,7 +51,7 @@ public class CmdFly extends FCommand {
                 context.msg(TL.COMMAND_FLY_NO_ACCESS, factionAtLocation.getTag(context.fPlayer));
             }
             return;
-        } else if (FlightUtil.instance().enemiesNearby(context.fPlayer, P.getInstance().getConfig().getInt("f-fly.enemy-radius", 7))) {
+        } else if (FlightUtil.instance().enemiesNearby(context.fPlayer, FactionsPlugin.getInstance().getConfig().getInt("f-fly.enemy-radius", 7))) {
             if (notify) {
                 context.msg(TL.COMMAND_FLY_ENEMY_NEARBY);
             }
@@ -59,7 +59,7 @@ public class CmdFly extends FCommand {
         }
 
         context.doWarmUp(WarmUpUtil.Warmup.FLIGHT, TL.WARMUPS_NOTIFY_FLIGHT, "Fly", () ->
-                context.fPlayer.setFlying(true), this.p.getConfig().getLong("warmups.f-fly", 0));
+                context.fPlayer.setFlying(true), this.plugin.getConfig().getLong("warmups.f-fly", 0));
     }
 
     @Override

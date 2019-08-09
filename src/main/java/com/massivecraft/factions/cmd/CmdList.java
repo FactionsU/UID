@@ -2,7 +2,7 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.TL;
@@ -36,7 +36,7 @@ public class CmdList extends FCommand {
     @Override
     public void perform(CommandContext context) {
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.payForCommand(P.getInstance().conf().economy().getCostList(), "to list the factions", "for listing the factions")) {
+        if (!context.payForCommand(FactionsPlugin.getInstance().conf().economy().getCostList(), "to list the factions", "for listing the factions")) {
             return;
         }
 
@@ -47,7 +47,7 @@ public class CmdList extends FCommand {
 
         // remove exempt factions
         if (!context.sender.hasPermission("factions.show.bypassexempt")) {
-            List<String> exemptFactions = P.getInstance().getConfig().getStringList("show-exempt");
+            List<String> exemptFactions = FactionsPlugin.getInstance().getConfig().getStringList("show-exempt");
             factionList.removeIf(next -> exemptFactions.contains(next.getTag()));
         }
 
@@ -76,16 +76,16 @@ public class CmdList extends FCommand {
         }
 
 
-        String header = p.getConfig().getString("list.header", defaults[0]);
+        String header = plugin.getConfig().getString("list.header", defaults[0]);
         header = header.replace("{pagenumber}", String.valueOf(pagenumber)).replace("{pagecount}", String.valueOf(pagecount));
-        lines.add(p.txt.parse(header));
+        lines.add(plugin.txt.parse(header));
 
         for (Faction faction : factionList.subList(start, end)) {
             if (faction.isWilderness()) {
-                lines.add(p.txt.parse(Tag.parsePlain(faction, p.getConfig().getString("list.factionless", defaults[1]))));
+                lines.add(plugin.txt.parse(Tag.parsePlain(faction, plugin.getConfig().getString("list.factionless", defaults[1]))));
                 continue;
             }
-            lines.add(p.txt.parse(Tag.parsePlain(faction, context.fPlayer, p.getConfig().getString("list.entry", defaults[2]))));
+            lines.add(plugin.txt.parse(Tag.parsePlain(faction, context.fPlayer, plugin.getConfig().getString("list.entry", defaults[2]))));
         }
         context.sendMessage(lines);
     }

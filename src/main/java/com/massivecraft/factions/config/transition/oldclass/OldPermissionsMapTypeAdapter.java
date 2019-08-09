@@ -1,7 +1,7 @@
 package com.massivecraft.factions.config.transition.oldclass;
 
 import com.google.gson.*;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.util.TL;
 
 import java.lang.reflect.Type;
@@ -57,7 +57,7 @@ public class OldPermissionsMapTypeAdapter implements JsonDeserializer<Map<OldPer
             return permissionsMap;
 
         } catch (Exception ex) {
-            P.getInstance().log(Level.WARNING, "Error encountered while deserializing a PermissionsMap.");
+            FactionsPlugin.getInstance().log(Level.WARNING, "Error encountered while deserializing a PermissionsMap.");
             ex.printStackTrace();
             return null;
         }

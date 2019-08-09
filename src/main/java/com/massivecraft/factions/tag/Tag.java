@@ -2,7 +2,7 @@ package com.massivecraft.factions.tag;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
@@ -48,11 +48,11 @@ public interface Tag {
             return line;
         }
 
-        if (P.getInstance().isClipPlaceholderAPIHooked() && player.isOnline()) {
+        if (FactionsPlugin.getInstance().isClipPlaceholderAPIHooked() && player.isOnline()) {
             line = PlaceholderAPI.setPlaceholders(player, line);
         }
 
-        if (P.getInstance().isMVdWPlaceholderAPIHooked() && player.isOnline()) {
+        if (FactionsPlugin.getInstance().isMVdWPlaceholderAPIHooked() && player.isOnline()) {
             line = be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, line);
         }
 
@@ -60,7 +60,7 @@ public interface Tag {
     }
 
     static boolean isMinimalShow() {
-        return P.getInstance().getConfig().getBoolean("minimal-show", false);
+        return FactionsPlugin.getInstance().getConfig().getBoolean("minimal-show", false);
     }
 
     /**

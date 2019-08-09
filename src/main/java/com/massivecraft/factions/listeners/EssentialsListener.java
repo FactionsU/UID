@@ -5,7 +5,7 @@ import com.earth2me.essentials.User;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -45,7 +45,7 @@ public class EssentialsListener implements Listener {
             // We're only going to remove homes in territory that belongs to THEIR faction.
             if (factionAt.equals(faction) && factionAt.isNormal()) {
                 user.delHome(homeName);
-                P.getInstance().log(Level.INFO, "FactionLeaveEvent: Removing home %s, player %s, in territory of %s",
+                FactionsPlugin.getInstance().log(Level.INFO, "FactionLeaveEvent: Removing home %s, player %s, in territory of %s",
                         homeName, event.getfPlayer().getName(), faction.getTag());
             }
         }

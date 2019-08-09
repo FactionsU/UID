@@ -3,7 +3,7 @@ package com.massivecraft.factions.util;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.struct.Relation;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -37,7 +37,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
     // Return the plugin version since this expansion is bundled with the dependency
     @Override
     public String getVersion() {
-        return P.getInstance().getDescription().getVersion();
+        return FactionsPlugin.getInstance().getDescription().getVersion();
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                 String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fPlayer.getLastLoginTime(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
                 return fPlayer.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fPlayer.getLastLoginTime() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
             case "player_group":
-                return P.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(UUID.fromString(fPlayer.getId())));
+                return FactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(UUID.fromString(fPlayer.getId())));
             case "player_balance":
                 return Econ.isSetup() ? Econ.getFriendlyBalance(fPlayer) : TL.ECON_OFF.format("balance");
             case "player_power":
@@ -117,7 +117,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
             case "faction_joining":
                 return (faction.getOpen() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString());
             case "faction_peaceful":
-                return faction.isPeaceful() ? P.getInstance().conf().colors().relations().getNeutral() + TL.COMMAND_SHOW_PEACEFUL.toString() : "";
+                return faction.isPeaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getNeutral() + TL.COMMAND_SHOW_PEACEFUL.toString() : "";
             case "faction_powerboost":
                 double powerBoost = faction.getPowerBoost();
                 return (powerBoost == 0.0) ? "" : (powerBoost > 0.0 ? TL.COMMAND_SHOW_BONUS.toString() : TL.COMMAND_SHOW_PENALTY.toString()) + powerBoost + ")";
@@ -127,7 +127,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
             case "faction_warps":
                 return String.valueOf(faction.getWarps().size());
             case "faction_raidable":
-                boolean raid = P.getInstance().getConfig().getBoolean("hcf.raidable", false) && faction.getLandRounded() >= faction.getPowerRounded();
+                boolean raid = FactionsPlugin.getInstance().getConfig().getBoolean("hcf.raidable", false) && faction.getLandRounded() >= faction.getPowerRounded();
                 return raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
             case "faction_home_world":
                 return faction.hasHome() ? faction.getHome().getWorld().getName() : "";

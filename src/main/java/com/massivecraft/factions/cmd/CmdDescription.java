@@ -2,7 +2,7 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.struct.Role;
 import com.massivecraft.factions.util.TL;
@@ -27,7 +27,7 @@ public class CmdDescription extends FCommand {
     @Override
     public void perform(CommandContext context) {
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.payForCommand(P.getInstance().conf().economy().getCostDesc(), TL.COMMAND_DESCRIPTION_TOCHANGE, TL.COMMAND_DESCRIPTION_FORCHANGE)) {
+        if (!context.payForCommand(FactionsPlugin.getInstance().conf().economy().getCostDesc(), TL.COMMAND_DESCRIPTION_TOCHANGE, TL.COMMAND_DESCRIPTION_FORCHANGE)) {
             return;
         }
 
@@ -35,7 +35,7 @@ public class CmdDescription extends FCommand {
         // And replace all the % because it messes with string formatting and this is easy way around that.
         context.faction.setDescription(TextUtil.implode(context.args, " ").replaceAll("%", "").replaceAll("(&([a-f0-9klmnor]))", "& $2"));
 
-        if (!P.getInstance().conf().factions().chat().isBroadcastDescriptionChanges()) {
+        if (!FactionsPlugin.getInstance().conf().factions().chat().isBroadcastDescriptionChanges()) {
             context.fPlayer.msg(TL.COMMAND_DESCRIPTION_CHANGED, context.faction.describeTo(context.fPlayer));
             context.fPlayer.sendMessage(context.faction.getDescription());
             return;

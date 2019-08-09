@@ -1,7 +1,7 @@
 package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.struct.Relation;
@@ -34,7 +34,7 @@ public class CmdSetFWarp extends FCommand {
             return;
         }
 
-        int maxWarps = P.getInstance().getConfig().getInt("max-warps", 5);
+        int maxWarps = FactionsPlugin.getInstance().getConfig().getInt("max-warps", 5);
         if (maxWarps <= context.faction.getWarps().size()) {
             context.fPlayer.msg(TL.COMMAND_SETFWARP_LIMIT, maxWarps);
             return;
@@ -56,7 +56,7 @@ public class CmdSetFWarp extends FCommand {
     }
 
     private boolean transact(FPlayer player, CommandContext context) {
-        return !P.getInstance().getConfig().getBoolean("warp-cost.enabled", false) || player.isAdminBypassing() || context.payForCommand(P.getInstance().getConfig().getDouble("warp-cost.setwarp", 5), TL.COMMAND_SETFWARP_TOSET.toString(), TL.COMMAND_SETFWARP_FORSET.toString());
+        return !FactionsPlugin.getInstance().getConfig().getBoolean("warp-cost.enabled", false) || player.isAdminBypassing() || context.payForCommand(FactionsPlugin.getInstance().getConfig().getDouble("warp-cost.setwarp", 5), TL.COMMAND_SETFWARP_TOSET.toString(), TL.COMMAND_SETFWARP_FORSET.toString());
     }
 
     @Override

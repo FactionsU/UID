@@ -3,20 +3,20 @@ package com.massivecraft.factions.data;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 
 public class SaveTask implements Runnable {
 
     private static boolean running = false;
 
-    private P p;
+    private FactionsPlugin plugin;
 
-    public SaveTask(P p) {
-        this.p = p;
+    public SaveTask(FactionsPlugin plugin) {
+        this.plugin = plugin;
     }
 
     public void run() {
-        if (!p.getAutoSave() || running) {
+        if (!plugin.getAutoSave() || running) {
             return;
         }
         running = true;

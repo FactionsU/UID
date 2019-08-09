@@ -1,14 +1,14 @@
 package com.massivecraft.factions.tag;
 
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
 
 import java.util.function.Supplier;
 
 public enum GeneralTag implements Tag {
-    MAX_WARPS("{max-warps}", () -> String.valueOf(P.getInstance().getConfig().getInt("max-warps", 5))),
+    MAX_WARPS("{max-warps}", () -> String.valueOf(FactionsPlugin.getInstance().getConfig().getInt("max-warps", 5))),
     MAX_ALLIES("{max-allies}", () -> getRelation("ally")),
     MAX_ENEMIES("{max-enemies}", () -> getRelation("enemy")),
     MAX_TRUCES("{max-truces}", () -> getRelation("truce")),
@@ -20,8 +20,8 @@ public enum GeneralTag implements Tag {
     private final Supplier<String> supplier;
 
     private static String getRelation(String relation) {
-        if (P.getInstance().getConfig().getBoolean("max-relations.enabled", true)) {
-            return String.valueOf(P.getInstance().getConfig().getInt("max-relations." + relation, 10));
+        if (FactionsPlugin.getInstance().getConfig().getBoolean("max-relations.enabled", true)) {
+            return String.valueOf(FactionsPlugin.getInstance().getConfig().getInt("max-relations." + relation, 10));
         }
         return TL.GENERIC_INFINITY.toString();
     }

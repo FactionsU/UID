@@ -1,6 +1,6 @@
 package com.massivecraft.factions.cmd;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.struct.Role;
@@ -53,7 +53,7 @@ public class CommandRequirements {
                 return false;
             }
 
-            if (!P.getInstance().getPermUtil().has(context.sender, permission.node, informIfNot)) {
+            if (!FactionsPlugin.getInstance().getPermUtil().has(context.sender, permission.node, informIfNot)) {
                 return false;
             }
 
