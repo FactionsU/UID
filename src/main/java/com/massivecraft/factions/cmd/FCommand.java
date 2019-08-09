@@ -4,7 +4,6 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.P;
 import com.massivecraft.factions.integration.Econ;
-import com.massivecraft.factions.zcore.CommandVisibility;
 import com.massivecraft.factions.zcore.util.TL;
 import com.massivecraft.factions.zcore.util.TextUtil;
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -16,6 +15,11 @@ import java.util.*;
 
 
 public abstract class FCommand {
+    public enum CommandVisibility {
+        VISIBLE, // Visible commands are visible to anyone. Even those who don't have permission to use it or is of invalid sender type.
+        SECRET, // Secret commands are visible only to those who can use the command. These commands are usually some kind of admin commands.
+        INVISIBLE // Invisible commands are invisible to everyone, even those who can use the command.
+    }
 
     public P p;
     public SimpleDateFormat sdf = new SimpleDateFormat(TL.DATE_FORMAT.toString());
