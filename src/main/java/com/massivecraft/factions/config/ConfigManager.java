@@ -1,6 +1,6 @@
 package com.massivecraft.factions.config;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.DefaultOfflinePermissionsConfig;
 import com.massivecraft.factions.config.file.DefaultPermissionsConfig;
 import com.massivecraft.factions.config.file.MainConfig;
@@ -9,7 +9,7 @@ import com.massivecraft.factions.config.transition.Transitioner;
 import java.io.IOException;
 
 public class ConfigManager {
-    private final P plugin;
+    private final FactionsPlugin plugin;
     private final DefaultPermissionsConfig permissionsConfig = new DefaultPermissionsConfig();
     private final String permissionsConfigComment="Default permissions";
     private final DefaultOfflinePermissionsConfig offlinePermissionsConfig = new DefaultOfflinePermissionsConfig();
@@ -22,7 +22,7 @@ public class ConfigManager {
             "\n" +
             "# Made with love <3";
 
-    public ConfigManager(P plugin) {
+    public ConfigManager(FactionsPlugin plugin) {
         this.plugin = plugin;
     }
 

@@ -58,15 +58,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class P extends JavaPlugin {
+public class FactionsPlugin extends JavaPlugin {
 
     // Our single plugin instance.
     // Single 4 life.
-    private static P instance;
+    private static FactionsPlugin instance;
     private Permission perms = null;
     private static int version;
 
-    public static P getInstance() {
+    public static FactionsPlugin getInstance() {
         return instance;
     }
 
@@ -116,7 +116,7 @@ public class P extends JavaPlugin {
 
     private Metrics metrics;
 
-    public P() {
+    public FactionsPlugin() {
         instance = this;
     }
 
@@ -184,8 +184,8 @@ public class P extends JavaPlugin {
         }
 
         // Register recurring tasks
-        if (saveTask == null && ((P) this).conf().factions().getSaveToFileEveryXMinutes() > 0.0) {
-            long saveTicks = (long) (20 * 60 * ((P) this).conf().factions().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
+        if (saveTask == null && ((FactionsPlugin) this).conf().factions().getSaveToFileEveryXMinutes() > 0.0) {
+            long saveTicks = (long) (20 * 60 * ((FactionsPlugin) this).conf().factions().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
             saveTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new SaveTask(this), saveTicks, saveTicks);
         }
 
@@ -421,25 +421,25 @@ public class P extends JavaPlugin {
         safeZoneNerfedCreatureTypes.add(EntityType.WITCH);
         safeZoneNerfedCreatureTypes.add(EntityType.WITHER);
         safeZoneNerfedCreatureTypes.add(EntityType.ZOMBIE);
-        if (P.getMCVersion() >= 900) {
+        if (FactionsPlugin.getMCVersion() >= 900) {
             safeZoneNerfedCreatureTypes.add(EntityType.SHULKER);
         }
-        if (P.getMCVersion() >= 1000) {
+        if (FactionsPlugin.getMCVersion() >= 1000) {
             safeZoneNerfedCreatureTypes.add(EntityType.HUSK);
             safeZoneNerfedCreatureTypes.add(EntityType.STRAY);
         }
-        if (P.getMCVersion() >= 1100) {
+        if (FactionsPlugin.getMCVersion() >= 1100) {
             safeZoneNerfedCreatureTypes.add(EntityType.ELDER_GUARDIAN);
             safeZoneNerfedCreatureTypes.add(EntityType.EVOKER);
             safeZoneNerfedCreatureTypes.add(EntityType.VEX);
             safeZoneNerfedCreatureTypes.add(EntityType.VINDICATOR);
             safeZoneNerfedCreatureTypes.add(EntityType.ZOMBIE_VILLAGER);
         }
-        if (P.getMCVersion() >= 1300) {
+        if (FactionsPlugin.getMCVersion() >= 1300) {
             safeZoneNerfedCreatureTypes.add(EntityType.DROWNED);
             safeZoneNerfedCreatureTypes.add(EntityType.PHANTOM);
         }
-        if (P.getMCVersion() >= 1400) {
+        if (FactionsPlugin.getMCVersion() >= 1400) {
             safeZoneNerfedCreatureTypes.add(EntityType.PILLAGER);
             safeZoneNerfedCreatureTypes.add(EntityType.RAVAGER);
         }

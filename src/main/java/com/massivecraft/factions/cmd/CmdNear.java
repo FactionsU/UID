@@ -2,7 +2,7 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.TL;
@@ -25,7 +25,7 @@ public class CmdNear extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        int radius = P.getInstance().getConfig().getInt("f-near.radius", 20);
+        int radius = FactionsPlugin.getInstance().getConfig().getInt("f-near.radius", 20);
         List<Entity> nearbyEntities = context.player.getNearbyEntities(radius, radius, radius);
         List<FPlayer> nearbyMembers = new ArrayList<>();
 

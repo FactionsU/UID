@@ -2,7 +2,7 @@ package com.massivecraft.factions.tag;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.struct.Relation;
 import com.massivecraft.factions.util.TL;
@@ -16,7 +16,7 @@ public enum FactionTag implements Tag {
     HOME_Z("{z}", (fac) -> fac.hasHome() ? String.valueOf(fac.getHome().getBlockZ()) : Tag.isMinimalShow() ? null : "{ig}"),
     CHUNKS("{chunks}", (fac) -> String.valueOf(fac.getLandRounded())),
     WARPS("{warps}", (fac) -> String.valueOf(fac.getWarps().size())),
-    HEADER("{header}", (fac, fp) -> P.getInstance().txt.titleize(fac.getTag(fp))),
+    HEADER("{header}", (fac, fp) -> FactionsPlugin.getInstance().txt.titleize(fac.getTag(fp))),
     POWER("{power}", (fac) -> String.valueOf(fac.getPowerRounded())),
     MAX_POWER("{maxPower}", (fac) -> String.valueOf(fac.getPowerMaxRounded())),
     POWER_BOOST("{power-boost}", (fac) -> {
@@ -32,18 +32,18 @@ public enum FactionTag implements Tag {
     FACTION_RELATION_COLOR("{faction-relation-color}", (fac, fp) -> fp == null ? "" : fp.getColorTo(fac).toString()),
     HOME_WORLD("{world}", (fac) -> fac.hasHome() ? fac.getHome().getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
     RAIDABLE("{raidable}", (fac) -> {
-        if (P.getInstance().getConfig().getBoolean("hcf.raidable", false)) {
+        if (FactionsPlugin.getInstance().getConfig().getBoolean("hcf.raidable", false)) {
             boolean raidable = fac.getLandRounded() >= fac.getPowerRounded();
             String str = raidable ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
-            if (P.getInstance().getConfig().getBoolean("hcf.dtr", false)) {
-                int dtr = raidable ? 0 : (int) Math.ceil(((double) (fac.getPowerRounded() - fac.getLandRounded())) / P.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
+            if (FactionsPlugin.getInstance().getConfig().getBoolean("hcf.dtr", false)) {
+                int dtr = raidable ? 0 : (int) Math.ceil(((double) (fac.getPowerRounded() - fac.getLandRounded())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
                 str += ' ' + TL.COMMAND_SHOW_DEATHS_TIL_RAIDABLE.format(dtr);
             }
             return str;
         }
         return null;
     }),
-    PEACEFUL("{peaceful}", (fac) -> fac.isPeaceful() ? P.getInstance().conf().colors().relations().getPeaceful() + TL.COMMAND_SHOW_PEACEFUL.toString() : ""),
+    PEACEFUL("{peaceful}", (fac) -> fac.isPeaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getPeaceful() + TL.COMMAND_SHOW_PEACEFUL.toString() : ""),
     PERMANENT("permanent", (fac) -> fac.isPermanent() ? "permanent" : "{notPermanent}"), // no braces needed
     LAND_VALUE("{land-value}", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(fac.getLandRounded())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("value")),
     DESCRIPTION("{description}", Faction::getDescription),
@@ -51,7 +51,7 @@ public enum FactionTag implements Tag {
     LAND_REFUND("{land-refund}", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(fac.getLandRounded())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("refund")),
     BANK_BALANCE("{faction-balance}", (fac) -> {
         if (Econ.shouldBeUsed()) {
-            return P.getInstance().conf().economy().isBankEnabled() ? Econ.moneyString(Econ.getBalance(fac.getAccountId())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance");
+            return FactionsPlugin.getInstance().conf().economy().isBankEnabled() ? Econ.moneyString(Econ.getBalance(fac.getAccountId())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance");
         }
         return Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance");
     }),

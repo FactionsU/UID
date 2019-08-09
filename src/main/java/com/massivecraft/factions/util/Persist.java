@@ -1,6 +1,6 @@
 package com.massivecraft.factions.util;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -10,10 +10,10 @@ import java.util.logging.Level;
 
 public class Persist {
 
-    private P p;
+    private FactionsPlugin plugin;
 
-    public Persist(P p) {
-        this.p = p;
+    public Persist(FactionsPlugin plugin) {
+        this.plugin = plugin;
     }
 
     // ------------------------------------------------------------ //
@@ -37,7 +37,7 @@ public class Persist {
     // ------------------------------------------------------------ //
 
     public File getFile(String name) {
-        return new File(p.getDataFolder(), name + ".json");
+        return new File(plugin.getDataFolder(), name + ".json");
     }
 
     public File getFile(Class<?> clazz) {
@@ -65,7 +65,7 @@ public class Persist {
 
     public <T> T loadOrSaveDefault(T def, Class<T> clazz, File file) {
         if (!file.exists()) {
-            p.getLogger().info("Creating default: " + file);
+            plugin.getLogger().info("Creating default: " + file);
             this.save(def, file);
             return def;
         }
@@ -73,14 +73,14 @@ public class Persist {
         T loaded = this.load(clazz, file);
 
         if (loaded == null) {
-            p.log(Level.WARNING, "Using default as I failed to load: " + file);
+            plugin.log(Level.WARNING, "Using default as I failed to load: " + file);
 
             // backup bad file, so user can attempt to recover their changes from it
             File backup = new File(file.getPath() + "_bad");
             if (backup.exists()) {
                 backup.delete();
             }
-            p.log(Level.WARNING, "Backing up copy of bad file to: " + backup);
+            plugin.log(Level.WARNING, "Backing up copy of bad file to: " + backup);
             file.renameTo(backup);
 
             return def;
@@ -100,7 +100,7 @@ public class Persist {
     }
 
     public boolean save(Object instance, File file) {
-        return DiscUtil.writeCatch(file, p.gson.toJson(instance), true);
+        return DiscUtil.writeCatch(file, plugin.gson.toJson(instance), true);
     }
 
     // LOAD BY CLASS
@@ -120,9 +120,9 @@ public class Persist {
         }
 
         try {
-            return p.gson.fromJson(content, clazz);
+            return plugin.gson.fromJson(content, clazz);
         } catch (Exception ex) {    // output the error message rather than full stack trace; error parsing the file, most likely
-            p.log(Level.WARNING, ex.getMessage());
+            plugin.log(Level.WARNING, ex.getMessage());
         }
 
         return null;
@@ -143,9 +143,9 @@ public class Persist {
         }
 
         try {
-            return (T) p.gson.fromJson(content, typeOfT);
+            return (T) plugin.gson.fromJson(content, typeOfT);
         } catch (Exception ex) {    // output the error message rather than full stack trace; error parsing the file, most likely
-            p.log(Level.WARNING, ex.getMessage());
+            plugin.log(Level.WARNING, ex.getMessage());
         }
 
         return null;

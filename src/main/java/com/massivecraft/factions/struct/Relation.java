@@ -1,6 +1,6 @@
 package com.massivecraft.factions.struct;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.ChatColor;
@@ -89,27 +89,27 @@ public enum Relation implements Permissible {
     public ChatColor getColor() {
         switch (this) {
             case MEMBER:
-                return P.getInstance().conf().colors().relations().getMember();
+                return FactionsPlugin.getInstance().conf().colors().relations().getMember();
             case ALLY:
-                return P.getInstance().conf().colors().relations().getAlly();
+                return FactionsPlugin.getInstance().conf().colors().relations().getAlly();
             case NEUTRAL:
-                return P.getInstance().conf().colors().relations().getNeutral();
+                return FactionsPlugin.getInstance().conf().colors().relations().getNeutral();
             case TRUCE:
-                return P.getInstance().conf().colors().relations().getTruce();
+                return FactionsPlugin.getInstance().conf().colors().relations().getTruce();
             default:
-                return P.getInstance().conf().colors().relations().getEnemy();
+                return FactionsPlugin.getInstance().conf().colors().relations().getEnemy();
         }
     }
 
     public double getRelationCost() {
         if (isEnemy()) {
-            return P.getInstance().conf().economy().getCostEnemy();
+            return FactionsPlugin.getInstance().conf().economy().getCostEnemy();
         } else if (isAlly()) {
-            return P.getInstance().conf().economy().getCostAlly();
+            return FactionsPlugin.getInstance().conf().economy().getCostAlly();
         } else if (isTruce()) {
-            return P.getInstance().conf().economy().getCostTruce();
+            return FactionsPlugin.getInstance().conf().economy().getCostTruce();
         } else {
-            return P.getInstance().conf().economy().getCostNeutral();
+            return FactionsPlugin.getInstance().conf().economy().getCostNeutral();
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.massivecraft.factions.cmd;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
@@ -25,7 +25,7 @@ public class CmdToggleAllianceChat extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        if (!P.getInstance().conf().factions().chat().isFactionOnlyChat()) {
+        if (!FactionsPlugin.getInstance().conf().factions().chat().isFactionOnlyChat()) {
             context.msg(TL.COMMAND_CHAT_DISABLED.toString());
             return;
         }

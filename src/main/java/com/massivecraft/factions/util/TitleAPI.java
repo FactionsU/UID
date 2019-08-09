@@ -1,6 +1,6 @@
 package com.massivecraft.factions.util;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -35,7 +35,7 @@ public class TitleAPI {
         try {
             Player.class.getMethod("sendTitle", String.class, String.class, int.class, int.class, int.class);
             supportsAPI = true;
-            P.getInstance().getLogger().info("Found API support for sending player titles :D");
+            FactionsPlugin.getInstance().getLogger().info("Found API support for sending player titles :D");
         } catch (NoSuchMethodException e) {
             try {
                 this.methodChatTitle = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class);
@@ -43,9 +43,9 @@ public class TitleAPI {
                 this.fieldTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE");
                 this.fieldSubTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE");
 
-                P.getInstance().getLogger().info("Didn't find API support for sending titles, using reflection instead.");
+                FactionsPlugin.getInstance().getLogger().info("Didn't find API support for sending titles, using reflection instead.");
             } catch (NoSuchMethodException | NoSuchFieldException ex) {
-                P.getInstance().getLogger().info("Failed to use reflection.");
+                FactionsPlugin.getInstance().getLogger().info("Failed to use reflection.");
                 bailOut = false;
                 ex.printStackTrace();
             }

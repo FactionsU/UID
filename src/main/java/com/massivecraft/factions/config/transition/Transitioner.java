@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.Loader;
 import com.massivecraft.factions.config.transition.oldclass.*;
 import com.massivecraft.factions.util.EnumTypeAdapter;
@@ -28,11 +28,11 @@ import java.util.Set;
 import java.util.logging.Level;
 
 public class Transitioner {
-    private P plugin;
+    private FactionsPlugin plugin;
     private Gson gson;
 
-    public Transitioner(P p) {
-        this.plugin = p;
+    public Transitioner(FactionsPlugin plugin) {
+        this.plugin = plugin;
     }
 
     public void checkTransition() {

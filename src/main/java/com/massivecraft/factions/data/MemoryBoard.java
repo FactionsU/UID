@@ -152,7 +152,7 @@ public abstract class MemoryBoard extends Board {
     }
 
     public void clean(String factionId) {
-        if (LWC.getEnabled() && P.getInstance().getConfig().getBoolean("lwc.reset-locks-unclaim", false)) {
+        if (LWC.getEnabled() && FactionsPlugin.getInstance().getConfig().getBoolean("lwc.reset-locks-unclaim", false)) {
             for (Entry<FLocation, String> entry : flocationIds.entrySet()) {
                 if (entry.getValue().equals(factionId)) {
                     LWC.clearAllLocks(entry.getKey());
@@ -220,10 +220,10 @@ public abstract class MemoryBoard extends Board {
         while (iter.hasNext()) {
             Entry<FLocation, String> entry = iter.next();
             if (!Factions.getInstance().isValidFactionId(entry.getValue())) {
-                if (LWC.getEnabled() && P.getInstance().getConfig().getBoolean("lwc.reset-locks-unclaim", false)) {
+                if (LWC.getEnabled() && FactionsPlugin.getInstance().getConfig().getBoolean("lwc.reset-locks-unclaim", false)) {
                     LWC.clearAllLocks(entry.getKey());
                 }
-                P.getInstance().log("Board cleaner removed " + entry.getValue() + " from " + entry.getKey());
+                FactionsPlugin.getInstance().log("Board cleaner removed " + entry.getValue() + " from " + entry.getKey());
                 iter.remove();
             }
         }
@@ -264,19 +264,19 @@ public abstract class MemoryBoard extends Board {
         Faction faction = fplayer.getFaction();
         ArrayList<FancyMessage> ret = new ArrayList<>();
         Faction factionLoc = getFactionAt(flocation);
-        ret.add(new FancyMessage(P.getInstance().txt.titleize("(" + flocation.getCoordString() + ") " + factionLoc.getTag(fplayer))));
+        ret.add(new FancyMessage(FactionsPlugin.getInstance().txt.titleize("(" + flocation.getCoordString() + ") " + factionLoc.getTag(fplayer))));
 
         // Get the compass
-        ArrayList<String> asciiCompass = AsciiCompass.getAsciiCompass(inDegrees, ChatColor.RED, P.getInstance().txt.parse("<a>"));
+        ArrayList<String> asciiCompass = AsciiCompass.getAsciiCompass(inDegrees, ChatColor.RED, FactionsPlugin.getInstance().txt.parse("<a>"));
 
-        int halfWidth = P.getInstance().conf().map().getWidth() / 2;
+        int halfWidth = FactionsPlugin.getInstance().conf().map().getWidth() / 2;
         // Use player's value for height
         int halfHeight = fplayer.getMapHeight() / 2;
         FLocation topLeft = flocation.getRelative(-halfWidth, -halfHeight);
         int width = halfWidth * 2 + 1;
         int height = halfHeight * 2 + 1;
 
-        if (P.getInstance().conf().map().isShowFactionKey()) {
+        if (FactionsPlugin.getInstance().conf().map().isShowFactionKey()) {
             height--;
         }
 
@@ -302,15 +302,15 @@ public abstract class MemoryBoard extends Board {
                     Faction factionHere = getFactionAt(flocationHere);
                     Relation relation = fplayer.getRelationTo(factionHere);
                     if (factionHere.isWilderness()) {
-                        row.then("-").color(P.getInstance().conf().colors().factions().getWilderness());
+                        row.then("-").color(FactionsPlugin.getInstance().conf().colors().factions().getWilderness());
                     } else if (factionHere.isSafeZone()) {
-                        row.then("+").color(P.getInstance().conf().colors().factions().getSafezone());
+                        row.then("+").color(FactionsPlugin.getInstance().conf().colors().factions().getSafezone());
                     } else if (factionHere.isWarZone()) {
-                        row.then("+").color(P.getInstance().conf().colors().factions().getWarzone());
+                        row.then("+").color(FactionsPlugin.getInstance().conf().colors().factions().getWarzone());
                     } else if (factionHere == faction || factionHere == factionLoc || relation.isAtLeast(Relation.ALLY) ||
-                            (P.getInstance().conf().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
-                            (P.getInstance().conf().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
-                            P.getInstance().conf().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
+                            (FactionsPlugin.getInstance().conf().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
+                            (FactionsPlugin.getInstance().conf().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
+                            FactionsPlugin.getInstance().conf().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
                         if (!fList.containsKey(factionHere.getTag())) {
                             fList.put(factionHere.getTag(), this.mapKeyChrs[Math.min(chrIdx++, this.mapKeyChrs.length - 1)]);
                         }
@@ -325,7 +325,7 @@ public abstract class MemoryBoard extends Board {
         }
 
         // Add the faction key
-        if (P.getInstance().conf().map().isShowFactionKey()) {
+        if (FactionsPlugin.getInstance().conf().map().isShowFactionKey()) {
             FancyMessage fRow = new FancyMessage("");
             for (String key : fList.keySet()) {
                 fRow.then(String.format("%s: %s ", fList.get(key), key)).color(ChatColor.GRAY);

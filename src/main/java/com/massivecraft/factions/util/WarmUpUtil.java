@@ -1,7 +1,7 @@
 package com.massivecraft.factions.util;
 
 import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class WarmUpUtil {
@@ -27,7 +27,7 @@ public class WarmUpUtil {
                         player.stopWarmup();
                         runnable.run();
                     }
-                }.runTaskLater(P.p, delay * 20).getTaskId();
+                }.runTaskLater(FactionsPlugin.p, delay * 20).getTaskId();
                 player.addWarmup(warmup, id);
             }
         } else {

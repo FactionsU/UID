@@ -2,7 +2,7 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
@@ -21,7 +21,7 @@ public abstract class FCommand {
         INVISIBLE // Invisible commands are invisible to everyone, even those who can use the command.
     }
 
-    public P p;
+    public FactionsPlugin plugin;
     public SimpleDateFormat sdf = new SimpleDateFormat(TL.DATE_FORMAT.toString());
 
     // Command Aliases
@@ -35,7 +35,7 @@ public abstract class FCommand {
     public CommandRequirements requirements;
 
     public FCommand() {
-        p = P.p;
+        plugin = FactionsPlugin.p;
 
         requirements = new CommandRequirements.Builder(null).build();
 
@@ -81,7 +81,7 @@ public abstract class FCommand {
     }
 
     public boolean isEnabled(CommandContext context) {
-        if (P.getInstance().getLocked() && requirements.isDisableOnLock()) {
+        if (FactionsPlugin.getInstance().getLocked() && requirements.isDisableOnLock()) {
             context.msg("<b>Factions was locked by an admin. Please try again later.");
             return false;
         }
@@ -146,7 +146,7 @@ public abstract class FCommand {
      */
     public List<String> getToolTips(FPlayer player) {
         List<String> lines = new ArrayList<>();
-        for (String s : P.getInstance().getConfig().getStringList("tooltips.show")) {
+        for (String s : FactionsPlugin.getInstance().getConfig().getStringList("tooltips.show")) {
             lines.add(ChatColor.translateAlternateColorCodes('&', replaceFPlayerTags(s, player)));
         }
         return lines;
@@ -154,7 +154,7 @@ public abstract class FCommand {
 
     public List<String> getToolTips(Faction faction) {
         List<String> lines = new ArrayList<>();
-        for (String s : P.getInstance().getConfig().getStringList("tooltips.list")) {
+        for (String s : FactionsPlugin.getInstance().getConfig().getStringList("tooltips.list")) {
             lines.add(ChatColor.translateAlternateColorCodes('&', replaceFactionTags(s, faction)));
         }
         return lines;
@@ -175,7 +175,7 @@ public abstract class FCommand {
             s = s.replace("{power}", power);
         }
         if (s.contains("{group}")) {
-            String group = P.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(UUID.fromString(player.getId())));
+            String group = FactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(UUID.fromString(player.getId())));
             s = s.replace("{group}", group);
         }
         return s;
@@ -211,7 +211,7 @@ public abstract class FCommand {
  */
     public String getUseageTemplate(CommandContext context, boolean addShortHelp) {
         StringBuilder ret = new StringBuilder();
-        ret.append(P.getInstance().txt.parseTags("<c>"));
+        ret.append(FactionsPlugin.getInstance().txt.parseTags("<c>"));
         ret.append('/');
 
         for (FCommand fc : context.commandChain) {
@@ -238,12 +238,12 @@ public abstract class FCommand {
         }
 
         if (args.size() > 0) {
-            ret.append(P.getInstance().txt.parseTags("<p> "));
+            ret.append(FactionsPlugin.getInstance().txt.parseTags("<p> "));
             ret.append(TextUtil.implode(args, " "));
         }
 
         if (addShortHelp) {
-            ret.append(P.getInstance().txt.parseTags(" <i>"));
+            ret.append(FactionsPlugin.getInstance().txt.parseTags(" <i>"));
             ret.append(this.getHelpShort());
         }
 

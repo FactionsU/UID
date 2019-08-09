@@ -1,6 +1,6 @@
 package com.massivecraft.factions.cmd;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
@@ -25,10 +25,10 @@ public class CmdBypass extends FCommand {
         // TODO: Move this to a transient field in the model??
         if (context.fPlayer.isAdminBypassing()) {
             context.fPlayer.msg(TL.COMMAND_BYPASS_ENABLE.toString());
-            P.getInstance().log(context.fPlayer.getName() + TL.COMMAND_BYPASS_ENABLELOG.toString());
+            FactionsPlugin.getInstance().log(context.fPlayer.getName() + TL.COMMAND_BYPASS_ENABLELOG.toString());
         } else {
             context.fPlayer.msg(TL.COMMAND_BYPASS_DISABLE.toString());
-            P.getInstance().log(context.fPlayer.getName() + TL.COMMAND_BYPASS_DISABLELOG.toString());
+            FactionsPlugin.getInstance().log(context.fPlayer.getName() + TL.COMMAND_BYPASS_DISABLELOG.toString());
         }
     }
 

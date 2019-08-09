@@ -1,6 +1,6 @@
 package com.massivecraft.factions.config;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.config.annotation.ConfigName;
 import com.typesafe.config.ConfigRenderOptions;
@@ -15,7 +15,7 @@ import java.util.*;
 
 public class Loader {
     public static void load(String file, Object config, String comment) throws IOException, IllegalAccessException {
-        Path configFolder = P.getInstance().getDataFolder().toPath().resolve("config");
+        Path configFolder = FactionsPlugin.getInstance().getDataFolder().toPath().resolve("config");
         if (!configFolder.toFile().exists()) {
             configFolder.toFile().mkdir();
         }

@@ -1,7 +1,7 @@
 package com.massivecraft.factions.util.material;
 
 import com.google.gson.reflect.TypeToken;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import org.bukkit.Material;
 
 import java.io.InputStreamReader;
@@ -38,14 +38,14 @@ public class MaterialDb {
 
     public static void load() {
         instance = new MaterialDb();
-        instance.legacy = P.getMCVersion() < 1300; // Before 1.13
-        P.getInstance().getLogger().info(String.format("Using legacy support for materials: %s", instance.legacy));
+        instance.legacy = FactionsPlugin.getMCVersion() < 1300; // Before 1.13
+        FactionsPlugin.getInstance().getLogger().info(String.format("Using legacy support for materials: %s", instance.legacy));
 
-        InputStreamReader reader = new InputStreamReader(P.getInstance().getResource("materials.json"));
+        InputStreamReader reader = new InputStreamReader(FactionsPlugin.getInstance().getResource("materials.json"));
         Type typeToken = new TypeToken<HashMap<String, MaterialProvider.MaterialData>>() {
         }.getType();
-        HashMap<String, MaterialProvider.MaterialData> materialData = P.getInstance().gson.fromJson(reader, typeToken);
-        P.getInstance().getLogger().info(String.format("Found %s material mappings in the materials.json file.", materialData.keySet().size()));
+        HashMap<String, MaterialProvider.MaterialData> materialData = FactionsPlugin.getInstance().gson.fromJson(reader, typeToken);
+        FactionsPlugin.getInstance().getLogger().info(String.format("Found %s material mappings in the materials.json file.", materialData.keySet().size()));
         instance.provider = new MaterialProvider(materialData);
     }
 

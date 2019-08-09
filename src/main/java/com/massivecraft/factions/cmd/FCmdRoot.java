@@ -1,6 +1,6 @@
 package com.massivecraft.factions.cmd;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.claim.*;
 import com.massivecraft.factions.cmd.money.CmdMoney;
 import com.massivecraft.factions.cmd.relations.CmdRelationAlly;
@@ -104,11 +104,11 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
             brigadierManager = new BrigadierManager();
         }
 
-        this.aliases.addAll(P.getInstance().conf().getCommandBase());
+        this.aliases.addAll(FactionsPlugin.getInstance().conf().getCommandBase());
         this.aliases.removeAll(Collections.<String>singletonList(null));  // remove any nulls from extra commas
 
         this.setHelpShort("The faction base command");
-        this.helpLong.add(P.getInstance().txt.parseTags("<i>This command contains all faction stuff."));
+        this.helpLong.add(FactionsPlugin.getInstance().txt.parseTags("<i>This command contains all faction stuff."));
 
         this.addSubCommand(this.cmdAdmin);
         this.addSubCommand(this.cmdAutoClaim);
@@ -181,22 +181,22 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.addSubCommand(this.cmdColeader);
         this.addSubCommand(this.cmdNear);
         if (Bukkit.getServer().getPluginManager().isPluginEnabled("FactionsTop")) {
-            P.getInstance().getLogger().info("Found FactionsTop plugin. Disabling our own /f top command.");
+            FactionsPlugin.getInstance().getLogger().info("Found FactionsTop plugin. Disabling our own /f top command.");
         } else {
             this.addSubCommand(this.cmdTop);
         }
-        if (P.getInstance().isHookedPlayervaults()) {
-            P.getInstance().getLogger().info("Found playervaults hook, adding /f vault and /f setmaxvault commands.");
+        if (FactionsPlugin.getInstance().isHookedPlayervaults()) {
+            FactionsPlugin.getInstance().getLogger().info("Found playervaults hook, adding /f vault and /f setmaxvault commands.");
             this.addSubCommand(new CmdSetMaxVaults());
             this.addSubCommand(new CmdVault());
         }
 
-        if (P.getInstance().getConfig().getBoolean("f-fly.enable", false)) {
+        if (FactionsPlugin.getInstance().getConfig().getBoolean("f-fly.enable", false)) {
             this.addSubCommand(this.cmdFly);
             this.addSubCommand(this.cmdTrail);
-            P.getInstance().getLogger().info("Enabling /f fly command");
+            FactionsPlugin.getInstance().getLogger().info("Enabling /f fly command");
         } else {
-            P.getInstance().getLogger().info("Faction flight set to false in config.yml. Not enabling /f fly command.");
+            FactionsPlugin.getInstance().getLogger().info("Faction flight set to false in config.yml. Not enabling /f fly command.");
         }
 
         if (CommodoreProvider.isSupported()) {

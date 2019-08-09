@@ -19,11 +19,11 @@ public class SeeChunkUtil extends BukkitRunnable {
     private Object effect;
 
     public SeeChunkUtil() {
-        String effectName = P.getInstance().getConfig().getString("see-chunk.particle", "REDSTONE");
-        this.effect = P.getInstance().particleProvider.effectFromString(effectName);
-        this.useColor = P.getInstance().getConfig().getBoolean("see-chunk.relational-useColor", true);
+        String effectName = FactionsPlugin.getInstance().getConfig().getString("see-chunk.particle", "REDSTONE");
+        this.effect = FactionsPlugin.getInstance().particleProvider.effectFromString(effectName);
+        this.useColor = FactionsPlugin.getInstance().getConfig().getBoolean("see-chunk.relational-useColor", true);
 
-        P.getInstance().getLogger().info(P.getInstance().txt.parse("Using %s as the ParticleEffect for /f sc", P.getInstance().particleProvider.effectName(effect)));
+        FactionsPlugin.getInstance().getLogger().info(FactionsPlugin.getInstance().txt.parse("Using %s as the ParticleEffect for /f sc", FactionsPlugin.getInstance().particleProvider.effectName(effect)));
     }
 
     @Override
@@ -89,9 +89,9 @@ public class SeeChunkUtil extends BukkitRunnable {
 
             if (effect != null) {
                 if (color == null) {
-                    P.getInstance().particleProvider.playerSpawn(player, effect, loc, 1);
+                    FactionsPlugin.getInstance().particleProvider.playerSpawn(player, effect, loc, 1);
                 } else {
-                    P.getInstance().particleProvider.playerSpawn(player, effect, loc, color);
+                    FactionsPlugin.getInstance().particleProvider.playerSpawn(player, effect, loc, color);
                 }
             } else {
                 Material mat = blockY % 5 == 0 ? FactionMaterial.from("REDSTONE_LAMP").get() : FactionMaterial.from("GLASS_PANE").get();

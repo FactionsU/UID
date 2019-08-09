@@ -3,7 +3,7 @@ package com.massivecraft.factions.gui;
 import com.google.common.collect.ImmutableList;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.util.WarmUpUtil;
 import com.massivecraft.factions.util.material.FactionMaterial;
@@ -101,7 +101,7 @@ public class WarpGUI extends GUI<Integer> {
                 HashMap<Object, Object> sessionData = new HashMap<>();
                 sessionData.put("warp", warp);
                 PasswordPrompt passwordPrompt = new PasswordPrompt();
-                ConversationFactory inputFactory = new ConversationFactory(P.p)
+                ConversationFactory inputFactory = new ConversationFactory(FactionsPlugin.p)
                         .withModality(false)
                         .withLocalEcho(false)
                         .withInitialSessionData(sessionData)
@@ -212,21 +212,21 @@ public class WarpGUI extends GUI<Integer> {
                 player.teleport(user.getFaction().getWarp(warp).getLocation());
                 user.msg(TL.COMMAND_FWARP_WARPED, warp);
             }
-        }, P.getInstance().getConfig().getLong("warmups.f-warp", 0));
+        }, FactionsPlugin.getInstance().getConfig().getLong("warmups.f-warp", 0));
     }
 
     private boolean transact() {
-        if (!P.getInstance().getConfig().getBoolean("warp-cost.enabled", false) || user.isAdminBypassing()) {
+        if (!FactionsPlugin.getInstance().getConfig().getBoolean("warp-cost.enabled", false) || user.isAdminBypassing()) {
             return true;
         }
 
-        double cost = P.getInstance().getConfig().getDouble("warp-cost.warp", 5);
+        double cost = FactionsPlugin.getInstance().getConfig().getDouble("warp-cost.warp", 5);
 
         if (!Econ.shouldBeUsed() || this.user == null || cost == 0.0 || user.isAdminBypassing()) {
             return true;
         }
 
-        if (P.getInstance().conf().economy().isBankEnabled() && P.getInstance().conf().economy().isBankFactionPaysCosts() && user.hasFaction()) {
+        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && user.hasFaction()) {
             return Econ.modifyMoney(user.getFaction(), -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());
         } else {
             return Econ.modifyMoney(user, -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());

@@ -1,6 +1,6 @@
 package com.massivecraft.factions.cmd;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -19,7 +19,7 @@ public class BrigadierManager {
     public LiteralArgumentBuilder<Object> brigadier = LiteralArgumentBuilder.literal("factions");
 
     public BrigadierManager() {
-        commodore = CommodoreProvider.getCommodore(P.p);
+        commodore = CommodoreProvider.getCommodore(FactionsPlugin.p);
     }
 
     public void build() {

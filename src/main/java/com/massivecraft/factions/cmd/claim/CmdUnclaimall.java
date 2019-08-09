@@ -1,7 +1,7 @@
 package com.massivecraft.factions.cmd.claim;
 
 import com.massivecraft.factions.Board;
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.cmd.FCommand;
@@ -28,7 +28,7 @@ public class CmdUnclaimall extends FCommand {
     public void perform(CommandContext context) {
         if (Econ.shouldBeUsed()) {
             double refund = Econ.calculateTotalLandRefund(context.faction.getLandRounded());
-            if (P.getInstance().conf().economy().isBankEnabled() && P.getInstance().conf().economy().isBankFactionPaysLandCosts()) {
+            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysLandCosts()) {
                 if (!Econ.modifyMoney(context.faction, refund, TL.COMMAND_UNCLAIMALL_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIMALL_FORUNCLAIM.toString())) {
                     return;
                 }
@@ -48,8 +48,8 @@ public class CmdUnclaimall extends FCommand {
         Board.getInstance().unclaimAll(context.faction.getId());
         context.faction.msg(TL.COMMAND_UNCLAIMALL_UNCLAIMED, context.fPlayer.describeTo(context.faction, true));
 
-        if (P.getInstance().conf().logging().isLandUnclaims()) {
-            P.getInstance().log(TL.COMMAND_UNCLAIMALL_LOG.format(context.fPlayer.getName(), context.faction.getTag()));
+        if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
+            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIMALL_LOG.format(context.fPlayer.getName(), context.faction.getTag()));
         }
     }
 

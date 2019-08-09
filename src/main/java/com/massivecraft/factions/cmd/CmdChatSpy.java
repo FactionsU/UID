@@ -1,6 +1,6 @@
 package com.massivecraft.factions.cmd;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
@@ -24,10 +24,10 @@ public class CmdChatSpy extends FCommand {
 
         if (context.fPlayer.isSpyingChat()) {
             context.fPlayer.msg(TL.COMMAND_CHATSPY_ENABLE);
-            P.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_ENABLELOG.toString());
+            FactionsPlugin.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_ENABLELOG.toString());
         } else {
             context.fPlayer.msg(TL.COMMAND_CHATSPY_DISABLE);
-            P.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_DISABLELOG.toString());
+            FactionsPlugin.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_DISABLELOG.toString());
         }
     }
 

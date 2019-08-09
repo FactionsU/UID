@@ -1,6 +1,6 @@
 package com.massivecraft.factions.util;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.*;
@@ -88,7 +88,7 @@ public class DiscUtil {
                         lock.unlock();
                     }
                 }
-            }.runTaskAsynchronously(P.p);
+            }.runTaskAsynchronously(FactionsPlugin.p);
         }
 
         return true; // don't really care but for some reason this is a boolean.

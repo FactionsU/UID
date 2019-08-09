@@ -1,6 +1,6 @@
 package com.massivecraft.factions.struct;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.ChatColor;
@@ -83,23 +83,23 @@ public enum Role implements Permissible {
 
     public String getPrefix() {
         if (this == Role.ADMIN) {
-            return P.getInstance().conf().factions().prefixes().getAdmin();
+            return FactionsPlugin.getInstance().conf().factions().prefixes().getAdmin();
         }
 
         if (this == Role.COLEADER) {
-            return P.getInstance().conf().factions().prefixes().getColeader();
+            return FactionsPlugin.getInstance().conf().factions().prefixes().getColeader();
         }
 
         if (this == Role.MODERATOR) {
-            return P.getInstance().conf().factions().prefixes().getMod();
+            return FactionsPlugin.getInstance().conf().factions().prefixes().getMod();
         }
 
         if (this == Role.NORMAL) {
-            return P.getInstance().conf().factions().prefixes().getNormal();
+            return FactionsPlugin.getInstance().conf().factions().prefixes().getNormal();
         }
 
         if (this == Role.RECRUIT) {
-            return P.getInstance().conf().factions().prefixes().getRecruit();
+            return FactionsPlugin.getInstance().conf().factions().prefixes().getRecruit();
         }
 
         return "";
