@@ -910,7 +910,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     // Messages
     // ----------------------------------------------//
     public void msg(String message, Object... args) {
-        message = FactionsPlugin.getInstance().txt.parse(message, args);
+        message = FactionsPlugin.getInstance().txt().parse(message, args);
 
         for (FPlayer fplayer : this.getFPlayersWhereOnline(true)) {
             fplayer.sendMessage(message);

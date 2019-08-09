@@ -103,7 +103,7 @@ public class FactionsPlayerListener extends AbstractListener {
         me.setAutoLeave(!player.hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
         me.setTakeFallDamage(true);
 
-        FactionsPlugin.getInstance().seeChunkUtil.updatePlayerInfo(UUID.fromString(me.getId()), me.isSeeingChunk());
+        FactionsPlugin.getInstance().getSeeChunkUtil().updatePlayerInfo(UUID.fromString(me.getId()), me.isSeeingChunk());
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -139,8 +139,8 @@ public class FactionsPlayerListener extends AbstractListener {
 
         FScoreboard.remove(me);
 
-        if (FactionsPlugin.getInstance().seeChunkUtil != null) {
-            FactionsPlugin.getInstance().seeChunkUtil.updatePlayerInfo(UUID.fromString(me.getId()), false);
+        if (FactionsPlugin.getInstance().getSeeChunkUtil() != null) {
+            FactionsPlugin.getInstance().getSeeChunkUtil().updatePlayerInfo(UUID.fromString(me.getId()), false);
         }
     }
 

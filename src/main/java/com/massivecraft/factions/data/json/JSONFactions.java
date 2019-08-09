@@ -39,7 +39,7 @@ public class JSONFactions extends MemoryFactions {
 
     public JSONFactions() {
         this.file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/factions.json");
-        this.gson = FactionsPlugin.getInstance().gson;
+        this.gson = FactionsPlugin.getInstance().getGson();
         this.nextId = 1;
     }
 

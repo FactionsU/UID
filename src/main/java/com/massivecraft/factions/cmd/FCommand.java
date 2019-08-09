@@ -211,7 +211,7 @@ public abstract class FCommand {
  */
     public String getUseageTemplate(CommandContext context, boolean addShortHelp) {
         StringBuilder ret = new StringBuilder();
-        ret.append(FactionsPlugin.getInstance().txt.parseTags("<c>"));
+        ret.append(FactionsPlugin.getInstance().txt().parseTags("<c>"));
         ret.append('/');
 
         for (FCommand fc : context.commandChain) {
@@ -238,12 +238,12 @@ public abstract class FCommand {
         }
 
         if (args.size() > 0) {
-            ret.append(FactionsPlugin.getInstance().txt.parseTags("<p> "));
+            ret.append(FactionsPlugin.getInstance().txt().parseTags("<p> "));
             ret.append(TextUtil.implode(args, " "));
         }
 
         if (addShortHelp) {
-            ret.append(FactionsPlugin.getInstance().txt.parseTags(" <i>"));
+            ret.append(FactionsPlugin.getInstance().txt().parseTags(" <i>"));
             ret.append(this.getHelpShort());
         }
 

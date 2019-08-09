@@ -1,36 +1,29 @@
 package com.massivecraft.factions.cmd.money;
 
-import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
+import com.massivecraft.factions.cmd.FCmdRoot;
 import com.massivecraft.factions.util.TL;
 
 public class CmdMoney extends MoneyCommand {
-
-    public CmdMoneyBalance cmdMoneyBalance = new CmdMoneyBalance();
-    public CmdMoneyDeposit cmdMoneyDeposit = new CmdMoneyDeposit();
-    public CmdMoneyWithdraw cmdMoneyWithdraw = new CmdMoneyWithdraw();
-    public CmdMoneyTransferFf cmdMoneyTransferFf = new CmdMoneyTransferFf();
-    public CmdMoneyTransferFp cmdMoneyTransferFp = new CmdMoneyTransferFp();
-    public CmdMoneyTransferPf cmdMoneyTransferPf = new CmdMoneyTransferPf();
 
     public CmdMoney() {
         super();
         this.aliases.add("money");
 
-        this.helpLong.add(plugin.txt.parseTags(TL.COMMAND_MONEY_LONG.toString()));
+        this.helpLong.add(plugin.txt().parseTags(TL.COMMAND_MONEY_LONG.toString()));
 
-        this.addSubCommand(this.cmdMoneyBalance);
-        this.addSubCommand(this.cmdMoneyDeposit);
-        this.addSubCommand(this.cmdMoneyWithdraw);
-        this.addSubCommand(this.cmdMoneyTransferFf);
-        this.addSubCommand(this.cmdMoneyTransferFp);
-        this.addSubCommand(this.cmdMoneyTransferPf);
+        this.addSubCommand(new CmdMoneyBalance());
+        this.addSubCommand(new CmdMoneyDeposit());
+        this.addSubCommand(new CmdMoneyWithdraw());
+        this.addSubCommand(new CmdMoneyTransferFf());
+        this.addSubCommand(new CmdMoneyTransferFp());
+        this.addSubCommand(new CmdMoneyTransferPf());
     }
 
     @Override
     public void perform(CommandContext context) {
         context.commandChain.add(this);
-        FactionsPlugin.getInstance().cmdAutoHelp.execute(context);
+        FCmdRoot.getInstance().cmdAutoHelp.execute(context);
     }
 
     @Override

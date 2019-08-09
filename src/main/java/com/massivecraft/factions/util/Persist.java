@@ -100,7 +100,7 @@ public class Persist {
     }
 
     public boolean save(Object instance, File file) {
-        return DiscUtil.writeCatch(file, plugin.gson.toJson(instance), true);
+        return DiscUtil.writeCatch(file, plugin.getGson().toJson(instance), true);
     }
 
     // LOAD BY CLASS
@@ -120,7 +120,7 @@ public class Persist {
         }
 
         try {
-            return plugin.gson.fromJson(content, clazz);
+            return plugin.getGson().fromJson(content, clazz);
         } catch (Exception ex) {    // output the error message rather than full stack trace; error parsing the file, most likely
             plugin.log(Level.WARNING, ex.getMessage());
         }
@@ -143,7 +143,7 @@ public class Persist {
         }
 
         try {
-            return (T) plugin.gson.fromJson(content, typeOfT);
+            return (T) plugin.getGson().fromJson(content, typeOfT);
         } catch (Exception ex) {    // output the error message rather than full stack trace; error parsing the file, most likely
             plugin.log(Level.WARNING, ex.getMessage());
         }

@@ -98,8 +98,8 @@ public class FlightUtil {
                 FPlayer pilot = FPlayers.getInstance().getByPlayer(player);
                 if (pilot.isFlying()) {
                     if (pilot.getFlyTrailsEffect() != null && Permission.FLY_TRAILS.has(player) && pilot.getFlyTrailsState()) {
-                        Object effect = FactionsPlugin.getInstance().particleProvider.effectFromString(pilot.getFlyTrailsEffect());
-                        FactionsPlugin.getInstance().particleProvider.spawn(effect, player.getLocation(), amount, speed, 0, 0, 0);
+                        Object effect = FactionsPlugin.getInstance().getParticleProvider().effectFromString(pilot.getFlyTrailsEffect());
+                        FactionsPlugin.getInstance().getParticleProvider().spawn(effect, player.getLocation(), amount, speed, 0, 0, 0);
                     }
                 }
             }

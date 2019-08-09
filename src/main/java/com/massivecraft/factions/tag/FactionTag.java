@@ -16,7 +16,7 @@ public enum FactionTag implements Tag {
     HOME_Z("{z}", (fac) -> fac.hasHome() ? String.valueOf(fac.getHome().getBlockZ()) : Tag.isMinimalShow() ? null : "{ig}"),
     CHUNKS("{chunks}", (fac) -> String.valueOf(fac.getLandRounded())),
     WARPS("{warps}", (fac) -> String.valueOf(fac.getWarps().size())),
-    HEADER("{header}", (fac, fp) -> FactionsPlugin.getInstance().txt.titleize(fac.getTag(fp))),
+    HEADER("{header}", (fac, fp) -> FactionsPlugin.getInstance().txt().titleize(fac.getTag(fp))),
     POWER("{power}", (fac) -> String.valueOf(fac.getPowerRounded())),
     MAX_POWER("{maxPower}", (fac) -> String.valueOf(fac.getPowerMaxRounded())),
     POWER_BOOST("{power-boost}", (fac) -> {

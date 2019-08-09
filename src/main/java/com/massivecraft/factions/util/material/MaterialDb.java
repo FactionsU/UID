@@ -44,7 +44,7 @@ public class MaterialDb {
         InputStreamReader reader = new InputStreamReader(FactionsPlugin.getInstance().getResource("materials.json"));
         Type typeToken = new TypeToken<HashMap<String, MaterialProvider.MaterialData>>() {
         }.getType();
-        HashMap<String, MaterialProvider.MaterialData> materialData = FactionsPlugin.getInstance().gson.fromJson(reader, typeToken);
+        HashMap<String, MaterialProvider.MaterialData> materialData = FactionsPlugin.getInstance().getGson().fromJson(reader, typeToken);
         FactionsPlugin.getInstance().getLogger().info(String.format("Found %s material mappings in the materials.json file.", materialData.keySet().size()));
         instance.provider = new MaterialProvider(materialData);
     }

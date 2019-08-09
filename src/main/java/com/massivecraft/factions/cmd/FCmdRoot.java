@@ -22,6 +22,14 @@ import java.util.Collections;
 
 public class FCmdRoot extends FCommand implements CommandExecutor {
 
+    private static FCmdRoot cmdBase;
+
+    public static FCmdRoot getInstance() {
+        return cmdBase;
+    }
+
+    public CmdAutoHelp cmdAutoHelp = new CmdAutoHelp();
+
     public BrigadierManager brigadierManager;
 
     public CmdAdmin cmdAdmin = new CmdAdmin();
@@ -100,6 +108,9 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
 
     public FCmdRoot() {
         super();
+
+        cmdBase = this;
+
         if (CommodoreProvider.isSupported()) {
             brigadierManager = new BrigadierManager();
         }
@@ -108,7 +119,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.aliases.removeAll(Collections.<String>singletonList(null));  // remove any nulls from extra commas
 
         this.setHelpShort("The faction base command");
-        this.helpLong.add(FactionsPlugin.getInstance().txt.parseTags("<i>This command contains all faction stuff."));
+        this.helpLong.add(FactionsPlugin.getInstance().txt().parseTags("<i>This command contains all faction stuff."));
 
         this.addSubCommand(this.cmdAdmin);
         this.addSubCommand(this.cmdAutoClaim);

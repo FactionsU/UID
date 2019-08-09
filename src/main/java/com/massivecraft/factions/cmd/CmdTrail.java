@@ -26,7 +26,7 @@ public class CmdTrail extends FCommand {
             if (context.argAsString(0).equalsIgnoreCase("effect")) {
                 if (context.argIsSet(1)) {
                     String effectName = context.argAsString(1);
-                    Object particleEffect = plugin.particleProvider.effectFromString(effectName);
+                    Object particleEffect = plugin.getParticleProvider().effectFromString(effectName);
                     if (particleEffect == null) {
                         context.fPlayer.msg(TL.COMMAND_FLYTRAILS_PARTICLE_INVALID);
                         return;

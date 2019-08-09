@@ -80,11 +80,11 @@ public class CmdShow extends FCommand {
             // send header and that's all
             String header = show.get(0);
             if (FactionTag.HEADER.foundInString(header)) {
-                context.msg(plugin.txt.titleize(tag));
+                context.msg(plugin.txt().titleize(tag));
             } else {
                 String message = header.replace(FactionTag.FACTION.getTag(), tag);
                 message = Tag.parsePlain(faction, context.fPlayer, message);
-                context.msg(plugin.txt.parse(message));
+                context.msg(plugin.txt().parse(message));
             }
             return; // we only show header for non-normal factions
         }
@@ -155,7 +155,7 @@ public class CmdShow extends FCommand {
                     }
                 }
             } else {
-                recipient.sendMessage(FactionsPlugin.getInstance().txt.parse(parsed));
+                recipient.sendMessage(FactionsPlugin.getInstance().txt().parse(parsed));
             }
         }
     }
@@ -167,7 +167,7 @@ public class CmdShow extends FCommand {
             builder.append(first ? name : ", " + name);
             first = false;
         }
-        recipient.sendMessage(FactionsPlugin.getInstance().txt.parse(builder.toString()));
+        recipient.sendMessage(FactionsPlugin.getInstance().txt().parse(builder.toString()));
     }
 
     private void relationMessage(StringBuilder builder, CommandSender recipient, Faction faction, Relation relation) {
@@ -179,7 +179,7 @@ public class CmdShow extends FCommand {
                 first = false;
             }
         }
-        recipient.sendMessage(FactionsPlugin.getInstance().txt.parse(builder.toString()));
+        recipient.sendMessage(FactionsPlugin.getInstance().txt().parse(builder.toString()));
     }
 
     private boolean groupPresent() {

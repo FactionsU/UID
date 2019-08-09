@@ -78,14 +78,14 @@ public class CmdList extends FCommand {
 
         String header = plugin.getConfig().getString("list.header", defaults[0]);
         header = header.replace("{pagenumber}", String.valueOf(pagenumber)).replace("{pagecount}", String.valueOf(pagecount));
-        lines.add(plugin.txt.parse(header));
+        lines.add(plugin.txt().parse(header));
 
         for (Faction faction : factionList.subList(start, end)) {
             if (faction.isWilderness()) {
-                lines.add(plugin.txt.parse(Tag.parsePlain(faction, plugin.getConfig().getString("list.factionless", defaults[1]))));
+                lines.add(plugin.txt().parse(Tag.parsePlain(faction, plugin.getConfig().getString("list.factionless", defaults[1]))));
                 continue;
             }
-            lines.add(plugin.txt.parse(Tag.parsePlain(faction, context.fPlayer, plugin.getConfig().getString("list.entry", defaults[2]))));
+            lines.add(plugin.txt().parse(Tag.parsePlain(faction, context.fPlayer, plugin.getConfig().getString("list.entry", defaults[2]))));
         }
         context.sendMessage(lines);
     }

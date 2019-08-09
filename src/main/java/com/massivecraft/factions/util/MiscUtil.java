@@ -65,16 +65,16 @@ public class MiscUtil {
         ArrayList<String> errors = new ArrayList<>();
 
         if (getComparisonString(str).length() < FactionsPlugin.getInstance().conf().factions().getTagLengthMin()) {
-            errors.add(FactionsPlugin.getInstance().txt.parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), FactionsPlugin.getInstance().conf().factions().getTagLengthMin()));
+            errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), FactionsPlugin.getInstance().conf().factions().getTagLengthMin()));
         }
 
         if (str.length() > FactionsPlugin.getInstance().conf().factions().getTagLengthMax()) {
-            errors.add(FactionsPlugin.getInstance().txt.parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), FactionsPlugin.getInstance().conf().factions().getTagLengthMax()));
+            errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), FactionsPlugin.getInstance().conf().factions().getTagLengthMax()));
         }
 
         for (char c : str.toCharArray()) {
             if (!substanceChars.contains(String.valueOf(c))) {
-                errors.add(FactionsPlugin.getInstance().txt.parse(TL.GENERIC_FACTIONTAG_ALPHANUMERIC.toString(), c));
+                errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_ALPHANUMERIC.toString(), c));
             }
         }
 
