@@ -113,7 +113,25 @@ public class MainConfig {
                 private double offlineLossLimit = 0.0;
                 @Comment("If greater than 0, used as a cap for how much power a faction can have\nAdditional power from players beyond this acts as a \"buffer\" of sorts")
                 private double factionMax = 0.0;
+                private boolean respawnHomeFromNoPowerLossWorlds = true;
                 private Set<String> worldsNoPowerLoss = new HashSet<>();
+                private boolean peacefulMembersDisablePowerLoss = true;
+                private boolean warZonePowerLoss = true;
+                private boolean wildernessPowerLoss = true;
+                @Comment("Disallow joining/leaving/kicking while power is negative")
+                private boolean canLeaveWithNegativePower = true;
+
+                public boolean canLeaveWithNegativePower() {
+                    return canLeaveWithNegativePower;
+                }
+
+                public boolean isWarZonePowerLoss() {
+                    return warZonePowerLoss;
+                }
+
+                public boolean isWildernessPowerLoss() {
+                    return wildernessPowerLoss;
+                }
 
                 public double getPlayerMin() {
                     return playerMin;
@@ -151,8 +169,16 @@ public class MainConfig {
                     return factionMax;
                 }
 
+                public boolean isRespawnHomeFromNoPowerLossWorlds() {
+                    return respawnHomeFromNoPowerLossWorlds;
+                }
+
                 public Set<String> getWorldsNoPowerLoss() {
                     return worldsNoPowerLoss == null ? Collections.emptySet() : worldsNoPowerLoss;
+                }
+
+                public boolean isPeacefulMembersDisablePowerLoss() {
+                    return peacefulMembersDisablePowerLoss;
                 }
             }
 
@@ -294,7 +320,6 @@ public class MainConfig {
             private boolean enabled = true;
             private boolean mustBeInClaimedTerritory = true;
             private boolean teleportToOnDeath = true;
-            private boolean respawnFromNoPowerLossWorlds = true;
             private boolean teleportCommandEnabled = true;
             private boolean teleportCommandEssentialsIntegration = true;
             private boolean teleportCommandSmokeEffectEnabled = true;
@@ -314,10 +339,6 @@ public class MainConfig {
 
             public boolean isTeleportToOnDeath() {
                 return teleportToOnDeath;
-            }
-
-            public boolean isRespawnFromNoPowerLossWorlds() {
-                return respawnFromNoPowerLossWorlds;
             }
 
             public boolean isTeleportCommandEnabled() {
@@ -377,7 +398,7 @@ public class MainConfig {
             }
 
             public Set<String> getWorldsIgnorePvP() {
-                return worldsIgnorePvP == null ? Collections.emptySet() :worldsIgnorePvP ;
+                return worldsIgnorePvP == null ? Collections.emptySet() : worldsIgnorePvP;
             }
         }
 
@@ -385,7 +406,6 @@ public class MainConfig {
             private boolean peacefulTerritoryDisablePVP = true;
             private boolean peacefulTerritoryDisableMonsters = false;
             private boolean peacefulTerritoryDisableBoom = false;
-            private boolean peacefulMembersDisablePowerLoss = true;
             private boolean permanentFactionsDisableLeaderPromotion = false;
 
             public boolean isPeacefulTerritoryDisablePVP() {
@@ -398,10 +418,6 @@ public class MainConfig {
 
             public boolean isPeacefulTerritoryDisableBoom() {
                 return peacefulTerritoryDisableBoom;
-            }
-
-            public boolean isPeacefulMembersDisablePowerLoss() {
-                return peacefulMembersDisablePowerLoss;
             }
 
             public boolean isPermanentFactionsDisableLeaderPromotion() {
@@ -492,7 +508,6 @@ public class MainConfig {
             private boolean warZoneBlockCreepers = false;
             private boolean warZoneBlockFireballs = false;
             private boolean warZoneBlockTNT = true;
-            private boolean warZonePowerLoss = true;
             private boolean warZoneFriendlyFire = false;
             private boolean warZoneDenyEndermanBlocks = true;
 
@@ -501,7 +516,7 @@ public class MainConfig {
             private boolean wildernessBlockCreepers = false;
             private boolean wildernessBlockFireballs = false;
             private boolean wildernessBlockTNT = false;
-            private boolean wildernessPowerLoss = true;
+
             private boolean wildernessDenyEndermanBlocks = false;
 
             private boolean pistonProtectionThroughDenyBuild = true;
@@ -624,10 +639,6 @@ public class MainConfig {
                 return warZoneBlockTNT;
             }
 
-            public boolean isWarZonePowerLoss() {
-                return warZonePowerLoss;
-            }
-
             public boolean isWarZoneFriendlyFire() {
                 return warZoneFriendlyFire;
             }
@@ -654,10 +665,6 @@ public class MainConfig {
 
             public boolean isWildernessBlockTNT() {
                 return wildernessBlockTNT;
-            }
-
-            public boolean isWildernessPowerLoss() {
-                return wildernessPowerLoss;
             }
 
             public boolean isWildernessDenyEndermanBlocks() {
@@ -782,9 +789,6 @@ public class MainConfig {
         @Comment("What faction ID to start new players in when they first join the server; default is 0, \"no faction\"")
         private String newPlayerStartingFactionID = "0";
 
-        @Comment("Disallow joining/leaving/kicking while power is negative")
-        private boolean canLeaveWithNegativePower = true;
-
         private double saveToFileEveryXMinutes = 30.0;
 
         private double autoLeaveAfterDaysOfInactivity = 10.0;
@@ -857,10 +861,6 @@ public class MainConfig {
 
         public String getNewPlayerStartingFactionID() {
             return newPlayerStartingFactionID;
-        }
-
-        public boolean isCanLeaveWithNegativePower() {
-            return canLeaveWithNegativePower;
         }
 
         public double getSaveToFileEveryXMinutes() {

@@ -49,7 +49,13 @@ public class TransitionConfig {
                 private double offlineLossLimit = 0.0;
                 @Comment("If greater than 0, used as a cap for how much power a faction can have\nAdditional power from players beyond this acts as a \"buffer\" of sorts")
                 private double factionMax = 0.0;
+                private boolean respawnHomeFromNoPowerLossWorlds = true;
                 private Set<String> worldsNoPowerLoss = new HashSet<>();
+                private boolean peacefulMembersDisablePowerLoss = true;
+                private boolean warZonePowerLoss = true;
+                private boolean wildernessPowerLoss = true;
+                @Comment("Disallow joining/leaving/kicking while power is negative")
+                private boolean canLeaveWithNegativePower = true;
             }
 
             @Comment("Sets the mode of land/raid control")
@@ -94,7 +100,6 @@ public class TransitionConfig {
             private boolean enabled = true;
             private boolean mustBeInClaimedTerritory = true;
             private boolean teleportToOnDeath = true;
-            private boolean respawnFromNoPowerLossWorlds = true;
             private boolean teleportCommandEnabled = true;
             private boolean teleportCommandEssentialsIntegration = true;
             private boolean teleportCommandSmokeEffectEnabled = true;
@@ -117,7 +122,6 @@ public class TransitionConfig {
             private boolean peacefulTerritoryDisablePVP = true;
             private boolean peacefulTerritoryDisableMonsters = false;
             private boolean peacefulTerritoryDisableBoom = false;
-            private boolean peacefulMembersDisablePowerLoss = true;
             private boolean permanentFactionsDisableLeaderPromotion = false;
         }
 
@@ -176,7 +180,6 @@ public class TransitionConfig {
             private boolean warZoneBlockCreepers = false;
             private boolean warZoneBlockFireballs = false;
             private boolean warZoneBlockTNT = true;
-            private boolean warZonePowerLoss = true;
             private boolean warZoneFriendlyFire = false;
             private boolean warZoneDenyEndermanBlocks = true;
 
@@ -185,7 +188,6 @@ public class TransitionConfig {
             private boolean wildernessBlockCreepers = false;
             private boolean wildernessBlockFireballs = false;
             private boolean wildernessBlockTNT = false;
-            private boolean wildernessPowerLoss = true;
             private boolean wildernessDenyEndermanBlocks = false;
 
             private boolean pistonProtectionThroughDenyBuild = true;
@@ -305,9 +307,6 @@ public class TransitionConfig {
 
         @Comment("What faction ID to start new players in when they first join the server; default is 0, \"no faction\"")
         private String newPlayerStartingFactionID = "0";
-
-        @Comment("Disallow joining/leaving/kicking while power is negative")
-        private boolean canLeaveWithNegativePower = true;
 
         private double saveToFileEveryXMinutes = 30.0;
 
@@ -450,7 +449,12 @@ public class TransitionConfig {
         this.factions.landRaidControl.power.offlineLossPerDay = c.powerOfflineLossPerDay;
         this.factions.landRaidControl.power.offlineLossLimit = c.powerOfflineLossLimit;
         this.factions.landRaidControl.power.factionMax = c.powerFactionMax;
+        this.factions.landRaidControl.power.respawnHomeFromNoPowerLossWorlds = c.homesRespawnFromNoPowerLossWorlds;
         this.factions.landRaidControl.power.worldsNoPowerLoss = c.worldsNoPowerLoss;
+        this.factions.landRaidControl.power.peacefulMembersDisablePowerLoss = c.peacefulMembersDisablePowerLoss;
+        this.factions.landRaidControl.power.warZonePowerLoss = c.warZonePowerLoss;
+        this.factions.landRaidControl.power.wildernessPowerLoss = c.wildernessPowerLoss;
+        this.factions.landRaidControl.power.canLeaveWithNegativePower = c.canLeaveWithNegativePower;
 
         this.factions.prefixes.admin = c.prefixAdmin;
         this.factions.prefixes.coleader = c.prefixColeader;
@@ -479,7 +483,6 @@ public class TransitionConfig {
         this.factions.homes.enabled = c.homesEnabled;
         this.factions.homes.mustBeInClaimedTerritory = c.homesMustBeInClaimedTerritory;
         this.factions.homes.teleportToOnDeath = c.homesTeleportToOnDeath;
-        this.factions.homes.respawnFromNoPowerLossWorlds = c.homesRespawnFromNoPowerLossWorlds;
         this.factions.homes.teleportCommandEnabled = c.homesTeleportCommandEnabled;
         this.factions.homes.teleportCommandEssentialsIntegration = c.homesTeleportCommandEssentialsIntegration;
         this.factions.homes.teleportCommandSmokeEffectEnabled = c.homesTeleportCommandSmokeEffectEnabled;
@@ -498,7 +501,6 @@ public class TransitionConfig {
         this.factions.specialCase.peacefulTerritoryDisablePVP = c.peacefulTerritoryDisablePVP;
         this.factions.specialCase.peacefulTerritoryDisableMonsters = c.peacefulTerritoryDisableMonsters;
         this.factions.specialCase.peacefulTerritoryDisableBoom = c.peacefulTerritoryDisableBoom;
-        this.factions.specialCase.peacefulMembersDisablePowerLoss = c.peacefulMembersDisablePowerLoss;
         this.factions.specialCase.permanentFactionsDisableLeaderPromotion = c.permanentFactionsDisableLeaderPromotion;
 
         this.factions.claims.mustBeConnected = c.claimsMustBeConnected;
@@ -533,7 +535,6 @@ public class TransitionConfig {
         this.factions.protection.warZoneBlockCreepers = c.warZoneBlockCreepers;
         this.factions.protection.warZoneBlockFireballs = c.warZoneBlockFireballs;
         this.factions.protection.warZoneBlockTNT = c.warZoneBlockTNT;
-        this.factions.protection.warZonePowerLoss = c.warZonePowerLoss;
         this.factions.protection.warZoneFriendlyFire = c.warZoneFriendlyFire;
         this.factions.protection.warZoneDenyEndermanBlocks = c.warZoneDenyEndermanBlocks;
         this.factions.protection.wildernessDenyBuild = c.wildernessDenyBuild;
@@ -541,7 +542,6 @@ public class TransitionConfig {
         this.factions.protection.wildernessBlockCreepers = c.wildernessBlockCreepers;
         this.factions.protection.wildernessBlockFireballs = c.wildernessBlockFireballs;
         this.factions.protection.wildernessBlockTNT = c.wildernessBlockTNT;
-        this.factions.protection.wildernessPowerLoss = c.wildernessPowerLoss;
         this.factions.protection.wildernessDenyEndermanBlocks = c.wildernessDenyEndermanBlocks;
         this.factions.protection.pistonProtectionThroughDenyBuild = c.pistonProtectionThroughDenyBuild;
         this.factions.protection.territoryProtectedMaterials = c.territoryProtectedMaterials.stream().map(Material::name).collect(Collectors.toSet());
@@ -570,7 +570,6 @@ public class TransitionConfig {
         this.factions.newFactionsDefaultOpen = c.newFactionsDefaultOpen;
         this.factions.factionMemberLimit = c.factionMemberLimit;
         this.factions.newPlayerStartingFactionID = c.newPlayerStartingFactionID;
-        this.factions.canLeaveWithNegativePower = c.canLeaveWithNegativePower;
         this.factions.saveToFileEveryXMinutes = c.saveToFileEveryXMinutes;
         this.factions.autoLeaveAfterDaysOfInactivity = c.autoLeaveAfterDaysOfInactivity;
         this.factions.autoLeaveRoutineRunsEveryXMinutes = c.autoLeaveRoutineRunsEveryXMinutes;

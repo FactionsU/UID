@@ -485,7 +485,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (FactionsPlugin.getInstance().conf().factions().homes().isEnabled() &&
                 FactionsPlugin.getInstance().conf().factions().homes().isTeleportToOnDeath() &&
                 home != null &&
-                (FactionsPlugin.getInstance().conf().factions().homes().isRespawnFromNoPowerLossWorlds() || !FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getWorldsNoPowerLoss().contains(event.getPlayer().getWorld().getName()))) {
+                (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRespawnHomeFromNoPowerLossWorlds() || !FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getWorldsNoPowerLoss().contains(event.getPlayer().getWorld().getName()))) {
             event.setRespawnLocation(home);
         }
     }
