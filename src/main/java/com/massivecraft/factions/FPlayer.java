@@ -97,9 +97,6 @@ public interface FPlayer extends EconomyParticipator {
 
     void setShowScoreboard(boolean show);
 
-    // FIELD: account
-    String getAccountId();
-
     void resetFactionData(boolean doSpoutUpdate);
 
     void resetFactionData();
@@ -160,22 +157,7 @@ public interface FPlayer extends EconomyParticipator {
     // Relation and relation colors
     // -------------------------------
 
-    @Override
-    String describeTo(RelationParticipator that, boolean ucfirst);
-
-    @Override
-    String describeTo(RelationParticipator that);
-
-    @Override
-    Relation getRelationTo(RelationParticipator rp);
-
-    @Override
-    Relation getRelationTo(RelationParticipator rp, boolean ignorePeaceful);
-
     Relation getRelationToLocation();
-
-    @Override
-    ChatColor getColorTo(RelationParticipator rp);
 
     //----------------------------------------------//
     // Health
@@ -236,8 +218,6 @@ public interface FPlayer extends EconomyParticipator {
     boolean attemptClaim(Faction forFaction, Location location, boolean notifyFailure);
 
     boolean attemptClaim(Faction forFaction, FLocation location, boolean notifyFailure);
-
-    void msg(String str, Object... args);
 
     String getId();
 

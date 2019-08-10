@@ -40,22 +40,22 @@ public class PermissibleRelationGUI extends GUI<Permissible> {
         items.put(Role.COLEADER, coleader);
 
         SimpleItem ally = starter.build();
-        ally.setName(Relation.ALLY.getTranslation().toString());
+        ally.setName(Relation.ALLY.getTranslation());
         ally.setMaterial(FactionMaterial.from("GOLD_SWORD").get());
         items.put(Relation.ALLY, ally);
 
         SimpleItem truce = starter.build();
-        truce.setName(Relation.TRUCE.getTranslation().toString());
+        truce.setName(Relation.TRUCE.getTranslation());
         truce.setMaterial(FactionMaterial.from("IRON_AXE").get());
         items.put(Relation.TRUCE, truce);
 
         SimpleItem neutral = starter.build();
-        neutral.setName(Relation.NEUTRAL.getTranslation().toString());
+        neutral.setName(Relation.NEUTRAL.getTranslation());
         neutral.setMaterial(FactionMaterial.from("STONE_HOE").get());
         items.put(Relation.NEUTRAL, neutral);
 
         SimpleItem enemy = starter.build();
-        enemy.setName(Relation.ENEMY.getTranslation().toString());
+        enemy.setName(Relation.ENEMY.getTranslation());
         enemy.setMaterial(FactionMaterial.from("STONE_AXE").get());
         items.put(Relation.ENEMY, enemy);
     }

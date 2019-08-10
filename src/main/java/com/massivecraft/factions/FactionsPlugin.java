@@ -5,7 +5,6 @@ import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.massivecraft.factions.cmd.CmdAutoHelp;
 import com.massivecraft.factions.cmd.FCmdRoot;
 import com.massivecraft.factions.config.ConfigManager;
 import com.massivecraft.factions.config.file.MainConfig;
@@ -184,8 +183,8 @@ public class FactionsPlugin extends JavaPlugin {
         }
 
         // Register recurring tasks
-        if (saveTask == null && ((FactionsPlugin) this).conf().factions().getSaveToFileEveryXMinutes() > 0.0) {
-            long saveTicks = (long) (20 * 60 * ((FactionsPlugin) this).conf().factions().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
+        if (saveTask == null && this.conf().factions().getSaveToFileEveryXMinutes() > 0.0) {
+            long saveTicks = (long) (20 * 60 * this.conf().factions().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
             saveTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new SaveTask(this), saveTicks, saveTicks);
         }
 
