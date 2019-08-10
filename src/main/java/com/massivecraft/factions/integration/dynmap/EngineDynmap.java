@@ -1,7 +1,8 @@
 package com.massivecraft.factions.integration.dynmap;
 
 import org.dynmap.DynmapAPI;
-import org.dynmap.markers.*;
+import org.dynmap.markers.MarkerAPI;
+import org.dynmap.markers.MarkerSet;
 
 // This source code is a heavily modified version of mikeprimms plugin Dynmap-Factions.
 public class EngineDynmap {

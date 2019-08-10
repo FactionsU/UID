@@ -6,8 +6,8 @@ import com.massivecraft.factions.gui.WarpGUI;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.struct.Role;
-import com.massivecraft.factions.util.WarmUpUtil;
 import com.massivecraft.factions.util.TL;
+import com.massivecraft.factions.util.WarmUpUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

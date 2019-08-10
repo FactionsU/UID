@@ -67,8 +67,8 @@ public class Loader {
                     node.setValue(field.get(object));
                 } else {
                     try {
-                        if (node.getValue()!=null && Set.class.isAssignableFrom(field.getType()) && List.class.isAssignableFrom(node.getValue().getClass())) {
-                            field.set(object, new HashSet((List<?>)node.getValue()));
+                        if (node.getValue() != null && Set.class.isAssignableFrom(field.getType()) && List.class.isAssignableFrom(node.getValue().getClass())) {
+                            field.set(object, new HashSet((List<?>) node.getValue()));
                         } else {
                             field.set(object, node.getValue());
                         }
