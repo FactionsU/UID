@@ -1,6 +1,9 @@
 package com.massivecraft.factions.listeners;
 
-import com.massivecraft.factions.*;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.struct.Relation;
 import com.massivecraft.factions.struct.Role;
@@ -132,7 +135,7 @@ public class FactionsChatListener implements Listener {
             InsertIndex = eventFormat.indexOf(FactionsPlugin.getInstance().conf().factions().chat().getTagReplaceString());
             eventFormat = eventFormat.replace(FactionsPlugin.getInstance().conf().factions().chat().getTagReplaceString(), "");
             padBefore = false;
-            padAfter=false;
+            padAfter = false;
         } else if (!FactionsPlugin.getInstance().conf().factions().chat().getTagInsertAfterString().isEmpty() && eventFormat.contains(FactionsPlugin.getInstance().conf().factions().chat().getTagInsertAfterString())) {
             // we're using the "insert after string" method
             InsertIndex = eventFormat.indexOf(FactionsPlugin.getInstance().conf().factions().chat().getTagInsertAfterString()) + FactionsPlugin.getInstance().conf().factions().chat().getTagInsertAfterString().length();

@@ -11,9 +11,9 @@ import java.io.IOException;
 public class ConfigManager {
     private final FactionsPlugin plugin;
     private final DefaultPermissionsConfig permissionsConfig = new DefaultPermissionsConfig();
-    private static final String permissionsConfigComment="Default permissions";
+    private static final String permissionsConfigComment = "Default permissions";
     private final DefaultOfflinePermissionsConfig offlinePermissionsConfig = new DefaultOfflinePermissionsConfig();
-    private static final String offlinePermissionsConfigComment="Default permissions when offline, if enabled";
+    private static final String offlinePermissionsConfigComment = "Default permissions when offline, if enabled";
     private final MainConfig mainConfig = new MainConfig();
     private static final String mainConfigComment = "# FactionsUUID by drtshock\n" +
             "# Report issues https://github.com/drtshock/Factions/issues?state=open\n" +

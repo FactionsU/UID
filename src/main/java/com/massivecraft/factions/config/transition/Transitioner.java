@@ -59,7 +59,7 @@ public class Transitioner {
         try {
             OldConf conf = this.gson.fromJson(new String(Files.readAllBytes(oldConf), StandardCharsets.UTF_8), OldConf.class);
             TransitionConfig newConfig = new TransitionConfig(conf);
-            Loader.load("main", newConfig,"If you see this message, transitioning your config only got part way.");
+            Loader.load("main", newConfig, "If you see this message, transitioning your config only got part way.");
             oldConfigFolderFile.mkdir();
             Path dataFolder = pluginFolder.resolve("data");
             dataFolder.toFile().mkdir();

@@ -5,8 +5,8 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.FlightUtil;
-import com.massivecraft.factions.util.WarmUpUtil;
 import com.massivecraft.factions.util.TL;
+import com.massivecraft.factions.util.WarmUpUtil;
 
 public class CmdFly extends FCommand {
 

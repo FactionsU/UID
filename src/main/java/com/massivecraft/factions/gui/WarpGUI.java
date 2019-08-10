@@ -5,9 +5,9 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.WarmUpUtil;
 import com.massivecraft.factions.util.material.FactionMaterial;
-import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.conversations.*;
@@ -170,7 +170,7 @@ public class WarpGUI extends GUI<Integer> {
 
     @Override
     protected Map<Integer, SimpleItem> createDummyItems() {
-            return Collections.emptyMap();
+        return Collections.emptyMap();
     }
 
     private class PasswordPrompt extends StringPrompt implements ConversationAbandonedListener {
