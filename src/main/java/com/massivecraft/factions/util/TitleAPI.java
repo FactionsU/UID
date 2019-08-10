@@ -44,7 +44,7 @@ public class TitleAPI {
                 this.fieldSubTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE");
 
                 FactionsPlugin.getInstance().getLogger().info("Didn't find API support for sending titles, using reflection instead.");
-            } catch (NoSuchMethodException | NoSuchFieldException ex) {
+            } catch (Exception ex) {
                 FactionsPlugin.getInstance().getLogger().info("Failed to use reflection.");
                 bailOut = false;
                 ex.printStackTrace();
@@ -112,21 +112,16 @@ public class TitleAPI {
      * @param name Name of the class
      * @return Class
      */
-    private Class<?> getNMSClass(String name) {
+    private Class<?> getNMSClass(String name) throws ClassNotFoundException {
         String versionName = "net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3] + "." + name;
 
         if (classCache.containsKey(versionName)) {
             return classCache.get(versionName);
         }
 
-        try {
-            Class clazz = Class.forName(versionName);
-            classCache.put(name, clazz);
-            return clazz;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+        Class clazz = Class.forName(versionName);
+        classCache.put(name, clazz);
+        return clazz;
     }
 
     public static TitleAPI getInstance() {
