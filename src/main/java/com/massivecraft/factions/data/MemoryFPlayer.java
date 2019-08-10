@@ -665,7 +665,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().conf().factions().isCanLeaveWithNegativePower() && this.getPower() < 0) {
+        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && this.getPower() < 0) {
             msg(TL.LEAVE_NEGATIVEPOWER);
             return;
         }

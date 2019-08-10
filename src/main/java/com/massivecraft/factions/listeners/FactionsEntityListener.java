@@ -49,20 +49,20 @@ public class FactionsEntityListener extends AbstractListener {
         // Check for no power loss conditions
         if (faction.isWarZone()) {
             // war zones always override worldsNoPowerLoss either way, thus this layout
-            if (!FactionsPlugin.getInstance().conf().factions().protection().isWarZonePowerLoss()) {
+            if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isWarZonePowerLoss()) {
                 powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WARZONE.toString());
                 powerLossEvent.setCancelled(true);
             }
             if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getWorldsNoPowerLoss().contains(player.getWorld().getName())) {
                 powerLossEvent.setMessage(TL.PLAYER_POWER_LOSS_WARZONE.toString());
             }
-        } else if (faction.isWilderness() && !FactionsPlugin.getInstance().conf().factions().protection().isWildernessPowerLoss() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(player.getWorld().getName())) {
+        } else if (faction.isWilderness() && !FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isWildernessPowerLoss() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(player.getWorld().getName())) {
             powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WILDERNESS.toString());
             powerLossEvent.setCancelled(true);
         } else if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getWorldsNoPowerLoss().contains(player.getWorld().getName())) {
             powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WORLD.toString());
             powerLossEvent.setCancelled(true);
-        } else if (FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulMembersDisablePowerLoss() && fplayer.hasFaction() && fplayer.getFaction().isPeaceful()) {
+        } else if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isPeacefulMembersDisablePowerLoss() && fplayer.hasFaction() && fplayer.getFaction().isPeaceful()) {
             powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_PEACEFUL.toString());
             powerLossEvent.setCancelled(true);
         } else {
