@@ -11,11 +11,11 @@ import java.io.IOException;
 public class ConfigManager {
     private final FactionsPlugin plugin;
     private final DefaultPermissionsConfig permissionsConfig = new DefaultPermissionsConfig();
-    private final String permissionsConfigComment="Default permissions";
+    private static final String permissionsConfigComment="Default permissions";
     private final DefaultOfflinePermissionsConfig offlinePermissionsConfig = new DefaultOfflinePermissionsConfig();
-    private final String offlinePermissionsConfigComment="Default permissions when offline, if enabled";
+    private static final String offlinePermissionsConfigComment="Default permissions when offline, if enabled";
     private final MainConfig mainConfig = new MainConfig();
-    private final String mainConfigComment = "# FactionsUUID by drtshock\n" +
+    private static final String mainConfigComment = "# FactionsUUID by drtshock\n" +
             "# Report issues https://github.com/drtshock/Factions/issues?state=open\n" +
             "# Live support http://factions-support.cf\n" +
             "# Website https://www.spigotmc.org/resources/factionsuuid.1035/\n" +

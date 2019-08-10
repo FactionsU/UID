@@ -1090,8 +1090,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         return id;
     }
 
-    public abstract void remove();
-
     @Override
     public void setId(String id) {
         this.id = id;

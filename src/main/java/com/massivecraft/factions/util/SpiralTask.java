@@ -28,7 +28,7 @@ public abstract class SpiralTask implements Runnable {
     private transient World world;
     private transient boolean readyToGo = false;
     private transient int taskID = -1;
-    private transient int limit = 0;
+    private transient int limit;
 
     // values for the spiral pattern routine
     private transient int x = 0;

@@ -35,7 +35,7 @@ public class WarpGUI extends GUI<Integer> {
 
     private List<String> warps;
     private final String name;
-    private int page = 0;
+    private int page;
 
     public WarpGUI(FPlayer user) {
         this(user, -1);

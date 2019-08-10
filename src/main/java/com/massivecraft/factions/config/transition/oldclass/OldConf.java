@@ -1,8 +1,6 @@
 package com.massivecraft.factions.config.transition.oldclass;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import com.massivecraft.factions.integration.dynmap.DynmapStyle;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 

@@ -90,7 +90,7 @@ public enum FancyTag implements Tag {
                 return tag.getMessage(text, faction, player, groupMap);
             }
         }
-        return Collections.EMPTY_LIST; // We really shouldn't be here.
+        return Collections.emptyList(); // We really shouldn't be here.
     }
 
     public static boolean anyMatch(String text) {
@@ -171,7 +171,7 @@ public enum FancyTag implements Tag {
 
     public List<FancyMessage> getMessage(String text, Faction faction, FPlayer player, Map<UUID, String> groupMap) {
         if (!this.foundInString(text)) {
-            return Collections.EMPTY_LIST; // We really, really shouldn't be here.
+            return Collections.emptyList(); // We really, really shouldn't be here.
         }
         return this.function.apply(faction, player, text.replace(this.getTag(), ""), groupMap);
     }

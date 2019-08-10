@@ -110,8 +110,6 @@ public interface Faction extends EconomyParticipator {
 
     void confirmValidHome();
 
-    String getAccountId();
-
     Integer getPermanentPower();
 
     void setPermanentPower(Integer permanentPower);
@@ -162,21 +160,6 @@ public interface Faction extends EconomyParticipator {
     // -------------------------------
     // Relation and relation colors
     // -------------------------------
-
-    @Override
-    String describeTo(RelationParticipator that, boolean ucfirst);
-
-    @Override
-    String describeTo(RelationParticipator that);
-
-    @Override
-    Relation getRelationTo(RelationParticipator rp);
-
-    @Override
-    Relation getRelationTo(RelationParticipator rp, boolean ignorePeaceful);
-
-    @Override
-    ChatColor getColorTo(RelationParticipator rp);
 
     Relation getRelationWish(Faction otherFaction);
 
@@ -239,11 +222,6 @@ public interface Faction extends EconomyParticipator {
     Role getDefaultRole();
 
     void setDefaultRole(Role role);
-
-    // ----------------------------------------------//
-    // Messages
-    // ----------------------------------------------//
-    void msg(String message, Object... args);
 
     void sendMessage(String message);
 
