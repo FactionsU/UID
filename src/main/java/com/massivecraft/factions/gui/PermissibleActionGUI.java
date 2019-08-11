@@ -6,6 +6,8 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.perms.PermissibleAction;
+import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.struct.Role;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
@@ -94,6 +96,9 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
         Map<Integer, PermissibleAction> map = new HashMap<>();
         int i = 0;
         for (PermissibleAction action : PermissibleAction.values()) {
+            if (this.permissible instanceof Relation && action.isFactionOnly()) {
+                continue;
+            }
             map.put(i++, action);
         }
         return map;
