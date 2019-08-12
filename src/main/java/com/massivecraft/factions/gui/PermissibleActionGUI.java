@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.Backable {
-    private static SimpleItem backItem = SimpleItem.builder().setMaterial(FactionMaterial.from("ARROW").get()).setName("BACK").build();
+    private static SimpleItem backItem = SimpleItem.builder().setMaterial(FactionMaterial.from("ARROW").get()).setName(TL.GUI_BUTTON_BACK.toString()).build();
     private static SimpleItem allow;
     private static SimpleItem allowLocked;
     private static SimpleItem disallow;
@@ -50,7 +50,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
 
     @Override
     protected String getName() {
-        return "Permissions: " + permissible.name().toLowerCase();
+        return TL.GUI_PERMACTION_NAME.format(permissible.name().toLowerCase());
     }
 
     @Override
