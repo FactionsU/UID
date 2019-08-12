@@ -5,9 +5,9 @@ import com.massivecraft.factions.gui.PermissibleActionGUI;
 import com.massivecraft.factions.gui.PermissibleRelationGUI;
 import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.perms.PermissibleAction;
-import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
+import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
 import java.util.Arrays;

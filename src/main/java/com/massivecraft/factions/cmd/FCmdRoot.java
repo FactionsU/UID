@@ -1,7 +1,14 @@
 package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FactionsPlugin;
-import com.massivecraft.factions.cmd.claim.*;
+import com.massivecraft.factions.cmd.claim.CmdAutoClaim;
+import com.massivecraft.factions.cmd.claim.CmdClaim;
+import com.massivecraft.factions.cmd.claim.CmdClaimAt;
+import com.massivecraft.factions.cmd.claim.CmdClaimLine;
+import com.massivecraft.factions.cmd.claim.CmdSafeunclaimall;
+import com.massivecraft.factions.cmd.claim.CmdUnclaim;
+import com.massivecraft.factions.cmd.claim.CmdUnclaimall;
+import com.massivecraft.factions.cmd.claim.CmdWarunclaimall;
 import com.massivecraft.factions.cmd.money.CmdMoney;
 import com.massivecraft.factions.cmd.relations.CmdRelationAlly;
 import com.massivecraft.factions.cmd.relations.CmdRelationEnemy;

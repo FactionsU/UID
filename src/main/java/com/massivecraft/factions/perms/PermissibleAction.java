@@ -80,7 +80,7 @@ public enum PermissibleAction {
     }
 
     public String getDescription() {
-        switch(this) {
+        switch (this) {
             case BUILD:
                 return TL.PERM_BUILD.toString();
             case DESTROY:
