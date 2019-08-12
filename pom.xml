@@ -21,6 +21,7 @@
     <build>
         <directory>FactionsIsAwesome</directory>
         <sourceDirectory>FactionsIsAwesome/java</sourceDirectory>
+        <testSourceDirectory>FactionsIsAwesome/test</testSourceDirectory>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
