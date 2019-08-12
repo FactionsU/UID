@@ -11,12 +11,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public interface Faction extends EconomyParticipator {
-    HashMap<String, List<String>> getAnnouncements();
+    Map<String, List<String>> getAnnouncements();
 
-    ConcurrentHashMap<String, LazyLocation> getWarps();
+    Map<String, LazyLocation> getWarps();
 
     LazyLocation getWarp(String name);
 
@@ -203,9 +202,9 @@ public interface Faction extends EconomyParticipator {
 
     FPlayer getFPlayerAdmin();
 
-    ArrayList<FPlayer> getFPlayersWhereRole(Role role);
+    List<FPlayer> getFPlayersWhereRole(Role role);
 
-    ArrayList<Player> getOnlinePlayers();
+    List<Player> getOnlinePlayers();
 
     // slightly faster check than getOnlinePlayers() if you just want to see if
     // there are any players online
