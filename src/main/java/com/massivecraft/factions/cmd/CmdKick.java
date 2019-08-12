@@ -58,7 +58,7 @@ public class CmdKick extends FCommand {
 
         if (context.fPlayer == toKick) {
             context.msg(TL.COMMAND_KICK_SELF);
-            context.msg(TL.GENERIC_YOUMAYWANT.toString() + FCmdRoot.getInstance().cmdLeave.getUseageTemplate(context));
+            context.msg(TL.GENERIC_YOUMAYWANT.toString() + FCmdRoot.getInstance().cmdLeave.getUsageTemplate(context));
             return;
         }
 

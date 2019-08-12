@@ -59,7 +59,7 @@ public class CmdHome extends FCommand {
 
         if (!context.faction.hasHome()) {
             context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString() + (context.fPlayer.getRole().value < Role.MODERATOR.value ? TL.GENERIC_ASKYOURLEADER.toString() : TL.GENERIC_YOUSHOULD.toString()));
-            context.fPlayer.sendMessage(FCmdRoot.getInstance().cmdSethome.getUseageTemplate(context));
+            context.fPlayer.sendMessage(FCmdRoot.getInstance().cmdSethome.getUsageTemplate(context));
             return;
         }
 

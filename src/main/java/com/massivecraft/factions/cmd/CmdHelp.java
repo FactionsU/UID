@@ -72,28 +72,28 @@ public class CmdHelp extends FCommand {
         ArrayList<String> pageLines;
 
         pageLines = new ArrayList<>();
-        pageLines.add(FCmdRoot.getInstance().cmdHelp.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdList.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdShow.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdPower.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdJoin.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdLeave.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdChat.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdToggleAllianceChat.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdHome.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdHelp.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdList.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdShow.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdPower.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdJoin.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdLeave.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdChat.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdToggleAllianceChat.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdHome.getUsageTemplate(context, true));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_NEXTCREATE.toString()));
         helpPages.add(pageLines);
 
         pageLines = new ArrayList<>();
-        pageLines.add(FCmdRoot.getInstance().cmdCreate.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdDescription.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdTag.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdCreate.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdDescription.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdTag.getUsageTemplate(context, true));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_INVITATIONS.toString()));
-        pageLines.add(FCmdRoot.getInstance().cmdOpen.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdInvite.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdDeinvite.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdOpen.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdInvite.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdDeinvite.getUsageTemplate(context, true));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_HOME.toString()));
-        pageLines.add(FCmdRoot.getInstance().cmdSethome.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdSethome.getUsageTemplate(context, true));
         helpPages.add(pageLines);
 
         if (Econ.isSetup() && FactionsPlugin.getInstance().conf().economy().isEnabled() && FactionsPlugin.getInstance().conf().economy().isBankEnabled()) {
@@ -103,7 +103,7 @@ public class CmdHelp extends FCommand {
             pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_BANK_2.toString()));
             pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_BANK_3.toString()));
             pageLines.add("");
-            pageLines.add(FCmdRoot.getInstance().cmdMoney.getUseageTemplate(context, true));
+            pageLines.add(FCmdRoot.getInstance().cmdMoney.getUsageTemplate(context, true));
             pageLines.add("");
             pageLines.add("");
             pageLines.add("");
@@ -111,36 +111,36 @@ public class CmdHelp extends FCommand {
         }
 
         pageLines = new ArrayList<>();
-        pageLines.add(FCmdRoot.getInstance().cmdClaim.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdAutoClaim.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdUnclaim.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdUnclaimall.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdKick.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdMod.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdAdmin.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdTitle.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdSB.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdSeeChunk.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdStatus.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdClaim.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdAutoClaim.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdUnclaim.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdUnclaimall.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdKick.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdMod.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdAdmin.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdTitle.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdSB.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdSeeChunk.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdStatus.getUsageTemplate(context, true));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_PLAYERTITLES.toString()));
         helpPages.add(pageLines);
 
         pageLines = new ArrayList<>();
-        pageLines.add(FCmdRoot.getInstance().cmdMap.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdBoom.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdOwner.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdOwnerList.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdMap.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdBoom.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdOwner.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdOwnerList.getUsageTemplate(context, true));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_OWNERSHIP_1.toString()));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_OWNERSHIP_2.toString()));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_OWNERSHIP_3.toString()));
         helpPages.add(pageLines);
 
         pageLines = new ArrayList<>();
-        pageLines.add(FCmdRoot.getInstance().cmdDisband.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdDisband.getUsageTemplate(context, true));
         pageLines.add("");
-        pageLines.add(FCmdRoot.getInstance().cmdRelationAlly.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdRelationNeutral.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdRelationEnemy.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdRelationAlly.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdRelationNeutral.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdRelationEnemy.getUsageTemplate(context, true));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_RELATIONS_1.toString()));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_RELATIONS_2.toString()));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_RELATIONS_3.toString()));
@@ -173,31 +173,31 @@ public class CmdHelp extends FCommand {
 
         pageLines = new ArrayList<>();
         pageLines.add(TL.COMMAND_HELP_MOAR_1.toString());
-        pageLines.add(FCmdRoot.getInstance().cmdBypass.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdBypass.getUsageTemplate(context, true));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_ADMIN_1.toString()));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_ADMIN_2.toString()));
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_ADMIN_3.toString()));
-        pageLines.add(FCmdRoot.getInstance().cmdSafeunclaimall.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdWarunclaimall.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdSafeunclaimall.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdWarunclaimall.getUsageTemplate(context, true));
         //TODO:TL
-        pageLines.add(plugin.txt().parse("<i>Note: " + FCmdRoot.getInstance().cmdUnclaim.getUseageTemplate(context, false) + FactionsPlugin.getInstance().txt().parse("<i>") + " works on safe/war zones as well."));
-        pageLines.add(FCmdRoot.getInstance().cmdPeaceful.getUseageTemplate(context, true));
+        pageLines.add(plugin.txt().parse("<i>Note: " + FCmdRoot.getInstance().cmdUnclaim.getUsageTemplate(context, false) + FactionsPlugin.getInstance().txt().parse("<i>") + " works on safe/war zones as well."));
+        pageLines.add(FCmdRoot.getInstance().cmdPeaceful.getUsageTemplate(context, true));
         helpPages.add(pageLines);
 
         pageLines = new ArrayList<>();
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_MOAR_2.toString()));
-        pageLines.add(FCmdRoot.getInstance().cmdChatSpy.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdPermanent.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdPermanentPower.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdPowerBoost.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdChatSpy.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdPermanent.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdPermanentPower.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdPowerBoost.getUsageTemplate(context, true));
         helpPages.add(pageLines);
 
         pageLines = new ArrayList<>();
         pageLines.add(plugin.txt().parse(TL.COMMAND_HELP_MOAR_3.toString()));
-        pageLines.add(FCmdRoot.getInstance().cmdLock.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdReload.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdSaveAll.getUseageTemplate(context, true));
-        pageLines.add(FCmdRoot.getInstance().cmdVersion.getUseageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdLock.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdReload.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdSaveAll.getUsageTemplate(context, true));
+        pageLines.add(FCmdRoot.getInstance().cmdVersion.getUsageTemplate(context, true));
         helpPages.add(pageLines);
     }
 
