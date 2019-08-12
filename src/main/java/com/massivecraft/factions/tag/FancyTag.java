@@ -10,7 +10,11 @@ import com.massivecraft.factions.util.QuadFunction;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public enum FancyTag implements Tag {
     ALLIES_LIST("{allies-list}", (target, fme, prefix, gm) -> processRelation(prefix, target, fme, Relation.ALLY)),

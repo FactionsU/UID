@@ -1,12 +1,16 @@
 package com.massivecraft.factions.config.transition.oldclass;
 
 import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.struct.BanInfo;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
+import com.massivecraft.factions.struct.BanInfo;
 import com.massivecraft.factions.util.LazyLocation;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class OldMemoryFaction {

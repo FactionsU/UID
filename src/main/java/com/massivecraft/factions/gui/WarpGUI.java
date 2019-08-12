@@ -10,11 +10,22 @@ import com.massivecraft.factions.util.WarmUpUtil;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
-import org.bukkit.conversations.*;
+import org.bukkit.conversations.ConversationAbandonedEvent;
+import org.bukkit.conversations.ConversationAbandonedListener;
+import org.bukkit.conversations.ConversationContext;
+import org.bukkit.conversations.ConversationFactory;
+import org.bukkit.conversations.InactivityConversationCanceller;
+import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
+import org.bukkit.conversations.Prompt;
+import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WarpGUI extends GUI<Integer> {
     private static SimpleItem warpItem;
@@ -48,7 +59,7 @@ public class WarpGUI extends GUI<Integer> {
             page = 0;
         }
         this.page = page;
-        name = page == -1 ? TL.GUI_WARPS_ONE_PAGE.format(user.getFaction().getTag()) : TL.GUI_WARPS_PAGE.format(user.getFaction().getTag(),page+1);
+        name = page == -1 ? TL.GUI_WARPS_ONE_PAGE.format(user.getFaction().getTag()) : TL.GUI_WARPS_PAGE.format(user.getFaction().getTag(), page + 1);
         build();
     }
 
@@ -125,12 +136,12 @@ public class WarpGUI extends GUI<Integer> {
             num = warps.size();
             startingIndex = 0;
         } else {
-            num = Math.min(warps.size() - ((5 * 9) * page), 5*9);
+            num = Math.min(warps.size() - ((5 * 9) * page), 5 * 9);
             startingIndex = (5 * 9) * page;
             if (page > 0) {
                 map.put(45, -2);
             }
-            if (page < (getMaxPages()-1)) {
+            if (page < (getMaxPages() - 1)) {
                 map.put(53, -1);
             }
         }
