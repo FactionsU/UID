@@ -2,8 +2,8 @@ package com.massivecraft.factions.gui;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.perms.Permissible;
-import com.massivecraft.factions.struct.Relation;
-import com.massivecraft.factions.struct.Role;
+import com.massivecraft.factions.perms.Relation;
+import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.event.inventory.ClickType;
 

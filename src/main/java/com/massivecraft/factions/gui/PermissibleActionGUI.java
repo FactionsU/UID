@@ -6,8 +6,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.perms.PermissibleAction;
-import com.massivecraft.factions.struct.Relation;
-import com.massivecraft.factions.struct.Role;
+import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
@@ -27,8 +26,8 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
 
     static {
         List<String> lore = ImmutableList.of(
-                "&8Access:",
-                "&8[{action-access-color}{action-access}&8]",
+                "&8Access: {action-access-color}{action-access}",
+                "&8{action-desc}",
                 "",
                 "&8Left click to &a&lAllow",
                 "&8Right click to &c&lDeny");
@@ -67,6 +66,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
 
         toParse = toParse.replace("{action-access}", (access ? "Allow" : "Deny") + extra);
         toParse = toParse.replace("{action-access-color}", access ? ChatColor.GREEN.toString() : ChatColor.DARK_RED.toString());
+        toParse = toParse.replace("{action-desc}", action.getDescription());
 
         return toParse;
     }
@@ -85,7 +85,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
             // Reload items to reparse placeholders
             buildItem(action);
             user.msg(TL.COMMAND_PERM_SET, action.name(), access ? "allow" : "deny", permissible.name());
-            FactionsPlugin.getInstance().log(TL.COMMAND_PERM_SET.format(access ? "allow" : "deny", access ? "Allow" : "Deny", permissible.name()) + " for faction " + user.getTag());
+            FactionsPlugin.getInstance().log(TL.COMMAND_PERM_SET.format(action.name(), access ? "Allow" : "Deny", permissible.name()) + " for faction " + user.getTag());
         } else {
             user.msg(TL.COMMAND_PERM_INVALID_SET);
         }

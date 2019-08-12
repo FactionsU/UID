@@ -1,6 +1,6 @@
 package com.massivecraft.factions.cmd.relations;
 
-import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.perms.Relation;
 
 public class CmdRelationEnemy extends FRelationCommand {
 

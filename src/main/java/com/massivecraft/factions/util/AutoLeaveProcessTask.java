@@ -4,7 +4,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
-import com.massivecraft.factions.struct.Role;
+import com.massivecraft.factions.perms.Role;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;

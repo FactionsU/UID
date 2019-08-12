@@ -1,6 +1,6 @@
 package com.massivecraft.factions.iface;
 
-import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.perms.Relation;
 import org.bukkit.ChatColor;
 
 public interface RelationParticipator {

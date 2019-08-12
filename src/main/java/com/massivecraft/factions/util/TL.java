@@ -501,7 +501,7 @@ public enum TL {
 
     COMMAND_SETFWARP_NOTCLAIMED("&eYou can only set warps in your faction territory."),
     COMMAND_SETFWARP_LIMIT("&eYour Faction already has the max amount of warps set &6(%1$d)."),
-    COMMAND_SETFWARP_SET("&eSet warp &6%1$s and password &b'%2$s' &eto your location."),
+    COMMAND_SETFWARP_SET("&eSet warp &6%1$s&e and password &b'%2$s' &eto your location."),
     COMMAND_SETFWARP_TOSET("to set warp"),
     COMMAND_SETFWARP_FORSET("for setting warp"),
     COMMAND_SETFWARP_DESCRIPTION("Set a faction warp"),
@@ -801,6 +801,28 @@ public enum TL {
 
     PLAYER_PVP_NEUTRALFAIL("&eYou can't hurt %s&e in their own territory unless you declare them as an enemy."),
     PLAYER_PVP_TRIED("%s&e tried to hurt you."),
+
+    PERM_BUILD("Building blocks"),
+    PERM_DESTROY("Breaking blocks"),
+    PERM_PAINBUILD("If allow, can build but hurts to do so"),
+    PERM_ITEM("Using items"),
+    PERM_CONTAINER("Opening any block that can store items"),
+    PERM_BUTTON("Using buttons"),
+    PERM_DOOR("Opening doors"),
+    PERM_LEVER("Using levers"),
+    PERM_PLATE("Using pressure plates"),
+    PERM_FROSTWALK("Walking on water with the frostwalk enchantment"),
+    PERM_INVITE("Inviting others to join the faction"),
+    PERM_KICK("Kicking members from the faction"),
+    PERM_BAN("Banning players from the faction"),
+    PERM_PROMOTE("Promoting members of the faction"),
+    PERM_DISBAND("Disbanding the entire faction"),
+    PERM_ECONOMY("Spending faction money"),
+    PERM_TERRITORY("Claiming or unclaiming faction territory"),
+    PERM_SETHOME("Setting the faction home"),
+    PERM_SETWARP("Setting and unsetting faction warps"),
+    PERM_WARP("Using faction warps"),
+    PERM_FLY("Flying in faction territory"),
 
     /**
      * Strings lying around in other bits of the plugins
