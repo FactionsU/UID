@@ -34,6 +34,9 @@ public class DiscUtil {
     }
 
     public static void writeBytes(File file, byte[] bytes) throws IOException {
+        if (!file.exists()) {
+            file.createNewFile();
+        }
         FileOutputStream out = new FileOutputStream(file);
         out.write(bytes);
         out.close();

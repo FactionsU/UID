@@ -159,6 +159,7 @@ public class FactionsPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.loadSuccessful = false;
         getLogger().info("=== Starting up! ===");
         long timeEnableStart = System.currentTimeMillis();
 
@@ -228,8 +229,6 @@ public class FactionsPlugin extends JavaPlugin {
 
         loadLang();
 
-        loadSuccessful = true;
-        this.loadSuccessful = false;
         saveDefaultConfig();
 
         // Load Conf from disk
