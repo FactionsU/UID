@@ -4,6 +4,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
+import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.event.inventory.ClickType;
 
@@ -71,7 +72,7 @@ public class PermissibleRelationGUI extends GUI<Permissible> {
 
     @Override
     protected String getName() {
-        return "Choose a relation:";
+        return TL.GUI_PERMRELATION_NAME.toString();
     }
 
     @Override

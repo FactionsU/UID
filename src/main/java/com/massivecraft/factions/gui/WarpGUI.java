@@ -48,7 +48,7 @@ public class WarpGUI extends GUI<Integer> {
             page = 0;
         }
         this.page = page;
-        name = page == -1 ? TL.WARPS_GUI_ONE_PAGE.format(user.getFaction().getTag()) : TL.WARPS_GUI_PAGE.format(user.getFaction().getTag(),page+1);
+        name = page == -1 ? TL.GUI_WARPS_ONE_PAGE.format(user.getFaction().getTag()) : TL.GUI_WARPS_PAGE.format(user.getFaction().getTag(),page+1);
         build();
     }
 
@@ -150,10 +150,10 @@ public class WarpGUI extends GUI<Integer> {
     @Override
     protected SimpleItem getItem(Integer index) {
         if (index == -1) {
-            return SimpleItem.builder().setName(TL.GUI_NEXT.toString()).setMaterial(FactionMaterial.from("ARROW").get()).build();
+            return SimpleItem.builder().setName(TL.GUI_BUTTON_NEXT.toString()).setMaterial(FactionMaterial.from("ARROW").get()).build();
         }
         if (index == -2) {
-            return SimpleItem.builder().setName(TL.GUI_PREV.toString()).setMaterial(FactionMaterial.from("ARROW").get()).build();
+            return SimpleItem.builder().setName(TL.GUI_BUTTON_PREV.toString()).setMaterial(FactionMaterial.from("ARROW").get()).build();
         }
         SimpleItem item = new SimpleItem(warpItem);
         if (user.getFaction().hasWarpPassword(warps.get(index))) {
