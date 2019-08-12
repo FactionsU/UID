@@ -5,7 +5,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.gui.WarpGUI;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
-import com.massivecraft.factions.struct.Role;
+import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.WarmUpUtil;
 import org.bukkit.Bukkit;

@@ -1,7 +1,7 @@
 package com.massivecraft.factions.config.transition.oldclass;
 
 import com.massivecraft.factions.perms.Permissible;
-import com.massivecraft.factions.struct.Role;
+import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.TL;
 
 public enum OldRole implements OldPermissable {

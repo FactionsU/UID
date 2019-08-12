@@ -2,7 +2,7 @@ package com.massivecraft.factions.util;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
-import com.massivecraft.factions.struct.Role;
+import com.massivecraft.factions.perms.Role;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;

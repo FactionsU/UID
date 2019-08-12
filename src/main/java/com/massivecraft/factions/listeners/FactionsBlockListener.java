@@ -3,7 +3,7 @@ package com.massivecraft.factions.listeners;
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
-import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.perms.Relation;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

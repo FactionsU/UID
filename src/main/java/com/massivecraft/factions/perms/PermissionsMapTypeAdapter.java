@@ -2,8 +2,6 @@ package com.massivecraft.factions.perms;
 
 import com.google.gson.*;
 import com.massivecraft.factions.FactionsPlugin;
-import com.massivecraft.factions.struct.Relation;
-import com.massivecraft.factions.struct.Role;
 import com.massivecraft.factions.util.TL;
 
 import java.lang.reflect.Type;

@@ -4,8 +4,8 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
-import com.massivecraft.factions.struct.Relation;
-import com.massivecraft.factions.struct.Role;
+import com.massivecraft.factions.perms.Relation;
+import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.LazyLocation;
 import com.massivecraft.factions.util.TL;
 

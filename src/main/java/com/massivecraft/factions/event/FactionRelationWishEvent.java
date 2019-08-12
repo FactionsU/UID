@@ -2,7 +2,7 @@ package com.massivecraft.factions.event;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.perms.Relation;
 import org.bukkit.event.Cancellable;
 
 public class FactionRelationWishEvent extends FactionPlayerEvent implements Cancellable {

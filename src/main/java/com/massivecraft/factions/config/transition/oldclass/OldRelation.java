@@ -1,7 +1,7 @@
 package com.massivecraft.factions.config.transition.oldclass;
 
 import com.massivecraft.factions.perms.Permissible;
-import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 
 

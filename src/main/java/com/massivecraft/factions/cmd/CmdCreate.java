@@ -4,7 +4,7 @@ import com.massivecraft.factions.*;
 import com.massivecraft.factions.event.FPlayerJoinEvent;
 import com.massivecraft.factions.event.FactionCreateEvent;
 import com.massivecraft.factions.struct.Permission;
-import com.massivecraft.factions.struct.Role;
+import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
