@@ -105,6 +105,9 @@ public abstract class AbstractListener implements Listener {
                 if (material.name().contains("SHULKER_BOX") || material.name().contains("ANVIL")) {
                     action = PermissibleAction.CONTAINER;
                 }
+                if (material.name().endsWith("_PLATE")) {
+                    action = PermissibleAction.PLATE;
+                }
                 break;
         }
 
