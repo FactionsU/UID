@@ -2,51 +2,57 @@ package com.massivecraft.factions.perms;
 
 import com.massivecraft.factions.config.file.DefaultPermissionsConfig;
 import com.massivecraft.factions.util.TL;
+import com.massivecraft.factions.util.material.FactionMaterial;
+import org.bukkit.Material;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 public enum PermissibleAction {
-    BUILD(DefaultPermissionsConfig.Permissions::getBuild),
-    DESTROY(DefaultPermissionsConfig.Permissions::getDestroy),
-    PAINBUILD(DefaultPermissionsConfig.Permissions::getPainBuild),
-    ITEM(DefaultPermissionsConfig.Permissions::getItem),
-    CONTAINER(DefaultPermissionsConfig.Permissions::getContainer),
-    BUTTON(DefaultPermissionsConfig.Permissions::getButton),
-    DOOR(DefaultPermissionsConfig.Permissions::getDoor),
-    LEVER(DefaultPermissionsConfig.Permissions::getLever),
-    PLATE(DefaultPermissionsConfig.Permissions::getPlate),
-    FROSTWALK(DefaultPermissionsConfig.Permissions::getFrostWalk),
-    INVITE(true, DefaultPermissionsConfig.Permissions::getInvite),
-    KICK(true, DefaultPermissionsConfig.Permissions::getKick),
-    BAN(true, DefaultPermissionsConfig.Permissions::getBan),
-    PROMOTE(true, DefaultPermissionsConfig.Permissions::getPromote),
-    DISBAND(true, DefaultPermissionsConfig.Permissions::getDisband),
-    ECONOMY(true, DefaultPermissionsConfig.Permissions::getEconomy),
-    TERRITORY(true, DefaultPermissionsConfig.Permissions::getTerritory),
-    SETHOME(true, DefaultPermissionsConfig.Permissions::getSetHome),
-    SETWARP(true, DefaultPermissionsConfig.Permissions::getSetWarp),
-    WARP(DefaultPermissionsConfig.Permissions::getWarp),
-    FLY(DefaultPermissionsConfig.Permissions::getFly),
+    BUILD(DefaultPermissionsConfig.Permissions::getBuild, "STONE"),
+    DESTROY(DefaultPermissionsConfig.Permissions::getDestroy, "WOODEN_PICKAXE"),
+    PAINBUILD(DefaultPermissionsConfig.Permissions::getPainBuild, "WOODEN_SWORD"),
+    ITEM(DefaultPermissionsConfig.Permissions::getItem, "ITEM_FRAME"),
+    CONTAINER(DefaultPermissionsConfig.Permissions::getContainer, "CHEST"),
+    BUTTON(DefaultPermissionsConfig.Permissions::getButton, "STONE_BUTTON"),
+    DOOR(DefaultPermissionsConfig.Permissions::getDoor, "IRON_DOOR"),
+    LEVER(DefaultPermissionsConfig.Permissions::getLever, "LEVER"),
+    PLATE(DefaultPermissionsConfig.Permissions::getPlate, "STONE_PRESSURE_PLATE"),
+    FROSTWALK(DefaultPermissionsConfig.Permissions::getFrostWalk, "ICE"),
+    INVITE(true, DefaultPermissionsConfig.Permissions::getInvite, "FISHING_ROD"),
+    KICK(true, DefaultPermissionsConfig.Permissions::getKick, "LEATHER_BOOTS"),
+    BAN(true, DefaultPermissionsConfig.Permissions::getBan, "BARRIER"),
+    PROMOTE(true, DefaultPermissionsConfig.Permissions::getPromote, "ANVIL"),
+    DISBAND(true, DefaultPermissionsConfig.Permissions::getDisband, "BONE"),
+    ECONOMY(true, DefaultPermissionsConfig.Permissions::getEconomy, "GOLD_INGOT"),
+    TERRITORY(true, DefaultPermissionsConfig.Permissions::getTerritory, "GRASS_BLOCK"),
+    SETHOME(true, DefaultPermissionsConfig.Permissions::getSetHome, "RED_BED"),
+    SETWARP(true, DefaultPermissionsConfig.Permissions::getSetWarp, "END_PORTAL_FRAME"),
+    WARP(DefaultPermissionsConfig.Permissions::getWarp, "ENDER_PEARL"),
+    FLY(DefaultPermissionsConfig.Permissions::getFly, "FEATHER"),
     ;
 
     private final boolean factionOnly;
+    private final String materialName;
+    private Material material;
     private Function<DefaultPermissionsConfig.Permissions, DefaultPermissionsConfig.Permissions.FullPermInfo> fullFunction;
     private Function<DefaultPermissionsConfig.Permissions, DefaultPermissionsConfig.Permissions.FactionOnlyPermInfo> factionOnlyFunction;
 
-    PermissibleAction(Function<DefaultPermissionsConfig.Permissions, DefaultPermissionsConfig.Permissions.FullPermInfo> fullFunction) {
+    PermissibleAction(Function<DefaultPermissionsConfig.Permissions, DefaultPermissionsConfig.Permissions.FullPermInfo> fullFunction, String materialName) {
         this.factionOnly = false;
         this.fullFunction = fullFunction;
+        this.materialName = materialName;
     }
 
-    PermissibleAction(boolean factionOnly, Function<DefaultPermissionsConfig.Permissions, DefaultPermissionsConfig.Permissions.FactionOnlyPermInfo> factionOnlyFunction) {
+    PermissibleAction(boolean factionOnly, Function<DefaultPermissionsConfig.Permissions, DefaultPermissionsConfig.Permissions.FactionOnlyPermInfo> factionOnlyFunction, String materialName) {
         this.factionOnly = factionOnly;
         if (this.factionOnly) {
             this.factionOnlyFunction = factionOnlyFunction;
         } else {
             throw new AssertionError("May only set factionOnly actions in this constructor");
         }
+        this.materialName = materialName;
     }
 
     private static Map<String, PermissibleAction> map = new HashMap<>();
@@ -67,6 +73,13 @@ public enum PermissibleAction {
 
     public DefaultPermissionsConfig.Permissions.FactionOnlyPermInfo getFactionOnly(DefaultPermissionsConfig.Permissions permissions) {
         return this.factionOnlyFunction.apply(permissions);
+    }
+
+    public Material getMaterial() {
+        if (this.material == null) {
+            this.material = FactionMaterial.from(this.materialName).get();
+        }
+        return this.material;
     }
 
     /**

@@ -10,7 +10,6 @@ import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
 import org.bukkit.event.inventory.ClickType;
 
 import java.util.HashMap;
@@ -19,10 +18,7 @@ import java.util.Map;
 
 public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.Backable {
     private static SimpleItem backItem = SimpleItem.builder().setMaterial(FactionMaterial.from("ARROW").get()).setName(TL.GUI_BUTTON_BACK.toString()).build();
-    private static SimpleItem allow;
-    private static SimpleItem allowLocked;
-    private static SimpleItem disallow;
-    private static SimpleItem disallowLocked;
+    private static SimpleItem base;
 
     static {
         List<String> lore = ImmutableList.of(
@@ -31,11 +27,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
                 "",
                 "&8Left click to &a&lAllow",
                 "&8Right click to &c&lDeny");
-        SimpleItem.Builder builder = SimpleItem.builder().setLore(lore).setName("&8[{action-access-color}{action}&8]");
-        allow = builder.setMaterial(FactionMaterial.from("LIME_TERRACOTTA").get()).setColor(DyeColor.LIME).build();
-        disallow = builder.setMaterial(FactionMaterial.from("RED_TERRACOTTA").get()).setColor(DyeColor.RED).build();
-        allowLocked = builder.setMaterial(FactionMaterial.from("GREEN_TERRACOTTA").get()).setColor(DyeColor.GREEN).build();
-        disallowLocked = builder.setMaterial(FactionMaterial.from("MAGENTA_TERRACOTTA").get()).setColor(DyeColor.MAGENTA).build();
+        base = SimpleItem.builder().setLore(lore).setName("&8[{action-access-color}{action}&8]").build();
     }
 
     private Permissible permissible;
@@ -106,9 +98,9 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
 
     @Override
     protected SimpleItem getItem(PermissibleAction permissibleAction) {
-        boolean access = user.getFaction().hasAccess(online, permissible, permissibleAction);
-        boolean locked = user.getFaction().isLocked(online, permissible, permissibleAction);
-        return new SimpleItem(access ? (locked ? allowLocked : allow) : (locked ? disallowLocked : disallow));
+        SimpleItem item = new SimpleItem(base);
+        item.setMaterial(permissibleAction.getMaterial());
+        return item;
     }
 
     @Override
