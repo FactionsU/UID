@@ -43,12 +43,12 @@ public class WarpGUI extends GUI<Integer> {
 
     private WarpGUI(FPlayer user, int page) {
         super(user, getRows(user.getFaction()));
-        name = user.getFaction().getTag() + " warps";
         warps = new ArrayList<>(user.getFaction().getWarps().keySet());
         if (page == -1 && warps.size() > (5 * 9)) {
             page = 0;
         }
         this.page = page;
+        name = page == -1 ? TL.WARPS_GUI_ONE_PAGE.format(user.getFaction().getTag()) : TL.WARPS_GUI_PAGE.format(user.getFaction().getTag(),page+1);
         build();
     }
 
@@ -70,10 +70,11 @@ public class WarpGUI extends GUI<Integer> {
 
     @Override
     protected String parse(String toParse, Integer index) {
+        if (index < 0) {
+            return toParse;
+        }
         if (warps.size() > index) {
             toParse = toParse.replace("{warp}", warps.get(index));
-        } else {
-            toParse = toParse.replace("{warp}", "Undefined");
         }
         return toParse;
     }
@@ -124,17 +125,17 @@ public class WarpGUI extends GUI<Integer> {
             num = warps.size();
             startingIndex = 0;
         } else {
-            num = Math.min(warps.size() - ((5 * 9) * page), 20);
+            num = Math.min(warps.size() - ((5 * 9) * page), 5*9);
             startingIndex = (5 * 9) * page;
             if (page > 0) {
                 map.put(45, -2);
             }
-            if (page < getMaxPages()) {
+            if (page < (getMaxPages()-1)) {
                 map.put(53, -1);
             }
         }
         int modifier = 0;
-        for (int warpIndex = startingIndex, count = 0; warpIndex < num; warpIndex++, count++) {
+        for (int warpIndex = startingIndex, count = 0; count < num; warpIndex++, count++) {
             if (count % 9 == 0) {
                 int remaining = num - count;
                 if (remaining < 9) {
@@ -149,10 +150,10 @@ public class WarpGUI extends GUI<Integer> {
     @Override
     protected SimpleItem getItem(Integer index) {
         if (index == -1) {
-            return SimpleItem.builder().setName("NEXT").setMaterial(FactionMaterial.from("ARROW").get()).build();
+            return SimpleItem.builder().setName(TL.GUI_NEXT.toString()).setMaterial(FactionMaterial.from("ARROW").get()).build();
         }
         if (index == -2) {
-            return SimpleItem.builder().setName("BACK").setMaterial(FactionMaterial.from("ARROW").get()).build();
+            return SimpleItem.builder().setName(TL.GUI_PREV.toString()).setMaterial(FactionMaterial.from("ARROW").get()).build();
         }
         SimpleItem item = new SimpleItem(warpItem);
         if (user.getFaction().hasWarpPassword(warps.get(index))) {

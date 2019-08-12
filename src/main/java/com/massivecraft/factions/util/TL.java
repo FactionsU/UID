@@ -824,6 +824,13 @@ public enum TL {
     PERM_WARP("Using faction warps"),
     PERM_FLY("Flying in faction territory"),
 
+    WARPS_GUI_ONE_PAGE("%s warps"),
+    WARPS_GUI_PAGE("%1$s warps (page %2$d)"),
+
+    GUI_NEXT("NEXT"),
+    GUI_PREV("PREVIOUS"),
+    GUI_BACK("BACK"),
+
     /**
      * Strings lying around in other bits of the plugins
      */
