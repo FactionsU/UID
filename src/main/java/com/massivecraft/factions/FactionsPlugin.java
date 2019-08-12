@@ -234,6 +234,10 @@ public class FactionsPlugin extends JavaPlugin {
         // Load Conf from disk
         this.setNerfedEntities();
         this.configManager.startup();
+        File dataFolder = new File(this.getDataFolder(), "data");
+        if (!dataFolder.exists()) {
+            dataFolder.mkdir();
+        }
         this.anotherPluginChat = this.conf().factions().chat().isTagHandledByAnotherPlugin();
         getLogger().info(txt.parse("Running material provider in %1s mode", MaterialDb.getInstance().legacy ? "LEGACY" : "STANDARD"));
         MaterialDb.getInstance().test();
