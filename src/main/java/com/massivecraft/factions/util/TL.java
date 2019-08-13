@@ -229,6 +229,7 @@ public enum TL {
     COMMAND_FWARP_INVALID_PASSWORD("&4Invalid password!"),
     COMMAND_FWARP_PASSWORD_REQUIRED("&aPlease enter warp password. This will not be visible to anyone else"),
     COMMAND_FWARP_PASSWORD_CANCEL("&cWarp canceled"),
+    COMMAND_FWARP_NOACCESS("&cYou do not have permission to use %s &cwarps"),
 
     COMMAND_HELP_404("&cThis page does not exist"),
     COMMAND_HELP_NEXTCREATE("&eLearn how to create a faction on the next page."),

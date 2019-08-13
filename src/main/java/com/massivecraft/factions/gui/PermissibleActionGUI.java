@@ -86,7 +86,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
             return;
         }
         if (user.getFaction().setPermission(online, permissible, action, access)) {
-            // Reload items to reparse placeholders
+            // Reload item to reparse placeholders
             buildItem(action);
             user.msg(TL.COMMAND_PERM_SET, action.name(), access ? "allow" : "deny", permissible.name());
             FactionsPlugin.getInstance().log(TL.COMMAND_PERM_SET.format(action.name(), access ? "Allow" : "Deny", permissible.name()) + " for faction " + user.getTag());

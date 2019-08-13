@@ -47,20 +47,22 @@ public class WarpGUI extends GUI<Integer> {
 
     private List<String> warps;
     private final String name;
-    private int page;
+    private final int page;
+    private final Faction faction;
 
-    public WarpGUI(FPlayer user) {
-        this(user, -1);
+    public WarpGUI(FPlayer user, Faction faction) {
+        this(user, -1, faction);
     }
 
-    private WarpGUI(FPlayer user, int page) {
+    private WarpGUI(FPlayer user, int page, Faction faction) {
         super(user, getRows(user.getFaction()));
+        this.faction = faction;
         warps = new ArrayList<>(user.getFaction().getWarps().keySet());
         if (page == -1 && warps.size() > (5 * 9)) {
             page = 0;
         }
         this.page = page;
-        name = page == -1 ? TL.GUI_WARPS_ONE_PAGE.format(user.getFaction().getTag()) : TL.GUI_WARPS_PAGE.format(user.getFaction().getTag(), page + 1);
+        name = page == -1 ? TL.GUI_WARPS_ONE_PAGE.format(faction.getTag()) : TL.GUI_WARPS_PAGE.format(faction.getTag(), page + 1);
         build();
     }
 
@@ -93,14 +95,19 @@ public class WarpGUI extends GUI<Integer> {
 
     @Override
     protected void onClick(Integer index, ClickType clickType) {
+        if (!faction.hasAccess(this.user, PermissibleAction.WARP)) {
+            user.msg(TL.COMMAND_FWARP_NOACCESS, faction.getTag(user));
+            this.user.getPlayer().closeInventory();
+            return;
+        }
         if (index == -1) {
             int targetPage = page + 1;
-            new WarpGUI(this.user, targetPage).open();
+            new WarpGUI(this.user, targetPage, faction).open();
             return;
         }
         if (index == -2) {
             int targetPage = page - 1;
-            new WarpGUI(this.user, targetPage).open();
+            new WarpGUI(this.user, targetPage, faction).open();
             return;
         }
         // Check if there are enough faction warps for this index
@@ -222,6 +229,10 @@ public class WarpGUI extends GUI<Integer> {
         WarmUpUtil.process(user, WarmUpUtil.Warmup.WARP, TL.WARMUPS_NOTIFY_TELEPORT, warp, () -> {
             Player player = Bukkit.getPlayer(user.getPlayer().getUniqueId());
             if (player != null) {
+                if (!faction.hasAccess(this.user, PermissibleAction.WARP)) {
+                    user.msg(TL.COMMAND_FWARP_NOACCESS, faction.getTag(user));
+                    return;
+                }
                 player.teleport(user.getFaction().getWarp(warp).getLocation());
                 user.msg(TL.COMMAND_FWARP_WARPED, warp);
             }
