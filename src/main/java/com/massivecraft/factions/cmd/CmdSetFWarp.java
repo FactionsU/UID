@@ -23,7 +23,6 @@ public class CmdSetFWarp extends FCommand {
         this.requirements = new CommandRequirements.Builder(Permission.SETWARP)
                 .memberOnly()
                 .withAction(PermissibleAction.SETWARP)
-                .withRole(Role.MODERATOR)
                 .build();
     }
 

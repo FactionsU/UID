@@ -256,8 +256,7 @@ public class FactionsBlockListener implements Listener {
             if (pain) {
                 player.damage(FactionsPlugin.getInstance().conf().factions().getActionDeniedPainAmount());
                 me.msg("<b>It is painful to try to " + action + " in the territory of " + otherFaction.getTag(myFaction));
-            }
-            if (!justCheck) {
+            } else if (!justCheck) {
                 me.msg("<b>You can't " + action + " in the territory of " + otherFaction.getTag(myFaction));
             }
             return false;
