@@ -803,6 +803,13 @@ public class MainConfig {
         private double considerFactionsReallyOfflineAfterXMinutes = 0.0;
         private int actionDeniedPainAmount = 1;
 
+        @Comment("If enabled, perms can be managed separately for when the faction is offline")
+        private boolean separateOfflinePerms = false;
+
+        public boolean isSeparateOfflinePerms() {
+            return separateOfflinePerms;
+        }
+
         public Chat chat() {
             return chat;
         }

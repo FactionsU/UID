@@ -410,8 +410,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     private Map<Permissible, Map<PermissibleAction, Boolean>> getPermissionsMap(boolean online) {
-        // TODO test if online is even enabled
-        if (online /* || offlineDisabled */) {
+        if (online || !FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms()) {
             return this.permissions;
         } else {
             return this.permissionsOffline;
@@ -419,8 +418,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     private DefaultPermissionsConfig.Permissions getDefaultPermissions(boolean online) {
-        // TODO test if online is even enabled
-        if (online /* || offlineDisabled */) {
+        if (online || !FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms()) {
             return FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getPermissions();
         } else {
             return FactionsPlugin.getInstance().getConfigManager().getOfflinePermissionsConfig().getPermissions();
@@ -472,11 +470,11 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     public void resetPerms() {
         FactionsPlugin.getInstance().log(Level.WARNING, "Resetting permissions for Faction: " + tag);
 
-        this.resetPerms(this.permissions, FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getPermissions());
-        this.resetPerms(this.permissionsOffline, FactionsPlugin.getInstance().getConfigManager().getOfflinePermissionsConfig().getPermissions());
+        this.resetPerms(this.permissions, FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getPermissions(), true);
+        this.resetPerms(this.permissionsOffline, FactionsPlugin.getInstance().getConfigManager().getOfflinePermissionsConfig().getPermissions(), false);
     }
 
-    private void resetPerms(Map<Permissible, Map<PermissibleAction, Boolean>> permissions, DefaultPermissionsConfig.Permissions defaults) {
+    private void resetPerms(Map<Permissible, Map<PermissibleAction, Boolean>> permissions, DefaultPermissionsConfig.Permissions defaults, boolean online) {
         permissions.clear();
 
         for (Relation relation : Relation.values()) {
@@ -484,16 +482,18 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
                 permissions.put(relation, new HashMap<>());
             }
         }
-        for (Role role : Role.values()) {
-            if (role != Role.ADMIN) {
-                permissions.put(role, new HashMap<>());
+        if (online) {
+            for (Role role : Role.values()) {
+                if (role != Role.ADMIN) {
+                    permissions.put(role, new HashMap<>());
+                }
             }
         }
 
         for (Map.Entry<Permissible, Map<PermissibleAction, Boolean>> entry : permissions.entrySet()) {
             for (PermissibleAction permissibleAction : PermissibleAction.values()) {
                 if (permissibleAction.isFactionOnly()) {
-                    if (!(entry.getKey() instanceof Relation)) {
+                    if (online && !(entry.getKey() instanceof Relation)) {
                         entry.getValue().put(permissibleAction, permissibleAction.getFactionOnly(defaults).get(entry.getKey()).defaultAllowed());
                     }
                 } else {

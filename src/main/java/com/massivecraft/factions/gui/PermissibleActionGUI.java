@@ -42,7 +42,10 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
 
     @Override
     protected String getName() {
-        return TL.GUI_PERMACTION_NAME.format(permissible.name().toLowerCase());
+        String bit = FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() ?
+                TL.GUI_PERMS_ACTION_ONLINEOFFLINEBIT.format(online ? TL.GUI_PERMS_ONLINE.toString() : TL.GUI_PERMS_OFFLINE)
+                : "";
+        return TL.GUI_PERMS_ACTION_NAME.format(permissible.name().toLowerCase(), bit);
     }
 
     @Override
@@ -61,6 +64,15 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
         toParse = toParse.replace("{action-desc}", action.getDescription());
 
         return toParse;
+    }
+
+    @Override
+    public void click(int slot, ClickType clickType) {
+        if (FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() && permissible instanceof Relation && slot == this.back + 4) {
+            new PermissibleActionGUI(!online, user, permissible).open();
+        } else {
+            super.click(slot, clickType);
+        }
     }
 
     @Override
@@ -105,7 +117,11 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
 
     @Override
     protected Map<Integer, SimpleItem> createDummyItems() {
-        return ImmutableMap.of(this.back = ((PermissibleAction.values().length / 9) + 1) * 9, backItem);
+        ImmutableMap.Builder<Integer, SimpleItem> builder = ImmutableMap.<Integer, SimpleItem>builder().put(this.back = ((PermissibleAction.values().length / 9) + 1) * 9, backItem);
+        if (FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() && permissible instanceof Relation) {
+            builder.put(this.back + 4, PermissibleRelationGUI.offlineSwitch);
+        }
+        return builder.build();
     }
 
     // For dummy items only parseDefault is called, but we want to provide the relation placeholders, so: Override
