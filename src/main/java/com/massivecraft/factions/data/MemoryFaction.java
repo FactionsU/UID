@@ -52,7 +52,6 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected LazyLocation home;
     protected long foundedDate;
     protected transient long lastPlayerLoggedOffTime;
-    protected double money;
     protected double powerBoost;
     protected Map<String, Relation> relationWish = new HashMap<>();
     protected Map<FLocation, Set<String>> claimOwnership = new ConcurrentHashMap<>();
@@ -330,7 +329,6 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     public boolean isPowerFrozen() {
         int freezeSeconds = FactionsPlugin.getInstance().getConfig().getInt("hcf.powerfreeze", 0);
         return freezeSeconds != 0 && System.currentTimeMillis() - lastDeath < freezeSeconds * 1000;
-
     }
 
     public void setLastDeath(long time) {
@@ -541,7 +539,6 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         this.peaceful = false;
         this.peacefulExplosionsEnabled = false;
         this.permanent = false;
-        this.money = 0.0;
         this.powerBoost = 0.0;
         this.foundedDate = System.currentTimeMillis();
         this.maxVaults = FactionsPlugin.getInstance().conf().playerVaults().getDefaultMaxVaults();
@@ -562,7 +559,6 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         permanentPower = old.permanentPower;
         home = old.home;
         lastPlayerLoggedOffTime = old.lastPlayerLoggedOffTime;
-        money = old.money;
         powerBoost = old.powerBoost;
         relationWish = old.relationWish;
         claimOwnership = old.claimOwnership;

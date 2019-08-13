@@ -8,7 +8,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.event.FactionDisbandEvent;
 import com.massivecraft.factions.integration.Econ;
-import com.massivecraft.factions.perms.Role;
+import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.scoreboards.FTeamWrapper;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -37,7 +37,8 @@ public class CmdDisband extends FCommand {
         boolean isfaction = context.fPlayer != null && faction == context.faction;
 
         if (isfaction) {
-            if (!context.assertMinRole(Role.ADMIN)) {
+            if (!faction.hasAccess(context.fPlayer, PermissibleAction.DISBAND)) {
+                context.msg(TL.GENERIC_NOPERMISSION.format(PermissibleAction.DISBAND));
                 return;
             }
         } else {

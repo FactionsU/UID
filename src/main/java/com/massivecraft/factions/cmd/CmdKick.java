@@ -22,7 +22,6 @@ public class CmdKick extends FCommand {
 
         this.requirements = new CommandRequirements.Builder(Permission.KICK)
                 .memberOnly()
-                .withRole(Role.MODERATOR)
                 .withAction(PermissibleAction.KICK)
                 .noDisableOnLock()
                 .build();

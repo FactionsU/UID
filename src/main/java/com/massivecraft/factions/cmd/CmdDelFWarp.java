@@ -2,6 +2,7 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -18,7 +19,7 @@ public class CmdDelFWarp extends FCommand {
 
         this.requirements = new CommandRequirements.Builder(Permission.SETWARP)
                 .memberOnly()
-                .withRole(Role.MODERATOR)
+                .withAction(PermissibleAction.SETWARP)
                 .build();
     }
 

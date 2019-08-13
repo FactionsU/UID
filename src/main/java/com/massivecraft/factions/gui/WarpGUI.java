@@ -5,6 +5,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.WarmUpUtil;
 import com.massivecraft.factions.util.material.FactionMaterial;
@@ -238,7 +239,7 @@ public class WarpGUI extends GUI<Integer> {
             return true;
         }
 
-        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && user.hasFaction()) {
+        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && user.hasFaction() && user.getFaction().hasAccess(user, PermissibleAction.ECONOMY)) {
             return Econ.modifyMoney(user.getFaction(), -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());
         } else {
             return Econ.modifyMoney(user, -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());

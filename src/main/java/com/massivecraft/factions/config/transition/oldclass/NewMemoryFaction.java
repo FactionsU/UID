@@ -26,7 +26,6 @@ public class NewMemoryFaction {
     private Integer permanentPower;
     private LazyLocation home;
     private long foundedDate;
-    private double money;
     private double powerBoost;
     private Map<String, Relation> relationWish;
     private Map<FLocation, Set<String>> claimOwnership;
@@ -52,7 +51,6 @@ public class NewMemoryFaction {
         this.permanentPower = old.permanentPower;
         this.home = old.home;
         this.foundedDate = old.foundedDate;
-        this.money = old.money;
         this.powerBoost = old.powerBoost;
         this.relationWish = old.relationWish = new HashMap<>();
         this.claimOwnership = old.claimOwnership = new ConcurrentHashMap<>();
