@@ -32,12 +32,12 @@ public class CmdFWarp extends FCommand {
         // TODO: check if in combat.
 
         if (!context.faction.hasAccess(context.fPlayer, PermissibleAction.WARP)) {
-            context.msg(TL.GENERIC_NOPERMISSION, "warp");
+            context.msg(TL.COMMAND_FWARP_NOACCESS, context.faction.getTag(context.fPlayer));
             return;
         }
 
         if (context.args.size() == 0) {
-            WarpGUI ui = new WarpGUI(context.fPlayer);
+            WarpGUI ui = new WarpGUI(context.fPlayer, context.faction);
             ui.open();
         } else if (context.args.size() > 2) {
             context.msg(TL.COMMAND_FWARP_COMMANDFORMAT);
