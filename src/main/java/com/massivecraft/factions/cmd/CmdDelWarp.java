@@ -6,9 +6,9 @@ import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
-public class CmdDelFWarp extends FCommand {
+public class CmdDelWarp extends FCommand {
 
-    public CmdDelFWarp() {
+    public CmdDelWarp() {
         super();
         this.aliases.add("delwarp");
         this.aliases.add("dw");

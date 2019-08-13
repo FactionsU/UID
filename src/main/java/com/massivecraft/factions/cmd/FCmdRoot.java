@@ -92,9 +92,9 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
     public CmdShowInvites cmdShowInvites = new CmdShowInvites();
     public CmdAnnounce cmdAnnounce = new CmdAnnounce();
     public CmdSeeChunk cmdSeeChunk = new CmdSeeChunk();
-    public CmdFWarp cmdFWarp = new CmdFWarp();
-    public CmdSetFWarp cmdSetFWarp = new CmdSetFWarp();
-    public CmdDelFWarp cmdDelFWarp = new CmdDelFWarp();
+    public CmdWarp cmdWarp = new CmdWarp();
+    public CmdSetWarp cmdSetWarp = new CmdSetWarp();
+    public CmdDelWarp cmdDelWarp = new CmdDelWarp();
     public CmdModifyPower cmdModifyPower = new CmdModifyPower();
     public CmdLogins cmdLogins = new CmdLogins();
     public CmdClaimLine cmdClaimLine = new CmdClaimLine();
@@ -180,9 +180,9 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.addSubCommand(this.cmdShowInvites);
         this.addSubCommand(this.cmdAnnounce);
         this.addSubCommand(this.cmdSeeChunk);
-        this.addSubCommand(this.cmdFWarp);
-        this.addSubCommand(this.cmdSetFWarp);
-        this.addSubCommand(this.cmdDelFWarp);
+        this.addSubCommand(this.cmdWarp);
+        this.addSubCommand(this.cmdSetWarp);
+        this.addSubCommand(this.cmdDelWarp);
         this.addSubCommand(this.cmdModifyPower);
         this.addSubCommand(this.cmdLogins);
         this.addSubCommand(this.cmdClaimLine);

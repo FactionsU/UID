@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CmdFWarp extends FCommand {
+public class CmdWarp extends FCommand {
 
-    public CmdFWarp() {
+    public CmdWarp() {
         super();
         this.aliases.add("warp");
         this.aliases.add("warps");

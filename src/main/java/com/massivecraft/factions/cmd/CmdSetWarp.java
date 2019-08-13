@@ -9,9 +9,9 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.LazyLocation;
 import com.massivecraft.factions.util.TL;
 
-public class CmdSetFWarp extends FCommand {
+public class CmdSetWarp extends FCommand {
 
-    public CmdSetFWarp() {
+    public CmdSetWarp() {
         super();
 
         this.aliases.add("setwarp");
