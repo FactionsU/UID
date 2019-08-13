@@ -231,6 +231,8 @@ public enum TL {
     COMMAND_FWARP_PASSWORD_CANCEL("&cWarp canceled"),
     COMMAND_FWARP_NOACCESS("&cYou do not have permission to use %s &cwarps"),
 
+    COMMAND_WARPOTHER_COMMANDFORMAT("&e/f warpother <faction> <warpname> [password]"),
+
     COMMAND_HELP_404("&cThis page does not exist"),
     COMMAND_HELP_NEXTCREATE("&eLearn how to create a faction on the next page."),
     COMMAND_HELP_INVITATIONS("command.help.invitations", "&eYou might want to close it and use invitations:"),
@@ -677,7 +679,7 @@ public enum TL {
     GENERIC_DOTHAT("do that"),  //Ugh nuke this from high orbit
     GENERIC_NOPLAYERMATCH("&cNo player match found for \"&3%1$s&c\"."),
     GENERIC_NOPLAYERFOUND("&cNo player \"&3%1$s&c\" could not be found."),
-    GENERIC_NOFACTIONMATCH("&cNo player match found for \"&3%1$s&c\"."),
+    GENERIC_NOFACTIONMATCH("&cNo faction match found for \"&3%1$s&c\"."),
     GENERIC_ARGS_TOOFEW("&cToo few arguments. &eUse like this:"),
     GENERIC_ARGS_TOOMANY("&cStrange argument \"&3%1$s&c\". &eUse the command like this:"),
     GENERIC_DEFAULTDESCRIPTION("Default faction description :("),

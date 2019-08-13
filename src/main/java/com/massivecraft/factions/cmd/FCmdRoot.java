@@ -93,6 +93,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
     public CmdAnnounce cmdAnnounce = new CmdAnnounce();
     public CmdSeeChunk cmdSeeChunk = new CmdSeeChunk();
     public CmdWarp cmdWarp = new CmdWarp();
+    public CmdWarpOther cmdWarpOther = new CmdWarpOther();
     public CmdSetWarp cmdSetWarp = new CmdSetWarp();
     public CmdDelWarp cmdDelWarp = new CmdDelWarp();
     public CmdModifyPower cmdModifyPower = new CmdModifyPower();
@@ -181,6 +182,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.addSubCommand(this.cmdAnnounce);
         this.addSubCommand(this.cmdSeeChunk);
         this.addSubCommand(this.cmdWarp);
+        this.addSubCommand(this.cmdWarpOther);
         this.addSubCommand(this.cmdSetWarp);
         this.addSubCommand(this.cmdDelWarp);
         this.addSubCommand(this.cmdModifyPower);
