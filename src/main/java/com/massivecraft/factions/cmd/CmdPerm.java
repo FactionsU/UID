@@ -36,17 +36,17 @@ public class CmdPerm extends FCommand {
     @Override
     public void perform(CommandContext context) {
         if (context.args.size() == 0) {
-            PermissibleRelationGUI ui = new PermissibleRelationGUI(true, context.fPlayer); // TODO offline
+            PermissibleRelationGUI ui = new PermissibleRelationGUI(true, context.fPlayer);
             ui.open();
             return;
         } else if (context.args.size() == 1 && getPermissible(context.argAsString(0)) != null) {
-            PermissibleActionGUI ui = new PermissibleActionGUI(true, context.fPlayer, getPermissible(context.argAsString(0))); // TODO offline
+            PermissibleActionGUI ui = new PermissibleActionGUI(true, context.fPlayer, getPermissible(context.argAsString(0)));
             ui.open();
             return;
         }
 
         // If not opening GUI, then setting the permission manually.
-        if (context.args.size() != 3) {
+        if (context.args.size() < 3) {
             context.fPlayer.msg(TL.COMMAND_PERM_DESCRIPTION);
             return;
         }
@@ -56,6 +56,10 @@ public class CmdPerm extends FCommand {
 
         boolean allRelations = context.argAsString(0).equalsIgnoreCase("all");
         boolean allActions = context.argAsString(1).equalsIgnoreCase("all");
+        boolean online = true;
+        if (FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() && context.args.size() == 4 && "offline".equalsIgnoreCase(context.argAsString(3))) {
+            online = false;
+        }
 
         if (allRelations) {
             permissibles.addAll(context.faction.getPermissions().keySet());
@@ -99,7 +103,7 @@ public class CmdPerm extends FCommand {
 
         for (Permissible permissible : permissibles) {
             for (PermissibleAction permissibleAction : permissibleActions) {
-                context.fPlayer.getFaction().setPermission(true, permissible, permissibleAction, access);
+                context.fPlayer.getFaction().setPermission(online, permissible, permissibleAction, access);
             }
         }
 

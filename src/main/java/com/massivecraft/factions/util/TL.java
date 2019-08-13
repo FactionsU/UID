@@ -827,9 +827,15 @@ public enum TL {
     GUI_WARPS_ONE_PAGE("%s warps"),
     GUI_WARPS_PAGE("%1$s warps (page %2$d)"),
 
-    GUI_PERMRELATION_NAME("Choose a relation:"),
+    GUI_PERMS_RELATION_NAME("Choose a relation%s:"),
+    GUI_PERMS_RELATION_ONLINEOFFLINEBIT(" (%s)"),
 
-    GUI_PERMACTION_NAME("Permissions: %s"),
+    GUI_PERMS_ACTION_NAME("Permissions: %1$s%2$s"),
+    GUI_PERMS_ACTION_ONLINEOFFLINEBIT(" (%s)"),
+
+    GUI_PERMS_TOGGLE("Toggle online/offline"),
+    GUI_PERMS_ONLINE("online"),
+    GUI_PERMS_OFFLINE("offline"),
 
     GUI_BUTTON_NEXT("NEXT"),
     GUI_BUTTON_PREV("PREVIOUS"),

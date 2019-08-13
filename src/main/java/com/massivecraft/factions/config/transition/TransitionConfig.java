@@ -317,6 +317,9 @@ public class TransitionConfig {
         private boolean autoLeaveDeleteFPlayerData = true; // Let them just remove player from Faction.
         private double considerFactionsReallyOfflineAfterXMinutes = 0.0;
         private int actionDeniedPainAmount = 1;
+
+        @Comment("If enabled, perms can be managed separately for when the faction is offline")
+        private boolean separateOfflinePerms = false;
     }
 
     public class Logging {
