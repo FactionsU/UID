@@ -191,38 +191,15 @@ public class FactionsEntityListener extends AbstractListener {
     public void onEntityExplode(EntityExplodeEvent event) {
         Location loc = event.getLocation();
         Entity boomer = event.getEntity();
-        Faction faction = Board.getInstance().getFactionAt(new FLocation(loc));
 
-        if (faction.noExplosionsInTerritory() || (faction.isPeaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
-            // faction is peaceful and has explosions set to disabled
+        if (explosionDisallowed(boomer, event.getLocation())) {
             event.setCancelled(true);
             return;
         }
 
-        boolean online = faction.hasPlayersOnline();
+        event.blockList().removeIf(block -> explosionDisallowed(boomer, block.getLocation()));
 
-        //TODO: :(
-        if (boomer instanceof Creeper && ((faction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessBlockCreepers() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(loc.getWorld().getName())) ||
-                (faction.isNormal() && (online ? FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockCreepers() : FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockCreepersWhenOffline())) ||
-                (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockCreepers()) ||
-                faction.isSafeZone())) {
-            // creeper which needs prevention
-            event.setCancelled(true);
-        } else if (
-            // it's a bit crude just using fireball protection for Wither boss too, but I'd rather not add in a whole new set of xxxBlockWitherExplosion or whatever
-                (boomer instanceof Fireball || boomer instanceof WitherSkull || boomer instanceof Wither) && ((faction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessBlockFireballs() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(loc.getWorld().getName())) ||
-                        (faction.isNormal() && (online ? FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockFireballs() : FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockFireballsWhenOffline())) ||
-                        (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockFireballs()) ||
-                        faction.isSafeZone())) {
-            // ghast fireball which needs prevention
-            event.setCancelled(true);
-        } else if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && ((faction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessBlockTNT() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(loc.getWorld().getName())) ||
-                (faction.isNormal() && (online ? FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockTNT() : FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockTNTWhenOffline())) ||
-                (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockTNT()) ||
-                (faction.isSafeZone() && FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneBlockTNT()))) {
-            // TNT which needs prevention
-            event.setCancelled(true);
-        } else if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && FactionsPlugin.getInstance().conf().exploits().isTntWaterlog()) {
+        if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && FactionsPlugin.getInstance().conf().exploits().isTntWaterlog()) {
             // TNT in water/lava doesn't normally destroy any surrounding blocks, which is usually desired behavior, but...
             // this change below provides workaround for waterwalling providing perfect protection,
             // and makes cheap (non-obsidian) TNT cannons require minor maintenance between shots
@@ -237,6 +214,9 @@ public class FactionsEntityListener extends AbstractListener {
                 targets.add(center.getRelative(1, 0, 0));
                 targets.add(center.getRelative(-1, 0, 0));
                 for (Block target : targets) {
+                    if (explosionDisallowed(boomer, target.getLocation())) {
+                        continue;
+                    }
                     int id = target.getType().getId();
                     // ignore air, bedrock, water, lava, obsidian, enchanting table, etc.... too bad we can't get a blast resistance value through Bukkit yet
                     if (id != 0 && (id < 7 || id > 11) && id != 49 && id != 90 && id != 116 && id != 119 && id != 120 && id != 130) {
@@ -245,6 +225,37 @@ public class FactionsEntityListener extends AbstractListener {
                 }
             }
         }
+    }
+
+    private boolean explosionDisallowed(Entity boomer, Location location) {
+        Faction faction = Board.getInstance().getFactionAt(new FLocation(location));
+        boolean online = faction.hasPlayersOnline();
+        if (faction.noExplosionsInTerritory() || (faction.isPeaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
+            // faction is peaceful and has explosions set to disabled
+            return true;
+        }
+        if (boomer instanceof Creeper && ((faction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessBlockCreepers() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+                (faction.isNormal() && (online ? FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockCreepers() : FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockCreepersWhenOffline())) ||
+                (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockCreepers()) ||
+                faction.isSafeZone())) {
+            // creeper which needs prevention
+            return true;
+        } else if (
+                (boomer instanceof Fireball || boomer instanceof WitherSkull || boomer instanceof Wither) && ((faction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessBlockFireballs() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+                        (faction.isNormal() && (online ? FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockFireballs() : FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockFireballsWhenOffline())) ||
+                        (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockFireballs()) ||
+                        faction.isSafeZone())) {
+            // ghast fireball which needs prevention
+            // it's a bit crude just using fireball protection for Wither boss too, but I'd rather not add in a whole new set of xxxBlockWitherExplosion or whatever
+            return true;
+        } else if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && ((faction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessBlockTNT() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+                (faction.isNormal() && (online ? FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockTNT() : FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockTNTWhenOffline())) ||
+                (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockTNT()) ||
+                (faction.isSafeZone() && FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneBlockTNT()))) {
+            // TNT which needs prevention
+            return true;
+        }
+        return false;
     }
 
     // mainly for flaming arrows; don't want allies or people in safe zones to be ignited even after damage event is cancelled
