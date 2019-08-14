@@ -33,7 +33,7 @@ import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.PermissionsMapTypeAdapter;
 import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.util.AutoLeaveTask;
-import com.massivecraft.factions.util.ClipPlaceholderAPIManager;
+import com.massivecraft.factions.integration.ClipPlaceholderAPIManager;
 import com.massivecraft.factions.util.EnumTypeAdapter;
 import com.massivecraft.factions.util.FlightUtil;
 import com.massivecraft.factions.util.LazyLocation;
