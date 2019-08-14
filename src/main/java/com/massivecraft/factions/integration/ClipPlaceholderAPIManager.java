@@ -1,11 +1,11 @@
-package com.massivecraft.factions.util;
+package com.massivecraft.factions.integration;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
-import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.perms.Relation;
+import com.massivecraft.factions.util.TL;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
 import org.apache.commons.lang.time.DurationFormatUtils;
