@@ -17,10 +17,10 @@ import java.util.Map;
 import java.util.UUID;
 
 public enum FancyTag implements Tag {
-    ALLIES_LIST("{allies-list}", (target, fme, prefix, gm) -> processRelation(prefix, target, fme, Relation.ALLY)),
-    ENEMIES_LIST("{enemies-list}", (target, fme, prefix, gm) -> processRelation(prefix, target, fme, Relation.ENEMY)),
-    TRUCES_LIST("{truces-list}", (target, fme, prefix, gm) -> processRelation(prefix, target, fme, Relation.TRUCE)),
-    ONLINE_LIST("{online-list}", (target, fme, prefix, gm) -> {
+    ALLIES_LIST("allies-list", (target, fme, prefix, gm) -> processRelation(prefix, target, fme, Relation.ALLY)),
+    ENEMIES_LIST("enemies-list", (target, fme, prefix, gm) -> processRelation(prefix, target, fme, Relation.ENEMY)),
+    TRUCES_LIST("truces-list", (target, fme, prefix, gm) -> processRelation(prefix, target, fme, Relation.TRUCE)),
+    ONLINE_LIST("online-list", (target, fme, prefix, gm) -> {
         List<FancyMessage> fancyMessages = new ArrayList<>();
         FancyMessage currentOnline = FactionsPlugin.getInstance().txt().parseFancy(prefix);
         boolean firstOnline = true;
@@ -159,7 +159,7 @@ public enum FancyTag implements Tag {
     }
 
     FancyTag(String tag, QuadFunction<Faction, FPlayer, String, Map<UUID, String>, List<FancyMessage>> function) {
-        this.tag = tag;
+        this.tag = '{' + tag + '}';;
         this.function = function;
     }
 
