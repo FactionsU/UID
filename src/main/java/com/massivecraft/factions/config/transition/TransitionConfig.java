@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -547,10 +548,10 @@ public class TransitionConfig {
         this.factions.protection.wildernessBlockTNT = c.wildernessBlockTNT;
         this.factions.protection.wildernessDenyEndermanBlocks = c.wildernessDenyEndermanBlocks;
         this.factions.protection.pistonProtectionThroughDenyBuild = c.pistonProtectionThroughDenyBuild;
-        this.factions.protection.territoryProtectedMaterials = c.territoryProtectedMaterials.stream().map(Material::name).collect(Collectors.toSet());
-        this.factions.protection.territoryDenyUsageMaterials = c.territoryDenyUseageMaterials.stream().map(Material::name).collect(Collectors.toSet());
-        this.factions.protection.territoryProtectedMaterialsWhenOffline = c.territoryProtectedMaterialsWhenOffline.stream().map(Material::name).collect(Collectors.toSet());
-        this.factions.protection.territoryDenyUsageMaterialsWhenOffline = c.territoryDenyUseageMaterialsWhenOffline.stream().map(Material::name).collect(Collectors.toSet());
+        this.factions.protection.territoryProtectedMaterials = c.territoryProtectedMaterials.stream().filter(Objects::nonNull).map(Material::name).collect(Collectors.toSet());
+        this.factions.protection.territoryDenyUsageMaterials = c.territoryDenyUseageMaterials.stream().filter(Objects::nonNull).map(Material::name).collect(Collectors.toSet());
+        this.factions.protection.territoryProtectedMaterialsWhenOffline = c.territoryProtectedMaterialsWhenOffline.stream().filter(Objects::nonNull).map(Material::name).collect(Collectors.toSet());
+        this.factions.protection.territoryDenyUsageMaterialsWhenOffline = c.territoryDenyUseageMaterialsWhenOffline.stream().filter(Objects::nonNull).map(Material::name).collect(Collectors.toSet());
         this.factions.protection.playersWhoBypassAllProtection = c.playersWhoBypassAllProtection;
         this.factions.protection.worldsNoWildernessProtection = c.worldsNoWildernessProtection;
 
