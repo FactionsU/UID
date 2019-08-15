@@ -127,12 +127,10 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
     // For dummy items only parseDefault is called, but we want to provide the relation placeholders, so: Override
     @Override
     protected String parseDefault(String string) {
-        String parsed = super.parseDefault(string);
-
         String permissibleName = permissible.toString().substring(0, 1).toUpperCase() + permissible.toString().substring(1);
-        parsed = parsed.replace("{relation-color}", permissible.getColor().toString());
+        String parsed = string.replace("{relation-color}", permissible.getColor().toString());
         parsed = parsed.replace("{relation}", permissibleName);
-        return parsed;
+        return super.parseDefault(parsed);
     }
 
     @Override
