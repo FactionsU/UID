@@ -56,8 +56,8 @@
                             <shadedPattern>com.massivecraft.factions.shade.mkremins.fanciful</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.google.gson</pattern>
-                            <shadedPattern>com.massivecraft.factions.shade.com.google.gson</shadedPattern>
+                            <pattern>com.google</pattern>
+                            <shadedPattern>com.massivecraft.factions.shade.com.google</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.darkblade12</pattern>
@@ -353,7 +353,7 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>21.0</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <artifactId>jsr305</artifactId>
