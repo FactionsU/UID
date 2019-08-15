@@ -1,6 +1,7 @@
 package com.massivecraft.factions.gui;
 
 import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.TextUtil;
 import org.bukkit.Bukkit;
@@ -90,10 +91,10 @@ public abstract class GUI<Type> implements InventoryHolder {
 
     // Will parse default faction stuff, ie: Faction Name, Power, Colors etc
     protected void parse(SimpleItem item, Type type) {
-        item.setName(parseDefault(item.getName()));
         if (type != null) {
             item.setName(parse(item.getName(), type));
         }
+        item.setName(parseDefault(item.getName()));
         if (item.getLore() != null) {
             item.setLore(parseList(item.getLore(), type));
         }
@@ -102,10 +103,11 @@ public abstract class GUI<Type> implements InventoryHolder {
     protected List<String> parseList(List<String> stringList, Type type) {
         List<String> newList = new ArrayList<>();
         for (String toParse : stringList) {
-            String parsed = parseDefault(toParse);
+            String parsed = toParse;
             if (type != null) {
                 parsed = parse(parsed, type);
             }
+            parsed = parseDefault(parsed);
             newList.add(parsed);
         }
         return newList;
@@ -115,7 +117,8 @@ public abstract class GUI<Type> implements InventoryHolder {
         toParse = TextUtil.parseColor(toParse);
         toParse = Tag.parsePlain(user, toParse);
         toParse = Tag.parsePlain(user.getFaction(), toParse);
-        return Tag.parsePlaceholders(user.getPlayer(), toParse);
+        toParse = Tag.parsePlaceholders(user.getPlayer(), toParse);
+        return toParse;
     }
 
     @Override
