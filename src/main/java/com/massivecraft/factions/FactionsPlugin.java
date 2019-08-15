@@ -12,6 +12,7 @@ import com.massivecraft.factions.data.SaveTask;
 import com.massivecraft.factions.event.FactionCreateEvent;
 import com.massivecraft.factions.event.FactionEvent;
 import com.massivecraft.factions.event.FactionRelationEvent;
+import com.massivecraft.factions.integration.ClipPlaceholderAPIManager;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.integration.IWorldguard;
@@ -33,7 +34,6 @@ import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.PermissionsMapTypeAdapter;
 import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.util.AutoLeaveTask;
-import com.massivecraft.factions.integration.ClipPlaceholderAPIManager;
 import com.massivecraft.factions.util.EnumTypeAdapter;
 import com.massivecraft.factions.util.FlightUtil;
 import com.massivecraft.factions.util.LazyLocation;
@@ -80,6 +80,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -89,13 +90,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class FactionsPlugin extends JavaPlugin {
+public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     // Our single plugin instance.
     // Single 4 life.
@@ -144,7 +146,7 @@ public class FactionsPlugin extends JavaPlugin {
     private boolean hookedPlayervaults;
     private ClipPlaceholderAPIManager clipPlaceholderAPIManager;
     private boolean mvdwPlaceholderAPIManager = false;
-    private boolean anotherPluginChat;
+    private Set<String> pluginsHandlingChat = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private SeeChunkUtil seeChunkUtil;
     private ParticleProvider particleProvider;
@@ -238,7 +240,6 @@ public class FactionsPlugin extends JavaPlugin {
         if (!dataFolder.exists()) {
             dataFolder.mkdir();
         }
-        this.anotherPluginChat = this.conf().factions().chat().isTagHandledByAnotherPlugin();
         getLogger().info(txt.parse("Running material provider in %1s mode", MaterialDb.getInstance().legacy ? "LEGACY" : "STANDARD"));
         MaterialDb.getInstance().test();
 
@@ -831,29 +832,44 @@ public class FactionsPlugin extends JavaPlugin {
     // -------------------------------------------- //
 
     // This value will be updated whenever new hooks are added
-    public int hookSupportVersion() {
+    @Override
+    public int getAPIVersion() {
         // Updated from 4 to 5 for version 0.5.0
         return 4;
     }
 
     // If another plugin is handling insertion of chat tags, this should be used to notify Factions
-    public void handleFactionTagExternally(boolean notByFactions) {
-        this.anotherPluginChat = notByFactions;
+    @Override
+    public void setHandlingChat(Plugin plugin, boolean handling) {
+        if (plugin == null) {
+            throw new IllegalArgumentException("Null plugin!");
+        }
+        if (plugin == this) {
+            throw new IllegalArgumentException("Nice try, but this plugin isn't going to register itself!");
+        }
+        if (handling) {
+            this.pluginsHandlingChat.add(plugin.getName());
+        } else {
+            this.pluginsHandlingChat.remove(plugin.getName());
+        }
     }
 
+    @Override
     public boolean isAnotherPluginHandlingChat() {
-        return this.anotherPluginChat;
+        return this.conf().factions().chat().isTagHandledByAnotherPlugin() || !this.pluginsHandlingChat.isEmpty();
     }
 
     // Simply put, should this chat event be left for Factions to handle? For now, that means players with Faction Chat
     // enabled or use of the Factions f command without a slash; combination of isPlayerFactionChatting() and isFactionsCommand()
 
+    @Override
     public boolean shouldLetFactionsHandleThisChat(AsyncPlayerChatEvent event) {
         return event != null && (isPlayerFactionChatting(event.getPlayer()) || isFactionsCommand(event.getMessage()));
     }
 
     // Does player have Faction Chat enabled? If so, chat plugins should preferably not do channels,
     // local chat, or anything else which targets individual recipients, so Faction Chat can be done
+    @Override
     public boolean isPlayerFactionChatting(Player player) {
         if (player == null) {
             return false;
@@ -872,11 +888,13 @@ public class FactionsPlugin extends JavaPlugin {
     }
 
     // Get a player's faction tag (faction name), mainly for usage by chat plugins for local/channel chat
+    @Override
     public String getPlayerFactionTag(Player player) {
         return getPlayerFactionTagRelation(player, null);
     }
 
     // Same as above, but with relation (enemy/neutral/ally) coloring potentially added to the tag
+    @Override
     public String getPlayerFactionTagRelation(Player speaker, Player listener) {
         String tag = "~";
 
@@ -909,6 +927,7 @@ public class FactionsPlugin extends JavaPlugin {
     }
 
     // Get a player's title within their faction, mainly for usage by chat plugins for local/channel chat
+    @Override
     public String getPlayerTitle(Player player) {
         if (player == null) {
             return "";
@@ -923,11 +942,13 @@ public class FactionsPlugin extends JavaPlugin {
     }
 
     // Get a list of all faction tags (names)
+    @Override
     public Set<String> getFactionTags() {
         return Factions.getInstance().getFactionTags();
     }
 
     // Get a list of all players in the specified faction
+    @Override
     public Set<String> getPlayersInFaction(String factionTag) {
         Set<String> players = new HashSet<>();
         Faction faction = Factions.getInstance().getByTag(factionTag);
@@ -940,6 +961,7 @@ public class FactionsPlugin extends JavaPlugin {
     }
 
     // Get a list of all online players in the specified faction
+    @Override
     public Set<String> getOnlinePlayersInFaction(String factionTag) {
         Set<String> players = new HashSet<>();
         Faction faction = Factions.getInstance().getByTag(factionTag);
