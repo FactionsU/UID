@@ -559,7 +559,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                 this.worldguard = new Worldguard7();
                 getLogger().info("Found support for WorldGuard version " + version);
             } else {
-                log(Level.WARNING, "Loaded WorldGuard but couldn't support this version: " + version);
+                log(Level.WARNING, "Found WorldGuard but couldn't support this version: " + version);
             }
         } else {
             log(Level.WARNING, "WorldGuard checks were turned in on conf.json, but WorldGuard isn't present on the server.");
