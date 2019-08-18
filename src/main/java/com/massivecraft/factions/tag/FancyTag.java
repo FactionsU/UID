@@ -40,7 +40,7 @@ public enum FancyTag implements Tag {
         fancyMessages.add(currentOnline);
         return firstOnline && Tag.isMinimalShow() ? null : fancyMessages;
     }),
-    OFFLINE_LIST("{offline-list}", (target, fme, prefix, gm) -> {
+    OFFLINE_LIST("offline-list", (target, fme, prefix, gm) -> {
         List<FancyMessage> fancyMessages = new ArrayList<>();
         FancyMessage currentOffline = FactionsPlugin.getInstance().txt().parseFancy(prefix);
         boolean firstOffline = true;
