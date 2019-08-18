@@ -741,7 +741,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     // -------------------------------------------- //
     // LOGGING
     // -------------------------------------------- //
-    public void log(Object msg) {
+    public void log(String msg) {
         log(Level.INFO, msg);
     }
 
@@ -753,7 +753,11 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         log(level, this.txt.parse(str, args));
     }
 
-    public void log(Level level, Object msg) {
+    public void log(Level level, String msg) {
+        if (level == Level.INFO) {
+            this.getLogger().info(msg);
+            return;
+        }
         Bukkit.getLogger().log(level, "[" + this.getDescription().getFullName() + "] " + msg);
     }
 
