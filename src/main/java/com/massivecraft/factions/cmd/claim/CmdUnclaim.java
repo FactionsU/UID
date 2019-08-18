@@ -9,6 +9,7 @@ import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.event.LandUnclaimEvent;
 import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.SpiralTask;
@@ -123,10 +124,10 @@ public class CmdUnclaim extends FCommand {
             return false;
         }
 
-        if (!context.assertMinRole(Role.MODERATOR)) {
+        if (!context.faction.hasAccess(context.fPlayer, PermissibleAction.TERRITORY)) {
+            context.msg(TL.GENERIC_NOPERMISSION, PermissibleAction.TERRITORY);
             return false;
         }
-
 
         if (context.faction != targetFaction) {
             context.msg(TL.COMMAND_UNCLAIM_WRONGFACTION);

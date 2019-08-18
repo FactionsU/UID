@@ -7,6 +7,7 @@ import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.event.LandUnclaimAllEvent;
 import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -20,12 +21,16 @@ public class CmdUnclaimall extends FCommand {
 
         this.requirements = new CommandRequirements.Builder(Permission.UNCLAIM_ALL)
                 .memberOnly()
-                .withRole(Role.MODERATOR)
                 .build();
     }
 
     @Override
     public void perform(CommandContext context) {
+        if (!context.faction.hasAccess(context.fPlayer, PermissibleAction.TERRITORY)) {
+            context.msg(TL.GENERIC_NOPERMISSION, PermissibleAction.TERRITORY);
+            return;
+        }
+
         if (Econ.shouldBeUsed()) {
             double refund = Econ.calculateTotalLandRefund(context.faction.getLandRounded());
             if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysLandCosts()) {

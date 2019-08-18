@@ -94,6 +94,7 @@ public abstract class AbstractListener implements Listener {
             case FARMLAND:
             case BEACON:
             case ANVIL:
+            case FLOWER_POT:
                 action = PermissibleAction.CONTAINER;
                 break;
             default:
@@ -102,7 +103,7 @@ public abstract class AbstractListener implements Listener {
                     action = PermissibleAction.DOOR;
                 }
                 // Lazier than checking all the combinations
-                if (material.name().contains("SHULKER_BOX") || material.name().contains("ANVIL")) {
+                if (material.name().contains("SHULKER") || material.name().contains("ANVIL") || material.name().startsWith("POTTED")) {
                     action = PermissibleAction.CONTAINER;
                 }
                 if (material.name().endsWith("_PLATE")) {
@@ -111,9 +112,15 @@ public abstract class AbstractListener implements Listener {
                 break;
         }
 
+        if (action == null) {
+            return true;
+        }
+
         // F PERM check runs through before other checks.
         if (!otherFaction.hasAccess(me, action)) {
-            me.msg(TL.GENERIC_NOPERMISSION, action);
+            if (action != PermissibleAction.PLATE) {
+                me.msg(TL.GENERIC_NOPERMISSION, action);
+            }
             return false;
         }
 
