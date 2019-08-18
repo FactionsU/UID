@@ -247,15 +247,14 @@ public class FactionsBlockListener implements Listener {
         }
 
         Faction myFaction = me.getFaction();
-        Relation rel = myFaction.getRelationTo(otherFaction);
-        boolean online = otherFaction.hasPlayersOnline();
         boolean pain = !justCheck && otherFaction.hasAccess(me, PermissibleAction.PAINBUILD);
 
         // If the faction hasn't: defined access or denied, fallback to config values
         if (!otherFaction.hasAccess(me, permissibleAction)) {
-            if (pain) {
+            if (pain && permissibleAction != PermissibleAction.FROSTWALK) {
                 player.damage(FactionsPlugin.getInstance().conf().factions().getActionDeniedPainAmount());
-                me.msg("<b>It is painful to try to " + action + " in the territory of " + otherFaction.getTag(myFaction));
+                me.msg("<b>It is painful to " + action + " in the territory of " + otherFaction.getTag(myFaction));
+                return true;
             } else if (!justCheck) {
                 me.msg("<b>You can't " + action + " in the territory of " + otherFaction.getTag(myFaction));
             }
