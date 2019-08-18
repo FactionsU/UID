@@ -34,7 +34,7 @@ public enum GeneralTag implements Tag {
     }
 
     GeneralTag(String tag, Supplier<String> supplier) {
-        this.tag = '{' + tag + '}';;
+        this.tag = '{' + tag + '}';
         this.supplier = supplier;
     }
 

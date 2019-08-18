@@ -159,7 +159,7 @@ public enum FancyTag implements Tag {
     }
 
     FancyTag(String tag, QuadFunction<Faction, FPlayer, String, Map<UUID, String>, List<FancyMessage>> function) {
-        this.tag = '{' + tag + '}';;
+        this.tag = '{' + tag + '}';
         this.function = function;
     }
 

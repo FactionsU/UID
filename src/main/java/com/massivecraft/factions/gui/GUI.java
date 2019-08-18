@@ -1,7 +1,6 @@
 package com.massivecraft.factions.gui;
 
 import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.TextUtil;
 import org.bukkit.Bukkit;

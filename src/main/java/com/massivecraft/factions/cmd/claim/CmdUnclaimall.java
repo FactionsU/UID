@@ -8,7 +8,6 @@ import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.event.LandUnclaimAllEvent;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.perms.PermissibleAction;
-import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
@@ -27,7 +26,7 @@ public class CmdUnclaimall extends FCommand {
     @Override
     public void perform(CommandContext context) {
         if (!context.faction.hasAccess(context.fPlayer, PermissibleAction.TERRITORY)) {
-            context.msg(TL.GENERIC_NOPERMISSION, PermissibleAction.TERRITORY);
+            context.msg(TL.CLAIM_CANTCLAIM, context.faction.describeTo(context.fPlayer));
             return;
         }
 

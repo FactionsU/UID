@@ -4,8 +4,6 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.perms.PermissibleAction;
-import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
@@ -34,7 +32,7 @@ public class CmdAutoClaim extends FCommand {
 
         if (!context.fPlayer.canClaimForFaction(forFaction)) {
             if (context.faction == forFaction) {
-                context.msg(TL.GENERIC_NOPERMISSION, PermissibleAction.TERRITORY);
+                context.msg(TL.CLAIM_CANTCLAIM, forFaction.describeTo(context.fPlayer));
             } else {
                 context.msg(TL.COMMAND_AUTOCLAIM_OTHERFACTION, forFaction.describeTo(context.fPlayer));
             }
