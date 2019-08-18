@@ -10,7 +10,7 @@ import org.bukkit.ChatColor;
 import java.util.function.Function;
 
 public enum PlayerTag implements Tag {
-    GROUP("group",(fp) ->{
+    GROUP("group", (fp) -> {
         if (fp.isOnline()) {
             return FactionsPlugin.getInstance().getPrimaryGroup(fp.getPlayer());
         } else {
