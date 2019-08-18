@@ -96,12 +96,18 @@ public enum Permission {
     VAULT("vault"),
     SETMAXVAULTS("setmaxvaults"),
     NEAR("near"),
-    WARP("warp");
+    WARP("warp"),
+    UPDATES("updates");
 
     public final String node;
 
     Permission(final String node) {
         this.node = "factions." + node;
+    }
+
+    @Override
+    public String toString() {
+        return this.node;
     }
 
     public boolean has(CommandSender sender, boolean informSenderIfNot) {
