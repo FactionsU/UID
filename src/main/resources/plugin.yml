@@ -4,6 +4,7 @@ main: com.massivecraft.factions.FactionsPlugin
 authors: [Olof Larsson, Brett Flannigan, drtshock]
 softdepend: [PlayerVaults, PlaceholderAPI, MVdWPlaceholderAPI, PermissionsEx, Permissions, Essentials, EssentialsChat, HeroChat, iChat, LocalAreaChat, LWC, nChat, ChatManager, CAPI, AuthMe, Vault, Spout, WorldEdit, WorldGuard, AuthDB, CaptureThePoints, CombatTag, dynmap, FactionsTop]
 api-version: 1.13
+website: https://www.spigotmc.org/resources/factionsuuid.1035/
 commands:
   factions:
     description: Reference command for Factions.
@@ -20,6 +21,7 @@ permissions:
       factions.modifypower: true
       factions.ahome: true
       factions.setmaxvaults: true
+      factions.updates: true
   factions.*:
     description: This is just an alias for factions.kit.admin
     children:
@@ -295,3 +297,5 @@ permissions:
     description: Allow use of /f coleader <target>
   factions.near:
     description: Allow use of /f near to show nearby faction members
+  factions.updates:
+    description: Be informed of available updates to the plugin
