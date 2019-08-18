@@ -187,12 +187,8 @@ public class DefaultPermissionsConfig {
                 this.recruit.value = true;
             }
         };
-        @Comment("Gets hurt for trying to build or destroy in faction territory (while not raidable)")
-        private FullPermInfo painBuild = new FullPermInfo() {
-            {
-                this.enemy.value = true;
-            }
-        };
+        @Comment("Allows building/destroying in faction territory but causes pain (while not raidable)")
+        private FullPermInfo painBuild = new FullPermInfo();
         @Comment("Use doors in faction territory (while not raidable)")
         private FullPermInfo door = new FullPermInfo() {
             {
@@ -252,14 +248,12 @@ public class DefaultPermissionsConfig {
                 this.moderator.value = true;
                 this.normal.value = true;
                 this.recruit.value = true;
-                this.ally.value = true;
             }
         };
         @Comment("Can set the faction home")
         private FactionOnlyPermInfo sethome = new FactionOnlyPermInfo() {
             {
                 this.coleader.value = true;
-                this.moderator.value = true;
             }
         };
         @Comment("Can access faction economy")
@@ -276,12 +270,16 @@ public class DefaultPermissionsConfig {
             }
         };
         @Comment("Can interact with plates")
-        private FullPermInfo plate = new FullPermInfo();
-        private FactionOnlyPermInfo disband = new FactionOnlyPermInfo() {
+        private FullPermInfo plate = new FullPermInfo() {
             {
                 this.coleader.value = true;
+                this.moderator.value = true;
+                this.normal.value = true;
+                this.recruit.value = true;
+                this.ally.value = true;
             }
         };
+        private FactionOnlyPermInfo disband = new FactionOnlyPermInfo();
         @Comment("Can promote members up to their own role within the faction")
         private FactionOnlyPermInfo promote = new FactionOnlyPermInfo() {
             {
@@ -303,7 +301,6 @@ public class DefaultPermissionsConfig {
                 this.moderator.value = true;
                 this.normal.value = true;
                 this.recruit.value = true;
-                this.ally.value = true;
             }
         };
         @Comment("Can fly in faction territory")
