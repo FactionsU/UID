@@ -86,6 +86,7 @@ public abstract class AbstractListener implements Listener {
             case GRINDSTONE:
             case SMOKER:
             case STONECUTTER:
+            case LECTERN:
             case ITEM_FRAME:
             case JUKEBOX:
             case ARMOR_STAND:
@@ -108,6 +109,9 @@ public abstract class AbstractListener implements Listener {
                 }
                 if (material.name().endsWith("_PLATE")) {
                     action = PermissibleAction.PLATE;
+                }
+                if (material.name().contains("SIGN")) {
+                    action = PermissibleAction.ITEM;
                 }
                 break;
         }
