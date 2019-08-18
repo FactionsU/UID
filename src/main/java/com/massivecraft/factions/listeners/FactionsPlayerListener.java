@@ -314,6 +314,9 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (!canPlayerUseBlock(player, block.getType(), block.getLocation(), false)) {
             event.setCancelled(true);
+            if (block.getType().name().endsWith("_PLATE")) {
+                return;
+            }
             if (FactionsPlugin.getInstance().conf().exploits().isInteractionSpam()) {
                 String name = player.getName();
                 InteractAttemptSpam attempt = interactSpammers.get(name);
