@@ -30,6 +30,8 @@ extra_css:
 nav:
   - Home: index.md
   - Support: support.md
+  - Introduction: introduction.md
+  - First Steps: firststeps.md
 
 # Customization
 extra:
