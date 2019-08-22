@@ -671,7 +671,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     }
 
     public void updatesOnJoin(Player player) {
-        if (this.updateMessage != null) {
+        if (this.updateMessage != null && player.hasPermission(com.massivecraft.factions.struct.Permission.UPDATES.toString())) {
             player.sendMessage(this.updateMessage);
             player.sendMessage(ChatColor.GREEN + "Get it at " + ChatColor.DARK_AQUA + "https://www.spigotmc.org/resources/factionsuuid.1035/");
         }
