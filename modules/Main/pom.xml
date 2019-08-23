@@ -79,8 +79,8 @@
                             <shadedPattern>com.massivecraft.factions.shade.ninja.leaping</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>org.apache</pattern>
-                            <shadedPattern>com.massivecraft.factions.shade.org.apache</shadedPattern>
+                            <pattern>org.apache.http</pattern>
+                            <shadedPattern>com.massivecraft.factions.shade.org.apache.http</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.kitteh</pattern>
