@@ -43,6 +43,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.NumberConversions;
 
@@ -341,8 +342,21 @@ public class FactionsPlayerListener extends AbstractListener {
             return;  // only interested on right-clicks for below
         }
 
-        if (event.getItem() != null && event.getItem().getType() == Material.ARMOR_STAND) {
-            if (!FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleAction.BUILD, "place armor stands", false)) {
+        ItemStack item;
+        if ((item = event.getItem()) != null) {
+            String action = null;
+            switch (item.getType()) {
+                case ARMOR_STAND:
+                case END_CRYSTAL:
+                case MINECART:
+                case CHEST_MINECART:
+                case COMMAND_BLOCK_MINECART:
+                case FURNACE_MINECART:
+                case HOPPER_MINECART:
+                case TNT_MINECART:
+                    action = "place " + item.getType().name().toLowerCase().replace('_', ' ');
+            }
+            if (action != null && !FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleAction.BUILD, action, false)) {
                 event.setCancelled(true);
             }
         }
