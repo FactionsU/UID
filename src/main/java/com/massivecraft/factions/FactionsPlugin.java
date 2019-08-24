@@ -135,7 +135,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private PermUtil permUtil;
 
     // Persist related
-    private final Gson gson = this.getGsonBuilder().create();
+    private Gson gson;
 
     // holds f stuck start times
     private Map<UUID, Long> timers = new HashMap<>();
@@ -233,6 +233,22 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
         this.getLogger().info("Server UUID " + this.serverUUID);
 
+        saveDefaultConfig();
+
+        // Load Conf from disk
+        this.setNerfedEntities();
+        this.configManager.startup();
+
+        if (this.conf().data().json().useEfficientStorage()) {
+            getLogger().info("Using space efficient (less readable) storage.");
+        }
+        this.gson = this.getGsonBuilder().create();
+
+        File dataFolder = new File(this.getDataFolder(), "data");
+        if (!dataFolder.exists()) {
+            dataFolder.mkdir();
+        }
+
         // Load Material database
         MaterialDb.load();
 
@@ -262,15 +278,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
         loadLang();
 
-        saveDefaultConfig();
-
-        // Load Conf from disk
-        this.setNerfedEntities();
-        this.configManager.startup();
-        File dataFolder = new File(this.getDataFolder(), "data");
-        if (!dataFolder.exists()) {
-            dataFolder.mkdir();
-        }
         getLogger().info(txt.parse("Running material provider in %1s mode", MaterialDb.getInstance().legacy ? "LEGACY" : "STANDARD"));
         MaterialDb.getInstance().test();
 
@@ -882,9 +889,13 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
         Type materialType = new TypeToken<Material>() {
         }.getType();
+        GsonBuilder builder = new GsonBuilder();
 
-        return new GsonBuilder()
-                .setPrettyPrinting()
+        if (!this.conf().data().json().useEfficientStorage()) {
+            builder.setPrettyPrinting();
+        }
+
+        return builder
                 .disableHtmlEscaping()
                 .enableComplexMapKeySerialization()
                 .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
