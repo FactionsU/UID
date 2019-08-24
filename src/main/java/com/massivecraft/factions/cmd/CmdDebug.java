@@ -25,6 +25,7 @@ public class CmdDebug extends FCommand {
     public CmdDebug() {
         super();
         this.aliases.add("debug");
+        this.optionalArgs.put("mini/full", "full");
 
         this.requirements = new CommandRequirements.Builder(Permission.DEBUG).build();
     }
@@ -36,6 +37,12 @@ public class CmdDebug extends FCommand {
         mainInfo.append("Plugin version: ").append(FactionsPlugin.getInstance().getDescription().getVersion()).append('\n');
         mainInfo.append("Java version: ").append(System.getProperty("java.version")).append('\n');
         mainInfo.append("Server ID: ").append(FactionsPlugin.getInstance().getServerUUID()).append('\n');
+        if (!context.args.isEmpty() && context.argAsString(0).equalsIgnoreCase("mini")) {
+            for (String string : mainInfo.toString().split("\n")) {
+                context.msg(string);
+            }
+            return;
+        }
         mainInfo.append('\n');
         mainInfo.append("Plugins:\n");
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
