@@ -224,6 +224,10 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             versionInteger = 808;
         }
         version = versionInteger;
+        if (version < 808) {
+            getLogger().info("");
+            getLogger().warning("FactionsUUID works best with at least Minecraft 1.8.8");
+        }
         getLogger().info("");
         this.buildNumber = this.getBuildNumber(this.getDescription().getVersion());
 
