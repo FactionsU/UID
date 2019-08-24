@@ -1204,6 +1204,26 @@ public class MainConfig {
         }
     }
 
+    public class Data {
+        public class Json {
+            @Comment("If true, data files will be stored without extra whitespace and linebreaks.\n" +
+                    "This becomes less readable, but can cut storage use in half.")
+            private boolean efficientStorage = false;
+
+            public boolean useEfficientStorage() {
+                return efficientStorage;
+            }
+        }
+
+        @Comment("Presently, the only option is JSON.")
+        private String storage = "JSON";
+        private Json json = new Json();
+
+        public Json json() {
+            return json;
+        }
+    }
+
     public class PlayerVaults {
         @Comment("The %s is for the faction id")
         private String vaultPrefix = "faction-%s";
@@ -1250,7 +1270,9 @@ public class MainConfig {
     private Economy economy = new Economy();
     @Comment("Control for the default settings of /f map")
     private Map map = new Map();
-    @Comment("PlayerVaults faction vault settings=")
+    @Comment("Data storage settings")
+    private Data data = new Data();
+    @Comment("PlayerVaults faction vault settings")
     private PlayerVaults playerVaults = new PlayerVaults();
     @Comment("WorldGuard settings")
     private WorldGuard worldGuard = new WorldGuard();
@@ -1289,5 +1311,9 @@ public class MainConfig {
 
     public WorldGuard worldGuard() {
         return worldGuard;
+    }
+
+    public Data data() {
+        return data;
     }
 }
