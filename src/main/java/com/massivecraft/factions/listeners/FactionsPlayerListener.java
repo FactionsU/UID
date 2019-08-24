@@ -341,6 +341,12 @@ public class FactionsPlayerListener extends AbstractListener {
             return;  // only interested on right-clicks for below
         }
 
+        if (event.getItem() != null && event.getItem().getType() == Material.ARMOR_STAND) {
+            if (!FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleAction.BUILD, "place armor stands", false)) {
+                event.setCancelled(true);
+            }
+        }
+
         if (!playerCanUseItemHere(player, block.getLocation(), event.getMaterial(), false)) {
             event.setCancelled(true);
         }
@@ -366,64 +372,6 @@ public class FactionsPlayerListener extends AbstractListener {
             return attempts;
         }
     }
-
-    // TODO I feel terrible about this.
-    public boolean playerCanInteractHere(Player player, Location location) {
-        String name = player.getName();
-        if (FactionsPlugin.getInstance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(name)) {
-            return true;
-        }
-
-        FPlayer me = FPlayers.getInstance().getByPlayer(player);
-        if (me.isAdminBypassing()) {
-            return true;
-        }
-
-        FLocation loc = new FLocation(location);
-        Faction otherFaction = Board.getInstance().getFactionAt(loc);
-
-        if (FactionsPlugin.getInstance().getConfig().getBoolean("hcf.raidable", false) && otherFaction.getLandRounded() >= otherFaction.getPowerRounded()) {
-            return true;
-        }
-
-        if (otherFaction.isWilderness()) {
-            if (!FactionsPlugin.getInstance().conf().factions().protection().isWildernessDenyUsage() || FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(location.getWorld().getName())) {
-                return true; // This is not faction territory. Use whatever you like here.
-            }
-            me.msg(TL.PLAYER_USE_WILDERNESS, "this");
-            return false;
-        } else if (otherFaction.isSafeZone()) {
-            if (!FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneDenyUsage() || Permission.MANAGE_SAFE_ZONE.has(player)) {
-                return true;
-            }
-            me.msg(TL.PLAYER_USE_SAFEZONE, "this");
-            return false;
-        } else if (otherFaction.isWarZone()) {
-            if (!FactionsPlugin.getInstance().conf().factions().protection().isWarZoneDenyUsage() || Permission.MANAGE_WAR_ZONE.has(player)) {
-                return true;
-            }
-            me.msg(TL.PLAYER_USE_WARZONE, "this");
-
-            return false;
-        }
-
-        boolean access = otherFaction.hasAccess(me, PermissibleAction.ITEM);
-
-        // Cancel if we are not in our own territory
-        if (!access) {
-            me.msg(TL.PLAYER_USE_TERRITORY, "this", otherFaction.getTag(me.getFaction()));
-            return false;
-        }
-
-        // Also cancel if player doesn't have ownership rights for this claim
-        if (FactionsPlugin.getInstance().conf().factions().ownedArea().isEnabled() && FactionsPlugin.getInstance().conf().factions().ownedArea().isDenyUsage() && !otherFaction.playerHasOwnershipRights(me, loc)) {
-            me.msg(TL.PLAYER_USE_OWNED, "this", otherFaction.getOwnerListString(loc));
-            return false;
-        }
-
-        return true;
-    }
-
 
     public boolean playerCanUseItemHere(Player player, Location location, Material material, boolean justCheck) {
         String name = player.getName();

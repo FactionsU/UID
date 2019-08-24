@@ -509,8 +509,8 @@ public class MainConfig {
 
             private boolean warZoneDenyBuild = true;
             private boolean warZoneDenyUsage = true;
-            private boolean warZoneBlockCreepers = false;
-            private boolean warZoneBlockFireballs = false;
+            private boolean warZoneBlockCreepers = true;
+            private boolean warZoneBlockFireballs = true;
             private boolean warZoneBlockTNT = true;
             private boolean warZoneFriendlyFire = false;
             private boolean warZoneDenyEndermanBlocks = true;
