@@ -108,14 +108,14 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     // Single 4 life.
     private static FactionsPlugin instance;
     private Permission perms = null;
-    private static int version;
+    private static int mcVersion;
 
     public static FactionsPlugin getInstance() {
         return instance;
     }
 
     public static int getMCVersion() {
-        return version;
+        return mcVersion;
     }
 
     private ConfigManager configManager = new ConfigManager(this);
@@ -223,8 +223,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             log(Level.WARNING, "Could not identify version. Going with least supported version, 1.8.8. Please let us know what version of Minecraft you're running and we'll fix it!");
             versionInteger = 808;
         }
-        version = versionInteger;
-        if (version < 808) {
+        mcVersion = versionInteger;
+        if (mcVersion < 808) {
             getLogger().info("");
             getLogger().warning("FactionsUUID works best with at least Minecraft 1.8.8");
         }
@@ -326,7 +326,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         startAutoLeaveTask(false);
 
         // Run before initializing listeners to handle reloads properly.
-        if (version < 1300) { // Before 1.13
+        if (mcVersion < 1300) { // Before 1.13
             particleProvider = new PacketParticleProvider();
         } else {
             particleProvider = new BukkitParticleProvider();
@@ -348,7 +348,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         getServer().getPluginManager().registerEvents(new FactionsBlockListener(this), this);
 
         // Version specific portal listener check.
-        if (version >= 1400) { // Starting with 1.14
+        if (mcVersion >= 1400) { // Starting with 1.14
             getServer().getPluginManager().registerEvents(new PortalListener_114(), this);
         } else {
             getServer().getPluginManager().registerEvents(new PortalListenerLegacy(new PortalHandler()), this);
