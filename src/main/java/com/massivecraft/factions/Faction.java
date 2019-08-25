@@ -111,16 +111,6 @@ public interface Faction extends EconomyParticipator {
 
     void confirmValidHome();
 
-    Integer getPermanentPower();
-
-    void setPermanentPower(Integer permanentPower);
-
-    boolean hasPermanentPower();
-
-    double getPowerBoost();
-
-    void setPowerBoost(double powerBoost);
-
     boolean noPvPInTerritory();
 
     boolean noMonstersInTerritory();
@@ -137,8 +127,6 @@ public interface Faction extends EconomyParticipator {
     boolean isWarZone();
 
     boolean isPlayerFreeType();
-
-    boolean isPowerFrozen();
 
     void setLastDeath(long time);
 
@@ -157,6 +145,10 @@ public interface Faction extends EconomyParticipator {
     void resetPerms();
 
     Map<Permissible, Map<PermissibleAction, Boolean>> getPermissions();
+
+    int getLandRounded();
+
+    int getLandRoundedInWorld(String worldName);
 
     // -------------------------------
     // Relation and relation colors
@@ -179,11 +171,19 @@ public interface Faction extends EconomyParticipator {
 
     int getPowerMaxRounded();
 
-    int getLandRounded();
+    Integer getPermanentPower();
 
-    int getLandRoundedInWorld(String worldName);
+    void setPermanentPower(Integer permanentPower);
+
+    boolean hasPermanentPower();
+
+    double getPowerBoost();
+
+    void setPowerBoost(double powerBoost);
 
     boolean hasLandInflation();
+
+    boolean isPowerFrozen();
 
     // -------------------------------
     // FPlayers
