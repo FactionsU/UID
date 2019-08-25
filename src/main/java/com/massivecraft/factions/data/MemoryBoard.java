@@ -75,6 +75,9 @@ public abstract class MemoryBoard extends Board {
                     fPlayer.setFlying(false);
                 }
             }
+            for (FLocation floc : fLocations) {
+                super.remove(floc);
+            }
         }
     }
 
