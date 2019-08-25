@@ -324,6 +324,10 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         if (getServer().getPluginManager().getPlugin("GroupManager") != null) {
             getLogger().warning("Notice: GroupManager died in 2014. We suggest using LuckPerms instead. https://luckperms.github.io/");
         }
+        Plugin lwc = getServer().getPluginManager().getPlugin("LWC");
+        if (lwc != null && lwc.getDescription().getWebsite() != null && !lwc.getDescription().getWebsite().contains("extended")) {
+            getLogger().warning("Notice: LWC Extended is the updated continuation of ModernLWC. https://www.spigotmc.org/resources/lwc-extended.69551/");
+        }
 
         loadWorldguard();
 
