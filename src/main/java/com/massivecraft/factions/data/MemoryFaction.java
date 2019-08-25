@@ -310,31 +310,6 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         return aid;
     }
 
-    public Integer getPermanentPower() {
-        return this.permanentPower;
-    }
-
-    public void setPermanentPower(Integer permanentPower) {
-        this.permanentPower = permanentPower;
-    }
-
-    public boolean hasPermanentPower() {
-        return this.permanentPower != null;
-    }
-
-    public double getPowerBoost() {
-        return this.powerBoost;
-    }
-
-    public void setPowerBoost(double powerBoost) {
-        this.powerBoost = powerBoost;
-    }
-
-    public boolean isPowerFrozen() {
-        int freezeSeconds = FactionsPlugin.getInstance().getConfig().getInt("hcf.powerfreeze", 0);
-        return freezeSeconds != 0 && System.currentTimeMillis() - lastDeath < freezeSeconds * 1000;
-    }
-
     public void setLastDeath(long time) {
         this.lastDeath = time;
     }
@@ -670,6 +645,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     // ----------------------------------------------//
     // Power
     // ----------------------------------------------//
+    @Deprecated
     public double getPower() {
         if (this.hasPermanentPower()) {
             return this.getPermanentPower();
@@ -685,6 +661,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         return ret + this.powerBoost;
     }
 
+    @Deprecated
     public double getPowerMax() {
         if (this.hasPermanentPower()) {
             return this.getPermanentPower();
@@ -708,16 +685,41 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         return (int) Math.round(this.getPowerMax());
     }
 
+    public boolean hasLandInflation() {
+        return this.getLandRounded() > this.getPowerRounded();
+    }
+
+    public Integer getPermanentPower() {
+        return this.permanentPower;
+    }
+
+    public void setPermanentPower(Integer permanentPower) {
+        this.permanentPower = permanentPower;
+    }
+
+    public boolean hasPermanentPower() {
+        return this.permanentPower != null;
+    }
+
+    public double getPowerBoost() {
+        return this.powerBoost;
+    }
+
+    public void setPowerBoost(double powerBoost) {
+        this.powerBoost = powerBoost;
+    }
+
+    public boolean isPowerFrozen() {
+        int freezeSeconds = FactionsPlugin.getInstance().getConfig().getInt("hcf.powerfreeze", 0);
+        return freezeSeconds != 0 && System.currentTimeMillis() - lastDeath < freezeSeconds * 1000;
+    }
+
     public int getLandRounded() {
         return Board.getInstance().getFactionCoordCount(this);
     }
 
     public int getLandRoundedInWorld(String worldName) {
         return Board.getInstance().getFactionCoordCountInWorld(this, worldName);
-    }
-
-    public boolean hasLandInflation() {
-        return this.getLandRounded() > this.getPowerRounded();
     }
 
     // -------------------------------
