@@ -9,6 +9,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.struct.Permission;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -40,6 +41,10 @@ public class FactionsBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getBlock().getWorld())) {
+            return;
+        }
+
         if (!event.canBuild()) {
             return;
         }
@@ -56,6 +61,10 @@ public class FactionsBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockFromTo(BlockFromToEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getBlock().getWorld())) {
+            return;
+        }
+
         if (!FactionsPlugin.getInstance().conf().exploits().isLiquidFlow()) {
             return;
         }
@@ -80,6 +89,10 @@ public class FactionsBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getBlock().getWorld())) {
+            return;
+        }
+
         if (!playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.DESTROY, "destroy", false)) {
             event.setCancelled(true);
         }
@@ -87,6 +100,10 @@ public class FactionsBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockDamage(BlockDamageEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getBlock().getWorld())) {
+            return;
+        }
+
         if (event.getInstaBreak() && !playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.DESTROY, "destroy", false)) {
             event.setCancelled(true);
         }
@@ -94,6 +111,10 @@ public class FactionsBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getBlock().getWorld())) {
+            return;
+        }
+
         if (!FactionsPlugin.getInstance().conf().factions().protection().isPistonProtectionThroughDenyBuild()) {
             return;
         }
@@ -112,6 +133,10 @@ public class FactionsBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getBlock().getWorld())) {
+            return;
+        }
+
         // if not a sticky piston, retraction should be fine
         if (!event.isSticky() || !FactionsPlugin.getInstance().conf().factions().protection().isPistonProtectionThroughDenyBuild()) {
             return;
@@ -165,6 +190,10 @@ public class FactionsBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onFrostWalker(EntityBlockFormEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getBlock().getWorld())) {
+            return;
+        }
+
         if (event.getEntity() == null || event.getEntity().getType() != EntityType.PLAYER || event.getBlock() == null) {
             return;
         }

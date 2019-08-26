@@ -11,6 +11,7 @@ import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.TL;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -63,6 +64,10 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onEntityDeath(EntityDeathEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
+            return;
+        }
+
         Entity entity = event.getEntity();
         if (!(entity instanceof Player)) {
             return;
@@ -116,6 +121,10 @@ public class FactionsEntityListener extends AbstractListener {
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
+            return;
+        }
+
         if (event instanceof EntityDamageByEntityEvent) {
             EntityDamageByEntityEvent sub = (EntityDamageByEntityEvent) event;
             if (!this.canDamagerHurtDamagee(sub, true)) {
@@ -189,6 +198,10 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityExplode(EntityExplodeEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
+            return;
+        }
+
         Location loc = event.getLocation();
         Entity boomer = event.getEntity();
 
@@ -261,6 +274,10 @@ public class FactionsEntityListener extends AbstractListener {
     // mainly for flaming arrows; don't want allies or people in safe zones to be ignited even after damage event is cancelled
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityCombustByEntity(EntityCombustByEntityEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
+            return;
+        }
+
         EntityDamageByEntityEvent sub = new EntityDamageByEntityEvent(event.getCombuster(), event.getEntity(), EntityDamageEvent.DamageCause.FIRE, 0d);
         if (!this.canDamagerHurtDamagee(sub, false)) {
             event.setCancelled(true);
@@ -271,6 +288,10 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPotionSplashEvent(PotionSplashEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
+            return;
+        }
+
         // see if the potion has a harmful effect
         boolean badjuju = false;
         for (PotionEffect effect : event.getPotion().getEffects()) {
@@ -500,6 +521,10 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
+            return;
+        }
+
         if (event.getLocation() == null) {
             return;
         }
@@ -511,6 +536,10 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityTarget(EntityTargetEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
+            return;
+        }
+
         // if there is a target
         Entity target = event.getTarget();
         if (target == null) {
@@ -530,6 +559,10 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPaintingBreak(HangingBreakEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
+            return;
+        }
+
         if (event.getCause() == RemoveCause.EXPLOSION) {
             Location loc = event.getEntity().getLocation();
             Faction faction = Board.getInstance().getFactionAt(new FLocation(loc));
@@ -566,6 +599,10 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPaintingPlace(HangingPlaceEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
+            return;
+        }
+
         if (!FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleAction.BUILD, "place paintings", false)) {
             event.setCancelled(true);
         }
@@ -573,6 +610,10 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
+            return;
+        }
+
         Entity entity = event.getEntity();
 
         // for now, only interested in Enderman and Wither boss tomfoolery
