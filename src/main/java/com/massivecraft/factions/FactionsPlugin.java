@@ -235,6 +235,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
         saveDefaultConfig();
 
+        loadLang();
+
         // Load Conf from disk
         this.setNerfedEntities();
         this.configManager.startup();
@@ -275,8 +277,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             long saveTicks = (long) (20 * 60 * this.conf().factions().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
             saveTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new SaveTask(this), saveTicks, saveTicks);
         }
-
-        loadLang();
 
         getLogger().info(txt.parse("Running material provider in %1s mode", MaterialDb.getInstance().legacy ? "LEGACY" : "STANDARD"));
         MaterialDb.getInstance().test();
