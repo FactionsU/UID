@@ -46,6 +46,7 @@ import com.massivecraft.factions.util.SeeChunkUtil;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
 import com.massivecraft.factions.util.TitleAPI;
+import com.massivecraft.factions.util.WorldUtil;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import com.massivecraft.factions.util.material.MaterialDb;
 import com.massivecraft.factions.util.material.adapter.FactionMaterialAdapter;
@@ -127,9 +128,14 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     // Some utils
     private Persist persist;
     private TextUtil txt;
+    private WorldUtil worldUtil;
 
     public TextUtil txt() {
         return txt;
+    }
+
+    public WorldUtil worldUtil() {
+        return worldUtil;
     }
 
     private PermUtil permUtil;
@@ -260,6 +266,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         // Create Utility Instances
         this.permUtil = new PermUtil(this);
         this.persist = new Persist(this);
+        this.worldUtil = new WorldUtil(this);
 
         this.txt = new TextUtil();
         initTXT();
@@ -358,12 +365,12 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         getServer().getPluginManager().registerEvents(new FactionsPlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsChatListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsEntityListener(this), this);
-        getServer().getPluginManager().registerEvents(new FactionsExploitListener(), this);
+        getServer().getPluginManager().registerEvents(new FactionsExploitListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsBlockListener(this), this);
 
         // Version specific portal listener check.
         if (mcVersion >= 1400) { // Starting with 1.14
-            getServer().getPluginManager().registerEvents(new PortalListener_114(), this);
+            getServer().getPluginManager().registerEvents(new PortalListener_114(this), this);
         } else {
             getServer().getPluginManager().registerEvents(new PortalListenerLegacy(new PortalHandler()), this);
         }

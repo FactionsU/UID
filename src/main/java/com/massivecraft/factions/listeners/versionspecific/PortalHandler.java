@@ -12,6 +12,10 @@ import org.bukkit.entity.Player;
 
 public class PortalHandler implements PortalListenerBase {
     public boolean shouldCancel(Location location, Player player) {
+        if (FactionsPlugin.getInstance().worldUtil().worldCheck() && !FactionsPlugin.getInstance().worldUtil().enabledWorld(player.getWorld())) {
+            return true;
+        }
+
         if (!FactionsPlugin.getInstance().getConfig().getBoolean("portals.limit", false)) {
             return false; // Don't do anything if they don't want us to.
         }

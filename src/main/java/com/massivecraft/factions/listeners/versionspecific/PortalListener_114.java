@@ -8,6 +8,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
+
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -20,9 +21,18 @@ import org.bukkit.event.world.PortalCreateEvent;
   to create at the target destination.
  */
 public class PortalListener_114 implements Listener {
+    public FactionsPlugin plugin;
 
+    public PortalListener_114(FactionsPlugin plugin) {
+        this.plugin = plugin;
+    }
+    
     @EventHandler
     public void onPortalCreate(PortalCreateEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
+            return;
+        }
+
         Entity entity = event.getEntity();
 
         if (!(entity instanceof Player)) {

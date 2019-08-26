@@ -21,6 +21,7 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
 import com.massivecraft.factions.util.VisualizeUtil;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -172,6 +173,10 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+            return;
+        }
+
         Player player = event.getPlayer();
         FPlayer me = FPlayers.getInstance().getByPlayer(player);
 
@@ -270,6 +275,10 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEntityEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+            return;
+        }
+
         switch (event.getRightClicked().getType()) {
             case ITEM_FRAME:
                 if (!canPlayerUseBlock(event.getPlayer(), Material.ITEM_FRAME, event.getRightClicked().getLocation(), false)) {
@@ -297,6 +306,10 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerInteract(PlayerArmorStandManipulateEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+            return;
+        }
+
         if (!canPlayerUseBlock(event.getPlayer(), Material.ARMOR_STAND, event.getRightClicked().getLocation(), false)) {
             event.setCancelled(true);
         }
@@ -304,6 +317,10 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+            return;
+        }
+
         // only need to check right-clicks and physical as of MC 1.4+; good performance boost
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.PHYSICAL) {
             return;
@@ -468,6 +485,10 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+            return;
+        }
+
         FPlayer me = FPlayers.getInstance().getByPlayer(event.getPlayer());
 
         me.getPower();  // update power, so they won't have gained any while dead
@@ -483,6 +504,10 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+            return;
+        }
+
         FPlayer me = FPlayers.getInstance().getByPlayer(event.getPlayer());
         FLocation to = new FLocation(event.getTo());
         me.setLastStoodAt(to);
@@ -503,6 +528,10 @@ public class FactionsPlayerListener extends AbstractListener {
     // but these separate bucket events below always fire without fail
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+            return;
+        }
+
         Block block = event.getBlockClicked();
         Player player = event.getPlayer();
 
@@ -513,6 +542,10 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerBucketFill(PlayerBucketFillEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+            return;
+        }
+
         Block block = event.getBlockClicked();
         Player player = event.getPlayer();
 
@@ -601,6 +634,10 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerInteractGUI(InventoryClickEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getWhoClicked().getWorld())) {
+            return;
+        }
+
         if (event.getClickedInventory() == null) {
             return;
         }
@@ -613,6 +650,10 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMoveGUI(InventoryDragEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getWhoClicked().getWorld())) {
+            return;
+        }
+
         if (event.getInventory().getHolder() instanceof GUI) {
             event.setCancelled(true);
         }
@@ -649,6 +690,10 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+            return;
+        }
+
         if (FactionsPlayerListener.preventCommand(event.getMessage(), event.getPlayer())) {
             if (plugin.logPlayerCommands()) {
                 plugin.getLogger().info("[PLAYER_COMMAND] " + event.getPlayer().getName() + ": " + event.getMessage());

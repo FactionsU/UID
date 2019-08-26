@@ -17,11 +17,13 @@ import com.massivecraft.factions.cmd.relations.CmdRelationTruce;
 import com.massivecraft.factions.cmd.role.CmdDemote;
 import com.massivecraft.factions.cmd.role.CmdPromote;
 import com.massivecraft.factions.util.TL;
+
 import me.lucko.commodore.CommodoreProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -236,6 +238,13 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (plugin.worldUtil().worldCheck() && sender instanceof Player) {
+            if (!plugin.worldUtil().enabledWorld(((Player) sender).getWorld())) {
+                sender.sendMessage(TL.GENERIC_DISABLEDWORLD.toString());
+                return false;
+            }
+        }
+
         this.execute(new CommandContext(sender, new ArrayList<>(Arrays.asList(args)), label));
         return true;
     }
