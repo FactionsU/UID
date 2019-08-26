@@ -236,6 +236,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         saveDefaultConfig();
 
         loadLang();
+        this.gson = this.getGsonBuilder().create();
 
         // Load Conf from disk
         this.setNerfedEntities();
@@ -244,7 +245,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         if (this.conf().data().json().useEfficientStorage()) {
             getLogger().info("Using space efficient (less readable) storage.");
         }
-        this.gson = this.getGsonBuilder().create();
 
         File dataFolder = new File(this.getDataFolder(), "data");
         if (!dataFolder.exists()) {
