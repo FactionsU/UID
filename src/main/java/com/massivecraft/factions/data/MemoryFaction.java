@@ -447,7 +447,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public void resetPerms() {
-        FactionsPlugin.getInstance().log(Level.WARNING, "Resetting permissions for Faction: " + tag);
+        // FactionsPlugin.getInstance().log(Level.WARNING, "Resetting permissions for Faction: " + tag);
 
         this.resetPerms(this.permissions, FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getPermissions(), true);
         this.resetPerms(this.permissionsOffline, FactionsPlugin.getInstance().getConfigManager().getOfflinePermissionsConfig().getPermissions(), false);
