@@ -23,5 +23,5 @@ You can find the old documentation [here](https://github.com/drtshock/Factions/w
 - [ ] Translation
 - [ ] Placeholders
 - [ ] Scoreboard
-- [ ] Power
-- [ ] Introduction to Factions
+- [x] Power
+- [x] Introduction to Factions
