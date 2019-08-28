@@ -762,8 +762,6 @@ public abstract class MemoryFPlayer implements FPlayer {
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_CANTCLAIM.toString(), forFaction.describeTo(this));
         } else if (forFaction == currentFaction) {
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_ALREADYOWN.toString(), forFaction.describeTo(this, true));
-        } else if (this.getRole().value < Role.MODERATOR.value) {
-            error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_MUSTBE.toString(), Role.MODERATOR.getTranslation());
         } else if (forFaction.getFPlayers().size() < FactionsPlugin.getInstance().conf().factions().claims().getRequireMinFactionMembers()) {
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_MEMBERS.toString(), FactionsPlugin.getInstance().conf().factions().claims().getRequireMinFactionMembers());
         } else if (currentFaction.isSafeZone()) {
