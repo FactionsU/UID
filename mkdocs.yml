@@ -32,6 +32,7 @@ nav:
   - Support: support.md
   - Introduction: introduction.md
   - First Steps: firststeps.md
+  - Commands: commands.md
 
 # Customization
 extra:
@@ -51,6 +52,7 @@ markdown_extensions:
   - codehilite:
       guess_lang: false
   - pymdownx.critic
+  - pymdownx.details
   - pymdownx.inlinehilite
   - pymdownx.superfences
   - pymdownx.tasklist:
