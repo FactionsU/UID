@@ -5,7 +5,9 @@
 */
 
 .md-typeset code {
-  color: black !important
+  color: #eeeeee !important;
+  box-shadow: .29412em 0 0 hsla(0, 0%, 25%, .5), -.29412em 0 0 hsla(0, 0%, 25%, .5);
+  background-color: hsla(0, 0%, 25%, .5);
 }
 
 /*
