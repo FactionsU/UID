@@ -47,7 +47,7 @@ public class Econ {
         FactionsPlugin.getInstance().getLogger().info("Economy integration through Vault plugin successful.");
 
         if (!FactionsPlugin.getInstance().conf().economy().isEnabled()) {
-            FactionsPlugin.getInstance().getLogger().info("NOTE: Economy is disabled. You can enable it with the command: f config econEnabled true");
+            FactionsPlugin.getInstance().getLogger().info("NOTE: Economy is disabled. You can enable it in config/main.conf");
         }
 
         //P.getInstance().cmdBase.cmdHelp.updateHelp();
