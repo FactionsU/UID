@@ -12,6 +12,7 @@ import com.massivecraft.factions.struct.Permission;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,6 +25,9 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class FactionsBlockListener implements Listener {
@@ -94,21 +98,16 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
-        Faction pistonFaction = Board.getInstance().getFactionAt(new FLocation(event.getBlock()));
-
-        // target end-of-the-line empty (air) block which is being pushed into, including if piston itself would extend into air
-        Block targetBlock = event.getBlock().getRelative(event.getDirection(), event.getLength() + 1);
-
-        // if potentially pushing into air/water/lava in another territory, we need to check it out
-        if ((targetBlock.isEmpty() || targetBlock.isLiquid()) && !canPistonMoveBlock(pistonFaction, targetBlock.getLocation())) {
-            event.setCancelled(true);
+        // if the pushed blocks list is empty, no worries
+        if (event.getBlocks().isEmpty()) {
+            return;
         }
 
-        /*
-         * note that I originally was testing the territory of each affected block, but since I found that pistons can only push
-         * up to 12 blocks and the width of any territory is 16 blocks, it should be safe (and much more lightweight) to test
-         * only the final target block as done above
-         */
+        Faction pistonFaction = Board.getInstance().getFactionAt(new FLocation(event.getBlock()));
+
+        if (!canPistonMoveBlock(pistonFaction, event.getBlocks(), event.getDirection())) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -123,24 +122,9 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
-        // get the first potentially retracted block
-        Location targetLoc = event.getBlocks().get(0).getLocation();
-        Faction otherFaction = Board.getInstance().getFactionAt(new FLocation(targetLoc));
-
-        // Check if the piston is moving in a faction's territory. This disables pistons entirely in faction territory.
-        if (otherFaction.isNormal() && FactionsPlugin.getInstance().getConfig().getBoolean("disable-pistons-in-territory", false)) {
-            event.setCancelled(true);
-            return;
-        }
-
-        // if potentially retracted block is just air/water/lava, no worries
-        if (targetLoc.getBlock().isEmpty() || targetLoc.getBlock().isLiquid()) {
-            return;
-        }
-
         Faction pistonFaction = Board.getInstance().getFactionAt(new FLocation(event.getBlock()));
 
-        if (!canPistonMoveBlock(pistonFaction, targetLoc)) {
+        if (!canPistonMoveBlock(pistonFaction, event.getBlocks(), event.getDirection())) {
             event.setCancelled(true);
         }
     }
@@ -167,28 +151,39 @@ public class FactionsBlockListener implements Listener {
         }
     }
 
-    private boolean canPistonMoveBlock(Faction pistonFaction, Location target) {
+    private boolean canPistonMoveBlock(Faction pistonFaction, List<Block> blocks, BlockFace direction) {
+        String world = blocks.get(0).getWorld().getName();
+        List<Faction> factions = blocks.stream()
+                .map(b -> b.getRelative(direction))
+                .map(Block::getLocation)
+                .map(FLocation::new)
+                .distinct()
+                .map(Board.getInstance()::getFactionAt)
+                .distinct()
+                .collect(Collectors.toList());
 
-        Faction otherFaction = Board.getInstance().getFactionAt(new FLocation(target));
-
-        if (pistonFaction == otherFaction) {
-            return true;
+        boolean disableOverall = FactionsPlugin.getInstance().getConfig().getBoolean("disable-pistons-in-territory", false);
+        for (Faction otherFaction : factions) {
+            if (pistonFaction == otherFaction) {
+                continue;
+            }
+            // Check if the piston is moving in a faction's territory. This disables pistons entirely in faction territory.
+            if (disableOverall && otherFaction.isNormal()) {
+                return false;
+            }
+            if (otherFaction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessDenyBuild() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(world)) {
+                return false;
+            } else if (otherFaction.isSafeZone() && FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneDenyBuild()) {
+                return false;
+            } else if (otherFaction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneDenyBuild()) {
+                return false;
+            }
+            Relation rel = pistonFaction.getRelationTo(otherFaction);
+            if (!otherFaction.hasAccess(otherFaction.hasPlayersOnline(), rel, PermissibleAction.BUILD)) {
+                return false;
+            }
         }
-
-        if (otherFaction.isWilderness()) {
-            return !FactionsPlugin.getInstance().conf().factions().protection().isWildernessDenyBuild() || FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(target.getWorld().getName());
-
-        } else if (otherFaction.isSafeZone()) {
-            return !FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneDenyBuild();
-
-        } else if (otherFaction.isWarZone()) {
-            return !FactionsPlugin.getInstance().conf().factions().protection().isWarZoneDenyBuild();
-
-        }
-
-        Relation rel = pistonFaction.getRelationTo(otherFaction);
-
-        return otherFaction.hasAccess(otherFaction.hasPlayersOnline(), rel, PermissibleAction.BUILD);
+        return true;
     }
 
     public static boolean playerCanBuildDestroyBlock(Player player, Location location, PermissibleAction permissibleAction, String action, boolean justCheck) {
