@@ -40,7 +40,7 @@ public class LWC {
         Protection protection;
         for (Block block : findBlocks(flocation)) {
             if ((protection = lwc.findProtection(block)) != null) {
-                if (!faction.getFPlayers().contains(FPlayers.getInstance().getByPlayer(Bukkit.getServer().getPlayer(protection.getOwner())))) {
+                if (!faction.getFPlayers().contains(FPlayers.getInstance().getByOfflinePlayer(Bukkit.getServer().getOfflinePlayer(protection.getOwner())))) {
                     protection.remove();
                 }
             }
