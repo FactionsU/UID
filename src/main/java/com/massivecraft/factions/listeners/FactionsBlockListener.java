@@ -129,28 +129,6 @@ public class FactionsBlockListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onFrostWalker(EntityBlockFormEvent event) {
-        if (event.getEntity() == null || event.getEntity().getType() != EntityType.PLAYER || event.getBlock() == null) {
-            return;
-        }
-
-        Player player = (Player) event.getEntity();
-        Location location = event.getBlock().getLocation();
-
-        // only notify every 10 seconds
-        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
-        boolean justCheck = fPlayer.getLastFrostwalkerMessage() + 10000 > System.currentTimeMillis();
-        if (!justCheck) {
-            fPlayer.setLastFrostwalkerMessage();
-        }
-
-        // Check if they have build permissions here. If not, block this from happening.
-        if (!playerCanBuildDestroyBlock(player, location, PermissibleAction.FROSTWALK, "frostwalk", justCheck)) {
-            event.setCancelled(true);
-        }
-    }
-
     private boolean canPistonMoveBlock(Faction pistonFaction, List<Block> blocks, BlockFace direction) {
         String world = blocks.get(0).getWorld().getName();
         List<Faction> factions = blocks.stream()
@@ -184,6 +162,28 @@ public class FactionsBlockListener implements Listener {
             }
         }
         return true;
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onFrostWalker(EntityBlockFormEvent event) {
+        if (event.getEntity() == null || event.getEntity().getType() != EntityType.PLAYER || event.getBlock() == null) {
+            return;
+        }
+
+        Player player = (Player) event.getEntity();
+        Location location = event.getBlock().getLocation();
+
+        // only notify every 10 seconds
+        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+        boolean justCheck = fPlayer.getLastFrostwalkerMessage() + 10000 > System.currentTimeMillis();
+        if (!justCheck) {
+            fPlayer.setLastFrostwalkerMessage();
+        }
+
+        // Check if they have build permissions here. If not, block this from happening.
+        if (!playerCanBuildDestroyBlock(player, location, PermissibleAction.FROSTWALK, "frostwalk", justCheck)) {
+            event.setCancelled(true);
+        }
     }
 
     public static boolean playerCanBuildDestroyBlock(Player player, Location location, PermissibleAction permissibleAction, String action, boolean justCheck) {
