@@ -124,15 +124,14 @@ public class FactionsBlockListener implements Listener {
 
         Faction pistonFaction = Board.getInstance().getFactionAt(new FLocation(event.getBlock()));
 
-        if (!canPistonMoveBlock(pistonFaction, event.getBlocks(), event.getDirection())) {
+        if (!canPistonMoveBlock(pistonFaction, event.getBlocks(), null)) {
             event.setCancelled(true);
         }
     }
 
     private boolean canPistonMoveBlock(Faction pistonFaction, List<Block> blocks, BlockFace direction) {
         String world = blocks.get(0).getWorld().getName();
-        List<Faction> factions = blocks.stream()
-                .map(b -> b.getRelative(direction))
+        List<Faction> factions = (direction == null ? blocks.stream() : blocks.stream().map(b -> b.getRelative(direction)))
                 .map(Block::getLocation)
                 .map(FLocation::new)
                 .distinct()
