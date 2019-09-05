@@ -61,21 +61,21 @@ Click on any command for more details.
         Must be faction admin, or be granted `territory` perms in the faction.  
         To claim for safezone, must have `factions.managesafezone`.  
         To claim for warzone, must have `factions.managewarzone`.
-        
+
 ??? abstract "/f unclaimall"
     The nuclear option. Removes all claims in your faction, returning them to the wilderness.
     
     !!! success "Requirements"
         `factions.unclaimall` node.
         Must be faction admin, or be granted `territory` perms in the faction.  
-        
+
 ??? abstract "/f safeunclaimall [world]"
     Defaults: world = all  
     Removes all safezone claims in a given world, or in all worlds.
     
     !!! success "Requirements"
         `factions.managesafezone` node.
-        
+
 ??? abstract "/f warunclaimall [world]"
     Defaults: world = all  
     Removes all warzone claims in a given world, or in all worlds.
@@ -95,4 +95,17 @@ Click on any command for more details.
         Must be admin of your faction to use.  
         `factions.admin.any` node to change status of any player.
 
+??? abstract "/f announce &lt;message...&gt;"
+    Creates an announcement sent to all faction members.  
+    Also saves the message for all current members who are offline, sending to them upon login.
     
+    !!! success "Requirements"
+        `factions.announce` node.  
+        Must be moderator of your faction or higher to use.  
+
+??? abstract "/f ban &lt;target&gt;"
+    Bans a player from the faction.  
+    
+    !!! success "Requirements"
+        `factions.ban` node.  
+        Must be faction admin, or be granted `ban` perms in the faction.  

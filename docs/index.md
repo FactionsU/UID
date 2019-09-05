@@ -11,7 +11,7 @@ FactionsUUID supports versions of Minecraft as far back as 1.8.8, from one plugi
 
 ## Under Construction
 
-!!! warning "This site is presently under construction, and will be ready for the 0.5.0 release."
+!!! warning "This site is presently under construction, and will be ready soon!"
 
 You can find the old documentation [here](https://github.com/drtshock/Factions/wiki).
 
