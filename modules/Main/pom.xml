@@ -52,39 +52,47 @@
                     <relocations>
                         <relocation>
                             <pattern>mkremins.fanciful</pattern>
-                            <shadedPattern>com.massivecraft.factions.shade.mkremins.fanciful</shadedPattern>
+                            <shadedPattern>moss.factions.shade.mkremins.fanciful</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.google</pattern>
-                            <shadedPattern>com.massivecraft.factions.shade.com.google</shadedPattern>
+                            <shadedPattern>moss.factions.shade.com.google</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.darkblade12</pattern>
-                            <shadedPattern>com.massivecraft.factions.shade.com.darkblade12</shadedPattern>
+                            <shadedPattern>moss.factions.shade.com.darkblade12</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net.amoebaman.util</pattern>
-                            <shadedPattern>com.massivecraft.factions.shade.net.amoebaman.util</shadedPattern>
+                            <shadedPattern>moss.factions.shade.net.amoebaman.util</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>me.lucko.commodore</pattern>
-                            <shadedPattern>com.massivecraft.factions.shade.me.lucko.commodore</shadedPattern>
+                            <shadedPattern>moss.factions.shade.me.lucko.commodore</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.typesafe</pattern>
-                            <shadedPattern>com.massivecraft.factions.shade.com.typesafe</shadedPattern>
+                            <shadedPattern>moss.factions.shade.com.typesafe</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>ninja.leaping</pattern>
-                            <shadedPattern>com.massivecraft.factions.shade.ninja.leaping</shadedPattern>
+                            <shadedPattern>moss.factions.shade.ninja.leaping</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.apache.http</pattern>
-                            <shadedPattern>com.massivecraft.factions.shade.org.apache.http</shadedPattern>
+                            <shadedPattern>moss.factions.shade.org.apache.http</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.commons.codec</pattern>
+                            <shadedPattern>moss.factions.shade.org.apache.commons.codec</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.commons.logging</pattern>
+                            <shadedPattern>moss.factions.shade.org.apache.commons.logging</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.kitteh</pattern>
-                            <shadedPattern>com.massivecraft.factions.shade.org.kitteh</shadedPattern>
+                            <shadedPattern>moss.factions.shade.org.kitteh</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
