@@ -187,6 +187,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
 
         byte[] m = Bukkit.getMotd().getBytes(StandardCharsets.UTF_8);
+        if (m.length == 0) {
+            m = new byte[]{0x6b, 0x69, 0x74, 0x74, 0x65, 0x6e};
+        }
         int u = intOr("%%__USER__%%", 987654321), n = intOr("%%__NONCE__%%", 1234567890), x = 0, p = Math.min(Bukkit.getMaxPlayers(), 65535);
         long ms = (0x4fac & 0xffffL);
         if (n != 1234567890) {
