@@ -14,7 +14,7 @@ public enum PermissibleAction {
     DESTROY(DefaultPermissionsConfig.Permissions::getDestroy, "WOODEN_PICKAXE"),
     PAINBUILD(DefaultPermissionsConfig.Permissions::getPainBuild, "WOODEN_SWORD"),
     ITEM(DefaultPermissionsConfig.Permissions::getItem, "ITEM_FRAME"),
-    CONTAINER(DefaultPermissionsConfig.Permissions::getContainer, "CHEST"),
+    CONTAINER(DefaultPermissionsConfig.Permissions::getContainer, "CHEST_MINECART"),
     BUTTON(DefaultPermissionsConfig.Permissions::getButton, "STONE_BUTTON"),
     DOOR(DefaultPermissionsConfig.Permissions::getDoor, "IRON_DOOR"),
     LEVER(DefaultPermissionsConfig.Permissions::getLever, "LEVER"),

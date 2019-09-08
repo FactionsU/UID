@@ -111,6 +111,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
     @Override
     protected SimpleItem getItem(PermissibleAction permissibleAction) {
         SimpleItem item = new SimpleItem(base);
+        item.setEnchant(user.getFaction().hasAccess(online, permissible, permissibleAction));
         item.setMaterial(permissibleAction.getMaterial());
         return item;
     }
