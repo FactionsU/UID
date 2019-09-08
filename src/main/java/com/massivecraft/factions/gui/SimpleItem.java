@@ -2,6 +2,7 @@ package com.massivecraft.factions.gui;
 
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,6 +20,7 @@ public class SimpleItem {
     private List<String> lore;
     private Material material;
     private DyeColor color;
+    private boolean enchant;
 
     SimpleItem(Builder builder) {
         this.name = builder.name;
@@ -45,6 +47,9 @@ public class SimpleItem {
             // Empty list if not specified
             meta.setLore(lore);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
+            if (enchant) {
+                meta.addEnchant(Enchantment.LUCK, 1, true);
+            }
 
             // If a user places a color, they should be expected to put a colorable object
             if (color != null) {
@@ -110,6 +115,14 @@ public class SimpleItem {
 
     public void setColor(DyeColor color) {
         this.color = color;
+    }
+
+    public boolean isEnchant() {
+        return enchant;
+    }
+
+    public void setEnchant(boolean enchant) {
+        this.enchant = enchant;
     }
 
     public static Builder builder() {
