@@ -28,7 +28,7 @@ public enum PermissibleAction {
     ECONOMY(true, DefaultPermissionsConfig.Permissions::getEconomy, "GOLD_INGOT"),
     TERRITORY(true, DefaultPermissionsConfig.Permissions::getTerritory, "GRASS_BLOCK"),
     OWNER(true, DefaultPermissionsConfig.Permissions::getOwner, "FENCE_GATE"),
-    SETHOME(true, DefaultPermissionsConfig.Permissions::getSetHome, "RED_BED"),
+    SETHOME(true, DefaultPermissionsConfig.Permissions::getSetHome, "COMPASS"),
     SETWARP(true, DefaultPermissionsConfig.Permissions::getSetWarp, "END_PORTAL_FRAME"),
     WARP(DefaultPermissionsConfig.Permissions::getWarp, "ENDER_PEARL"),
     FLY(DefaultPermissionsConfig.Permissions::getFly, "FEATHER"),
