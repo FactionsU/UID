@@ -837,6 +837,7 @@ public enum TL {
     PERM_SETWARP("Setting and unsetting faction warps"),
     PERM_WARP("Using faction warps"),
     PERM_FLY("Flying in faction territory"),
+    PERM_OWNER("Set ownership of land using /f owner in faction territory"),
 
     GUI_WARPS_ONE_PAGE("%s warps"),
     GUI_WARPS_PAGE("%1$s warps (page %2$d)"),
