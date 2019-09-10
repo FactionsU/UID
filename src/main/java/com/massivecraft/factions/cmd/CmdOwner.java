@@ -5,6 +5,7 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -19,6 +20,7 @@ public class CmdOwner extends FCommand {
         this.optionalArgs.put("player", "you");
 
         this.requirements = new CommandRequirements.Builder(Permission.OWNER)
+                .withAction(PermissibleAction.OWNER)
                 .playerOnly()
                 .build();
     }
@@ -40,10 +42,6 @@ public class CmdOwner extends FCommand {
 
         if (!hasBypass && FactionsPlugin.getInstance().conf().factions().ownedArea().getLimitPerFaction() > 0 && context.faction.getCountOfClaimsWithOwners() >= FactionsPlugin.getInstance().conf().factions().ownedArea().getLimitPerFaction()) {
             context.msg(TL.COMMAND_OWNER_LIMIT, FactionsPlugin.getInstance().conf().factions().ownedArea().getLimitPerFaction());
-            return;
-        }
-
-        if (!hasBypass && !context.assertMinRole(FactionsPlugin.getInstance().conf().factions().ownedArea().isModeratorsCanSet() ? Role.MODERATOR : Role.ADMIN)) {
             return;
         }
 

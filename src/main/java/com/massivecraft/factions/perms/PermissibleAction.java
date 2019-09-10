@@ -27,6 +27,7 @@ public enum PermissibleAction {
     DISBAND(true, DefaultPermissionsConfig.Permissions::getDisband, "BONE"),
     ECONOMY(true, DefaultPermissionsConfig.Permissions::getEconomy, "GOLD_INGOT"),
     TERRITORY(true, DefaultPermissionsConfig.Permissions::getTerritory, "GRASS_BLOCK"),
+    OWNER(true, DefaultPermissionsConfig.Permissions::getOwner, "FENCE_GATE"),
     SETHOME(true, DefaultPermissionsConfig.Permissions::getSetHome, "RED_BED"),
     SETWARP(true, DefaultPermissionsConfig.Permissions::getSetWarp, "END_PORTAL_FRAME"),
     WARP(DefaultPermissionsConfig.Permissions::getWarp, "ENDER_PEARL"),
@@ -136,6 +137,8 @@ public enum PermissibleAction {
                 return TL.PERM_WARP.toString();
             case FLY:
                 return TL.PERM_FLY.toString();
+            case OWNER:
+                return TL.PERM_OWNER.toString();
         }
         throw new AssertionError("No description available! Somebody forgot to run unit tests!");
     }

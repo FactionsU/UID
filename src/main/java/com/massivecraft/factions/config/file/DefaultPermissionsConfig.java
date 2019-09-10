@@ -129,6 +129,10 @@ public class DefaultPermissionsConfig {
             return this.territory;
         }
 
+        public FactionOnlyPermInfo getOwner() {
+            return this.owner;
+        }
+
         public FullPermInfo getPlate() {
             return this.plate;
         }
@@ -269,6 +273,8 @@ public class DefaultPermissionsConfig {
                 this.moderator.value = true;
             }
         };
+        @Comment("Can created owned areas with /f owner")
+        private FactionOnlyPermInfo owner = new FactionOnlyPermInfo();
         @Comment("Can interact with plates")
         private FullPermInfo plate = new FullPermInfo() {
             {

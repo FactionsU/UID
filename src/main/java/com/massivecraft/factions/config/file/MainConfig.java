@@ -709,7 +709,6 @@ public class MainConfig {
         public class OwnedArea {
             private boolean enabled = true;
             private int limitPerFaction = 0;
-            private boolean moderatorsCanSet = false;
             private boolean moderatorsBypass = true;
             private boolean denyBuild = true;
             private boolean painBuild = false;
@@ -726,10 +725,6 @@ public class MainConfig {
 
             public int getLimitPerFaction() {
                 return limitPerFaction;
-            }
-
-            public boolean isModeratorsCanSet() {
-                return moderatorsCanSet;
             }
 
             public boolean isModeratorsBypass() {
