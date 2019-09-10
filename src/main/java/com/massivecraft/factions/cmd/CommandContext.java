@@ -368,21 +368,11 @@ public class CommandContext {
             return false;
         }
 
-        if (i.getRole().value > you.getRole().value || i.getRole().equals(Role.ADMIN)) {
+        if (i.getRole().value >= you.getRole().value || i.getRole() == Role.ADMIN) {
             return true;
         }
 
-        if (you.getRole().equals(Role.ADMIN)) {
-            i.sendMessage(FactionsPlugin.getInstance().txt().parse("<b>Only the faction admin can do that."));
-        } else if (i.getRole().equals(Role.MODERATOR)) {
-            if (i == you) {
-                return true; //Moderators can control themselves
-            } else {
-                i.sendMessage(FactionsPlugin.getInstance().txt().parse("<b>Moderators can't control each other..."));
-            }
-        } else {
-            i.sendMessage(FactionsPlugin.getInstance().txt().parse("<b>You must be a faction moderator to do that."));
-        }
+        i.sendMessage(FactionsPlugin.getInstance().txt().parse("%s <b>has a higher rank than you.", you.describeTo(i, true)));
 
         return false;
     }
