@@ -142,6 +142,8 @@ public interface Faction extends EconomyParticipator {
 
     boolean setPermission(boolean online, Permissible permissable, PermissibleAction permissableAction, boolean value);
 
+    void checkPerms();
+
     void resetPerms();
 
     Map<Permissible, Map<PermissibleAction, Boolean>> getPermissions();
