@@ -38,7 +38,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
 public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected String id = null;
@@ -444,6 +443,12 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
         accessMap.put(permissibleAction, value);
         return true;
+    }
+
+    public void checkPerms() {
+        if (this.permissions == null || this.permissions.isEmpty()) {
+            this.resetPerms();
+        }
     }
 
     public void resetPerms() {
