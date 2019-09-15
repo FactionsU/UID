@@ -7,6 +7,7 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
+import net.ess3.api.InvalidWorldException;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,8 +38,14 @@ public class EssentialsListener implements Listener {
         // Not a great way to do this on essential's side.
         for (String homeName : user.getHomes()) {
 
-            // This can throw an exception for some reason.
-            Location loc = user.getHome(homeName);
+            Location loc;
+            try {
+                loc = user.getHome(homeName);
+            } catch (InvalidWorldException e) {
+                // This can throw an exception for some reason.
+                FactionsPlugin.getInstance().getLogger().warning("Tried to check on home \"" + homeName + "\" for user \"" + event.getfPlayer().getName() + "\" but Essentials said world \"" + e.getWorld() + "\" does not exist. Skipping it.");
+                continue;
+            }
             FLocation floc = new FLocation(loc);
 
             Faction factionAt = Board.getInstance().getFactionAt(floc);
