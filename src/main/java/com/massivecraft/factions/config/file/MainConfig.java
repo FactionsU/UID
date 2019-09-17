@@ -234,7 +234,7 @@ public class MainConfig {
             private boolean factionOnlyChat = true;
             // Configuration on the Faction tag in chat messages.
             @Comment("If true, disables adding of faction tag so another plugin can manage this")
-            private transient boolean tagHandledByAnotherPlugin = false;
+            private boolean tagHandledByAnotherPlugin = false;
             private boolean tagRelationColored = true;
             private String tagReplaceString = "[FACTION]";
             private String tagInsertAfterString = "";
