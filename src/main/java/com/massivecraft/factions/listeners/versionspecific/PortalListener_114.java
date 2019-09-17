@@ -29,13 +29,9 @@ public class PortalListener_114 implements Listener {
     
     @EventHandler
     public void onPortalCreate(PortalCreateEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getEntity().getWorld())) {
-            return;
-        }
-
         Entity entity = event.getEntity();
 
-        if (!(entity instanceof Player)) {
+        if (!(entity instanceof Player) || !plugin.worldUtil().isEnabled(event.getEntity().getWorld())) {
             return;
         }
 

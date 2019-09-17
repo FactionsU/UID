@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class PortalHandler implements PortalListenerBase {
     public boolean shouldCancel(Location location, Player player) {
-        if (FactionsPlugin.getInstance().worldUtil().worldCheck() && !FactionsPlugin.getInstance().worldUtil().enabledWorld(player.getWorld())) {
+        if (!FactionsPlugin.getInstance().worldUtil().isEnabled(player.getWorld())) {
             return true;
         }
 

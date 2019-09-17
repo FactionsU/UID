@@ -173,7 +173,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 
@@ -275,7 +275,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEntityEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 
@@ -306,7 +306,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerInteract(PlayerArmorStandManipulateEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 
@@ -317,7 +317,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 
@@ -485,7 +485,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 
@@ -504,7 +504,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 
@@ -528,7 +528,7 @@ public class FactionsPlayerListener extends AbstractListener {
     // but these separate bucket events below always fire without fail
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 
@@ -542,7 +542,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerBucketFill(PlayerBucketFillEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 
@@ -634,7 +634,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerInteractGUI(InventoryClickEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getWhoClicked().getWorld())) {
+        if (!plugin.worldUtil().isEnabled(event.getWhoClicked().getWorld())) {
             return;
         }
 
@@ -650,7 +650,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMoveGUI(InventoryDragEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getWhoClicked().getWorld())) {
+        if (!plugin.worldUtil().isEnabled(event.getWhoClicked().getWorld())) {
             return;
         }
 
@@ -690,7 +690,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        if (plugin.worldUtil().worldCheck() && !plugin.worldUtil().enabledWorld(event.getPlayer().getWorld())) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 

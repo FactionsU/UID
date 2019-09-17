@@ -11,14 +11,6 @@
 # It's suggested that you only turn this on at the direction of a developer.
 debug: false
 
-# You can configure which worlds you want Factions to be enabled in here
-enabled-worlds:
-  check: false # true to check this list, false to enable it everywhere
-  worlds:
-    - "world"
-    - "world_nether"
-    - "world_the_end"
-
 # Prevent find factions exploit
 # This will help limit how many times a player can be sent a map of factions.
 # Set this to the cooldown you want, in milliseconds, for a map to be shown to a player.

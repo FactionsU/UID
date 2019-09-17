@@ -1219,6 +1219,27 @@ public class MainConfig {
         }
     }
 
+    public class RestrictWorlds {
+        @Comment("If true, Factions will only function on certain worlds")
+        private boolean restrictWorlds = false;
+        @Comment("If restrictWorlds is true, this setting determines if the world list below is a whitelist or blacklist.\n" +
+                "True for whitelist, false for blacklist.")
+        private boolean whitelist = true;
+        private Set<String> worldList = new HashSet<>();
+
+        public boolean isRestrictWorlds() {
+            return restrictWorlds;
+        }
+
+        public boolean isWhitelist() {
+            return whitelist;
+        }
+
+        public Set<String> getWorldList() {
+            return worldList == null ? Collections.emptySet() : worldList;
+        }
+    }
+
     public class PlayerVaults {
         @Comment("The %s is for the faction id")
         private String vaultPrefix = "faction-%s";
@@ -1267,6 +1288,7 @@ public class MainConfig {
     private Map map = new Map();
     @Comment("Data storage settings")
     private Data data = new Data();
+    private RestrictWorlds restrictWorlds = new RestrictWorlds();
     @Comment("PlayerVaults faction vault settings")
     private PlayerVaults playerVaults = new PlayerVaults();
     @Comment("WorldGuard settings")
@@ -1298,6 +1320,10 @@ public class MainConfig {
 
     public Map map() {
         return map;
+    }
+
+    public RestrictWorlds restrictWorlds() {
+        return restrictWorlds;
     }
 
     public PlayerVaults playerVaults() {
