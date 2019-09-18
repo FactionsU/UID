@@ -381,6 +381,10 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         // Grand metrics adventure!
         this.setupMetrics();
 
+        if (ChatColor.stripColor(TL.NOFACTION_PREFIX.toString()).equals("[4-]")) {
+            getLogger().warning("Looks like you have an old, mistaken 'nofactions-prefix' in your lang.yml. It currently displays [4-] which is... strange.");
+        }
+
         new BukkitRunnable() {
             @Override
             public void run() {
