@@ -440,16 +440,12 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     // Colored Chat Tag
     public String getChatTag(Faction faction) {
-        return this.hasFaction() ? this.getRelationTo(faction).getColor() + getChatTag() : "";
-    }
-
-    public String getChatTag(MemoryFPlayer fplayer) {
-        return this.hasFaction() ? this.getColorTo(fplayer) + getChatTag() : "";
+        return this.hasFaction() ? this.getRelationTo(faction).getColor() + getChatTag() : TL.NOFACTION_PREFIX.toString();
     }
 
     @Override
     public String getChatTag(FPlayer fplayer) {
-        return this.hasFaction() ? this.getRelationTo(fplayer).getColor() + getChatTag() : "";
+        return this.hasFaction() ? this.getRelationTo(fplayer).getColor() + getChatTag() : TL.NOFACTION_PREFIX.toString();
     }
 
     public int getKills() {
