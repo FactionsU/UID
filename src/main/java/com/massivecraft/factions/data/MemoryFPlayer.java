@@ -447,6 +447,11 @@ public abstract class MemoryFPlayer implements FPlayer {
         return this.hasFaction() ? this.getColorTo(fplayer) + getChatTag() : "";
     }
 
+    @Override
+    public String getChatTag(FPlayer fplayer) {
+        return this.hasFaction() ? this.getRelationTo(fplayer).getColor() + getChatTag() : "";
+    }
+
     public int getKills() {
         return isOnline() ? getPlayer().getStatistic(Statistic.PLAYER_KILLS) : this.kills;
     }
@@ -1086,11 +1091,6 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public String getNameAndTitle(FPlayer fplayer) {
         return this.getColorTo(fplayer) + this.getNameAndTitle();
-    }
-
-    @Override
-    public String getChatTag(FPlayer fplayer) {
-        return this.hasFaction() ? this.getRelationTo(fplayer).getColor() + getChatTag() : "";
     }
 
     @Override
