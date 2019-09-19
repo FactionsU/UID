@@ -17,7 +17,7 @@ public class TitleAPI {
 
     private static TitleAPI instance;
     private boolean supportsAPI = false;
-    private boolean bailOut = true;
+    private boolean bailOut = false;
 
     private Map<String, Class> classCache = new HashMap<>();
 
@@ -46,7 +46,7 @@ public class TitleAPI {
                 FactionsPlugin.getInstance().getLogger().info("Didn't find API support for sending titles, using reflection instead.");
             } catch (Exception ex) {
                 FactionsPlugin.getInstance().getLogger().info("Failed to use reflection.");
-                bailOut = false;
+                bailOut = true;
                 ex.printStackTrace();
             }
         }
