@@ -54,7 +54,7 @@ public class FlightUtil {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 FPlayer pilot = FPlayers.getInstance().getByPlayer(player);
                 if (pilot.isFlying() && !pilot.isAdminBypassing()) {
-                    if (enemiesNearby(pilot, 5)) {
+                    if (enemiesNearby(pilot, FactionsPlugin.getInstance().getConfig().getInt("f-fly.enemy-radius", 7))) {
                         pilot.msg(TL.COMMAND_FLY_ENEMY_DISABLE);
                         pilot.setFlying(false);
                         if (pilot.isAutoFlying()) {
