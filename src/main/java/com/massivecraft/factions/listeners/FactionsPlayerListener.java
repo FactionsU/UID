@@ -21,7 +21,6 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
 import com.massivecraft.factions.util.VisualizeUtil;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -85,6 +84,22 @@ public class FactionsPlayerListener extends AbstractListener {
 
         me.login(); // set kills / deaths
 
+        if (me.isSpyingChat() && !player.hasPermission(Permission.CHATSPY.node)) {
+            me.setSpyingChat(false);
+            FactionsPlugin.getInstance().log(Level.INFO, "Found %s spying chat without permission on login. Disabled their chat spying.", player.getName());
+        }
+
+        if (me.isAdminBypassing() && !player.hasPermission(Permission.BYPASS.node)) {
+            me.setIsAdminBypassing(false);
+            FactionsPlugin.getInstance().log(Level.INFO, "Found %s on admin Bypass without permission on login. Disabled it for them.", player.getName());
+        }
+
+        if (plugin.worldUtil().isEnabled(player.getWorld())) {
+            this.initFactionWorld(me);
+        }
+    }
+
+    private void initFactionWorld(FPlayer me) {
         // Check for Faction announcements. Let's delay this so they actually see it.
         new BukkitRunnable() {
             @Override
@@ -110,18 +125,8 @@ public class FactionsPlayerListener extends AbstractListener {
             }
         }
 
-        if (me.isSpyingChat() && !player.hasPermission(Permission.CHATSPY.node)) {
-            me.setSpyingChat(false);
-            FactionsPlugin.getInstance().log(Level.INFO, "Found %s spying chat without permission on login. Disabled their chat spying.", player.getName());
-        }
-
-        if (me.isAdminBypassing() && !player.hasPermission(Permission.BYPASS.node)) {
-            me.setIsAdminBypassing(false);
-            FactionsPlugin.getInstance().log(Level.INFO, "Found %s on admin Bypass without permission on login. Disabled it for them.", player.getName());
-        }
-
         // If they have the permission, don't let them autoleave. Bad inverted setter :\
-        me.setAutoLeave(!player.hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
+        me.setAutoLeave(!me.getPlayer().hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
         me.setTakeFallDamage(true);
         if (plugin.getConfig().getBoolean("f-fly.enable", false) && me.isFlying()) { // TODO allow flight to continue
             me.setFlying(false);
@@ -502,13 +507,20 @@ public class FactionsPlayerListener extends AbstractListener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onTeleport(PlayerTeleportEvent event) {
-        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
+        FPlayer me = FPlayers.getInstance().getByPlayer(event.getPlayer());
+        boolean isEnabled = plugin.worldUtil().isEnabled(event.getTo().getWorld());
+        if (!isEnabled) {
+            if (me.isFlying()) {
+                me.setFlying(false);
+            }
             return;
         }
+        if (!event.getFrom().getWorld().equals(event.getTo().getWorld()) && !plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
+            this.initFactionWorld(me);
+        }
 
-        FPlayer me = FPlayers.getInstance().getByPlayer(event.getPlayer());
         FLocation to = new FLocation(event.getTo());
         me.setLastStoodAt(to);
 
