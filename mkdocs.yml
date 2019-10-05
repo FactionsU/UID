@@ -33,6 +33,7 @@ nav:
   - Introduction: introduction.md
   - First Steps: firststeps.md
   - Commands: commands.md
+  - Permissions: permissions.md
 
 # Customization
 extra:
