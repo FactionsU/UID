@@ -117,6 +117,10 @@ public class DefaultPermissionsConfig {
             return this.item;
         }
 
+        public FullPermInfo getHome() {
+            return this.home;
+        }
+
         public FactionOnlyPermInfo getSetHome() {
             return this.sethome;
         }
@@ -247,6 +251,15 @@ public class DefaultPermissionsConfig {
         };
         @Comment("Use items in faction territory (while not raidable)")
         private FullPermInfo item = new FullPermInfo() {
+            {
+                this.coleader.value = true;
+                this.moderator.value = true;
+                this.normal.value = true;
+                this.recruit.value = true;
+            }
+        };
+        @Comment("Can visit the faction home")
+        private FullPermInfo home = new FullPermInfo() {
             {
                 this.coleader.value = true;
                 this.moderator.value = true;
