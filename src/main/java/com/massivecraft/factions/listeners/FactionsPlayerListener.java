@@ -166,7 +166,7 @@ public class FactionsPlayerListener extends AbstractListener {
             }
         }
 
-        FScoreboard.remove(me);
+        FScoreboard.remove(me, event.getPlayer());
 
         if (FactionsPlugin.getInstance().getSeeChunkUtil() != null) {
             FactionsPlugin.getInstance().getSeeChunkUtil().updatePlayerInfo(UUID.fromString(me.getId()), false);
@@ -512,6 +512,7 @@ public class FactionsPlayerListener extends AbstractListener {
         FPlayer me = FPlayers.getInstance().getByPlayer(event.getPlayer());
         boolean isEnabled = plugin.worldUtil().isEnabled(event.getTo().getWorld());
         if (!isEnabled) {
+            FScoreboard.remove(me, event.getPlayer());
             if (me.isFlying()) {
                 me.setFlying(false);
             }
