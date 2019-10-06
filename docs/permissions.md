@@ -4,31 +4,30 @@
 
 | Permission Node             | Description                                                                             |
 | --------------------------- | ------------------------------------------------------------------------------------    |
-| factions.admin              |                                                                                         |
-| factions.admin.any          |                                                                                         |
-| factions.ahome              |                                                                                         |
-| factions.announce           |                                                                                         |
-| factions.autoclaim          |                                                                                         |
-| factions.autoleavebypass    |                                                                                         |
-| factions.ban                |                                                                                         |
-| factions.bypass             |                                                                                         |
-| factions.chat               |                                                                                         |
-| factions.chatspy            |                                                                                         |
+| factions.admin              | Set new player as leader of your faction                                                |
+| factions.admin.any          | Set new player as leader of any faction                                                 |
+| factions.ahome              | Teleport a player to their faction's home                                               |
+| factions.announce           | Send a message to players in your faction                                               |
+| factions.autoclaim          | Use autoclaim command to automatically claim by walking                                 |
+| factions.autoleavebypass    | Ignored by the auto-leave mechanism                                                     |
+| factions.ban                | Ban users from your faction                                                             |
+| factions.bypass             | Can set yourself to bypass faction permission checks using `/f bypass`                  |
+| factions.chat               | Toggle chat modes                                                                       |
+| factions.chatspy            | Ability to use command to spy on private chat channels                                  |
 | factions.claim              | Grants the ability to claim territory for one's own faction                             |
 | factions.claim.line         | Grants the ability to claim territory for one's own faction in a line                   |
-| factions.claim.radius       | Grants the ability to claim territory for one's own faction in a line at a set radius    |
-| factions.claimat            |                                                                                         |
-| factions.coleader           |                                                                                         |
-| factions.coleader.any       |                                                                                         |
-| factions.config             |                                                                                         |
-| factions.create             |                                                                                         |
-| factions.debug              |                                                                                         |
-| factions.defaultrank        |                                                                                         |
-| factions.deinvite           |                                                                                         |
-| factions.delhome            |                                                                                         |
-| factions.description        |                                                                                         |
-| factions.disband            |                                                                                         |
-| factions.disband.any        |                                                                                         |
+| factions.claim.radius       | Grants the ability to claim territory for one's own faction in a line at a set radius   |
+| factions.claimat            | Grants the ability to claim territory for one's own faction at a distance               |
+| factions.coleader           | Set new coleader for your faction                                                       |
+| factions.coleader.any       | Set new coleader for any faction                                                        |
+| factions.create             | Can create factions                                                                     |
+| factions.debug              | Can use the debug command                                                               |
+| factions.defaultrank        | Can set the faction's default role                                                      |
+| factions.deinvite           | Can remove invite to your faction                                                       |
+| factions.delhome            | Can delete your faction's home                                                          |
+| factions.description        | Can set your faction description                                                        |
+| factions.disband            | Can use the disband command                                                             |
+| factions.disband.any        | Can disband any faction                                                                 |
 | factions.fly                | Grants the ability to use `/f fly`                                                      |
 | factions.fly.auto           |                                                                                         |
 | factions.fly.safezone       |                                                                                         |

@@ -29,7 +29,7 @@ You can find the old documentation [here](https://github.com/drtshock/Factions/w
 - [ ] Commands
 - [ ] Faction Permissions
 - [ ] Translation
-- [ ] Placeholders
+- [x] Placeholders
 - [ ] Scoreboard
 - [x] Power
 - [x] Introduction to Factions

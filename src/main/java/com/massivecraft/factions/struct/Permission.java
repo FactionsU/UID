@@ -23,7 +23,6 @@ public enum Permission {
     CLAIM_RADIUS("claim.radius"),
     COLEADER("coleader"),
     COLEADER_ANY("coleader.any"),
-    CONFIG("config"),
     CREATE("create"),
     DEFAULTRANK("defaultrank"),
     DEINVITE("deinvite"),
