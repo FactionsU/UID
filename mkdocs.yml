@@ -35,6 +35,7 @@ nav:
   - First Steps: firststeps.md
   - Commands: commands.md
   - Permissions: permissions.md
+  - Placeholders: placeholders.md
 
 # Customization
 extra:
