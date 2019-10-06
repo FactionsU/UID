@@ -43,7 +43,9 @@ public class FScoreboard {
         FScoreboard fboard = fscoreboards.remove(fplayer);
 
         if (fboard != null) {
-            player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+            if (fboard.scoreboard == player.getScoreboard()) { // No equals method implemented, so may as well skip a nullcheck
+                player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+            }
             fboard.removed = true;
             FTeamWrapper.untrack(fboard);
         }
