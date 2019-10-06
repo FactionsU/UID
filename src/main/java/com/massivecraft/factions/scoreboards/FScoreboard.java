@@ -39,10 +39,11 @@ public class FScoreboard {
         FTeamWrapper.track(fboard);
     }
 
-    public static void remove(FPlayer fplayer) {
+    public static void remove(FPlayer fplayer, Player player) {
         FScoreboard fboard = fscoreboards.remove(fplayer);
 
         if (fboard != null) {
+            player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
             fboard.removed = true;
             FTeamWrapper.untrack(fboard);
         }
