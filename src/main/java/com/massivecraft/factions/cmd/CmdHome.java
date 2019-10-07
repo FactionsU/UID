@@ -47,6 +47,7 @@ public class CmdHome extends FCommand {
             } else {
                 context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString());
             }
+            return;
         }
 
         if (!FactionsPlugin.getInstance().conf().factions().homes().isEnabled()) {
