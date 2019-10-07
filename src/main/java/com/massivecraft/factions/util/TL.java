@@ -811,6 +811,7 @@ public enum TL {
     PERM_DISBAND("Disbanding the entire faction"),
     PERM_ECONOMY("Spending faction money"),
     PERM_TERRITORY("Claiming or unclaiming faction territory"),
+    PERM_HOME("Visiting the faction home"),
     PERM_SETHOME("Setting the faction home"),
     PERM_SETWARP("Setting and unsetting faction warps"),
     PERM_WARP("Using faction warps"),

@@ -27,6 +27,8 @@ public class CmdHome extends FCommand {
         super();
         this.aliases.add("home");
 
+        this.optionalArgs.put("faction", "yours");
+
         this.requirements = new CommandRequirements.Builder(Permission.HOME)
                 .playerOnly()
                 .noDisableOnLock()
