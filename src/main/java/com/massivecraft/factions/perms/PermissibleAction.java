@@ -130,6 +130,8 @@ public enum PermissibleAction {
                 return TL.PERM_ECONOMY.toString();
             case TERRITORY:
                 return TL.PERM_TERRITORY.toString();
+            case HOME:
+                return TL.PERM_HOME.toString();
             case SETHOME:
                 return TL.PERM_SETHOME.toString();
             case SETWARP:
