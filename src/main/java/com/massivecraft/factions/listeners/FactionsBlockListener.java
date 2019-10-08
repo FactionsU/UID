@@ -9,7 +9,6 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.struct.Permission;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

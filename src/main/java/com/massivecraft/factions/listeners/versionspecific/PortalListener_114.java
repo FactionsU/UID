@@ -8,7 +8,6 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
-
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -26,7 +25,7 @@ public class PortalListener_114 implements Listener {
     public PortalListener_114(FactionsPlugin plugin) {
         this.plugin = plugin;
     }
-    
+
     @EventHandler
     public void onPortalCreate(PortalCreateEvent event) {
         Entity entity = event.getEntity();

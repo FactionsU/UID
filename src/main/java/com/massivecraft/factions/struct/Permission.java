@@ -99,8 +99,7 @@ public enum Permission {
     NEAR("near"),
     WARP("warp"),
     UPDATES("updates"),
-    DEBUG("debug")
-    ;
+    DEBUG("debug");
 
     public final String node;
 
