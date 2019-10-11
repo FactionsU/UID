@@ -463,8 +463,9 @@ lwc:
 # - {action-access}       : Shows the action's access with current relation
 # - {action-access-color} : Access color
 # General variables. Can be used anywhere.
-# - {total-online}  : Total # of players on the server
-# - {max-warps}     : Max # of warps a faction can set
-# - {max-allies}    : Max # of allies a faction can have
-# - {max-enemies}   : Max # of enemies a faction can have
-# - {factionless}   : Count of all factionless players online
+# - {total-online}       : Total # of players on the server
+# - {max-warps}          : Max # of warps a faction can set
+# - {max-allies}         : Max # of allies a faction can have
+# - {max-enemies}        : Max # of enemies a faction can have
+# - {factionless}        : Count of all factionless players online
+# - {factionless-total}  : Count of all factionless players online

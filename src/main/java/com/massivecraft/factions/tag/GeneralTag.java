@@ -13,6 +13,7 @@ public enum GeneralTag implements Tag {
     MAX_ENEMIES("max-enemies", () -> getRelation("enemy")),
     MAX_TRUCES("max-truces", () -> getRelation("truce")),
     FACTIONLESS("factionless", () -> String.valueOf(FPlayers.getInstance().getOnlinePlayers().stream().filter(p -> !p.hasFaction()).count())),
+    FACTIONLESS_TOTAL("factionless-total", () -> String.valueOf(FPlayers.getInstance().getAllFPlayers().stream().filter(p -> !p.hasFaction()).count())),
     TOTAL_ONLINE("total-online", () -> String.valueOf(Bukkit.getOnlinePlayers().size())),
     ;
 
