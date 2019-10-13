@@ -39,7 +39,7 @@ public class NewMemoryFaction {
     private Map<Permissible, Map<PermissibleAction, Boolean>> permissionsOffline;
     private Set<BanInfo> bans;
 
-    public NewMemoryFaction(OldMemoryFaction old) {
+    public NewMemoryFaction(OldMemoryFactionV0 old) {
         this.id = old.id;
         this.peacefulExplosionsEnabled = old.peacefulExplosionsEnabled;
         this.permanent = old.permanent;
@@ -65,8 +65,8 @@ public class NewMemoryFaction {
         old.permissions.forEach((permiss, map) -> {
             Map<PermissibleAction, Boolean> newMap = new HashMap<>();
             map.forEach((permact, access) -> {
-                if (access == Access.ALLOW || access == Access.DENY) {
-                    newMap.put(permact.getNew(), access == Access.ALLOW);
+                if (access == OldAccessV0.ALLOW || access == OldAccessV0.DENY) {
+                    newMap.put(permact.getNew(), access == OldAccessV0.ALLOW);
                 }
             });
             this.permissions.put(permiss.newPermissible(), newMap);

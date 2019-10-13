@@ -4,7 +4,7 @@ import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.TL;
 
-public enum OldRole implements OldPermissable {
+public enum OldRoleV0 implements OldPermissableV0 {
     ADMIN(4, TL.ROLE_ADMIN, Role.ADMIN),
     COLEADER(3, TL.ROLE_COLEADER, Role.COLEADER),
     MODERATOR(2, TL.ROLE_MODERATOR, Role.MODERATOR),
@@ -16,7 +16,7 @@ public enum OldRole implements OldPermissable {
     public final TL translation;
     public final Role replacement;
 
-    OldRole(final int value, final TL translation, final Role replacement) {
+    OldRoleV0(final int value, final TL translation, final Role replacement) {
         this.value = value;
         this.nicename = translation.toString();
         this.translation = translation;
@@ -27,7 +27,7 @@ public enum OldRole implements OldPermissable {
         return this.replacement;
     }
 
-    public static OldRole fromString(String check) {
+    public static OldRoleV0 fromString(String check) {
         switch (check.toLowerCase()) {
             case "admin":
                 return ADMIN;

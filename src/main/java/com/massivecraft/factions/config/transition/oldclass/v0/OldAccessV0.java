@@ -2,7 +2,7 @@ package com.massivecraft.factions.config.transition.oldclass.v0;
 
 import org.bukkit.ChatColor;
 
-public enum Access {
+public enum OldAccessV0 {
     ALLOW("Allow", ChatColor.GREEN),
     DENY("Deny", ChatColor.DARK_RED),
     UNDEFINED("Undefined", ChatColor.GRAY);
@@ -10,7 +10,7 @@ public enum Access {
     private String name;
     private ChatColor color;
 
-    Access(String name, ChatColor color) {
+    OldAccessV0(String name, ChatColor color) {
         this.name = name;
         this.color = color;
     }
@@ -21,8 +21,8 @@ public enum Access {
      * @param check check
      * @return access
      */
-    public static Access fromString(String check) {
-        for (Access access : values()) {
+    public static OldAccessV0 fromString(String check) {
+        for (OldAccessV0 access : values()) {
             if (access.name().equalsIgnoreCase(check)) {
                 return access;
             }

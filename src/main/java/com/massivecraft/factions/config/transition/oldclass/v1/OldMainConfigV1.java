@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MainConfig {
+public class OldMainConfigV1 {
     public class Colors {
         public class Relations {
             public String member = "GREEN";

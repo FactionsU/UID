@@ -1,7 +1,7 @@
-package com.massivecraft.factions.config.transition;
+package com.massivecraft.factions.config.transition.oldclass.v0;
 
 import com.massivecraft.factions.config.annotation.Comment;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldConf;
+import com.massivecraft.factions.config.transition.oldclass.v0.OldConfV0;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TransitionConfig {
+public class TransitionConfigV0 {
     public class Colors {
         public class Relations {
             private String member = "GREEN";
@@ -425,7 +425,7 @@ public class TransitionConfig {
     @Comment("WorldGuard settings")
     private WorldGuard worldGuard = new WorldGuard();
 
-    public TransitionConfig(OldConf c) {
+    public TransitionConfigV0(OldConfV0 c) {
         this.commandBase = new ArrayList<>(c.baseCommandAliases);
 
         this.worldGuard.buildPriority = c.worldGuardBuildPriority;

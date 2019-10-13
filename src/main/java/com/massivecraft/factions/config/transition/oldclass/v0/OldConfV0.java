@@ -11,7 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class OldConf {
+public class OldConfV0 {
     public List<String> baseCommandAliases = new ArrayList<>();
 
     // Colors
