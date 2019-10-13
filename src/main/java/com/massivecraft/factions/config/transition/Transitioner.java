@@ -66,7 +66,7 @@ public class Transitioner {
         try {
             OldConfV0 conf = this.gsonV0.fromJson(new String(Files.readAllBytes(oldConf), StandardCharsets.UTF_8), OldConfV0.class);
             TransitionConfigV0 newConfig = new TransitionConfigV0(conf);
-            Loader.load("main", newConfig, "If you see this message, transitioning your config only got part way.");
+            Loader.loadAndSave("main", newConfig);
             oldConfigFolderFile.mkdir();
             Path dataFolder = pluginFolder.resolve("data");
             dataFolder.toFile().mkdir();

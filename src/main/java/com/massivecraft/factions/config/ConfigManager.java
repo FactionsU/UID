@@ -11,9 +11,7 @@ import java.io.IOException;
 public class ConfigManager {
     private final FactionsPlugin plugin;
     private final DefaultPermissionsConfig permissionsConfig = new DefaultPermissionsConfig();
-    private static final String permissionsConfigComment = "Default permissions";
     private final DefaultOfflinePermissionsConfig offlinePermissionsConfig = new DefaultOfflinePermissionsConfig();
-    private static final String offlinePermissionsConfigComment = "Default permissions when offline, if enabled";
     private final MainConfig mainConfig = new MainConfig();
     private static final String mainConfigComment = "# FactionsUUID by drtshock\n" +
             "# Report issues https://github.com/drtshock/Factions/issues?state=open\n" +
@@ -36,9 +34,9 @@ public class ConfigManager {
 
     public void loadConfigs() {
         try {
-            Loader.load("default_permissions", this.permissionsConfig, this.permissionsConfigComment);
-            Loader.load("default_permissions_offline", this.offlinePermissionsConfig, this.offlinePermissionsConfigComment);
-            Loader.load("main", this.mainConfig, this.mainConfigComment);
+            Loader.loadAndSave("default_permissions", this.permissionsConfig);
+            Loader.loadAndSave("default_permissions_offline", this.offlinePermissionsConfig);
+            Loader.loadAndSave("main", this.mainConfig);
         } catch (IOException | IllegalAccessException e) {
             e.printStackTrace();
         }
