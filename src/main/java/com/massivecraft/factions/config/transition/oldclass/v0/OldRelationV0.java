@@ -5,7 +5,7 @@ import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 
 
-public enum OldRelation implements OldPermissable {
+public enum OldRelationV0 implements OldPermissableV0 {
     MEMBER(4, TL.RELATION_MEMBER_SINGULAR.toString(), Relation.MEMBER),
     ALLY(3, TL.RELATION_ALLY_SINGULAR.toString(), Relation.ALLY),
     TRUCE(2, TL.RELATION_TRUCE_SINGULAR.toString(), Relation.TRUCE),
@@ -16,7 +16,7 @@ public enum OldRelation implements OldPermissable {
     public final String nicename;
     public final Relation replacement;
 
-    OldRelation(final int value, final String nicename, final Relation replacement) {
+    OldRelationV0(final int value, final String nicename, final Relation replacement) {
         this.value = value;
         this.nicename = nicename;
         this.replacement = replacement;
@@ -26,7 +26,7 @@ public enum OldRelation implements OldPermissable {
         return this.replacement;
     }
 
-    public static OldRelation fromString(String s) {
+    public static OldRelationV0 fromString(String s) {
         // Because Java 6 doesn't allow String switches :(
         if (s.equalsIgnoreCase(MEMBER.nicename)) {
             return MEMBER;

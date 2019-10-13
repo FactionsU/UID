@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class OldMemoryFaction {
+public class OldMemoryFactionV0 {
     protected String id = null;
     protected boolean peacefulExplosionsEnabled;
     protected boolean permanent;
@@ -35,9 +35,9 @@ public class OldMemoryFaction {
     protected long lastDeath;
     protected int maxVaults;
     protected Role defaultRole;
-    protected Map<OldPermissable, Map<OldPermissableAction, Access>> permissions = new HashMap<>();
+    protected Map<OldPermissableV0, Map<OldPermissableActionV0, OldAccessV0>> permissions = new HashMap<>();
     protected Set<BanInfo> bans = new HashSet<>();
 
-    private OldMemoryFaction() {
+    private OldMemoryFactionV0() {
     }
 }

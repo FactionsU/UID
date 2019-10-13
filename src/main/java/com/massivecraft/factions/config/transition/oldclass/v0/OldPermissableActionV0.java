@@ -2,7 +2,7 @@ package com.massivecraft.factions.config.transition.oldclass.v0;
 
 import com.massivecraft.factions.perms.PermissibleAction;
 
-public enum OldPermissableAction {
+public enum OldPermissableActionV0 {
     BAN("ban", PermissibleAction.BAN),
     BUILD("build", PermissibleAction.BUILD),
     DESTROY("destroy", PermissibleAction.DESTROY),
@@ -30,7 +30,7 @@ public enum OldPermissableAction {
 
     private PermissibleAction action;
 
-    OldPermissableAction(String name, PermissibleAction newPermissibleAction) {
+    OldPermissableActionV0(String name, PermissibleAction newPermissibleAction) {
         this.name = name;
         this.action = newPermissibleAction;
     }
@@ -54,8 +54,8 @@ public enum OldPermissableAction {
      * @param check check
      * @return permissible
      */
-    public static OldPermissableAction fromString(String check) {
-        for (OldPermissableAction permissableAction : values()) {
+    public static OldPermissableActionV0 fromString(String check) {
+        for (OldPermissableActionV0 permissableAction : values()) {
             if (permissableAction.name().equalsIgnoreCase(check)) {
                 return permissableAction;
             }

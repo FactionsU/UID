@@ -6,13 +6,14 @@ import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.Loader;
-import com.massivecraft.factions.config.transition.oldclass.v0.Access;
+import com.massivecraft.factions.config.transition.oldclass.v0.OldAccessV0;
 import com.massivecraft.factions.config.transition.oldclass.v0.NewMemoryFaction;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldConf;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldMemoryFaction;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissable;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissableAction;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissionsMapTypeAdapter;
+import com.massivecraft.factions.config.transition.oldclass.v0.OldConfV0;
+import com.massivecraft.factions.config.transition.oldclass.v0.OldMemoryFactionV0;
+import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissableV0;
+import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissableActionV0;
+import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissionsMapTypeAdapterV0;
+import com.massivecraft.factions.config.transition.oldclass.v0.TransitionConfigV0;
 import com.massivecraft.factions.util.EnumTypeAdapter;
 import com.massivecraft.factions.util.LazyLocation;
 import com.massivecraft.factions.util.MapFLocToStringSetTypeAdapter;
@@ -63,8 +64,8 @@ public class Transitioner {
         this.plugin.getLogger().info("Found no 'config' folder. Starting configuration transition...");
         this.buildGson();
         try {
-            OldConf conf = this.gson.fromJson(new String(Files.readAllBytes(oldConf), StandardCharsets.UTF_8), OldConf.class);
-            TransitionConfig newConfig = new TransitionConfig(conf);
+            OldConfV0 conf = this.gson.fromJson(new String(Files.readAllBytes(oldConf), StandardCharsets.UTF_8), OldConfV0.class);
+            TransitionConfigV0 newConfig = new TransitionConfigV0(conf);
             Loader.load("main", newConfig, "If you see this message, transitioning your config only got part way.");
             oldConfigFolderFile.mkdir();
             Path dataFolder = pluginFolder.resolve("data");
@@ -73,7 +74,7 @@ public class Transitioner {
             Files.move(pluginFolder.resolve("players.json"), dataFolder.resolve("players.json"));
 
             Path oldFactions = pluginFolder.resolve("factions.json");
-            Map<String, OldMemoryFaction> data = this.gson.fromJson(new String(Files.readAllBytes(oldFactions), StandardCharsets.UTF_8), new TypeToken<Map<String, OldMemoryFaction>>() {
+            Map<String, OldMemoryFactionV0> data = this.gson.fromJson(new String(Files.readAllBytes(oldFactions), StandardCharsets.UTF_8), new TypeToken<Map<String, OldMemoryFactionV0>>() {
             }.getType());
             Map<String, NewMemoryFaction> newData = new HashMap<>();
             data.forEach((id, fac) -> newData.put(id, new NewMemoryFaction(fac)));
@@ -91,7 +92,7 @@ public class Transitioner {
         Type mapFLocToStringSetType = new TypeToken<Map<FLocation, Set<String>>>() {
         }.getType();
 
-        Type accessTypeAdatper = new TypeToken<Map<OldPermissable, Map<OldPermissableAction, Access>>>() {
+        Type accessTypeAdatper = new TypeToken<Map<OldPermissableV0, Map<OldPermissableActionV0, OldAccessV0>>>() {
         }.getType();
 
         Type factionMaterialType = new TypeToken<FactionMaterial>() {
@@ -107,7 +108,7 @@ public class Transitioner {
                 .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
                 .registerTypeAdapter(factionMaterialType, new FactionMaterialAdapter())
                 .registerTypeAdapter(materialType, new MaterialAdapter())
-                .registerTypeAdapter(accessTypeAdatper, new OldPermissionsMapTypeAdapter())
+                .registerTypeAdapter(accessTypeAdatper, new OldPermissionsMapTypeAdapterV0())
                 .registerTypeAdapter(LazyLocation.class, new MyLocationTypeAdapter())
                 .registerTypeAdapter(mapFLocToStringSetType, new MapFLocToStringSetTypeAdapter())
                 .registerTypeAdapterFactory(EnumTypeAdapter.ENUM_FACTORY).create();
