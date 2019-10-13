@@ -38,11 +38,16 @@ public class Transitioner {
     private FactionsPlugin plugin;
     private Gson gsonV0;
 
-    public Transitioner(FactionsPlugin plugin) {
+    public static void transition(FactionsPlugin plugin) {
+        Transitioner transitioner = new Transitioner(plugin);
+        transitioner.migrateV0();
+    }
+
+    private Transitioner(FactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public void migrateV0() {
+    private void migrateV0() {
         Path pluginFolder = this.plugin.getDataFolder().toPath();
         Path configFolder = pluginFolder.resolve("config");
         if (configFolder.toFile().exists()) {
