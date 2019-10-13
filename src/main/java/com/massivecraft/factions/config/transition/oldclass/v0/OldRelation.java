@@ -1,4 +1,4 @@
-package com.massivecraft.factions.config.transition.oldclass;
+package com.massivecraft.factions.config.transition.oldclass.v0;
 
 import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.perms.Relation;

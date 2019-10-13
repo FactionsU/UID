@@ -1,4 +1,4 @@
-package com.massivecraft.factions.config.transition.oldclass;
+package com.massivecraft.factions.config.transition.oldclass.v0;
 
 import org.bukkit.ChatColor;
 

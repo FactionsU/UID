@@ -1,7 +1,7 @@
 package com.massivecraft.factions.config.transition;
 
 import com.massivecraft.factions.config.annotation.Comment;
-import com.massivecraft.factions.config.transition.oldclass.OldConf;
+import com.massivecraft.factions.config.transition.oldclass.v0.OldConf;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
