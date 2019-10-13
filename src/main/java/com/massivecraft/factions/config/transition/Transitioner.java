@@ -36,13 +36,13 @@ import java.util.logging.Level;
 
 public class Transitioner {
     private FactionsPlugin plugin;
-    private Gson gson;
+    private Gson gsonV0;
 
     public Transitioner(FactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public void checkTransition() {
+    public void migrateV0() {
         Path pluginFolder = this.plugin.getDataFolder().toPath();
         Path configFolder = pluginFolder.resolve("config");
         if (configFolder.toFile().exists()) {
@@ -62,9 +62,9 @@ public class Transitioner {
             return;
         }
         this.plugin.getLogger().info("Found no 'config' folder. Starting configuration transition...");
-        this.buildGson();
+        this.buildV0Gson();
         try {
-            OldConfV0 conf = this.gson.fromJson(new String(Files.readAllBytes(oldConf), StandardCharsets.UTF_8), OldConfV0.class);
+            OldConfV0 conf = this.gsonV0.fromJson(new String(Files.readAllBytes(oldConf), StandardCharsets.UTF_8), OldConfV0.class);
             TransitionConfigV0 newConfig = new TransitionConfigV0(conf);
             Loader.load("main", newConfig, "If you see this message, transitioning your config only got part way.");
             oldConfigFolderFile.mkdir();
@@ -74,7 +74,7 @@ public class Transitioner {
             Files.move(pluginFolder.resolve("players.json"), dataFolder.resolve("players.json"));
 
             Path oldFactions = pluginFolder.resolve("factions.json");
-            Map<String, OldMemoryFactionV0> data = this.gson.fromJson(new String(Files.readAllBytes(oldFactions), StandardCharsets.UTF_8), new TypeToken<Map<String, OldMemoryFactionV0>>() {
+            Map<String, OldMemoryFactionV0> data = this.gsonV0.fromJson(new String(Files.readAllBytes(oldFactions), StandardCharsets.UTF_8), new TypeToken<Map<String, OldMemoryFactionV0>>() {
             }.getType());
             Map<String, NewMemoryFaction> newData = new HashMap<>();
             data.forEach((id, fac) -> newData.put(id, new NewMemoryFaction(fac)));
@@ -88,7 +88,7 @@ public class Transitioner {
         }
     }
 
-    private void buildGson() {
+    private void buildV0Gson() {
         Type mapFLocToStringSetType = new TypeToken<Map<FLocation, Set<String>>>() {
         }.getType();
 
@@ -101,7 +101,7 @@ public class Transitioner {
         Type materialType = new TypeToken<Material>() {
         }.getType();
 
-        this.gson = new GsonBuilder()
+        this.gsonV0 = new GsonBuilder()
                 .setPrettyPrinting()
                 .disableHtmlEscaping()
                 .enableComplexMapKeySerialization()

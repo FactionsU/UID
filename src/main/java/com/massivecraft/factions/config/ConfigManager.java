@@ -29,7 +29,7 @@ public class ConfigManager {
     public void startup() {
         if (!this.plugin.getDataFolder().toPath().resolve("config").toFile().exists()) {
             Transitioner transitioner = new Transitioner(this.plugin);
-            transitioner.checkTransition();
+            transitioner.migrateV0();
         }
         this.loadConfigs();
     }
