@@ -1,13 +1,8 @@
 package com.massivecraft.factions.config.transition.oldclass.v1;
 
-import com.google.common.collect.ImmutableList;
 import com.massivecraft.factions.config.annotation.Comment;
-import com.massivecraft.factions.util.material.FactionMaterial;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,197 +10,63 @@ import java.util.Set;
 public class MainConfig {
     public class Colors {
         public class Relations {
-            private String member = "GREEN";
-            private transient ChatColor memberColor;
-            private String ally = "LIGHT_PURPLE";
-            private transient ChatColor allyColor;
-            private String truce = "DARK_PURPLE";
-            private transient ChatColor truceColor;
-            private String neutral = "WHITE";
-            private transient ChatColor neutralColor;
-            private String enemy = "RED";
-            private transient ChatColor enemyColor;
-            private String peaceful = "GOLD";
-            private transient ChatColor peacefulColor;
-
-            public ChatColor getMember() {
-                return memberColor = Colors.this.getColor(this.member, this.memberColor, ChatColor.GREEN);
-            }
-
-            public ChatColor getAlly() {
-                return allyColor = Colors.this.getColor(this.ally, this.allyColor, ChatColor.LIGHT_PURPLE);
-            }
-
-            public ChatColor getTruce() {
-                return truceColor = Colors.this.getColor(this.truce, this.truceColor, ChatColor.DARK_PURPLE);
-            }
-
-            public ChatColor getNeutral() {
-                return neutralColor = Colors.this.getColor(this.neutral, this.neutralColor, ChatColor.WHITE);
-            }
-
-            public ChatColor getEnemy() {
-                return enemyColor = Colors.this.getColor(this.enemy, this.enemyColor, ChatColor.RED);
-            }
-
-            public ChatColor getPeaceful() {
-                return peacefulColor = Colors.this.getColor(this.peaceful, this.peacefulColor, ChatColor.GOLD);
-            }
+            public String member = "GREEN";
+            public String ally = "LIGHT_PURPLE";
+            public String truce = "DARK_PURPLE";
+            public String neutral = "WHITE";
+            public String enemy = "RED";
+            public String peaceful = "GOLD";
         }
 
         public class Factions {
-            private String wilderness = "GRAY";
-            private transient ChatColor wildernessColor;
-            private String safezone = "GOLD";
-            private transient ChatColor safezoneColor;
-            private String warzone = "DARK_RED";
-            private transient ChatColor warzoneColor;
-
-            public ChatColor getWilderness() {
-                return wildernessColor = Colors.this.getColor(this.wilderness, this.wildernessColor, ChatColor.GRAY);
-            }
-
-            public ChatColor getSafezone() {
-                return safezoneColor = Colors.this.getColor(this.safezone, this.safezoneColor, ChatColor.GOLD);
-            }
-
-            public ChatColor getWarzone() {
-                return warzoneColor = Colors.this.getColor(this.warzone, this.warzoneColor, ChatColor.DARK_RED);
-            }
+            public String wilderness = "GRAY";
+            public String safezone = "GOLD";
+            public String warzone = "DARK_RED";
         }
 
-        private Factions factions = new Factions();
-        private Relations relations = new Relations();
-
-        private ChatColor getColor(String name, ChatColor current, ChatColor defaultColor) {
-            if (current != null) {
-                return current;
-            }
-            ChatColor ret;
-            try {
-                ret = ChatColor.valueOf(name);
-            } catch (IllegalArgumentException e) {
-                ret = defaultColor;
-            }
-            return ret;
-        }
-
-        public Factions factions() {
-            return factions;
-        }
-
-        public Relations relations() {
-            return relations;
-        }
+        public Factions factions = new Factions();
+        public Relations relations = new Relations();
     }
 
     public class Factions {
         public class LandRaidControl {
             public class Power {
-                private double playerMin = -10.0D;
-                private double playerMax = 10.0D;
-                private double playerStarting = 0.0D;
+                public double playerMin = -10.0D;
+                public double playerMax = 10.0D;
+                public double playerStarting = 0.0D;
                 @Comment("Default health rate of 0.2 takes 5 minutes to recover one power")
-                private double powerPerMinute = 0.2;
+                public double powerPerMinute = 0.2;
                 @Comment("How much is lost on death")
-                private double lossPerDeath = 4.0;
+                public double lossPerDeath = 4.0;
                 @Comment("Does a player regenerate power while offline?")
-                private boolean regenOffline = false;
+                public boolean regenOffline = false;
                 @Comment("A player loses this much per day offline")
-                private double offlineLossPerDay = 0.0;
+                public double offlineLossPerDay = 0.0;
                 @Comment("A player stops losing power from being offline once they reach this amount")
-                private double offlineLossLimit = 0.0;
+                public double offlineLossLimit = 0.0;
                 @Comment("If greater than 0, used as a cap for how much power a faction can have\nAdditional power from players beyond this acts as a \"buffer\" of sorts")
-                private double factionMax = 0.0;
-                private boolean respawnHomeFromNoPowerLossWorlds = true;
-                private Set<String> worldsNoPowerLoss = new HashSet<>();
-                private boolean peacefulMembersDisablePowerLoss = true;
-                private boolean warZonePowerLoss = true;
-                private boolean wildernessPowerLoss = true;
+                public double factionMax = 0.0;
+                public boolean respawnHomeFromNoPowerLossWorlds = true;
+                public Set<String> worldsNoPowerLoss = new HashSet<>();
+                public boolean peacefulMembersDisablePowerLoss = true;
+                public boolean warZonePowerLoss = true;
+                public boolean wildernessPowerLoss = true;
                 @Comment("Disallow joining/leaving/kicking while power is negative")
-                private boolean canLeaveWithNegativePower = true;
-
-                public boolean canLeaveWithNegativePower() {
-                    return canLeaveWithNegativePower;
-                }
-
-                public boolean isWarZonePowerLoss() {
-                    return warZonePowerLoss;
-                }
-
-                public boolean isWildernessPowerLoss() {
-                    return wildernessPowerLoss;
-                }
-
-                public double getPlayerMin() {
-                    return playerMin;
-                }
-
-                public double getPlayerMax() {
-                    return playerMax;
-                }
-
-                public double getPlayerStarting() {
-                    return playerStarting;
-                }
-
-                public double getPowerPerMinute() {
-                    return powerPerMinute;
-                }
-
-                public double getLossPerDeath() {
-                    return lossPerDeath;
-                }
-
-                public boolean isRegenOffline() {
-                    return regenOffline;
-                }
-
-                public double getOfflineLossPerDay() {
-                    return offlineLossPerDay;
-                }
-
-                public double getOfflineLossLimit() {
-                    return offlineLossLimit;
-                }
-
-                public double getFactionMax() {
-                    return factionMax;
-                }
-
-                public boolean isRespawnHomeFromNoPowerLossWorlds() {
-                    return respawnHomeFromNoPowerLossWorlds;
-                }
-
-                public Set<String> getWorldsNoPowerLoss() {
-                    return worldsNoPowerLoss == null ? Collections.emptySet() : worldsNoPowerLoss;
-                }
-
-                public boolean isPeacefulMembersDisablePowerLoss() {
-                    return peacefulMembersDisablePowerLoss;
-                }
+                public boolean canLeaveWithNegativePower = true;
             }
 
             @Comment("Sets the mode of land/raid control")
-            private String system = "power";
+            public String system = "power";
             @Comment("Controls the power system of land/raid control\nSet the 'system' value to 'power' to use this system")
-            private Power power = new Power();
-
-            public String getSystem() {
-                return system;
-            }
-
-            public Power power() {
-                return power;
-            }
+            public Power power = new Power();
         }
 
         public class Prefix {
-            private String admin = "***";
-            private String coleader = "**";
-            private String mod = "*";
-            private String normal = "+";
-            private String recruit = "-";
+            public String admin = "***";
+            public String coleader = "**";
+            public String mod = "*";
+            public String normal = "+";
+            public String recruit = "-";
 
             public String getAdmin() {
                 return admin;
@@ -231,251 +92,75 @@ public class MainConfig {
         public class Chat {
             @Comment("Allow for players to chat only within their faction, with allies, etc.\n" +
                     "Set to false to only allow public chats through this plugin.")
-            private boolean factionOnlyChat = true;
+            public boolean factionOnlyChat = true;
             // Configuration on the Faction tag in chat messages.
             @Comment("If true, disables adding of faction tag so another plugin can manage this")
-            private boolean tagHandledByAnotherPlugin = false;
-            private boolean tagRelationColored = true;
-            private String tagReplaceString = "[FACTION]";
-            private String tagInsertAfterString = "";
-            private String tagInsertBeforeString = "";
-            private int tagInsertIndex = 0;
-            private boolean tagPadBefore = false;
-            private boolean tagPadAfter = true;
-            private String tagFormat = "%s\u00A7f";
-            private boolean alwaysShowChatTag = true;
-            private String factionChatFormat = "%s:\u00A7f %s";
-            private String allianceChatFormat = "\u00A7d%s:\u00A7f %s";
-            private String truceChatFormat = "\u00A75%s:\u00A7f %s";
-            private String modChatFormat = "\u00A7c%s:\u00A7f %s";
-            private boolean broadcastDescriptionChanges = false;
-            private boolean broadcastTagChanges = false;
-
-            public boolean isFactionOnlyChat() {
-                return factionOnlyChat;
-            }
-
-            public boolean isTagHandledByAnotherPlugin() {
-                return tagHandledByAnotherPlugin;
-            }
-
-            public boolean isTagRelationColored() {
-                return tagRelationColored;
-            }
-
-            public String getTagReplaceString() {
-                return tagReplaceString;
-            }
-
-            public String getTagInsertAfterString() {
-                return tagInsertAfterString;
-            }
-
-            public String getTagInsertBeforeString() {
-                return tagInsertBeforeString;
-            }
-
-            public int getTagInsertIndex() {
-                return tagInsertIndex;
-            }
-
-            public boolean isTagPadBefore() {
-                return tagPadBefore;
-            }
-
-            public boolean isTagPadAfter() {
-                return tagPadAfter;
-            }
-
-            public String getTagFormat() {
-                return tagFormat;
-            }
-
-            public boolean isAlwaysShowChatTag() {
-                return alwaysShowChatTag;
-            }
-
-            public String getFactionChatFormat() {
-                return factionChatFormat;
-            }
-
-            public String getAllianceChatFormat() {
-                return allianceChatFormat;
-            }
-
-            public String getTruceChatFormat() {
-                return truceChatFormat;
-            }
-
-            public String getModChatFormat() {
-                return modChatFormat;
-            }
-
-            public boolean isBroadcastDescriptionChanges() {
-                return broadcastDescriptionChanges;
-            }
-
-            public boolean isBroadcastTagChanges() {
-                return broadcastTagChanges;
-            }
+            public boolean tagHandledByAnotherPlugin = false;
+            public boolean tagRelationColored = true;
+            public String tagReplaceString = "[FACTION]";
+            public String tagInsertAfterString = "";
+            public String tagInsertBeforeString = "";
+            public int tagInsertIndex = 0;
+            public boolean tagPadBefore = false;
+            public boolean tagPadAfter = true;
+            public String tagFormat = "%s\u00A7f";
+            public boolean alwaysShowChatTag = true;
+            public String factionChatFormat = "%s:\u00A7f %s";
+            public String allianceChatFormat = "\u00A7d%s:\u00A7f %s";
+            public String truceChatFormat = "\u00A75%s:\u00A7f %s";
+            public String modChatFormat = "\u00A7c%s:\u00A7f %s";
+            public boolean broadcastDescriptionChanges = false;
+            public boolean broadcastTagChanges = false;
         }
 
         public class Homes {
-            private boolean enabled = true;
-            private boolean mustBeInClaimedTerritory = true;
-            private boolean teleportToOnDeath = true;
-            private boolean teleportCommandEnabled = true;
-            private boolean teleportCommandEssentialsIntegration = true;
-            private boolean teleportCommandSmokeEffectEnabled = true;
-            private float teleportCommandSmokeEffectThickness = 3f;
-            private boolean teleportAllowedFromEnemyTerritory = true;
-            private boolean teleportAllowedFromDifferentWorld = true;
-            private double teleportAllowedEnemyDistance = 32.0;
-            private boolean teleportIgnoreEnemiesIfInOwnTerritory = true;
-
-            public boolean isEnabled() {
-                return enabled;
-            }
-
-            public boolean isMustBeInClaimedTerritory() {
-                return mustBeInClaimedTerritory;
-            }
-
-            public boolean isTeleportToOnDeath() {
-                return teleportToOnDeath;
-            }
-
-            public boolean isTeleportCommandEnabled() {
-                return teleportCommandEnabled;
-            }
-
-            public boolean isTeleportCommandEssentialsIntegration() {
-                return teleportCommandEssentialsIntegration;
-            }
-
-            public boolean isTeleportCommandSmokeEffectEnabled() {
-                return teleportCommandSmokeEffectEnabled;
-            }
-
-            public float getTeleportCommandSmokeEffectThickness() {
-                return teleportCommandSmokeEffectThickness;
-            }
-
-            public boolean isTeleportAllowedFromEnemyTerritory() {
-                return teleportAllowedFromEnemyTerritory;
-            }
-
-            public boolean isTeleportAllowedFromDifferentWorld() {
-                return teleportAllowedFromDifferentWorld;
-            }
-
-            public double getTeleportAllowedEnemyDistance() {
-                return teleportAllowedEnemyDistance;
-            }
-
-            public boolean isTeleportIgnoreEnemiesIfInOwnTerritory() {
-                return teleportIgnoreEnemiesIfInOwnTerritory;
-            }
+            public boolean enabled = true;
+            public boolean mustBeInClaimedTerritory = true;
+            public boolean teleportToOnDeath = true;
+            public boolean teleportCommandEnabled = true;
+            public boolean teleportCommandEssentialsIntegration = true;
+            public boolean teleportCommandSmokeEffectEnabled = true;
+            public float teleportCommandSmokeEffectThickness = 3f;
+            public boolean teleportAllowedFromEnemyTerritory = true;
+            public boolean teleportAllowedFromDifferentWorld = true;
+            public double teleportAllowedEnemyDistance = 32.0;
+            public boolean teleportIgnoreEnemiesIfInOwnTerritory = true;
         }
 
         public class PVP {
-            private boolean disablePVPBetweenNeutralFactions = false;
-            private boolean disablePVPForFactionlessPlayers = false;
-            private boolean enablePVPAgainstFactionlessInAttackersLand = false;
-            private int noPVPDamageToOthersForXSecondsAfterLogin = 3;
-            private Set<String> worldsIgnorePvP = new HashSet<>();
-
-            public boolean isDisablePVPBetweenNeutralFactions() {
-                return disablePVPBetweenNeutralFactions;
-            }
-
-            public boolean isDisablePVPForFactionlessPlayers() {
-                return disablePVPForFactionlessPlayers;
-            }
-
-            public boolean isEnablePVPAgainstFactionlessInAttackersLand() {
-                return enablePVPAgainstFactionlessInAttackersLand;
-            }
-
-            public int getNoPVPDamageToOthersForXSecondsAfterLogin() {
-                return noPVPDamageToOthersForXSecondsAfterLogin;
-            }
-
-            public Set<String> getWorldsIgnorePvP() {
-                return worldsIgnorePvP == null ? Collections.emptySet() : worldsIgnorePvP;
-            }
+            public boolean disablePVPBetweenNeutralFactions = false;
+            public boolean disablePVPForFactionlessPlayers = false;
+            public boolean enablePVPAgainstFactionlessInAttackersLand = false;
+            public int noPVPDamageToOthersForXSecondsAfterLogin = 3;
+            public Set<String> worldsIgnorePvP = new HashSet<>();
         }
 
         public class SpecialCase {
-            private boolean peacefulTerritoryDisablePVP = true;
-            private boolean peacefulTerritoryDisableMonsters = false;
-            private boolean peacefulTerritoryDisableBoom = false;
-            private boolean permanentFactionsDisableLeaderPromotion = false;
-
-            public boolean isPeacefulTerritoryDisablePVP() {
-                return peacefulTerritoryDisablePVP;
-            }
-
-            public boolean isPeacefulTerritoryDisableMonsters() {
-                return peacefulTerritoryDisableMonsters;
-            }
-
-            public boolean isPeacefulTerritoryDisableBoom() {
-                return peacefulTerritoryDisableBoom;
-            }
-
-            public boolean isPermanentFactionsDisableLeaderPromotion() {
-                return permanentFactionsDisableLeaderPromotion;
-            }
+            public boolean peacefulTerritoryDisablePVP = true;
+            public boolean peacefulTerritoryDisableMonsters = false;
+            public boolean peacefulTerritoryDisableBoom = false;
+            public boolean permanentFactionsDisableLeaderPromotion = false;
         }
 
         public class Claims {
-            private boolean mustBeConnected = false;
-            private boolean canBeUnconnectedIfOwnedByOtherFaction = true;
-            private int requireMinFactionMembers = 1;
-            private int landsMax = 0;
-            private int lineClaimLimit = 5;
+            public boolean mustBeConnected = false;
+            public boolean canBeUnconnectedIfOwnedByOtherFaction = true;
+            public int requireMinFactionMembers = 1;
+            public int landsMax = 0;
+            public int lineClaimLimit = 5;
             @Comment("If someone is doing a radius claim and the process fails to claim land this many times in a row, it will exit")
-            private int radiusClaimFailureLimit = 9;
-            private Set<String> worldsNoClaiming = new HashSet<>();
-
-            public boolean isMustBeConnected() {
-                return mustBeConnected;
-            }
-
-            public boolean isCanBeUnconnectedIfOwnedByOtherFaction() {
-                return canBeUnconnectedIfOwnedByOtherFaction;
-            }
-
-            public int getRequireMinFactionMembers() {
-                return requireMinFactionMembers;
-            }
-
-            public int getLandsMax() {
-                return landsMax;
-            }
-
-            public int getLineClaimLimit() {
-                return lineClaimLimit;
-            }
-
-            public int getRadiusClaimFailureLimit() {
-                return radiusClaimFailureLimit;
-            }
-
-            public Set<String> getWorldsNoClaiming() {
-                return worldsNoClaiming == null ? Collections.emptySet() : worldsNoClaiming;
-            }
+            public int radiusClaimFailureLimit = 9;
+            public Set<String> worldsNoClaiming = new HashSet<>();
         }
 
         public class Protection {
             @Comment("Commands which will be prevented if the player is a member of a permanent faction")
-            private Set<String> permanentFactionMemberDenyCommands = new HashSet<>();
+            public Set<String> permanentFactionMemberDenyCommands = new HashSet<>();
 
             @Comment("Commands which will be prevented when in claimed territory of a neutral faction")
-            private Set<String> territoryNeutralDenyCommands = new HashSet<>();
+            public Set<String> territoryNeutralDenyCommands = new HashSet<>();
             @Comment("Commands which will be prevented when in claimed territory of an enemy faction")
-            private Set<String> territoryEnemyDenyCommands = new HashSet<String>() {
+            public Set<String> territoryEnemyDenyCommands = new HashSet<String>() {
                 {
                     this.add("home");
                     this.add("sethome");
@@ -486,55 +171,53 @@ public class MainConfig {
                 }
             };
             @Comment("Commands which will be prevented when in claimed territory of an ally faction")
-            private Set<String> territoryAllyDenyCommands = new HashSet<>();
+            public Set<String> territoryAllyDenyCommands = new HashSet<>();
             @Comment("Commands which will be prevented when in warzone")
-            private Set<String> warzoneDenyCommands = new HashSet<>();
+            public Set<String> warzoneDenyCommands = new HashSet<>();
             @Comment("Commands which will be prevented when in wilderness")
-            private Set<String> wildernessDenyCommands = new HashSet<>();
+            public Set<String> wildernessDenyCommands = new HashSet<>();
 
-            private boolean territoryBlockCreepers = false;
-            private boolean territoryBlockCreepersWhenOffline = false;
-            private boolean territoryBlockFireballs = false;
-            private boolean territoryBlockFireballsWhenOffline = false;
-            private boolean territoryBlockTNT = false;
-            private boolean territoryBlockTNTWhenOffline = false;
-            private boolean territoryDenyEndermanBlocks = true;
-            private boolean territoryDenyEndermanBlocksWhenOffline = true;
+            public boolean territoryBlockCreepers = false;
+            public boolean territoryBlockCreepersWhenOffline = false;
+            public boolean territoryBlockFireballs = false;
+            public boolean territoryBlockFireballsWhenOffline = false;
+            public boolean territoryBlockTNT = false;
+            public boolean territoryBlockTNTWhenOffline = false;
+            public boolean territoryDenyEndermanBlocks = true;
+            public boolean territoryDenyEndermanBlocksWhenOffline = true;
 
-            private boolean safeZoneDenyBuild = true;
-            private boolean safeZoneDenyUsage = true;
-            private boolean safeZoneBlockTNT = true;
-            private boolean safeZonePreventAllDamageToPlayers = false;
-            private boolean safeZoneDenyEndermanBlocks = true;
+            public boolean safeZoneDenyBuild = true;
+            public boolean safeZoneDenyUsage = true;
+            public boolean safeZoneBlockTNT = true;
+            public boolean safeZonePreventAllDamageToPlayers = false;
+            public boolean safeZoneDenyEndermanBlocks = true;
 
-            private boolean warZoneDenyBuild = true;
-            private boolean warZoneDenyUsage = true;
-            private boolean warZoneBlockCreepers = true;
-            private boolean warZoneBlockFireballs = true;
-            private boolean warZoneBlockTNT = true;
-            private boolean warZoneFriendlyFire = false;
-            private boolean warZoneDenyEndermanBlocks = true;
+            public boolean warZoneDenyBuild = true;
+            public boolean warZoneDenyUsage = true;
+            public boolean warZoneBlockCreepers = true;
+            public boolean warZoneBlockFireballs = true;
+            public boolean warZoneBlockTNT = true;
+            public boolean warZoneFriendlyFire = false;
+            public boolean warZoneDenyEndermanBlocks = true;
 
-            private boolean wildernessDenyBuild = false;
-            private boolean wildernessDenyUsage = false;
-            private boolean wildernessBlockCreepers = false;
-            private boolean wildernessBlockFireballs = false;
-            private boolean wildernessBlockTNT = false;
+            public boolean wildernessDenyBuild = false;
+            public boolean wildernessDenyUsage = false;
+            public boolean wildernessBlockCreepers = false;
+            public boolean wildernessBlockFireballs = false;
+            public boolean wildernessBlockTNT = false;
 
-            private boolean wildernessDenyEndermanBlocks = false;
+            public boolean wildernessDenyEndermanBlocks = false;
 
-            private boolean pistonProtectionThroughDenyBuild = true;
+            public boolean pistonProtectionThroughDenyBuild = true;
 
-            private Set<String> territoryDenyUsageMaterials = new HashSet<>();
-            private Set<String> territoryDenyUsageMaterialsWhenOffline = new HashSet<>();
-            private transient Set<Material> territoryDenyUsageMaterialsMat;
-            private transient Set<Material> territoryDenyUsageMaterialsWhenOfflineMat;
+            public Set<String> territoryDenyUsageMaterials = new HashSet<>();
+            public Set<String> territoryDenyUsageMaterialsWhenOffline = new HashSet<>();
 
             @Comment("Mainly for other plugins/mods that use a fake player to take actions, which shouldn't be subject to our protections")
-            private Set<String> playersWhoBypassAllProtection = new HashSet<>();
-            private Set<String> worldsNoWildernessProtection = new HashSet<>();
+            public Set<String> playersWhoBypassAllProtection = new HashSet<>();
+            public Set<String> worldsNoWildernessProtection = new HashSet<>();
 
-            private Protection() {
+            public Protection() {
                 protectUsage("FIRE_CHARGE");
                 protectUsage("FLINT_AND_STEEL");
                 protectUsage("BUCKET");
@@ -542,799 +225,197 @@ public class MainConfig {
                 protectUsage("LAVA_BUCKET");
             }
 
-            private void protectUsage(String material) {
+            public void protectUsage(String material) {
                 territoryDenyUsageMaterials.add(material);
                 territoryDenyUsageMaterialsWhenOffline.add(material);
-            }
-
-            public Set<String> getPermanentFactionMemberDenyCommands() {
-                return permanentFactionMemberDenyCommands == null ? Collections.emptySet() : permanentFactionMemberDenyCommands;
-            }
-
-            public Set<String> getTerritoryNeutralDenyCommands() {
-                return territoryNeutralDenyCommands == null ? Collections.emptySet() : territoryNeutralDenyCommands;
-            }
-
-            public Set<String> getTerritoryEnemyDenyCommands() {
-                return territoryEnemyDenyCommands == null ? Collections.emptySet() : territoryEnemyDenyCommands;
-            }
-
-            public Set<String> getTerritoryAllyDenyCommands() {
-                return territoryAllyDenyCommands == null ? Collections.emptySet() : territoryAllyDenyCommands;
-            }
-
-            public Set<String> getWarzoneDenyCommands() {
-                return warzoneDenyCommands == null ? Collections.emptySet() : warzoneDenyCommands;
-            }
-
-            public Set<String> getWildernessDenyCommands() {
-                return wildernessDenyCommands == null ? Collections.emptySet() : wildernessDenyCommands;
-            }
-
-            public boolean isTerritoryBlockCreepers() {
-                return territoryBlockCreepers;
-            }
-
-            public boolean isTerritoryBlockCreepersWhenOffline() {
-                return territoryBlockCreepersWhenOffline;
-            }
-
-            public boolean isTerritoryBlockFireballs() {
-                return territoryBlockFireballs;
-            }
-
-            public boolean isTerritoryBlockFireballsWhenOffline() {
-                return territoryBlockFireballsWhenOffline;
-            }
-
-            public boolean isTerritoryBlockTNT() {
-                return territoryBlockTNT;
-            }
-
-            public boolean isTerritoryBlockTNTWhenOffline() {
-                return territoryBlockTNTWhenOffline;
-            }
-
-            public boolean isTerritoryDenyEndermanBlocks() {
-                return territoryDenyEndermanBlocks;
-            }
-
-            public boolean isTerritoryDenyEndermanBlocksWhenOffline() {
-                return territoryDenyEndermanBlocksWhenOffline;
-            }
-
-            public boolean isSafeZoneDenyBuild() {
-                return safeZoneDenyBuild;
-            }
-
-            public boolean isSafeZoneDenyUsage() {
-                return safeZoneDenyUsage;
-            }
-
-            public boolean isSafeZoneBlockTNT() {
-                return safeZoneBlockTNT;
-            }
-
-            public boolean isSafeZonePreventAllDamageToPlayers() {
-                return safeZonePreventAllDamageToPlayers;
-            }
-
-            public boolean isSafeZoneDenyEndermanBlocks() {
-                return safeZoneDenyEndermanBlocks;
-            }
-
-            public boolean isWarZoneDenyBuild() {
-                return warZoneDenyBuild;
-            }
-
-            public boolean isWarZoneDenyUsage() {
-                return warZoneDenyUsage;
-            }
-
-            public boolean isWarZoneBlockCreepers() {
-                return warZoneBlockCreepers;
-            }
-
-            public boolean isWarZoneBlockFireballs() {
-                return warZoneBlockFireballs;
-            }
-
-            public boolean isWarZoneBlockTNT() {
-                return warZoneBlockTNT;
-            }
-
-            public boolean isWarZoneFriendlyFire() {
-                return warZoneFriendlyFire;
-            }
-
-            public boolean isWarZoneDenyEndermanBlocks() {
-                return warZoneDenyEndermanBlocks;
-            }
-
-            public boolean isWildernessDenyBuild() {
-                return wildernessDenyBuild;
-            }
-
-            public boolean isWildernessDenyUsage() {
-                return wildernessDenyUsage;
-            }
-
-            public boolean isWildernessBlockCreepers() {
-                return wildernessBlockCreepers;
-            }
-
-            public boolean isWildernessBlockFireballs() {
-                return wildernessBlockFireballs;
-            }
-
-            public boolean isWildernessBlockTNT() {
-                return wildernessBlockTNT;
-            }
-
-            public boolean isWildernessDenyEndermanBlocks() {
-                return wildernessDenyEndermanBlocks;
-            }
-
-            public boolean isPistonProtectionThroughDenyBuild() {
-                return pistonProtectionThroughDenyBuild;
-            }
-
-            public Set<Material> getTerritoryDenyUsageMaterials() {
-                if (territoryDenyUsageMaterialsMat == null) {
-                    territoryDenyUsageMaterialsMat = new HashSet<>();
-                    territoryDenyUsageMaterials.forEach(m -> territoryDenyUsageMaterialsMat.add(FactionMaterial.from(m).get()));
-                    territoryDenyUsageMaterialsMat.remove(Material.AIR);
-                }
-                return territoryDenyUsageMaterialsMat;
-            }
-
-            public Set<Material> getTerritoryDenyUsageMaterialsWhenOffline() {
-                if (territoryDenyUsageMaterialsWhenOfflineMat == null) {
-                    territoryDenyUsageMaterialsWhenOfflineMat = new HashSet<>();
-                    territoryDenyUsageMaterialsWhenOffline.forEach(m -> territoryDenyUsageMaterialsWhenOfflineMat.add(FactionMaterial.from(m).get()));
-                    territoryDenyUsageMaterialsWhenOfflineMat.remove(Material.AIR);
-                }
-                return territoryDenyUsageMaterialsWhenOfflineMat;
-            }
-
-            public Set<String> getPlayersWhoBypassAllProtection() {
-                return playersWhoBypassAllProtection == null ? Collections.emptySet() : playersWhoBypassAllProtection;
-            }
-
-            public Set<String> getWorldsNoWildernessProtection() {
-                return worldsNoWildernessProtection == null ? Collections.emptySet() : worldsNoWildernessProtection;
             }
         }
 
         public class OwnedArea {
-            private boolean enabled = true;
-            private int limitPerFaction = 0;
-            private boolean moderatorsBypass = true;
-            private boolean denyBuild = true;
-            private boolean painBuild = false;
-            private boolean protectMaterials = true;
-            private boolean denyUsage = true;
+            public boolean enabled = true;
+            public int limitPerFaction = 0;
+            public boolean moderatorsBypass = true;
+            public boolean denyBuild = true;
+            public boolean painBuild = false;
+            public boolean protectMaterials = true;
+            public boolean denyUsage = true;
 
-            private boolean messageOnBorder = true;
-            private boolean messageInsideTerritory = true;
-            private boolean messageByChunk = false;
-
-            public boolean isEnabled() {
-                return enabled;
-            }
-
-            public int getLimitPerFaction() {
-                return limitPerFaction;
-            }
-
-            public boolean isModeratorsBypass() {
-                return moderatorsBypass;
-            }
-
-            public boolean isDenyBuild() {
-                return denyBuild;
-            }
-
-            public boolean isPainBuild() {
-                return painBuild;
-            }
-
-            public boolean isProtectMaterials() {
-                return protectMaterials;
-            }
-
-            public boolean isDenyUsage() {
-                return denyUsage;
-            }
-
-            public boolean isMessageOnBorder() {
-                return messageOnBorder;
-            }
-
-            public boolean isMessageInsideTerritory() {
-                return messageInsideTerritory;
-            }
-
-            public boolean isMessageByChunk() {
-                return messageByChunk;
-            }
+            public boolean messageOnBorder = true;
+            public boolean messageInsideTerritory = true;
+            public boolean messageByChunk = false;
         }
 
-        private Chat chat = new Chat();
-        private Homes homes = new Homes();
-        private PVP pvp = new PVP();
-        private SpecialCase specialCase = new SpecialCase();
-        private Claims claims = new Claims();
-        private Protection protection = new Protection();
+        public Chat chat = new Chat();
+        public Homes homes = new Homes();
+        public PVP pvp = new PVP();
+        public SpecialCase specialCase = new SpecialCase();
+        public Claims claims = new Claims();
+        public Protection protection = new Protection();
         @Comment("For claimed areas where further faction-member ownership can be defined")
-        private OwnedArea ownedArea = new OwnedArea();
+        public OwnedArea ownedArea = new OwnedArea();
         @Comment("Displayed prefixes for different roles within a faction")
-        private Prefix prefixes = new Prefix();
-        private LandRaidControl landRaidControl = new LandRaidControl();
+        public Prefix prefixes = new Prefix();
+        public LandRaidControl landRaidControl = new LandRaidControl();
 
-        private boolean allowMultipleColeaders = false;
+        public boolean allowMultipleColeaders = false;
 
         @Comment("Minimum faction tag length")
-        private int tagLengthMin = 3;
+        public int tagLengthMin = 3;
         @Comment("Maximum faction tag length")
-        private int tagLengthMax = 10;
-        private boolean tagForceUpperCase = false;
+        public int tagLengthMax = 10;
+        public boolean tagForceUpperCase = false;
 
-        private boolean newFactionsDefaultOpen = false;
+        public boolean newFactionsDefaultOpen = false;
 
         @Comment("When faction membership hits this limit, players will no longer be able to join using /f join; default is 0, no limit")
-        private int factionMemberLimit = 0;
+        public int factionMemberLimit = 0;
 
         @Comment("What faction ID to start new players in when they first join the server; default is 0, \"no faction\"")
-        private String newPlayerStartingFactionID = "0";
+        public String newPlayerStartingFactionID = "0";
 
-        private double saveToFileEveryXMinutes = 30.0;
+        public double saveToFileEveryXMinutes = 30.0;
 
-        private double autoLeaveAfterDaysOfInactivity = 10.0;
-        private double autoLeaveRoutineRunsEveryXMinutes = 5.0;
-        private int autoLeaveRoutineMaxMillisecondsPerTick = 5;  // 1 server tick is roughly 50ms, so default max 10% of a tick
-        private boolean removePlayerDataWhenBanned = true;
-        private boolean autoLeaveDeleteFPlayerData = true; // Let them just remove player from Faction.
-        private double considerFactionsReallyOfflineAfterXMinutes = 0.0;
-        private int actionDeniedPainAmount = 1;
+        public double autoLeaveAfterDaysOfInactivity = 10.0;
+        public double autoLeaveRoutineRunsEveryXMinutes = 5.0;
+        public int autoLeaveRoutineMaxMillisecondsPerTick = 5;  // 1 server tick is roughly 50ms, so default max 10% of a tick
+        public boolean removePlayerDataWhenBanned = true;
+        public boolean autoLeaveDeleteFPlayerData = true; // Let them just remove player from Faction.
+        public double considerFactionsReallyOfflineAfterXMinutes = 0.0;
+        public int actionDeniedPainAmount = 1;
 
         @Comment("If enabled, perms can be managed separately for when the faction is offline")
-        private boolean separateOfflinePerms = false;
-
-        public boolean isSeparateOfflinePerms() {
-            return separateOfflinePerms;
-        }
-
-        public Chat chat() {
-            return chat;
-        }
-
-        public Homes homes() {
-            return homes;
-        }
-
-        public PVP pvp() {
-            return pvp;
-        }
-
-        public SpecialCase specialCase() {
-            return specialCase;
-        }
-
-        public Claims claims() {
-            return claims;
-        }
-
-        public Protection protection() {
-            return protection;
-        }
-
-        public OwnedArea ownedArea() {
-            return ownedArea;
-        }
-
-        public Prefix prefixes() {
-            return prefixes;
-        }
-
-        public LandRaidControl landRaidControl() {
-            return landRaidControl;
-        }
-
-        public boolean isAllowMultipleColeaders() {
-            return allowMultipleColeaders;
-        }
-
-        public int getTagLengthMin() {
-            return tagLengthMin;
-        }
-
-        public int getTagLengthMax() {
-            return tagLengthMax;
-        }
-
-        public boolean isTagForceUpperCase() {
-            return tagForceUpperCase;
-        }
-
-        public boolean isNewFactionsDefaultOpen() {
-            return newFactionsDefaultOpen;
-        }
-
-        public int getFactionMemberLimit() {
-            return factionMemberLimit;
-        }
-
-        public String getNewPlayerStartingFactionID() {
-            return newPlayerStartingFactionID;
-        }
-
-        public double getSaveToFileEveryXMinutes() {
-            return saveToFileEveryXMinutes;
-        }
-
-        public double getAutoLeaveAfterDaysOfInactivity() {
-            return autoLeaveAfterDaysOfInactivity;
-        }
-
-        public double getAutoLeaveRoutineRunsEveryXMinutes() {
-            return autoLeaveRoutineRunsEveryXMinutes;
-        }
-
-        public int getAutoLeaveRoutineMaxMillisecondsPerTick() {
-            return autoLeaveRoutineMaxMillisecondsPerTick;
-        }
-
-        public boolean isRemovePlayerDataWhenBanned() {
-            return removePlayerDataWhenBanned;
-        }
-
-        public boolean isAutoLeaveDeleteFPlayerData() {
-            return autoLeaveDeleteFPlayerData;
-        }
-
-        public double getConsiderFactionsReallyOfflineAfterXMinutes() {
-            return considerFactionsReallyOfflineAfterXMinutes;
-        }
-
-        public int getActionDeniedPainAmount() {
-            return actionDeniedPainAmount;
-        }
+        public boolean separateOfflinePerms = false;
     }
 
     public class Logging {
-        private boolean factionCreate = true;
-        private boolean factionDisband = true;
-        private boolean factionJoin = true;
-        private boolean factionKick = true;
-        private boolean factionLeave = true;
-        private boolean landClaims = true;
-        private boolean landUnclaims = true;
-        private boolean moneyTransactions = true;
-        private boolean playerCommands = true;
-
-        public boolean isFactionCreate() {
-            return factionCreate;
-        }
-
-        public boolean isFactionDisband() {
-            return factionDisband;
-        }
-
-        public boolean isFactionJoin() {
-            return factionJoin;
-        }
-
-        public boolean isFactionKick() {
-            return factionKick;
-        }
-
-        public boolean isFactionLeave() {
-            return factionLeave;
-        }
-
-        public boolean isLandClaims() {
-            return landClaims;
-        }
-
-        public boolean isLandUnclaims() {
-            return landUnclaims;
-        }
-
-        public boolean isMoneyTransactions() {
-            return moneyTransactions;
-        }
-
-        public boolean isPlayerCommands() {
-            return playerCommands;
-        }
+        public boolean factionCreate = true;
+        public boolean factionDisband = true;
+        public boolean factionJoin = true;
+        public boolean factionKick = true;
+        public boolean factionLeave = true;
+        public boolean landClaims = true;
+        public boolean landUnclaims = true;
+        public boolean moneyTransactions = true;
+        public boolean playerCommands = true;
     }
 
     public class Exploits {
-        private boolean obsidianGenerators = true;
-        private boolean enderPearlClipping = true;
-        private boolean interactionSpam = true;
-        private boolean tntWaterlog = false;
-        private boolean liquidFlow = false;
-        private boolean preventDuping = true;
-
-        public boolean isObsidianGenerators() {
-            return obsidianGenerators;
-        }
-
-        public boolean isEnderPearlClipping() {
-            return enderPearlClipping;
-        }
-
-        public boolean isInteractionSpam() {
-            return interactionSpam;
-        }
-
-        public boolean isTntWaterlog() {
-            return tntWaterlog;
-        }
-
-        public boolean isLiquidFlow() {
-            return liquidFlow;
-        }
-
-        public boolean doPreventDuping() {
-            return preventDuping;
-        }
+        public boolean obsidianGenerators = true;
+        public boolean enderPearlClipping = true;
+        public boolean interactionSpam = true;
+        public boolean tntWaterlog = false;
+        public boolean liquidFlow = false;
+        public boolean preventDuping = true;
     }
 
     public class Economy {
-        private boolean enabled = false;
-        private String universeAccount = "";
-        private double costClaimWilderness = 30.0;
-        private double costClaimFromFactionBonus = 30.0;
-        private double overclaimRewardMultiplier = 0.0;
-        private double claimAdditionalMultiplier = 0.5;
-        private double claimRefundMultiplier = 0.7;
-        private double claimUnconnectedFee = 0.0;
-        private double costCreate = 100.0;
-        private double costOwner = 15.0;
-        private double costSethome = 30.0;
-        private double costDelhome = 30.0;
-        private double costJoin = 0.0;
-        private double costLeave = 0.0;
-        private double costKick = 0.0;
-        private double costInvite = 0.0;
-        private double costHome = 0.0;
-        private double costTag = 0.0;
-        private double costDesc = 0.0;
-        private double costTitle = 0.0;
-        private double costList = 0.0;
-        private double costMap = 0.0;
-        private double costPower = 0.0;
-        private double costShow = 0.0;
-        private double costStuck = 0.0;
-        private double costOpen = 0.0;
-        private double costAlly = 0.0;
-        private double costTruce = 0.0;
-        private double costEnemy = 0.0;
-        private double costNeutral = 0.0;
-        private double costNoBoom = 0.0;
+        public boolean enabled = false;
+        public String universeAccount = "";
+        public double costClaimWilderness = 30.0;
+        public double costClaimFromFactionBonus = 30.0;
+        public double overclaimRewardMultiplier = 0.0;
+        public double claimAdditionalMultiplier = 0.5;
+        public double claimRefundMultiplier = 0.7;
+        public double claimUnconnectedFee = 0.0;
+        public double costCreate = 100.0;
+        public double costOwner = 15.0;
+        public double costSethome = 30.0;
+        public double costDelhome = 30.0;
+        public double costJoin = 0.0;
+        public double costLeave = 0.0;
+        public double costKick = 0.0;
+        public double costInvite = 0.0;
+        public double costHome = 0.0;
+        public double costTag = 0.0;
+        public double costDesc = 0.0;
+        public double costTitle = 0.0;
+        public double costList = 0.0;
+        public double costMap = 0.0;
+        public double costPower = 0.0;
+        public double costShow = 0.0;
+        public double costStuck = 0.0;
+        public double costOpen = 0.0;
+        public double costAlly = 0.0;
+        public double costTruce = 0.0;
+        public double costEnemy = 0.0;
+        public double costNeutral = 0.0;
+        public double costNoBoom = 0.0;
 
         @Comment("Faction banks, to pay for land claiming and other costs instead of individuals paying for them")
-        private boolean bankEnabled = true;
+        public boolean bankEnabled = true;
         @Comment("Have to be at least moderator to withdraw or pay money to another faction")
-        private boolean bankMembersCanWithdraw = false;
+        public boolean bankMembersCanWithdraw = false;
         @Comment("The faction pays for faction command costs, such as sethome")
-        private boolean bankFactionPaysCosts = true;
+        public boolean bankFactionPaysCosts = true;
         @Comment("The faction pays for land claiming costs.")
-        private boolean bankFactionPaysLandCosts = true;
-
-        public boolean isEnabled() {
-            return enabled;
-        }
-
-        public String getUniverseAccount() {
-            return universeAccount;
-        }
-
-        public double getCostClaimWilderness() {
-            return costClaimWilderness;
-        }
-
-        public double getCostClaimFromFactionBonus() {
-            return costClaimFromFactionBonus;
-        }
-
-        public double getOverclaimRewardMultiplier() {
-            return overclaimRewardMultiplier;
-        }
-
-        public double getClaimAdditionalMultiplier() {
-            return claimAdditionalMultiplier;
-        }
-
-        public double getClaimRefundMultiplier() {
-            return claimRefundMultiplier;
-        }
-
-        public double getClaimUnconnectedFee() {
-            return claimUnconnectedFee;
-        }
-
-        public double getCostCreate() {
-            return costCreate;
-        }
-
-        public double getCostOwner() {
-            return costOwner;
-        }
-
-        public double getCostSethome() {
-            return costSethome;
-        }
-
-        public double getCostDelhome() {
-            return costDelhome;
-        }
-
-        public double getCostJoin() {
-            return costJoin;
-        }
-
-        public double getCostLeave() {
-            return costLeave;
-        }
-
-        public double getCostKick() {
-            return costKick;
-        }
-
-        public double getCostInvite() {
-            return costInvite;
-        }
-
-        public double getCostHome() {
-            return costHome;
-        }
-
-        public double getCostTag() {
-            return costTag;
-        }
-
-        public double getCostDesc() {
-            return costDesc;
-        }
-
-        public double getCostTitle() {
-            return costTitle;
-        }
-
-        public double getCostList() {
-            return costList;
-        }
-
-        public double getCostMap() {
-            return costMap;
-        }
-
-        public double getCostPower() {
-            return costPower;
-        }
-
-        public double getCostShow() {
-            return costShow;
-        }
-
-        public double getCostStuck() {
-            return costStuck;
-        }
-
-        public double getCostOpen() {
-            return costOpen;
-        }
-
-        public double getCostAlly() {
-            return costAlly;
-        }
-
-        public double getCostTruce() {
-            return costTruce;
-        }
-
-        public double getCostEnemy() {
-            return costEnemy;
-        }
-
-        public double getCostNeutral() {
-            return costNeutral;
-        }
-
-        public double getCostNoBoom() {
-            return costNoBoom;
-        }
-
-        public boolean isBankEnabled() {
-            return bankEnabled;
-        }
-
-        public boolean isBankMembersCanWithdraw() {
-            return bankMembersCanWithdraw;
-        }
-
-        public boolean isBankFactionPaysCosts() {
-            return bankFactionPaysCosts;
-        }
-
-        public boolean isBankFactionPaysLandCosts() {
-            return bankFactionPaysLandCosts;
-        }
+        public boolean bankFactionPaysLandCosts = true;
     }
 
     public class Map {
-        private int height = 17;
-        private int width = 49;
-        private boolean showFactionKey = true;
-        private boolean showNeutralFactionsOnMap = true;
-        private boolean showEnemyFactions = true;
-        private boolean showTruceFactions = true;
-
-        public int getHeight() {
-            return height;
-        }
-
-        public int getWidth() {
-            return width;
-        }
-
-        public boolean isShowFactionKey() {
-            return showFactionKey;
-        }
-
-        public boolean isShowNeutralFactionsOnMap() {
-            return showNeutralFactionsOnMap;
-        }
-
-        public boolean isShowEnemyFactions() {
-            return showEnemyFactions;
-        }
-
-        public boolean isShowTruceFactions() {
-            return showTruceFactions;
-        }
+        public int height = 17;
+        public int width = 49;
+        public boolean showFactionKey = true;
+        public boolean showNeutralFactionsOnMap = true;
+        public boolean showEnemyFactions = true;
+        public boolean showTruceFactions = true;
     }
 
     public class Data {
         public class Json {
             @Comment("If true, data files will be stored without extra whitespace and linebreaks.\n" +
                     "This becomes less readable, but can cut storage use in half.")
-            private boolean efficientStorage = false;
-
-            public boolean useEfficientStorage() {
-                return efficientStorage;
-            }
+            public boolean efficientStorage = false;
         }
 
         @Comment("Presently, the only option is JSON.")
-        private String storage = "JSON";
-        private Json json = new Json();
-
-        public Json json() {
-            return json;
-        }
+        public String storage = "JSON";
+        public Json json = new Json();
     }
 
     public class RestrictWorlds {
         @Comment("If true, Factions will only function on certain worlds")
-        private boolean restrictWorlds = false;
+        public boolean restrictWorlds = false;
         @Comment("If restrictWorlds is true, this setting determines if the world list below is a whitelist or blacklist.\n" +
                 "True for whitelist, false for blacklist.")
-        private boolean whitelist = true;
-        private Set<String> worldList = new HashSet<>();
-
-        public boolean isRestrictWorlds() {
-            return restrictWorlds;
-        }
-
-        public boolean isWhitelist() {
-            return whitelist;
-        }
-
-        public Set<String> getWorldList() {
-            return worldList == null ? Collections.emptySet() : worldList;
-        }
+        public boolean whitelist = true;
+        public Set<String> worldList = new HashSet<>();
     }
 
     public class PlayerVaults {
         @Comment("The %s is for the faction id")
-        private String vaultPrefix = "faction-%s";
-        private int defaultMaxVaults = 0;
-
-        public String getVaultPrefix() {
-            return vaultPrefix;
-        }
-
-        public int getDefaultMaxVaults() {
-            return defaultMaxVaults;
-        }
+        public String vaultPrefix = "faction-%s";
+        public int defaultMaxVaults = 0;
     }
 
     public class WorldGuard {
-        private boolean checking;
-        private boolean buildPriority;
-
-        public boolean isChecking() {
-            return checking;
-        }
-
-        public boolean isBuildPriority() {
-            return buildPriority;
-        }
+        public boolean checking;
+        public boolean buildPriority;
     }
 
     @Comment("The command base (by default f, making the command /f)")
-    private List<String> commandBase = new ArrayList<String>() {
+    public List<String> commandBase = new ArrayList<String>() {
         {
             this.add("f");
         }
     };
 
     @Comment("Colors for relationships and default factions")
-    private Colors colors = new Colors();
+    public Colors colors = new Colors();
 
-    private Factions factions = new Factions();
+    public Factions factions = new Factions();
     @Comment("What should be logged?")
-    private Logging logging = new Logging();
+    public Logging logging = new Logging();
     @Comment("Controls certain exploit preventions")
-    private Exploits exploits = new Exploits();
+    public Exploits exploits = new Exploits();
     @Comment("Economy support requires Vault and a compatible economy plugin")
-    private Economy economy = new Economy();
+    public Economy economy = new Economy();
     @Comment("Control for the default settings of /f map")
-    private Map map = new Map();
+    public Map map = new Map();
     @Comment("Data storage settings")
-    private Data data = new Data();
-    private RestrictWorlds restrictWorlds = new RestrictWorlds();
+    public Data data = new Data();
+    public RestrictWorlds restrictWorlds = new RestrictWorlds();
     @Comment("PlayerVaults faction vault settings")
-    private PlayerVaults playerVaults = new PlayerVaults();
+    public PlayerVaults playerVaults = new PlayerVaults();
     @Comment("WorldGuard settings")
-    private WorldGuard worldGuard = new WorldGuard();
-
-    public List<String> getCommandBase() {
-        return commandBase == null ? ImmutableList.of("f") : commandBase;
-    }
-
-    public Colors colors() {
-        return colors;
-    }
-
-    public Factions factions() {
-        return factions;
-    }
-
-    public Logging logging() {
-        return logging;
-    }
-
-    public Exploits exploits() {
-        return exploits;
-    }
-
-    public Economy economy() {
-        return economy;
-    }
-
-    public Map map() {
-        return map;
-    }
-
-    public RestrictWorlds restrictWorlds() {
-        return restrictWorlds;
-    }
-
-    public PlayerVaults playerVaults() {
-        return playerVaults;
-    }
-
-    public WorldGuard worldGuard() {
-        return worldGuard;
-    }
-
-    public Data data() {
-        return data;
-    }
+    public WorldGuard worldGuard = new WorldGuard();
 }
