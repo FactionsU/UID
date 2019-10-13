@@ -1274,6 +1274,13 @@ public class MainConfig {
         }
     };
 
+    @Comment("# FactionsUUID by drtshock\n" +
+            "# Support and documentation http://factions-support.cf\n" +
+            "# Updates https://www.spigotmc.org/resources/factionsuuid.1035/\n" +
+            "\n" +
+            "# Made with love <3")
+    private Versioning.Info aVeryFriendlyFactionsConfig = new Versioning.Info();
+
     @Comment("Colors for relationships and default factions")
     private Colors colors = new Colors();
 

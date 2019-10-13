@@ -18,20 +18,27 @@ import java.util.List;
 import java.util.Set;
 
 public class Loader {
-    public static void load(String file, Object config, String comment) throws IOException, IllegalAccessException {
+    public static void loadAndSave(String file, Object config) throws IOException, IllegalAccessException {
+        HoconConfigurationLoader loader = getLoader(file);
+        loadAndSave(loader, config);
+    }
+
+    public static HoconConfigurationLoader getLoader(String file) {
         Path configFolder = FactionsPlugin.getInstance().getDataFolder().toPath().resolve("config");
         if (!configFolder.toFile().exists()) {
             configFolder.toFile().mkdir();
         }
         Path path = configFolder.resolve(file + ".conf");
-        HoconConfigurationLoader loader = HoconConfigurationLoader.builder()
+        return HoconConfigurationLoader.builder()
                 .setPath(path)
                 .setRenderOptions(ConfigRenderOptions.defaults().setComments(true).setOriginComments(false).setJson(false))
                 .build();
+    }
+
+    public static void loadAndSave(HoconConfigurationLoader loader, Object config) throws IOException, IllegalAccessException {
         CommentedConfigurationNode node = loader.load();
 
         loadNode(node, config);
-        node.setComment(comment);
 
         loader.save(node);
     }
@@ -62,12 +69,12 @@ public class Loader {
             Comment comment = field.getAnnotation(Comment.class);
             String confName = configName == null || configName.value().isEmpty() ? field.getName() : configName.value();
             CommentedConfigurationNode node = current.getNode(confName);
+            boolean virtual = node.isVirtual();
+            if (comment != null) {
+                node.setComment(comment.value());
+            }
             if (types.contains(field.getType())) {
-                //System.out.println("Found " + getNodeName(node.getPath()) + " " + field.get(object));
-                if (node.isVirtual()) {
-                    if (comment != null && !node.getComment().isPresent()) {
-                        node.setComment(comment.value());
-                    }
+                if (virtual) {
                     node.setValue(field.get(object));
                 } else {
                     try {
