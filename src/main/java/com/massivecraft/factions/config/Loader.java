@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Loader {
@@ -62,6 +63,7 @@ public class Loader {
         types.add(Long.TYPE);
         types.add(Short.TYPE);
         types.add(List.class);
+        types.add(Map.class);
         types.add(Set.class);
         types.add(String.class);
     }
@@ -77,16 +79,17 @@ public class Loader {
             String confName = configName == null || configName.value().isEmpty() ? field.getName() : configName.value();
             CommentedConfigurationNode curNode = current.getNode(confName);
             CommentedConfigurationNode newNewNode = newNode.getNode(confName);
-            boolean virtual = curNode.isVirtual();
+            boolean needsValue = curNode.isVirtual() || curNode.getValue() == null;
             if (comment != null) {
                 newNewNode.setComment(comment.value());
             }
+            Object defaultValue = field.get(object);
             if (types.contains(field.getType())) {
-                if (virtual) {
-                    newNewNode.setValue(field.get(object));
+                if (needsValue) {
+                    newNewNode.setValue(defaultValue);
                 } else {
                     try {
-                        if (curNode.getValue() != null && Set.class.isAssignableFrom(field.getType()) && List.class.isAssignableFrom(curNode.getValue().getClass())) {
+                        if (Set.class.isAssignableFrom(field.getType()) && List.class.isAssignableFrom(curNode.getValue().getClass())) {
                             field.set(object, new HashSet((List<?>) curNode.getValue()));
                         } else {
                             field.set(object, curNode.getValue());
@@ -94,10 +97,11 @@ public class Loader {
                         newNewNode.setValue(curNode.getValue());
                     } catch (IllegalArgumentException ex) {
                         System.out.println("Found incorrect type for " + getNodeName(curNode.getPath()) + ": Expected " + field.getType() + ", found " + curNode.getValue().getClass());
+                        field.set(object, defaultValue);
                     }
                 }
             } else {
-                Object o = field.get(object);
+                Object o = defaultValue;
                 if (o == null) {
                     System.out.println("Found null default for " + getNodeName(curNode.getPath()) + " which shouldn't be possible");
                     curNode.setValue(null);

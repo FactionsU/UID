@@ -30,6 +30,7 @@ public class CmdStuck extends FCommand {
         final Player player = context.fPlayer.getPlayer();
         final Location sentAt = player.getLocation();
         final FLocation chunk = context.fPlayer.getLastStoodAt();
+        // TODO handle delay 0
         final long delay = FactionsPlugin.getInstance().getConfig().getLong("hcf.stuck.delay", 30);
         final int radius = FactionsPlugin.getInstance().getConfig().getInt("hcf.stuck.radius", 10);
 
