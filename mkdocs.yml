@@ -36,6 +36,7 @@ nav:
   - Commands: commands.md
   - Permissions: permissions.md
   - Placeholders: placeholders.md
+  - Particles: particles.md
 
 # Customization
 extra:
