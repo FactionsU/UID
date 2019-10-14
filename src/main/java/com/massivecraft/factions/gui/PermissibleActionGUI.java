@@ -42,7 +42,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
 
     @Override
     protected String getName() {
-        String bit = FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() ?
+        String bit = FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() ?
                 TL.GUI_PERMS_ACTION_ONLINEOFFLINEBIT.format(online ? TL.GUI_PERMS_ONLINE.toString() : TL.GUI_PERMS_OFFLINE)
                 : "";
         return TL.GUI_PERMS_ACTION_NAME.format(permissible.name().toLowerCase(), bit);
@@ -68,7 +68,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
 
     @Override
     public void click(int slot, ClickType clickType) {
-        if (FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() && permissible instanceof Relation && slot == this.back + 4) {
+        if (FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() && permissible instanceof Relation && slot == this.back + 4) {
             new PermissibleActionGUI(!online, user, permissible).open();
         } else {
             super.click(slot, clickType);
@@ -119,7 +119,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
     @Override
     protected Map<Integer, SimpleItem> createDummyItems() {
         ImmutableMap.Builder<Integer, SimpleItem> builder = ImmutableMap.<Integer, SimpleItem>builder().put(this.back = ((PermissibleAction.values().length / 9) + 1) * 9, backItem);
-        if (FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() && permissible instanceof Relation) {
+        if (FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() && permissible instanceof Relation) {
             builder.put(this.back + 4, PermissibleRelationGUI.offlineSwitch);
         }
         return builder.build();

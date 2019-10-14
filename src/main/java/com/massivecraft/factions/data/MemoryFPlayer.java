@@ -270,8 +270,8 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.deaths = 0;
         this.mapHeight = FactionsPlugin.getInstance().conf().map().getHeight();
 
-        if (!FactionsPlugin.getInstance().conf().factions().getNewPlayerStartingFactionID().equals("0") && Factions.getInstance().isValidFactionId(FactionsPlugin.getInstance().conf().factions().getNewPlayerStartingFactionID())) {
-            this.factionId = FactionsPlugin.getInstance().conf().factions().getNewPlayerStartingFactionID();
+        if (!FactionsPlugin.getInstance().conf().factions().other().getNewPlayerStartingFactionID().equals("0") && Factions.getInstance().isValidFactionId(FactionsPlugin.getInstance().conf().factions().other().getNewPlayerStartingFactionID())) {
+            this.factionId = FactionsPlugin.getInstance().conf().factions().other().getNewPlayerStartingFactionID();
         }
     }
 

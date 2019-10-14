@@ -67,14 +67,14 @@ public class PermissibleRelationGUI extends GUI<Permissible> {
     private boolean online;
 
     public PermissibleRelationGUI(boolean online, FPlayer user) {
-        super(user, FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() ? 2 : 1);
+        super(user, FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() ? 2 : 1);
         this.online = online;
         build();
     }
 
     @Override
     protected String getName() {
-        String bit = FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() ?
+        String bit = FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() ?
                 TL.GUI_PERMS_RELATION_ONLINEOFFLINEBIT.format(online ? TL.GUI_PERMS_ONLINE.toString() : TL.GUI_PERMS_OFFLINE)
                 : "";
         return TL.GUI_PERMS_RELATION_NAME.format(bit);
@@ -92,7 +92,7 @@ public class PermissibleRelationGUI extends GUI<Permissible> {
 
     @Override
     public void click(int slot, ClickType clickType) {
-        if (FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() && slot == 13) {
+        if (FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() && slot == 13) {
             new PermissibleRelationGUI(!online, user).open();
         } else {
             super.click(slot, clickType);
@@ -127,6 +127,6 @@ public class PermissibleRelationGUI extends GUI<Permissible> {
 
     @Override
     protected Map<Integer, SimpleItem> createDummyItems() {
-        return FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() ? ImmutableMap.of(13, offlineSwitch) : Collections.emptyMap();
+        return FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() ? ImmutableMap.of(13, offlineSwitch) : Collections.emptyMap();
     }
 }

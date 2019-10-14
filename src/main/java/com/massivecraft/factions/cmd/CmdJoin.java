@@ -49,8 +49,8 @@ public class CmdJoin extends FCommand {
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().factions().getFactionMemberLimit() > 0 && faction.getFPlayers().size() >= FactionsPlugin.getInstance().conf().factions().getFactionMemberLimit()) {
-            context.msg(TL.COMMAND_JOIN_ATLIMIT, faction.getTag(context.fPlayer), FactionsPlugin.getInstance().conf().factions().getFactionMemberLimit(), fplayer.describeTo(context.fPlayer, false));
+        if (FactionsPlugin.getInstance().conf().factions().other().getFactionMemberLimit() > 0 && faction.getFPlayers().size() >= FactionsPlugin.getInstance().conf().factions().other().getFactionMemberLimit()) {
+            context.msg(TL.COMMAND_JOIN_ATLIMIT, faction.getTag(context.fPlayer), FactionsPlugin.getInstance().conf().factions().other().getFactionMemberLimit(), fplayer.describeTo(context.fPlayer, false));
             return;
         }
 

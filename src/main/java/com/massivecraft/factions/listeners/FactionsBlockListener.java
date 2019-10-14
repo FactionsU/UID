@@ -280,7 +280,7 @@ public class FactionsBlockListener implements Listener {
         // If the faction hasn't: defined access or denied, fallback to config values
         if (!otherFaction.hasAccess(me, permissibleAction)) {
             if (pain && permissibleAction != PermissibleAction.FROSTWALK) {
-                player.damage(FactionsPlugin.getInstance().conf().factions().getActionDeniedPainAmount());
+                player.damage(FactionsPlugin.getInstance().conf().factions().other().getActionDeniedPainAmount());
                 me.msg("<b>It is painful to " + action + " in the territory of " + otherFaction.getTag(myFaction));
                 return true;
             } else if (!justCheck) {
@@ -292,7 +292,7 @@ public class FactionsBlockListener implements Listener {
         // Also cancel and/or cause pain if player doesn't have ownership rights for this claim
         if (FactionsPlugin.getInstance().conf().factions().ownedArea().isEnabled() && (FactionsPlugin.getInstance().conf().factions().ownedArea().isDenyBuild() || FactionsPlugin.getInstance().conf().factions().ownedArea().isPainBuild()) && !otherFaction.playerHasOwnershipRights(me, loc)) {
             if (pain && FactionsPlugin.getInstance().conf().factions().ownedArea().isPainBuild()) {
-                player.damage(FactionsPlugin.getInstance().conf().factions().getActionDeniedPainAmount());
+                player.damage(FactionsPlugin.getInstance().conf().factions().other().getActionDeniedPainAmount());
 
                 if (!FactionsPlugin.getInstance().conf().factions().ownedArea().isDenyBuild()) {
                     me.msg("<b>It is painful to try to " + action + " in this territory, it is owned by: " + otherFaction.getOwnerListString(loc));

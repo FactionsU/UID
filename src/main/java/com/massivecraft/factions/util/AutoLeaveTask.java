@@ -8,7 +8,7 @@ public class AutoLeaveTask implements Runnable {
     double rate;
 
     public AutoLeaveTask() {
-        this.rate = FactionsPlugin.getInstance().conf().factions().getAutoLeaveRoutineRunsEveryXMinutes();
+        this.rate = FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes();
     }
 
     public synchronized void run() {
@@ -20,7 +20,7 @@ public class AutoLeaveTask implements Runnable {
         task.runTaskTimer(FactionsPlugin.getInstance(), 1, 1);
 
         // maybe setting has been changed? if so, restart this task at new rate
-        if (this.rate != FactionsPlugin.getInstance().conf().factions().getAutoLeaveRoutineRunsEveryXMinutes()) {
+        if (this.rate != FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes()) {
             FactionsPlugin.getInstance().startAutoLeaveTask(true);
         }
     }

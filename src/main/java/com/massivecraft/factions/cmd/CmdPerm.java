@@ -57,7 +57,7 @@ public class CmdPerm extends FCommand {
         boolean allRelations = context.argAsString(0).equalsIgnoreCase("all");
         boolean allActions = context.argAsString(1).equalsIgnoreCase("all");
         boolean online = true;
-        if (FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms() && context.args.size() == 4 && "offline".equalsIgnoreCase(context.argAsString(3))) {
+        if (FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() && context.args.size() == 4 && "offline".equalsIgnoreCase(context.argAsString(3))) {
             online = false;
         }
 

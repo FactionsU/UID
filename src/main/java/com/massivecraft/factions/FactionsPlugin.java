@@ -283,8 +283,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
 
         // Register recurring tasks
-        if (saveTask == null && this.conf().factions().getSaveToFileEveryXMinutes() > 0.0) {
-            long saveTicks = (long) (20 * 60 * this.conf().factions().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
+        if (saveTask == null && this.conf().factions().other().getSaveToFileEveryXMinutes() > 0.0) {
+            long saveTicks = (long) (20 * 60 * this.conf().factions().other().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
             saveTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new SaveTask(this), saveTicks, saveTicks);
         }
 
@@ -959,8 +959,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             this.getServer().getScheduler().cancelTask(AutoLeaveTask);
         }
 
-        if (this.conf().factions().getAutoLeaveRoutineRunsEveryXMinutes() > 0.0) {
-            long ticks = (long) (20 * 60 * this.conf().factions().getAutoLeaveRoutineRunsEveryXMinutes());
+        if (this.conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes() > 0.0) {
+            long ticks = (long) (20 * 60 * this.conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes());
             AutoLeaveTask = getServer().getScheduler().scheduleSyncRepeatingTask(this, new AutoLeaveTask(), ticks, ticks);
         }
     }

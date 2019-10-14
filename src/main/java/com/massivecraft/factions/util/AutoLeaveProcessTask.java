@@ -21,13 +21,13 @@ public class AutoLeaveProcessTask extends BukkitRunnable {
     public AutoLeaveProcessTask() {
         ArrayList<FPlayer> fplayers = (ArrayList<FPlayer>) FPlayers.getInstance().getAllFPlayers();
         this.iterator = fplayers.listIterator();
-        this.toleranceMillis = FactionsPlugin.getInstance().conf().factions().getAutoLeaveAfterDaysOfInactivity() * 24 * 60 * 60 * 1000;
+        this.toleranceMillis = FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveAfterDaysOfInactivity() * 24 * 60 * 60 * 1000;
         this.readyToGo = true;
         this.finished = false;
     }
 
     public void run() {
-        if (FactionsPlugin.getInstance().conf().factions().getAutoLeaveAfterDaysOfInactivity() <= 0.0 || FactionsPlugin.getInstance().conf().factions().getAutoLeaveRoutineMaxMillisecondsPerTick() <= 0.0) {
+        if (FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveAfterDaysOfInactivity() <= 0.0 || FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveRoutineMaxMillisecondsPerTick() <= 0.0) {
             this.stop();
             return;
         }
@@ -44,7 +44,7 @@ public class AutoLeaveProcessTask extends BukkitRunnable {
             long now = System.currentTimeMillis();
 
             // if this iteration has been running for maximum time, stop to take a breather until next tick
-            if (now > loopStartTime + FactionsPlugin.getInstance().conf().factions().getAutoLeaveRoutineMaxMillisecondsPerTick()) {
+            if (now > loopStartTime + FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveRoutineMaxMillisecondsPerTick()) {
                 readyToGo = true;
                 return;
             }
@@ -72,7 +72,7 @@ public class AutoLeaveProcessTask extends BukkitRunnable {
 
                 fplayer.leave(false);
                 iterator.remove();  // go ahead and remove this list's link to the FPlayer object
-                if (FactionsPlugin.getInstance().conf().factions().isAutoLeaveDeleteFPlayerData()) {
+                if (FactionsPlugin.getInstance().conf().factions().other().isAutoLeaveDeleteFPlayerData()) {
                     fplayer.remove();
                 }
             }

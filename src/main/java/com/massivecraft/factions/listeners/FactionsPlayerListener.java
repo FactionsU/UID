@@ -681,7 +681,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         // if player was banned (not just kicked), get rid of their stored info
-        if (FactionsPlugin.getInstance().conf().factions().isRemovePlayerDataWhenBanned() && event.getReason().equals("Banned by admin.")) {
+        if (FactionsPlugin.getInstance().conf().factions().other().isRemovePlayerDataWhenBanned() && event.getReason().equals("Banned by admin.")) {
             if (badGuy.getRole() == Role.ADMIN) {
                 badGuy.getFaction().promoteNewLeader();
             }

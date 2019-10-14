@@ -6,14 +6,16 @@ import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.Loader;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldAccessV0;
 import com.massivecraft.factions.config.transition.oldclass.v0.NewMemoryFaction;
+import com.massivecraft.factions.config.transition.oldclass.v0.OldAccessV0;
 import com.massivecraft.factions.config.transition.oldclass.v0.OldConfV0;
 import com.massivecraft.factions.config.transition.oldclass.v0.OldMemoryFactionV0;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissableV0;
 import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissableActionV0;
+import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissableV0;
 import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissionsMapTypeAdapterV0;
 import com.massivecraft.factions.config.transition.oldclass.v0.TransitionConfigV0;
+import com.massivecraft.factions.config.transition.oldclass.v1.OldMainConfigV1;
+import com.massivecraft.factions.config.transition.oldclass.v1.TransitionConfigV1;
 import com.massivecraft.factions.util.EnumTypeAdapter;
 import com.massivecraft.factions.util.LazyLocation;
 import com.massivecraft.factions.util.MapFLocToStringSetTypeAdapter;
@@ -21,9 +23,12 @@ import com.massivecraft.factions.util.MyLocationTypeAdapter;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import com.massivecraft.factions.util.material.adapter.FactionMaterialAdapter;
 import com.massivecraft.factions.util.material.adapter.MaterialAdapter;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.bukkit.Material;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -41,6 +46,7 @@ public class Transitioner {
     public static void transition(FactionsPlugin plugin) {
         Transitioner transitioner = new Transitioner(plugin);
         transitioner.migrateV0();
+        transitioner.migrateV1();
     }
 
     private Transitioner(FactionsPlugin plugin) {
@@ -117,5 +123,28 @@ public class Transitioner {
                 .registerTypeAdapter(LazyLocation.class, new MyLocationTypeAdapter())
                 .registerTypeAdapter(mapFLocToStringSetType, new MapFLocToStringSetTypeAdapter())
                 .registerTypeAdapterFactory(EnumTypeAdapter.ENUM_FACTORY).create();
+    }
+
+    private void migrateV1() {
+        Path confPath = this.plugin.getDataFolder().toPath().resolve("config").resolve("main.conf");
+        if (!confPath.toFile().exists()) {
+            return;
+        }
+        HoconConfigurationLoader loader = Loader.getLoader("main");
+        try {
+            CommentedConfigurationNode node = loader.load();
+            node = node.getNode("aVeryFriendlyFactionsConfig.version");
+            if (!node.isVirtual()) {
+                return;
+            }
+            OldMainConfigV1 oldConf = new OldMainConfigV1();
+            Loader.load(loader, oldConf);
+            TransitionConfigV1 newConf = new TransitionConfigV1();
+            Loader.load(loader, newConf);
+            newConf.update(oldConf);
+            Loader.loadAndSave(loader, newConf);
+        } catch (Exception e) {
+            this.plugin.getLogger().log(Level.SEVERE, "Could not process configuration", e);
+        }
     }
 }

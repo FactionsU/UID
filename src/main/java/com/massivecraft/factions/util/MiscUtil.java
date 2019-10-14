@@ -64,12 +64,12 @@ public class MiscUtil {
     public static ArrayList<String> validateTag(String str) {
         ArrayList<String> errors = new ArrayList<>();
 
-        if (getComparisonString(str).length() < FactionsPlugin.getInstance().conf().factions().getTagLengthMin()) {
-            errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), FactionsPlugin.getInstance().conf().factions().getTagLengthMin()));
+        if (getComparisonString(str).length() < FactionsPlugin.getInstance().conf().factions().other().getTagLengthMin()) {
+            errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), FactionsPlugin.getInstance().conf().factions().other().getTagLengthMin()));
         }
 
-        if (str.length() > FactionsPlugin.getInstance().conf().factions().getTagLengthMax()) {
-            errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), FactionsPlugin.getInstance().conf().factions().getTagLengthMax()));
+        if (str.length() > FactionsPlugin.getInstance().conf().factions().other().getTagLengthMax()) {
+            errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), FactionsPlugin.getInstance().conf().factions().other().getTagLengthMax()));
         }
 
         for (char c : str.toCharArray()) {
