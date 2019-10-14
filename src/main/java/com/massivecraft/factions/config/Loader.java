@@ -37,16 +37,17 @@ public class Loader {
 
     public static void loadAndSave(HoconConfigurationLoader loader, Object config) throws IOException, IllegalAccessException {
         CommentedConfigurationNode node = loader.load();
+        CommentedConfigurationNode newNode = loader.createEmptyNode();
 
-        loadNode(node, config);
+        loadNode(node, newNode, config);
 
-        loader.save(node);
+        loader.save(newNode);
     }
 
     public static void load(HoconConfigurationLoader loader, Object config) throws IOException, IllegalAccessException {
         CommentedConfigurationNode node = loader.load();
 
-        loadNode(node, config);
+        loadNode(node, loader.createEmptyNode(), config);
     }
 
     private static Set<Class<?>> types = new HashSet<>();
@@ -65,7 +66,7 @@ public class Loader {
         types.add(String.class);
     }
 
-    private static void loadNode(CommentedConfigurationNode current, Object object) throws IllegalAccessException {
+    private static void loadNode(CommentedConfigurationNode current, CommentedConfigurationNode newNode, Object object) throws IllegalAccessException {
         for (Field field : getFields(object.getClass())) {
             if ((field.getModifiers() & Modifier.TRANSIENT) != 0 || field.isSynthetic()) {
                 continue;
@@ -74,31 +75,35 @@ public class Loader {
             ConfigName configName = field.getAnnotation(ConfigName.class);
             Comment comment = field.getAnnotation(Comment.class);
             String confName = configName == null || configName.value().isEmpty() ? field.getName() : configName.value();
-            CommentedConfigurationNode node = current.getNode(confName);
-            boolean virtual = node.isVirtual();
+            CommentedConfigurationNode curNode = current.getNode(confName);
+            CommentedConfigurationNode newNewNode = newNode.getNode(confName);
+            boolean virtual = curNode.isVirtual();
             if (comment != null) {
-                node.setComment(comment.value());
+                newNewNode.setComment(comment.value());
             }
             if (types.contains(field.getType())) {
                 if (virtual) {
-                    node.setValue(field.get(object));
+                    newNewNode.setValue(field.get(object));
                 } else {
                     try {
-                        if (node.getValue() != null && Set.class.isAssignableFrom(field.getType()) && List.class.isAssignableFrom(node.getValue().getClass())) {
-                            field.set(object, new HashSet((List<?>) node.getValue()));
+                        if (curNode.getValue() != null && Set.class.isAssignableFrom(field.getType()) && List.class.isAssignableFrom(curNode.getValue().getClass())) {
+                            field.set(object, new HashSet((List<?>) curNode.getValue()));
                         } else {
-                            field.set(object, node.getValue());
+                            field.set(object, curNode.getValue());
                         }
+                        newNewNode.setValue(curNode.getValue());
                     } catch (IllegalArgumentException ex) {
-                        System.out.println("Found incorrect type for " + getNodeName(node.getPath()) + ": Expected " + field.getType() + ", found " + node.getValue().getClass());
+                        System.out.println("Found incorrect type for " + getNodeName(curNode.getPath()) + ": Expected " + field.getType() + ", found " + curNode.getValue().getClass());
                     }
                 }
             } else {
                 Object o = field.get(object);
                 if (o == null) {
-                    node.setValue(null);
+                    System.out.println("Found null default for " + getNodeName(curNode.getPath()) + " which shouldn't be possible");
+                    curNode.setValue(null);
+                    newNewNode.setValue(null);
                 } else {
-                    loadNode(node, o);
+                    loadNode(curNode, newNewNode, o);
                 }
             }
         }
