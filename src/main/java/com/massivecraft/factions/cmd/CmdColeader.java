@@ -75,7 +75,7 @@ public class CmdColeader extends FCommand {
         }
 
         // Check to see if we should allow multiple coleaders or not.
-        if (!FactionsPlugin.getInstance().conf().factions().isAllowMultipleColeaders() && !targetFaction.getFPlayersWhereRole(Role.COLEADER).isEmpty()) {
+        if (!FactionsPlugin.getInstance().conf().factions().other().isAllowMultipleColeaders() && !targetFaction.getFPlayersWhereRole(Role.COLEADER).isEmpty()) {
             context.msg(TL.COMMAND_COLEADER_ALREADY_COLEADER);
             return;
         }

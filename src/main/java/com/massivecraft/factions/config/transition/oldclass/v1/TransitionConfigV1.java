@@ -1,4 +1,4 @@
-package com.massivecraft.factions.config.file;
+package com.massivecraft.factions.config.transition.oldclass.v1;
 
 import com.google.common.collect.ImmutableList;
 import com.massivecraft.factions.config.annotation.Comment;
@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MainConfig {
+public class TransitionConfigV1 {
     public static class VersioningInfo {
         @Comment("Don't change this value yourself, unless you WANT a broken config!")
         private int version = 2;
@@ -799,7 +799,6 @@ public class MainConfig {
                 return separateOfflinePerms;
             }
 
-
             public boolean isAllowMultipleColeaders() {
                 return allowMultipleColeaders;
             }
@@ -1288,11 +1287,11 @@ public class MainConfig {
         }
     };
 
-    @Comment("FactionsUUID by drtshock\n" +
-            "Support and documentation http://factions-support.cf\n" +
-            "Updates https://www.spigotmc.org/resources/factionsuuid.1035/\n" +
+    @Comment("# FactionsUUID by drtshock\n" +
+            "# Support and documentation http://factions-support.cf\n" +
+            "# Updates https://www.spigotmc.org/resources/factionsuuid.1035/\n" +
             "\n" +
-            "Made with love <3")
+            "# Made with love <3")
     private VersioningInfo aVeryFriendlyFactionsConfig = new VersioningInfo();
 
     @Comment("Colors for relationships and default factions")
@@ -1357,5 +1356,24 @@ public class MainConfig {
 
     public Data data() {
         return data;
+    }
+
+    public void update(OldMainConfigV1 old) {
+        factions.other.allowMultipleColeaders = old.factions.allowMultipleColeaders;
+        factions.other.tagLengthMin = old.factions.tagLengthMin;
+        factions.other.tagLengthMax = old.factions.tagLengthMax;
+        factions.other.tagForceUpperCase = old.factions.tagForceUpperCase;
+        factions.other.newFactionsDefaultOpen = old.factions.newFactionsDefaultOpen;
+        factions.other.factionMemberLimit = old.factions.factionMemberLimit;
+        factions.other.newPlayerStartingFactionID = old.factions.newPlayerStartingFactionID;
+        factions.other.saveToFileEveryXMinutes =old.factions.saveToFileEveryXMinutes;
+        factions.other.autoLeaveAfterDaysOfInactivity = old.factions.autoLeaveAfterDaysOfInactivity;
+        factions.other.autoLeaveRoutineRunsEveryXMinutes = old.factions.autoLeaveRoutineRunsEveryXMinutes;
+        factions.other.autoLeaveRoutineMaxMillisecondsPerTick = old.factions.autoLeaveRoutineMaxMillisecondsPerTick;
+        factions.other.removePlayerDataWhenBanned = old.factions.removePlayerDataWhenBanned;
+        factions.other.autoLeaveDeleteFPlayerData =old.factions.autoLeaveDeleteFPlayerData;
+        factions.other.considerFactionsReallyOfflineAfterXMinutes = old.factions.considerFactionsReallyOfflineAfterXMinutes;
+        factions.other.actionDeniedPainAmount =old.factions.actionDeniedPainAmount;
+        factions.other.separateOfflinePerms =old.factions.separateOfflinePerms;
     }
 }

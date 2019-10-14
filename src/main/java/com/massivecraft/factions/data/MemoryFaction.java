@@ -243,7 +243,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public void setTag(String str) {
-        if (FactionsPlugin.getInstance().conf().factions().isTagForceUpperCase()) {
+        if (FactionsPlugin.getInstance().conf().factions().other().isTagForceUpperCase()) {
             str = str.toUpperCase();
         }
         this.tag = str;
@@ -388,7 +388,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     private Map<Permissible, Map<PermissibleAction, Boolean>> getPermissionsMap(boolean online) {
-        if (online || !FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms()) {
+        if (online || !FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms()) {
             return this.permissions;
         } else {
             return this.permissionsOffline;
@@ -396,7 +396,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     private DefaultPermissionsConfig.Permissions getDefaultPermissions(boolean online) {
-        if (online || !FactionsPlugin.getInstance().conf().factions().isSeparateOfflinePerms()) {
+        if (online || !FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms()) {
             return FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getPermissions();
         } else {
             return FactionsPlugin.getInstance().getConfigManager().getOfflinePermissionsConfig().getPermissions();
@@ -516,7 +516,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
     public MemoryFaction(String id) {
         this.id = id;
-        this.open = FactionsPlugin.getInstance().conf().factions().isNewFactionsDefaultOpen();
+        this.open = FactionsPlugin.getInstance().conf().factions().other().isNewFactionsDefaultOpen();
         this.tag = "???";
         this.description = TL.GENERIC_DEFAULTDESCRIPTION.toString();
         this.lastPlayerLoggedOffTime = 0;
@@ -866,7 +866,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
         // even if all players are technically logged off, maybe someone was on
         // recently enough to not consider them officially offline yet
-        return FactionsPlugin.getInstance().conf().factions().getConsiderFactionsReallyOfflineAfterXMinutes() > 0 && System.currentTimeMillis() < lastPlayerLoggedOffTime + (FactionsPlugin.getInstance().conf().factions().getConsiderFactionsReallyOfflineAfterXMinutes() * 60000);
+        return FactionsPlugin.getInstance().conf().factions().other().getConsiderFactionsReallyOfflineAfterXMinutes() > 0 && System.currentTimeMillis() < lastPlayerLoggedOffTime + (FactionsPlugin.getInstance().conf().factions().other().getConsiderFactionsReallyOfflineAfterXMinutes() * 60000);
     }
 
     public void memberLoggedOff() {
