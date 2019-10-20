@@ -51,7 +51,7 @@ public class CmdFly extends FCommand {
                 context.msg(TL.COMMAND_FLY_NO_ACCESS, factionAtLocation.getTag(context.fPlayer));
             }
             return;
-        } else if (FlightUtil.instance().enemiesNearby(context.fPlayer, FactionsPlugin.getInstance().getConfig().getInt("f-fly.enemy-radius", 7))) {
+        } else if (FlightUtil.instance().enemiesNearby(context.fPlayer, FactionsPlugin.getInstance().conf().commands().fly().getEnemyRadius())) {
             if (notify) {
                 context.msg(TL.COMMAND_FLY_ENEMY_NEARBY);
             }
@@ -59,7 +59,7 @@ public class CmdFly extends FCommand {
         }
 
         context.doWarmUp(WarmUpUtil.Warmup.FLIGHT, TL.WARMUPS_NOTIFY_FLIGHT, "Fly", () ->
-                context.fPlayer.setFlying(true), this.plugin.getConfig().getLong("warmups.f-fly", 0));
+                context.fPlayer.setFlying(true), this.plugin.conf().commands().fly().getDelay());
     }
 
     @Override

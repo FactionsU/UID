@@ -8,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class CmdHelp extends FCommand {
@@ -25,7 +26,7 @@ public class CmdHelp extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        if (FactionsPlugin.getInstance().getConfig().getBoolean("use-old-help", true)) {
+        if (FactionsPlugin.getInstance().conf().commands().help().isUseOldHelp()) {
             if (helpPages == null) {
                 updateHelp(context);
             }
@@ -42,16 +43,9 @@ public class CmdHelp extends FCommand {
             context.sendMessage(helpPages.get(page));
             return;
         }
-        ConfigurationSection help = FactionsPlugin.getInstance().getConfig().getConfigurationSection("help");
-        if (help == null) {
-            help = FactionsPlugin.getInstance().getConfig().createSection("help"); // create new help section
-            List<String> error = new ArrayList<>();
-            error.add("&cUpdate help messages in config.yml!");
-            error.add("&cSet use-old-help for legacy help messages");
-            help.set("'1'", error); // add default error messages
-        }
+        Map<String, List<String>> help = FactionsPlugin.getInstance().conf().commands().help().getEntries();
         String pageArg = context.argAsString(0, "1");
-        List<String> page = help.getStringList(pageArg);
+        List<String> page = help.get(pageArg);
         if (page == null || page.isEmpty()) {
             context.msg(TL.COMMAND_HELP_404.format(pageArg));
             return;

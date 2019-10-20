@@ -118,7 +118,7 @@ public enum FancyTag implements Tag {
      */
     private static List<String> tipFaction(Faction faction, FPlayer player) {
         List<String> lines = new ArrayList<>();
-        for (String line : FactionsPlugin.getInstance().getConfig().getStringList("tooltips.list")) {
+        for (String line : FactionsPlugin.getInstance().conf().commands().toolTips().getFaction()) {
             String string = Tag.parsePlain(faction, player, line);
             if (string == null) {
                 continue;
@@ -136,7 +136,7 @@ public enum FancyTag implements Tag {
      */
     private static List<String> tipPlayer(FPlayer fplayer, Map<UUID, String> groupMap) {
         List<String> lines = new ArrayList<>();
-        for (String line : FactionsPlugin.getInstance().getConfig().getStringList("tooltips.show")) {
+        for (String line : FactionsPlugin.getInstance().conf().commands().toolTips().getPlayer()) {
             String newLine = line;
             everythingOnYourWayOut:
             if (line.contains("{group}")) {

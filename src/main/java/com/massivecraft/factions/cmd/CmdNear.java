@@ -25,7 +25,7 @@ public class CmdNear extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        int radius = FactionsPlugin.getInstance().getConfig().getInt("f-near.radius", 20);
+        int radius = FactionsPlugin.getInstance().conf().commands().near().getRadius();
         List<Entity> nearbyEntities = context.player.getNearbyEntities(radius, radius, radius);
         List<FPlayer> nearbyMembers = new ArrayList<>();
 

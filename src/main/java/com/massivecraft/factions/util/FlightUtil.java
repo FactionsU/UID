@@ -19,13 +19,13 @@ public class FlightUtil {
     private EnemiesTask enemiesTask;
 
     private FlightUtil() {
-        double enemyCheck = FactionsPlugin.getInstance().getConfig().getDouble("f-fly.radius-check", 1) * 20;
+        double enemyCheck = FactionsPlugin.getInstance().conf().commands().fly().getRadiusCheck() * 20;
         if (enemyCheck > 0) {
             enemiesTask = new EnemiesTask();
             enemiesTask.runTaskTimer(FactionsPlugin.getInstance(), 0, (long) enemyCheck);
         }
 
-        double spawnRate = FactionsPlugin.getInstance().getConfig().getDouble("f-fly.trails.spawn-rate", 0) * 20;
+        double spawnRate = FactionsPlugin.getInstance().conf().commands().fly().particles().getSpawnRate() * 20;
         if (spawnRate > 0) {
             new ParticleTrailsTask().runTaskTimer(FactionsPlugin.getInstance(), 0, (long) spawnRate);
         }
@@ -54,7 +54,7 @@ public class FlightUtil {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 FPlayer pilot = FPlayers.getInstance().getByPlayer(player);
                 if (pilot.isFlying() && !pilot.isAdminBypassing()) {
-                    if (enemiesNearby(pilot, FactionsPlugin.getInstance().getConfig().getInt("f-fly.enemy-radius", 7))) {
+                    if (enemiesNearby(pilot, FactionsPlugin.getInstance().conf().commands().fly().getEnemyRadius())) {
                         pilot.msg(TL.COMMAND_FLY_ENEMY_DISABLE);
                         pilot.setFlying(false);
                         if (pilot.isAutoFlying()) {
@@ -91,8 +91,8 @@ public class FlightUtil {
         private float speed;
 
         private ParticleTrailsTask() {
-            this.amount = FactionsPlugin.getInstance().getConfig().getInt("f-fly.trails.amount", 20);
-            this.speed = (float) FactionsPlugin.getInstance().getConfig().getDouble("f-fly.trails.speed", 0.02);
+            this.amount = FactionsPlugin.getInstance().conf().commands().fly().particles().getAmount();
+            this.speed = (float) FactionsPlugin.getInstance().conf().commands().fly().particles().getSpeed();
         }
 
         @Override

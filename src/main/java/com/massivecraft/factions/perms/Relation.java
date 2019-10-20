@@ -100,6 +100,20 @@ public enum Relation implements Permissible {
         }
     }
 
+    public int getMax() {
+        switch (this) {
+            case ALLY:
+                return FactionsPlugin.getInstance().conf().factions().maxRelations().getAlly();
+            case ENEMY:
+                return FactionsPlugin.getInstance().conf().factions().maxRelations().getEnemy();
+            case TRUCE:
+                return FactionsPlugin.getInstance().conf().factions().maxRelations().getTruce();
+            case NEUTRAL:
+            default:
+                return FactionsPlugin.getInstance().conf().factions().maxRelations().getNeutral();
+        }
+    }
+
     public double getRelationCost() {
         if (isEnemy()) {
             return FactionsPlugin.getInstance().conf().economy().getCostEnemy();

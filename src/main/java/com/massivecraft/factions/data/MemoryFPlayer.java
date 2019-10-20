@@ -609,14 +609,14 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public void sendFactionHereMessage(Faction from) {
         Faction toShow = Board.getInstance().getFactionAt(getLastStoodAt());
-        boolean showTitle = FactionsPlugin.getInstance().getConfig().getBoolean("enter-titles.enabled", true);
+        boolean showTitle = FactionsPlugin.getInstance().conf().factions().enterTitles().isEnabled();
         boolean showChat = true;
         Player player = getPlayer();
 
         if (showTitle && player != null) {
-            int in = FactionsPlugin.getInstance().getConfig().getInt("enter-titles.fade-in", 10);
-            int stay = FactionsPlugin.getInstance().getConfig().getInt("enter-titles.stay", 70);
-            int out = FactionsPlugin.getInstance().getConfig().getInt("enter-titles.fade-out", 20);
+            int in = FactionsPlugin.getInstance().conf().factions().enterTitles().getFadeIn();
+            int stay = FactionsPlugin.getInstance().conf().factions().enterTitles().getStay();
+            int out = FactionsPlugin.getInstance().conf().factions().enterTitles().getFadeOut();
             String title = TL.FACTION_ENTER_TITLE.format(this);
             String sub = TL.FACTION_ENTER_SUBTITLE.format(toShow.getTag(this));
 
@@ -624,12 +624,12 @@ public abstract class MemoryFPlayer implements FPlayer {
             // We're just trying to be as unintrusive as possible.
             TitleAPI.getInstance().sendTitle(player, title, sub, in, stay, out);
 
-            showChat = FactionsPlugin.getInstance().getConfig().getBoolean("enter-titles.also-show-chat", true);
+            showChat = FactionsPlugin.getInstance().conf().factions().enterTitles().isAlsoShowChat();
         }
 
         if (showInfoBoard(toShow)) {
             FScoreboard.get(this).setTemporarySidebar(new FInfoSidebar(toShow));
-            showChat = FactionsPlugin.getInstance().getConfig().getBoolean("scoreboard.also-send-chat", true);
+            showChat = FactionsPlugin.getInstance().conf().scoreboard().info().isAlsoSendChat();
         }
         if (showChat) {
             this.sendMessage(FactionsPlugin.getInstance().txt().parse(TL.FACTION_LEAVE.format(from.getTag(this), toShow.getTag(this))));
@@ -643,7 +643,7 @@ public abstract class MemoryFPlayer implements FPlayer {
      * @return true if should show, otherwise false.
      */
     public boolean showInfoBoard(Faction toShow) {
-        return showScoreboard && !toShow.isWarZone() && !toShow.isWilderness() && !toShow.isSafeZone() && FactionsPlugin.getInstance().getConfig().contains("scoreboard.finfo") && FactionsPlugin.getInstance().getConfig().getBoolean("scoreboard.finfo-enabled", false) && FScoreboard.get(this) != null;
+        return showScoreboard && !toShow.isWarZone() && !toShow.isWilderness() && !toShow.isSafeZone() && FactionsPlugin.getInstance().conf().scoreboard().info().isEnabled() && FScoreboard.get(this) != null;
     }
 
     @Override
@@ -745,8 +745,8 @@ public abstract class MemoryFPlayer implements FPlayer {
         Faction myFaction = getFaction();
         Faction currentFaction = Board.getInstance().getFactionAt(flocation);
         int ownedLand = forFaction.getLandRounded();
-        int factionBuffer = FactionsPlugin.getInstance().getConfig().getInt("hcf.buffer-zone", 0);
-        int worldBuffer = FactionsPlugin.getInstance().getConfig().getInt("world-border.buffer", 0);
+        int factionBuffer = FactionsPlugin.getInstance().conf().factions().claims().getBufferZone();
+        int worldBuffer = FactionsPlugin.getInstance().conf().worldBorder().getBuffer();
 
         if (FactionsPlugin.getInstance().conf().worldGuard().isChecking() && FactionsPlugin.getInstance().getWorldguard() != null && FactionsPlugin.getInstance().getWorldguard().checkForRegionsInChunk(flocation.getChunk())) {
             // Checks for WorldGuard regions in the chunk attempting to be claimed
@@ -769,7 +769,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_SAFEZONE.toString());
         } else if (currentFaction.isWarZone()) {
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_WARZONE.toString());
-        } else if (FactionsPlugin.getInstance().getConfig().getBoolean("hcf.allow-overclaim", true) && ownedLand >= forFaction.getPowerRounded()) {
+        } else if (FactionsPlugin.getInstance().conf().factions().claims().isAllowOverClaim() && ownedLand >= forFaction.getPowerRounded()) {
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_POWER.toString());
         } else if (FactionsPlugin.getInstance().conf().factions().claims().getLandsMax() != 0 && ownedLand >= FactionsPlugin.getInstance().conf().factions().claims().getLandsMax() && forFaction.isNormal()) {
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_LIMIT.toString());
@@ -797,7 +797,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             } else if (!currentFaction.hasLandInflation()) {
                 // TODO more messages WARN current faction most importantly
                 error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_THISISSPARTA.toString(), currentFaction.getTag(this));
-            } else if (currentFaction.hasLandInflation() && !FactionsPlugin.getInstance().getConfig().getBoolean("hcf.allow-overclaim", true)) {
+            } else if (currentFaction.hasLandInflation() && !FactionsPlugin.getInstance().conf().factions().claims().isAllowOverClaim()) {
                 // deny over claim when it normally would be allowed.
                 error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_OVERCLAIM_DISABLED.toString());
             } else if (!Board.getInstance().isBorderLocation(flocation)) {
@@ -867,7 +867,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             Econ.modifyMoney(payee, FactionsPlugin.getInstance().conf().economy().getOverclaimRewardMultiplier(), TL.CLAIM_TOOVERCLAIM.toString(), TL.CLAIM_FOROVERCLAIM.toString());
         }
 
-        if (LWC.getEnabled() && forFaction.isNormal() && FactionsPlugin.getInstance().getConfig().getBoolean("lwc.reset-locks-capture", false)) {
+        if (LWC.getEnabled() && forFaction.isNormal() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnCapture()) {
             LWC.clearOtherLocks(flocation, this.getFaction());
         }
 
@@ -942,7 +942,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         // If leaving fly mode, don't let them take fall damage for x seconds.
         if (!fly) {
-            int cooldown = FactionsPlugin.getInstance().getConfig().getInt("f-fly.falldamage-cooldown", 3);
+            int cooldown = FactionsPlugin.getInstance().conf().commands().fly().getFallDamageCooldown();
 
             // If the value is 0 or lower, make them take fall damage.
             // Otherwise, start a timer and have this cancel after a few seconds.

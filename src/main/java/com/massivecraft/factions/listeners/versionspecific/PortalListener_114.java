@@ -30,6 +30,10 @@ public class PortalListener_114 implements Listener {
     public void onPortalCreate(PortalCreateEvent event) {
         Entity entity = event.getEntity();
 
+        if (!FactionsPlugin.getInstance().conf().factions().portals().isLimit()) {
+            return; // Don't do anything if they don't want us to.
+        }
+
         if (!(entity instanceof Player) || !plugin.worldUtil().isEnabled(event.getEntity().getWorld())) {
             return;
         }
@@ -50,7 +54,7 @@ public class PortalListener_114 implements Listener {
                 return;
             }
 
-            String mininumRelation = FactionsPlugin.getInstance().getConfig().getString("portals.minimum-relation", "MEMBER");
+            String mininumRelation = FactionsPlugin.getInstance().conf().factions().portals().getMinimumRelation();
 
             // Don't let people portal into nether bases if server owners don't want that.
             if (!fPlayer.getFaction().getRelationTo(faction).isAtLeast(Relation.fromString(mininumRelation))) {

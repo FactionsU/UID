@@ -16,17 +16,10 @@ import java.util.function.Function;
 
 public class CmdList extends FCommand {
 
-    private String[] defaults = new String[3];
-
     public CmdList() {
         super();
         this.aliases.add("list");
         this.aliases.add("ls");
-
-        // default values in case user has old config
-        defaults[0] = "&e&m----------&r&e[ &2Faction List &9{pagenumber}&e/&9{pagecount} &e]&m----------";
-        defaults[1] = "<i>Factionless<i> {factionless} online";
-        defaults[2] = "<a>{faction} <i>{online} / {members} online, <a>Land / Power / Maxpower: <i>{chunks}/{power}/{maxPower}";
 
         this.optionalArgs.put("page", "1");
 
@@ -47,7 +40,7 @@ public class CmdList extends FCommand {
 
         // remove exempt factions
         if (!context.sender.hasPermission(Permission.SHOW_BYPASS_EXEMPT.toString())) {
-            List<String> exemptFactions = FactionsPlugin.getInstance().getConfig().getStringList("show-exempt");
+            List<String> exemptFactions = FactionsPlugin.getInstance().conf().commands().show().getExempt();
             factionList.removeIf(next -> exemptFactions.contains(next.getTag()));
         }
 
@@ -76,16 +69,16 @@ public class CmdList extends FCommand {
         }
 
 
-        String header = plugin.getConfig().getString("list.header", defaults[0]);
+        String header = plugin.conf().commands().list().getHeader();
         header = header.replace("{pagenumber}", String.valueOf(pagenumber)).replace("{pagecount}", String.valueOf(pagecount));
         lines.add(plugin.txt().parse(header));
 
         for (Faction faction : factionList.subList(start, end)) {
             if (faction.isWilderness()) {
-                lines.add(plugin.txt().parse(Tag.parsePlain(faction, plugin.getConfig().getString("list.factionless", defaults[1]))));
+                lines.add(plugin.txt().parse(Tag.parsePlain(faction, plugin.conf().commands().list().getFactionlessEntry())));
                 continue;
             }
-            lines.add(plugin.txt().parse(Tag.parsePlain(faction, context.fPlayer, plugin.getConfig().getString("list.entry", defaults[2]))));
+            lines.add(plugin.txt().parse(Tag.parsePlain(faction, context.fPlayer, plugin.conf().commands().list().getEntry())));
         }
         context.sendMessage(lines);
     }

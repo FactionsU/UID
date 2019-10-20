@@ -39,7 +39,7 @@ public class FTeamWrapper {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().getConfig().getBoolean("scoreboard.default-prefixes", false)) {
+        if (!FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes()) {
             return;
         }
 
@@ -64,7 +64,7 @@ public class FTeamWrapper {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().getConfig().getBoolean("scoreboard.default-prefixes", false)) {
+        if (!FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes()) {
             return;
         }
 
@@ -166,7 +166,7 @@ public class FTeamWrapper {
     }
 
     private void updatePrefixes() {
-        if (FactionsPlugin.getInstance().getConfig().getBoolean("scoreboard.default-prefixes", false)) {
+        if (FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes()) {
             for (FScoreboard fboard : teams.keySet()) {
                 updatePrefix(fboard);
             }
@@ -174,7 +174,7 @@ public class FTeamWrapper {
     }
 
     private void updatePrefix(FScoreboard fboard) {
-        if (FactionsPlugin.getInstance().getConfig().getBoolean("scoreboard.default-prefixes", false)) {
+        if (FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes()) {
             FPlayer fplayer = fboard.getFPlayer();
             Team team = teams.get(fboard);
 

@@ -294,7 +294,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
         // We set the option to TRUE by default in the config.yml for new users,
         // BUT we leave it set to false for users updating that haven't added it to their config.
-        if (ess != null && getConfig().getBoolean("delete-ess-homes", false)) {
+        if (ess != null && conf().factions().other().isDeleteEssentialsHomes()) {
             getLogger().info("Found Essentials. We'll delete player homes in their old Faction's when kicked.");
             getServer().getPluginManager().registerEvents(new EssentialsListener(ess), this);
         }
@@ -358,8 +358,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
         getLogger().info(txt.parse("Using %1s as a particle provider", particleProvider.name()));
 
-        if (getConfig().getBoolean("see-chunk.particles", true)) {
-            double delay = Math.floor(getConfig().getDouble("f-fly.radius-check", 0.75) * 20);
+        if (conf().commands().seeChunk().isParticles()) {
+            double delay = Math.floor(conf().commands().seeChunk().getParticleUpdateTime() * 20);
             seeChunkUtil = new SeeChunkUtil();
             seeChunkUtil.runTaskTimer(this, 0, (long) delay);
         }
@@ -382,7 +382,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         // since some other plugins execute commands directly through this command interface, provide it
         this.getCommand(refCommand).setExecutor(cmdBase);
 
-        if (getConfig().getBoolean("f-fly.enable", false)) {
+        if (conf().commands().fly().isEnable()) {
             FlightUtil.start();
         }
 
@@ -451,7 +451,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         Plugin ess = Essentials.getEssentials();
         this.metricsDrillPie("essentials", () -> this.metricsPluginInfo(ess));
         if (ess != null) {
-            this.metricsSimplePie("essentials_delete_homes", () -> "" + getConfig().getBoolean("delete-ess-homes", false));
+            this.metricsSimplePie("essentials_delete_homes", () -> "" + conf().factions().other().isDeleteEssentialsHomes());
             this.metricsSimplePie("essentials_home_teleport", () -> "" + this.conf().factions().homes().isTeleportCommandEssentialsIntegration());
         }
 
@@ -459,11 +459,11 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         Plugin lwc = LWC.getLWC();
         this.metricsDrillPie("lwc", () -> this.metricsPluginInfo(lwc));
         if (lwc != null) {
-            boolean enabled = getConfig().getBoolean("lwc.integration", false);
+            boolean enabled = conf().lwc().isEnabled();
             this.metricsSimplePie("lwc_integration", () -> "" + enabled);
             if (enabled) {
-                this.metricsSimplePie("lwc_reset_locks_unclaim", () -> "" + getConfig().getBoolean("lwc.reset-locks-unclaim", false));
-                this.metricsSimplePie("lwc_reset_locks_capture", () -> "" + getConfig().getBoolean("lwc.reset-locks-capture", false));
+                this.metricsSimplePie("lwc_reset_locks_unclaim", () -> "" + conf().lwc().isResetLocksOnUnclaim());
+                this.metricsSimplePie("lwc_reset_locks_capture", () -> "" + conf().lwc().isResetLocksOnCapture());
             }
         }
 
@@ -507,7 +507,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
         // Overall stats
         this.metricsLine("factions", () -> Factions.getInstance().getAllFactions().size() - 3);
-        this.metricsSimplePie("scoreboard", () -> "" + getConfig().getBoolean("scoreboard.default-enabled", false));
+        this.metricsSimplePie("scoreboard", () -> "" + conf().scoreboard().constant().isEnabled());
 
         // Event listeners
         this.metricsDrillPie("event_listeners", () -> {
@@ -1122,7 +1122,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     }
 
     public void debug(Level level, String s) {
-        if (getConfig().getBoolean("debug", false)) {
+        if (conf().getaVeryFriendlyFactionsConfig().isDebug()) {
             getLogger().log(level, s);
         }
     }

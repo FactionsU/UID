@@ -169,7 +169,7 @@ public abstract class MemoryBoard extends Board {
     }
 
     public void clean(String factionId) {
-        if (LWC.getEnabled() && FactionsPlugin.getInstance().getConfig().getBoolean("lwc.reset-locks-unclaim", false)) {
+        if (LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim()) {
             for (Entry<FLocation, String> entry : flocationIds.entrySet()) {
                 if (entry.getValue().equals(factionId)) {
                     LWC.clearAllLocks(entry.getKey());
@@ -237,7 +237,7 @@ public abstract class MemoryBoard extends Board {
         while (iter.hasNext()) {
             Entry<FLocation, String> entry = iter.next();
             if (!Factions.getInstance().isValidFactionId(entry.getValue())) {
-                if (LWC.getEnabled() && FactionsPlugin.getInstance().getConfig().getBoolean("lwc.reset-locks-unclaim", false)) {
+                if (LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim()) {
                     LWC.clearAllLocks(entry.getKey());
                 }
                 FactionsPlugin.getInstance().log("Board cleaner removed " + entry.getValue() + " from " + entry.getKey());

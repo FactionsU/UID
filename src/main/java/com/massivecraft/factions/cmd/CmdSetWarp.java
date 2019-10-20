@@ -32,7 +32,7 @@ public class CmdSetWarp extends FCommand {
             return;
         }
 
-        int maxWarps = FactionsPlugin.getInstance().getConfig().getInt("max-warps", 5);
+        int maxWarps = FactionsPlugin.getInstance().conf().commands().warp().getMaxWarps();
         if (maxWarps <= context.faction.getWarps().size()) {
             context.fPlayer.msg(TL.COMMAND_SETFWARP_LIMIT, maxWarps);
             return;
@@ -54,7 +54,7 @@ public class CmdSetWarp extends FCommand {
     }
 
     private boolean transact(FPlayer player, CommandContext context) {
-        return !FactionsPlugin.getInstance().getConfig().getBoolean("warp-cost.enabled", false) || player.isAdminBypassing() || context.payForCommand(FactionsPlugin.getInstance().getConfig().getDouble("warp-cost.setwarp", 5), TL.COMMAND_SETFWARP_TOSET.toString(), TL.COMMAND_SETFWARP_FORSET.toString());
+        return player.isAdminBypassing() || context.payForCommand(FactionsPlugin.getInstance().conf().economy().getCostSetWarp(), TL.COMMAND_SETFWARP_TOSET.toString(), TL.COMMAND_SETFWARP_FORSET.toString());
     }
 
     @Override

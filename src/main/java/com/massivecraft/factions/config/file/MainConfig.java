@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@SuppressWarnings("ALL")
+@SuppressWarnings({"FieldCanBeLocal","InnerClassMayBeStatic","BooleanMethodIsAlwaysInverted"})
 public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @Comment("Don't change this value yourself, unless you WANT a broken config!")
@@ -1861,7 +1861,7 @@ public class MainConfig {
             }
 
             public List<String> getFactionlessContent() {
-                return factionlessContent != null ? content : Collections.emptyList();
+                return factionlessContent != null ? factionlessContent : Collections.emptyList();
             }
         }
 
@@ -1951,8 +1951,8 @@ public class MainConfig {
     }
 
     public class WorldGuard {
-        private boolean checking;
-        private boolean buildPriority;
+        private boolean checking = false;
+        private boolean buildPriority = false;
 
         public boolean isChecking() {
             return checking;
@@ -2023,6 +2023,10 @@ public class MainConfig {
         return commandBase == null ? ImmutableList.of("f") : commandBase;
     }
 
+    public AVeryFriendlyFactionsConfig getaVeryFriendlyFactionsConfig() {
+        return aVeryFriendlyFactionsConfig;
+    }
+
     public Colors colors() {
         return colors;
     }
@@ -2065,6 +2069,10 @@ public class MainConfig {
 
     public WorldGuard worldGuard() {
         return worldGuard;
+    }
+
+    public LWC lwc() {
+        return lwc;
     }
 
     public WorldBorder worldBorder() {
