@@ -89,10 +89,9 @@ public class CmdDebug extends FCommand {
                     add("0info.txt", mainInfo.toString());
                     add("1server.properties", getFile(Paths.get("server.properties")).replaceAll("(?:(?:server-ip=)|(?:server-port=)|(?:rcon\\.port=)|(?:rcon\\.password=)|(?:query.port=))[^\n]*[\r\n]*", ""));
                     add("2main.conf", getFile(dataPath.resolve("config/main.conf")));
-                    add("3config.yml", getFile(dataPath.resolve("config.yml")));
-                    add("4spigot.yml", getFile(Paths.get("spigot.yml")));
+                    add("3spigot.yml", getFile(Paths.get("spigot.yml")));
                     if (permInfo.length() > 0) {
-                        add("5perms.txt", permInfo.toString());
+                        add("4perms.txt", permInfo.toString());
                     }
                     PasteBuilder.PasteResult result = builder.build();
                     new BukkitRunnable() {
