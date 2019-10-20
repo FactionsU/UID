@@ -126,8 +126,10 @@ public class Transitioner {
     }
 
     private void migrateV1() {
-        Path confPath = this.plugin.getDataFolder().toPath().resolve("config").resolve("main.conf");
-        Path configPath = this.plugin.getDataFolder().toPath().resolve("config.yml");
+        Path pluginFolder = this.plugin.getDataFolder().toPath();
+        Path confPath = pluginFolder.resolve("config").resolve("main.conf");
+        Path configPath = pluginFolder.resolve("config.yml");
+        Path oldConfigFolder = pluginFolder.resolve("oldConfig");
         if (!confPath.toFile().exists() || !configPath.toFile().exists()) {
             return;
         }
@@ -144,7 +146,7 @@ public class Transitioner {
             Loader.load(loader, newConf);
             newConf.update(oldConf, this.plugin.getConfig());
             Loader.loadAndSave(loader, newConf);
-            configPath.toFile().delete();
+            Files.move(configPath, oldConfigFolder.resolve("config.yml"));
         } catch (Exception e) {
             this.plugin.getLogger().log(Level.SEVERE, "Could not process configuration", e);
         }
