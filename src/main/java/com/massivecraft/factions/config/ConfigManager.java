@@ -13,12 +13,6 @@ public class ConfigManager {
     private final DefaultPermissionsConfig permissionsConfig = new DefaultPermissionsConfig();
     private final DefaultOfflinePermissionsConfig offlinePermissionsConfig = new DefaultOfflinePermissionsConfig();
     private final MainConfig mainConfig = new MainConfig();
-    private static final String mainConfigComment = "# FactionsUUID by drtshock\n" +
-            "# Report issues https://github.com/drtshock/Factions/issues?state=open\n" +
-            "# Live support http://factions-support.cf\n" +
-            "# Website https://www.spigotmc.org/resources/factionsuuid.1035/\n" +
-            "\n" +
-            "# Made with love <3";
 
     public ConfigManager(FactionsPlugin plugin) {
         this.plugin = plugin;
