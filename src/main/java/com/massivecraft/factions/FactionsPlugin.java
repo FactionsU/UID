@@ -20,6 +20,7 @@ import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.integration.Worldguard6;
 import com.massivecraft.factions.integration.Worldguard7;
 import com.massivecraft.factions.integration.dynmap.EngineDynmap;
+import com.massivecraft.factions.landraidcontrol.LandRaidControl;
 import com.massivecraft.factions.listeners.EssentialsListener;
 import com.massivecraft.factions.listeners.FactionsBlockListener;
 import com.massivecraft.factions.listeners.FactionsChatListener;
@@ -163,6 +164,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private ParticleProvider particleProvider;
     private IWorldguard worldguard;
     private Set<EntityType> safeZoneNerfedCreatureTypes = EnumSet.noneOf(EntityType.class);
+    private LandRaidControl landRaidControl;
 
     private Metrics metrics;
     private final Pattern factionsVersionPattern = Pattern.compile("b(\\d{1,4})");
@@ -243,6 +245,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         if (this.conf().data().json().useEfficientStorage()) {
             getLogger().info("Using space efficient (less readable) storage.");
         }
+
+        this.landRaidControl = LandRaidControl.getByName(this.conf().factions().landRaidControl().getSystem());
 
         File dataFolder = new File(this.getDataFolder(), "data");
         if (!dataFolder.exists()) {
@@ -514,6 +518,42 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         });
     }
 
+    private Set<Plugin> getPlugins(HandlerList... handlerLists) {
+        Set<Plugin> plugins = new HashSet<>();
+        for (HandlerList handlerList : handlerLists) {
+            plugins.addAll(this.getPlugins(handlerList));
+        }
+        return plugins;
+    }
+
+    private Set<Plugin> getPlugins(HandlerList handlerList) {
+        return Arrays.stream(handlerList.getRegisteredListeners()).map(RegisteredListener::getPlugin).collect(Collectors.toSet());
+    }
+
+    private void metricsLine(String name, Callable<Integer> callable) {
+        this.metrics.addCustomChart(new Metrics.SingleLineChart(name, callable));
+    }
+
+    private void metricsDrillPie(String name, Callable<Map<String, Map<String, Integer>>> callable) {
+        this.metrics.addCustomChart(new Metrics.DrilldownPie(name, callable));
+    }
+
+    private void metricsSimplePie(String name, Callable<String> callable) {
+        this.metrics.addCustomChart(new Metrics.SimplePie(name, callable));
+    }
+
+    private Map<String, Map<String, Integer>> metricsPluginInfo(Plugin plugin) {
+        return this.metricsInfo(plugin, () -> plugin.getDescription().getVersion());
+    }
+
+    private Map<String, Map<String, Integer>> metricsInfo(Object plugin, Supplier<String> versionGetter) {
+        Map<String, Map<String, Integer>> map = new HashMap<>();
+        Map<String, Integer> entry = new HashMap<>();
+        entry.put(plugin == null ? "nope" : versionGetter.get(), 1);
+        map.put(plugin == null ? "absent" : "present", entry);
+        return map;
+    }
+
     private void setNerfedEntities() {
         safeZoneNerfedCreatureTypes.add(EntityType.BLAZE);
         safeZoneNerfedCreatureTypes.add(EntityType.CAVE_SPIDER);
@@ -554,42 +594,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             safeZoneNerfedCreatureTypes.add(EntityType.PILLAGER);
             safeZoneNerfedCreatureTypes.add(EntityType.RAVAGER);
         }
-    }
-
-    private Set<Plugin> getPlugins(HandlerList... handlerLists) {
-        Set<Plugin> plugins = new HashSet<>();
-        for (HandlerList handlerList : handlerLists) {
-            plugins.addAll(this.getPlugins(handlerList));
-        }
-        return plugins;
-    }
-
-    private Set<Plugin> getPlugins(HandlerList handlerList) {
-        return Arrays.stream(handlerList.getRegisteredListeners()).map(RegisteredListener::getPlugin).collect(Collectors.toSet());
-    }
-
-    private void metricsLine(String name, Callable<Integer> callable) {
-        this.metrics.addCustomChart(new Metrics.SingleLineChart(name, callable));
-    }
-
-    private void metricsDrillPie(String name, Callable<Map<String, Map<String, Integer>>> callable) {
-        this.metrics.addCustomChart(new Metrics.DrilldownPie(name, callable));
-    }
-
-    private void metricsSimplePie(String name, Callable<String> callable) {
-        this.metrics.addCustomChart(new Metrics.SimplePie(name, callable));
-    }
-
-    private Map<String, Map<String, Integer>> metricsPluginInfo(Plugin plugin) {
-        return this.metricsInfo(plugin, () -> plugin.getDescription().getVersion());
-    }
-
-    private Map<String, Map<String, Integer>> metricsInfo(Object plugin, Supplier<String> versionGetter) {
-        Map<String, Map<String, Integer>> map = new HashMap<>();
-        Map<String, Integer> entry = new HashMap<>();
-        entry.put(plugin == null ? "nope" : versionGetter.get(), 1);
-        map.put(plugin == null ? "absent" : "present", entry);
-        return map;
     }
 
     private void loadWorldguard() {
@@ -837,6 +841,10 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     public MainConfig conf() {
         return this.configManager.getMainConfig();
+    }
+
+    public LandRaidControl getLandRaidControl() {
+        return this.landRaidControl;
     }
 
     public Set<EntityType> getSafeZoneNerfedCreatureTypes() {

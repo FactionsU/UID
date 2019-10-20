@@ -3,7 +3,9 @@ package com.massivecraft.factions.cmd;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.entity.Player;
@@ -58,7 +60,7 @@ public class CmdTop extends FCommand {
                 }
                 return 0;
             });
-        } else if (criteria.equalsIgnoreCase("power")) {
+        } else if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl && criteria.equalsIgnoreCase("power")) {
             factionList.sort((f1, f2) -> {
                 int f1Size = f1.getPowerRounded();
                 int f2Size = f2.getPowerRounded();
@@ -152,7 +154,7 @@ public class CmdTop extends FCommand {
             return String.valueOf(faction.getFPlayers().size());
         } else if (criteria.equalsIgnoreCase("land")) {
             return String.valueOf(faction.getLandRounded());
-        } else if (criteria.equalsIgnoreCase("power")) {
+        } else if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl && criteria.equalsIgnoreCase("power")) {
             return String.valueOf(faction.getPowerRounded());
         } else { // Last one is balance, and it has 3 different things it could be.
             double balance = Econ.getBalance(faction.getAccountId());

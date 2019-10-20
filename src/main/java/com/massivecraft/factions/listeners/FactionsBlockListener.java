@@ -270,7 +270,7 @@ public class FactionsBlockListener implements Listener {
 
             return false;
         }
-        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability() && otherFaction.getLandRounded() >= otherFaction.getPowerRounded()) {
+        if (FactionsPlugin.getInstance().getLandRaidControl().isRaidable(otherFaction)) {
             return true;
         }
 

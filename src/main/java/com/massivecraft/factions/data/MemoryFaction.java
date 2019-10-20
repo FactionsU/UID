@@ -691,7 +691,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public boolean hasLandInflation() {
-        return this.getLandRounded() > this.getPowerRounded();
+        return FactionsPlugin.getInstance().getLandRaidControl().hasLandInflation(this);
     }
 
     public Integer getPermanentPower() {

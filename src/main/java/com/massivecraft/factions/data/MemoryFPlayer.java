@@ -14,6 +14,7 @@ import com.massivecraft.factions.iface.RelationParticipator;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.integration.LWC;
+import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
@@ -328,9 +329,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public void setLastLoginTime(long lastLoginTime) {
-        losePowerFromBeingOffline();
         this.lastLoginTime = lastLoginTime;
-        this.lastPowerUpdateTime = lastLoginTime;
         if (FactionsPlugin.getInstance().conf().factions().pvp().getNoPVPDamageToOthersForXSecondsAfterLogin() > 0) {
             this.loginPvpDisabled = true;
         }
@@ -562,10 +561,9 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public void losePowerFromBeingOffline() {
+        long now = System.currentTimeMillis();
         if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getOfflineLossPerDay() > 0.0 && this.power > FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getOfflineLossLimit()) {
-            long now = System.currentTimeMillis();
             long millisPassed = now - this.lastPowerUpdateTime;
-            this.lastPowerUpdateTime = now;
 
             double loss = millisPassed * FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getOfflineLossPerDay() / (24 * 60 * 60 * 1000);
             if (this.power - loss < FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getOfflineLossLimit()) {
@@ -573,11 +571,10 @@ public abstract class MemoryFPlayer implements FPlayer {
             }
             this.alterPower(-loss);
         }
+        this.lastPowerUpdateTime = now;
     }
 
     public void onDeath() {
-        this.updatePower();
-        this.alterPower(-FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
         if (hasFaction()) {
             getFaction().setLastDeath(System.currentTimeMillis());
         }
@@ -676,8 +673,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && this.getPower() < 0) {
-            msg(TL.LEAVE_NEGATIVEPOWER);
+        if (!FactionsPlugin.getInstance().getLandRaidControl().canLeaveFaction(this)) {
             return;
         }
 
@@ -769,7 +765,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_SAFEZONE.toString());
         } else if (currentFaction.isWarZone()) {
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_WARZONE.toString());
-        } else if (FactionsPlugin.getInstance().conf().factions().claims().isAllowOverClaim() && ownedLand >= forFaction.getPowerRounded()) {
+        } else if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl && FactionsPlugin.getInstance().conf().factions().claims().isAllowOverClaim() && ownedLand >= forFaction.getPowerRounded()) {
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_POWER.toString());
         } else if (FactionsPlugin.getInstance().conf().factions().claims().getLandsMax() != 0 && ownedLand >= FactionsPlugin.getInstance().conf().factions().claims().getLandsMax() && forFaction.isNormal()) {
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_LIMIT.toString());
@@ -889,6 +885,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public boolean shouldBeSaved() {
+        // TODO DTR
         return this.hasFaction() || (this.getPowerRounded() != this.getPowerMaxRounded() && this.getPowerRounded() != (int) Math.round(FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getPlayerStarting()));
     }
 
