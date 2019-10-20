@@ -65,7 +65,7 @@ public class CmdShow extends FCommand {
         }
 
         if (context.fPlayer != null && !context.player.hasPermission(Permission.SHOW_BYPASS_EXEMPT.toString())
-                && FactionsPlugin.getInstance().getConfig().getStringList("show-exempt").contains(faction.getTag())) {
+                && FactionsPlugin.getInstance().conf().commands().show().getExempt().contains(faction.getTag())) {
             context.msg(TL.COMMAND_SHOW_EXEMPT);
             return;
         }
@@ -75,7 +75,7 @@ public class CmdShow extends FCommand {
             return;
         }
 
-        List<String> show = FactionsPlugin.getInstance().getConfig().getStringList("show");
+        List<String> show = FactionsPlugin.getInstance().conf().commands().show().getFormat();
         if (show == null || show.isEmpty()) {
             show = defaults;
         }
@@ -188,7 +188,7 @@ public class CmdShow extends FCommand {
     }
 
     private boolean groupPresent() {
-        for (String line : FactionsPlugin.getInstance().getConfig().getStringList("tooltips.show")) {
+        for (String line : FactionsPlugin.getInstance().conf().commands().toolTips().getPlayer()) {
             if (line.contains("{group}")) {
                 return true;
             }

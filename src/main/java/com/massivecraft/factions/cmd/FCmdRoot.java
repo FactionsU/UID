@@ -215,7 +215,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
             this.addSubCommand(new CmdVault());
         }
 
-        if (FactionsPlugin.getInstance().getConfig().getBoolean("f-fly.enable", false)) {
+        if (FactionsPlugin.getInstance().conf().commands().fly().isEnable()) {
             this.addSubCommand(this.cmdFly);
             this.addSubCommand(this.cmdTrail);
             FactionsPlugin.getInstance().getLogger().info("Enabling /f fly command");

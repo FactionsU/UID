@@ -160,7 +160,7 @@ public class FactionsEntityListener extends AbstractListener {
             Player player = (Player) entity;
             FPlayer me = FPlayers.getInstance().getByPlayer(player);
             cancelFStuckTeleport(player);
-            if (plugin.getConfig().getBoolean("f-fly.disable-generic-damage", false)) {
+            if (plugin.conf().commands().fly().isDisableOnGenericDamage()) {
                 cancelFFly(player);
             }
             if (me.isWarmingUp()) {

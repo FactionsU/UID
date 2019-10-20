@@ -110,9 +110,9 @@ public class FactionsPlayerListener extends AbstractListener {
             }
         }.runTaskLater(FactionsPlugin.getInstance(), 33L); // Don't ask me why.
 
-        if (FactionsPlugin.getInstance().getConfig().getBoolean("scoreboard.default-enabled", false)) {
+        if (FactionsPlugin.getInstance().conf().scoreboard().constant().isEnabled()) {
             FScoreboard.init(me);
-            FScoreboard.get(me).setDefaultSidebar(new FDefaultSidebar(), FactionsPlugin.getInstance().getConfig().getInt("default-update-interval", 20));
+            FScoreboard.get(me).setDefaultSidebar(new FDefaultSidebar());
             FScoreboard.get(me).setSidebarVisibility(me.showScoreboard());
         }
 
@@ -128,7 +128,7 @@ public class FactionsPlayerListener extends AbstractListener {
         // If they have the permission, don't let them autoleave. Bad inverted setter :\
         me.setAutoLeave(!me.getPlayer().hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
         me.setTakeFallDamage(true);
-        if (plugin.getConfig().getBoolean("f-fly.enable", false) && me.isFlying()) { // TODO allow flight to continue
+        if (plugin.conf().commands().fly().isEnable() && me.isFlying()) { // TODO allow flight to continue
             me.setFlying(false);
         }
 
@@ -216,7 +216,7 @@ public class FactionsPlayerListener extends AbstractListener {
         Faction factionTo = Board.getInstance().getFactionAt(to);
         boolean changedFaction = (factionFrom != factionTo);
 
-        if (plugin.getConfig().getBoolean("f-fly.enable", false) && changedFaction && !me.isAdminBypassing()) {
+        if (plugin.conf().commands().fly().isEnable() && changedFaction && !me.isAdminBypassing()) {
             boolean canFly = me.canFlyAtLocation();
             if (me.isFlying() && !canFly) {
                 me.setFlying(false);
@@ -227,12 +227,9 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (me.isMapAutoUpdating()) {
             if (showTimes.containsKey(player.getUniqueId()) && (showTimes.get(player.getUniqueId()) > System.currentTimeMillis()) && !me.isFlying()) {
-                if (FactionsPlugin.getInstance().getConfig().getBoolean("findfactionsexploit.log", false)) {
-                    FactionsPlugin.getInstance().log(Level.WARNING, "%s tried to show a faction map too soon and triggered exploit blocker.", player.getName());
-                }
             } else {
                 me.sendFancyMessage(Board.getInstance().getMap(me, to, player.getLocation().getYaw()));
-                showTimes.put(player.getUniqueId(), System.currentTimeMillis() + FactionsPlugin.getInstance().getConfig().getLong("findfactionsexploit.cooldown", 2000));
+                showTimes.put(player.getUniqueId(), System.currentTimeMillis() + FactionsPlugin.getInstance().conf().commands().map().getCooldown());
             }
         } else {
             Faction myFaction = me.getFaction();
@@ -423,7 +420,7 @@ public class FactionsPlayerListener extends AbstractListener {
         FLocation loc = new FLocation(location);
         Faction otherFaction = Board.getInstance().getFactionAt(loc);
 
-        if (FactionsPlugin.getInstance().getConfig().getBoolean("hcf.raidable", false) && otherFaction.getLandRounded() >= otherFaction.getPowerRounded()) {
+        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability() && otherFaction.getLandRounded() >= otherFaction.getPowerRounded()) {
             return true;
         }
 
@@ -526,7 +523,7 @@ public class FactionsPlayerListener extends AbstractListener {
         me.setLastStoodAt(to);
 
         // Check the location they're teleporting to and check if they can fly there.
-        if (plugin.getConfig().getBoolean("f-fly.enable", false) && !me.isAdminBypassing()) {
+        if (plugin.conf().commands().fly().isEnable() && !me.isAdminBypassing()) {
             boolean canFly = me.canFlyAtLocation(to);
             if (me.isFlying() && !canFly) {
                 me.setFlying(false, false);

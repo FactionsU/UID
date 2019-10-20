@@ -89,7 +89,7 @@ public class FScoreboard {
         bufferedObjective.setDisplaySlot(visible ? DisplaySlot.SIDEBAR : null);
     }
 
-    public void setDefaultSidebar(final FSidebarProvider provider, int updateInterval) {
+    public void setDefaultSidebar(final FSidebarProvider provider) {
         if (!isSupportedByServer()) {
             return;
         }
@@ -112,7 +112,7 @@ public class FScoreboard {
                     updateObjective();
                 }
             }
-        }.runTaskTimer(FactionsPlugin.getInstance(), updateInterval, updateInterval);
+        }.runTaskTimer(FactionsPlugin.getInstance(), 20, 20);
     }
 
     public void setTemporarySidebar(final FSidebarProvider provider) {
@@ -135,7 +135,7 @@ public class FScoreboard {
                     updateObjective();
                 }
             }
-        }.runTaskLater(FactionsPlugin.getInstance(), FactionsPlugin.getInstance().getConfig().getInt("scoreboard.expiration", 7) * 20);
+        }.runTaskLater(FactionsPlugin.getInstance(), FactionsPlugin.getInstance().conf().scoreboard().info().getExpiration() * 20);
     }
 
     private void updateObjective() {

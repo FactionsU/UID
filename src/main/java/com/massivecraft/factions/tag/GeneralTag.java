@@ -2,16 +2,17 @@ package com.massivecraft.factions.tag;
 
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
 
 import java.util.function.Supplier;
 
 public enum GeneralTag implements Tag {
-    MAX_WARPS("max-warps", () -> String.valueOf(FactionsPlugin.getInstance().getConfig().getInt("max-warps", 5))),
-    MAX_ALLIES("max-allies", () -> getRelation("ally")),
-    MAX_ENEMIES("max-enemies", () -> getRelation("enemy")),
-    MAX_TRUCES("max-truces", () -> getRelation("truce")),
+    MAX_WARPS("max-warps", () -> String.valueOf(FactionsPlugin.getInstance().conf().commands().warp().getMaxWarps())),
+    MAX_ALLIES("max-allies", () -> getRelation(Relation.ALLY)),
+    MAX_ENEMIES("max-enemies", () -> getRelation(Relation.ENEMY)),
+    MAX_TRUCES("max-truces", () -> getRelation(Relation.TRUCE)),
     FACTIONLESS("factionless", () -> String.valueOf(FPlayers.getInstance().getOnlinePlayers().stream().filter(p -> !p.hasFaction()).count())),
     FACTIONLESS_TOTAL("factionless-total", () -> String.valueOf(FPlayers.getInstance().getAllFPlayers().stream().filter(p -> !p.hasFaction()).count())),
     TOTAL_ONLINE("total-online", () -> String.valueOf(Bukkit.getOnlinePlayers().size())),
@@ -20,9 +21,9 @@ public enum GeneralTag implements Tag {
     private final String tag;
     private final Supplier<String> supplier;
 
-    private static String getRelation(String relation) {
-        if (FactionsPlugin.getInstance().getConfig().getBoolean("max-relations.enabled", true)) {
-            return String.valueOf(FactionsPlugin.getInstance().getConfig().getInt("max-relations." + relation, 10));
+    private static String getRelation(Relation relation) {
+        if (FactionsPlugin.getInstance().conf().factions().maxRelations().isEnabled()) {
+            return String.valueOf(relation.getMax());
         }
         return TL.GENERIC_INFINITY.toString();
     }

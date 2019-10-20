@@ -60,7 +60,7 @@ public interface Tag {
     }
 
     static boolean isMinimalShow() {
-        return FactionsPlugin.getInstance().getConfig().getBoolean("minimal-show", false);
+        return FactionsPlugin.getInstance().conf().commands().show().isMinimal();
     }
 
     /**

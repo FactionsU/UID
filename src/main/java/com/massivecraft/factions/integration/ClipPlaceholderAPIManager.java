@@ -127,7 +127,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
             case "faction_warps":
                 return String.valueOf(faction.getWarps().size());
             case "faction_raidable":
-                boolean raid = FactionsPlugin.getInstance().getConfig().getBoolean("hcf.raidable", false) && faction.getLandRounded() >= faction.getPowerRounded();
+                boolean raid = FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability() && faction.getLandRounded() >= faction.getPowerRounded();
                 return raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
             case "faction_home_world":
                 return faction.hasHome() ? faction.getHome().getWorld().getName() : "";

@@ -149,7 +149,7 @@ public class CmdHome extends FCommand {
             }
 
             context.player.teleport(targetFaction.getHome());
-        }, this.plugin.getConfig().getLong("warmups.f-home", 0));
+        }, this.plugin.conf().commands().home().getDelay());
     }
 
     @Override

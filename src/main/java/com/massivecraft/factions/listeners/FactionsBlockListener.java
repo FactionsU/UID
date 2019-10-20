@@ -163,7 +163,7 @@ public class FactionsBlockListener implements Listener {
                 .distinct()
                 .collect(Collectors.toList());
 
-        boolean disableOverall = FactionsPlugin.getInstance().getConfig().getBoolean("disable-pistons-in-territory", false);
+        boolean disableOverall = FactionsPlugin.getInstance().conf().factions().other().isDisablePistonsInTerritory();
         for (Faction otherFaction : factions) {
             if (pistonFaction == otherFaction) {
                 continue;
@@ -270,7 +270,7 @@ public class FactionsBlockListener implements Listener {
 
             return false;
         }
-        if (FactionsPlugin.getInstance().getConfig().getBoolean("hcf.raidable", false) && otherFaction.getLandRounded() >= otherFaction.getPowerRounded()) {
+        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability() && otherFaction.getLandRounded() >= otherFaction.getPowerRounded()) {
             return true;
         }
 

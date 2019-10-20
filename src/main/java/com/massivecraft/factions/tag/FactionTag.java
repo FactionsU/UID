@@ -32,7 +32,7 @@ public enum FactionTag implements Tag {
     FACTION_RELATION_COLOR("faction-relation-color", (fac, fp) -> fp == null ? "" : fp.getColorTo(fac).toString()),
     HOME_WORLD("world", (fac) -> fac.hasHome() ? fac.getHome().getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
     RAIDABLE("raidable", (fac) -> {
-        if (FactionsPlugin.getInstance().getConfig().getBoolean("hcf.raidable", false)) {
+        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability()) {
             return fac.getLandRounded() >= fac.getPowerRounded() ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
         }
         return null;

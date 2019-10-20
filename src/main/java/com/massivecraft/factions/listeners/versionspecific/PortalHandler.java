@@ -11,12 +11,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class PortalHandler implements PortalListenerBase {
+    @Override
     public boolean shouldCancel(Location location, Player player) {
         if (!FactionsPlugin.getInstance().worldUtil().isEnabled(player.getWorld())) {
             return true;
         }
 
-        if (!FactionsPlugin.getInstance().getConfig().getBoolean("portals.limit", false)) {
+        if (!FactionsPlugin.getInstance().conf().factions().portals().isLimit()) {
             return false; // Don't do anything if they don't want us to.
         }
         FLocation loc = new FLocation(location);
@@ -29,7 +30,7 @@ public class PortalHandler implements PortalListenerBase {
         }
 
         FPlayer fp = FPlayers.getInstance().getByPlayer(player);
-        String mininumRelation = FactionsPlugin.getInstance().getConfig().getString("portals.minimum-relation", "MEMBER"); // Defaults to Neutral if typed wrong.
+        String mininumRelation = FactionsPlugin.getInstance().conf().factions().portals().getMinimumRelation(); // Defaults to Neutral if typed wrong.
         return !fp.getFaction().getRelationTo(faction).isAtLeast(Relation.fromString(mininumRelation));
     }
 }

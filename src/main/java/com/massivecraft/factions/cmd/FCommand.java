@@ -4,6 +4,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -144,70 +145,23 @@ public abstract class FCommand {
 
     public abstract TL getUsageTranslation();
 
-
     /*
         Common Logic
      */
     public List<String> getToolTips(FPlayer player) {
         List<String> lines = new ArrayList<>();
-        for (String s : FactionsPlugin.getInstance().getConfig().getStringList("tooltips.show")) {
-            lines.add(ChatColor.translateAlternateColorCodes('&', replaceFPlayerTags(s, player)));
+        for (String s : FactionsPlugin.getInstance().conf().commands().toolTips().getPlayer()) {
+            lines.add(ChatColor.translateAlternateColorCodes('&', Tag.parsePlain(player, s)));
         }
         return lines;
     }
 
     public List<String> getToolTips(Faction faction) {
         List<String> lines = new ArrayList<>();
-        for (String s : FactionsPlugin.getInstance().getConfig().getStringList("tooltips.list")) {
-            lines.add(ChatColor.translateAlternateColorCodes('&', replaceFactionTags(s, faction)));
+        for (String s : FactionsPlugin.getInstance().conf().commands().toolTips().getFaction()) {
+            lines.add(ChatColor.translateAlternateColorCodes('&', Tag.parsePlain(faction, s)));
         }
         return lines;
-    }
-
-    public String replaceFPlayerTags(String s, FPlayer player) {
-        if (s.contains("{balance}")) {
-            String balance = Econ.isSetup() ? Econ.getFriendlyBalance(player) : "no balance";
-            s = s.replace("{balance}", balance);
-        }
-        if (s.contains("{lastSeen}")) {
-            String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - player.getLastLoginTime(), true, true) + " ago";
-            String lastSeen = player.isOnline() ? ChatColor.GREEN + "Online" : (System.currentTimeMillis() - player.getLastLoginTime() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
-            s = s.replace("{lastSeen}", lastSeen);
-        }
-        if (s.contains("{power}")) {
-            String power = player.getPowerRounded() + "/" + player.getPowerMaxRounded();
-            s = s.replace("{power}", power);
-        }
-        if (s.contains("{group}")) {
-            String group = FactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(UUID.fromString(player.getId())));
-            s = s.replace("{group}", group);
-        }
-        return s;
-    }
-
-    public String replaceFactionTags(String s, Faction faction) {
-        if (s.contains("{power}")) {
-            s = s.replace("{power}", String.valueOf(faction.getPowerRounded()));
-        }
-        if (s.contains("{maxPower}")) {
-            s = s.replace("{maxPower}", String.valueOf(faction.getPowerMaxRounded()));
-        }
-        if (s.contains("{leader}")) {
-            FPlayer fLeader = faction.getFPlayerAdmin();
-            String leader = fLeader == null ? "Server" : fLeader.getName().substring(0, fLeader.getName().length() > 14 ? 13 : fLeader.getName().length());
-            s = s.replace("{leader}", leader);
-        }
-        if (s.contains("{chunks}")) {
-            s = s.replace("{chunks}", String.valueOf(faction.getLandRounded()));
-        }
-        if (s.contains("{members}")) {
-            s = s.replace("{members}", String.valueOf(faction.getSize()));
-
-        }
-        if (s.contains("{online}")) {
-            s = s.replace("{online}", String.valueOf(faction.getOnlinePlayers().size()));
-        }
-        return s;
     }
 
     /*

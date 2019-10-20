@@ -12,22 +12,20 @@ public class FDefaultSidebar extends FSidebarProvider {
 
     @Override
     public String getTitle(FPlayer fplayer) {
-        return replaceTags(fplayer, FactionsPlugin.getInstance().getConfig().getString("scoreboard.default-title", "{name}"));
+        return replaceTags(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getTitle());
     }
 
     @Override
     public List<String> getLines(FPlayer fplayer) {
         if (fplayer.hasFaction()) {
-            return getOutput(fplayer, "scoreboard.default");
-        } else if (FactionsPlugin.getInstance().getConfig().getBoolean("scoreboard.factionless-enabled", false)) {
-            return getOutput(fplayer, "scoreboard.factionless");
+            return getOutput(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getContent());
+        } else if (FactionsPlugin.getInstance().conf().scoreboard().constant().isFactionlessEnabled()) {
+            return getOutput(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getFactionlessContent());
         }
-        return getOutput(fplayer, "scoreboard.default"); // no faction, factionless-board disabled
+        return getOutput(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getContent()); // no faction, factionless-board disabled
     }
 
-    public List<String> getOutput(FPlayer fplayer, String list) {
-        List<String> lines = FactionsPlugin.getInstance().getConfig().getStringList(list);
-
+    public List<String> getOutput(FPlayer fplayer, List<String> lines) {
         if (lines == null || lines.isEmpty()) {
             return new ArrayList<>();
         }
