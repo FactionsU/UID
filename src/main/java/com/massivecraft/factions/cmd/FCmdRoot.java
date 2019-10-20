@@ -220,7 +220,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
             this.addSubCommand(this.cmdTrail);
             FactionsPlugin.getInstance().getLogger().info("Enabling /f fly command");
         } else {
-            FactionsPlugin.getInstance().getLogger().info("Faction flight set to false in config.yml. Not enabling /f fly command.");
+            FactionsPlugin.getInstance().getLogger().info("Faction flight set to false in main.conf. Not enabling /f fly command.");
         }
 
         if (CommodoreProvider.isSupported()) {

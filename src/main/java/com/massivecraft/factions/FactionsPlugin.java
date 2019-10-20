@@ -182,15 +182,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
         // Ensure basefolder exists!
         this.getDataFolder().mkdirs();
-        try {
-            List<String> allLines = Files.readAllLines(this.getDataFolder().toPath().resolve("config.yml"), Charsets.UTF_8);
-            if (allLines.size() > 3 && allLines.get(2).contains("ive support") && allLines.get(2).contains("esper")) {
-                List<String> list = new ArrayList<>(allLines);
-                list.set(2, "# Live support http://factions-support.cf");
-                Files.write(this.getDataFolder().toPath().resolve("config.yml"), list, Charsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
-            }
-        } catch (IOException ignored) { // I tried!
-        }
 
         byte[] m = Bukkit.getMotd().getBytes(StandardCharsets.UTF_8);
         if (m.length == 0) {
@@ -292,10 +283,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         // Check for Essentials
         IEssentials ess = Essentials.setup();
 
-        // We set the option to TRUE by default in the config.yml for new users,
-        // BUT we leave it set to false for users updating that haven't added it to their config.
         if (ess != null && conf().factions().other().isDeleteEssentialsHomes()) {
-            getLogger().info("Found Essentials. We'll delete player homes in their old Faction's when kicked.");
+            getLogger().info("Found Essentials, and based on main.conf will delete player homes in their old faction when they leave");
             getServer().getPluginManager().registerEvents(new EssentialsListener(ess), this);
         }
 
