@@ -127,7 +127,8 @@ public class Transitioner {
 
     private void migrateV1() {
         Path confPath = this.plugin.getDataFolder().toPath().resolve("config").resolve("main.conf");
-        if (!confPath.toFile().exists()) {
+        Path configPath = this.plugin.getDataFolder().toPath().resolve("config.yml");
+        if (!confPath.toFile().exists() || !configPath.toFile().exists()) {
             return;
         }
         HoconConfigurationLoader loader = Loader.getLoader("main");
@@ -141,8 +142,9 @@ public class Transitioner {
             Loader.load(loader, oldConf);
             TransitionConfigV1 newConf = new TransitionConfigV1();
             Loader.load(loader, newConf);
-            newConf.update(oldConf);
+            newConf.update(oldConf, this.plugin.getConfig());
             Loader.loadAndSave(loader, newConf);
+            configPath.toFile().delete();
         } catch (Exception e) {
             this.plugin.getLogger().log(Level.SEVERE, "Could not process configuration", e);
         }

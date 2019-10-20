@@ -33,15 +33,13 @@ public enum FactionTag implements Tag {
     HOME_WORLD("world", (fac) -> fac.hasHome() ? fac.getHome().getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
     RAIDABLE("raidable", (fac) -> {
         if (FactionsPlugin.getInstance().getConfig().getBoolean("hcf.raidable", false)) {
-            boolean raidable = fac.getLandRounded() >= fac.getPowerRounded();
-            String str = raidable ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
-            if (FactionsPlugin.getInstance().getConfig().getBoolean("hcf.dtr", false)) {
-                int dtr = raidable ? 0 : (int) Math.ceil(((double) (fac.getPowerRounded() - fac.getLandRounded())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
-                str += ' ' + TL.COMMAND_SHOW_DEATHS_TIL_RAIDABLE.format(dtr);
-            }
-            return str;
+            return fac.getLandRounded() >= fac.getPowerRounded() ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
         }
         return null;
+    }),
+    DTR("dtr", (fac) -> {
+        int dtr = fac.getLandRounded() >= fac.getPowerRounded() ? 0 : (int) Math.ceil(((double) (fac.getPowerRounded() - fac.getLandRounded())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
+        return TL.COMMAND_SHOW_DEATHS_TIL_RAIDABLE.format(dtr);
     }),
     PEACEFUL("peaceful", (fac) -> fac.isPeaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getPeaceful() + TL.COMMAND_SHOW_PEACEFUL.toString() : ""),
     PERMANENT("permanent", (fac) -> fac.isPermanent() ? "permanent" : "{notPermanent}"), // no braces needed

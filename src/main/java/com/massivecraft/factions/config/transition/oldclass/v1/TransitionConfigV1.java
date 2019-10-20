@@ -5,17 +5,33 @@ import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("ALL")
 public class TransitionConfigV1 {
-    public static class VersioningInfo {
+    public static class AVeryFriendlyFactionsConfig {
         @Comment("Don't change this value yourself, unless you WANT a broken config!")
         private int version = 2;
+
+        @Comment("Debug\n" +
+                "Turn this on if you are having issues with something and working on resolving them.\n" +
+                "This will spam your console with information that is useful if you know how to read the source.\n" +
+                "It's suggested that you only turn this on at the direction of a developer.")
+        private boolean debug = false;
+
+        public boolean isDebug() {
+            return debug;
+        }
     }
 
     public class Colors {
@@ -104,6 +120,377 @@ public class TransitionConfigV1 {
         }
     }
 
+    public class Commands {
+        public class Fly {
+            public class Particles {
+                @Comment("Speed of the particles, can be decimal value")
+                private double speed = 0.02;
+                @Comment("Amount spawned")
+                private int amount = 20;
+                @Comment("How often should we spawn these particles?\n" +
+                        "0 disables this completely")
+                private double spawnRate = 0.2;
+
+                public double getSpeed() {
+                    return speed;
+                }
+
+                public int getAmount() {
+                    return amount;
+                }
+
+                public double getSpawnRate() {
+                    return spawnRate;
+                }
+            }
+
+            @Comment("Warmup seconds before command executes. Set to 0 for no warmup.")
+            private int delay = 0;
+            @Comment("True to enable the fly command, false to disable")
+            private boolean enable = true;
+            @Comment("If a player leaves fly (out of territory or took damage)\n" +
+                    "how long (in seconds) should they not take fall damage for?\n" +
+                    "Set to 0 to have them always take fall damage.")
+            private int fallDamageCooldown = 3;
+            @Comment("From how far away a player can disable another's flight by being enemy\n" +
+                    "Set to 0 if wanted disable\n" +
+                    "Note: Will produce lag at higher numbers")
+            private int enemyRadius = 7;
+            @Comment("How frequently to check enemy radius, in seconds. Set to 0 to disable checking.")
+            private int radiusCheck = 1;
+            @Comment("Should we disable flight if the player has suffered generic damage")
+            private boolean disableOnGenericDamage = false;
+
+            @Comment("Trails show below the players foot when flying, faction.fly.trails\n" +
+                    "Players can enable them with /f trail on/off\n" +
+                    "Players can also set which effect to show /f trail effect <particle> only if they have faction.fly.trails.<particle>")
+            private Particles particles = new Particles();
+
+            public int getDelay() {
+                return delay;
+            }
+
+            public boolean isEnable() {
+                return enable;
+            }
+
+            public int getFallDamageCooldown() {
+                return fallDamageCooldown;
+            }
+
+            public int getEnemyRadius() {
+                return enemyRadius;
+            }
+
+            public int getRadiusCheck() {
+                return radiusCheck;
+            }
+
+            public boolean isDisableOnGenericDamage() {
+                return disableOnGenericDamage;
+            }
+
+            public Particles particles() {
+                return particles;
+            }
+        }
+
+        public class Help {
+            @Comment("You can change the page name to whatever you like\n" +
+                    "We use '1' to preserve default functionality of /f help 1")
+            private Map<String, List<String>> entries = new HashMap<String, List<String>>() {
+                {
+                    this.put("1", Arrays.asList(
+                            "&e&m----------------------------------------------",
+                            "                  &c&lFactions Help               ",
+                            "&e&m----------------------------------------------",
+                            "&3/f create  &e>>  &7Create your own faction",
+                            "&3/f who      &e>>  &7Show factions info",
+                            "&3/f tag      &e>>  &7Change faction tag",
+                            "&3/f join     &e>>  &7Join faction",
+                            "&3/f list      &e>>  &7List all factions",
+                            "&e&m--------------&r &2/f help 2 for more &e&m--------------"));
+                    this.put("2", Arrays.asList(
+                            "&e&m------------------&r&c&l Page 2 &e&m--------------------",
+                            "&3/f home     &e>>  &7Teleport to faction home",
+                            "&3/f sethome &e>>  &7Set your faction home",
+                            "&3/f leave    &e>>  &7Leave your faction",
+                            "&3/f invite    &e>>  &7Invite a player to your faction",
+                            "&3/f deinvite &e>>  &7Revoke invitation to player",
+                            "&e&m--------------&r &2/f help 3 for more &e&m--------------"));
+                    this.put("3", Arrays.asList(
+                            "&e&m------------------&r&c&l Page 3 &e&m--------------------",
+                            "&3/f claim     &e>>  &7Claim land",
+                            "&3/f unclaim  &e>>  &7Unclaim land",
+                            "&3/f kick      &e>>  &7Kick player from your faction",
+                            "&3/f mod      &e>>  &7Set player role in faction",
+                            "&3/f chat     &e>>  &7Switch to faction chat",
+                            "&e&m--------------&r &2/f help 4 for more &e&m--------------"));
+                    this.put("4", Arrays.asList(
+                            "&e&m------------------&r&c&l Page 4 &e&m--------------------",
+                            "&3/f version &e>>  &7Display version information",
+                            "&e&m--------------&r&2 End of /f help &e&m-----------------"));
+                }
+            };
+            @Comment("set to true to use legacy factions help")
+            private boolean useOldHelp = true;
+
+            public Map<String, List<String>> getEntries() {
+                return entries != null ? entries : Collections.emptyMap();
+            }
+
+            public boolean isUseOldHelp() {
+                return useOldHelp;
+            }
+        }
+
+        public class Home {
+            @Comment("Warmup seconds before command executes. Set to 0 for no warmup.")
+            private int delay = 0;
+
+            public int getDelay() {
+                return delay;
+            }
+        }
+
+        public class ListCmd {
+            @Comment("You can only use {pagenumber} and {pagecount} in the header")
+            private String header = "&e&m----------&r&e[ &2Faction List &9{pagenumber}&e/&9{pagecount} &e]&m----------";
+            @Comment("You can use any variables here")
+            private String factionlessEntry = "<i>Factionless<i> {factionless} online";
+            @Comment("You can use any variable here")
+            private String entry = "<a>{faction-relation-color}{faction} <i>{online} / {members} online, <a>Land / Power / Maxpower: <i>{chunks}/{power}/{maxPower}";
+
+            public String getHeader() {
+                return header;
+            }
+
+            public String getFactionlessEntry() {
+                return factionlessEntry;
+            }
+
+            public String getEntry() {
+                return entry;
+            }
+        }
+
+        public class MapCmd {
+            @Comment("This will help limit how many times a player can be sent a map of factions.\n" +
+                    "Set this to the cooldown you want, in milliseconds, for a map to be shown to a player.\n" +
+                    "This can prevent some teleportation-based exploits for finding factions.\n" +
+                    "The old default was 2000, which blocks any movement faster than running.\n" +
+                    "The new default is 700, which should also allow boats and horses.")
+            private int cooldown = 700;
+
+            public int getCooldown() {
+                return cooldown;
+            }
+        }
+
+        public class Near {
+            @Comment("Making this radius larger increases lag, do so at your own risk\n" +
+                    "If on a high radius it is advised to add a cooldown to the command\n" +
+                    "Also using {distance} placeholder in the lang would cause more lag on a bigger radius")
+            private int radius = 20;
+
+            public int getRadius() {
+                return radius;
+            }
+        }
+
+        public class SeeChunk {
+            private boolean particles = true;
+            @Comment("Get a list of particle names here: https://factions-support.cf/particles/")
+            private String particleName = "REDSTONE";
+            @Comment("If the chosen particle is compatible with coloring we will color\n" +
+                    "it based on the current chunk's faction")
+            private boolean relationalColor = true;
+            @Comment("How often should we update the particles to the current player's location?")
+            private double particleUpdateTime = 0.75;
+
+            public boolean isParticles() {
+                return particles;
+            }
+
+            public String getParticleName() {
+                return particleName;
+            }
+
+            public boolean isRelationalColor() {
+                return relationalColor;
+            }
+
+            public double getParticleUpdateTime() {
+                return particleUpdateTime;
+            }
+        }
+
+        public class Show {
+            @Comment("You can use any variable here, including fancy messages. Color codes and or tags work fine.\n" +
+                    "Lines that aren't defined wont be sent (home not set, faction not peaceful / permanent, dtr freeze)\n" +
+                    "Supports placeholders.\n" +
+                    "First line can be {header} for default header, or any string (we recommend &m for smooth lines ;p)\n" +
+                    "The line with 'permanent' in it only appears if the faction is permanent.")
+            private List<String> format = new ArrayList<String>() {
+                {
+                    this.add("{header}");
+                    this.add("<a>Description: <i>{description}");
+                    this.add("<a>Joining: <i>{joining}    {peaceful}");
+                    this.add("<a>Land / Power / Maxpower: <i> {chunks}/{power}/{maxPower}");
+                    this.add("<a>Raidable: {raidable}");
+                    this.add("<a>Founded: <i>{create-date}");
+                    this.add("<a>This faction is permanent, remaining even with no members.'");
+                    this.add("<a>Land value: <i>{land-value} {land-refund}");
+                    this.add("<a>Balance: <i>{faction-balance}");
+                    this.add("<a>Bans: <i>{faction-bancount}");
+                    this.add("<a>Allies(<i>{allies}<a>/<i>{max-allies}<a>): {allies-list} ");
+                    this.add("<a>Online: (<i>{online}<a>/<i>{members}<a>): {online-list}");
+                    this.add("<a>Offline: (<i>{offline}<a>/<i>{members}<a>): {offline-list}");
+                }
+            };
+            @Comment("Set true to not display empty fancy messages")
+            private boolean minimal = false;
+            @Comment("Factions that should be exempt from /f show, case sensitive, useful for a\n" +
+                    "serverteam faction, since the command shows vanished players otherwise")
+            private List<String> exempt = new ArrayList<String>() {
+                {
+                    this.add("put_faction_tag_here");
+                }
+            };
+
+            public List<String> getFormat() {
+                return format != null ? format : Collections.emptyList();
+            }
+
+            public boolean isMinimal() {
+                return minimal;
+            }
+
+            public List<String> getExempt() {
+                return exempt != null ? exempt : Collections.emptyList();
+            }
+        }
+
+        public class Stuck {
+            @Comment("Warmup seconds before command executes. Set to 0 for no warmup.")
+            private int delay = 30;
+            @Comment("This radius defines how far from where they ran the command the player\n" +
+                    "may travel while waiting to be unstuck. If they leave this radius, the\n" +
+                    "command will be cancelled.")
+            private int radius = 10;
+
+            public int getDelay() {
+                return delay;
+            }
+
+            public int getRadius() {
+                return radius;
+            }
+        }
+
+        public class Warp {
+            @Comment("Warmup seconds before command executes. Set to 0 for no warmup.")
+            private int delay = 0;
+            @Comment("What should be the maximum amount of warps that a Faction can set?")
+            private int maxWarps = 5;
+
+            public int getDelay() {
+                return delay;
+            }
+
+            public int getMaxWarps() {
+                return maxWarps;
+            }
+        }
+
+        public class ToolTips {
+            @Comment("Faction on-hover tooltip information")
+            private List<String> faction = new ArrayList<String>() {
+                {
+                    this.add("&6Leader: &f{leader}");
+                    this.add("&6Claimed: &f{chunks}");
+                    this.add("&6Raidable: &f{raidable}");
+                    this.add("&6Warps: &f{warps}");
+                    this.add("&6Power: &f{power}/{maxPower}");
+                    this.add("&6Members: &f{online}/{members}");
+                }
+            };
+            @Comment("Player on-hover tooltip information")
+            private List<String> player = new ArrayList<String>() {
+                {
+                    this.add("&6Last Seen: &f{lastSeen}");
+                    this.add("&6Power: &f{power}");
+                    this.add("&6Rank: &f{group}");
+                    this.add("&6Balance: &a${balance}");
+                }
+            };
+
+            public List<String> getFaction() {
+                return faction != null ? faction : Collections.emptyList();
+            }
+
+            public List<String> getPlayer() {
+                return player != null ? player : Collections.emptyList();
+            }
+        }
+
+        private Fly fly = new Fly();
+        private Help help = new Help();
+        private Home home = new Home();
+        private ListCmd list = new ListCmd();
+        private MapCmd map = new MapCmd();
+        private Near near = new Near();
+        private SeeChunk seeChunk = new SeeChunk();
+        private Show show = new Show();
+        private Stuck stuck = new Stuck();
+        private ToolTips toolTips = new ToolTips();
+        private Warp warp = new Warp();
+
+        public Fly fly() {
+            return fly;
+        }
+
+        public Help help() {
+            return help;
+        }
+
+        public Home home() {
+            return home;
+        }
+
+        public ListCmd list() {
+            return list;
+        }
+
+        public MapCmd map() {
+            return map;
+        }
+
+        public Near near() {
+            return near;
+        }
+
+        public SeeChunk seeChunk() {
+            return seeChunk;
+        }
+
+        public Show show() {
+            return show;
+        }
+
+        public Stuck stuck() {
+            return stuck;
+        }
+
+        public ToolTips toolTips() {
+            return toolTips;
+        }
+
+        public Warp warp() {
+            return warp;
+        }
+    }
+
     public class Factions {
         public class LandRaidControl {
             public class Power {
@@ -129,6 +516,23 @@ public class TransitionConfigV1 {
                 private boolean wildernessPowerLoss = true;
                 @Comment("Disallow joining/leaving/kicking while power is negative")
                 private boolean canLeaveWithNegativePower = true;
+                @Comment("Allow a faction to be raided if they have more land than power.\n" +
+                        "This will make claimed territory lose all protections\n" +
+                        "  allowing factions to open chests, break blocks, etc. if they\n" +
+                        "  have claimed chunks >= power.")
+                private boolean raidability = false;
+                @Comment("After a player dies, how long should the faction not be able to regen power?\n" +
+                        "This resets on each death but does not accumulate.\n" +
+                        "Set to 0 for no freeze. Time is in seconds.")
+                private int powerFreeze = 0;
+
+                public boolean isRaidability() {
+                    return raidability;
+                }
+
+                public int getPowerFreeze() {
+                    return powerFreeze;
+                }
 
                 public boolean canLeaveWithNegativePower() {
                     return canLeaveWithNegativePower;
@@ -383,6 +787,34 @@ public class TransitionConfigV1 {
             }
         }
 
+        public class MaxRelations {
+            private boolean enabled = false;
+            private int ally = 10;
+            private int truce = 10;
+            private int neutral = -1;
+            private int enemy = 10;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public int getAlly() {
+                return ally;
+            }
+
+            public int getTruce() {
+                return truce;
+            }
+
+            public int getNeutral() {
+                return neutral;
+            }
+
+            public int getEnemy() {
+                return enemy;
+            }
+        }
+
         public class PVP {
             private boolean disablePVPBetweenNeutralFactions = false;
             private boolean disablePVPForFactionlessPlayers = false;
@@ -434,6 +866,25 @@ public class TransitionConfigV1 {
             }
         }
 
+        public class Portals {
+            @Comment("If true, portals will be limited to the minimum relation below")
+            private boolean limit = false;
+            @Comment("What should the minimum relation be to create a portal in territory?\n" +
+                    "Goes in the order of: ENEMY, NEUTRAL, ALLY, MEMBER.\n" +
+                    "Minimum relation allows that and all listed to the right to create portals.\n" +
+                    "Example: put ALLY to allow ALLY and MEMBER to be able to create portals.\n" +
+                    "If typed incorrectly, defaults to NEUTRAL.")
+            private String minimumRelation = "MEMBER";
+
+            public boolean isLimit() {
+                return limit;
+            }
+
+            public String getMinimumRelation() {
+                return minimumRelation;
+            }
+        }
+
         public class Claims {
             private boolean mustBeConnected = false;
             private boolean canBeUnconnectedIfOwnedByOtherFaction = true;
@@ -443,6 +894,27 @@ public class TransitionConfigV1 {
             @Comment("If someone is doing a radius claim and the process fails to claim land this many times in a row, it will exit")
             private int radiusClaimFailureLimit = 9;
             private Set<String> worldsNoClaiming = new HashSet<>();
+            @Comment("Buffer Zone is an chunk area required between claims of different Factions.\n" +
+                    "This is default to 0 and has always been that way. Meaning Factions can have\n" +
+                    "  claims that border each other.\n" +
+                    "If this is set to 3, then Factions need to have 3 chunks between their claim\n" +
+                    "  and another Faction's claim.\n" +
+                    "It's recommended to keep this pretty low as the radius check could be a\n" +
+                    "  heavy operation if set to a large number.\n" +
+                    "If this is set to 0, we won't even bother checking which is how Factions has\n" +
+                    "  always been.")
+            private int bufferZone = 0;
+            @Comment("Should we allow Factions to over claim if they are raidable?\n" +
+                    "This has always been true, allowing factions to over claim others.")
+            private boolean allowOverClaim = true;
+
+            public boolean isAllowOverClaim() {
+                return allowOverClaim;
+            }
+
+            public int getBufferZone() {
+                return bufferZone;
+            }
 
             public boolean isMustBeConnected() {
                 return mustBeConnected;
@@ -795,6 +1267,31 @@ public class TransitionConfigV1 {
             @Comment("If enabled, perms can be managed separately for when the faction is offline")
             private boolean separateOfflinePerms = false;
 
+            @Comment("Should we delete player homes that they set via Essentials when they leave a Faction\n" +
+                    "if they have homes set in that Faction's territory?")
+            private boolean deleteEssentialsHomes = true;
+
+            @Comment("Default Relation allows you to change the default relation for Factions.\n" +
+                    "Example usage would be so people can't leave then make a new Faction while Raiding\n" +
+                    "  in order to be able to execute commands if the default relation is neutral.")
+            private String defaultRelation = "neutral";
+
+            @Comment("If true, disables pistons entirely within faction territory.\n" +
+                    "Prevents flying piston machines in faction territory.")
+            private boolean disablePistonsInTerritory = false;
+
+            public boolean isDisablePistonsInTerritory() {
+                return disablePistonsInTerritory;
+            }
+
+            public boolean isDeleteEssentialsHomes() {
+                return deleteEssentialsHomes;
+            }
+
+            public String getDefaultRelation() {
+                return defaultRelation;
+            }
+
             public boolean isSeparateOfflinePerms() {
                 return separateOfflinePerms;
             }
@@ -860,11 +1357,47 @@ public class TransitionConfigV1 {
             }
         }
 
+        public class EnterTitles {
+            private boolean enabled = true;
+            private int fadeIn = 10;
+            private int stay = 70;
+            private int fadeOut = 20;
+            private boolean alsoShowChat = false;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public int getFadeIn() {
+                return fadeIn;
+            }
+
+            public int getStay() {
+                return stay;
+            }
+
+            public int getFadeOut() {
+                return fadeOut;
+            }
+
+            public boolean isAlsoShowChat() {
+                return alsoShowChat;
+            }
+        }
+
         private Chat chat = new Chat();
         private Homes homes = new Homes();
+        @Comment("Limits factions to having a max number of each relation.\n" +
+                "Setting to 0 means none allowed. -1 for disabled.\n" +
+                "This will have no effect on default or existing relations, only when relations are changed.\n" +
+                "It is advised that you set the default relation to -1 so they can always go back to that.\n" +
+                "Otherwise Factions could be stuck with not being able to unenemy other Factions.")
+        private MaxRelations maxRelations = new MaxRelations();
         private PVP pvp = new PVP();
         private SpecialCase specialCase = new SpecialCase();
         private Claims claims = new Claims();
+        @Comment("Do you want to limit portal creation?")
+        private Portals portals = new Portals();
         private Protection protection = new Protection();
         @Comment("For claimed areas where further faction-member ownership can be defined")
         private OwnedArea ownedArea = new OwnedArea();
@@ -873,6 +1406,12 @@ public class TransitionConfigV1 {
         private LandRaidControl landRaidControl = new LandRaidControl();
         @Comment("Remaining settings not categorized")
         private Other other = new Other();
+        @Comment("Should we send titles when players enter Factions?")
+        private EnterTitles enterTitles = new EnterTitles();
+
+        public EnterTitles enterTitles() {
+            return enterTitles;
+        }
 
         public Chat chat() {
             return chat;
@@ -880,6 +1419,10 @@ public class TransitionConfigV1 {
 
         public Homes homes() {
             return homes;
+        }
+
+        public MaxRelations maxRelations() {
+            return maxRelations;
         }
 
         public PVP pvp() {
@@ -892,6 +1435,10 @@ public class TransitionConfigV1 {
 
         public Claims claims() {
             return claims;
+        }
+
+        public Portals portals() {
+            return portals;
         }
 
         public Protection protection() {
@@ -997,6 +1544,7 @@ public class TransitionConfigV1 {
     }
 
     public class Economy {
+        @Comment("Must be true for any economy features")
         private boolean enabled = false;
         private String universeAccount = "";
         private double costClaimWilderness = 30.0;
@@ -1028,6 +1576,10 @@ public class TransitionConfigV1 {
         private double costEnemy = 0.0;
         private double costNeutral = 0.0;
         private double costNoBoom = 0.0;
+        // Calculate if enabled
+        private double costWarp = 0.0;
+        private double costSetWarp = 0.0;
+        private double costDelWarp = 0.0;
 
         @Comment("Faction banks, to pay for land claiming and other costs instead of individuals paying for them")
         private boolean bankEnabled = true;
@@ -1162,6 +1714,18 @@ public class TransitionConfigV1 {
             return costNoBoom;
         }
 
+        public double getCostWarp() {
+            return costWarp;
+        }
+
+        public double getCostSetWarp() {
+            return costSetWarp;
+        }
+
+        public double getCostDelWarp() {
+            return costDelWarp;
+        }
+
         public boolean isBankEnabled() {
             return bankEnabled;
         }
@@ -1179,7 +1743,7 @@ public class TransitionConfigV1 {
         }
     }
 
-    public class Map {
+    public class MapSettings {
         private int height = 17;
         private int width = 49;
         private boolean showFactionKey = true;
@@ -1253,6 +1817,127 @@ public class TransitionConfigV1 {
         }
     }
 
+    public class Scoreboard {
+        public class Constant {
+            private boolean enabled = false;
+            @Comment("Can use any placeholders, but does not update once set")
+            private String title = "Faction Status";
+            @Comment("If true, show faction prefixes on nametags and in tab list if scoreboard is enabled")
+            private boolean prefixes = true;
+            private List<String> content = new ArrayList<String>() {
+                {
+                    this.add("&6Your Faction");
+                    this.add("{faction}");
+                    this.add("&3Your Power");
+                    this.add("{power}");
+                    this.add("&aBalance");
+                    this.add("${balance}");
+                }
+            };
+            private boolean factionlessEnabled = false;
+            private List<String> factionlessContent = new ArrayList<String>() {
+                {
+                    this.add("Make a new Faction");
+                    this.add("Use /f create");
+                }
+            };
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public boolean isPrefixes() {
+                return prefixes;
+            }
+
+            public List<String> getContent() {
+                return content != null ? content : Collections.emptyList();
+            }
+
+            public boolean isFactionlessEnabled() {
+                return factionlessEnabled;
+            }
+
+            public List<String> getFactionlessContent() {
+                return factionlessContent != null ? content : Collections.emptyList();
+            }
+        }
+
+        public class Info {
+            @Comment("send faction change message as well when scoreboard is up?")
+            private boolean alsoSendChat = true;
+            @Comment("How long do we want scoreboards to stay")
+            private int expiration = 7;
+            private boolean enabled = false;
+            @Comment("Supports placeholders")
+            private List<String> content = new ArrayList<String>() {
+                {
+                    this.add("&6Power");
+                    this.add("{power}");
+                    this.add("&3Members");
+                    this.add("{online}/{members}");
+                    this.add("&4Leader");
+                    this.add("{leader}");
+                    this.add("&bTerritory");
+                    this.add("{chunks}");
+                }
+            };
+
+            public boolean isAlsoSendChat() {
+                return alsoSendChat;
+            }
+
+            public int getExpiration() {
+                return expiration;
+            }
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public List<String> getContent() {
+                return content != null ? content : Collections.emptyList();
+            }
+        }
+
+        @Comment("Constant scoreboard stays around all the time, displaying status info.\n" +
+                "Also, if prefixes are enabled while it is enabled, will show prefixes on nametags and tab")
+        private Constant constant = new Constant();
+        @Comment("Info scoreboard is displayed when a player walks into a new Faction's territory.\n" +
+                "Scoreboard disappears after <expiration> seconds.")
+        private Info info = new Info();
+
+        public Constant constant() {
+            return constant;
+        }
+
+        public Info info() {
+            return info;
+        }
+    }
+
+    public class LWC {
+        private boolean enabled = true;
+        private boolean resetLocksOnUnclaim = false;
+        private boolean resetLocksOnCapture = false;
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public boolean isResetLocksOnUnclaim() {
+            return resetLocksOnUnclaim;
+        }
+
+        public boolean isResetLocksOnCapture() {
+            return resetLocksOnCapture;
+        }
+    }
+
     public class PlayerVaults {
         @Comment("The %s is for the faction id")
         private String vaultPrefix = "faction-%s";
@@ -1280,6 +1965,19 @@ public class TransitionConfigV1 {
         }
     }
 
+    public class WorldBorder {
+        @Comment("WorldBorder support\n" +
+                "This is for Minecraft's built-in command. To get your current border: /minecraft:worldborder get\n" +
+                "A buffer of 0 means faction claims can go right up to the border of the world.\n" +
+                "The buffer is in chunks, so 1 as a buffer means an entire chunk of buffer between\n" +
+                "the border of the world and what can be claimed to factions")
+        private int buffer = 0;
+
+        public int getBuffer() {
+            return buffer;
+        }
+    }
+
     @Comment("The command base (by default f, making the command /f)")
     private List<String> commandBase = new ArrayList<String>() {
         {
@@ -1287,16 +1985,16 @@ public class TransitionConfigV1 {
         }
     };
 
-    @Comment("# FactionsUUID by drtshock\n" +
-            "# Support and documentation http://factions-support.cf\n" +
-            "# Updates https://www.spigotmc.org/resources/factionsuuid.1035/\n" +
+    @Comment("FactionsUUID by drtshock\n" +
+            "Support and documentation https://factions-support.cf\n" +
+            "Updates https://www.spigotmc.org/resources/factionsuuid.1035/\n" +
             "\n" +
-            "# Made with love <3")
-    private VersioningInfo aVeryFriendlyFactionsConfig = new VersioningInfo();
+            "Made with love <3")
+    private AVeryFriendlyFactionsConfig aVeryFriendlyFactionsConfig = new AVeryFriendlyFactionsConfig();
 
     @Comment("Colors for relationships and default factions")
     private Colors colors = new Colors();
-
+    private Commands commands = new Commands();
     private Factions factions = new Factions();
     @Comment("What should be logged?")
     private Logging logging = new Logging();
@@ -1305,14 +2003,23 @@ public class TransitionConfigV1 {
     @Comment("Economy support requires Vault and a compatible economy plugin")
     private Economy economy = new Economy();
     @Comment("Control for the default settings of /f map")
-    private Map map = new Map();
+    private MapSettings map = new MapSettings();
     @Comment("Data storage settings")
     private Data data = new Data();
     private RestrictWorlds restrictWorlds = new RestrictWorlds();
-    @Comment("PlayerVaults faction vault settings")
+    private Scoreboard scoreboard = new Scoreboard();
+    @Comment("LWC integration\n" +
+            "This support targets the modern fork of LWC, called LWC Extended.\n" +
+            "You can find it here: https://www.spigotmc.org/resources/lwc-extended.69551/\n" +
+            "Note: Modern LWC is no longer supported, and its former maintainer now runs LWC Extended")
+    private LWC lwc = new LWC();
+    @Comment("PlayerVaults faction vault settings.\n" +
+            "Enable faction-owned vaults!\n" +
+            "https://www.spigotmc.org/resources/playervaultsx.51204/")
     private PlayerVaults playerVaults = new PlayerVaults();
     @Comment("WorldGuard settings")
     private WorldGuard worldGuard = new WorldGuard();
+    private WorldBorder worldBorder = new WorldBorder();
 
     public List<String> getCommandBase() {
         return commandBase == null ? ImmutableList.of("f") : commandBase;
@@ -1320,6 +2027,10 @@ public class TransitionConfigV1 {
 
     public Colors colors() {
         return colors;
+    }
+
+    public Commands commands() {
+        return commands;
     }
 
     public Factions factions() {
@@ -1338,12 +2049,16 @@ public class TransitionConfigV1 {
         return economy;
     }
 
-    public Map map() {
+    public MapSettings map() {
         return map;
     }
 
     public RestrictWorlds restrictWorlds() {
         return restrictWorlds;
+    }
+
+    public Scoreboard scoreboard() {
+        return scoreboard;
     }
 
     public PlayerVaults playerVaults() {
@@ -1354,26 +2069,146 @@ public class TransitionConfigV1 {
         return worldGuard;
     }
 
+    public WorldBorder worldBorder() {
+        return worldBorder;
+    }
+
     public Data data() {
         return data;
     }
 
-    public void update(OldMainConfigV1 old) {
-        factions.other.allowMultipleColeaders = old.factions.allowMultipleColeaders;
-        factions.other.tagLengthMin = old.factions.tagLengthMin;
-        factions.other.tagLengthMax = old.factions.tagLengthMax;
-        factions.other.tagForceUpperCase = old.factions.tagForceUpperCase;
-        factions.other.newFactionsDefaultOpen = old.factions.newFactionsDefaultOpen;
-        factions.other.factionMemberLimit = old.factions.factionMemberLimit;
-        factions.other.newPlayerStartingFactionID = old.factions.newPlayerStartingFactionID;
-        factions.other.saveToFileEveryXMinutes =old.factions.saveToFileEveryXMinutes;
-        factions.other.autoLeaveAfterDaysOfInactivity = old.factions.autoLeaveAfterDaysOfInactivity;
-        factions.other.autoLeaveRoutineRunsEveryXMinutes = old.factions.autoLeaveRoutineRunsEveryXMinutes;
-        factions.other.autoLeaveRoutineMaxMillisecondsPerTick = old.factions.autoLeaveRoutineMaxMillisecondsPerTick;
-        factions.other.removePlayerDataWhenBanned = old.factions.removePlayerDataWhenBanned;
-        factions.other.autoLeaveDeleteFPlayerData =old.factions.autoLeaveDeleteFPlayerData;
-        factions.other.considerFactionsReallyOfflineAfterXMinutes = old.factions.considerFactionsReallyOfflineAfterXMinutes;
-        factions.other.actionDeniedPainAmount =old.factions.actionDeniedPainAmount;
-        factions.other.separateOfflinePerms =old.factions.separateOfflinePerms;
+    public void update(OldMainConfigV1 oldConf, FileConfiguration o) {
+        factions.other.allowMultipleColeaders = oldConf.factions.allowMultipleColeaders;
+        factions.other.tagLengthMin = oldConf.factions.tagLengthMin;
+        factions.other.tagLengthMax = oldConf.factions.tagLengthMax;
+        factions.other.tagForceUpperCase = oldConf.factions.tagForceUpperCase;
+        factions.other.newFactionsDefaultOpen = oldConf.factions.newFactionsDefaultOpen;
+        factions.other.factionMemberLimit = oldConf.factions.factionMemberLimit;
+        factions.other.newPlayerStartingFactionID = oldConf.factions.newPlayerStartingFactionID;
+        factions.other.saveToFileEveryXMinutes = oldConf.factions.saveToFileEveryXMinutes;
+        factions.other.autoLeaveAfterDaysOfInactivity = oldConf.factions.autoLeaveAfterDaysOfInactivity;
+        factions.other.autoLeaveRoutineRunsEveryXMinutes = oldConf.factions.autoLeaveRoutineRunsEveryXMinutes;
+        factions.other.autoLeaveRoutineMaxMillisecondsPerTick = oldConf.factions.autoLeaveRoutineMaxMillisecondsPerTick;
+        factions.other.removePlayerDataWhenBanned = oldConf.factions.removePlayerDataWhenBanned;
+        factions.other.autoLeaveDeleteFPlayerData = oldConf.factions.autoLeaveDeleteFPlayerData;
+        factions.other.considerFactionsReallyOfflineAfterXMinutes = oldConf.factions.considerFactionsReallyOfflineAfterXMinutes;
+        factions.other.actionDeniedPainAmount = oldConf.factions.actionDeniedPainAmount;
+        factions.other.separateOfflinePerms = oldConf.factions.separateOfflinePerms;
+
+        aVeryFriendlyFactionsConfig.debug = o.getBoolean("debug", false);
+
+        commands.fly.particles.amount = o.getInt("f-fly.trails.amount", 20);
+        commands.fly.particles.spawnRate = o.getDouble("f-fly.trails.spawn-rate", 0.2);
+        commands.fly.particles.speed = o.getDouble("f-fly.trails.speed", 0.02);
+        commands.fly.enable = o.getBoolean("f-fly.enable", true);
+        commands.fly.delay = o.getInt("warmups.f-fly", 0);
+        commands.fly.fallDamageCooldown = o.getInt("f-fly.falldamage-cooldown", 3);
+        commands.fly.enemyRadius = o.getInt("f-fly.enemy-radius", 7);
+        commands.fly.radiusCheck = o.getInt("f-fly.radius-check", 1);
+        commands.fly.disableOnGenericDamage = o.getBoolean("f-fly.disable-generic-damage", false);
+
+        ConfigurationSection help = o.getConfigurationSection("help");
+        Map<String, List<String>> helpMap = new HashMap<>();
+        for (String key : help.getKeys(false)) {
+            List<String> list = help.getStringList(key);
+            if (list != null) {
+                helpMap.put(key, help.getStringList(key));
+            }
+        }
+        if (!helpMap.isEmpty()) {
+            commands.help.entries = helpMap;
+        }
+        commands.help.useOldHelp = o.getBoolean("use-old-help", true);
+
+        commands.home.delay = o.getInt("warmups.f-home", 0);
+
+        commands.list.header = o.getString("list.header", "&e&m----------&r&e[ &2Faction List &9{pagenumber}&e/&9{pagecount} &e]&m----------");
+        commands.list.factionlessEntry = o.getString("list.factionless", "<i>Factionless<i> {factionless} online");
+        commands.list.entry = o.getString("list.entry", "<a>{faction-relation-color}{faction} <i>{online} / {members} online, <a>Land / Power / Maxpower: <i>{chunks}/{power}/{maxPower}");
+
+        commands.map.cooldown = o.getInt("findfactionsexploit", 700);
+
+        commands.near.radius = o.getInt("f-near.radius", 20);
+
+        commands.seeChunk.particleName = o.getString("see-chunk.particle", "REDSTONE");
+        commands.seeChunk.particles = o.getBoolean("see-chunk.particles", true);
+        commands.seeChunk.particleUpdateTime = o.getDouble("see-chunk.particle-update-time", 0.75);
+        commands.seeChunk.relationalColor = o.getBoolean("see-chunk.relational-color", true);
+
+        commands.show.exempt = o.getStringList("show-exempt");
+        if (commands.show.exempt == null) {
+            commands.show.exempt = Arrays.asList("Put_faction_tag_here");
+        }
+        commands.show.minimal = o.getBoolean("minimal-show", false);
+        if (!o.getStringList("show").isEmpty()) {
+            commands.show.format = o.getStringList("show");
+        }
+
+        commands.stuck.delay = o.getInt("hcf.stuck.delay", 30);
+        commands.stuck.radius = o.getInt("hcf.stuck.radius", 10);
+
+        commands.warp.delay = o.getInt("warmups.f-warp", 0);
+        commands.warp.maxWarps = o.getInt("max-warps", 5);
+
+        if (!o.getStringList("tooltips.list").isEmpty()) {
+            commands.toolTips.faction = o.getStringList("tooltips.list");
+        }
+        if (!o.getStringList("tooltips.show").isEmpty()) {
+            commands.toolTips.player = o.getStringList("tooltips.show");
+        }
+
+        factions.landRaidControl.power.raidability = o.getBoolean("hcf.raidable", false);
+        factions.landRaidControl.power.powerFreeze = o.getInt("hcf.powerfreeze", 0);
+
+        factions.maxRelations.enabled = o.getBoolean("max-relations.enabled", false);
+        factions.maxRelations.ally = o.getInt("max-relations.ally", 10);
+        factions.maxRelations.truce = o.getInt("max-relations.truce", 10);
+        factions.maxRelations.neutral = o.getInt("max-relations.neutral", -1);
+        factions.maxRelations.enemy = o.getInt("max-relations.enemy", 10);
+
+        factions.portals.limit = o.getBoolean("portals.limit", false);
+        factions.portals.minimumRelation = o.getString("portals.minimum-relation", "MEMBER");
+
+        factions.claims.bufferZone = o.getInt("hcf.buffer-zone", 0);
+        factions.claims.allowOverClaim = o.getBoolean("hcf.allow-overclaim", true);
+
+        factions.other.deleteEssentialsHomes = o.getBoolean("delete-ess-homes", true);
+        factions.other.defaultRelation = o.getString("default-relation", "neutral");
+        factions.other.disablePistonsInTerritory = o.getBoolean("disable-pistons-in-territory", false);
+
+        factions.enterTitles.enabled = o.getBoolean("enter-titles.enabled", true);
+        factions.enterTitles.fadeIn = o.getInt("enter-titles.fade-in", 10);
+        factions.enterTitles.fadeOut = o.getInt("enter-titles.fade-out", 20);
+        factions.enterTitles.stay = o.getInt("enter-titles.stay", 70);
+        factions.enterTitles.alsoShowChat = o.getBoolean("enter-titles.also-show-chat", false);
+
+        boolean warpCostEnabled = economy.enabled && o.getBoolean("warp-cost.enabled", false);
+        economy.costWarp = warpCostEnabled ? o.getInt("warp-cost.warp", 5) : 0;
+        economy.costSetWarp = warpCostEnabled ? o.getInt("warp-cost.setwarp", 5) : 0;
+        economy.costDelWarp = warpCostEnabled ? o.getInt("warp-cost.delwarp", 5) : 0;
+
+        scoreboard.constant.enabled = o.getBoolean("scoreboard.default-enabled", false);
+        scoreboard.constant.title = o.getString("scoreboard.default-title", "Faction Status");
+        scoreboard.constant.prefixes = o.getBoolean("scoreboard.default-prefixes", true);
+        if (!o.getStringList("scoreboard.default").isEmpty()) {
+            scoreboard.constant.content = o.getStringList("scoreboard.default");
+        }
+        scoreboard.constant.factionlessEnabled = o.getBoolean("scoreboard.factionless-enabled", false);
+        if (!o.getStringList("scoreboard.factionless").isEmpty()) {
+            scoreboard.constant.factionlessContent = o.getStringList("scoreboard.factionless");
+        }
+
+        scoreboard.info.enabled = o.getBoolean("scoreboard.finfo-enabled", false);
+        scoreboard.info.alsoSendChat = o.getBoolean("scoreboard.also-sent-chat", true);
+        scoreboard.info.expiration = o.getInt("scoreboard.expiration");
+        if (!o.getStringList("scoreboard.finfo").isEmpty()) {
+            scoreboard.info.content = o.getStringList("scoreboard.finfo");
+        }
+
+        lwc.enabled = o.getBoolean("lwc.integration", false);
+        lwc.resetLocksOnCapture = o.getBoolean("lwc.reset-locks-unclaim");
+        lwc.resetLocksOnUnclaim = o.getBoolean("lwc.reset-locks-capture");
+
+        worldBorder.buffer = o.getInt("world-border.buffer", 0);
     }
 }

@@ -242,8 +242,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
         this.getLogger().info("Server UUID " + this.serverUUID);
 
-        saveDefaultConfig();
-
         loadLang();
         this.gson = this.getGsonBuilder().create();
 

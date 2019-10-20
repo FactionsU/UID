@@ -355,8 +355,6 @@ public class MainConfig {
                     this.add("put_faction_tag_here");
                 }
             };
-            @Comment("If true, include deaths until raidable with {raidable}")
-            private boolean dtrInRaidable = false;
 
             public List<String> getFormat() {
                 return format != null ? format : Collections.emptyList();
@@ -368,10 +366,6 @@ public class MainConfig {
 
             public List<String> getExempt() {
                 return exempt != null ? exempt : Collections.emptyList();
-            }
-
-            public boolean isDtrInRaidable() {
-                return dtrInRaidable;
             }
         }
 
