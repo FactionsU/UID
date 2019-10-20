@@ -103,7 +103,6 @@ public class Loader {
             } else {
                 Object o = defaultValue;
                 if (o == null) {
-                    System.out.println("Found null default for " + getNodeName(curNode.getPath()) + " which shouldn't be possible");
                     curNode.setValue(null);
                     newNewNode.setValue(null);
                 } else {
