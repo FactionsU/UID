@@ -49,7 +49,7 @@ public class PowerControl implements LandRaidControl {
     }
 
     @Override
-    public boolean canKick(FPlayer toKick,  CommandContext context) {
+    public boolean canKick(FPlayer toKick, CommandContext context) {
         if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.getPower() < 0) {
             context.msg(TL.COMMAND_KICK_NEGATIVEPOWER);
             return false;
