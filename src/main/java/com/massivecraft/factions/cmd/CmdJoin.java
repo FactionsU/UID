@@ -60,8 +60,7 @@ public class CmdJoin extends FCommand {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && fplayer.getPower() < 0) {
-            context.msg(TL.COMMAND_JOIN_NEGATIVEPOWER, fplayer.describeTo(context.fPlayer, true));
+        if (!FactionsPlugin.getInstance().getLandRaidControl().canJoinFaction(faction, fplayer, context)) {
             return;
         }
 

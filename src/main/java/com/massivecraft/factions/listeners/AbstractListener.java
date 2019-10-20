@@ -33,7 +33,7 @@ public abstract class AbstractListener implements Listener {
         FLocation loc = new FLocation(location);
         Faction otherFaction = Board.getInstance().getFactionAt(loc);
 
-        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability() && otherFaction.getLandRounded() >= otherFaction.getPowerRounded()) {
+        if (FactionsPlugin.getInstance().getLandRaidControl().isRaidable(otherFaction)) {
             return true;
         }
 
@@ -96,7 +96,7 @@ public abstract class AbstractListener implements Listener {
             return true;
         }
 
-        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability() && otherFaction.getLandRounded() >= otherFaction.getPowerRounded()) {
+        if (FactionsPlugin.getInstance().getLandRaidControl().isRaidable(otherFaction)) {
             return true;
         }
 

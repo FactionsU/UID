@@ -16,6 +16,7 @@ import com.massivecraft.factions.cmd.relations.CmdRelationNeutral;
 import com.massivecraft.factions.cmd.relations.CmdRelationTruce;
 import com.massivecraft.factions.cmd.role.CmdDemote;
 import com.massivecraft.factions.cmd.role.CmdPromote;
+import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.util.TL;
 import me.lucko.commodore.CommodoreProvider;
 import org.bukkit.Bukkit;
@@ -159,9 +160,6 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.addSubCommand(this.cmdOwnerList);
         this.addSubCommand(this.cmdPeaceful);
         this.addSubCommand(this.cmdPermanent);
-        this.addSubCommand(this.cmdPermanentPower);
-        this.addSubCommand(this.cmdPower);
-        this.addSubCommand(this.cmdPowerBoost);
         this.addSubCommand(this.cmdRelationAlly);
         this.addSubCommand(this.cmdRelationEnemy);
         this.addSubCommand(this.cmdRelationNeutral);
@@ -188,7 +186,6 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.addSubCommand(this.cmdWarpOther);
         this.addSubCommand(this.cmdSetWarp);
         this.addSubCommand(this.cmdDelWarp);
-        this.addSubCommand(this.cmdModifyPower);
         this.addSubCommand(this.cmdLogins);
         this.addSubCommand(this.cmdClaimLine);
         this.addSubCommand(this.cmdAHome);
@@ -204,6 +201,12 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.addSubCommand(this.cmdColeader);
         this.addSubCommand(this.cmdNear);
         this.addSubCommand(this.cmdDebug);
+        if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
+            this.addSubCommand(this.cmdPermanentPower);
+            this.addSubCommand(this.cmdPower);
+            this.addSubCommand(this.cmdPowerBoost);
+            this.addSubCommand(this.cmdModifyPower);
+        }
         if (Bukkit.getServer().getPluginManager().isPluginEnabled("FactionsTop")) {
             FactionsPlugin.getInstance().getLogger().info("Found FactionsTop plugin. Disabling our own /f top command.");
         } else {

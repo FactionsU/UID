@@ -80,8 +80,7 @@ public class CmdKick extends FCommand {
                 return;
             }
 
-            if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.getPower() < 0) {
-                context.msg(TL.COMMAND_KICK_NEGATIVEPOWER);
+            if (!FactionsPlugin.getInstance().getLandRaidControl().canKick(toKick, context)) {
                 return;
             }
         }

@@ -76,6 +76,7 @@ public class FactionsPlayerListener extends AbstractListener {
         final FPlayer me = FPlayers.getInstance().getByPlayer(player);
         ((MemoryFPlayer) me).setName(player.getName());
 
+        this.plugin.getLandRaidControl().onInit(me);
         // Update the lastLoginTime for this fplayer
         me.setLastLoginTime(System.currentTimeMillis());
 
@@ -139,8 +140,7 @@ public class FactionsPlayerListener extends AbstractListener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         FPlayer me = FPlayers.getInstance().getByPlayer(event.getPlayer());
 
-        // Make sure player's power is up to date when they log off.
-        me.getPower();
+        FactionsPlugin.getInstance().getLandRaidControl().onQuit(me);
         // and update their last login time to point to when the logged off, for auto-remove routine
         me.setLastLoginTime(System.currentTimeMillis());
 
@@ -420,7 +420,7 @@ public class FactionsPlayerListener extends AbstractListener {
         FLocation loc = new FLocation(location);
         Faction otherFaction = Board.getInstance().getFactionAt(loc);
 
-        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability() && otherFaction.getLandRounded() >= otherFaction.getPowerRounded()) {
+        if (FactionsPlugin.getInstance().getLandRaidControl().isRaidable(otherFaction)) {
             return true;
         }
 
@@ -493,7 +493,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         FPlayer me = FPlayers.getInstance().getByPlayer(event.getPlayer());
 
-        me.getPower();  // update power, so they won't have gained any while dead
+        FactionsPlugin.getInstance().getLandRaidControl().onRespawn(me);
 
         Location home = me.getFaction().getHome();
         if (FactionsPlugin.getInstance().conf().factions().homes().isEnabled() &&

@@ -6,12 +6,10 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
-import com.massivecraft.factions.event.PowerLossEvent;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.TL;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -68,49 +66,8 @@ public class FactionsEntityListener extends AbstractListener {
         }
 
         Entity entity = event.getEntity();
-        if (!(entity instanceof Player)) {
-            return;
-        }
-
-        Player player = (Player) entity;
-        FPlayer fplayer = FPlayers.getInstance().getByPlayer(player);
-        Faction faction = Board.getInstance().getFactionAt(new FLocation(player.getLocation()));
-
-        PowerLossEvent powerLossEvent = new PowerLossEvent(faction, fplayer);
-        // Check for no power loss conditions
-        if (faction.isWarZone()) {
-            // war zones always override worldsNoPowerLoss either way, thus this layout
-            if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isWarZonePowerLoss()) {
-                powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WARZONE.toString());
-                powerLossEvent.setCancelled(true);
-            }
-            if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getWorldsNoPowerLoss().contains(player.getWorld().getName())) {
-                powerLossEvent.setMessage(TL.PLAYER_POWER_LOSS_WARZONE.toString());
-            }
-        } else if (faction.isWilderness() && !FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isWildernessPowerLoss() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(player.getWorld().getName())) {
-            powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WILDERNESS.toString());
-            powerLossEvent.setCancelled(true);
-        } else if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getWorldsNoPowerLoss().contains(player.getWorld().getName())) {
-            powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WORLD.toString());
-            powerLossEvent.setCancelled(true);
-        } else if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isPeacefulMembersDisablePowerLoss() && fplayer.hasFaction() && fplayer.getFaction().isPeaceful()) {
-            powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_PEACEFUL.toString());
-            powerLossEvent.setCancelled(true);
-        } else {
-            powerLossEvent.setMessage(TL.PLAYER_POWER_NOW.toString());
-        }
-
-        // call Event
-        Bukkit.getPluginManager().callEvent(powerLossEvent);
-
-        // Call player onDeath if the event is not cancelled
-        if (!powerLossEvent.isCancelled()) {
-            fplayer.onDeath();
-        }
-        // Send the message from the powerLossEvent
-        final String msg = powerLossEvent.getMessage();
-        if (msg != null && !msg.isEmpty()) {
-            fplayer.msg(msg, fplayer.getPowerRounded(), fplayer.getPowerMaxRounded());
+        if (entity instanceof Player) {
+            FactionsPlugin.getInstance().getLandRaidControl().onDeath((Player) entity);
         }
     }
 

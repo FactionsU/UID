@@ -32,12 +32,10 @@ public enum FactionTag implements Tag {
     FACTION_RELATION_COLOR("faction-relation-color", (fac, fp) -> fp == null ? "" : fp.getColorTo(fac).toString()),
     HOME_WORLD("world", (fac) -> fac.hasHome() ? fac.getHome().getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
     RAIDABLE("raidable", (fac) -> {
-        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability()) {
-            return fac.getLandRounded() >= fac.getPowerRounded() ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
-        }
-        return null;
+        boolean raid = FactionsPlugin.getInstance().getLandRaidControl().isRaidable(fac);
+        return raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
     }),
-    DTR("dtr", (fac) -> {
+    DTR("dtr", (fac) -> { // TODO DTR
         int dtr = fac.getLandRounded() >= fac.getPowerRounded() ? 0 : (int) Math.ceil(((double) (fac.getPowerRounded() - fac.getLandRounded())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
         return TL.COMMAND_SHOW_DEATHS_TIL_RAIDABLE.format(dtr);
     }),
