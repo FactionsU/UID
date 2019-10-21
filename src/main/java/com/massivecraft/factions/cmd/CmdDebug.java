@@ -69,9 +69,10 @@ public class CmdDebug extends FCommand {
             private PasteBuilder builder = new PasteBuilder().name("FactionsUUID Debug")
                     .visibility(Visibility.UNLISTED)
                     .expires(ZonedDateTime.now(ZoneOffset.UTC).plusDays(3));
+            private int i = 0;
 
             private void add(String name, String content) {
-                builder.addFile(new PasteFile(name, new PasteContent(PasteContent.ContentType.TEXT, content)));
+                builder.addFile(new PasteFile(i++ + name, new PasteContent(PasteContent.ContentType.TEXT, content)));
             }
 
             private String getFile(Path file) {
@@ -86,12 +87,16 @@ public class CmdDebug extends FCommand {
             public void run() {
                 try {
                     Path dataPath = FactionsPlugin.getInstance().getDataFolder().toPath();
-                    add("0info.txt", mainInfo.toString());
-                    add("1server.properties", getFile(Paths.get("server.properties")).replaceAll("(?:(?:server-ip=)|(?:server-port=)|(?:rcon\\.port=)|(?:rcon\\.password=)|(?:query.port=))[^\n]*[\r\n]*", ""));
-                    add("2main.conf", getFile(dataPath.resolve("config/main.conf")));
-                    add("3spigot.yml", getFile(Paths.get("spigot.yml")));
+                    add("info.txt", mainInfo.toString());
+                    add("startup.txt", plugin.getStartupLog());
+                    if (!plugin.getStartupExceptionLog().isEmpty()) {
+                        add("startupexceptions.txt", plugin.getStartupExceptionLog());
+                    }
+                    add("server.properties", getFile(Paths.get("server.properties")).replaceAll("(?:(?:server-ip=)|(?:server-port=)|(?:rcon\\.port=)|(?:rcon\\.password=)|(?:query.port=))[^\n]*[\r\n]*", ""));
+                    add("main.conf", getFile(dataPath.resolve("config/main.conf")));
+                    add("spigot.yml", getFile(Paths.get("spigot.yml")));
                     if (permInfo.length() > 0) {
-                        add("4perms.txt", permInfo.toString());
+                        add("perms.txt", permInfo.toString());
                     }
                     PasteBuilder.PasteResult result = builder.build();
                     new BukkitRunnable() {

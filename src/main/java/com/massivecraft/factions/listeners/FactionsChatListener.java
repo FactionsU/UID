@@ -52,7 +52,7 @@ public class FactionsChatListener implements Listener {
                 }
             }
 
-            Bukkit.getLogger().log(Level.INFO, ChatColor.stripColor("ModChat " + myFaction.getTag() + ": " + message));
+            FactionsPlugin.getInstance().log(Level.INFO, ChatColor.stripColor("ModChat " + myFaction.getTag() + ": " + message));
 
             event.setCancelled(true);
         } else if (chat == ChatMode.FACTION) {
@@ -61,7 +61,7 @@ public class FactionsChatListener implements Listener {
             String message = String.format(FactionsPlugin.getInstance().conf().factions().chat().getFactionChatFormat(), me.describeTo(myFaction), msg);
             myFaction.sendMessage(message);
 
-            Bukkit.getLogger().log(Level.INFO, ChatColor.stripColor("FactionChat " + myFaction.getTag() + ": " + message));
+            FactionsPlugin.getInstance().log(Level.INFO, ChatColor.stripColor("FactionChat " + myFaction.getTag() + ": " + message));
 
             //Send to any players who are spying chat
             for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
@@ -88,7 +88,7 @@ public class FactionsChatListener implements Listener {
                 }
             }
 
-            Bukkit.getLogger().log(Level.INFO, ChatColor.stripColor("AllianceChat: " + message));
+            FactionsPlugin.getInstance().log(Level.INFO, ChatColor.stripColor("AllianceChat: " + message));
 
             event.setCancelled(true);
         } else if (chat == ChatMode.TRUCE) {
@@ -108,7 +108,7 @@ public class FactionsChatListener implements Listener {
                 }
             }
 
-            Bukkit.getLogger().log(Level.INFO, ChatColor.stripColor("TruceChat: " + message));
+            FactionsPlugin.getInstance().log(Level.INFO, ChatColor.stripColor("TruceChat: " + message));
             event.setCancelled(true);
         }
     }

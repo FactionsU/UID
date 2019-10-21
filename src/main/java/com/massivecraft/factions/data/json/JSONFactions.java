@@ -107,7 +107,7 @@ public class JSONFactions extends MemoryFactions {
 
         if (needsUpdate > 0) {
             // We've got some converting to do!
-            Bukkit.getLogger().log(Level.INFO, "Factions is now updating factions.json");
+            FactionsPlugin.getInstance().log(Level.INFO, "Factions is now updating factions.json");
 
             // First we'll make a backup, because god forbid anybody heed a
             // warning
@@ -118,9 +118,9 @@ public class JSONFactions extends MemoryFactions {
                 e.printStackTrace();
             }
             saveCore(file, data, true);
-            Bukkit.getLogger().log(Level.INFO, "Backed up your old data at " + file.getAbsolutePath());
+            FactionsPlugin.getInstance().log(Level.INFO, "Backed up your old data at " + file.getAbsolutePath());
 
-            Bukkit.getLogger().log(Level.INFO, "Please wait while Factions converts " + needsUpdate + " old player names to UUID. This may take a while.");
+            FactionsPlugin.getInstance().log(Level.INFO, "Please wait while Factions converts " + needsUpdate + " old player names to UUID. This may take a while.");
 
             // Update claim ownership
 
@@ -178,7 +178,7 @@ public class JSONFactions extends MemoryFactions {
             }
 
             saveCore(this.file, data, true); // Update the flatfile
-            Bukkit.getLogger().log(Level.INFO, "Done converting factions.json to UUID.");
+            FactionsPlugin.getInstance().log(Level.INFO, "Done converting factions.json to UUID.");
         }
         return data;
     }

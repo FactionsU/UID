@@ -77,6 +77,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
@@ -94,7 +96,9 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -166,6 +170,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private String updateMessage;
     private int buildNumber = -1;
     private UUID serverUUID;
+    private String startupLog;
+    private String startupExceptionLog;
 
     public FactionsPlugin() {
         instance = this;
@@ -174,6 +180,32 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     @Override
     public void onEnable() {
         this.loadSuccessful = false;
+        StringBuilder startupBuilder = new StringBuilder();
+        StringBuilder startupExceptionBuilder = new StringBuilder();
+        Handler handler = new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+                startupBuilder.append('[').append(record.getLevel().getName()).append("] ").append(record.getMessage()).append('\n');
+                if (record.getThrown() != null) {
+                    StringWriter stringWriter = new StringWriter();
+                    PrintWriter printWriter = new PrintWriter(stringWriter);
+                    record.getThrown().printStackTrace(printWriter);
+                    startupExceptionBuilder.append('[').append(record.getLevel().getName()).append("] ").append(record.getMessage()).append('\n')
+                            .append(stringWriter.toString()).append('\n');
+                }
+            }
+
+            @Override
+            public void flush() {
+
+            }
+
+            @Override
+            public void close() throws SecurityException {
+
+            }
+        };
+        getLogger().addHandler(handler);
         getLogger().info("=== Starting up! ===");
         long timeEnableStart = System.currentTimeMillis();
 
@@ -384,6 +416,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             getLogger().warning("Looks like you have an old, mistaken 'nofactions-prefix' in your lang.yml. It currently displays [4-] which is... strange.");
         }
 
+        getLogger().log(Level.SEVERE, "Doot", new Exception());
+
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -400,6 +434,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }.runTaskTimerAsynchronously(this, 0, 20 * 60 * 10); // ten minutes
 
         getLogger().info("=== Ready to go after " + (System.currentTimeMillis() - timeEnableStart) + "ms! ===");
+        getLogger().removeHandler(handler);
+        this.startupLog = startupBuilder.toString();
+        this.startupExceptionLog = startupExceptionBuilder.toString();
         this.loadSuccessful = true;
     }
 
@@ -722,6 +759,14 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.serverUUID;
     }
 
+    public String getStartupLog() {
+        return this.startupLog;
+    }
+
+    public String getStartupExceptionLog() {
+        return this.startupExceptionLog;
+    }
+
     public void updatesOnJoin(Player player) {
         if (this.updateMessage != null && player.hasPermission(com.massivecraft.factions.struct.Permission.UPDATES.toString())) {
             player.sendMessage(this.updateMessage);
@@ -806,11 +851,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     }
 
     public void log(Level level, String msg) {
-        if (level == Level.INFO) {
-            this.getLogger().info(msg);
-            return;
-        }
-        Bukkit.getLogger().log(level, "[" + this.getDescription().getFullName() + "] " + msg);
+        this.getLogger().log(level, msg);
     }
 
     public boolean getLocked() {
