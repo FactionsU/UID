@@ -106,7 +106,7 @@ public class JSONFPlayers extends MemoryFPlayers {
 
         if (list.size() > 0) {
             // We've got some converting to do!
-            Bukkit.getLogger().log(Level.INFO, "Factions is now updating players.json");
+            FactionsPlugin.getInstance().log(Level.INFO, "Factions is now updating players.json");
 
             // First we'll make a backup, because god forbid anybody heed a
             // warning
@@ -117,10 +117,10 @@ public class JSONFPlayers extends MemoryFPlayers {
                 e.printStackTrace();
             }
             saveCore(file, data, true);
-            Bukkit.getLogger().log(Level.INFO, "Backed up your old data at " + file.getAbsolutePath());
+            FactionsPlugin.getInstance().log(Level.INFO, "Backed up your old data at " + file.getAbsolutePath());
 
             // Start fetching those UUIDs
-            Bukkit.getLogger().log(Level.INFO, "Please wait while Factions converts " + list.size() + " old player names to UUID. This may take a while.");
+            FactionsPlugin.getInstance().log(Level.INFO, "Please wait while Factions converts " + list.size() + " old player names to UUID. This may take a while.");
             UUIDFetcher fetcher = new UUIDFetcher(new ArrayList<>(list));
             try {
                 Map<String, UUID> response = fetcher.call();
@@ -157,12 +157,12 @@ public class JSONFPlayers extends MemoryFPlayers {
                     // Remove all the invalid names we collected
                     data.remove(name);
                 }
-                Bukkit.getLogger().log(Level.INFO, "While converting we found names that either don't have a UUID or aren't players and removed them from storage.");
-                Bukkit.getLogger().log(Level.INFO, "The following names were detected as being invalid: " + StringUtils.join(invalidList, ", "));
+                FactionsPlugin.getInstance().log(Level.INFO, "While converting we found names that either don't have a UUID or aren't players and removed them from storage.");
+                FactionsPlugin.getInstance().log(Level.INFO, "The following names were detected as being invalid: " + StringUtils.join(invalidList, ", "));
             }
             saveCore(this.file, data, true); // Update the
             // flatfile
-            Bukkit.getLogger().log(Level.INFO, "Done converting players.json to UUID.");
+            FactionsPlugin.getInstance().log(Level.INFO, "Done converting players.json to UUID.");
         }
         return data;
     }
