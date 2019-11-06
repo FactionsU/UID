@@ -64,6 +64,13 @@ public class MiscUtil {
     public static ArrayList<String> validateTag(String str) {
         ArrayList<String> errors = new ArrayList<>();
 
+        for (String blacklistItem : FactionsPlugin.getInstance().conf().factions().other().getNameBlacklist()) {
+            if (str.toLowerCase().contains(blacklistItem.toLowerCase())) {
+                errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_BLACKLIST.toString()));
+                break;
+            }
+        }
+
         if (getComparisonString(str).length() < FactionsPlugin.getInstance().conf().factions().other().getTagLengthMin()) {
             errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), FactionsPlugin.getInstance().conf().factions().other().getTagLengthMin()));
         }
