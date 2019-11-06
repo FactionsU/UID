@@ -416,8 +416,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             getLogger().warning("Looks like you have an old, mistaken 'nofactions-prefix' in your lang.yml. It currently displays [4-] which is... strange.");
         }
 
-        getLogger().log(Level.SEVERE, "Doot", new Exception());
-
         new BukkitRunnable() {
             @Override
             public void run() {
