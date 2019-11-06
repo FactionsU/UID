@@ -689,6 +689,7 @@ public enum TL {
     GENERIC_TRANSLATION_VERSION("Translation: %1$s(%2$s,%3$s) State: %4$s"),
     GENERIC_TRANSLATION_CONTRIBUTORS("Translation contributors: %1$s"),
     GENERIC_TRANSLATION_RESPONSIBLE("Responsible for translation: %1$s"),
+    GENERIC_FACTIONTAG_BLACKLIST("&eThat faction tag is blacklisted."),
     GENERIC_FACTIONTAG_TOOSHORT("&eThe faction tag can't be shorter than &d%1$s&e chars."),
     GENERIC_FACTIONTAG_TOOLONG("&eThe faction tag can't be longer than &d%s&e chars."),
     GENERIC_FACTIONTAG_ALPHANUMERIC("&eFaction tag must be alphanumeric. \"&d%s&e\" is not allowed."),

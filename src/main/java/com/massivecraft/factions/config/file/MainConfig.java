@@ -1278,6 +1278,18 @@ public class MainConfig {
                     "Prevents flying piston machines in faction territory.")
             private boolean disablePistonsInTerritory = false;
 
+            @Comment("Any faction names CONTAINING any of these items will be disallowed")
+            private List<String> nameBlacklist = new ArrayList<String>() {
+                {
+                    this.add("blockedwordhere");
+                    this.add("anotherblockedthinghere");
+                }
+            };
+
+            public List<String> getNameBlacklist() {
+                return nameBlacklist == null ? Collections.emptyList() : this.nameBlacklist;
+            }
+
             public boolean isDisablePistonsInTerritory() {
                 return disablePistonsInTerritory;
             }
