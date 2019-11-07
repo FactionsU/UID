@@ -5,6 +5,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Relation;
+import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.TL;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
@@ -104,6 +105,10 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
             // Then Faction stuff
             case "faction_name":
                 return fPlayer.hasFaction() ? faction.getTag() : TL.NOFACTION_PREFIX.toString();
+            case "faction_name_custom":
+                return fPlayer.hasFaction() ? Tag.parsePlain(fPlayer, TL.PLACEHOLDER_CUSTOM_FACTION.toString()) : "";
+            case "faction_only_space":
+                return fPlayer.hasFaction() ? " " : "";
             case "faction_power":
                 return String.valueOf(faction.getPowerRounded());
             case "faction_powermax":
