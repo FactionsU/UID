@@ -55,6 +55,9 @@ public class CmdDisband extends FCommand {
             context.msg(TL.COMMAND_DISBAND_MARKEDPERMANENT.toString());
             return;
         }
+        if (!FactionsPlugin.getInstance().getLandRaidControl().canDisbandFaction(faction, context)) {
+            return;
+        }
 
         FactionDisbandEvent disbandEvent = new FactionDisbandEvent(context.player, faction.getId());
         Bukkit.getServer().getPluginManager().callEvent(disbandEvent);

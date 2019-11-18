@@ -19,11 +19,6 @@ public class PowerControl implements LandRaidControl {
     }
 
     @Override
-    public boolean canOverClaim(Faction faction) {
-        return FactionsPlugin.getInstance().conf().factions().claims().isAllowOverClaim() && faction.getLandRounded() >= faction.getPowerRounded();
-    }
-
-    @Override
     public boolean hasLandInflation(Faction faction) {
         return faction.getLandRounded() > faction.getPowerRounded();
     }
@@ -49,6 +44,11 @@ public class PowerControl implements LandRaidControl {
     }
 
     @Override
+    public boolean canDisbandFaction(Faction faction, CommandContext context) {
+        return true;
+    }
+
+    @Override
     public boolean canKick(FPlayer toKick, CommandContext context) {
         if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.getPower() < 0) {
             context.msg(TL.COMMAND_KICK_NEGATIVEPOWER);
@@ -59,17 +59,21 @@ public class PowerControl implements LandRaidControl {
 
     @Override
     public void onRespawn(FPlayer player) {
-        player.updatePower(); // update power, so they won't have gained any while dead
+        this.update(player); // update power, so they won't have gained any while dead
     }
-
 
     @Override
     public void onQuit(FPlayer player) {
-        player.updatePower(); // Make sure player's power is up to date when they log off.
+        this.update(player); // Make sure player's power is up to date when they log off.
     }
 
     @Override
-    public void onInit(FPlayer player) {
+    public void update(FPlayer player) {
+        player.updatePower();
+    }
+
+    @Override
+    public void onJoin(FPlayer player) {
         player.losePowerFromBeingOffline();
     }
 

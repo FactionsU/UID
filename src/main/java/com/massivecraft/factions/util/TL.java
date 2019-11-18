@@ -876,7 +876,13 @@ public enum TL {
     WARMUPS_NOTIFY_FLIGHT("&eFlight will enable in &d%2$d &eseconds."),
     WARMUPS_NOTIFY_TELEPORT("&eYou will teleport to &d%1$s &ein &d%2$d &eseconds."),
     WARMUPS_ALREADY("&cYou are already warming up."),
-    WARMUPS_CANCELLED("&cYou have cancelled your warmup.");
+    WARMUPS_CANCELLED("&cYou have cancelled your warmup."),
+    /**
+     * DTR
+     */
+    DTR_CANNOT_FROZEN("&cAction denied due to frozen DTR"),
+    DTR_KICK_PENALTY("&cPenalty DTR lost due to kicking with frozen DTR"),
+    ;
 
     private String path;
     private String def;

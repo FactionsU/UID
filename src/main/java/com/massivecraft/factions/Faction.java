@@ -163,6 +163,24 @@ public interface Faction extends EconomyParticipator {
     int getRelationCount(Relation relation);
 
     // ----------------------------------------------//
+    // DTR
+    // ----------------------------------------------//
+
+    double getDTR();
+
+    double getDTRWithoutUpdate();
+
+    void setDTR(double dtr);
+
+    long getLastDTRUpdateTime();
+
+    long getFrozenDTRUntilTime();
+
+    void setFrozenDTR(long time);
+
+    boolean isFrozenDTR();
+
+    // ----------------------------------------------//
     // Power
     // ----------------------------------------------//
     double getPower();
