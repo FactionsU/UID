@@ -5,6 +5,7 @@ import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -491,6 +492,83 @@ public class MainConfig {
 
     public class Factions {
         public class LandRaidControl {
+            public class DTR {
+                private double startingDTR = 2.0;
+                private double maxDTR = 10.0;
+                private double minDTR = -3.0;
+                private double perPlayer = 1;
+                private double regainPerMinutePerPlayer = 0.05;
+                private double regainPerMinuteMaxRate = 0.1;
+                private double lossPerDeath = 1;
+                @Comment("Time, in seconds, to freeze DTR regeneration after a faction member dies")
+                private int freezeTime = 0;
+                private boolean freezePreventsJoin = true;
+                private boolean freezePreventsLeave = true;
+                private boolean freezePreventsDisband = true;
+                private double freezeKickPenalty = 0.5;
+                private Map<String, Number> worldDeathModifiers = new HashMap<String, Number>(){
+                    {
+                        this.put("world_nether", 0.5D);
+                        this.put("world_the_end", 0.25D);
+                    }
+                };
+
+                public int getFreezeTime() {
+                    return freezeTime;
+                }
+
+                public boolean isFreezePreventsJoin() {
+                    return freezePreventsJoin;
+                }
+
+                public boolean isFreezePreventsLeave() {
+                    return freezePreventsLeave;
+                }
+
+                public boolean isFreezePreventsDisband() {
+                    return freezePreventsDisband;
+                }
+
+                public double getFreezeKickPenalty() {
+                    return freezeKickPenalty;
+                }
+
+                public double getMinDTR() {
+                    return minDTR;
+                }
+
+                public double getPerPlayer() {
+                    return perPlayer;
+                }
+
+                public double getRegainPerMinutePerPlayer() {
+                    return regainPerMinutePerPlayer;
+                }
+
+                public double getRegainPerMinuteMaxRate() {
+                    return regainPerMinuteMaxRate;
+                }
+
+                public double getMaxDTR() {
+                    return maxDTR;
+                }
+
+                public double getStartingDTR() {
+                    return startingDTR;
+                }
+
+                public double getLossPerDeath() {
+                    return this.lossPerDeath;
+                }
+
+                public double getLossPerDeath(World world) {
+                    if (this.worldDeathModifiers == null) {
+                        this.worldDeathModifiers = new HashMap<>();
+                    }
+                    return this.lossPerDeath * this.worldDeathModifiers.getOrDefault(world.getName(), 1D).doubleValue();
+                }
+            }
+
             public class Power {
                 private double playerMin = -10.0D;
                 private double playerMax = 10.0D;
@@ -595,11 +673,16 @@ public class MainConfig {
 
             @Comment("Sets the mode of land/raid control")
             private String system = "power";
+            private DTR dtr = new DTR();
             @Comment("Controls the power system of land/raid control\nSet the 'system' value to 'power' to use this system")
             private Power power = new Power();
 
             public String getSystem() {
                 return system;
+            }
+
+            public DTR dtr() {
+                return this.dtr;
             }
 
             public Power power() {
@@ -2010,7 +2093,8 @@ public class MainConfig {
     private Logging logging = new Logging();
     @Comment("Controls certain exploit preventions")
     private Exploits exploits = new Exploits();
-    @Comment("Economy support requires Vault and a compatible economy plugin")
+    @Comment("Economy support requires Vault and a compatible economy plugin\n" +
+            "If you wish to use economy features, be sure to set 'enabled' in this section to true!")
     private Economy economy = new Economy();
     @Comment("Control for the default settings of /f map")
     private MapSettings map = new MapSettings();

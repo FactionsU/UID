@@ -673,7 +673,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().getLandRaidControl().canLeaveFaction(this)) {
+        if (makePay && !FactionsPlugin.getInstance().getLandRaidControl().canLeaveFaction(this)) {
             return;
         }
 

@@ -76,7 +76,7 @@ public class FactionsPlayerListener extends AbstractListener {
         final FPlayer me = FPlayers.getInstance().getByPlayer(player);
         ((MemoryFPlayer) me).setName(player.getName());
 
-        this.plugin.getLandRaidControl().onInit(me);
+        this.plugin.getLandRaidControl().onJoin(me);
         // Update the lastLoginTime for this fplayer
         me.setLastLoginTime(System.currentTimeMillis());
 
@@ -516,6 +516,7 @@ public class FactionsPlayerListener extends AbstractListener {
             return;
         }
         if (!event.getFrom().getWorld().equals(event.getTo().getWorld()) && !plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
+            FactionsPlugin.getInstance().getLandRaidControl().update(me);
             this.initFactionWorld(me);
         }
 

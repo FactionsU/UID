@@ -16,13 +16,13 @@ public interface LandRaidControl {
 
     boolean isRaidable(Faction faction);
 
-    boolean canOverClaim(Faction faction);
-
     boolean hasLandInflation(Faction faction);
 
     boolean canJoinFaction(Faction faction, FPlayer player, CommandContext context);
 
     boolean canLeaveFaction(FPlayer player);
+
+    boolean canDisbandFaction(Faction faction, CommandContext context);
 
     boolean canKick(FPlayer toKick, CommandContext context);
 
@@ -32,5 +32,7 @@ public interface LandRaidControl {
 
     void onQuit(FPlayer player);
 
-    void onInit(FPlayer player);
+    void onJoin(FPlayer player);
+
+    void update(FPlayer player);
 }
