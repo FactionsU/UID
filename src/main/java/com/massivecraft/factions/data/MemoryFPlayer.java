@@ -748,38 +748,53 @@ public abstract class MemoryFPlayer implements FPlayer {
             // Checks for WorldGuard regions in the chunk attempting to be claimed
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_PROTECTED.toString());
         } else if (FactionsPlugin.getInstance().conf().factions().claims().getWorldsNoClaiming().contains(flocation.getWorldName())) {
+            // Cannot claim in this world
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_DISABLED.toString());
         } else if (this.isAdminBypassing()) {
+            // Admin bypass
             return true;
         } else if (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(getPlayer())) {
+            // Safezone and can claim for such
             return true;
         } else if (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(getPlayer())) {
+            // Warzone and can claim for such
             return true;
         } else if (!forFaction.hasAccess(this, PermissibleAction.TERRITORY)) {
+            // Lacking perms to territory claim
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_CANTCLAIM.toString(), forFaction.describeTo(this));
         } else if (forFaction == currentFaction) {
+            // Already owned by this faction, nitwit
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_ALREADYOWN.toString(), forFaction.describeTo(this, true));
         } else if (forFaction.getFPlayers().size() < FactionsPlugin.getInstance().conf().factions().claims().getRequireMinFactionMembers()) {
+            // Need more members in order to claim land
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_MEMBERS.toString(), FactionsPlugin.getInstance().conf().factions().claims().getRequireMinFactionMembers());
         } else if (currentFaction.isSafeZone()) {
+            // Cannot claim safezone
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_SAFEZONE.toString());
         } else if (currentFaction.isWarZone()) {
+            // Cannot claim warzone
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_WARZONE.toString());
-        } else if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl && FactionsPlugin.getInstance().conf().factions().claims().isAllowOverClaim() && ownedLand >= forFaction.getPowerRounded()) {
+        } else if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl && ownedLand >= forFaction.getPowerRounded()) {
+            // Already own at least as much land as power
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_POWER.toString());
         } else if (FactionsPlugin.getInstance().conf().factions().claims().getLandsMax() != 0 && ownedLand >= FactionsPlugin.getInstance().conf().factions().claims().getLandsMax() && forFaction.isNormal()) {
+            // Land limit reached
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_LIMIT.toString());
         } else if (currentFaction.getRelationTo(forFaction) == Relation.ALLY) {
+            // // Can't claim ally
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_ALLY.toString());
         } else if (FactionsPlugin.getInstance().conf().factions().claims().isMustBeConnected() && !this.isAdminBypassing() && myFaction.getLandRoundedInWorld(flocation.getWorldName()) > 0 && !Board.getInstance().isConnectedLocation(flocation, myFaction) && (!FactionsPlugin.getInstance().conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction() || !currentFaction.isNormal())) {
+            // Must be contiguous/connected
             if (FactionsPlugin.getInstance().conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction()) {
                 error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_CONTIGIOUS.toString());
             } else {
                 error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_FACTIONCONTIGUOUS.toString());
             }
         } else if (factionBuffer > 0 && Board.getInstance().hasFactionWithin(flocation, myFaction, factionBuffer)) {
+            // Too close to buffer
             error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_TOOCLOSETOOTHERFACTION.format(factionBuffer));
         } else if (flocation.isOutsideWorldBorder(worldBuffer)) {
+            // Border buffer
             if (worldBuffer > 0) {
                 error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_OUTSIDEBORDERBUFFER.format(worldBuffer));
             } else {
@@ -787,10 +802,13 @@ public abstract class MemoryFPlayer implements FPlayer {
             }
         } else if (currentFaction.isNormal()) {
             if (myFaction.isPeaceful()) {
+                // Cannot claim as peaceful
                 error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_PEACEFUL.toString(), currentFaction.getTag(this));
             } else if (currentFaction.isPeaceful()) {
+                // Cannot claim from peaceful
                 error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_PEACEFULTARGET.toString(), currentFaction.getTag(this));
             } else if (!currentFaction.hasLandInflation()) {
+                // Cannot claim other faction (perhaps based on power/land ratio)
                 // TODO more messages WARN current faction most importantly
                 error = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_THISISSPARTA.toString(), currentFaction.getTag(this));
             } else if (currentFaction.hasLandInflation() && !FactionsPlugin.getInstance().conf().factions().claims().isAllowOverClaim()) {
