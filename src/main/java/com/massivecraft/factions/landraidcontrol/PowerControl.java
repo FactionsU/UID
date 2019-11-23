@@ -24,6 +24,11 @@ public class PowerControl implements LandRaidControl {
     }
 
     @Override
+    public int getLandLimit(Faction faction) {
+        return faction.getPowerRounded();
+    }
+
+    @Override
     public boolean canJoinFaction(Faction faction, FPlayer player, CommandContext context) {
         if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.getPower() < 0) {
             if (context != null) {

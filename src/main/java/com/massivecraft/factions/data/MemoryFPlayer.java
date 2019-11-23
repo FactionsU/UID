@@ -14,6 +14,7 @@ import com.massivecraft.factions.iface.RelationParticipator;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.integration.LWC;
+import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
@@ -732,6 +733,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         return this.isAdminBypassing() || !forFaction.isWilderness() && (forFaction == this.getFaction() && this.getFaction().hasAccess(this, PermissibleAction.TERRITORY)) || (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(getPlayer())) || (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(getPlayer()));
     }
 
+    // Not used
     public boolean canClaimForFactionAtLocation(Faction forFaction, Location location, boolean notifyFailure) {
         return canClaimForFactionAtLocation(forFaction, new FLocation(location), notifyFailure);
     }
@@ -777,6 +779,9 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl && ownedLand >= forFaction.getPowerRounded()) {
             // Already own at least as much land as power
             denyReason = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_POWER.toString());
+        } else if (FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl && ownedLand >= FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(forFaction)) {
+            // Already own at least as much land as land limit (DTR)
+            denyReason = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_DTR_LAND.toString());
         } else if (FactionsPlugin.getInstance().conf().factions().claims().getLandsMax() != 0 && ownedLand >= FactionsPlugin.getInstance().conf().factions().claims().getLandsMax() && forFaction.isNormal()) {
             // Land limit reached
             denyReason = FactionsPlugin.getInstance().txt().parse(TL.CLAIM_LIMIT.toString());
