@@ -28,6 +28,7 @@
 | factions.description        | Can set your faction description                                                        |
 | factions.disband            | Can use the disband command                                                             |
 | factions.disband.any        | Can disband any faction                                                                 |
+| factions.dtr                | Can view faction DTR                                                                    |
 | factions.fly                | Grants the ability to use `/f fly`                                                      |
 | factions.fly.auto           |                                                                                         |
 | factions.fly.safezone       |                                                                                         |
@@ -52,6 +53,7 @@
 | factions.mod                |                                                                                         |
 | factions.mod.any            |                                                                                         |
 | factions.modifypower        |                                                                                         |
+| factions.modifydtr          |                                                                                         |
 | factions.money.balance      |                                                                                         |
 | factions.money.balance.any  |                                                                                         |
 | factions.money.deposit      |                                                                                         |

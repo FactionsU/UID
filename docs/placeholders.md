@@ -39,8 +39,13 @@ Player Placeholder | Description
 Faction Placeholder | Description
 --- | ---
 %factionsuuid_faction_name% | Faction's tag
+%factionsuuid_faction_name_custom% | Custom faction tag based on lang.yml CUSTOM name
+%factionsuuid_faction_only_space% | Literally a space, only if the player is in a faction
 %factionsuuid_faction_power% | Faction's current power
 %factionsuuid_faction_powermax% | Faction's max power
+%factionsuuid_faction_dtr% | Faction's DTR
+%factionsuuid_faction_dtrmax% | Faction's max DTR
+%factionsuuid_faction_maxclaims% | Faction's max claims
 %factionsuuid_faction_description% | Faction's long description
 %factionsuuid_faction_claims% | Number of claimed chunks
 %factionsuuid_faction_founded% | Date your faction was founded
