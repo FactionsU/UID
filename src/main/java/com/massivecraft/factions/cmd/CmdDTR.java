@@ -1,8 +1,8 @@
 package com.massivecraft.factions.cmd;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.dtr.CmdDTRGet;
+import com.massivecraft.factions.cmd.dtr.CmdDTRModify;
+import com.massivecraft.factions.cmd.dtr.CmdDTRResetAll;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
@@ -15,6 +15,8 @@ public class CmdDTR extends FCommand {
         this.aliases.add("deathstilraidable"); // YOLO
 
         this.addSubCommand(this.cmdDTRGet = new CmdDTRGet());
+        this.addSubCommand(new CmdDTRModify());
+        this.addSubCommand(new CmdDTRResetAll());
 
         this.requirements = new CommandRequirements.Builder(Permission.DTR).noDisableOnLock().build();
     }
@@ -29,5 +31,4 @@ public class CmdDTR extends FCommand {
     public TL getUsageTranslation() {
         return TL.COMMAND_DTR_DESCRIPTION;
     }
-
 }

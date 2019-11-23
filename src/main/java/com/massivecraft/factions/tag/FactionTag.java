@@ -42,12 +42,12 @@ public enum FactionTag implements Tag {
             int dtr = fac.getLandRounded() >= fac.getPowerRounded() ? 0 : (int) Math.ceil(((double) (fac.getPowerRounded() - fac.getLandRounded())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
             return TL.COMMAND_SHOW_DEATHS_TIL_RAIDABLE.format(dtr);
         } else {
-            return TL.COMMAND_SHOW_DTR.format(fac.getDTR());
+            return DTRControl.round(fac.getDTR());
         }
     }),
     MAX_DTR("max-dtr", (fac) -> {
         if (FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
-            TL.COMMAND_SHOW_MAXDTR.format(((DTRControl)FactionsPlugin.getInstance().getLandRaidControl()).getMaxDTR(fac));
+            return DTRControl.round(((DTRControl)FactionsPlugin.getInstance().getLandRaidControl()).getMaxDTR(fac));
         }
         return Tag.isMinimalShow() ? null : "{ig}";
     }),
