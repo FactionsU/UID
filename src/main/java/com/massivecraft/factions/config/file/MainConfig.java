@@ -506,12 +506,25 @@ public class MainConfig {
                 private boolean freezePreventsLeave = true;
                 private boolean freezePreventsDisband = true;
                 private double freezeKickPenalty = 0.5;
+                @Comment("Additional claims allowed for each player in the faction")
+                private int landPerPlayer = 3;
+                @Comment("Claims the faction starts with.\n" +
+                        "Note: A faction of one player has this many PLUS the perPlayer amount.")
+                private int landStarting = 6;
                 private Map<String, Number> worldDeathModifiers = new HashMap<String, Number>(){
                     {
                         this.put("world_nether", 0.5D);
                         this.put("world_the_end", 0.25D);
                     }
                 };
+
+                public int getLandPerPlayer() {
+                    return landPerPlayer;
+                }
+
+                public int getLandStarting() {
+                    return landStarting;
+                }
 
                 public int getFreezeTime() {
                     return freezeTime;
@@ -557,7 +570,7 @@ public class MainConfig {
                     return startingDTR;
                 }
 
-                public double getLossPerDeath() {
+                public double getLossPerDeathBase() {
                     return this.lossPerDeath;
                 }
 

@@ -637,6 +637,7 @@ public enum TL {
     CLAIM_SAFEZONE("&cYou can not claim a Safe Zone."),
     CLAIM_WARZONE("&cYou can not claim a War Zone."),
     CLAIM_POWER("&cYou can't claim more land! You need more power!"),
+    CLAIM_DTR_LAND("&cYou can't claim more land!"),
     CLAIM_LIMIT("&cLimit reached. You can't claim more land!"),
     CLAIM_ALLY("&cYou can't claim the land of your allies."),
     CLAIM_CONTIGIOUS("&cYou can only claim additional land which is connected to your first claim or controlled by another faction!"),

@@ -29,6 +29,11 @@ public class DTRControl implements LandRaidControl {
     }
 
     @Override
+    public int getLandLimit(Faction faction) {
+        return conf.getLandStarting() + (faction.getFPlayers().size() * conf.getLandPerPlayer());
+    }
+
+    @Override
     public boolean canJoinFaction(Faction faction, FPlayer player, CommandContext context) {
         if (faction.isFrozenDTR() && conf.isFreezePreventsJoin()) {
             context.msg(TL.DTR_CANNOT_FROZEN);

@@ -18,6 +18,8 @@ public interface LandRaidControl {
 
     boolean hasLandInflation(Faction faction);
 
+    int getLandLimit(Faction faction);
+
     boolean canJoinFaction(Faction faction, FPlayer player, CommandContext context);
 
     boolean canLeaveFaction(FPlayer player);
