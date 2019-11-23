@@ -1,6 +1,5 @@
 package com.massivecraft.factions.cmd.dtr;
 
-import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
@@ -11,10 +10,10 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
 public class CmdDTRGet extends FCommand {
-
     public CmdDTRGet() {
         super();
         this.aliases.add("get");
+        this.optionalArgs.put("faction", "yours");
 
         this.requirements = new CommandRequirements.Builder(Permission.DTR).noDisableOnLock().build();
     }
@@ -36,7 +35,7 @@ public class CmdDTRGet extends FCommand {
         }
 
         DTRControl dtr = (DTRControl) FactionsPlugin.getInstance().getLandRaidControl();
-        context.msg(TL.COMMAND_DTR_DTR, target.describeTo(context.fPlayer, true), target.getDTR(), dtr.getMaxDTR(target));
+        context.msg(TL.COMMAND_DTR_DTR, target.describeTo(context.fPlayer, false), DTRControl.round(target.getDTR()), DTRControl.round(dtr.getMaxDTR(target)));
     }
 
     @Override

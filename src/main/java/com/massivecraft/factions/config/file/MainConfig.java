@@ -511,12 +511,17 @@ public class MainConfig {
                 @Comment("Claims the faction starts with.\n" +
                         "Note: A faction of one player has this many PLUS the perPlayer amount.")
                 private int landStarting = 6;
+                private int decimalDigits = 2;
                 private Map<String, Number> worldDeathModifiers = new HashMap<String, Number>(){
                     {
                         this.put("world_nether", 0.5D);
                         this.put("world_the_end", 0.25D);
                     }
                 };
+
+                public int getDecimalDigits() {
+                    return decimalDigits;
+                }
 
                 public int getLandPerPlayer() {
                     return landPerPlayer;

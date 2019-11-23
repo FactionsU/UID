@@ -72,6 +72,7 @@ permissions:
       factions.deinvite: true
       factions.description: true
       factions.disband: true
+      factions.dtr: true
       factions.help: true
       factions.home: true
       factions.invite: true

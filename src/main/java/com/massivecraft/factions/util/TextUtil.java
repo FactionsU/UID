@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +24,6 @@ public class TextUtil {
     // -------------------------------------------- //
 
     public String parse(String str, Object... args) {
-        System.out.println(str);
-        System.out.println(Arrays.asList(args));
         return String.format(this.parse(str), args);
     }
 

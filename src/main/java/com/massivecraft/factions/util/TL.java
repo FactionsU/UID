@@ -194,8 +194,10 @@ public enum TL {
 
     COMMAND_DTR_TOSHOW("to show faction DTR info"),
     COMMAND_DTR_FORSHOW("for showing faction DTR info"),
-    COMMAND_DTR_DTR("%1$s&6 - DTR / Max DTR: &e%2$.1f / %3$.1f"),
+    COMMAND_DTR_DTR("%1$s&6 - DTR / Max DTR: &e%2$s / %3$s"),
     COMMAND_DTR_DESCRIPTION("Show faction DTR info"),
+    COMMAND_DTR_MODIFY_DESCRIPTION("Modify faction DTR"),
+    COMMAND_DTR_MODIFY_DONE("&eSet DTR for %s&e to %s"),
 
     COMMAND_FLY_DESCRIPTION("Enter or leave Faction flight mode"),
     COMMAND_FLY_CHANGE("&eFaction flight &d%1$s"),
@@ -542,8 +544,6 @@ public enum TL {
     COMMAND_SHOW_MEMBERSOFFLINE("Members offline: "),
     COMMAND_SHOW_COMMANDDESCRIPTION("Show faction information"),
     COMMAND_SHOW_DEATHS_TIL_RAIDABLE("&eDTR: %1$d"),
-    COMMAND_SHOW_DTR("%.2f"),
-    COMMAND_SHOW_MAXDTR("%.2f"),
     COMMAND_SHOW_EXEMPT("&cThis faction is exempt and cannot be seen."),
 
     COMMAND_SHOWINVITES_PENDING("Players with pending invites: "),
