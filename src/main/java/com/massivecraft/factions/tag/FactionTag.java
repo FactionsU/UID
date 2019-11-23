@@ -4,6 +4,8 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.landraidcontrol.DTRControl;
+import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 
@@ -35,10 +37,21 @@ public enum FactionTag implements Tag {
         boolean raid = FactionsPlugin.getInstance().getLandRaidControl().isRaidable(fac);
         return raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
     }),
-    DTR("dtr", (fac) -> { // TODO DTR
-        int dtr = fac.getLandRounded() >= fac.getPowerRounded() ? 0 : (int) Math.ceil(((double) (fac.getPowerRounded() - fac.getLandRounded())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
-        return TL.COMMAND_SHOW_DEATHS_TIL_RAIDABLE.format(dtr);
+    DTR("dtr", (fac) -> {
+        if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
+            int dtr = fac.getLandRounded() >= fac.getPowerRounded() ? 0 : (int) Math.ceil(((double) (fac.getPowerRounded() - fac.getLandRounded())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
+            return TL.COMMAND_SHOW_DEATHS_TIL_RAIDABLE.format(dtr);
+        } else {
+            return TL.COMMAND_SHOW_DTR.format(fac.getDTR());
+        }
     }),
+    MAX_DTR("max-dtr", (fac) -> {
+        if (FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
+            TL.COMMAND_SHOW_MAXDTR.format(((DTRControl)FactionsPlugin.getInstance().getLandRaidControl()).getMaxDTR(fac));
+        }
+        return Tag.isMinimalShow() ? null : "{ig}";
+    }),
+    MAX_CHUNKS("max-chunks", (fac -> String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(fac)))),
     PEACEFUL("peaceful", (fac) -> fac.isPeaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getPeaceful() + TL.COMMAND_SHOW_PEACEFUL.toString() : ""),
     PERMANENT("permanent", (fac) -> fac.isPermanent() ? "permanent" : "{notPermanent}"), // no braces needed
     LAND_VALUE("land-value", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(fac.getLandRounded())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("value")),
