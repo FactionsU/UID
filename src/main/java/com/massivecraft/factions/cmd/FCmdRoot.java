@@ -16,6 +16,7 @@ import com.massivecraft.factions.cmd.relations.CmdRelationNeutral;
 import com.massivecraft.factions.cmd.relations.CmdRelationTruce;
 import com.massivecraft.factions.cmd.role.CmdDemote;
 import com.massivecraft.factions.cmd.role.CmdPromote;
+import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.util.TL;
 import me.lucko.commodore.CommodoreProvider;
@@ -71,6 +72,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
     public CmdPermanentPower cmdPermanentPower = new CmdPermanentPower();
     public CmdPowerBoost cmdPowerBoost = new CmdPowerBoost();
     public CmdPower cmdPower = new CmdPower();
+    public CmdDTR cmdDTR = new CmdDTR();
     public CmdRelationAlly cmdRelationAlly = new CmdRelationAlly();
     public CmdRelationEnemy cmdRelationEnemy = new CmdRelationEnemy();
     public CmdRelationNeutral cmdRelationNeutral = new CmdRelationNeutral();
@@ -206,6 +208,8 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
             this.addSubCommand(this.cmdPower);
             this.addSubCommand(this.cmdPowerBoost);
             this.addSubCommand(this.cmdModifyPower);
+        } else if (FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
+            this.addSubCommand(this.cmdDTR);
         }
         if (Bukkit.getServer().getPluginManager().isPluginEnabled("FactionsTop")) {
             FactionsPlugin.getInstance().getLogger().info("Found FactionsTop plugin. Disabling our own /f top command.");

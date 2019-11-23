@@ -1676,6 +1676,7 @@ public class MainConfig {
         private double costPower = 0.0;
         private double costShow = 0.0;
         private double costStuck = 0.0;
+        private double costDTR = 0.0;
         private double costOpen = 0.0;
         private double costAlly = 0.0;
         private double costTruce = 0.0;
@@ -1698,6 +1699,10 @@ public class MainConfig {
 
         public boolean isEnabled() {
             return enabled;
+        }
+
+        public double getCostDTR() {
+            return costDTR;
         }
 
         public String getUniverseAccount() {

@@ -192,6 +192,11 @@ public enum TL {
     COMMAND_DISBAND_HOLDINGS("&eYou have been given the disbanded faction's bank, totaling %1$s."),
     COMMAND_DISBAND_DESCRIPTION("Disband a faction"),
 
+    COMMAND_DTR_TOSHOW("to show faction DTR info"),
+    COMMAND_DTR_FORSHOW("for showing faction DTR info"),
+    COMMAND_DTR_DTR("%1$s&6 - DTR / Max DTR: &e%2$.1f / %3$.1f"),
+    COMMAND_DTR_DESCRIPTION("Show faction DTR info"),
+
     COMMAND_FLY_DESCRIPTION("Enter or leave Faction flight mode"),
     COMMAND_FLY_CHANGE("&eFaction flight &d%1$s"),
     COMMAND_FLY_DAMAGE("&eFaction flight &ddisabled&e due to entering combat"),
