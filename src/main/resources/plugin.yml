@@ -270,6 +270,8 @@ permissions:
     description: set a warp for your faction
   factions.warp:
     description: access your faction warps
+  factions.modifydtr:
+    description: modify other factions' DTR
   factions.modifypower:
     description: modify other player's power
   factions.monitorlogins:
