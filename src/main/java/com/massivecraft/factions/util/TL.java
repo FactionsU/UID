@@ -542,6 +542,8 @@ public enum TL {
     COMMAND_SHOW_MEMBERSOFFLINE("Members offline: "),
     COMMAND_SHOW_COMMANDDESCRIPTION("Show faction information"),
     COMMAND_SHOW_DEATHS_TIL_RAIDABLE("&eDTR: %1$d"),
+    COMMAND_SHOW_DTR("%.2f"),
+    COMMAND_SHOW_MAXDTR("%.2f"),
     COMMAND_SHOW_EXEMPT("&cThis faction is exempt and cannot be seen."),
 
     COMMAND_SHOWINVITES_PENDING("Players with pending invites: "),
