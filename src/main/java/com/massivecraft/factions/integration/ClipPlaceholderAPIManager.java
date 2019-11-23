@@ -4,6 +4,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.TL;
@@ -113,6 +114,15 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                 return String.valueOf(faction.getPowerRounded());
             case "faction_powermax":
                 return String.valueOf(faction.getPowerMaxRounded());
+            case "faction_dtr":
+                return fPlayer.hasFaction() ? DTRControl.round(faction.getDTR()) : "";
+            case "faction_dtrmax":
+                if (fPlayer.hasFaction() && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
+                    return DTRControl.round(((DTRControl) FactionsPlugin.getInstance().getLandRaidControl()).getMaxDTR(faction));
+                }
+                return "";
+            case "faction_maxclaims":
+                return fPlayer.hasFaction() ? String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(faction)) : "";
             case "faction_description":
                 return faction.getDescription();
             case "faction_claims":
