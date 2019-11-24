@@ -1,16 +1,15 @@
 package com.massivecraft.factions.integration.dynmap;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.config.file.DynmapConfig;
+import com.massivecraft.factions.data.MemoryBoard;
+import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.perms.Role;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -23,16 +22,16 @@ import org.dynmap.markers.MarkerSet;
 import org.dynmap.markers.PlayerSet;
 import org.dynmap.utils.TileFlags;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.FactionsPlugin;
-import com.massivecraft.factions.config.file.DynmapConfig;
-import com.massivecraft.factions.data.MemoryBoard;
-import com.massivecraft.factions.integration.Econ;
-import com.massivecraft.factions.perms.Role;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 // This source code is a heavily modified version of mikeprimms plugin Dynmap-Factions.
 public class EngineDynmap {
@@ -743,7 +742,7 @@ public class EngineDynmap {
             return ret;
         }
 
-        return dynmapConf.style().getDefaultStyle();
+        return DynmapStyle.getDefault();
     }
 
     // Thread Safe / Asynchronous: Yes

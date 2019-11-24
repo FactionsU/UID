@@ -47,7 +47,7 @@ public enum FactionTag implements Tag {
     }),
     MAX_DTR("max-dtr", (fac) -> {
         if (FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
-            return DTRControl.round(((DTRControl)FactionsPlugin.getInstance().getLandRaidControl()).getMaxDTR(fac));
+            return DTRControl.round(((DTRControl) FactionsPlugin.getInstance().getLandRaidControl()).getMaxDTR(fac));
         }
         return Tag.isMinimalShow() ? null : "{ig}";
     }),

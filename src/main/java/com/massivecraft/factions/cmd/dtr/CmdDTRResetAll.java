@@ -1,6 +1,5 @@
 package com.massivecraft.factions.cmd.dtr;
 
-import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;

@@ -11,7 +11,6 @@ import com.massivecraft.factions.data.MemoryFPlayers;
 import com.massivecraft.factions.util.DiscUtil;
 import com.massivecraft.factions.util.UUIDFetcher;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.IOException;
