@@ -512,7 +512,7 @@ public class MainConfig {
                         "Note: A faction of one player has this many PLUS the perPlayer amount.")
                 private int landStarting = 6;
                 private int decimalDigits = 2;
-                private Map<String, Number> worldDeathModifiers = new HashMap<String, Number>(){
+                private Map<String, Number> worldDeathModifiers = new HashMap<String, Number>() {
                     {
                         this.put("world_nether", 0.5D);
                         this.put("world_the_end", 0.25D);

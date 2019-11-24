@@ -1,30 +1,52 @@
 package com.massivecraft.factions.integration.dynmap;
 
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.config.file.DynmapConfig;
 
 public class DynmapStyle {
+    public static final String DEFAULT_LINE_COLOR = "#00FF00";
+    public static final double DEFAULT_LINE_OPACITY = 0.8D;
+    public static final int DEFAULT_LINE_WEIGHT = 3;
+    public static final String DEFAULT_FILL_COLOR = "#00FF00";
+    public static final double DEFAULT_FILL_OPACITY = 0.35D;
+    public static final String DEFAULT_HOME_MARKER = "greenflag";
+    public static final boolean DEFAULT_BOOST = false;
+
+    private static DynmapStyle defaultStyle = new DynmapStyle()
+            .setLineColor(DEFAULT_LINE_COLOR)
+            .setLineOpacity(DEFAULT_LINE_OPACITY)
+            .setLineWeight(DEFAULT_LINE_WEIGHT)
+            .setFillColor(DEFAULT_FILL_COLOR)
+            .setFillOpacity(DEFAULT_FILL_OPACITY)
+            .setHomeMarker(DEFAULT_HOME_MARKER)
+            .setBoost(DEFAULT_BOOST);
+
+    public static DynmapStyle getDefault() {
+        return defaultStyle;
+    }
+
+    private static DynmapConfig.Style styleConf() {
+        return FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style();
+    }
+
     // -------------------------------------------- //
     // FIELDS
     // -------------------------------------------- //
-    public String lineColor = null;
+    private String lineColor = null;
 
     public int getLineColor() {
-        return getColor(coalesce(this.lineColor,
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getLineColor(),
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getDefaultStyle().lineColor));
+        return getColor(coalesce(this.lineColor, styleConf().getLineColor(), DEFAULT_FILL_COLOR));
     }
 
-    public DynmapStyle setStrokeColor(String strokeColor) {
+    public DynmapStyle setLineColor(String strokeColor) {
         this.lineColor = strokeColor;
         return this;
     }
 
-    public Double lineOpacity = null;
+    private Double lineOpacity = null;
 
     public double getLineOpacity() {
-        return coalesce(this.lineOpacity,
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getLineOpacity(),
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getDefaultStyle().lineOpacity);
+        return coalesce(this.lineOpacity, styleConf().getLineOpacity(), DEFAULT_LINE_OPACITY);
     }
 
     public DynmapStyle setLineOpacity(Double strokeOpacity) {
@@ -32,12 +54,10 @@ public class DynmapStyle {
         return this;
     }
 
-    public Integer lineWeight = null;
+    private Integer lineWeight = null;
 
     public int getLineWeight() {
-        return coalesce(this.lineWeight,
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getLineWeight(),
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getDefaultStyle().lineWeight);
+        return coalesce(this.lineWeight, styleConf().getLineWeight(), DEFAULT_LINE_WEIGHT);
     }
 
     public DynmapStyle setLineWeight(Integer strokeWeight) {
@@ -45,12 +65,10 @@ public class DynmapStyle {
         return this;
     }
 
-    public String fillColor = null;
+    private String fillColor = null;
 
     public int getFillColor() {
-        return getColor(coalesce(this.fillColor,
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getFillColor(),
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getDefaultStyle().fillColor));
+        return getColor(coalesce(this.fillColor, styleConf().getFillColor(), DEFAULT_FILL_COLOR));
     }
 
     public DynmapStyle setFillColor(String fillColor) {
@@ -58,12 +76,10 @@ public class DynmapStyle {
         return this;
     }
 
-    public Double fillOpacity = null;
+    private Double fillOpacity = null;
 
     public double getFillOpacity() {
-        return coalesce(this.fillOpacity,
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getFillOpacity(),
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getDefaultStyle().fillOpacity);
+        return coalesce(this.fillOpacity, styleConf().getFillOpacity(), DEFAULT_FILL_OPACITY);
     }
 
     public DynmapStyle setFillOpacity(Double fillOpacity) {
@@ -71,15 +87,10 @@ public class DynmapStyle {
         return this;
     }
 
-    // NOTE: We just return the string here. We do not return the resolved Dynmap MarkerIcon object.
-    // The reason is we use this class in the MConf. For serialization to work Dynmap would have to be loaded and we can't require that.
-    // Using dynmap is optional.
-    public String homeMarker = null;
+    private String homeMarker = null;
 
     public String getHomeMarker() {
-        return coalesce(this.homeMarker,
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getHomeMarker(),
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getDefaultStyle().homeMarker);
+        return coalesce(this.homeMarker, styleConf().getHomeMarker(), DEFAULT_HOME_MARKER);
     }
 
     public DynmapStyle setHomeMarker(String homeMarker) {
@@ -87,12 +98,10 @@ public class DynmapStyle {
         return this;
     }
 
-    public Boolean boost = null;
+    private Boolean boost = null;
 
     public boolean getBoost() {
-        return coalesce(this.boost,
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().isStyleBoost(),
-                FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getDefaultStyle().boost);
+        return coalesce(this.boost, styleConf().isStyleBoost(), DEFAULT_BOOST);
     }
 
     public DynmapStyle setBoost(Boolean boost) {
@@ -104,14 +113,8 @@ public class DynmapStyle {
     // UTIL
     // -------------------------------------------- //
 
-    @SafeVarargs
-    public static <T> T coalesce(T... items) {
-        for (T item : items) {
-            if (item != null) {
-                return item;
-            }
-        }
-        return null;
+    private static <T> T coalesce(T first, T second, T defaultItem) {
+        return first != null ? first : (second != null ? second : defaultItem);
     }
 
     public static int getColor(String string) {
