@@ -145,6 +145,9 @@ public class Transitioner {
             Loader.load(loader, newConf);
             newConf.update(oldConf, this.plugin.getConfig());
             Loader.loadAndSave(loader, newConf);
+            if (!oldConfigFolder.toFile().exists()) {
+                oldConfigFolder.toFile().mkdir();
+            }
             Files.move(configPath, oldConfigFolder.resolve("config.yml"));
         } catch (Exception e) {
             this.plugin.getLogger().log(Level.SEVERE, "Could not process configuration", e);
