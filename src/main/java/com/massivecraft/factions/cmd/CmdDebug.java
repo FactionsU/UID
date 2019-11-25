@@ -25,6 +25,7 @@ public class CmdDebug extends FCommand {
     public CmdDebug() {
         super();
         this.aliases.add("debug");
+        this.aliases.add("helpme");
         this.optionalArgs.put("mini/full", "full");
 
         this.requirements = new CommandRequirements.Builder(Permission.DEBUG).build();
@@ -34,9 +35,9 @@ public class CmdDebug extends FCommand {
     public void perform(CommandContext context) {
         StringBuilder mainInfo = new StringBuilder();
         mainInfo.append(Bukkit.getName()).append(" version: ").append(Bukkit.getServer().getVersion()).append('\n');
+        mainInfo.append("Server ID: ").append(FactionsPlugin.getInstance().getServerUUID()).append('\n');
         mainInfo.append("Plugin version: ").append(FactionsPlugin.getInstance().getDescription().getVersion()).append('\n');
         mainInfo.append("Java version: ").append(System.getProperty("java.version")).append('\n');
-        mainInfo.append("Server ID: ").append(FactionsPlugin.getInstance().getServerUUID()).append('\n');
         if (!context.args.isEmpty() && context.argAsString(0).equalsIgnoreCase("mini")) {
             for (String string : mainInfo.toString().split("\n")) {
                 context.msg(string);

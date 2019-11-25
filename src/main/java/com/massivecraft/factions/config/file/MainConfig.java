@@ -947,6 +947,18 @@ public class MainConfig {
             private boolean peacefulTerritoryDisableMonsters = false;
             private boolean peacefulTerritoryDisableBoom = false;
             private boolean permanentFactionsDisableLeaderPromotion = false;
+            @Comment("Material names of things whose placement is ignored in faction territory")
+            private Set<String> ignoreBuildMaterials = new HashSet<>();
+            private transient Set<Material> ignoreBuildMaterialsMat;
+
+            public Set<Material> getIgnoreBuildMaterials() {
+                if (ignoreBuildMaterialsMat == null) {
+                    ignoreBuildMaterialsMat = new HashSet<>();
+                    ignoreBuildMaterials.forEach(m -> ignoreBuildMaterialsMat.add(FactionMaterial.from(m).get()));
+                    ignoreBuildMaterialsMat.remove(Material.AIR);
+                }
+                return ignoreBuildMaterialsMat;
+            }
 
             public boolean isPeacefulTerritoryDisablePVP() {
                 return peacefulTerritoryDisablePVP;
