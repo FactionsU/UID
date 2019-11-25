@@ -53,6 +53,11 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
+        Faction targetFaction = Board.getInstance().getFactionAt(new FLocation(event.getBlock().getLocation()));
+        if (targetFaction.isNormal() && !targetFaction.isPeaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().getIgnoreBuildMaterials().contains(event.getBlock().getType())) {
+            return;
+        }
+
         if (!playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.BUILD, "build", false)) {
             event.setCancelled(true);
         }

@@ -375,7 +375,9 @@ public class FactionsPlayerListener extends AbstractListener {
                 case TNT_MINECART:
                     action = "place " + item.getType().name().toLowerCase().replace('_', ' ');
             }
-            if (action != null && !FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleAction.BUILD, action, false)) {
+            if (action != null &&
+                    !FactionsPlugin.getInstance().conf().factions().specialCase().getIgnoreBuildMaterials().contains(item.getType()) &&
+                    !FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleAction.BUILD, action, false)) {
                 event.setCancelled(true);
             }
         }
