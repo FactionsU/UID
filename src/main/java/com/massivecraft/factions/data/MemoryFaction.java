@@ -569,7 +569,9 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public boolean noMonstersInTerritory() {
-        return isSafeZone() || (peaceful && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters());
+        return isSafeZone() ||
+                (peaceful && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters()) ||
+                (isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZonePreventMonsterSpawns());
     }
 
     // -------------------------------
