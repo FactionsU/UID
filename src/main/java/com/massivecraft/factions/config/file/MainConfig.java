@@ -1102,6 +1102,7 @@ public class MainConfig {
             private boolean warZoneBlockTNT = true;
             private boolean warZoneFriendlyFire = false;
             private boolean warZoneDenyEndermanBlocks = true;
+            private boolean warZonePreventMonsterSpawns = false;
 
             private boolean wildernessDenyBuild = false;
             private boolean wildernessDenyUsage = false;
@@ -1237,6 +1238,10 @@ public class MainConfig {
 
             public boolean isWarZoneDenyEndermanBlocks() {
                 return warZoneDenyEndermanBlocks;
+            }
+
+            public boolean isWarZonePreventMonsterSpawns() {
+                return warZonePreventMonsterSpawns;
             }
 
             public boolean isWildernessDenyBuild() {
