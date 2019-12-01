@@ -34,7 +34,7 @@ FactionsUUID versioning: `U<major>.<minor>.<patch>-<tag>`
 
 Usage
 ---------
-<b>Read the full userguide here: [Factions Wiki](https://github.com/drtshock/Factions/wiki)</b>
+<b>Read the full userguide here: [Factions Documentation](https://factions.support)</b>
 
 The chat console command is:
 

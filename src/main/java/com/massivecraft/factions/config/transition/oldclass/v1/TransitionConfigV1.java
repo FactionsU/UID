@@ -300,7 +300,7 @@ public class TransitionConfigV1 {
 
         public class SeeChunk {
             private boolean particles = true;
-            @Comment("Get a list of particle names here: https://factions-support.cf/particles/")
+            @Comment("Get a list of particle names here: https://factions.support/particles/")
             private String particleName = "REDSTONE";
             @Comment("If the chosen particle is compatible with coloring we will color\n" +
                     "it based on the current chunk's faction")
@@ -1986,7 +1986,7 @@ public class TransitionConfigV1 {
     };
 
     @Comment("FactionsUUID by drtshock\n" +
-            "Support and documentation https://factions-support.cf\n" +
+            "Support and documentation https://factions.support\n" +
             "Updates https://www.spigotmc.org/resources/factionsuuid.1035/\n" +
             "\n" +
             "Made with love <3")

@@ -7,9 +7,9 @@ about: Having a problem? Use this template!
 Don't put anything inside this block, as it won't be included in the issue.
 
 If you have a question about Factions, it may be more useful to join our
-Discord server: https://discord.gg/F7gexAQ. Check the wiki, https://github.com/drtshock/Factions/Wiki,
-as well to make sure this has a fix. Also check to see if this issue has
-already been reported.
+Discord server which you can find at https://factions.support/help or to
+check the documentation at https://factions.support look for more info.
+Please also check to see if this issue has already been reported.
 
 1.  Fill out the template, running the commands either in the console or 
     as a player. Don't simply put "latest" or we will ignore it.
@@ -27,12 +27,8 @@ already been reported.
 5.  Include a description and any other details that may be helpful under
     "Details:".
 -->
-### FactionsUUID Version
-*Run `/f version` and give us your output.* 
-
-
-### Server Version
-*Run `/version` and give us your output.*
+### Debug info
+*Run `/f debug mini` and paste or screenshot all four lines here.* 
 
 
 ### Logs
