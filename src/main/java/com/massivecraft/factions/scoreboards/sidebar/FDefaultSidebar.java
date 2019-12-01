@@ -17,12 +17,10 @@ public class FDefaultSidebar extends FSidebarProvider {
 
     @Override
     public List<String> getLines(FPlayer fplayer) {
-        if (fplayer.hasFaction()) {
-            return getOutput(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getContent());
-        } else if (FactionsPlugin.getInstance().conf().scoreboard().constant().isFactionlessEnabled()) {
+        if (FactionsPlugin.getInstance().conf().scoreboard().constant().isFactionlessEnabled() && !fplayer.hasFaction()) {
             return getOutput(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getFactionlessContent());
         }
-        return getOutput(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getContent()); // no faction, factionless-board disabled
+        return getOutput(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getContent());
     }
 
     public List<String> getOutput(FPlayer fplayer, List<String> lines) {
