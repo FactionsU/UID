@@ -1,6 +1,6 @@
 # Permission Nodes
 
-!!! warning "This page is presently under construction, and is incomplete"
+!!! warning "This page is presently under construction. Permissions are all here but descriptions are incomplete"
 
 | Permission Node             | Description                                                                             |
 | --------------------------- | ------------------------------------------------------------------------------------    |
@@ -21,20 +21,21 @@
 | factions.coleader           | Set new coleader for your faction                                                       |
 | factions.coleader.any       | Set new coleader for any faction                                                        |
 | factions.create             | Can create factions                                                                     |
-| factions.debug              | Can use the debug command                                                               |
+| factions.debug              | Can use the `/f debug` command                                                          |
 | factions.defaultrank        | Can set the faction's default role                                                      |
 | factions.deinvite           | Can remove invite to your faction                                                       |
 | factions.delhome            | Can delete your faction's home                                                          |
 | factions.description        | Can set your faction description                                                        |
 | factions.disband            | Can use the disband command                                                             |
 | factions.disband.any        | Can disband any faction                                                                 |
-| factions.dtr                | Can view faction DTR                                                                    |
+| factions.dtr                | Can view faction DTR via `/f dtr`                                                       |
+| factions.dtr.any            | Can view any faction DTR via `/f dtr get <faction>`                                     |
 | factions.fly                | Grants the ability to use `/f fly`                                                      |
-| factions.fly.auto           |                                                                                         |
-| factions.fly.safezone       |                                                                                         |
-| factions.fly.trails         |                                                                                         |
-| factions.fly.warzone        |                                                                                         |
-| factions.fly.wilderness     |                                                                                         |
+| factions.fly.auto           | Grants ability to enable auto-flying                                                    |
+| factions.fly.safezone       | Grants ability to fly in safezone territory                                             |
+| factions.fly.trails         | Grants ability to have particle trails while flying                                     |
+| factions.fly.warzone        | Grants ability to fly in warzone territory                                              |
+| factions.fly.wilderness     | Grants ability to fly in wilderness territory                                           |
 | factions.help               |                                                                                         |
 | factions.home               |                                                                                         |
 | factions.invite             |                                                                                         |

@@ -2,7 +2,7 @@
 site_name: 'FactionsUUID'
 site_description: 'Premium Factions for premium people.'
 site_author: 'MOSS'
-site_url: 'https://factions-support.cf/'
+site_url: 'https://factions.support/'
 
 # Repository
 repo_name: 'GitHub'
@@ -30,7 +30,7 @@ extra_css:
 # Page tree
 nav:
   - Home: index.md
-  - Support: support.md
+  - Support: help.md
   - Introduction: introduction.md
   - First Steps: firststeps.md
   - Commands: commands.md

@@ -1,9 +1,6 @@
 ---
 name: Questions
-about: Check the wiki, https://github.com/drtshock/Factions/Wiki, or go to our Discord, https://discord.gg/F7gexAQ for questions!
+about: Check the documentation at https://factions.support or visit https://factions.support/help for live support!
 
 ---
-<!-- Questions should be posted on our Discord, https://discord.gg/F7gexAQ, as posting here will make it harder for us to find other bugs and issues. Check the wiki, https://github.com/drtshock/Factions/Wiki, as well just to make sure it hasn't been already asked.
-
-DO NOT POST ANYTHING IN THIS FORM AND INSTEAD HIT CANCEL!
--->
+<!-- Questions should be asked on our Discord. Don't forget to visit our documentation at https://factions.support-->

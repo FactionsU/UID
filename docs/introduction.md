@@ -11,7 +11,8 @@ and build (or destroy) relationships with other factions.
     In Minecraft, a "chunk" is a 3D piece of the Minecraft world. It goes from the bedrock all the way into the sky (y)
     and is 16 blocks by 16 blocks in the horizontal dimensions (x and z).
 
-A faction claims land by chunk, dependent on how much [power](#power) they possess, at a rate of 1 chunk per power.
+A faction claims land by chunk, dependent on how much [power](#power) they possess at a rate of 1 chunk per power or at
+a set amount per faction member when in [DTR](#dtr) mode.
 Within its territory, members of the faction can exclusively build without interference of non-members (configurable
 through the `/f perms` command). Your faction's territory is where you can build your base, set your faction's home 
 location, create warp points, and more.
@@ -28,9 +29,13 @@ playing on the server. Dying takes a way a set amount of power.
 
 When a player is part of a faction, their faction's power is calculated as a total of its players' power. Power is how
 factions acquire territory, or raid another faction. A faction can claim territory as long as its power is greater than
-its current territory claims. 
-
-## Raiding
+its current territory claims.
 
 If, through player death or players leaving a faction, territory count is greater than power the faction can be raided
 by enemies who can now destroy blocks in their enemy's territory and maybe even claim territory away from the faction.
+
+## DTR
+
+An alternative to power, Deaths 'til Raidable is a mode in which land claiming does not depend on power but instead
+factions can claim a certain amount based on faction membership. Every time a faction member dies, the faction's DTR
+value decreases (typically by 1) and once it hits 0 the faction's land can be raided and looted.

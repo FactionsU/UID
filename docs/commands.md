@@ -17,8 +17,9 @@ Click on any command for more details.
     Can only claim if the land is not claimed by another faction, or if the other faction has more land than power (and is not an ally).
     
     !!! success "Requirements"
+        Land cannot be owned by another faction (unless using power, the owning faction has more land than power, and the owning faction is not an ally)  
         `factions.claim` node.  
-        `factions.claim.radius` node to claim a radius greater than 1.
+        `factions.claim.radius` node to claim a radius greater than 1.  
         Must be faction admin, or be granted `territory` perms in the faction.  
         To claim for safezone, must have `factions.managesafezone`.  
         To claim for warzone, must have `factions.managewarzone`.  
@@ -39,7 +40,7 @@ Click on any command for more details.
     you reach your faction's limit.
     
     !!! success "Requirements"
-        `factions.autoclaim` node.
+        `factions.autoclaim` node.  
         Must be faction admin, or be granted `territory` perms in the faction.  
         To claim for safezone, must have `factions.managesafezone`.  
         To claim for warzone, must have `factions.managewarzone`.
@@ -50,7 +51,7 @@ Click on any command for more details.
     You can see chunk coordinates from `/f map`, for example.
     
     !!! success "Requirements"
-        `factions.claimat` node.
+        `factions.claimat` node.  
         Must be faction admin, or be granted `territory` perms in the faction.  
 
 ??? abstract "/f claimline [amount] [direction] [faction]"
@@ -59,7 +60,7 @@ Click on any command for more details.
     Acceptable directions: north, south, east, west.
     
     !!! success "Requirements"
-        `factions.claim.line` node.
+        `factions.claim.line` node.  
         Must be faction admin, or be granted `territory` perms in the faction.  
         To claim for safezone, must have `factions.managesafezone`.  
         To claim for warzone, must have `factions.managewarzone`.
@@ -68,7 +69,7 @@ Click on any command for more details.
     The nuclear option. Removes all claims in your faction, returning them to the wilderness.
     
     !!! success "Requirements"
-        `factions.unclaimall` node.
+        `factions.unclaimall` node.  
         Must be faction admin, or be granted `territory` perms in the faction.  
 
 ??? abstract "/f safeunclaimall [world]"
