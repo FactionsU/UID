@@ -235,7 +235,7 @@ public class MainConfig {
             private boolean useOldHelp = true;
 
             public Map<String, List<String>> getEntries() {
-                return entries != null ? entries : Collections.emptyMap();
+                return entries != null ? Collections.unmodifiableMap(entries) : Collections.emptyMap();
             }
 
             public boolean isUseOldHelp() {
@@ -358,7 +358,7 @@ public class MainConfig {
             };
 
             public List<String> getFormat() {
-                return format != null ? format : Collections.emptyList();
+                return format != null ? Collections.unmodifiableList(format) : Collections.emptyList();
             }
 
             public boolean isMinimal() {
@@ -366,7 +366,7 @@ public class MainConfig {
             }
 
             public List<String> getExempt() {
-                return exempt != null ? exempt : Collections.emptyList();
+                return exempt != null ? Collections.unmodifiableList(exempt) : Collections.emptyList();
             }
         }
 
@@ -425,11 +425,11 @@ public class MainConfig {
             };
 
             public List<String> getFaction() {
-                return faction != null ? faction : Collections.emptyList();
+                return faction != null ? Collections.unmodifiableList(faction) : Collections.emptyList();
             }
 
             public List<String> getPlayer() {
-                return player != null ? player : Collections.emptyList();
+                return player != null ? Collections.unmodifiableList(player) : Collections.emptyList();
             }
         }
 
@@ -681,7 +681,7 @@ public class MainConfig {
                 }
 
                 public Set<String> getWorldsNoPowerLoss() {
-                    return worldsNoPowerLoss == null ? Collections.emptySet() : worldsNoPowerLoss;
+                    return worldsNoPowerLoss == null ? Collections.emptySet() : Collections.unmodifiableSet(worldsNoPowerLoss);
                 }
 
                 public boolean isPeacefulMembersDisablePowerLoss() {
@@ -938,7 +938,7 @@ public class MainConfig {
             }
 
             public Set<String> getWorldsIgnorePvP() {
-                return worldsIgnorePvP == null ? Collections.emptySet() : worldsIgnorePvP;
+                return worldsIgnorePvP == null ? Collections.emptySet() : Collections.unmodifiableSet(worldsIgnorePvP);
             }
         }
 
@@ -956,6 +956,7 @@ public class MainConfig {
                     ignoreBuildMaterialsMat = new HashSet<>();
                     ignoreBuildMaterials.forEach(m -> ignoreBuildMaterialsMat.add(FactionMaterial.from(m).get()));
                     ignoreBuildMaterialsMat.remove(Material.AIR);
+                    ignoreBuildMaterials = Collections.unmodifiableSet(ignoreBuildMaterials);
                 }
                 return ignoreBuildMaterialsMat;
             }
@@ -1052,7 +1053,7 @@ public class MainConfig {
             }
 
             public Set<String> getWorldsNoClaiming() {
-                return worldsNoClaiming == null ? Collections.emptySet() : worldsNoClaiming;
+                return worldsNoClaiming == null ? Collections.emptySet() : Collections.unmodifiableSet(worldsNoClaiming);
             }
         }
 
@@ -1137,27 +1138,27 @@ public class MainConfig {
             }
 
             public Set<String> getPermanentFactionMemberDenyCommands() {
-                return permanentFactionMemberDenyCommands == null ? Collections.emptySet() : permanentFactionMemberDenyCommands;
+                return permanentFactionMemberDenyCommands == null ? Collections.emptySet() : Collections.unmodifiableSet(permanentFactionMemberDenyCommands);
             }
 
             public Set<String> getTerritoryNeutralDenyCommands() {
-                return territoryNeutralDenyCommands == null ? Collections.emptySet() : territoryNeutralDenyCommands;
+                return territoryNeutralDenyCommands == null ? Collections.emptySet() : Collections.unmodifiableSet(territoryNeutralDenyCommands);
             }
 
             public Set<String> getTerritoryEnemyDenyCommands() {
-                return territoryEnemyDenyCommands == null ? Collections.emptySet() : territoryEnemyDenyCommands;
+                return territoryEnemyDenyCommands == null ? Collections.emptySet() : Collections.unmodifiableSet(territoryEnemyDenyCommands);
             }
 
             public Set<String> getTerritoryAllyDenyCommands() {
-                return territoryAllyDenyCommands == null ? Collections.emptySet() : territoryAllyDenyCommands;
+                return territoryAllyDenyCommands == null ? Collections.emptySet() : Collections.unmodifiableSet(territoryAllyDenyCommands);
             }
 
             public Set<String> getWarzoneDenyCommands() {
-                return warzoneDenyCommands == null ? Collections.emptySet() : warzoneDenyCommands;
+                return warzoneDenyCommands == null ? Collections.emptySet() : Collections.unmodifiableSet(warzoneDenyCommands);
             }
 
             public Set<String> getWildernessDenyCommands() {
-                return wildernessDenyCommands == null ? Collections.emptySet() : wildernessDenyCommands;
+                return wildernessDenyCommands == null ? Collections.emptySet() : Collections.unmodifiableSet(wildernessDenyCommands);
             }
 
             public boolean isTerritoryBlockCreepers() {
@@ -1277,6 +1278,7 @@ public class MainConfig {
                     territoryDenyUsageMaterialsMat = new HashSet<>();
                     territoryDenyUsageMaterials.forEach(m -> territoryDenyUsageMaterialsMat.add(FactionMaterial.from(m).get()));
                     territoryDenyUsageMaterialsMat.remove(Material.AIR);
+                    territoryDenyUsageMaterialsMat = Collections.unmodifiableSet(territoryDenyUsageMaterialsMat);
                 }
                 return territoryDenyUsageMaterialsMat;
             }
@@ -1286,16 +1288,17 @@ public class MainConfig {
                     territoryDenyUsageMaterialsWhenOfflineMat = new HashSet<>();
                     territoryDenyUsageMaterialsWhenOffline.forEach(m -> territoryDenyUsageMaterialsWhenOfflineMat.add(FactionMaterial.from(m).get()));
                     territoryDenyUsageMaterialsWhenOfflineMat.remove(Material.AIR);
+                    territoryDenyUsageMaterialsWhenOfflineMat = Collections.unmodifiableSet(territoryDenyUsageMaterialsWhenOfflineMat);
                 }
                 return territoryDenyUsageMaterialsWhenOfflineMat;
             }
 
             public Set<String> getPlayersWhoBypassAllProtection() {
-                return playersWhoBypassAllProtection == null ? Collections.emptySet() : playersWhoBypassAllProtection;
+                return playersWhoBypassAllProtection == null ? Collections.emptySet() : Collections.unmodifiableSet(playersWhoBypassAllProtection);
             }
 
             public Set<String> getWorldsNoWildernessProtection() {
-                return worldsNoWildernessProtection == null ? Collections.emptySet() : worldsNoWildernessProtection;
+                return worldsNoWildernessProtection == null ? Collections.emptySet() : Collections.unmodifiableSet(worldsNoWildernessProtection);
             }
         }
 
@@ -1405,7 +1408,7 @@ public class MainConfig {
             };
 
             public List<String> getNameBlacklist() {
-                return nameBlacklist == null ? Collections.emptyList() : this.nameBlacklist;
+                return nameBlacklist == null ? Collections.emptyList() : Collections.unmodifiableList(this.nameBlacklist);
             }
 
             public boolean isDisablePistonsInTerritory() {
@@ -1946,7 +1949,7 @@ public class MainConfig {
         }
 
         public Set<String> getWorldList() {
-            return worldList == null ? Collections.emptySet() : worldList;
+            return worldList == null ? Collections.emptySet() : Collections.unmodifiableSet(worldList);
         }
     }
 
@@ -1988,7 +1991,7 @@ public class MainConfig {
             }
 
             public List<String> getContent() {
-                return content != null ? content : Collections.emptyList();
+                return content != null ? Collections.unmodifiableList(content) : Collections.emptyList();
             }
 
             public boolean isFactionlessEnabled() {
@@ -1996,7 +1999,7 @@ public class MainConfig {
             }
 
             public List<String> getFactionlessContent() {
-                return factionlessContent != null ? factionlessContent : Collections.emptyList();
+                return factionlessContent != null ? Collections.unmodifiableList(factionlessContent) : Collections.emptyList();
             }
         }
 
@@ -2033,7 +2036,7 @@ public class MainConfig {
             }
 
             public List<String> getContent() {
-                return content != null ? content : Collections.emptyList();
+                return content != null ? Collections.unmodifiableList(content) : Collections.emptyList();
             }
         }
 
@@ -2156,7 +2159,7 @@ public class MainConfig {
     private WorldBorder worldBorder = new WorldBorder();
 
     public List<String> getCommandBase() {
-        return commandBase == null ? ImmutableList.of("f") : commandBase;
+        return commandBase == null ? ImmutableList.of("f") : Collections.unmodifiableList(commandBase);
     }
 
     public AVeryFriendlyFactionsConfig getaVeryFriendlyFactionsConfig() {
