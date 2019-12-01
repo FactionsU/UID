@@ -30,6 +30,8 @@ public class FDefaultSidebar extends FSidebarProvider {
             return new ArrayList<>();
         }
 
+        lines = new ArrayList<>(lines);
+
         ListIterator<String> it = lines.listIterator();
         while (it.hasNext()) {
             it.set(replaceTags(fplayer, it.next()));
