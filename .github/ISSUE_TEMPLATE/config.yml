@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Factions Documentation
+    url: https://factions.support/
+    about: Look here for documentation on running the plugin
+  - name: Factions Support Discord
+    url: https://discord.gg/PHpuzZS
+    about: Click on the FactionsUUID category to see our channels
