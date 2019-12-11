@@ -624,6 +624,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             safeZoneNerfedCreatureTypes.add(EntityType.PILLAGER);
             safeZoneNerfedCreatureTypes.add(EntityType.RAVAGER);
         }
+        if (FactionsPlugin.getMCVersion() >= 1500) {
+            safeZoneNerfedCreatureTypes.add(EntityType.BEE);
+        }
     }
 
     private void loadWorldguard() {
