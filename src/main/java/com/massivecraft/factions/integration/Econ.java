@@ -444,6 +444,12 @@ public class Econ {
         return econ.withdrawPlayer(account, amount).transactionSuccess();
     }
 
+    public static void createAccount(String name) {
+        if (!econ.createPlayerAccount(name)) {
+            FactionsPlugin.getInstance().getLogger().warning("FAILED TO CREATE ECONOMY ACCOUNT " + name);
+        }
+    }
+
     // ---------------------------------------
     // Helpful Utilities
     // ---------------------------------------

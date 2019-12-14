@@ -308,6 +308,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
         // We need to override the default money given to players.
         if (!Econ.hasAccount(aid)) {
+            Econ.createAccount(aid);
             Econ.setBalance(aid, 0);
         }
 
