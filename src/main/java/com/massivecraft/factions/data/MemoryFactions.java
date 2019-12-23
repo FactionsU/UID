@@ -16,7 +16,7 @@ public abstract class MemoryFactions extends Factions {
     public final Map<String, Faction> factions = new ConcurrentHashMap<>();
     public int nextId = 1;
 
-    public void load() {
+    public int load() {
         // Make sure the default neutral faction exists
         if (!factions.containsKey("0")) {
             Faction faction = generateFactionObject("0");
@@ -72,6 +72,7 @@ public abstract class MemoryFactions extends Factions {
                 faction.setTag(TL.WARZONE.toString());
             }
         }
+        return 0;
     }
 
     public Faction getFactionById(String id) {

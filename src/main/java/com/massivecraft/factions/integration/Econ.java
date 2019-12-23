@@ -44,7 +44,7 @@ public class Econ {
         }
         econ = rsp.getProvider();
 
-        FactionsPlugin.getInstance().getLogger().info("Economy integration through Vault plugin successful.");
+        FactionsPlugin.getInstance().getLogger().info("Found economy plugin through Vault: " + econ.getName());
 
         if (!FactionsPlugin.getInstance().conf().economy().isEnabled()) {
             FactionsPlugin.getInstance().getLogger().info("NOTE: Economy is disabled. You can enable it in config/main.conf");

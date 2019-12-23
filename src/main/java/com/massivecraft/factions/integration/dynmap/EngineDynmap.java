@@ -96,7 +96,7 @@ public class EngineDynmap {
             return;
         }
 
-        // Shedule non thread safe sync at the end!
+        // Schedule non thread safe sync at the end!
         Bukkit.getScheduler().scheduleSyncRepeatingTask(FactionsPlugin.getInstance(), () -> {
 
             final Map<String, TempMarker> homes = createHomes();
@@ -118,6 +118,7 @@ public class EngineDynmap {
         }, 100L, 100L);
 
         this.enabled = true;
+        FactionsPlugin.getInstance().getLogger().info("Enabled Dynmap integration");
     }
 
     // Thread Safe / Asynchronous: No

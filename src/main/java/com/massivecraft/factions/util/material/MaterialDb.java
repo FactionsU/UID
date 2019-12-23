@@ -38,19 +38,16 @@ public class MaterialDb {
 
     public static void load() {
         instance = new MaterialDb();
-        instance.legacy = FactionsPlugin.getMCVersion() < 1300; // Before 1.13
-        FactionsPlugin.getInstance().getLogger().info(String.format("Using legacy support for materials: %s", instance.legacy));
+        if (instance.legacy = FactionsPlugin.getMCVersion() < 1300) { // Before 1.13
+            FactionsPlugin.getInstance().getLogger().info("Using legacy support for materials");
+        }
 
         InputStreamReader reader = new InputStreamReader(FactionsPlugin.getInstance().getResource("materials.json"));
         Type typeToken = new TypeToken<HashMap<String, MaterialProvider.MaterialData>>() {
         }.getType();
         HashMap<String, MaterialProvider.MaterialData> materialData = FactionsPlugin.getInstance().getGson().fromJson(reader, typeToken);
-        FactionsPlugin.getInstance().getLogger().info(String.format("Found %s material mappings in the materials.json file.", materialData.keySet().size()));
+        FactionsPlugin.getInstance().getLogger().info(String.format("Loaded %s material mappings.", materialData.keySet().size()));
         instance.provider = new MaterialProvider(materialData);
-    }
-
-    public void test() {
-        // TODO: Do some Material tests
     }
 
     public static MaterialDb getInstance() {

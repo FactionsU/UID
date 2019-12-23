@@ -48,5 +48,5 @@ public abstract class Factions {
         return new JSONFactions();
     }
 
-    public abstract void load();
+    public abstract int load();
 }

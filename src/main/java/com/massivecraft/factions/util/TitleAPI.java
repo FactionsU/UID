@@ -45,7 +45,7 @@ public class TitleAPI {
 
                 FactionsPlugin.getInstance().getLogger().info("Didn't find API support for sending titles, using reflection instead.");
             } catch (Exception ex) {
-                FactionsPlugin.getInstance().getLogger().info("Failed to use reflection.");
+                FactionsPlugin.getInstance().getLogger().info("Didn't find API support for sending titles, and failed to use reflection. Title support disabled.");
                 bailOut = true;
                 ex.printStackTrace();
             }
@@ -75,7 +75,6 @@ public class TitleAPI {
         try {
             Object chatTitle = methodChatTitle.invoke(null, "{\"text\": \"" + title + "\"}");
             Object chatsubTitle = methodChatTitle.invoke(null, "{\"text\": \"" + subtitle + "\"}");
-
 
             Object titlePacket = titleConstructor.newInstance(fieldTitle.get(null), chatTitle, fadeInTime, showTime, fadeOutTime);
             Object subTitlePacket = titleConstructor.newInstance(fieldSubTitle.get(null), chatsubTitle, fadeInTime, showTime, fadeOutTime);

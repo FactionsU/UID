@@ -67,14 +67,14 @@ public class JSONFPlayers extends MemoryFPlayers {
         return DiscUtil.writeCatch(target, this.gson.toJson(data), sync);
     }
 
-    public void load() {
+    public int load() {
         Map<String, JSONFPlayer> fplayers = this.loadCore();
         if (fplayers == null) {
-            return;
+            return 0;
         }
         this.fPlayers.clear();
         this.fPlayers.putAll(fplayers);
-        FactionsPlugin.getInstance().getLogger().info("Loaded " + fPlayers.size() + " players");
+        return fPlayers.size();
     }
 
     private Map<String, JSONFPlayer> loadCore() {
