@@ -237,6 +237,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         getLogger().info("Factions UUID!");
         getLogger().info("Version " + this.getDescription().getVersion());
         getLogger().info("");
+        getLogger().info("Need support? https://factions.support/help/");
+        getLogger().info("");
         Integer versionInteger = null;
         if (versionMatcher.find()) {
             try {
@@ -249,7 +251,10 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             }
         }
         if (versionInteger == null) {
-            log(Level.WARNING, "Could not identify version. Going with least supported version, 1.8.8. Please let us know what version of Minecraft you're running and we'll fix it!");
+            getLogger().warning("");
+            getLogger().warning("Could not identify version. Going with least supported version, 1.8.8.");
+            getLogger().warning("Please visit our support live chat for help - https://factions.support/help/");
+            getLogger().warning("");
             versionInteger = 808;
         }
         mcVersion = versionInteger;
@@ -308,21 +313,24 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             saveTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new SaveTask(this), saveTicks, saveTicks);
         }
 
-        getLogger().info(txt.parse("Running material provider in %1s mode", MaterialDb.getInstance().legacy ? "LEGACY" : "STANDARD"));
-        MaterialDb.getInstance().test();
-
         // Check for Essentials
         IEssentials ess = Essentials.setup();
 
-        if (ess != null && conf().factions().other().isDeleteEssentialsHomes()) {
-            getLogger().info("Found Essentials, and based on main.conf will delete player homes in their old faction when they leave");
-            getServer().getPluginManager().registerEvents(new EssentialsListener(ess), this);
+        if (ess != null) {
+            getLogger().info("Found and connected to Essentials");
+            if (conf().factions().other().isDeleteEssentialsHomes()) {
+                getLogger().info("Based on main.conf will delete Essentials player homes in their old faction when they leave");
+                getServer().getPluginManager().registerEvents(new EssentialsListener(ess), this);
+            }
+            if (conf().factions().homes().isTeleportCommandEssentialsIntegration()) {
+                getLogger().info("Using Essentials for teleportation");
+            }
         }
 
         hookedPlayervaults = setupPlayervaults();
 
-        FPlayers.getInstance().load();
-        Factions.getInstance().load();
+        int loadedPlayers = FPlayers.getInstance().load();
+        int loadedFactions = Factions.getInstance().load();
         for (FPlayer fPlayer : FPlayers.getInstance().getAllFPlayers()) {
             Faction faction = Factions.getInstance().getFactionById(fPlayer.getFactionId());
             if (faction == null) {
@@ -332,8 +340,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             }
             faction.addFPlayer(fPlayer);
         }
-        Board.getInstance().load();
+        int loadedClaims = Board.getInstance().load();
         Board.getInstance().clean();
+        FactionsPlugin.getInstance().getLogger().info("Loaded " + loadedPlayers + " players in " + loadedFactions + " factions with " + loadedClaims + " claims");
 
         // Add Base Commands
         FCmdRoot cmdBase = new FCmdRoot();
@@ -359,7 +368,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         Plugin lwc = getServer().getPluginManager().getPlugin("LWC");
         if (lwc != null && lwc.getDescription().getWebsite() != null && !lwc.getDescription().getWebsite().contains("extended")) {
             getLogger().info(" ");
-            getLogger().warning("Notice: LWC Extended is the updated continuation of ModernLWC. https://www.spigotmc.org/resources/lwc-extended.69551/");
+            getLogger().warning("Notice: LWC Extended is the updated, and best supported, continuation of LWC. https://www.spigotmc.org/resources/lwc-extended.69551/");
             getLogger().info(" ");
         }
 

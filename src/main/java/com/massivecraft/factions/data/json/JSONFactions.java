@@ -64,15 +64,15 @@ public class JSONFactions extends MemoryFactions {
         return DiscUtil.writeCatch(target, this.gson.toJson(entities), sync);
     }
 
-    public void load() {
+    public int load() {
         Map<String, JSONFaction> factions = this.loadCore();
         if (factions == null) {
-            return;
+            return 0;
         }
         this.factions.putAll(factions);
 
         super.load();
-        FactionsPlugin.getInstance().getLogger().info("Loaded " + factions.size() + " Factions");
+        return factions.size();
     }
 
     private Map<String, JSONFaction> loadCore() {

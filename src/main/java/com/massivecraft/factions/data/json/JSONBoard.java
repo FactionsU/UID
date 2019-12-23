@@ -71,11 +71,11 @@ public class JSONBoard extends MemoryBoard {
         DiscUtil.writeCatch(file, FactionsPlugin.getInstance().getGson().toJson(dumpAsSaveFormat()), sync);
     }
 
-    public boolean load() {
+    public int load() {
         if (!file.exists()) {
             FactionsPlugin.getInstance().getLogger().info("No board to load from disk. Creating new file.");
             forceSave();
-            return true;
+            return 0;
         }
 
         try {
@@ -83,14 +83,13 @@ public class JSONBoard extends MemoryBoard {
             }.getType();
             Map<String, Map<String, String>> worldCoordIds = FactionsPlugin.getInstance().getGson().fromJson(DiscUtil.read(file), type);
             loadFromSaveFormat(worldCoordIds);
-            FactionsPlugin.getInstance().getLogger().info("Loaded " + flocationIds.size() + " board locations");
         } catch (Exception e) {
             e.printStackTrace();
             FactionsPlugin.getInstance().log(Level.SEVERE, "Failed to load the board from disk.");
-            return false;
+            return 0;
         }
 
-        return true;
+        return flocationIds.size();
     }
 
     @Override

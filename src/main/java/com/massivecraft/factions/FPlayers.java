@@ -34,5 +34,5 @@ public abstract class FPlayers {
 
     public abstract FPlayer getById(String string);
 
-    public abstract void load();
+    public abstract int load();
 }

@@ -204,11 +204,13 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.addSubCommand(this.cmdNear);
         this.addSubCommand(this.cmdDebug);
         if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
+            FactionsPlugin.getInstance().getLogger().info("Using POWER for land/raid control. Enabling power commands.");
             this.addSubCommand(this.cmdPermanentPower);
             this.addSubCommand(this.cmdPower);
             this.addSubCommand(this.cmdPowerBoost);
             this.addSubCommand(this.cmdModifyPower);
         } else if (FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
+            FactionsPlugin.getInstance().getLogger().info("Using DTR for land/raid control. Enabling DTR commands.");
             this.addSubCommand(this.cmdDTR);
         }
         if (Bukkit.getServer().getPluginManager().isPluginEnabled("FactionsTop")) {
@@ -217,7 +219,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
             this.addSubCommand(this.cmdTop);
         }
         if (FactionsPlugin.getInstance().isHookedPlayervaults()) {
-            FactionsPlugin.getInstance().getLogger().info("Found playervaults hook, adding /f vault and /f setmaxvault commands.");
+            FactionsPlugin.getInstance().getLogger().info("Found PlayerVaults hook, adding /f vault and /f setmaxvault commands.");
             this.addSubCommand(new CmdSetMaxVaults());
             this.addSubCommand(new CmdVault());
         }
