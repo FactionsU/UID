@@ -23,6 +23,7 @@ import com.massivecraft.factions.scoreboards.FScoreboard;
 import com.massivecraft.factions.scoreboards.sidebar.FInfoSidebar;
 import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.tag.FactionTag;
 import com.massivecraft.factions.util.RelationUtil;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TitleAPI;
@@ -615,8 +616,8 @@ public abstract class MemoryFPlayer implements FPlayer {
             int in = FactionsPlugin.getInstance().conf().factions().enterTitles().getFadeIn();
             int stay = FactionsPlugin.getInstance().conf().factions().enterTitles().getStay();
             int out = FactionsPlugin.getInstance().conf().factions().enterTitles().getFadeOut();
-            String title = TL.FACTION_ENTER_TITLE.format(this);
-            String sub = TL.FACTION_ENTER_SUBTITLE.format(toShow.getTag(this));
+            String title = FactionTag.parse(FactionsPlugin.getInstance().conf().factions().enterTitles().getTitle(), toShow, this);
+            String sub =  FactionTag.parse(FactionsPlugin.getInstance().conf().factions().enterTitles().getSubtitle(), toShow, this);
 
             // We send null instead of empty because Spigot won't touch the title if it's null, but clears if empty.
             // We're just trying to be as unintrusive as possible.

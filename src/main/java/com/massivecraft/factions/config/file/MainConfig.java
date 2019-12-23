@@ -1,6 +1,7 @@
 package com.massivecraft.factions.config.file;
 
 import com.google.common.collect.ImmutableList;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
@@ -20,7 +21,7 @@ import java.util.Set;
 public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @Comment("Don't change this value yourself, unless you WANT a broken config!")
-        private int version = 2;
+        private int version = 3;
 
         @Comment("Debug\n" +
                 "Turn this on if you are having issues with something and working on resolving them.\n" +
@@ -1494,6 +1495,8 @@ public class MainConfig {
             private int stay = 70;
             private int fadeOut = 20;
             private boolean alsoShowChat = false;
+            private String title = "{faction-relation-color}{faction}";
+            private String subtitle = "{description}";
 
             public boolean isEnabled() {
                 return enabled;
@@ -1513,6 +1516,14 @@ public class MainConfig {
 
             public boolean isAlsoShowChat() {
                 return alsoShowChat;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public String getSubtitle() {
+                return subtitle;
             }
         }
 
