@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.Loader;
+import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.config.transition.oldclass.v0.NewMemoryFaction;
 import com.massivecraft.factions.config.transition.oldclass.v0.OldAccessV0;
 import com.massivecraft.factions.config.transition.oldclass.v0.OldConfV0;
@@ -23,6 +24,7 @@ import com.massivecraft.factions.util.MyLocationTypeAdapter;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import com.massivecraft.factions.util.material.adapter.FactionMaterialAdapter;
 import com.massivecraft.factions.util.material.adapter.MaterialAdapter;
+import com.typesafe.config.ConfigRenderOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.bukkit.Material;
@@ -46,6 +48,7 @@ public class Transitioner {
         Transitioner transitioner = new Transitioner(plugin);
         transitioner.migrateV0();
         transitioner.migrateV1();
+        transitioner.migrateV2();
     }
 
     private Transitioner(FactionsPlugin plugin) {
@@ -149,6 +152,29 @@ public class Transitioner {
                 oldConfigFolder.toFile().mkdir();
             }
             Files.move(configPath, oldConfigFolder.resolve("config.yml"));
+        } catch (Exception e) {
+            this.plugin.getLogger().log(Level.SEVERE, "Could not process configuration", e);
+        }
+    }
+
+    private void migrateV2() {
+        HoconConfigurationLoader loader = Loader.getLoader("main");
+        try {
+            CommentedConfigurationNode node = loader.load();
+            CommentedConfigurationNode ver = node.getNode("aVeryFriendlyFactionsConfig.version");
+            if (ver.getInt() >= 3) {
+                return;
+            }
+            CommentedConfigurationNode n1 = node.getNode("factions").getNode("enterTitles").getNode("title");
+            n1.setValue("");
+            CommentedConfigurationNode n2 = node.getNode("factions").getNode("enterTitles").getNode("subtitle");
+            n2.setValue("{faction-relation-color}{faction}");
+            ver.setValue(3);
+            node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(3);
+            loader.save(node);
+
+            this.plugin.getLogger().info("Detected a config from before 0.5.7");
+            this.plugin.getLogger().info("  Setting default enterTitles settings based on old style. Visit main.conf to edit.");
         } catch (Exception e) {
             this.plugin.getLogger().log(Level.SEVERE, "Could not process configuration", e);
         }
