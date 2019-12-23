@@ -1496,7 +1496,7 @@ public class MainConfig {
             private int fadeOut = 20;
             private boolean alsoShowChat = false;
             private String title = "{faction-relation-color}{faction}";
-            private String subtitle = "{description}";
+            private String subtitle = "&7{description}";
 
             public boolean isEnabled() {
                 return enabled;
