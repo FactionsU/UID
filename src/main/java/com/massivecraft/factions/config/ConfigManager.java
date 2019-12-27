@@ -8,6 +8,7 @@ import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.config.transition.Transitioner;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class ConfigManager {
     private final FactionsPlugin plugin;
@@ -26,13 +27,17 @@ public class ConfigManager {
     }
 
     public void loadConfigs() {
+        this.loadConfig("default_permissions", this.permissionsConfig);
+        this.loadConfig("default_permissions_offline", this.offlinePermissionsConfig);
+        this.loadConfig("main", this.mainConfig);
+        this.loadConfig("dynmap", this.dynmapConfig);
+    }
+
+    private void loadConfig(String name, Object config) {
         try {
-            Loader.loadAndSave("default_permissions", this.permissionsConfig);
-            Loader.loadAndSave("default_permissions_offline", this.offlinePermissionsConfig);
-            Loader.loadAndSave("main", this.mainConfig);
-            Loader.loadAndSave("dynmap", this.dynmapConfig);
+            Loader.loadAndSave(name, config);
         } catch (IOException | IllegalAccessException e) {
-            e.printStackTrace();
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Could not load config '" + name + ".conf'", e);
         }
     }
 

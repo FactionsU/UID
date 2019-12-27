@@ -12,6 +12,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class BrigadierManager {
 
@@ -46,7 +47,7 @@ public class BrigadierManager {
                     Constructor<? extends BrigadierProvider> constructor = brigadierProvider.getDeclaredConstructor(subCommand.getClass());
                     brigadier.then(constructor.newInstance(subCommand).get(literal));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to reflectively access brigadier", e);
                 }
             } else {
                 // Generate our own based on args - quite ugly

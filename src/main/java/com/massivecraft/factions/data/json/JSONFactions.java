@@ -114,7 +114,7 @@ public class JSONFactions extends MemoryFactions {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to create file factions.json.old", e);
             }
             saveCore(file, data, true);
             FactionsPlugin.getInstance().log(Level.INFO, "Backed up your old data at " + file.getAbsolutePath());
@@ -144,7 +144,7 @@ public class JSONFactions extends MemoryFactions {
                                 set.add(id); // And in with the new
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Encountered exception looking up UUIDs", e);
                         }
                         claims.put(key, set); // Update
                     }
@@ -171,7 +171,7 @@ public class JSONFactions extends MemoryFactions {
                             invites.add(id); // And in with the new
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Encountered exception looking up UUIDs", e);
                     }
                 }
             }

@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.logging.Level;
 
 public class DiscUtil {
 
@@ -78,7 +79,7 @@ public class DiscUtil {
             try {
                 write(file, content);
             } catch (IOException e) {
-                e.printStackTrace();
+                FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to write file " + file.getAbsolutePath(), e);
             } finally {
                 lock.unlock();
             }
@@ -90,7 +91,7 @@ public class DiscUtil {
                     try {
                         write(file, content);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to write file " + file.getAbsolutePath(), e);
                     } finally {
                         lock.unlock();
                     }

@@ -37,8 +37,7 @@ public class MyLocationTypeAdapter implements JsonDeserializer<LazyLocation>, Js
             return new LazyLocation(worldName, x, y, z, yaw, pitch);
 
         } catch (Exception ex) {
-            ex.printStackTrace();
-            FactionsPlugin.getInstance().log(Level.WARNING, "Error encountered while deserializing a LazyLocation.");
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while deserializing a LazyLocation.", ex);
             return null;
         }
     }
@@ -57,8 +56,7 @@ public class MyLocationTypeAdapter implements JsonDeserializer<LazyLocation>, Js
 
             return obj;
         } catch (Exception ex) {
-            ex.printStackTrace();
-            FactionsPlugin.getInstance().log(Level.WARNING, "Error encountered while serializing a LazyLocation.");
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while serializing a LazyLocation.", ex);
             return obj;
         }
     }

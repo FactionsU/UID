@@ -84,8 +84,7 @@ public class JSONBoard extends MemoryBoard {
             Map<String, Map<String, String>> worldCoordIds = FactionsPlugin.getInstance().getGson().fromJson(DiscUtil.read(file), type);
             loadFromSaveFormat(worldCoordIds);
         } catch (Exception e) {
-            e.printStackTrace();
-            FactionsPlugin.getInstance().log(Level.SEVERE, "Failed to load the board from disk.");
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load the board from disk.", e);
             return 0;
         }
 

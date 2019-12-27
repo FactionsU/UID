@@ -681,8 +681,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                     TL.setFile(defConfig);
                 }
             } catch (IOException e) {
-                e.printStackTrace(); // So they notice
-                getLogger().severe("[Factions] Couldn't create language file.");
+                getLogger().log(Level.SEVERE, "[Factions] Couldn't create language file.", e);
                 getLogger().severe("[Factions] This is a fatal error. Now disabling");
                 this.setEnabled(false); // Without it loaded, we can't send them messages
             } finally {
@@ -690,16 +689,15 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                     try {
                         defLangStream.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to close resource", e);
                     }
                 }
                 if (out != null) {
                     try {
                         out.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to close output", e);
                     }
-
                 }
             }
         }
@@ -721,9 +719,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         try {
             conf.save(lang);
         } catch (IOException e) {
-            getLogger().log(Level.WARNING, "Factions: Failed to save lang.yml.");
             getLogger().log(Level.WARNING, "Factions: Report this stack trace to drtshock.");
-            e.printStackTrace();
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to save lang.yml", e);
         }
     }
 

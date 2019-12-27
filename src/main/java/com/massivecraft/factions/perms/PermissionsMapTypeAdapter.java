@@ -53,8 +53,7 @@ public class PermissionsMapTypeAdapter implements JsonDeserializer<Map<Permissib
             return permissionsMap;
 
         } catch (Exception ex) {
-            FactionsPlugin.getInstance().log(Level.WARNING, "Error encountered while deserializing a PermissionsMap.");
-            ex.printStackTrace();
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while deserializing a PermissionsMap.", ex);
             return null;
         }
     }

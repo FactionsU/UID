@@ -1,8 +1,10 @@
 package com.massivecraft.factions.config.file;
 
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.annotation.Comment;
 
 import java.lang.reflect.Field;
+import java.util.logging.Level;
 
 public class DefaultOfflinePermissionsConfig {
     @Comment("Offline permissions settings\n" +
@@ -32,7 +34,7 @@ public class DefaultOfflinePermissionsConfig {
                 }
             }
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to update offline permission special states", e);
         }
     }
 

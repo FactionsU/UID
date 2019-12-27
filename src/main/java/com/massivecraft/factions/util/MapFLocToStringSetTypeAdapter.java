@@ -59,8 +59,7 @@ public class MapFLocToStringSetTypeAdapter implements JsonDeserializer<Map<FLoca
             return locationMap;
 
         } catch (Exception ex) {
-            ex.printStackTrace();
-            FactionsPlugin.getInstance().log(Level.WARNING, "Error encountered while deserializing a Map of FLocations to String Sets.");
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while deserializing a Map of FLocations to String Sets.", ex);
             return null;
         }
     }
@@ -104,8 +103,7 @@ public class MapFLocToStringSetTypeAdapter implements JsonDeserializer<Map<FLoca
             return obj;
 
         } catch (Exception ex) {
-            ex.printStackTrace();
-            FactionsPlugin.getInstance().log(Level.WARNING, "Error encountered while serializing a Map of FLocations to String Sets.");
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while serializing a Map of FLocations to String Sets.", ex);
             return obj;
         }
     }
