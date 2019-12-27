@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * With help from https://www.spigotmc.org/threads/send-titles-to-players-using-spigot-1-8-1-11-2.48819/
@@ -45,9 +46,8 @@ public class TitleAPI {
 
                 FactionsPlugin.getInstance().getLogger().info("Didn't find API support for sending titles, using reflection instead.");
             } catch (Exception ex) {
-                FactionsPlugin.getInstance().getLogger().info("Didn't find API support for sending titles, and failed to use reflection. Title support disabled.");
                 bailOut = true;
-                ex.printStackTrace();
+                FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Didn't find API support for sending titles, and failed to use reflection. Title support disabled.", ex);
             }
         }
     }
@@ -82,7 +82,7 @@ public class TitleAPI {
             sendPacket(player, titlePacket);
             sendPacket(player, subTitlePacket);
         } catch (Exception e) {
-            e.printStackTrace();
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to send title via reflection", e);
         }
     }
 
@@ -101,7 +101,7 @@ public class TitleAPI {
             }
             this.methodSendPacket.invoke(playerConnection, packet);
         } catch (Exception e) {
-            e.printStackTrace();
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to send title packet via reflection", e);
         }
     }
 

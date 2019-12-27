@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.logging.Level;
 
 public class CmdDebug extends FCommand {
     public CmdDebug() {
@@ -118,7 +119,7 @@ public class CmdDebug extends FCommand {
                         }
                     }.runTask(FactionsPlugin.getInstance());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to execute debug command", e);
                     new BukkitRunnable() {
                         @Override
                         public void run() {

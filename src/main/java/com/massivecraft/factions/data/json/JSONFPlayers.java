@@ -113,7 +113,7 @@ public class JSONFPlayers extends MemoryFPlayers {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to create file players.json.old", e);
             }
             saveCore(file, data, true);
             FactionsPlugin.getInstance().log(Level.INFO, "Backed up your old data at " + file.getAbsolutePath());
@@ -149,7 +149,7 @@ public class JSONFPlayers extends MemoryFPlayers {
                     data.put(id, player); // And in with the new
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed name to UUID conversion", e);
             }
             if (invalidList.size() > 0) {
                 for (String name : invalidList) {
