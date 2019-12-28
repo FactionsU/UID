@@ -20,6 +20,8 @@ Variable | Explanation
 {balance} | Players balance
 {player-kills} | # of kills the player has
 {player-deaths}| # of deaths the player has
+{player-power} | Current player power
+{player-maxpower} | Player max power
 {total-online-visible}| # of players online from the perspective of the current player
  
 Faction variables. Can be used in tooltips.list, scoreboards, or /f show
@@ -50,6 +52,13 @@ Variable | Explanation
 {faction-kills} | # of kills the faction has
 {faction-deaths}| # of deaths the faction has
 {faction-bancount} | # of bans the faction has
+{raidable} | Displays true/false (modifiable in lang.yml)
+{dtr} | Current faction DTR
+{max-dtr} | Max faction DTR based on players
+{max-chunks} | Maximum claims the faction can have (power or DTR)
+{peaceful} | Displays a message if peaceful
+{permanent} | Displays a message if permanent
+
  
 Faction Permissions GUI variables. Can only be used in GUI
 
