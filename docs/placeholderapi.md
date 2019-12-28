@@ -1,3 +1,5 @@
+# PlaceholderAPI
+
 We hook into the plugin [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) to allow you to hook 
 Factions info into other plugins.
 
