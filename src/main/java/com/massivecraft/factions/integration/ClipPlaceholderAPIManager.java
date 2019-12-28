@@ -81,9 +81,11 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
 
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
         Faction faction = fPlayer.getFaction();
+        boolean territory = false;
         if (placeholder.contains("faction_territory")) {
             faction = Board.getInstance().getFactionAt(fPlayer.getLastStoodAt());
             placeholder = placeholder.replace("_territory", "");
+            territory = true;
         }
         switch (placeholder) {
             // First list player stuff
@@ -110,24 +112,24 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                 return fPlayer.hasFaction() ? fPlayer.getRole().getTranslation().toString() : TL.PLACEHOLDER_ROLE_NAME.toString();
             // Then Faction stuff
             case "faction_name":
-                return fPlayer.hasFaction() ? faction.getTag() : TL.NOFACTION_PREFIX.toString();
+                return (fPlayer.hasFaction() || territory) ? faction.getTag() : TL.NOFACTION_PREFIX.toString();
             case "faction_name_custom":
-                return fPlayer.hasFaction() ? Tag.parsePlain(fPlayer, TL.PLACEHOLDER_CUSTOM_FACTION.toString()) : "";
+                return (fPlayer.hasFaction() || territory) ? Tag.parsePlain(fPlayer, TL.PLACEHOLDER_CUSTOM_FACTION.toString()) : "";
             case "faction_only_space":
-                return fPlayer.hasFaction() ? " " : "";
+                return (fPlayer.hasFaction() || territory) ? " " : "";
             case "faction_power":
                 return String.valueOf(faction.getPowerRounded());
             case "faction_powermax":
                 return String.valueOf(faction.getPowerMaxRounded());
             case "faction_dtr":
-                return fPlayer.hasFaction() ? DTRControl.round(faction.getDTR()) : "";
+                return (fPlayer.hasFaction() || territory) ? DTRControl.round(faction.getDTR()) : "";
             case "faction_dtrmax":
-                if (fPlayer.hasFaction() && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
+                if ((fPlayer.hasFaction() || territory) && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
                     return DTRControl.round(((DTRControl) FactionsPlugin.getInstance().getLandRaidControl()).getMaxDTR(faction));
                 }
                 return "";
             case "faction_maxclaims":
-                return fPlayer.hasFaction() ? String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(faction)) : "";
+                return (fPlayer.hasFaction() || territory) ? String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(faction)) : "";
             case "faction_description":
                 return faction.getDescription();
             case "faction_claims":
