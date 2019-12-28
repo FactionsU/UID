@@ -40,6 +40,7 @@ nav:
   - Placeholders: placeholders.md
   - PlaceholderAPI: placeholderapi.md
   - Particles: particles.md
+  - Developers: developers.md
 
 # Customization
 extra:

@@ -1,6 +1,6 @@
-!!! note "Looking for permission nodes? [Click here](permissionnodes.md)"
-
 # /f perms
+
+!!! note "Looking for permission nodes? [Click here](permissionnodes.md)"
 
 You can control who inside, or outside, your faction has access to various functionality.
 

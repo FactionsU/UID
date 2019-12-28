@@ -1,6 +1,6 @@
-!!! note "Looking for /f perms? [Click here](permissions.md)"
-
 # Permission Nodes
+
+!!! note "Looking for /f perms? [Click here](permissions.md)"
 
 !!! warning "This page is presently under construction. Permissions are all here but descriptions are incomplete"
 

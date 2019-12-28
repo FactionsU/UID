@@ -1,3 +1,5 @@
+# Placeholders
+
 !!! note "Looking for PlaceholderAPI placeholders? [Click here](placeholderapi.md)"
 
 
