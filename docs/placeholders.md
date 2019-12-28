@@ -1,74 +1,73 @@
-We hook into the plugin [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) to allow you to hook 
-Factions info into other plugins.
+!!! note "Looking for PlaceholderAPI placeholders? [Click here](placeholderapi.md)"
 
-## Internal Placeholders
-Spots that you can use placeholders from other plugins in FactionsUUID text:
 
-* `/f show`
-* scoreboards
-* name tag prefix
+Fancy variables. Can only be used in /f show
 
-## External Placeholders
-These are placeholders you can use in other plugins (or the places listed above) that will hook into FactionsUUID.
+Variable | Explanation
+--| ---
+{allies-list}  | Lists each faction ally with tooltips
+{enemies-list} | Lists each faction enemy with tooltips
+{online-list}  | Lists all online members with tooltips
+{offline-list} | Lists all offline members with tooltips
+ 
+Player variables. Can be used in tooltips.show, scoreboards, or /f show
 
-### Relations
-The following can be used in plugins that support PlaceholderAPI relational placeholders.
+Variable | Explanation
+--| ---
+{group}     | Players group (/f show only)
+{name}      | Players name
+{lastSeen}  | Last time player was seen (if offline), or just 'Online'
+{balance} | Players balance
+{player-kills} | # of kills the player has
+{player-deaths}| # of deaths the player has
+{total-online-visible}| # of players online from the perspective of the current player
+ 
+Faction variables. Can be used in tooltips.list, scoreboards, or /f show
 
-Relational Placeholder | Description
---- | ---
-%rel_factionsuuid_relation% | The relation between the 2 players
-%rel_factionsuuid_relation_color% | Color of the relation between the 2 players
+Variable | Explanation
+--| ---
+{header}    | Default factions header (ex. /f show)
+{faction}   | Factions tag (if none, uses lang.yml for factionless name)
+{faction-relation-color} | Factions color relative to the viewer
+{joining}   | How to join this faction
+{power}     | Factions deaths until raidable value
+{power-boost}  | DTR Symbol based on current DTR (max, regen, frozen, raidable)
+{maxPower}  | Factions max deaths until raidable value
+{chunks}    | # of claims faction has (in chunks)
+{warps}     | # of warps faction has
+{description} | Factions description
+{create-date} | Date faction was created
+{leader}    | Faction leader
+{land-value}  | Value of all claims
+{land-refund} | Calculated refund value
+{allies}    | # of allies faction has
+{enemies}   | # of enemies faction has
+{online}    | # of faction members online
+{offline}   | # of faction members offline
+{members}   | # of faction members (includes offline)
+{faction-balance}      | Faction bank balance
+{world}, {x}, {y}, {z} | Faction home variables. You don't need to use them all.
+{faction-kills} | # of kills the faction has
+{faction-deaths}| # of deaths the faction has
+{faction-bancount} | # of bans the faction has
+ 
+Faction Permissions GUI variables. Can only be used in GUI
 
-### Players
-The rest of the placeholders should be usable by any plugin supporting placeholders.
+Variable | Explanation
+--| ---
+{relation}            | Shows relation name (Can be used in action and relation)
+{relation-color}      | Relation color
+{action}              | Shows action name (Can only be used in action)
+{action-access}       | Shows the action's access with current relation
+{action-access-color} | Access color
 
-Player Placeholder | Description
---- | ---
-%factionsuuid_player_name% | The player's name
-%factionsuuid_player_lastseen% | Last time the player was seen on the server or their online status
-%factionsuuid_player_group% | Player's permission group
-%factionsuuid_player_balance% | Player's money
-%factionsuuid_player_power% | Player's power
-%factionsuuid_player_maxpower% | Max power a player can have
-%factionsuuid_player_kills% | Kills by this player
-%factionsuuid_player_deaths% | Deaths by this player
-%factionsuuid_player_role% | Player's faction role
-%factionsuuid_player_role_name% | Player's faction role's name
+General variables. Can be used anywhere.
 
-### Factions
-
-Faction Placeholder | Description
---- | ---
-%factionsuuid_faction_name% | Faction's tag
-%factionsuuid_faction_name_custom% | Custom faction tag based on lang.yml CUSTOM name
-%factionsuuid_faction_only_space% | Literally a space, only if the player is in a faction
-%factionsuuid_faction_power% | Faction's current power
-%factionsuuid_faction_powermax% | Faction's max power
-%factionsuuid_faction_dtr% | Faction's DTR
-%factionsuuid_faction_dtrmax% | Faction's max DTR
-%factionsuuid_faction_maxclaims% | Faction's max claims
-%factionsuuid_faction_description% | Faction's long description
-%factionsuuid_faction_claims% | Number of claimed chunks
-%factionsuuid_faction_founded% | Date your faction was founded
-%factionsuuid_faction_joining% | If your faction is allowing new members
-%factionsuuid_faction_peaceful% | If your faction is peaceful
-%factionsuuid_faction_powerboost% | Faction's current powerboost
-%factionsuuid_faction_leader% | Name of the leader
-%factionsuuid_faction_warps% | Number of warps
-%factionsuuid_faction_raidable% | If HCF features are enabled, shows if your faction is raidable
-%factionsuuid_faction_home_world% | World of your faction's home
-%factionsuuid_faction_home_x% | X coordinate of your faction's home
-%factionsuuid_faction_home_y% | Y coordinate of your faction's home
-%factionsuuid_faction_home_z% | Z coordinate of your faction's home
-%factionsuuid_faction_land_value% | Total value of your faction's land
-%factionsuuid_faction_land_refund% | How much your faction would get if they refunded the land
-%factionsuuid_faction_bank_balance% | Faction's bank balance
-%factionsuuid_faction_allies% | Number of allies
-%factionsuuid_faction_enemies% | Number of enemies
-%factionsuuid_faction_truces% | Number of truces
-%factionsuuid_faction_online% | Number of players online in your faction
-%factionsuuid_faction_offline% | Number of players offline in your faction
-%factionsuuid_faction_size% | Total online and offline faction members
-%factionsuuid_faction_kills% | Total kills your faction has
-%factionsuuid_faction_deaths% | Total deaths your faction has
-%factionsuuid_faction_maxvaults% | Max vaults your faction can have
+Variable | Explanation
+--| ---
+{total-online}       | Total # of players on the server
+{max-warps}          | Max # of warps a faction can set
+{max-allies}         | Max # of allies a faction can have
+{max-enemies}        | Max # of enemies a faction can have
+{factionless}        | Count of all factionless players online
+{factionless-total}  | Count of all factionless players online
