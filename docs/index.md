@@ -17,19 +17,10 @@ available [here](https://github.com/CmdrKittens/factions-top/releases/download/t
 All credit for the plugin itself goes to Novucs, who released his work under the MIT license. Once they update
 their plugin with the fix we have submitted (or their own equivalent fix), we'll remove this link.
 
+## Translation
+
+You can translate most FactionsUUID messages to your own language by editing `lang.yml`
+
 ## Under Construction
 
 !!! warning "This site under construction! We hope to be fully ready soon."
-
-You can find the old documentation [here](https://github.com/drtshock/Factions/wiki).
-
-### Current Progress:
-
-- [x] Support page
-- [ ] Commands
-- [ ] Faction Permissions
-- [ ] Translation
-- [x] Placeholders
-- [ ] Scoreboard
-- [x] Power
-- [x] Introduction to Factions
