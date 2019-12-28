@@ -36,6 +36,7 @@ nav:
   - First Steps: firststeps.md
   - Commands: commands.md
   - Permissions: permissions.md
+  - Permission Nodes: permissionnodes.md
   - Placeholders: placeholders.md
   - PlaceholderAPI: placeholderapi.md
   - Particles: particles.md
