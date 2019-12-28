@@ -1,7 +1,6 @@
 package com.massivecraft.factions.config.file;
 
 import com.google.common.collect.ImmutableList;
-import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
