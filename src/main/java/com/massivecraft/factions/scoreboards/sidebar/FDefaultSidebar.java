@@ -12,6 +12,9 @@ public class FDefaultSidebar extends FSidebarProvider {
 
     @Override
     public String getTitle(FPlayer fplayer) {
+        if (FactionsPlugin.getInstance().conf().scoreboard().constant().isFactionlessEnabled() && !fplayer.hasFaction()) {
+            return replaceTags(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getFactionlessTitle());
+        }
         return replaceTags(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getTitle());
     }
 

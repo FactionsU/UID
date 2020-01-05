@@ -662,7 +662,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public void leave(boolean makePay) {
         Faction myFaction = this.getFaction();
-        makePay = makePay && Econ.shouldBeUsed() && !this.isAdminBypassing();
+        boolean econMakePay = makePay && Econ.shouldBeUsed() && !this.isAdminBypassing();
 
         if (myFaction == null) {
             resetFactionData();
@@ -681,7 +681,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         // if economy is enabled and they're not on the bypass list, make sure they can pay
-        if (makePay && !Econ.hasAtLeast(this, FactionsPlugin.getInstance().conf().economy().getCostLeave(), TL.LEAVE_TOLEAVE.toString())) {
+        if (econMakePay && !Econ.hasAtLeast(this, FactionsPlugin.getInstance().conf().economy().getCostLeave(), TL.LEAVE_TOLEAVE.toString())) {
             return;
         }
 
@@ -692,7 +692,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         // then make 'em pay (if applicable)
-        if (makePay && !Econ.modifyMoney(this, -FactionsPlugin.getInstance().conf().economy().getCostLeave(), TL.LEAVE_TOLEAVE.toString(), TL.LEAVE_FORLEAVE.toString())) {
+        if (econMakePay && !Econ.modifyMoney(this, -FactionsPlugin.getInstance().conf().economy().getCostLeave(), TL.LEAVE_TOLEAVE.toString(), TL.LEAVE_FORLEAVE.toString())) {
             return;
         }
 

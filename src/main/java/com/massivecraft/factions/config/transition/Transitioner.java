@@ -169,10 +169,14 @@ public class Transitioner {
             n2.setValue("{faction-relation-color}{faction}");
             ver.setValue(3);
             node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(3);
+            CommentedConfigurationNode n3 = node.getNode("scoreboard").getNode("constant").getNode("factionlessTitle");
+            n3.setValue(node.getNode("scoreboard").getNode("constant").getNode("title").getString());
+
             loader.save(node);
 
             this.plugin.getLogger().info("Detected a config from before 0.5.7");
             this.plugin.getLogger().info("  Setting default enterTitles settings based on old style. Visit main.conf to edit.");
+            this.plugin.getLogger().info("  Setting default constant scoreboard factionlessTitle settings based on normal title. Visit main.conf to edit.");
         } catch (Exception e) {
             this.plugin.getLogger().log(Level.SEVERE, "Could not process configuration", e);
         }

@@ -60,6 +60,10 @@ Variable | Explanation
 {max-chunks} | Maximum claims the faction can have (power or DTR)
 {peaceful} | Displays a message if peaceful
 {permanent} | Displays a message if permanent
+{dtr-frozen-status} | True or false (customizable in lang.yml) for DTR frozen state
+{dtr-frozen-time} | Time remaining in frozen state (configure in main.conf) or blank if not frozen
+{tnt-balance} | TNT bank balance
+{tnt-max-balance} | Maximum TNT bank balance
 
  
 Faction Permissions GUI variables. Can only be used in GUI

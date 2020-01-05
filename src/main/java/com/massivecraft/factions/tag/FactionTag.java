@@ -8,6 +8,7 @@ import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
+import org.apache.commons.lang.time.DurationFormatUtils;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -51,6 +52,10 @@ public enum FactionTag implements Tag {
         }
         return Tag.isMinimalShow() ? null : "{ig}";
     }),
+    DTR_FROZEN("dtr-frozen-status", (fac -> TL.DTR_FROZEN_STATUS_MESSAGE.format(fac.isFrozenDTR() ? TL.DTR_FROZEN_STATUS_TRUE.toString() : TL.DTR_FROZEN_STATUS_FALSE.toString()))),
+    DTR_FROZEN_TIME("dtr-frozen-time", (fac -> TL.DTR_FROZEN_TIME_MESSAGE.format(fac.isFrozenDTR() ?
+            DurationFormatUtils.formatDuration(fac.getFrozenDTRUntilTime() - System.currentTimeMillis(), FactionsPlugin.getInstance().conf().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
+            TL.DTR_FROZEN_TIME_NOTFROZEN.toString()))),
     MAX_CHUNKS("max-chunks", (fac -> String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(fac)))),
     PEACEFUL("peaceful", (fac) -> fac.isPeaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getPeaceful() + TL.COMMAND_SHOW_PEACEFUL.toString() : ""),
     PERMANENT("permanent", (fac) -> fac.isPermanent() ? "permanent" : "{notPermanent}"), // no braces needed
@@ -63,6 +68,18 @@ public enum FactionTag implements Tag {
             return FactionsPlugin.getInstance().conf().economy().isBankEnabled() ? Econ.moneyString(Econ.getBalance(fac.getAccountId())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance");
         }
         return Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance");
+    }),
+    TNT_BALANCE("tnt-balance", (fac) -> {
+        if (FactionsPlugin.getInstance().conf().commands().tnt().isEnable()) {
+            return String.valueOf(fac.getTNTBank());
+        }
+        return Tag.isMinimalShow() ? null : "";
+    }),
+    TNT_MAX("tnt-max-balance", (fac) -> {
+        if (FactionsPlugin.getInstance().conf().commands().tnt().isEnable()) {
+            return String.valueOf(FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage());
+        }
+        return Tag.isMinimalShow() ? null : "";
     }),
     ALLIES_COUNT("allies", (fac) -> String.valueOf(fac.getRelationCount(Relation.ALLY))),
     ENEMIES_COUNT("enemies", (fac) -> String.valueOf(fac.getRelationCount(Relation.ENEMY))),

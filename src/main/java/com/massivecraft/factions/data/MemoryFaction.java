@@ -70,6 +70,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected double dtr;
     protected long lastDTRUpdateTime;
     protected long frozenDTRUntilTime;
+    protected int tntBank;
 
     public HashMap<String, List<String>> getAnnouncements() {
         return this.announcements;
@@ -779,6 +780,14 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
     public int getLandRoundedInWorld(String worldName) {
         return Board.getInstance().getFactionCoordCountInWorld(this, worldName);
+    }
+
+    public int getTNTBank() {
+        return this.tntBank;
+    }
+
+    public void setTNTBank(int amount) {
+        this.tntBank = amount;
     }
 
     // -------------------------------

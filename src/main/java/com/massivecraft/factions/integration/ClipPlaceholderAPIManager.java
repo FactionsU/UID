@@ -7,6 +7,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.perms.Relation;
+import com.massivecraft.factions.tag.FactionTag;
 import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.TL;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -128,6 +129,16 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                     return DTRControl.round(((DTRControl) FactionsPlugin.getInstance().getLandRaidControl()).getMaxDTR(faction));
                 }
                 return "";
+            case "faction_dtr_frozen":
+                if ((fPlayer.hasFaction() || territory) && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
+                    return FactionTag.DTR_FROZEN.replace(FactionTag.DTR_FROZEN.getTag(), faction);
+                }
+                return "";
+            case "faction_dtr_frozen_time":
+                if ((fPlayer.hasFaction() || territory) && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
+                    return FactionTag.DTR_FROZEN_TIME.replace(FactionTag.DTR_FROZEN_TIME.getTag(), faction);
+                }
+                return "";
             case "faction_maxclaims":
                 return (fPlayer.hasFaction() || territory) ? String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(faction)) : "";
             case "faction_description":
@@ -165,6 +176,10 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                 return Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.getLandRounded())) : TL.ECON_OFF.format("refund");
             case "faction_bank_balance":
                 return Econ.shouldBeUsed() ? Econ.moneyString(Econ.getBalance(faction.getAccountId())) : TL.ECON_OFF.format("balance");
+            case "faction_tnt_balance":
+                return FactionTag.TNT_BALANCE.replace(FactionTag.TNT_BALANCE.getTag(), faction);
+            case "faction_tnt_max_balance":
+                return FactionTag.TNT_MAX.replace(FactionTag.TNT_MAX.getTag(), faction);
             case "faction_allies":
                 return String.valueOf(faction.getRelationCount(Relation.ALLY));
             case "faction_enemies":
