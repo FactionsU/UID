@@ -159,18 +159,13 @@ public class Transitioner {
         HoconConfigurationLoader loader = Loader.getLoader("main");
         try {
             CommentedConfigurationNode node = loader.load();
-            CommentedConfigurationNode ver = node.getNode("aVeryFriendlyFactionsConfig.version");
-            if (ver.getInt() >= 3) {
+            if (node.getNode("aVeryFriendlyFactionsConfig").getNode("version").getInt() >= 3) {
                 return;
             }
-            CommentedConfigurationNode n1 = node.getNode("factions").getNode("enterTitles").getNode("title");
-            n1.setValue("");
-            CommentedConfigurationNode n2 = node.getNode("factions").getNode("enterTitles").getNode("subtitle");
-            n2.setValue("{faction-relation-color}{faction}");
-            ver.setValue(3);
+            node.getNode("factions").getNode("enterTitles").getNode("title").setValue("");
+            node.getNode("factions").getNode("enterTitles").getNode("subtitle").setValue("{faction-relation-color}{faction}");
             node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(3);
-            CommentedConfigurationNode n3 = node.getNode("scoreboard").getNode("constant").getNode("factionlessTitle");
-            n3.setValue(node.getNode("scoreboard").getNode("constant").getNode("title").getString());
+            node.getNode("scoreboard").getNode("constant").getNode("factionlessTitle").setValue(node.getNode("scoreboard").getNode("constant").getNode("title").getString());
 
             loader.save(node);
 
