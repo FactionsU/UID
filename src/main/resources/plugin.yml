@@ -313,3 +313,13 @@ permissions:
     description: Use /f perms
   factions.debug:
     description: Use /f debug
+  factions.tnt.info:
+    description: Get TNT information
+  factions.tnt.deposit:
+    description: Deposit to TNT bank
+  factions.tnt.withdraw:
+    description: Withdraw from TNT bank
+  factions.tnt.fill:
+    description: Use TNT fill command
+  factions.tnt.siphon:
+    description: Use TNT siphon command

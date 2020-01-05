@@ -133,6 +133,14 @@ public class DefaultPermissionsConfig {
             return this.territory;
         }
 
+        public FactionOnlyPermInfo getTNTDeposit() {
+            return this.tntDeposit;
+        }
+
+        public FactionOnlyPermInfo getTNTWithdraw() {
+            return this.tntWithdraw;
+        }
+
         public FactionOnlyPermInfo getOwner() {
             return this.owner;
         }
@@ -281,6 +289,22 @@ public class DefaultPermissionsConfig {
         };
         @Comment("Can claim/unclaim faction territory")
         private FactionOnlyPermInfo territory = new FactionOnlyPermInfo() {
+            {
+                this.coleader.value = true;
+                this.moderator.value = true;
+            }
+        };
+        @Comment("Can deposit TNT into the bank")
+        private FactionOnlyPermInfo tntDeposit = new FactionOnlyPermInfo() {
+            {
+                this.coleader.value = true;
+                this.moderator.value = true;
+                this.normal.value = true;
+                this.recruit.value = true;
+            }
+        };
+        @Comment("Can withdraw TNT from the bank")
+        private FactionOnlyPermInfo tntWithdraw = new FactionOnlyPermInfo() {
             {
                 this.coleader.value = true;
                 this.moderator.value = true;

@@ -42,4 +42,6 @@ promote | Can promote members up to their own role within the faction
 sethome | Can set the faction home
 setwarp | Can set a faction warp
 territory | Can claim/unclaim faction territory
+tntdeposit | Can deposit into faction TNT bank (including siphon)
+tntwithdraw | Can withdraw from faction TNT bank (including fill)
 warp | Can use faction warps

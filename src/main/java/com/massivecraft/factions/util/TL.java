@@ -515,6 +515,28 @@ public enum TL {
     COMMAND_SETMAXVAULTS_DESCRIPTION("Set max vaults for a Faction."),
     COMMAND_SETMAXVAULTS_SUCCESS("&aSet max vaults for &e%s &ato &b%d"),
 
+    COMMAND_TNT_TERRITORYONLY("&cCommand can only be run from your faction's territory!"),
+    COMMAND_TNT_DEPOSIT_DESCRIPTION("Add to your faction's TNT bank"),
+    COMMAND_TNT_DEPOSIT_FAIL_FULL("&cFaction bank already at maximum!"),
+    COMMAND_TNT_DEPOSIT_FAIL_NOTENOUGH("&cYou do not have that much TNT!"),
+    COMMAND_TNT_DEPOSIT_FAIL_POSITIVE("&cMust deposit at least one!"),
+    COMMAND_TNT_DEPOSIT_SUCCESS("&eYour faction now has %d TNT"),
+    COMMAND_TNT_FILL_DESCRIPTION("Fill TNT into nearby dispensers"),
+    COMMAND_TNT_FILL_MESSAGE("&eFilled %d TNT into %d dispensers. %d left in the faction bank."),
+    COMMAND_TNT_FILL_FAIL_MAXRADIUS("&c%d is bigger than the maximum radius of %d"),
+    COMMAND_TNT_FILL_FAIL_POSITIVE("&cPositive values only!"),
+    COMMAND_TNT_INFO_DESCRIPTION("View your faction's TNT bank"),
+    COMMAND_TNT_INFO_MESSAGE("&eYour faction has %d TNT"),
+    COMMAND_TNT_SIPHON_DESCRIPTION("Take TNT from nearby dispensers"),
+    COMMAND_TNT_SIPHON_MESSAGE("&eAcquired %d TNT, for a total of %d in the faction bank."),
+    COMMAND_TNT_SIPHON_FAIL_POSITIVE("&cPositive values only!"),
+    COMMAND_TNT_SIPHON_FAIL_FULL("&cFaction bank already at maximum!"),
+    COMMAND_TNT_SIPHON_FAIL_MAXRADIUS("&c%d is bigger than the maximum radius of %d"),
+    COMMAND_TNT_WITHDRAW_DESCRIPTION("Withdraw TNT from the faction bank"),
+    COMMAND_TNT_WITHDRAW_MESSAGE("&eWithdrew %d TNT. %d left in the faction bank."),
+    COMMAND_TNT_WITHDRAW_FAIL_NOTENOUGH("&cThe faction bank does not have %d TNT!"),
+    COMMAND_TNT_WITHDRAW_FAIL_POSITIVE("&cPositive values only!"),
+
     COMMAND_VAULT_DESCRIPTION("/f vault <number> to open one of your Faction's vaults."),
     COMMAND_VAULT_TOOHIGH("&cYou tried to open vault %d but your Faction only has %d vaults."),
 
@@ -824,6 +846,8 @@ public enum TL {
     PERM_HOME("Visiting the faction home"),
     PERM_SETHOME("Setting the faction home"),
     PERM_SETWARP("Setting and unsetting faction warps"),
+    PERM_TNTDEPOSIT("Deposit TNT into faction bank"),
+    PERM_TNTWITHDRAW("Withdraw TNT from faction bank"),
     PERM_WARP("Using faction warps"),
     PERM_FLY("Flying in faction territory"),
     PERM_OWNER("Set ownership of land using /f owner in faction territory"),
@@ -888,6 +912,11 @@ public enum TL {
      */
     DTR_CANNOT_FROZEN("&cAction denied due to frozen DTR"),
     DTR_KICK_PENALTY("&cPenalty DTR lost due to kicking with frozen DTR"),
+    DTR_FROZEN_STATUS_MESSAGE("%s"),
+    DTR_FROZEN_STATUS_TRUE("Frozen"),
+    DTR_FROZEN_STATUS_FALSE("Not frozen"),
+    DTR_FROZEN_TIME_MESSAGE("%s"),
+    DTR_FROZEN_TIME_NOTFROZEN(""),
     ;
 
     private String path;

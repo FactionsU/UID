@@ -387,6 +387,32 @@ public class MainConfig {
             }
         }
 
+        public class TNT {
+            private boolean enable = false;
+            @Comment("Maximum storage. Set to -1 (or lower) to disable")
+            private int maxStorage = -1;
+            private int maxRadius = 5;
+
+            public int getMaxRadius() {
+                return maxRadius;
+            }
+
+            public int getMaxStorage() {
+                return maxStorage;
+            }
+
+            public boolean isAboveMaxStorage(int amount) {
+                if (maxStorage < 0) {
+                    return false;
+                }
+                return amount > maxStorage;
+            }
+
+            public boolean isEnable() {
+                return enable;
+            }
+        }
+
         public class Warp {
             @Comment("Warmup seconds before command executes. Set to 0 for no warmup.")
             private int delay = 0;
@@ -442,6 +468,8 @@ public class MainConfig {
         private SeeChunk seeChunk = new SeeChunk();
         private Show show = new Show();
         private Stuck stuck = new Stuck();
+        @Comment("TNT bank!")
+        private TNT tnt = new TNT();
         private ToolTips toolTips = new ToolTips();
         private Warp warp = new Warp();
 
@@ -481,6 +509,10 @@ public class MainConfig {
             return stuck;
         }
 
+        public TNT tnt() {
+            return tnt;
+        }
+
         public ToolTips toolTips() {
             return toolTips;
         }
@@ -506,6 +538,7 @@ public class MainConfig {
                 private boolean freezePreventsLeave = true;
                 private boolean freezePreventsDisband = true;
                 private double freezeKickPenalty = 0.5;
+                private String freezeTimeFormat = "H:mm:ss";
                 @Comment("Additional claims allowed for each player in the faction")
                 private int landPerPlayer = 3;
                 @Comment("Claims the faction starts with.\n" +
@@ -533,6 +566,10 @@ public class MainConfig {
 
                 public int getFreezeTime() {
                     return freezeTime;
+                }
+
+                public String getFreezeTimeFormat() {
+                    return freezeTimeFormat;
                 }
 
                 public boolean isFreezePreventsJoin() {
@@ -1547,7 +1584,7 @@ public class MainConfig {
         private LandRaidControl landRaidControl = new LandRaidControl();
         @Comment("Remaining settings not categorized")
         private Other other = new Other();
-        @Comment("Should we send titles when players enter Factions?")
+        @Comment("Should we send titles when players enter Factions? Durations are in ticks (20 ticks every second)")
         private EnterTitles enterTitles = new EnterTitles();
 
         public EnterTitles enterTitles() {
@@ -1987,6 +2024,7 @@ public class MainConfig {
                     this.add("Use /f create");
                 }
             };
+            private String factionlessTitle = "Status";
 
             public boolean isEnabled() {
                 return enabled;
@@ -2010,6 +2048,10 @@ public class MainConfig {
 
             public List<String> getFactionlessContent() {
                 return factionlessContent != null ? Collections.unmodifiableList(factionlessContent) : Collections.emptyList();
+            }
+
+            public String getFactionlessTitle() {
+                return factionlessTitle;
             }
         }
 

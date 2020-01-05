@@ -18,3 +18,4 @@ Balance | The amount of money the player has in or outside of the faction. There
 Warp | The destination or a location that can be used to be teleported to. An alternative way of travel.
 Raid | The word one uses to destroy, loot or obliterate a faction using force, strategy, and or TNT. 
 Permission | The authority to do something.
+TNT Bank | TNT that can be stored as part of the faction. Can be filled into dispensers or siphoned from them.

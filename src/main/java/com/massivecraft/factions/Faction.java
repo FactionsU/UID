@@ -134,13 +134,13 @@ public interface Faction extends EconomyParticipator {
 
     int getDeaths();
 
-    boolean hasAccess(boolean online, Permissible permissable, PermissibleAction permissableAction);
+    boolean hasAccess(boolean online, Permissible permissible, PermissibleAction permissibleAction);
 
-    boolean hasAccess(FPlayer player, PermissibleAction permissableAction);
+    boolean hasAccess(FPlayer player, PermissibleAction permissibleAction);
 
     boolean isLocked(boolean online, Permissible permissible, PermissibleAction permissibleAction);
 
-    boolean setPermission(boolean online, Permissible permissable, PermissibleAction permissableAction, boolean value);
+    boolean setPermission(boolean online, Permissible permissible, PermissibleAction permissibleAction, boolean value);
 
     void checkPerms();
 
@@ -151,6 +151,10 @@ public interface Faction extends EconomyParticipator {
     int getLandRounded();
 
     int getLandRoundedInWorld(String worldName);
+
+    int getTNTBank();
+
+    void setTNTBank(int amount);
 
     // -------------------------------
     // Relation and relation colors
