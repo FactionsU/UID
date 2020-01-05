@@ -2,6 +2,7 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FactionsPlugin;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
@@ -35,6 +36,13 @@ public class BrigadierManager {
     }
 
     public void addSubCommand(FCommand subCommand) {
+        this.addSubCommand(subCommand, null);
+    }
+
+    public void addSubCommand(FCommand subCommand, ArgumentBuilder<Object, ?> starting) {
+        if (starting == null) {
+            starting = brigadier;
+        }
         // Register brigadier to all command aliases
         for (String alias : subCommand.aliases) {
             LiteralArgumentBuilder<Object> literal = LiteralArgumentBuilder.literal(alias);
@@ -45,48 +53,55 @@ public class BrigadierManager {
 
                 try {
                     Constructor<? extends BrigadierProvider> constructor = brigadierProvider.getDeclaredConstructor(subCommand.getClass());
-                    brigadier.then(constructor.newInstance(subCommand).get(literal));
+                    starting.then(constructor.newInstance(subCommand).get(literal));
                 } catch (Exception e) {
                     FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to reflectively access brigadier", e);
                 }
             } else {
                 // Generate our own based on args - quite ugly
 
-                // We create an orderly stack of all args, required and optional, format them differently
-                List<RequiredArgumentBuilder<Object, ?>> stack = new ArrayList<>();
-                for (String required : subCommand.requiredArgs) {
-                    // Simply add the arg name as required
-                    stack.add(RequiredArgumentBuilder.argument(required, StringArgumentType.word()));
-                }
-
-                for (Map.Entry<String, String> optionalEntry : subCommand.optionalArgs.entrySet()) {
-                    RequiredArgumentBuilder<Object, ?> optional;
-
-                    // Optional without default
-                    if (optionalEntry.getKey().equalsIgnoreCase(optionalEntry.getValue())) {
-                        optional = RequiredArgumentBuilder.argument(":" + optionalEntry.getKey(), StringArgumentType.word());
-                        // Optional with default, explain
-                    } else {
-                        optional = RequiredArgumentBuilder.argument(optionalEntry.getKey() + "|" + optionalEntry.getValue(), StringArgumentType.word());
+                RequiredArgumentBuilder<Object, ?> previous = null;
+                if (subCommand.subCommands.isEmpty()) {
+                    // We create an orderly stack of all args, required and optional, format them differently
+                    List<RequiredArgumentBuilder<Object, ?>> stack = new ArrayList<>();
+                    for (String required : subCommand.requiredArgs) {
+                        // Simply add the arg name as required
+                        stack.add(RequiredArgumentBuilder.argument(required, StringArgumentType.word()));
                     }
 
-                    stack.add(optional);
-                }
+                    for (Map.Entry<String, String> optionalEntry : subCommand.optionalArgs.entrySet()) {
+                        RequiredArgumentBuilder<Object, ?> optional;
 
-                // Reverse the stack and apply .then()
-                RequiredArgumentBuilder<Object, ?> previous = null;
-                for (int i = stack.size() - 1; i >= 0; i--) {
-                    if (previous == null) {
-                        previous = stack.get(i);
-                    } else {
-                        previous = stack.get(i).then(previous);
+                        // Optional without default
+                        if (optionalEntry.getKey().equalsIgnoreCase(optionalEntry.getValue())) {
+                            optional = RequiredArgumentBuilder.argument(":" + optionalEntry.getKey(), StringArgumentType.word());
+                            // Optional with default, explain
+                        } else {
+                            optional = RequiredArgumentBuilder.argument(optionalEntry.getKey() + "|" + optionalEntry.getValue(), StringArgumentType.word());
+                        }
+
+                        stack.add(optional);
+                    }
+
+                    // Reverse the stack and apply .then()
+
+                    for (int i = stack.size() - 1; i >= 0; i--) {
+                        if (previous == null) {
+                            previous = stack.get(i);
+                        } else {
+                            previous = stack.get(i).then(previous);
+                        }
+                    }
+                } else {
+                    for (FCommand cmd : subCommand.subCommands) {
+                        this.addSubCommand(cmd, literal);
                     }
                 }
 
                 if (previous == null) {
-                    brigadier.then(literal);
+                    starting.then(literal);
                 } else {
-                    brigadier.then(literal.then(previous));
+                    starting.then(literal.then(previous));
                 }
             }
         }
