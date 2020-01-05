@@ -58,6 +58,7 @@ public class CmdTNTFill extends FCommand {
 
         int remaining = amount;
         int dispenserCount = 0;
+        boolean firstRound = true;
 
         while (remaining > 0 && !list.isEmpty()) {
             int per = Math.max(1, remaining / list.size());
@@ -65,13 +66,14 @@ public class CmdTNTFill extends FCommand {
             while (iterator.hasNext() && remaining >= per) {
                 int left = getCount(iterator.next().getInventory().addItem(getStacks(per)).values());
                 remaining -= per - left;
-                if ((per - left) > 0) {
+                if (firstRound && ((per - left) > 0)) {
                     dispenserCount++;
                 }
                 if (left > 0) {
                     iterator.remove();
                 }
             }
+            firstRound = false;
         }
 
         context.faction.setTNTBank(context.faction.getTNTBank() - amount + remaining);
