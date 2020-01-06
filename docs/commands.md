@@ -195,3 +195,9 @@ Command | Permission | Meaning
 /f warp [warp] [password] |	factions.warp |	To go a warp, password optional. Opens GUI if no warp defined.
 /f warunclaimall	| factions.managewarzone |	Unclaim all warzone claims.
 /f near | factions.near | Show nearby faction members
+/f tnt | factions.tnt.info | Show faction TNT bank
+/f tnt info | factions.tnt.info | Show faction TNT bank
+/f tnt deposit <amount> | factions.tnt.deposit | Deposit into the faction TNT bank
+/f tnt withdraw <amount> | factions.tnt.withdraw | Withdraw from the faction TNT bank
+/f tnt fill <radius> <amount> | factions.tnt.fill | Fill nearby dispensers with TNT from faction TNT bank
+/f tnt siphon <radius> [amount] | factions.tnt.siphon | Siphon TNT from nearby dispensers into the faction TNT bank
