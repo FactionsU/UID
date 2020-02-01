@@ -756,6 +756,19 @@ public enum TL {
     ECON_FORMAT("###,###.###"),
     ECON_DISABLED("Faction econ is disabled."),
     ECON_OVER_BAL_CAP("&4The amount &e%s &4is over Essentials' balance cap."),
+    ECON_BALANCE("<a>%s's<i> balance is <h>%s<i>."),
+    ECON_NOPERM("<h>%s<i> lacks permission to control <h>%s's<i> money."),
+    ECON_CANTAFFORD_TRANSFER("<h>%s<b> can't afford to transfer <h>%s<b> to %s<b>."),
+    ECON_CANTAFFORD_AMOUNT("<h>%s<i> can't afford <h>%s<i> %s."),
+    ECON_TRANSFER_UNABLE("Unable to transfer %s<b> to <h>%s<b> from <h>%s<b>."),
+    ECON_TRANSFER_NOINVOKER("<h>%s<i> was transferred from <h>%s<i> to <h>%s<i>."),
+    ECON_TRANSFER_GAVE("<h>%s<i> <h>gave %s<i> to <h>%s<i>."),
+    ECON_TRANSFER_TOOK("<h>%s<i> <h>took %s<i> from <h>%s<i>."),
+    ECON_TRANSFER_TRANSFER("<h>%s<i> transferred <h>%s<i> from <h>%s<i> to <h>%s<i>."),
+    ECON_GAIN_SUCCESS("<h>%s<i> gained <h>%s<i> %s."),
+    ECON_GAIN_FAILURE("<h>%s<i> would have gained <h>%s<i> %s, but the deposit failed."),
+    ECON_LOST_SUCCESS("<h>%s<i> lost <h>%s<i> %s."),
+    ECON_LOST_FAILURE("<h>%s<i> can't afford <h>%s<i> %s."),
 
     /**
      * Relations
