@@ -1,13 +1,15 @@
 package com.massivecraft.factions.config.file;
 
 import com.google.common.collect.ImmutableMap;
+import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.integration.dynmap.DynmapStyle;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@SuppressWarnings({"FieldCanBeLocal", "InnerClassMayBeStatic", "BooleanMethodIsAlwaysInverted"})
+@SuppressWarnings({"FieldCanBeLocal", "InnerClassMayBeStatic"})
 public class DynmapConfig {
     public class Dynmap {
         // Should the dynmap integration be used?
@@ -98,15 +100,28 @@ public class DynmapConfig {
             return hiddenFactions;
         }
 
-        // Optional per Faction style overrides. Any defined replace those in dynmapDefaultStyle.
-        // Specify Faction either by name or UUID.
-        private transient Map<String, DynmapStyle> factionStyles = ImmutableMap.of(
-                "SafeZone", new DynmapStyle().setLineColor("#FF00FF").setFillColor("#FF00FF").setBoost(false),
-                "WarZone", new DynmapStyle().setLineColor("#FF0000").setFillColor("#FF0000").setBoost(false)
+        @Comment("Per-faction overrides")
+        private Map<String, Style> factionStyles = ImmutableMap.of(
+                "SafeZone", new DynmapConfig.Style("#FF00FF", "#FF00FF"),
+                "WarZone", new DynmapConfig.Style("#FF0000", "#FF0000")
         );
 
+        private transient Map<String, DynmapStyle> styles;
+
         public Map<String, DynmapStyle> getFactionStyles() {
-            return factionStyles;
+            if (styles == null) {
+                styles = new HashMap<>();
+                factionStyles.forEach((name, style) -> styles.put(name, new DynmapStyle()
+                        .setLineColor(style.getLineColor())
+                        .setLineOpacity(style.getLineOpacity())
+                        .setLineWeight(style.getLineWeight())
+                        .setFillColor(style.getFillColor())
+                        .setFillOpacity(style.getFillOpacity())
+                        .setHomeMarker(style.getHomeMarker())
+                        .setBoost(style.isStyleBoost())
+                ));
+            }
+            return styles;
         }
     }
 
@@ -119,6 +134,15 @@ public class DynmapConfig {
         private double fillOpacity = DynmapStyle.DEFAULT_FILL_OPACITY;
         private String homeMarker = DynmapStyle.DEFAULT_HOME_MARKER;
         private boolean styleBoost = DynmapStyle.DEFAULT_BOOST;
+
+        private Style() {
+            // Yay
+        }
+
+        private Style(String lineColor, String fillColor) {
+            this.lineColor = lineColor;
+            this.fillColor = fillColor;
+        }
 
         public String getLineColor() {
             return lineColor;
