@@ -253,8 +253,10 @@ public class MainConfig {
         }
 
         public class ListCmd {
-            @Comment("You can only use {pagenumber} and {pagecount} in the header")
+            @Comment("You can only use {pagenumber} and {pagecount} in the header.\nBlank entry results in nothing being displayed.")
             private String header = "&e&m----------&r&e[ &2Faction List &9{pagenumber}&e/&9{pagecount} &e]&m----------";
+            @Comment("You can only use {pagenumber} and {pagecount} in the footer.\nBlank entry results in nothing being displayed.")
+            private String footer = "";
             @Comment("You can use any variables here")
             private String factionlessEntry = "<i>Factionless<i> {factionless} online";
             @Comment("You can use any variable here")
@@ -262,6 +264,10 @@ public class MainConfig {
 
             public String getHeader() {
                 return header;
+            }
+
+            public String getFooter() {
+                return footer;
             }
 
             public String getFactionlessEntry() {

@@ -70,8 +70,12 @@ public class CmdList extends FCommand {
 
 
         String header = plugin.conf().commands().list().getHeader();
-        header = header.replace("{pagenumber}", String.valueOf(pagenumber)).replace("{pagecount}", String.valueOf(pagecount));
-        lines.add(plugin.txt().parse(header));
+        String footer = plugin.conf().commands().list().getFooter();
+
+        if (!header.isEmpty()) {
+            header = header.replace("{pagenumber}", String.valueOf(pagenumber)).replace("{pagecount}", String.valueOf(pagecount));
+            lines.add(plugin.txt().parse(header));
+        }
 
         for (Faction faction : factionList.subList(start, end)) {
             if (faction.isWilderness()) {
@@ -80,6 +84,12 @@ public class CmdList extends FCommand {
             }
             lines.add(plugin.txt().parse(Tag.parsePlain(faction, context.fPlayer, plugin.conf().commands().list().getEntry())));
         }
+
+        if (!footer.isEmpty()) {
+            footer = footer.replace("{pagenumber}", String.valueOf(pagenumber)).replace("{pagecount}", String.valueOf(pagecount));
+            lines.add(plugin.txt().parse(footer));
+        }
+
         context.sendMessage(lines);
     }
 
