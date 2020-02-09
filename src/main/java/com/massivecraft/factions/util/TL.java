@@ -621,6 +621,7 @@ public enum TL {
     COMMAND_UNCLAIM_WARZONE_NOPERM("&cThis is a war zone. You lack permissions to unclaim."),
     COMMAND_UNCLAIM_UNCLAIMED("%1$s&e unclaimed some of your land."),
     COMMAND_UNCLAIM_UNCLAIMS("&eYou unclaimed this land."),
+    COMMAND_UNCLAIM_WRONGFACTIONOTHER("&cAttempted to unclaim land for incorrect faction"),
     COMMAND_UNCLAIM_LOG("%1$s unclaimed land at (%2$s) from the faction: %3$s"),
     COMMAND_UNCLAIM_WRONGFACTION("&cYou don't own this land."),
     COMMAND_UNCLAIM_TOUNCLAIM("to unclaim this land"),

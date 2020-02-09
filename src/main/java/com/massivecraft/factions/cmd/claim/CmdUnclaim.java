@@ -42,7 +42,7 @@ public class CmdUnclaim extends FCommand {
 
         if (radius < 2) {
             // single chunk
-            unClaim(new FLocation(context.player), context);
+            unClaim(new FLocation(context.player), context, forFaction);
         } else {
             // radius claim
             if (!Permission.CLAIM_RADIUS.has(context.sender, false)) {
@@ -56,7 +56,7 @@ public class CmdUnclaim extends FCommand {
 
                 @Override
                 public boolean work() {
-                    boolean success = unClaim(this.currentFLocation(), context);
+                    boolean success = unClaim(this.currentFLocation(), context, forFaction);
                     if (success) {
                         failCount = 0;
                     } else if (failCount++ >= limit) {
@@ -70,8 +70,14 @@ public class CmdUnclaim extends FCommand {
         }
     }
 
-    private boolean unClaim(FLocation target, CommandContext context) {
+    private boolean unClaim(FLocation target, CommandContext context, Faction faction) {
         Faction targetFaction = Board.getInstance().getFactionAt(target);
+
+        if (!targetFaction.equals(faction)) {
+            context.msg(TL.COMMAND_UNCLAIM_WRONGFACTIONOTHER);
+            return false;
+        }
+
         if (targetFaction.isSafeZone()) {
             if (Permission.MANAGE_SAFE_ZONE.has(context.sender)) {
                 Board.getInstance().removeAt(target);
