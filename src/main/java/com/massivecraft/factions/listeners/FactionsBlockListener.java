@@ -9,6 +9,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.util.TL;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -57,7 +58,7 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
-        if (!playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.BUILD, "build", false)) {
+        if (!playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.BUILD, false)) {
             event.setCancelled(true);
         }
     }
@@ -96,7 +97,7 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
-        if (!playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.DESTROY, "destroy", false)) {
+        if (!playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.DESTROY, false)) {
             event.setCancelled(true);
         }
     }
@@ -107,7 +108,7 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
-        if (event.getInstaBreak() && !playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.DESTROY, "destroy", false)) {
+        if (event.getInstaBreak() && !playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.DESTROY, false)) {
             event.setCancelled(true);
         }
     }
@@ -212,12 +213,12 @@ public class FactionsBlockListener implements Listener {
         }
 
         // Check if they have build permissions here. If not, block this from happening.
-        if (!playerCanBuildDestroyBlock(player, location, PermissibleAction.FROSTWALK, "frostwalk", justCheck)) {
+        if (!playerCanBuildDestroyBlock(player, location, PermissibleAction.FROSTWALK, justCheck)) {
             event.setCancelled(true);
         }
     }
 
-    public static boolean playerCanBuildDestroyBlock(Player player, Location location, PermissibleAction permissibleAction, String action, boolean justCheck) {
+    public static boolean playerCanBuildDestroyBlock(Player player, Location location, PermissibleAction permissibleAction, boolean justCheck) {
         String name = player.getName();
         if (FactionsPlugin.getInstance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(name)) {
             return true;
@@ -241,7 +242,7 @@ public class FactionsBlockListener implements Listener {
             }
 
             if (!justCheck) {
-                me.msg("<b>You can't " + action + " in the wilderness.");
+                me.msg(TL.PERM_DENIED_WILDERNESS, permissibleAction.getShortDescription());
             }
 
             return false;
@@ -255,7 +256,7 @@ public class FactionsBlockListener implements Listener {
             }
 
             if (!justCheck) {
-                me.msg("<b>You can't " + action + " in a safe zone.");
+                me.msg(TL.PERM_DENIED_SAFEZONE, permissibleAction.getShortDescription());
             }
 
             return false;
@@ -269,7 +270,7 @@ public class FactionsBlockListener implements Listener {
             }
 
             if (!justCheck) {
-                me.msg("<b>You can't " + action + " in a war zone.");
+                me.msg(TL.PERM_DENIED_WARZONE, permissibleAction.getShortDescription());
             }
 
             return false;
@@ -285,10 +286,10 @@ public class FactionsBlockListener implements Listener {
         if (!otherFaction.hasAccess(me, permissibleAction)) {
             if (pain && permissibleAction != PermissibleAction.FROSTWALK) {
                 player.damage(FactionsPlugin.getInstance().conf().factions().other().getActionDeniedPainAmount());
-                me.msg("<b>It is painful to " + action + " in the territory of " + otherFaction.getTag(myFaction));
+                me.msg(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.getShortDescription(), otherFaction.getTag(myFaction));
                 return true;
             } else if (!justCheck) {
-                me.msg("<b>You can't " + action + " in the territory of " + otherFaction.getTag(myFaction));
+                me.msg(TL.PERM_DENIED_TERRITORY, permissibleAction.getShortDescription(), otherFaction.getTag(myFaction));
             }
             return false;
         }
@@ -299,12 +300,12 @@ public class FactionsBlockListener implements Listener {
                 player.damage(FactionsPlugin.getInstance().conf().factions().other().getActionDeniedPainAmount());
 
                 if (!FactionsPlugin.getInstance().conf().factions().ownedArea().isDenyBuild()) {
-                    me.msg("<b>It is painful to try to " + action + " in this territory, it is owned by: " + otherFaction.getOwnerListString(loc));
+                    me.msg(TL.PERM_DENIED_PAINOWNED, permissibleAction.getShortDescription(), otherFaction.getOwnerListString(loc));
                 }
             }
             if (FactionsPlugin.getInstance().conf().factions().ownedArea().isDenyBuild()) {
                 if (!justCheck) {
-                    me.msg("<b>You can't " + action + " in this territory, it is owned by: " + otherFaction.getOwnerListString(loc));
+                    me.msg(TL.PERM_DENIED_OWNED, permissibleAction.getShortDescription(), otherFaction.getOwnerListString(loc));
                 }
 
                 return false;
