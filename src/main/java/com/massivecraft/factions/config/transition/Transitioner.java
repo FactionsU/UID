@@ -28,6 +28,7 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.bukkit.Material;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -45,8 +46,35 @@ public class Transitioner {
     public static void transition(FactionsPlugin plugin) {
         Transitioner transitioner = new Transitioner(plugin);
         transitioner.migrateV0();
-        transitioner.migrateV1();
-        transitioner.migrateV2();
+
+        Path confPath = plugin.getDataFolder().toPath().resolve("config").resolve("main.conf");
+        if (!confPath.toFile().exists()) {
+            return;
+        }
+
+        HoconConfigurationLoader loader = Loader.getLoader("main");
+        try {
+            CommentedConfigurationNode rootNode = loader.load();
+            CommentedConfigurationNode versionNode = rootNode.getNode("aVeryFriendlyFactionsConfig").getNode("version");
+
+            if (versionNode.isVirtual()) {
+                transitioner.migrateV1(loader);
+                rootNode = loader.load();
+                versionNode = rootNode.getNode("aVeryFriendlyFactionsConfig").getNode("version");
+                if (versionNode.isVirtual()) {
+                    return; // Failure!
+                }
+            }
+
+            int version = rootNode.getNode("aVeryFriendlyFactionsConfig").getNode("version").getInt();
+            if (version < 3) {
+                transitioner.migrateV2(rootNode);
+            }
+
+            loader.save(rootNode);
+        } catch (IOException e) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to save configuration migration! Data may be lost, requiring restoration from backups.", e);
+        }
     }
 
     private Transitioner(FactionsPlugin plugin) {
@@ -125,21 +153,15 @@ public class Transitioner {
                 .registerTypeAdapterFactory(EnumTypeAdapter.ENUM_FACTORY).create();
     }
 
-    private void migrateV1() {
+    private void migrateV1(HoconConfigurationLoader loader) {
         Path pluginFolder = this.plugin.getDataFolder().toPath();
-        Path confPath = pluginFolder.resolve("config").resolve("main.conf");
         Path configPath = pluginFolder.resolve("config.yml");
         Path oldConfigFolder = pluginFolder.resolve("oldConfig");
-        if (!confPath.toFile().exists() || !configPath.toFile().exists()) {
+        if (!configPath.toFile().exists()) {
+            this.plugin.getLogger().warning("Found a main.conf from before 0.5.4 but no config.yml was found! Might lose some config information!");
             return;
         }
-        HoconConfigurationLoader loader = Loader.getLoader("main");
         try {
-            CommentedConfigurationNode node = loader.load();
-            node = node.getNode("aVeryFriendlyFactionsConfig.version");
-            if (!node.isVirtual()) {
-                return;
-            }
             OldMainConfigV1 oldConf = new OldMainConfigV1();
             Loader.load(loader, oldConf);
             TransitionConfigV1 newConf = new TransitionConfigV1();
@@ -151,29 +173,18 @@ public class Transitioner {
             }
             Files.move(configPath, oldConfigFolder.resolve("config.yml"));
         } catch (Exception e) {
-            this.plugin.getLogger().log(Level.SEVERE, "Could not process configuration", e);
+            this.plugin.getLogger().log(Level.SEVERE, "Could not migrate configuration", e);
         }
     }
 
-    private void migrateV2() {
-        HoconConfigurationLoader loader = Loader.getLoader("main");
-        try {
-            CommentedConfigurationNode node = loader.load();
-            if (node.getNode("aVeryFriendlyFactionsConfig").getNode("version").getInt() >= 3) {
-                return;
-            }
-            node.getNode("factions").getNode("enterTitles").getNode("title").setValue("");
-            node.getNode("factions").getNode("enterTitles").getNode("subtitle").setValue("{faction-relation-color}{faction}");
-            node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(3);
-            node.getNode("scoreboard").getNode("constant").getNode("factionlessTitle").setValue(node.getNode("scoreboard").getNode("constant").getNode("title").getString());
+    private void migrateV2(CommentedConfigurationNode node) {
+        node.getNode("factions").getNode("enterTitles").getNode("title").setValue("");
+        node.getNode("factions").getNode("enterTitles").getNode("subtitle").setValue("{faction-relation-color}{faction}");
+        node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(3);
+        node.getNode("scoreboard").getNode("constant").getNode("factionlessTitle").setValue(node.getNode("scoreboard").getNode("constant").getNode("title").getString());
 
-            loader.save(node);
-
-            this.plugin.getLogger().info("Detected a config from before 0.5.7");
-            this.plugin.getLogger().info("  Setting default enterTitles settings based on old style. Visit main.conf to edit.");
-            this.plugin.getLogger().info("  Setting default constant scoreboard factionlessTitle settings based on normal title. Visit main.conf to edit.");
-        } catch (Exception e) {
-            this.plugin.getLogger().log(Level.SEVERE, "Could not process configuration", e);
-        }
+        this.plugin.getLogger().info("Detected a config from before 0.5.7");
+        this.plugin.getLogger().info("  Setting default enterTitles settings based on old style. Visit main.conf to edit.");
+        this.plugin.getLogger().info("  Setting default constant scoreboard factionlessTitle settings based on normal title. Visit main.conf to edit.");
     }
 }
