@@ -363,7 +363,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         ItemStack item;
         if ((item = event.getItem()) != null) {
-            String action = null;
+            boolean ohNo = false;
             switch (item.getType()) {
                 case ARMOR_STAND:
                 case END_CRYSTAL:
@@ -373,11 +373,11 @@ public class FactionsPlayerListener extends AbstractListener {
                 case FURNACE_MINECART:
                 case HOPPER_MINECART:
                 case TNT_MINECART:
-                    action = "place " + item.getType().name().toLowerCase().replace('_', ' ');
+                    ohNo = true;
             }
-            if (action != null &&
+            if (ohNo &&
                     !FactionsPlugin.getInstance().conf().factions().specialCase().getIgnoreBuildMaterials().contains(item.getType()) &&
-                    !FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleAction.BUILD, action, false)) {
+                    !FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleAction.BUILD, false)) {
                 event.setCancelled(true);
             }
         }
