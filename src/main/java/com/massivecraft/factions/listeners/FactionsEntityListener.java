@@ -548,7 +548,7 @@ public class FactionsEntityListener extends AbstractListener {
             return;
         }
 
-        if (!FactionsBlockListener.playerCanBuildDestroyBlock((Player) breaker, event.getEntity().getLocation(), PermissibleAction.DESTROY, "remove paintings", false)) {
+        if (!FactionsBlockListener.playerCanBuildDestroyBlock((Player) breaker, event.getEntity().getLocation(), PermissibleAction.DESTROY, false)) {
             event.setCancelled(true);
         }
     }
@@ -559,7 +559,7 @@ public class FactionsEntityListener extends AbstractListener {
             return;
         }
 
-        if (!FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleAction.BUILD, "place paintings", false)) {
+        if (!FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleAction.BUILD, false)) {
             event.setCancelled(true);
         }
     }
