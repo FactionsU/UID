@@ -165,7 +165,7 @@ Command | Permission | Meaning
 `/f ownerlist` | factions.ownerlist | Get the current owner of the chunk you're in if it's in your faction.
 `/f peaceful <faction>` | factions.peaceful | Set a faction to being peaceful.
 `/f perm [relation] [action] [access]` | factions.permissions | Manage permissions for your Faction. Example /f perm recruit build deny.
-`/f permanent <faction>` | factions.permanent | Set a faction to permanent status. This will make the faction stay if there are zero members.
+`/f permanent <faction>` | factions.setpermanent | Set a faction to permanent status. This will make the faction stay if there are zero members.
 `/f permanentpower <faction> [power]` | factions.setpermanentpower | Set permanent power to a faction.
 `/f power <player>` | factions.power | Check power of a player. Default is yourself.
 `/f powerboost <player/faction> <name> <number>` | factions.powerboost | Set powerboost of a player or faction. <player/faction> can be 'f' or 'p' to let the plugin know if you're specifying a player or faction.
