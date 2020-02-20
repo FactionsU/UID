@@ -121,6 +121,9 @@ public enum TL {
     COMMAND_CLAIM_DENIED("&cYou do not have permission to claim in a radius."),
     COMMAND_CLAIM_DESCRIPTION("Claim land from where you are standing"),
 
+    COMMAND_CLAIMFILL_DESCRIPTION("Claim land filling in a gap in claims"),
+    COMMAND_CLAIMFILL_ABOVEMAX("&cThe maximum limit for claim fill is %s."),
+
     COMMAND_CLAIMLINE_INVALIDRADIUS("&cIf you specify a distance, it must be at least 1."),
     COMMAND_CLAIMLINE_DENIED("&cYou do not have permission to claim in a line."),
     COMMAND_CLAIMLINE_DESCRIPTION("Claim land in a straight line."),

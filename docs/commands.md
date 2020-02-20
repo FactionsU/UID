@@ -54,6 +54,16 @@ Click on any command for more details.
         `factions.claimat` node.  
         Must be faction admin, or be granted `territory` perms in the faction.  
 
+??? abstract "/f claimfill [amount] [faction]"
+    Defaults: amount = config limit, faction = yours
+    Attempts to claim a number of blocks filling in an established shape of claims.  
+    
+    !!! success "Requirements"
+        `factions.claim.fill` node.  
+        Must be faction admin, or be granted `territory` perms in the faction.  
+        To claim for safezone, must have `factions.managesafezone`.  
+        To claim for warzone, must have `factions.managewarzone`.
+
 ??? abstract "/f claimline [amount] [direction] [faction]"
     Defaults: amount = 1, direction = facing, faction = yours
     Attempts to claim a number of blocks in a line based on the direction given (or facing direction, if not specified).  

@@ -17,6 +17,7 @@
 | factions.chat               | Toggle chat modes                                                                       |
 | factions.chatspy            | Ability to use command to spy on private chat channels                                  |
 | factions.claim              | Grants the ability to claim territory for one's own faction                             |
+| factions.claim.fill         | Grants the ability to claim territory for one's own faction filling in a shape          |
 | factions.claim.line         | Grants the ability to claim territory for one's own faction in a line                   |
 | factions.claim.radius       | Grants the ability to claim territory for one's own faction in a line at a set radius   |
 | factions.claimat            | Grants the ability to claim territory for one's own faction at a distance               |
