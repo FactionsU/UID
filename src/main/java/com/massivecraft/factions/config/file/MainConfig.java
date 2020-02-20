@@ -1046,6 +1046,8 @@ public class MainConfig {
             private int requireMinFactionMembers = 1;
             private int landsMax = 0;
             private int lineClaimLimit = 5;
+            private int fillClaimMaxClaims = 25;
+            private int fillClaimMaxDistance = 5;
             @Comment("If someone is doing a radius claim and the process fails to claim land this many times in a row, it will exit")
             private int radiusClaimFailureLimit = 9;
             private Set<String> worldsNoClaiming = new HashSet<>();
@@ -1085,6 +1087,14 @@ public class MainConfig {
 
             public int getLandsMax() {
                 return landsMax;
+            }
+
+            public int getFillClaimMaxClaims() {
+                return fillClaimMaxClaims;
+            }
+
+            public int getFillClaimMaxDistance() {
+                return fillClaimMaxDistance;
             }
 
             public int getLineClaimLimit() {

@@ -22,6 +22,10 @@ public interface LandRaidControl {
 
     int getLandLimit(Faction faction);
 
+    default int getPossibleClaimCount(Faction faction) {
+        return this.getLandLimit(faction) - faction.getLandRounded();
+    }
+
     boolean canJoinFaction(Faction faction, FPlayer player, CommandContext context);
 
     boolean canLeaveFaction(FPlayer player);
