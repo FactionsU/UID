@@ -2138,6 +2138,7 @@ public class MainConfig {
                     this.add("{chunks}");
                 }
             };
+            private String title = "{faction-relation-color}{faction}";
 
             public boolean isAlsoSendChat() {
                 return alsoSendChat;
@@ -2153,6 +2154,10 @@ public class MainConfig {
 
             public List<String> getContent() {
                 return content != null ? Collections.unmodifiableList(content) : Collections.emptyList();
+            }
+
+            public String getTitle() {
+                return title;
             }
         }
 
