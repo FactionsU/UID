@@ -1080,9 +1080,15 @@ public class MainConfig {
             @Comment("Should we allow Factions to over claim if they are raidable?\n" +
                     "This has always been true, allowing factions to over claim others.")
             private boolean allowOverClaim = true;
+            @Comment("If true (and allowOverClaim is true, claiming over another faction's land will ignore buffer zone settings.")
+            private boolean allowOverClaimIgnoringBuffer = false;
 
             public boolean isAllowOverClaim() {
                 return allowOverClaim;
+            }
+
+            public boolean isAllowOverClaimAndIgnoringBuffer() {
+                return allowOverClaim && allowOverClaimIgnoringBuffer;
             }
 
             public int getBufferZone() {
