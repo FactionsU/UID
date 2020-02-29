@@ -356,13 +356,13 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         if (getServer().getPluginManager().getPlugin("PermissionsEx") != null) {
             if (getServer().getPluginManager().getPlugin("PermissionsEx").getDescription().getVersion().startsWith("1")) {
                 getLogger().info(" ");
-                getLogger().warning("Notice: PermissionsEx version 1.x is dead. We suggest using LuckPerms (or PEX 2.0 when available). https://luckperms.github.io/");
+                getLogger().warning("Notice: PermissionsEx version 1.x is dead. We suggest using LuckPerms (or PEX 2.0 when available). https://luckperms.net/");
                 getLogger().info(" ");
             }
         }
         if (getServer().getPluginManager().getPlugin("GroupManager") != null) {
             getLogger().info(" ");
-            getLogger().warning("Notice: GroupManager died in 2014. We suggest using LuckPerms instead. https://luckperms.github.io/");
+            getLogger().warning("Notice: GroupManager died in 2014. We suggest using LuckPerms instead. https://luckperms.net/");
             getLogger().info(" ");
         }
         Plugin lwc = getServer().getPluginManager().getPlugin("LWC");
