@@ -4,6 +4,8 @@
 
 !!! warning "This page is presently under construction. Permissions are all here but descriptions are incomplete"
 
+Below is a full list of all permission nodes. An asterisk (`*`) is next to any node granted by default to all users.
+
 | Permission Node             | Description                                                                             |
 | --------------------------- | ------------------------------------------------------------------------------------    |
 | factions.admin              | Set new player as leader of your faction                                                |
@@ -111,4 +113,126 @@
 | factions.vault              |                                                                                         |
 | factions.version            |                                                                                         |
 | factions.warp               |                                                                                         |
-   
+
+
+## Parent modes
+
+There are some permission nodes that grant a wide set of nodes. 
+
+| factions.kit.admin    |
+|-----------------------|
+| factions.kit.mod      |
+| factions.config       |
+| factions.lock         |
+| factions.reload       |
+| factions.save         |
+| factions.modifypower  |
+| factions.ahome        |
+| factions.setmaxvaults |
+| factions.updates      |
+| factions.debug        |
+
+| factions.kit.mod           |
+|----------------------------|
+| factions.kit.halfmod       |
+| factions.disband.any       |
+| factions.setpeaceful       |
+| factions.setpermanent      |
+| factions.setpermanentpower |
+| factions.powerboost        |
+| factions.sethome.any       |
+| factions.money.*           |
+| factions.join.any          |
+| factions.join.others       |
+| factions.admin.any         |
+| factions.mod.any           |
+
+| factions.kit.halfmod |
+|-------------|
+| factions.kit.fullplayer |
+| factions.managesafezone |
+| factions.managewarzone |
+| factions.bypass |
+| factions.kick.any |
+| factions.ownershipbypass |
+| factions.chatspy |
+| factions.show.bypassexempt |
+
+| factions.kit.fullplayer |
+|-----------------|
+| factions.kit.halfplayer |
+| factions.create |
+| factions.title.color |
+
+| factions.kit.halfplayer |
+|-------|
+| factions.admin |
+| factions.autoclaim |
+| factions.chat |
+| factions.claim |
+| factions.claim.line |
+| factions.claim.radius |
+| factions.deinvite |
+| factions.description |
+| factions.disband |
+| factions.dtr |
+| factions.help |
+| factions.home |
+| factions.invite |
+| factions.join |
+| factions.kick |
+| factions.leave |
+| factions.list |
+| factions.map |
+| factions.mod |
+| factions.money.kit.standard |
+| factions.noboom |
+| factions.open |
+| factions.owner |
+| factions.ownerlist |
+| factions.power |
+| factions.power.any |
+| factions.relation |
+| factions.sethome |
+| factions.delhome |
+| factions.show |
+| factions.stuck |
+| factions.tag |
+| factions.title |
+| factions.version |
+| factions.unclaim |
+| factions.unclaimall |
+| factions.scoreboard |
+| factions.showinvites |
+| factions.seechunk |
+| factions.monitorlogins |
+| factions.top |
+| factions.togglealliancechat |
+| factions.vault |
+| factions.mapheight |
+| factions.ban |
+| factions.fly |
+| factions.coleader |
+| factions.near |
+| factions.permissions |
+
+| factions.money.kit.standard |
+|-----------------------------|
+| factions.money.balance      |
+| factions.money.balance.any  |
+| factions.money.deposit      |
+| factions.money.withdraw     |
+| factions.money.f2f          |
+| factions.money.f2p          |
+| factions.money.p2f          |
+
+| factions.money.*            |
+|-----------------------------|
+| factions.money.kit.standard |
+| factions.money.balance.any  |
+| factions.money.deposit      |
+| factions.money.withdraw     |
+| factions.money.withdraw.any |
+| factions.money.f2f          |
+| factions.money.f2p          |
+| factions.money.p2f          |
