@@ -103,8 +103,8 @@ public class DynmapConfig {
         @Comment("Per-faction overrides")
         @DefinedType
         private Map<String, Style> factionStyles = ImmutableMap.of(
-                "Safezone", new DynmapConfig.Style("#FF00FF", "#FF00FF"),
-                "Warzone", new DynmapConfig.Style("#FF0000", "#FF0000")
+                "-1", new DynmapConfig.Style("#FF00FF", "#FF00FF"),
+                "-2", new DynmapConfig.Style("#FF0000", "#FF0000")
         );
 
         private transient TypeToken<Map<String, Style>> factionStylesToken = new TypeToken<Map<String, Style>>() {
