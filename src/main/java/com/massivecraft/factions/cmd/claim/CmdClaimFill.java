@@ -26,7 +26,7 @@ public class CmdClaimFill extends FCommand {
         this.aliases.add("cf");
 
         // Args
-        this.optionalArgs.put("limit", "10");
+        this.optionalArgs.put("limit", String.valueOf(FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxClaims()));
         this.optionalArgs.put("faction", "you");
 
         this.requirements = new CommandRequirements.Builder(Permission.CLAIM_FILL)
@@ -52,6 +52,7 @@ public class CmdClaimFill extends FCommand {
 
         if (currentFaction.equals(forFaction)) {
             context.msg(TL.CLAIM_ALREADYOWN, forFaction.describeTo(context.fPlayer, true));
+            return;
         }
 
         if (!currentFaction.isWilderness()) {
@@ -100,7 +101,7 @@ public class CmdClaimFill extends FCommand {
         final int limFail = FactionsPlugin.getInstance().conf().factions().claims().getRadiusClaimFailureLimit();
         int fails = 0;
         for (FLocation currentLocation : toClaim) {
-            if (context.fPlayer.attemptClaim(forFaction, currentLocation, true)) {
+            if (!context.fPlayer.attemptClaim(forFaction, currentLocation, true)) {
                 fails++;
             }
             if (fails >= limFail) {
