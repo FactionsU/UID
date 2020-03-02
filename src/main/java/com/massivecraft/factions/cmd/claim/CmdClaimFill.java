@@ -37,7 +37,7 @@ public class CmdClaimFill extends FCommand {
     @Override
     public void perform(CommandContext context) {
         // Args
-        int limit = context.argAsInt(0, FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxClaims());
+        final int limit = context.argAsInt(0, FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxClaims());
 
         if (limit > FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxClaims()) {
             context.msg(TL.COMMAND_CLAIMFILL_ABOVEMAX, FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxClaims());
@@ -49,19 +49,22 @@ public class CmdClaimFill extends FCommand {
         FLocation loc = new FLocation(location);
 
         Faction currentFaction = Board.getInstance().getFactionAt(loc);
+
+        if (currentFaction.equals(forFaction)) {
+            context.msg(TL.CLAIM_ALREADYOWN, forFaction.describeTo(context.fPlayer, true));
+        }
+
         if (!currentFaction.isWilderness()) {
-            // TODO error
-            System.out.println("CLAIMED");
+            context.msg(TL.COMMAND_CLAIMFILL_ALREADYCLAIMED);
             return;
         }
 
         if (!context.fPlayer.isAdminBypassing() && !forFaction.hasAccess(context.fPlayer, PermissibleAction.TERRITORY)) {
-            // TODO error
-            System.out.println("NO PERMS");
+            context.msg(TL.CLAIM_CANTCLAIM, forFaction.describeTo(context.fPlayer));
             return;
         }
 
-        double distance = FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxDistance();
+        final double distance = FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxDistance();
         long startX = loc.getX();
         long startZ = loc.getZ();
 
@@ -74,8 +77,7 @@ public class CmdClaimFill extends FCommand {
             currentHead = queue.poll();
 
             if (Math.abs(currentHead.getX() - startX) > distance || Math.abs(currentHead.getZ() - startZ) > distance) {
-                System.out.println("TOO FAR");
-                // TODO error
+                context.msg(TL.COMMAND_CLAIMFILL_TOOFAR, distance);
                 return;
             }
 
@@ -86,14 +88,12 @@ public class CmdClaimFill extends FCommand {
         }
 
         if (toClaim.size() > limit) {
-            System.out.println("TOO MANY");
-            // TODO error
+            context.msg(TL.COMMAND_CLAIMFILL_PASTLIMIT);
             return;
         }
 
         if (toClaim.size() > this.plugin.getLandRaidControl().getPossibleClaimCount(forFaction)) {
-            // TODO error
-            System.out.println("NOT ENOUGH REMAINING LAND/POWER");
+            context.msg(TL.COMMAND_CLAIMFILL_NOTENOUGHLANDLEFT, forFaction.describeTo(context.fPlayer), toClaim.size());
             return;
         }
 
@@ -104,8 +104,7 @@ public class CmdClaimFill extends FCommand {
                 fails++;
             }
             if (fails >= limFail) {
-                // TODO error
-                System.out.println("TOO FAIL");
+                context.msg(TL.COMMAND_CLAIMFILL_TOOMUCHFAIL, fails);
                 return;
             }
         }
