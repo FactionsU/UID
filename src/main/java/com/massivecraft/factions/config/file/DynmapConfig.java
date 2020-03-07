@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.config.annotation.DefinedType;
+import com.massivecraft.factions.config.annotation.WipeOnReload;
 import com.massivecraft.factions.integration.dynmap.DynmapStyle;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
@@ -110,6 +111,7 @@ public class DynmapConfig {
         private transient TypeToken<Map<String, Style>> factionStylesToken = new TypeToken<Map<String, Style>>() {
         };
 
+        @WipeOnReload
         private transient Map<String, DynmapStyle> styles;
 
         public Map<String, DynmapStyle> getFactionStyles() {
