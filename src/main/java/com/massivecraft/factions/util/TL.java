@@ -532,6 +532,7 @@ public enum TL {
     COMMAND_TNT_FILL_DESCRIPTION("Fill TNT into nearby dispensers"),
     COMMAND_TNT_FILL_MESSAGE("&eFilled %d TNT into %d dispensers. %d left in the faction bank."),
     COMMAND_TNT_FILL_FAIL_MAXRADIUS("&c%d is bigger than the maximum radius of %d"),
+    COMMAND_TNT_FILL_FAIL_NOTENOUGH("&cThe faction bank does not have %d TNT!"),
     COMMAND_TNT_FILL_FAIL_POSITIVE("&cPositive values only!"),
     COMMAND_TNT_INFO_DESCRIPTION("View your faction's TNT bank"),
     COMMAND_TNT_INFO_MESSAGE("&eYour faction has %d TNT"),
