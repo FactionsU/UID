@@ -50,7 +50,7 @@ public class CmdTNTFill extends FCommand {
         }
 
         if (amount > context.faction.getTNTBank()) {
-            context.msg(TL.COMMAND_TNT_FILL_FAIL_NOTENOUGH);
+            context.msg(TL.COMMAND_TNT_FILL_FAIL_NOTENOUGH, amount);
             return;
         }
 
