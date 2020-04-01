@@ -193,7 +193,7 @@ public enum TL {
     COMMAND_DESCRIPTION_FORCHANGE("for changing faction description"),
     COMMAND_DESCRIPTION_DESCRIPTION("Change the faction description"),
 
-    COMMAND_DISBAND_IMMUTABLE("&eYou cannot disband the Wilderness, SafeZone, or WarZone."),
+    COMMAND_DISBAND_IMMUTABLE("&eYou cannot disband the Wilderness, safe zone, or war zone."),
     COMMAND_DISBAND_MARKEDPERMANENT("&eThis faction is designated as permanent, so you cannot disband it."),
     COMMAND_DISBAND_BROADCAST_YOURS("&d%1$s&e disbanded your faction."),
     COMMAND_DISBAND_BROADCAST_NOTYOURS("&d%1$s&e disbanded the faction %2$s."),
@@ -269,8 +269,8 @@ public enum TL {
     COMMAND_HELP_PERMISSIONS_7("&ealso use this to create member only areas."),
     COMMAND_HELP_PERMISSIONS_8("&eAs dispensers are protected, you can create traps without"),
     COMMAND_HELP_PERMISSIONS_9("&eworrying about those arrows getting stolen."),
-    COMMAND_HELP_ADMIN_1("&b/f claim safezone &eclaim land for the Safe Zone"),
-    COMMAND_HELP_ADMIN_2("&b/f claim warzone &eclaim land for the War Zone"),
+    COMMAND_HELP_ADMIN_1("&b/f claim safezone &eclaim land for the safe zone"),
+    COMMAND_HELP_ADMIN_2("&b/f claim warzone &eclaim land for the war zone"),
     COMMAND_HELP_ADMIN_3("&b/f autoclaim [safezone|warzone] &etake a guess"),
     COMMAND_HELP_MOAR_1("Finally some commands for the server admins:"),
     COMMAND_HELP_MOAR_2("&eMore commands for server admins:"),
@@ -491,7 +491,7 @@ public enum TL {
     COMMAND_RELOAD_TIME("&eReloaded &dall configuration files &efrom disk, took &d%1$d ms&e."),
     COMMAND_RELOAD_DESCRIPTION("Reload data file(s) from disk"),
 
-    COMMAND_SAFEUNCLAIMALL_DESCRIPTION("Unclaim all safezone land"),
+    COMMAND_SAFEUNCLAIMALL_DESCRIPTION("Unclaim all safe zone land"),
     COMMAND_SAFEUNCLAIMALL_UNCLAIMED("&eYou unclaimed ALL safe zone land."),
     COMMAND_SAFEUNCLAIMALL_UNCLAIMEDLOG("%1$s unclaimed all safe zones."),
 
@@ -647,7 +647,7 @@ public enum TL {
     COMMAND_VERSION_VERSION("&eYou are running %1$s"),
     COMMAND_VERSION_DESCRIPTION("Show plugin and translation version information"),
 
-    COMMAND_WARUNCLAIMALL_DESCRIPTION("Unclaim all warzone land"),
+    COMMAND_WARUNCLAIMALL_DESCRIPTION("Unclaim all war zone land"),
     COMMAND_WARUNCLAIMALL_SUCCESS("&eYou unclaimed ALL war zone land."),
     COMMAND_WARUNCLAIMALL_LOG("%1$s unclaimed all war zones."),
 
@@ -673,8 +673,8 @@ public enum TL {
     CLAIM_ALREADYOWN("%s&e already own this land."),
     CLAIM_MUSTBE("&cYou must be &d%s&c to claim land."),
     CLAIM_MEMBERS("Factions must have at least &d%s&c members to claim land."),
-    CLAIM_SAFEZONE("&cYou can not claim a Safe Zone."),
-    CLAIM_WARZONE("&cYou can not claim a War Zone."),
+    CLAIM_SAFEZONE("&cYou can not claim a safe zone."),
+    CLAIM_WARZONE("&cYou can not claim a war zone."),
     CLAIM_POWER("&cYou can't claim more land! You need more power!"),
     CLAIM_DTR_LAND("&cYou can't claim more land!"),
     CLAIM_LIMIT("&cLimit reached. You can't claim more land!"),
@@ -823,7 +823,7 @@ public enum TL {
     PLAYER_USE_WARZONE("&cYou can't use &d%s&c in a war zone."),
     PLAYER_USE_TERRITORY("&cYou can't &d%s&c in the territory of &d%s&c."),
     PLAYER_USE_OWNED("&cYou can't use &d%s&c in this territory, it is owned by: %s&c."),
-    PLAYER_COMMAND_WARZONE("&cYou can't use the command '%s' in warzone."),
+    PLAYER_COMMAND_WARZONE("&cYou can't use the command '%s' in war zone."),
     PLAYER_COMMAND_NEUTRAL("&cYou can't use the command '%s' in neutral territory."),
     PLAYER_COMMAND_ENEMY("&cYou can't use the command '%s' in enemy territory."),
     PLAYER_COMMAND_PERMANENT("&cYou can't use the command '%s' because you are in a permanent faction."),
