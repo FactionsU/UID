@@ -52,7 +52,7 @@ public class CmdWarp extends FCommand {
                     context.fPlayer.msg(TL.COMMAND_FWARP_INVALID_PASSWORD);
                     return;
                 }
-                FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(context.fPlayer, FPlayerTeleportEvent.PlayerTeleportReason.WARP);
+                FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(context.fPlayer, context.fPlayer.getFaction().getWarp(warpName).getLocation(), FPlayerTeleportEvent.PlayerTeleportReason.WARP);
                 Bukkit.getServer().getPluginManager().callEvent(tpEvent);
                 if (tpEvent.isCancelled()) {
                     return;

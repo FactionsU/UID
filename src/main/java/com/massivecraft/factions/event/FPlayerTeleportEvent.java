@@ -1,20 +1,23 @@
 package com.massivecraft.factions.event;
 
 import com.massivecraft.factions.FPlayer;
+import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 
 public class FPlayerTeleportEvent extends FactionPlayerEvent implements Cancellable {
 
-    private FPlayerTeleportEvent.PlayerTeleportReason reason;
-    boolean cancelled = false;
+    private final PlayerTeleportReason reason;
+    private boolean cancelled = false;
+    private final Location location;
 
     public enum PlayerTeleportReason {
         HOME, AHOME, WARP, STUCK
     }
 
-    public FPlayerTeleportEvent(FPlayer p, FPlayerTeleportEvent.PlayerTeleportReason r) {
+    public FPlayerTeleportEvent(FPlayer p, Location location, FPlayerTeleportEvent.PlayerTeleportReason r) {
         super(p.getFaction(), p);
         reason = r;
+        this.location = location;
     }
 
     /**
@@ -24,6 +27,10 @@ public class FPlayerTeleportEvent extends FactionPlayerEvent implements Cancella
      */
     public FPlayerTeleportEvent.PlayerTeleportReason getReason() {
         return reason;
+    }
+
+    public Location getDestination() {
+        return location;
     }
 
     @Override
