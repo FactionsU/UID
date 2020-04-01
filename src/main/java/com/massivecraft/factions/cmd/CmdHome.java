@@ -1,6 +1,11 @@
 package com.massivecraft.factions.cmd;
 
-import com.massivecraft.factions.*;
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerTeleportEvent;
 import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.perms.PermissibleAction;
@@ -124,7 +129,8 @@ public class CmdHome extends FCommand {
             }
         }
 
-        FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(context.fPlayer, FPlayerTeleportEvent.PlayerTeleportReason.HOME);
+        Location destination = targetFaction.getHome();
+        FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(context.fPlayer, destination, FPlayerTeleportEvent.PlayerTeleportReason.HOME);
         Bukkit.getServer().getPluginManager().callEvent(tpEvent);
         if (tpEvent.isCancelled()) {
             return;
@@ -136,7 +142,7 @@ public class CmdHome extends FCommand {
         }
 
         // if Essentials teleport handling is enabled and available, pass the teleport off to it (for delay and cooldown)
-        if (Essentials.handleTeleport(context.player, targetFaction.getHome())) {
+        if (Essentials.handleTeleport(context.player, destination)) {
             return;
         }
 
@@ -146,12 +152,12 @@ public class CmdHome extends FCommand {
                 List<Location> smokeLocations = new ArrayList<>();
                 smokeLocations.add(loc);
                 smokeLocations.add(loc.add(0, 1, 0));
-                smokeLocations.add(targetFaction.getHome());
-                smokeLocations.add(targetFaction.getHome().clone().add(0, 1, 0));
+                smokeLocations.add(destination);
+                smokeLocations.add(destination.clone().add(0, 1, 0));
                 SmokeUtil.spawnCloudRandom(smokeLocations, FactionsPlugin.getInstance().conf().factions().homes().getTeleportCommandSmokeEffectThickness());
             }
 
-            context.player.teleport(targetFaction.getHome());
+            context.player.teleport(destination);
         }, this.plugin.conf().commands().home().getDelay());
     }
 
