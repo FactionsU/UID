@@ -42,7 +42,7 @@ public class Essentials {
     }
 
     public static boolean isVanished(Player player) {
-        return essentials != null && essentials.getUser(player).isVanished();
+        return essentials != null && player != null && essentials.getUser(player).isVanished();
     }
 
     public static boolean isOverBalCap(EconomyParticipator participator, double amount) {

@@ -36,6 +36,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
@@ -215,7 +216,18 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public boolean isVanished() {
-        return Essentials.isVanished(getPlayer());
+        Player player = this.getPlayer();
+        if (Essentials.isVanished(player)) {
+            return true;
+        }
+        if (player != null) {
+            for (MetadataValue metadataValue : player.getMetadata("vanished")) {
+                if (metadataValue != null && metadataValue.asBoolean()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void setIsAdminBypassing(boolean val) {
