@@ -24,8 +24,10 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Wither;
 import org.bukkit.entity.WitherSkull;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
@@ -154,19 +156,25 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityExplode(EntityExplodeEvent event) {
-        if (!plugin.worldUtil().isEnabled(event.getEntity().getWorld())) {
+        this.handleExplosion(event.getLocation(), event.getEntity(), event, event.blockList());
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onBlockExplode(BlockExplodeEvent event) {
+        this.handleExplosion(event.getBlock().getLocation(), null, event, event.blockList());
+    }
+
+    private void handleExplosion(Location loc, Entity boomer, Cancellable event, List<Block> blockList) {
+        if (!plugin.worldUtil().isEnabled(loc.getWorld())) {
             return;
         }
 
-        Location loc = event.getLocation();
-        Entity boomer = event.getEntity();
-
-        if (explosionDisallowed(boomer, event.getLocation())) {
+        if (explosionDisallowed(boomer, loc)) {
             event.setCancelled(true);
             return;
         }
 
-        event.blockList().removeIf(block -> explosionDisallowed(boomer, block.getLocation()));
+        blockList.removeIf(block -> explosionDisallowed(boomer, block.getLocation()));
 
         if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && FactionsPlugin.getInstance().conf().exploits().isTntWaterlog()) {
             // TNT in water/lava doesn't normally destroy any surrounding blocks, which is usually desired behavior, but...
@@ -238,6 +246,11 @@ public class FactionsEntityListener extends AbstractListener {
                 (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockTNT()) ||
                 (faction.isSafeZone() && FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneBlockTNT()))) {
             // TNT which needs prevention
+            return true;
+        } else if (((faction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessBlockOtherExplosions() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+                (faction.isNormal() && (online ? FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockOtherExplosions() : FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockOtherExplosionsWhenOffline())) ||
+                (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockOtherExplosions()) ||
+                (faction.isSafeZone() && FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneBlockOtherExplosions()))) {
             return true;
         }
         return false;

@@ -1194,12 +1194,15 @@ public class MainConfig {
             private boolean territoryBlockFireballsWhenOffline = false;
             private boolean territoryBlockTNT = false;
             private boolean territoryBlockTNTWhenOffline = false;
+            private boolean territoryBlockOtherExplosions = false;
+            private boolean territoryBlockOtherExplosionsWhenOffline = false;
             private boolean territoryDenyEndermanBlocks = true;
             private boolean territoryDenyEndermanBlocksWhenOffline = true;
 
             private boolean safeZoneDenyBuild = true;
             private boolean safeZoneDenyUsage = true;
             private boolean safeZoneBlockTNT = true;
+            private boolean safeZoneBlockOtherExplosions = true;
             private boolean safeZonePreventAllDamageToPlayers = false;
             private boolean safeZoneDenyEndermanBlocks = true;
 
@@ -1208,6 +1211,7 @@ public class MainConfig {
             private boolean warZoneBlockCreepers = true;
             private boolean warZoneBlockFireballs = true;
             private boolean warZoneBlockTNT = true;
+            private boolean warZoneBlockOtherExplosions = true;
             private boolean warZoneFriendlyFire = false;
             private boolean warZoneDenyEndermanBlocks = true;
             private boolean warZonePreventMonsterSpawns = false;
@@ -1217,7 +1221,7 @@ public class MainConfig {
             private boolean wildernessBlockCreepers = false;
             private boolean wildernessBlockFireballs = false;
             private boolean wildernessBlockTNT = false;
-
+            private boolean wildernessBlockOtherExplosions = false;
             private boolean wildernessDenyEndermanBlocks = false;
 
             private boolean pistonProtectionThroughDenyBuild = true;
@@ -1388,6 +1392,26 @@ public class MainConfig {
 
             public boolean isPistonProtectionThroughDenyBuild() {
                 return pistonProtectionThroughDenyBuild;
+            }
+
+            public boolean isTerritoryBlockOtherExplosions() {
+                return territoryBlockOtherExplosions;
+            }
+
+            public boolean isTerritoryBlockOtherExplosionsWhenOffline() {
+                return territoryBlockOtherExplosionsWhenOffline;
+            }
+
+            public boolean isSafeZoneBlockOtherExplosions() {
+                return safeZoneBlockOtherExplosions;
+            }
+
+            public boolean isWarZoneBlockOtherExplosions() {
+                return warZoneBlockOtherExplosions;
+            }
+
+            public boolean isWildernessBlockOtherExplosions() {
+                return wildernessBlockOtherExplosions;
             }
 
             public Set<Material> getTerritoryDenyUsageMaterials() {
