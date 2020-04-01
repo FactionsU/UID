@@ -152,6 +152,9 @@ public enum TL {
     COMMAND_CONVERT_BACKEND_INVALID("Invalid backend"),
     COMMAND_CONVERT_DESCRIPTION("Convert the plugin backend"),
 
+    COMMAND_COORDS_MESSAGE("&c&l[COORDS] &e{player}&7's location: &c{x}&7,&c{y}&7,&c{z}&7 [&c{world}&7]"),
+    COMMAND_COORDS_DESCRIPTION("Broadcast your current position to your faction"),
+
     COMMAND_CREATE_MUSTLEAVE("&cYou must leave your current faction first."),
     COMMAND_CREATE_INUSE("&cThat tag is already in use."),
     COMMAND_CREATE_TOCREATE("to create a new faction"),
@@ -434,7 +437,7 @@ public enum TL {
     COMMAND_PERM_INVALID_SET("&cCannot set a locked permission"),
     COMMAND_PERM_TOP("RCT MEM OFF ALLY TRUCE NEUT ENEMY"),
 
-    COMMAND_PERMANENT_DESCRIPTION("Toggles a faction's permanence"), //TODO: Real word?
+    COMMAND_PERMANENT_DESCRIPTION("Toggles a faction's permanence"),
     COMMAND_PERMANENT_GRANT("added permanent status to"),
     COMMAND_PERMANENT_REVOKE("removed permanent status from"),
     COMMAND_PERMANENT_YOURS("%1$s has %2$s your faction"),
@@ -444,7 +447,7 @@ public enum TL {
     COMMAND_PROMOTE_PROMOTED("promoted"),
     COMMAND_PROMOTE_DEMOTED("demoted"),
 
-    COMMAND_PERMANENTPOWER_DESCRIPTION("Toggle faction power permanence"), //TODO: This a real word?
+    COMMAND_PERMANENTPOWER_DESCRIPTION("Toggle faction power permanence"),
     COMMAND_PERMANENTPOWER_GRANT("added permanentpower status to"),
     COMMAND_PERMANENTPOWER_REVOKE("removed permanentpower status from"),
     COMMAND_PERMANENTPOWER_SUCCESS("&eYou %s &d%s&e."),
