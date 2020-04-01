@@ -140,9 +140,8 @@ Command | Permission | Meaning
 `/f chatspy` | factions.chatspy | Enable spying on all private chat channels.
 `/f claim [radius] [faction]` | factions.claim | Claim land for your faction given an optional radius. Admins can specify other factions and claim for them.
 `/f claimline <chunks> [direction] [faction]` | factions.claimline | Claim land in a line for your faction given an optional length and direction. Admins can specify other factions and claim for them.
-`/f config <setting> <value>` | factions.config | Set configuration values in the conf.json. 
-`/f convert <backend>` | console only | Convert from your current backend to a new backend (JSON). New backends will be added in the future (MYSQL).
 `/f create <name>` | factions.create | Create a faction with the given name.
+`/f coords` | factions.coords | Send faction members your current position
 `/f defaultrole <role>` | factions.defaultrank | Set the default rank new members get when joining your faction.
 `/f deinvite [name]` | factions.deinvite | Revoke an invite from a player. If no player is defined, it will list all players with pending invites. Click the names to revoke their invite.
 `/f delwarp <name>` | factions.setwarp | Delete a warp
