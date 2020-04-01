@@ -29,6 +29,11 @@ public class FPlayerTeleportEvent extends FactionPlayerEvent implements Cancella
         return reason;
     }
 
+    /**
+     * Gets the destination, if known before starting to teleport.
+     *
+     * @return destination unless STUCK
+     */
     public Location getDestination() {
         return location;
     }
