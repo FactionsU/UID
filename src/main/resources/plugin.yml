@@ -69,6 +69,7 @@ permissions:
       factions.claim: true
       factions.claim.line: true
       factions.claim.radius: true
+      factions.coords: true
       factions.deinvite: true
       factions.description: true
       factions.disband: true
@@ -323,3 +324,5 @@ permissions:
     description: Use TNT fill command
   factions.tnt.siphon:
     description: Use TNT siphon command
+  factions.coords:
+    description: Send coordinates to your teammates

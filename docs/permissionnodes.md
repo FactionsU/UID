@@ -25,6 +25,7 @@ Below is a full list of all permission nodes. A check mark (✔) is next to any 
 | factions.claimat            | Grants the ability to claim territory for one's own faction at a distance               |
 | factions.coleader ✔         | Set new coleader for your faction                                                       |
 | factions.coleader.any       | Set new coleader for any faction                                                        |
+| factions.coords ✔           | Can send your current coordinates to fellow faction members using /f coords             |
 | factions.create ✔           | Can create factions                                                                     |
 | factions.debug              | Can use the `/f debug` command                                                          |
 | factions.defaultrank        | Can set the faction's default role                                                      |
@@ -122,7 +123,6 @@ There are some permission nodes that grant a wide set of nodes.
 | factions.kit.admin    |
 |-----------------------|
 | factions.kit.mod      |
-| factions.config       |
 | factions.lock         |
 | factions.reload       |
 | factions.save         |
@@ -172,6 +172,7 @@ There are some permission nodes that grant a wide set of nodes.
 | factions.claim |
 | factions.claim.line |
 | factions.claim.radius |
+| factions.coords |
 | factions.deinvite |
 | factions.description |
 | factions.disband |
