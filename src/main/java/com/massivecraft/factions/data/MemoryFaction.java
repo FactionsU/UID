@@ -533,7 +533,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         this.powerBoost = 0.0;
         this.foundedDate = System.currentTimeMillis();
         this.maxVaults = FactionsPlugin.getInstance().conf().playerVaults().getDefaultMaxVaults();
-        this.defaultRole = Role.fromString(FactionsPlugin.getInstance().conf().factions().other().getDefaultRole());
+        this.defaultRole = FactionsPlugin.getInstance().conf().factions().other().getDefaultRole();
         this.dtr = FactionsPlugin.getInstance().conf().factions().landRaidControl().dtr().getStartingDTR();
 
         resetPerms(); // Reset on new Faction so it has default values.

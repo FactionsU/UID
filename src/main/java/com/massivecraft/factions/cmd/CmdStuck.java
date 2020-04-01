@@ -42,7 +42,7 @@ public class CmdStuck extends FCommand {
             context.msg(TL.COMMAND_STUCK_EXISTS, time);
         } else {
 
-            FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(context.fPlayer, FPlayerTeleportEvent.PlayerTeleportReason.STUCK);
+            FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(context.fPlayer, null, FPlayerTeleportEvent.PlayerTeleportReason.STUCK);
             Bukkit.getServer().getPluginManager().callEvent(tpEvent);
             if (tpEvent.isCancelled()) {
                 return;

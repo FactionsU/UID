@@ -3,6 +3,7 @@ package com.massivecraft.factions.config.file;
 import com.google.common.collect.ImmutableList;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.config.annotation.WipeOnReload;
+import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -1511,10 +1512,12 @@ public class MainConfig {
                     "  in order to be able to execute commands if the default relation is neutral.")
             private String defaultRelation = "neutral";
 
-            @Comment("Default Role allows you to change the default Role of a Player\n" +
-                    "  when he joins a Faction. Any Faction can customize the default Role\n" +
-                    "  later with the command /f defaultrole anyways, after its creation.")
-            private String defaultRole = "normal";
+            @Comment("Default role of a player when joining a faction. Can be customized by faction leader\n" +
+                    "with /f defaultrole\n" +
+                    "Options: coleader, moderator, member, recruit\n" +
+                    "Defaults to member if set incorrectly")
+            private String defaultRole = "member";
+            private transient Role defaultRoleRole;
 
             @Comment("If true, disables pistons entirely within faction territory.\n" +
                     "Prevents flying piston machines in faction territory.")
@@ -1544,8 +1547,13 @@ public class MainConfig {
                 return defaultRelation;
             }
 
-            public String getDefaultRole() {
-                return defaultRole;
+            public Role getDefaultRole() {
+                if (defaultRoleRole == null) {
+                    if ((defaultRoleRole = Role.fromString(defaultRole)) == null) {
+                        defaultRoleRole = Role.NORMAL;
+                    }
+                }
+                return defaultRoleRole;
             }
 
             public boolean isSeparateOfflinePerms() {
