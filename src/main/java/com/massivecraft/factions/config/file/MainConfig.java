@@ -976,6 +976,7 @@ public class MainConfig {
             private boolean disablePVPBetweenNeutralFactions = false;
             private boolean disablePVPForFactionlessPlayers = false;
             private boolean enablePVPAgainstFactionlessInAttackersLand = false;
+            private boolean disablePeacefulPVPInWarzone = true;
             private int noPVPDamageToOthersForXSecondsAfterLogin = 3;
             private Set<String> worldsIgnorePvP = new HashSet<String>() {
                 {
@@ -989,6 +990,10 @@ public class MainConfig {
 
             public boolean isDisablePVPForFactionlessPlayers() {
                 return disablePVPForFactionlessPlayers;
+            }
+
+            public boolean isDisablePeacefulPVPInWarzone() {
+                return disablePeacefulPVPInWarzone;
             }
 
             public boolean isEnablePVPAgainstFactionlessInAttackersLand() {

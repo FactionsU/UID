@@ -444,16 +444,18 @@ public class FactionsEntityListener extends AbstractListener {
             }
         }
 
-        if (defendFaction.isPeaceful()) {
-            if (notify) {
-                attacker.msg(TL.PLAYER_PVP_PEACEFUL);
+        if (!defLocFaction.isWarZone() || FactionsPlugin.getInstance().conf().factions().pvp().isDisablePeacefulPVPInWarzone()) {
+            if (defendFaction.isPeaceful()) {
+                if (notify) {
+                    attacker.msg(TL.PLAYER_PVP_PEACEFUL);
+                }
+                return false;
+            } else if (attackFaction.isPeaceful()) {
+                if (notify) {
+                    attacker.msg(TL.PLAYER_PVP_PEACEFUL);
+                }
+                return false;
             }
-            return false;
-        } else if (attackFaction.isPeaceful()) {
-            if (notify) {
-                attacker.msg(TL.PLAYER_PVP_PEACEFUL);
-            }
-            return false;
         }
 
         Relation relation = defendFaction.getRelationTo(attackFaction);
