@@ -6,6 +6,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.MiscUtil;
@@ -227,30 +228,31 @@ public class FactionsEntityListener extends AbstractListener {
             // faction is peaceful and has explosions set to disabled
             return true;
         }
-        if (boomer instanceof Creeper && ((faction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessBlockCreepers() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
-                (faction.isNormal() && (online ? FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockCreepers() : FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockCreepersWhenOffline())) ||
-                (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockCreepers()) ||
+        MainConfig.Factions.Protection protection = FactionsPlugin.getInstance().conf().factions().protection();
+        if (boomer instanceof Creeper && ((faction.isWilderness() && protection.isWildernessBlockCreepers() && !protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+                (faction.isNormal() && (online ? protection.isTerritoryBlockCreepers() : protection.isTerritoryBlockCreepersWhenOffline())) ||
+                (faction.isWarZone() && protection.isWarZoneBlockCreepers()) ||
                 faction.isSafeZone())) {
             // creeper which needs prevention
             return true;
         } else if (
-                (boomer instanceof Fireball || boomer instanceof WitherSkull || boomer instanceof Wither) && ((faction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessBlockFireballs() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
-                        (faction.isNormal() && (online ? FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockFireballs() : FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockFireballsWhenOffline())) ||
-                        (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockFireballs()) ||
+                (boomer instanceof Fireball || boomer instanceof WitherSkull || boomer instanceof Wither) && ((faction.isWilderness() && protection.isWildernessBlockFireballs() && !protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+                        (faction.isNormal() && (online ? protection.isTerritoryBlockFireballs() : protection.isTerritoryBlockFireballsWhenOffline())) ||
+                        (faction.isWarZone() && protection.isWarZoneBlockFireballs()) ||
                         faction.isSafeZone())) {
             // ghast fireball which needs prevention
             // it's a bit crude just using fireball protection for Wither boss too, but I'd rather not add in a whole new set of xxxBlockWitherExplosion or whatever
             return true;
-        } else if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && ((faction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessBlockTNT() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
-                (faction.isNormal() && (online ? FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockTNT() : FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockTNTWhenOffline())) ||
-                (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockTNT()) ||
-                (faction.isSafeZone() && FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneBlockTNT()))) {
+        } else if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && ((faction.isWilderness() && protection.isWildernessBlockTNT() && !protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+                (faction.isNormal() && (online ? protection.isTerritoryBlockTNT() : protection.isTerritoryBlockTNTWhenOffline())) ||
+                (faction.isWarZone() && protection.isWarZoneBlockTNT()) ||
+                (faction.isSafeZone() && protection.isSafeZoneBlockTNT()))) {
             // TNT which needs prevention
             return true;
-        } else if (((faction.isWilderness() && FactionsPlugin.getInstance().conf().factions().protection().isWildernessBlockOtherExplosions() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
-                (faction.isNormal() && (online ? FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockOtherExplosions() : FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockOtherExplosionsWhenOffline())) ||
-                (faction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneBlockOtherExplosions()) ||
-                (faction.isSafeZone() && FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneBlockOtherExplosions()))) {
+        } else if (((faction.isWilderness() && protection.isWildernessBlockOtherExplosions() && !protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+                (faction.isNormal() && (online ? protection.isTerritoryBlockOtherExplosions() : protection.isTerritoryBlockOtherExplosionsWhenOffline())) ||
+                (faction.isWarZone() && protection.isWarZoneBlockOtherExplosions()) ||
+                (faction.isSafeZone() && protection.isSafeZoneBlockOtherExplosions()))) {
             return true;
         }
         return false;
