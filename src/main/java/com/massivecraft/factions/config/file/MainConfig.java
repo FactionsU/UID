@@ -1,6 +1,7 @@
 package com.massivecraft.factions.config.file;
 
 import com.google.common.collect.ImmutableList;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.config.annotation.WipeOnReload;
 import com.massivecraft.factions.perms.Role;
@@ -2136,6 +2137,9 @@ public class MainConfig {
             private String title = "Faction Status";
             @Comment("If true, show faction prefixes on nametags and in tab list if scoreboard is enabled")
             private boolean prefixes = true;
+            @Comment("Set the length limit for prefixes.\n" +
+                    "If 0, will use a sane default for your Minecraft version (16 for pre-1.13, 32 for 1.13+).")
+            private int prefixLength = 0;
             private List<String> content = new ArrayList<String>() {
                 {
                     this.add("&6Your Faction");
@@ -2165,6 +2169,10 @@ public class MainConfig {
 
             public boolean isPrefixes() {
                 return prefixes;
+            }
+
+            public int getPrefixLength() {
+                return prefixLength < 1 ? (FactionsPlugin.getMCVersion() < 1300 ? 16 : 32) : prefixLength;
             }
 
             public List<String> getContent() {
