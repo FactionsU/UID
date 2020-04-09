@@ -181,8 +181,8 @@ public class FTeamWrapper {
             String prefix = TL.DEFAULT_PREFIX.toString();
             prefix = Tag.parsePlaceholders(fplayer.getPlayer(), prefix);
             prefix = prefix.replace("{relationcolor}", faction.getRelationTo(fplayer).getColor().toString());
-            prefix = prefix.replace("{faction}", faction.getTag().substring(0, Math.min("{faction}".length() + 16 - prefix.length(), faction.getTag().length())));
-            if (team.getPrefix() == null || !team.getPrefix().equals(prefix)) {
+            prefix = prefix.replace("{faction}", faction.getTag().substring(0, Math.min("{faction}".length() + FactionsPlugin.getInstance().conf().scoreboard().constant().getPrefixLength() - prefix.length(), faction.getTag().length())));
+            if (!prefix.equals(team.getPrefix())) {
                 team.setPrefix(prefix);
             }
         }
