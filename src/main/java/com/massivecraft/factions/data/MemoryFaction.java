@@ -974,7 +974,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
             }
 
             for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
-                fplayer.msg("The faction %s<i> was disbanded.", this.getTag(fplayer));
+                fplayer.msg(TL.LEAVE_DISBANDED, this.getTag(fplayer));
             }
 
             Factions.getInstance().removeFaction(getId());
