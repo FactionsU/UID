@@ -211,6 +211,28 @@ public class FactionsPlayerListener extends AbstractListener {
 
         me.setLastStoodAt(to);
 
+        if (me.getAutoClaimFor() != null) {
+            me.attemptClaim(me.getAutoClaimFor(), event.getTo(), true);
+        } else if (me.isAutoSafeClaimEnabled()) {
+            if (!Permission.MANAGE_SAFE_ZONE.has(player)) {
+                me.setIsAutoSafeClaimEnabled(false);
+            } else {
+                if (!Board.getInstance().getFactionAt(to).isSafeZone()) {
+                    Board.getInstance().setFactionAt(Factions.getInstance().getSafeZone(), to);
+                    me.msg(TL.PLAYER_SAFEAUTO);
+                }
+            }
+        } else if (me.isAutoWarClaimEnabled()) {
+            if (!Permission.MANAGE_WAR_ZONE.has(player)) {
+                me.setIsAutoWarClaimEnabled(false);
+            } else {
+                if (!Board.getInstance().getFactionAt(to).isWarZone()) {
+                    Board.getInstance().setFactionAt(Factions.getInstance().getWarZone(), to);
+                    me.msg(TL.PLAYER_WARAUTO);
+                }
+            }
+        }
+
         // Did we change "host"(faction)?
         Faction factionFrom = Board.getInstance().getFactionAt(from);
         Faction factionTo = Board.getInstance().getFactionAt(to);
@@ -247,28 +269,6 @@ public class FactionsPlayerListener extends AbstractListener {
                     } else if (!TL.GENERIC_PUBLICLAND.toString().isEmpty()) {
                         me.sendMessage(TL.GENERIC_PUBLICLAND.toString());
                     }
-                }
-            }
-        }
-
-        if (me.getAutoClaimFor() != null) {
-            me.attemptClaim(me.getAutoClaimFor(), event.getTo(), true);
-        } else if (me.isAutoSafeClaimEnabled()) {
-            if (!Permission.MANAGE_SAFE_ZONE.has(player)) {
-                me.setIsAutoSafeClaimEnabled(false);
-            } else {
-                if (!Board.getInstance().getFactionAt(to).isSafeZone()) {
-                    Board.getInstance().setFactionAt(Factions.getInstance().getSafeZone(), to);
-                    me.msg(TL.PLAYER_SAFEAUTO);
-                }
-            }
-        } else if (me.isAutoWarClaimEnabled()) {
-            if (!Permission.MANAGE_WAR_ZONE.has(player)) {
-                me.setIsAutoWarClaimEnabled(false);
-            } else {
-                if (!Board.getInstance().getFactionAt(to).isWarZone()) {
-                    Board.getInstance().setFactionAt(Factions.getInstance().getWarZone(), to);
-                    me.msg(TL.PLAYER_WARAUTO);
                 }
             }
         }
