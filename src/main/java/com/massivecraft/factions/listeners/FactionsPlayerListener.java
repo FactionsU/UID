@@ -133,7 +133,9 @@ public class FactionsPlayerListener extends AbstractListener {
             me.setFlying(false);
         }
 
-        FactionsPlugin.getInstance().getSeeChunkUtil().updatePlayerInfo(UUID.fromString(me.getId()), me.isSeeingChunk());
+        if (FactionsPlugin.getInstance().getSeeChunkUtil() != null) {
+            FactionsPlugin.getInstance().getSeeChunkUtil().updatePlayerInfo(UUID.fromString(me.getId()), me.isSeeingChunk());
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
