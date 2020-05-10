@@ -11,7 +11,6 @@ public class BukkitParticleProvider implements ParticleProvider<Particle> {
         return "BUKKIT";
     }
 
-
     @Override
     public void spawn(Particle effect, Location location, int count) {
         location.getWorld().spawnParticle(effect, location, count);

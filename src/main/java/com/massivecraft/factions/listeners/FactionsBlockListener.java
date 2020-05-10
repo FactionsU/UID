@@ -1,5 +1,6 @@
 package com.massivecraft.factions.listeners;
 
+import com.google.common.collect.ImmutableList;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
@@ -156,14 +157,21 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
+        List<Block> blocks;
+        if (FactionsPlugin.getMCVersion()<800) {
+            blocks = ImmutableList.of(event.getBlock().getRelative(event.getDirection(), 2));
+        } else {
+            blocks = event.getBlocks();
+        }
+
         // if the retracted blocks list is empty, no worries
-        if (event.getBlocks().isEmpty()) {
+        if (blocks.isEmpty()) {
             return;
         }
 
         Faction pistonFaction = Board.getInstance().getFactionAt(new FLocation(event.getBlock()));
 
-        if (!canPistonMoveBlock(pistonFaction, event.getBlocks(), null)) {
+        if (!canPistonMoveBlock(pistonFaction, blocks, null)) {
             event.setCancelled(true);
         }
     }

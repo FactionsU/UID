@@ -14,7 +14,6 @@ public class PacketParticleProvider implements ParticleProvider<ParticleEffect> 
         return "PACKETS";
     }
 
-
     @Override
     public void spawn(ParticleEffect particleEffect, Location location, int count) {
         particleEffect.display(0, 0, 0, 1, count, location, new ArrayList<>(Bukkit.getOnlinePlayers()));
