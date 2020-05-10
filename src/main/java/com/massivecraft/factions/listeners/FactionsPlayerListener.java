@@ -30,7 +30,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -43,6 +42,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.NumberConversions;
@@ -305,17 +306,6 @@ public class FactionsPlayerListener extends AbstractListener {
                     event.setCancelled(true);
                 }
                 break;
-        }
-    }
-
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerInteract(PlayerArmorStandManipulateEvent event) {
-        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
-            return;
-        }
-
-        if (!canPlayerUseBlock(event.getPlayer(), Material.ARMOR_STAND, event.getRightClicked().getLocation(), false)) {
-            event.setCancelled(true);
         }
     }
 
@@ -649,13 +639,27 @@ public class FactionsPlayerListener extends AbstractListener {
             return;
         }
 
-        if (event.getClickedInventory() == null) {
+        Inventory clickedInventory = getClickedInventory(event);
+        if (clickedInventory == null) {
             return;
         }
-        if (event.getClickedInventory().getHolder() instanceof GUI) {
+        if (clickedInventory.getHolder() instanceof GUI) {
             event.setCancelled(true);
-            GUI ui = (GUI) event.getClickedInventory().getHolder();
+            GUI<?> ui = (GUI<?>) clickedInventory.getHolder();
             ui.click(event.getRawSlot(), event.getClick());
+        }
+    }
+
+    private Inventory getClickedInventory(InventoryClickEvent event) {
+        int rawSlot = event.getRawSlot();
+        InventoryView view = event.getView();
+        if (rawSlot < 0 || rawSlot >= view.countSlots()) { // < 0 check also covers situation of InventoryView.OUTSIDE (-999)
+            return null;
+        }
+        if (rawSlot < view.getTopInventory().getSize()) {
+            return view.getTopInventory();
+        } else {
+            return view.getBottomInventory();
         }
     }
 

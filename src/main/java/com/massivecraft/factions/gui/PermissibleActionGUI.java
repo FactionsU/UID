@@ -9,6 +9,7 @@ import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 
 import java.util.HashMap;
@@ -115,7 +116,8 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
         SimpleItem item = new SimpleItem(base);
 
         item.setEnchant(user.getFaction().hasAccess(online, permissible, permissibleAction));
-        item.setMaterial(permissibleAction.getMaterial());
+        Material material = permissibleAction.getMaterial();
+        item.setMaterial(material == Material.AIR ? Material.STONE : material);
         return item;
     }
 

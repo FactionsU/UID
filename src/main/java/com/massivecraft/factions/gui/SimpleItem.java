@@ -1,5 +1,6 @@
 package com.massivecraft.factions.gui;
 
+import com.massivecraft.factions.FactionsPlugin;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -46,7 +47,9 @@ public class SimpleItem {
             }
             // Empty list if not specified
             meta.setLore(lore);
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
+            if (FactionsPlugin.getMCVersion() >= 800) {
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
+            }
             if (enchant) {
                 meta.addEnchant(Enchantment.LUCK, 1, true);
             }
