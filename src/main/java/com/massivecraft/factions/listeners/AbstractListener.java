@@ -157,6 +157,7 @@ public abstract class AbstractListener implements Listener {
             case BEACON:
             case ANVIL:
             case FLOWER_POT:
+            case BEE_NEST:
                 action = PermissibleAction.CONTAINER;
                 break;
             default:
