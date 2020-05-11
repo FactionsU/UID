@@ -50,7 +50,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
 
     @Override
     protected String parse(String toParse, PermissibleAction action) {
-        String actionName = action.name().substring(0, 1).toUpperCase() + action.name().substring(1);
+        String actionName = action.getShortDescription().substring(0, 1).toUpperCase() + action.getShortDescription().substring(1);
         toParse = toParse.replace("{action}", actionName);
 
         boolean access = user.getFaction().hasAccess(online, permissible, action);
@@ -88,8 +88,8 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
         if (user.getFaction().setPermission(online, permissible, action, access)) {
             // Reload item to reparse placeholders
             buildItem(action);
-            user.msg(TL.COMMAND_PERM_SET, action.name(), access ? "allow" : "deny", permissible.name());
-            FactionsPlugin.getInstance().log(TL.COMMAND_PERM_SET.format(action.name(), access ? "Allow" : "Deny", permissible.name()) + " for faction " + user.getTag());
+            user.msg(TL.COMMAND_PERM_SET, action.getShortDescription(), access ? "allow" : "deny", permissible.name());
+            FactionsPlugin.getInstance().log(TL.COMMAND_PERM_SET.format(action.getShortDescription(), access ? "Allow" : "Deny", permissible.name()) + " for faction " + user.getTag());
         } else {
             user.msg(TL.COMMAND_PERM_INVALID_SET);
         }
