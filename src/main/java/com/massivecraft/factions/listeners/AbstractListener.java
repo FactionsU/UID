@@ -185,6 +185,11 @@ public abstract class AbstractListener implements Listener {
             return true;
         }
 
+        // Ignored types
+        if (action == PermissibleAction.CONTAINER && FactionsPlugin.getInstance().conf().factions().protection().getContainerExceptions().contains(material)) {
+            return true;
+        }
+
         // F PERM check runs through before other checks.
         if (!otherFaction.hasAccess(me, action)) {
             if (action != PermissibleAction.PLATE) {

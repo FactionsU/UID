@@ -1239,7 +1239,18 @@ public class MainConfig {
             @WipeOnReload
             private transient Set<Material> territoryDenyUsageMaterialsWhenOfflineMat;
 
-            @Comment("Mainly for other plugins/mods that use a fake player to take actions, which shouldn't be subject to our protections")
+            @Comment("Exceptions to consideration for container perms.\n" +
+                    "For example, putting \"TRAPPED_CHEST\" into here would allow anyone to open trapped chests anywhere.")
+            private Set<String> containerExceptions = new HashSet<>();
+            @WipeOnReload
+            private transient Set<Material> containerExceptionsMat;
+
+            @Comment("Exceptions to consideration for breaking perms. Can always be broken.")
+            private Set<String> breakExceptions = new HashSet<>();
+            @WipeOnReload
+            private transient Set<Material> breakExceptionsMat;
+
+            @Comment("Mainly for other plugins/mods that use a fake player to take actions, which shouldn't be subject to our protections.")
             private Set<String> playersWhoBypassAllProtection = new HashSet<String>() {
                 {
                     this.add("example-player-name");
@@ -1438,6 +1449,26 @@ public class MainConfig {
                     territoryDenyUsageMaterialsWhenOfflineMat = Collections.unmodifiableSet(territoryDenyUsageMaterialsWhenOfflineMat);
                 }
                 return territoryDenyUsageMaterialsWhenOfflineMat;
+            }
+
+            public Set<Material> getContainerExceptions() {
+                if (containerExceptionsMat == null) {
+                    containerExceptionsMat = new HashSet<>();
+                    containerExceptions.forEach(m -> containerExceptionsMat.add(FactionMaterial.from(m).get()));
+                    containerExceptionsMat.remove(Material.AIR);
+                    containerExceptionsMat = Collections.unmodifiableSet(containerExceptionsMat);
+                }
+                return containerExceptionsMat;
+            }
+
+            public Set<Material> getBreakExceptions() {
+                if (breakExceptionsMat == null) {
+                    breakExceptionsMat = new HashSet<>();
+                    breakExceptions.forEach(m -> breakExceptionsMat.add(FactionMaterial.from(m).get()));
+                    breakExceptionsMat.remove(Material.AIR);
+                    breakExceptionsMat = Collections.unmodifiableSet(breakExceptionsMat);
+                }
+                return breakExceptionsMat;
             }
 
             public Set<String> getPlayersWhoBypassAllProtection() {
