@@ -97,7 +97,8 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType())) {
+        if (FactionsPlugin.getInstance().conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
+                Board.getInstance().getFactionAt(new FLocation(event.getBlock().getLocation())).isNormal()) {
             return;
         }
 
@@ -112,7 +113,8 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType())) {
+        if (FactionsPlugin.getInstance().conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
+                Board.getInstance().getFactionAt(new FLocation(event.getBlock().getLocation())).isNormal()) {
             return;
         }
 
