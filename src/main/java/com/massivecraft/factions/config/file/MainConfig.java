@@ -1578,6 +1578,7 @@ public class MainConfig {
                     "Options: coleader, moderator, member, recruit\n" +
                     "Defaults to member if set incorrectly")
             private String defaultRole = "member";
+            @WipeOnReload
             private transient Role defaultRoleRole;
 
             @Comment("If true, disables pistons entirely within faction territory.\n" +
@@ -1610,7 +1611,7 @@ public class MainConfig {
 
             public Role getDefaultRole() {
                 if (defaultRoleRole == null) {
-                    if ((defaultRoleRole = Role.fromString(defaultRole)) == null) {
+                    if (defaultRole == null || (defaultRoleRole = Role.fromString(defaultRole)) == null) {
                         defaultRoleRole = Role.NORMAL;
                     }
                 }
