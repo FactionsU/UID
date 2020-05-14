@@ -21,8 +21,13 @@ public class LWC {
     private static com.griefcraft.lwc.LWC lwc;
 
     public static void setup() {
+        if (!Bukkit.getServer().getPluginManager().isPluginEnabled("LWC")) {
+            return;
+        }
         Plugin test = Bukkit.getServer().getPluginManager().getPlugin("LWC");
-        if (!(test instanceof LWCPlugin) || !test.isEnabled()) return;
+        if (!(test instanceof LWCPlugin) || !test.isEnabled()) {
+            return;
+        }
 
         lwc = ((LWCPlugin) test).getLWC();
         FactionsPlugin.getInstance().log("Successfully hooked into LWC!" + (FactionsPlugin.getInstance().conf().lwc().isEnabled() ? "" : " Integration is currently disabled (\"lwc.integration\")."));
