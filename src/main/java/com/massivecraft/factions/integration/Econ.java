@@ -303,6 +303,12 @@ public class Econ {
             return false;
         }
 
+        if (delta == 0) {
+            // no money actually transferred?
+//			ep.msg("<h>%s<i> didn't have to pay anything %s.", You, forDoingThis);  // might be for gains, might be for losses
+            return true;
+        }
+
         OfflinePlayer acc;
 
         if (isUUID(ep.getAccountId())) {
@@ -311,16 +317,10 @@ public class Econ {
                 return false;
             }
         } else {
-            acc = Bukkit.getOfflinePlayer(ep.getAccountId());
+            acc = ep instanceof Faction ? ((Faction) ep).getOfflinePlayer() : Bukkit.getOfflinePlayer(ep.getAccountId());
         }
 
         String You = ep.describeTo(ep, true);
-
-        if (delta == 0) {
-            // no money actually transferred?
-//			ep.msg("<h>%s<i> didn't have to pay anything %s.", You, forDoingThis);  // might be for gains, might be for losses
-            return true;
-        }
 
         if (delta > 0) {
             // The player should gain money

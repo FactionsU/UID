@@ -71,6 +71,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected long lastDTRUpdateTime;
     protected long frozenDTRUntilTime;
     protected int tntBank;
+    protected transient OfflinePlayer offlinePlayer;
 
     public HashMap<String, List<String>> getAnnouncements() {
         return this.announcements;
@@ -153,6 +154,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
     public void setId(String id) {
         this.id = id;
+        this.offlinePlayer = null;
     }
 
     public void invite(FPlayer fplayer) {
@@ -314,6 +316,13 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         }
 
         return aid;
+    }
+
+    public OfflinePlayer getOfflinePlayer() {
+        if (this.offlinePlayer == null) {
+            this.offlinePlayer = Bukkit.getOfflinePlayer(this.getAccountId());
+        }
+        return this.offlinePlayer;
     }
 
     public void setLastDeath(long time) {
