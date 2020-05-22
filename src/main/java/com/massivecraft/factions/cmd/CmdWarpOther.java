@@ -55,7 +55,7 @@ public class CmdWarpOther extends FCommand {
 
             if (faction.isWarp(warpName)) {
                 // Check if requires password and if so, check if valid. CASE SENSITIVE
-                if (faction.hasWarpPassword(warpName) && !faction.isWarpPassword(warpName, passwordAttempt)) {
+                if (!context.fPlayer.isAdminBypassing() && faction.hasWarpPassword(warpName) && !faction.isWarpPassword(warpName, passwordAttempt)) {
                     context.fPlayer.msg(TL.COMMAND_FWARP_INVALID_PASSWORD);
                     return;
                 }
@@ -86,7 +86,6 @@ public class CmdWarpOther extends FCommand {
     private boolean transact(FPlayer player, CommandContext context) {
         return player.isAdminBypassing() || context.payForCommand(FactionsPlugin.getInstance().conf().economy().getCostWarp(), TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());
     }
-
 
     @Override
     public TL getUsageTranslation() {
