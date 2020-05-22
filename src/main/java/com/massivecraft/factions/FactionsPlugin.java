@@ -625,15 +625,14 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         if (FactionsPlugin.getMCVersion() >= 900) {
             safeZoneNerfedCreatureTypes.add(EntityType.SHULKER);
         }
-        if (FactionsPlugin.getMCVersion() >= 1000) {
-            safeZoneNerfedCreatureTypes.add(EntityType.HUSK);
-            safeZoneNerfedCreatureTypes.add(EntityType.STRAY);
-        }
         if (FactionsPlugin.getMCVersion() >= 1100) {
             safeZoneNerfedCreatureTypes.add(EntityType.ELDER_GUARDIAN);
             safeZoneNerfedCreatureTypes.add(EntityType.EVOKER);
+            safeZoneNerfedCreatureTypes.add(EntityType.HUSK);
+            safeZoneNerfedCreatureTypes.add(EntityType.STRAY);
             safeZoneNerfedCreatureTypes.add(EntityType.VEX);
             safeZoneNerfedCreatureTypes.add(EntityType.VINDICATOR);
+            safeZoneNerfedCreatureTypes.add(EntityType.WITHER_SKELETON);
             safeZoneNerfedCreatureTypes.add(EntityType.ZOMBIE_VILLAGER);
         }
         if (FactionsPlugin.getMCVersion() >= 1300) {
