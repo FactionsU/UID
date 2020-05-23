@@ -158,7 +158,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     // Persistence related
     private boolean locked = false;
 
-    private Integer AutoLeaveTask = null;
+    private Integer autoLeaveTask = null;
 
     private boolean hookedPlayervaults;
     private ClipPlaceholderAPIManager clipPlaceholderAPIManager;
@@ -981,9 +981,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     @Override
     public void onDisable() {
-        if (AutoLeaveTask != null) {
-            this.getServer().getScheduler().cancelTask(AutoLeaveTask);
-            AutoLeaveTask = null;
+        if (autoLeaveTask != null) {
+            this.getServer().getScheduler().cancelTask(autoLeaveTask);
+            autoLeaveTask = null;
         }
 
         if (saveTask != null) {
@@ -1000,16 +1000,16 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     }
 
     public void startAutoLeaveTask(boolean restartIfRunning) {
-        if (AutoLeaveTask != null) {
+        if (autoLeaveTask != null) {
             if (!restartIfRunning) {
                 return;
             }
-            this.getServer().getScheduler().cancelTask(AutoLeaveTask);
+            this.getServer().getScheduler().cancelTask(autoLeaveTask);
         }
 
         if (this.conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes() > 0.0) {
             long ticks = (long) (20 * 60 * this.conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes());
-            AutoLeaveTask = getServer().getScheduler().scheduleSyncRepeatingTask(this, new AutoLeaveTask(), ticks, ticks);
+            autoLeaveTask = getServer().getScheduler().scheduleSyncRepeatingTask(this, new AutoLeaveTask(), ticks, ticks);
         }
     }
 
