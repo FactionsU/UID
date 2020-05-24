@@ -90,7 +90,26 @@ public class FactionsEntityListener extends AbstractListener {
                 event.setCancelled(true);
                 return;
             }
-            // event is not cancelled by factions
+        } else if (FactionsPlugin.getInstance().conf().factions().protection().isSafeZonePreventAllDamageToPlayers() && isPlayerInSafeZone(event.getEntity())) {
+            // Players can not take any damage in a Safe Zone
+            event.setCancelled(true);
+        } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+            if (fPlayer != null && !fPlayer.shouldTakeFallDamage()) {
+                event.setCancelled(true); // Falling after /f fly
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityDamageMonitor(EntityDamageEvent event) {
+        if (!plugin.worldUtil().isEnabled(event.getEntity().getWorld())) {
+            return;
+        }
+
+        if (event instanceof EntityDamageByEntityEvent) {
+            EntityDamageByEntityEvent sub = (EntityDamageByEntityEvent) event;
 
             Entity damagee = sub.getEntity();
             Entity damager = sub.getDamager();
@@ -102,15 +121,6 @@ public class FactionsEntityListener extends AbstractListener {
             if (damager instanceof Player) {
                 cancelFStuckTeleport((Player) damager);
                 cancelFFly((Player) damager);
-            }
-        } else if (FactionsPlugin.getInstance().conf().factions().protection().isSafeZonePreventAllDamageToPlayers() && isPlayerInSafeZone(event.getEntity())) {
-            // Players can not take any damage in a Safe Zone
-            event.setCancelled(true);
-        } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
-            if (fPlayer != null && !fPlayer.shouldTakeFallDamage()) {
-                event.setCancelled(true); // Falling after /f fly
             }
         }
 
