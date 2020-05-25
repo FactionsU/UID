@@ -300,7 +300,8 @@ public class FactionsPlayerListener extends AbstractListener {
             case MINECART_CHEST:
             case MINECART_FURNACE:
             case MINECART_HOPPER:
-                if (!this.playerCanInteractHere(event.getPlayer(), event.getRightClicked().getLocation())) {
+                if (!FactionsPlugin.getInstance().conf().factions().protection().getEntityInteractExceptions().contains(event.getRightClicked().getType().name()) &&
+                        !this.playerCanInteractHere(event.getPlayer(), event.getRightClicked().getLocation())) {
                     event.setCancelled(true);
                 }
                 break;

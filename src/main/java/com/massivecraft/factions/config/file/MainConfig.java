@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@SuppressWarnings({"FieldCanBeLocal", "InnerClassMayBeStatic", "BooleanMethodIsAlwaysInverted"})
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "InnerClassMayBeStatic", "BooleanMethodIsAlwaysInverted"})
 public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @Comment("Don't change this value yourself, unless you WANT a broken config!")
@@ -630,6 +630,12 @@ public class MainConfig {
                     return startingDTR;
                 }
 
+                /**
+                 * Not used directly by the plugin, as it uses the helper method.
+                 *
+                 * @return loss per death
+                 * @see #getLossPerDeath(World)
+                 */
                 public double getLossPerDeathBase() {
                     return this.lossPerDeath;
                 }
@@ -1250,6 +1256,9 @@ public class MainConfig {
             @WipeOnReload
             private transient Set<Material> breakExceptionsMat;
 
+            @Comment("Exceptions for protections of interacting with entities, such as mounting horses")
+            private Set<String> entityInteractExceptions = new HashSet<>();
+
             @Comment("Mainly for other plugins/mods that use a fake player to take actions, which shouldn't be subject to our protections.")
             private Set<String> playersWhoBypassAllProtection = new HashSet<String>() {
                 {
@@ -1469,6 +1478,10 @@ public class MainConfig {
                     breakExceptionsMat = Collections.unmodifiableSet(breakExceptionsMat);
                 }
                 return breakExceptionsMat;
+            }
+
+            public Set<String> getEntityInteractExceptions() {
+                return Collections.unmodifiableSet(entityInteractExceptions);
             }
 
             public Set<String> getPlayersWhoBypassAllProtection() {
