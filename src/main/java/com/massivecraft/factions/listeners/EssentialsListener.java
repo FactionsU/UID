@@ -29,6 +29,11 @@ public class EssentialsListener implements Listener {
         // Get the USER from their UUID.
         Faction faction = event.getFaction();
         User user = ess.getUser(UUID.fromString(event.getfPlayer().getId()));
+        if (user == null) {
+            FactionsPlugin.getInstance().log(Level.WARNING, "Attempted to remove Essentials homes for " + event.getfPlayer().getName() + " " +
+                    "but no Essentials data at all was found for this user. " +
+                    "This may be a bug in Essentials, or may be that the player only played prior to adding Essentials to the server");
+        }
 
         List<String> homes = user.getHomes();
         if (homes == null || homes.isEmpty()) {
