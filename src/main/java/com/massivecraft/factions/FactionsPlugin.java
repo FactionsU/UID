@@ -16,9 +16,11 @@ import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.integration.IWorldguard;
 import com.massivecraft.factions.integration.LWC;
+import com.massivecraft.factions.integration.LuckPerms;
 import com.massivecraft.factions.integration.Worldguard6;
 import com.massivecraft.factions.integration.Worldguard7;
 import com.massivecraft.factions.integration.dynmap.EngineDynmap;
+import com.massivecraft.factions.integration.permcontext.ContextManager;
 import com.massivecraft.factions.landraidcontrol.LandRaidControl;
 import com.massivecraft.factions.listeners.EssentialsListener;
 import com.massivecraft.factions.listeners.FactionsBlockListener;
@@ -358,6 +360,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         // Add Base Commands
         FCmdRoot cmdBase = new FCmdRoot();
 
+        ContextManager.init(this);
+        LuckPerms.init(this);
         Econ.setup();
         LWC.setup();
         setupPermissions();
@@ -996,6 +1000,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             FPlayers.getInstance().forceSave();
             Board.getInstance().forceSave();
         }
+        LuckPerms.shutdown(this);
+        ContextManager.shutdown();
         log("Disabled");
     }
 
