@@ -1,8 +1,11 @@
 package com.massivecraft.factions.perms;
 
+import com.google.common.collect.ImmutableSet;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.ChatColor;
+
+import java.util.Set;
 
 public enum Role implements Permissible {
     ADMIN(4, TL.ROLE_ADMIN),
@@ -14,6 +17,7 @@ public enum Role implements Permissible {
     public final int value;
     public final String nicename;
     public final TL translation;
+    private Set<String> roleNamesAtOrBelow;
 
     Role(final int value, final TL translation) {
         this.value = value;
@@ -107,5 +111,24 @@ public enum Role implements Permissible {
     @Override
     public ChatColor getColor() {
         return Relation.MEMBER.getColor();
+    }
+
+    /**
+     * Gets this role name and roles below it in priority. These names are
+     * not localized and will always match the enum values.
+     *
+     * @return an immutable set of role names
+     */
+    public Set<String> getRoleNamesAtOrBelow() {
+        if (this.roleNamesAtOrBelow == null) {
+            ImmutableSet.Builder<String> builder = ImmutableSet.builder();
+            for (Role role : values()) {
+                if (this.isAtLeast(role)) {
+                    builder.add(role.name().toLowerCase());
+                }
+            }
+            this.roleNamesAtOrBelow = builder.build();
+        }
+        return this.roleNamesAtOrBelow;
     }
 }

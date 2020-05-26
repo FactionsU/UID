@@ -1,9 +1,11 @@
 package com.massivecraft.factions.perms;
 
+import com.google.common.collect.ImmutableSet;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.ChatColor;
 
+import java.util.Set;
 
 public enum Relation implements Permissible {
     MEMBER(4, TL.RELATION_MEMBER_SINGULAR.toString()),
@@ -14,6 +16,7 @@ public enum Relation implements Permissible {
 
     public final int value;
     public final String nicename;
+    private Set<String> justMyNameInASet;
 
     Relation(final int value, final String nicename) {
         this.value = value;
@@ -124,5 +127,18 @@ public enum Relation implements Permissible {
         } else {
             return FactionsPlugin.getInstance().conf().economy().getCostNeutral();
         }
+    }
+
+    /**
+     * Gets this enum name, in lower case, for fastest possible access for
+     * {@link com.massivecraft.factions.integration.permcontext.Contexts#TERRITORY_RELATION}
+     *
+     * @return an immutable set of just this name
+     */
+    public Set<String> getNameInASet() {
+        if (this.justMyNameInASet == null) {
+            this.justMyNameInASet = ImmutableSet.of(this.name().toLowerCase());
+        }
+        return this.justMyNameInASet;
     }
 }
