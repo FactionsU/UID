@@ -59,8 +59,8 @@ public class MaterialProvider {
     public class MaterialData {
 
         @SerializedName("material")
-        private String name;
-        private String legacy;
+        private final String name;
+        private final String legacy;
 
         public MaterialData(String name, String legacy) {
             this.name = name;

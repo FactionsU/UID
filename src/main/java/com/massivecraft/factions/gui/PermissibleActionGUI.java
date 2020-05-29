@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.Backable {
-    private static SimpleItem backItem = SimpleItem.builder().setMaterial(FactionMaterial.from("ARROW").get()).setName(TL.GUI_BUTTON_BACK.toString()).build();
-    private static SimpleItem base;
+    private static final SimpleItem backItem = SimpleItem.builder().setMaterial(FactionMaterial.from("ARROW").get()).setName(TL.GUI_BUTTON_BACK.toString()).build();
+    private static final SimpleItem base;
 
     static {
         List<String> lore = ImmutableList.of(
@@ -30,8 +30,8 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
         base = SimpleItem.builder().setLore(lore).setName("&8[{action-access-color}{action}&8]").build();
     }
 
-    private Permissible permissible;
-    private boolean online;
+    private final Permissible permissible;
+    private final boolean online;
 
     public PermissibleActionGUI(boolean online, FPlayer user, Permissible permissible) {
         super(user, (int) Math.ceil(((double) PermissibleAction.values().length) / 9d) + 1);

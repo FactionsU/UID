@@ -7,7 +7,7 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
 public class CmdDTR extends FCommand {
-    private CmdDTRGet cmdDTRGet;
+    private final CmdDTRGet cmdDTRGet;
 
     public CmdDTR() {
         super();

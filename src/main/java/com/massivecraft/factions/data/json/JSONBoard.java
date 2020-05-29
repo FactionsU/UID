@@ -17,7 +17,7 @@ import java.util.logging.Level;
 
 
 public class JSONBoard extends MemoryBoard {
-    private static transient File file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/board.json");
+    private static final transient File file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/board.json");
 
     // -------------------------------------------- //
     // Persistance

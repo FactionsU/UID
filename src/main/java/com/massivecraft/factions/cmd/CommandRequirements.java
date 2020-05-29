@@ -9,21 +9,21 @@ import com.massivecraft.factions.util.TL;
 public class CommandRequirements {
 
     // Permission required to execute command
-    private Permission permission;
+    private final Permission permission;
 
     // Must be player
-    private boolean playerOnly;
+    private final boolean playerOnly;
     // Must be member of faction
-    private boolean memberOnly;
+    private final boolean memberOnly;
 
     // Must be at least this role
-    private Role role;
+    private final Role role;
 
     // PermissibleAction check if the player has allow for this before checking the role
-    private PermissibleAction action;
+    private final PermissibleAction action;
 
     // Commodore stuffs
-    private Class<? extends BrigadierProvider> brigadier;
+    private final Class<? extends BrigadierProvider> brigadier;
 
     // Edge case handling
     private boolean errorOnManyArgs;
@@ -99,7 +99,7 @@ public class CommandRequirements {
 
     public static class Builder {
 
-        private Permission permission;
+        private final Permission permission;
 
         private boolean playerOnly = false;
         private boolean memberOnly = false;

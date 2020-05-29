@@ -20,7 +20,7 @@ public class TitleAPI {
     private boolean supportsAPI = false;
     private boolean bailOut = false;
 
-    private Map<String, Class> classCache = new HashMap<>();
+    private final Map<String, Class<?>> classCache = new HashMap<>();
 
     private Method methodChatTitle;
     private Method methodGetHandle;
@@ -118,7 +118,7 @@ public class TitleAPI {
             return classCache.get(versionName);
         }
 
-        Class clazz = Class.forName(versionName);
+        Class<?> clazz = Class.forName(versionName);
         classCache.put(name, clazz);
         return clazz;
     }

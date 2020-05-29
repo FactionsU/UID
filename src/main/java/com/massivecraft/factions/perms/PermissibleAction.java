@@ -65,7 +65,7 @@ public enum PermissibleAction {
         this.materialName = materialName;
     }
 
-    private static Map<String, PermissibleAction> map = new HashMap<>();
+    private static final Map<String, PermissibleAction> map = new HashMap<>();
 
     static {
         for (PermissibleAction action : values()) {

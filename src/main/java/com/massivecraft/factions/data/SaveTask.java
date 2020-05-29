@@ -9,7 +9,7 @@ public class SaveTask implements Runnable {
 
     private static boolean running = false;
 
-    private FactionsPlugin plugin;
+    private final FactionsPlugin plugin;
 
     public SaveTask(FactionsPlugin plugin) {
         this.plugin = plugin;

@@ -126,7 +126,7 @@ public class DTRControl implements LandRaidControl {
             return;
         }
         long millisPassed = now - Math.max(faction.getLastDTRUpdateTime(), faction.getFrozenDTRUntilTime());
-        long onlineInEnabledWorlds = faction.getOnlinePlayers().stream().filter(p -> this.plugin.worldUtil().isEnabled(p.getWorld())).count();
+        long onlineInEnabledWorlds = faction.getOnlinePlayers().stream().filter(p -> plugin.worldUtil().isEnabled(p.getWorld())).count();
         double rate = Math.min(conf().getRegainPerMinuteMaxRate(), Math.max(0, onlineInEnabledWorlds - minusPlayer) * conf().getRegainPerMinutePerPlayer());
         double regain = (millisPassed / (60D * 1000D)) * rate;
         faction.setDTR(Math.min(faction.getDTRWithoutUpdate() + regain, this.getMaxDTR(faction)));

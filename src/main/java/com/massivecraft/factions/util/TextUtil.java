@@ -80,10 +80,8 @@ public class TextUtil {
                         message.then(text).style(color);
                     }
                     text = "";
-                    color = ChatColor.getByChar(chars[i + 1]);
-                } else {
-                    color = ChatColor.getByChar(chars[i + 1]);
                 }
+                color = ChatColor.getByChar(chars[i + 1]);
                 i++; // skip color char
             } else {
                 text += chars[i];

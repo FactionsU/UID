@@ -96,8 +96,8 @@ public class FlightUtil {
 
     public class ParticleTrailsTask extends BukkitRunnable {
 
-        private int amount;
-        private float speed;
+        private final int amount;
+        private final float speed;
 
         private ParticleTrailsTask() {
             this.amount = FactionsPlugin.getInstance().conf().commands().fly().particles().getAmount();

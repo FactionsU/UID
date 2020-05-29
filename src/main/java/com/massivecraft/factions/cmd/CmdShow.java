@@ -197,10 +197,10 @@ public class CmdShow extends FCommand {
     }
 
     private class GroupGetter extends BukkitRunnable {
-        private List<String> messageList;
-        private FPlayer sender;
-        private Faction faction;
-        private Set<OfflinePlayer> players;
+        private final List<String> messageList;
+        private final FPlayer sender;
+        private final Faction faction;
+        private final Set<OfflinePlayer> players;
 
         private GroupGetter(List<String> messageList, FPlayer sender, Faction faction) {
             this.messageList = messageList;
@@ -220,10 +220,10 @@ public class CmdShow extends FCommand {
     }
 
     private class Sender extends BukkitRunnable {
-        private List<String> messageList;
-        private FPlayer sender;
-        private Faction faction;
-        private Map<UUID, String> map;
+        private final List<String> messageList;
+        private final FPlayer sender;
+        private final Faction faction;
+        private final Map<UUID, String> map;
 
         private Sender(List<String> messageList, FPlayer sender, Faction faction, Map<UUID, String> map) {
             this.messageList = messageList;

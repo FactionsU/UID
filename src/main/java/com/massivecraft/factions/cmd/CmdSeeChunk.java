@@ -7,7 +7,7 @@ import com.massivecraft.factions.util.TL;
 
 public class CmdSeeChunk extends FCommand {
 
-    private boolean useParticles;
+    private final boolean useParticles;
 
     public CmdSeeChunk() {
         super();

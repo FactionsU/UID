@@ -123,7 +123,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return mcVersion;
     }
 
-    private ConfigManager configManager = new ConfigManager(this);
+    private final ConfigManager configManager = new ConfigManager(this);
 
     private Integer saveTask = null;
     private boolean autoSave = true;
@@ -152,10 +152,10 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private Gson gson;
 
     // holds f stuck start times
-    private Map<UUID, Long> timers = new HashMap<>();
+    private final Map<UUID, Long> timers = new HashMap<>();
 
     //holds f stuck taskids
-    private Map<UUID, Integer> stuckMap = new HashMap<>();
+    private final Map<UUID, Integer> stuckMap = new HashMap<>();
 
     // Persistence related
     private boolean locked = false;
@@ -165,12 +165,12 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private boolean hookedPlayervaults;
     private ClipPlaceholderAPIManager clipPlaceholderAPIManager;
     private boolean mvdwPlaceholderAPIManager = false;
-    private Set<String> pluginsHandlingChat = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Set<String> pluginsHandlingChat = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private SeeChunkUtil seeChunkUtil;
     private ParticleProvider particleProvider;
     private IWorldguard worldguard;
-    private Set<EntityType> safeZoneNerfedCreatureTypes = EnumSet.noneOf(EntityType.class);
+    private final Set<EntityType> safeZoneNerfedCreatureTypes = EnumSet.noneOf(EntityType.class);
     private LandRaidControl landRaidControl;
 
     private Metrics metrics;
@@ -180,7 +180,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private UUID serverUUID;
     private String startupLog;
     private String startupExceptionLog;
-    private List<RuntimeException> grumpyExceptions = new ArrayList<>();
+    private final List<RuntimeException> grumpyExceptions = new ArrayList<>();
 
     public FactionsPlugin() {
         instance = this;
@@ -317,7 +317,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             if (refCmd != null && !refCmd.isEmpty()) {
                 refCommand = (String) (refCmd.keySet().toArray()[0]);
             }
-        } catch (ClassCastException ex) {
+        } catch (ClassCastException ignored) {
         }
 
         // Register recurring tasks
@@ -817,7 +817,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     // These are not supposed to be used directly.
     // They are loaded and used through the TextUtil instance for the plugin.
-    private Map<String, String> rawTags = new LinkedHashMap<>();
+    private final Map<String, String> rawTags = new LinkedHashMap<>();
 
     private void addRawTags() {
         this.rawTags.put("l", "<green>"); // logo

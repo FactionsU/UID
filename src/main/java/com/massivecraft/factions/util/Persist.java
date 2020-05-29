@@ -10,7 +10,7 @@ import java.util.logging.Level;
 
 public class Persist {
 
-    private FactionsPlugin plugin;
+    private final FactionsPlugin plugin;
 
     public Persist(FactionsPlugin plugin) {
         this.plugin = plugin;
