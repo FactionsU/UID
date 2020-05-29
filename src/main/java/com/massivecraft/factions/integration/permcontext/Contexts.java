@@ -21,7 +21,11 @@ public enum Contexts implements Context {
             Arrays.stream(Relation.values()).map(relation -> relation.name().toLowerCase()).collect(Collectors.toSet())),
     ROLE_AT_LEAST((player) ->
             FPlayers.getInstance().getByPlayer(player).getRole().getRoleNamesAtOrBelow(),
+            Arrays.stream(Role.values()).map(role -> role.name().toLowerCase()).collect(Collectors.toSet())),
+    ROLE_AT_MOST((player) ->
+            FPlayers.getInstance().getByPlayer(player).getRole().getRoleNamesAtOrAbove(),
             Arrays.stream(Role.values()).map(role -> role.name().toLowerCase()).collect(Collectors.toSet()));
+
 
     /**
      * The FactionsUUID namespace. Should not be used by another plugin.

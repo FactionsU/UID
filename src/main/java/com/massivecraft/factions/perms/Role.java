@@ -18,6 +18,7 @@ public enum Role implements Permissible {
     public final String nicename;
     public final TL translation;
     private Set<String> roleNamesAtOrBelow;
+    private Set<String> roleNamesAtOrAbove;
 
     Role(final int value, final TL translation) {
         this.value = value;
@@ -111,6 +112,25 @@ public enum Role implements Permissible {
     @Override
     public ChatColor getColor() {
         return Relation.MEMBER.getColor();
+    }
+
+    /**
+     * Gets this role name and roles above it in priority. These names are
+     * not localized and will always match the enum values.
+     *
+     * @return an immutable set of role names
+     */
+    public Set<String> getRoleNamesAtOrAbove() {
+        if (this.roleNamesAtOrAbove == null) {
+            ImmutableSet.Builder<String> builder = ImmutableSet.builder();
+            for (Role role : values()) {
+                if (this.isAtMost(role)) {
+                    builder.add(role.name().toLowerCase());
+                }
+            }
+            this.roleNamesAtOrAbove = builder.build();
+        }
+        return this.roleNamesAtOrAbove;
     }
 
     /**
