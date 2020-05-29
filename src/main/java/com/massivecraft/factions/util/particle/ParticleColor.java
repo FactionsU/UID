@@ -5,11 +5,11 @@ import org.bukkit.Color;
 
 public class ParticleColor {
 
-    private Color color;
+    private final Color color;
 
-    private float red;
-    private float green;
-    private float blue;
+    private final float red;
+    private final float green;
+    private final float blue;
 
     ParticleColor(Color color) {
         this.color = color;

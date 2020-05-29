@@ -980,7 +980,7 @@ public enum TL {
     ;
 
     private String path;
-    private String def;
+    private final String def;
     private static YamlConfiguration LANG;
     public static SimpleDateFormat sdf;
 

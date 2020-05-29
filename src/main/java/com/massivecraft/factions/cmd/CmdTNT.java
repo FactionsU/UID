@@ -9,7 +9,7 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
 public class CmdTNT extends FCommand {
-    private CmdTNTInfo infoCmd;
+    private final CmdTNTInfo infoCmd;
 
     public CmdTNT() {
         super();

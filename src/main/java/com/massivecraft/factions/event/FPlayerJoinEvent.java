@@ -9,7 +9,7 @@ import org.bukkit.event.Cancellable;
  */
 public class FPlayerJoinEvent extends FactionPlayerEvent implements Cancellable {
 
-    private PlayerJoinReason reason;
+    private final PlayerJoinReason reason;
     private boolean cancelled = false;
 
     public enum PlayerJoinReason {

@@ -6,7 +6,7 @@ import org.bukkit.event.Cancellable;
 
 public class FPlayerLeaveEvent extends FactionPlayerEvent implements Cancellable {
 
-    private PlayerLeaveReason reason;
+    private final PlayerLeaveReason reason;
     boolean cancelled = false;
 
     public enum PlayerLeaveReason {

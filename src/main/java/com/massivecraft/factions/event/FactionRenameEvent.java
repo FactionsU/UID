@@ -7,7 +7,7 @@ import org.bukkit.event.Cancellable;
 public class FactionRenameEvent extends FactionPlayerEvent implements Cancellable {
 
     private boolean cancelled = false;
-    private String tag;
+    private final String tag;
 
     public FactionRenameEvent(FPlayer sender, String newTag) {
         super(sender.getFaction(), sender);

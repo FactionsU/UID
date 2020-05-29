@@ -7,7 +7,7 @@ import java.util.logging.Level;
 
 public class FactionMaterial {
 
-    private String name;
+    private final String name;
 
     private FactionMaterial(String name) {
         if (MaterialDb.getInstance().provider.isLegacy(name)) {

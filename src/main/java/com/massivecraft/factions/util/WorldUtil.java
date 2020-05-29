@@ -9,7 +9,7 @@ import java.util.HashSet;
 
 public class WorldUtil {
     private HashSet<String> worlds;
-    private boolean check;
+    private final boolean check;
     private boolean whitelist;
 
     public WorldUtil(FactionsPlugin plugin) {

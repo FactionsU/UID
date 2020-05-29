@@ -56,7 +56,7 @@ import java.util.logging.Level;
 
 public class FactionsPlayerListener extends AbstractListener {
 
-    private FactionsPlugin plugin;
+    private final FactionsPlugin plugin;
 
     public FactionsPlayerListener(FactionsPlugin plugin) {
         this.plugin = plugin;
@@ -176,7 +176,7 @@ public class FactionsPlayerListener extends AbstractListener {
     }
 
     // Holds the next time a player can have a map shown.
-    private HashMap<UUID, Long> showTimes = new HashMap<>();
+    private final HashMap<UUID, Long> showTimes = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -391,7 +391,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
 
     // for handling people who repeatedly spam attempts to open a door (or similar) in another faction's territory
-    private Map<String, InteractAttemptSpam> interactSpammers = new HashMap<>();
+    private final Map<String, InteractAttemptSpam> interactSpammers = new HashMap<>();
 
     private static class InteractAttemptSpam {
         private int attempts = 0;

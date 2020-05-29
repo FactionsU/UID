@@ -68,7 +68,7 @@ public class CmdDebug extends FCommand {
         }
 
         new BukkitRunnable() {
-            private PasteBuilder builder = new PasteBuilder().name("FactionsUUID Debug")
+            private final PasteBuilder builder = new PasteBuilder().name("FactionsUUID Debug")
                     .visibility(Visibility.UNLISTED)
                     .expires(ZonedDateTime.now(ZoneOffset.UTC).plusDays(3));
             private int i = 0;

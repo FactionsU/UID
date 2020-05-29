@@ -32,7 +32,7 @@ public class JSONFPlayers extends MemoryFPlayers {
         // NOOP
     }
 
-    private File file;
+    private final File file;
 
     public JSONFPlayers() {
         if (FactionsPlugin.getInstance().getServerUUID() == null) {

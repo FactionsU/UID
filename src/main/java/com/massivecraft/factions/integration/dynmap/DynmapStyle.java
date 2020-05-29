@@ -12,7 +12,7 @@ public class DynmapStyle {
     public static final String DEFAULT_HOME_MARKER = "greenflag";
     public static final boolean DEFAULT_BOOST = false;
 
-    private static DynmapStyle defaultStyle = new DynmapStyle()
+    private static final DynmapStyle defaultStyle = new DynmapStyle()
             .setLineColor(DEFAULT_LINE_COLOR)
             .setLineOpacity(DEFAULT_LINE_OPACITY)
             .setLineWeight(DEFAULT_LINE_WEIGHT)

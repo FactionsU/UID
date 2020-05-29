@@ -59,7 +59,7 @@ public class DiscUtil {
     // CATCH
     // -------------------------------------------- //
 
-    private static HashMap<String, Lock> locks = new HashMap<>();
+    private static final HashMap<String, Lock> locks = new HashMap<>();
 
     public static boolean writeCatch(final File file, final String content, boolean sync) {
         String name = file.getName();

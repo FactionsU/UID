@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 public class WarpGUI extends GUI<Integer> {
-    private static SimpleItem warpItem;
-    private static SimpleItem passwordModifier;
+    private static final SimpleItem warpItem;
+    private static final SimpleItem passwordModifier;
 
     static {
         warpItem = SimpleItem.builder()
@@ -45,7 +45,7 @@ public class WarpGUI extends GUI<Integer> {
                 .build();
     }
 
-    private List<String> warps;
+    private final List<String> warps;
     private final String name;
     private final int page;
     private final Faction faction;

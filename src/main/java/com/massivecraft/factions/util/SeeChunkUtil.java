@@ -22,9 +22,9 @@ import java.util.UUID;
 @SuppressWarnings("unchecked")
 public class SeeChunkUtil extends BukkitRunnable {
 
-    private Set<UUID> playersSeeingChunks = new HashSet<>();
-    private boolean useColor;
-    private Object effect;
+    private final Set<UUID> playersSeeingChunks = new HashSet<>();
+    private final boolean useColor;
+    private final Object effect;
 
     public SeeChunkUtil() {
         String effectName = FactionsPlugin.getInstance().conf().commands().seeChunk().getParticleName();
