@@ -172,6 +172,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private IWorldguard worldguard;
     private final Set<EntityType> safeZoneNerfedCreatureTypes = EnumSet.noneOf(EntityType.class);
     private LandRaidControl landRaidControl;
+    private boolean luckPermsSetup;
 
     private Metrics metrics;
     private final Pattern factionsVersionPattern = Pattern.compile("b(\\d{1,4})");
@@ -361,7 +362,24 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         FCmdRoot cmdBase = new FCmdRoot();
 
         ContextManager.init(this);
-        LuckPerms.init(this);
+        // LuckPerms time
+        if (this.getServer().getPluginManager().isPluginEnabled("LuckPerms")) {
+            String[] version = this.getServer().getPluginManager().getPlugin("LuckPerms").getDescription().getVersion().split("\\.");
+            boolean notSupported = true;
+            try {
+                int major = Integer.parseInt(version[0]);
+                int minor = Integer.parseInt(version[1]);
+                if ((major == 5 && minor > 0) || major > 5) {
+                    notSupported = false;
+                }
+            } catch (NumberFormatException ignored) {
+            }
+            if (notSupported) {
+                this.log("Found an outdated LuckPerms. With LuckPerms 5.1.0 and above, FactionsUUID supports permission contexts!");
+            } else {
+                this.luckPermsSetup = LuckPerms.init(this);
+            }
+        }
         Econ.setup();
         LWC.setup();
         setupPermissions();
@@ -1000,7 +1018,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             FPlayers.getInstance().forceSave();
             Board.getInstance().forceSave();
         }
-        LuckPerms.shutdown(this);
+        if (this.luckPermsSetup) {
+            LuckPerms.shutdown(this);
+        }
         ContextManager.shutdown();
         log("Disabled");
     }
