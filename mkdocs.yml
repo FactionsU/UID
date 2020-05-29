@@ -37,7 +37,7 @@ nav:
   - Commands: commands.md
   - Permissions: permissions.md
   - Permission Nodes: permissionnodes.md
-  - Permission Contexts: context.md
+  - Permission Contexts: contexts.md
   - Placeholders: placeholders.md
   - PlaceholderAPI: placeholderapi.md
   - Particles: particles.md
