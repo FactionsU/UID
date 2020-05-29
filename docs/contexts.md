@@ -10,7 +10,9 @@ running at least LuckPerms version 5.1.0 for FactionsUUID to utilize this featur
 
 `factionsuuid:territory-relation`  
 **Possible values**: member, ally, truce, neutral, enemy
-**Description**: The player's relation to the land they are in. Only one value at a time. Could be used to, for example
+**Description**: The player's relation to the land they are in. Only one value at a time. Could be used to, for example, 
+prevent players in enemy territory from using particular features of another plugin that are permission-based (not 
+just limited to commands).
 
 ### Faction role at least
  
