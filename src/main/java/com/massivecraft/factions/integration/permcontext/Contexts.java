@@ -2,6 +2,7 @@ package com.massivecraft.factions.integration.permcontext;
 
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
@@ -17,13 +18,20 @@ import java.util.stream.Collectors;
  * Default FactionsUUID contexts.
  */
 public enum Contexts implements Context {
-    TERRITORY_RELATION((player) -> FPlayers.getInstance().getByPlayer(player).getRelationTo(Board.getInstance().getFactionAt(new FLocation(player.getLocation()))).getNameInASet(),
+    TERRITORY_RELATION((player) ->
+            FPlayers.getInstance().getByPlayer(player).getRelationTo(Board.getInstance().getFactionAt(new FLocation(player.getLocation()))).getNameInASet(),
             Arrays.stream(Relation.values()).map(relation -> relation.name().toLowerCase()).collect(Collectors.toSet())),
     ROLE_AT_LEAST((player) ->
-            FPlayers.getInstance().getByPlayer(player).getRole().getRoleNamesAtOrBelow(),
+    {
+        FPlayer p = FPlayers.getInstance().getByPlayer(player);
+        return p.hasFaction() ? p.getRole().getRoleNamesAtOrBelow() : Collections.emptySet();
+    },
             Arrays.stream(Role.values()).map(role -> role.name().toLowerCase()).collect(Collectors.toSet())),
     ROLE_AT_MOST((player) ->
-            FPlayers.getInstance().getByPlayer(player).getRole().getRoleNamesAtOrAbove(),
+    {
+        FPlayer p = FPlayers.getInstance().getByPlayer(player);
+        return p.hasFaction() ? p.getRole().getRoleNamesAtOrAbove() : Collections.emptySet();
+    },
             Arrays.stream(Role.values()).map(role -> role.name().toLowerCase()).collect(Collectors.toSet()));
 
 
