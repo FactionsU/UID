@@ -178,10 +178,15 @@ public class FTeamWrapper {
             FPlayer fplayer = fboard.getFPlayer();
             Team team = teams.get(fboard);
 
+            int maxLength = FactionsPlugin.getInstance().conf().scoreboard().constant().getPrefixLength();
             String prefix = TL.DEFAULT_PREFIX.toString();
             prefix = Tag.parsePlaceholders(fplayer.getPlayer(), prefix);
             prefix = prefix.replace("{relationcolor}", faction.getRelationTo(fplayer).getColor().toString());
-            prefix = prefix.replace("{faction}", faction.getTag().substring(0, Math.min("{faction}".length() + FactionsPlugin.getInstance().conf().scoreboard().constant().getPrefixLength() - prefix.length(), faction.getTag().length())));
+            int remaining = Math.min("{faction}".length() + maxLength - prefix.length(), faction.getTag().length());
+            prefix = prefix.replace("{faction}", remaining > 0 ? faction.getTag().substring(0, remaining) : "");
+            if (prefix.length() > maxLength) {
+                prefix = prefix.substring(0, maxLength);
+            }
             if (!prefix.equals(team.getPrefix())) {
                 team.setPrefix(prefix);
             }
