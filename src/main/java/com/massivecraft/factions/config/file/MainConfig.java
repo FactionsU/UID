@@ -1729,6 +1729,7 @@ public class MainConfig {
             private boolean tagForceUpperCase = false;
 
             private boolean newFactionsDefaultOpen = false;
+            private boolean newFactionsDefaultPeaceful = false;
 
             @Comment("When faction membership hits this limit, players will no longer be able to join using /f join; default is 0, no limit")
             private int factionMemberLimit = 0;
@@ -1825,6 +1826,10 @@ public class MainConfig {
 
             public boolean isNewFactionsDefaultOpen() {
                 return newFactionsDefaultOpen;
+            }
+
+            public boolean isNewFactionsDefaultPeaceful() {
+                return newFactionsDefaultPeaceful;
             }
 
             public int getFactionMemberLimit() {
