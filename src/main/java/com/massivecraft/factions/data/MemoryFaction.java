@@ -536,7 +536,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         this.tag = "???";
         this.description = TL.GENERIC_DEFAULTDESCRIPTION.toString();
         this.lastPlayerLoggedOffTime = 0;
-        this.peaceful = false;
+        this.peaceful = FactionsPlugin.getInstance().conf().factions().other().isNewFactionsDefaultPeaceful();
         this.peacefulExplosionsEnabled = false;
         this.permanent = false;
         this.powerBoost = 0.0;
