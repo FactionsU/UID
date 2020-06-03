@@ -17,6 +17,7 @@ import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.integration.IWorldguard;
 import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.integration.LuckPerms;
+import com.massivecraft.factions.integration.Sentinel;
 import com.massivecraft.factions.integration.Worldguard6;
 import com.massivecraft.factions.integration.Worldguard7;
 import com.massivecraft.factions.integration.dynmap.EngineDynmap;
@@ -408,6 +409,10 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         loadWorldguard();
 
         EngineDynmap.getInstance().init();
+
+        if (this.getServer().getPluginManager().isPluginEnabled("Sentinel")) {
+            Sentinel.init(this.getServer().getPluginManager());
+        }
 
         // start up task which runs the autoLeaveAfterDaysOfInactivity routine
         startAutoLeaveTask(false);
