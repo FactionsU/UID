@@ -318,6 +318,23 @@ public class MainConfig {
             }
         }
 
+        public class Perms {
+            @Comment("Placeholders: {action-access-color}, {action-access}, {action-desc}")
+            private List<String> guiLore = new ArrayList<String>() {
+                {
+                    this.add("&8Access: {action-access-color}{action-access}");
+                    this.add("&8{action-desc}");
+                    this.add("");
+                    this.add("&8Left click to &a&lAllow");
+                    this.add("&8Right click to &c&lDeny");
+                }
+            };
+
+            public List<String> getGuiLore() {
+                return Collections.unmodifiableList(guiLore);
+            }
+        }
+
         public class SeeChunk {
             private boolean particles = true;
             @Comment("Get a list of particle names here: https://factions.support/particles/")
@@ -486,6 +503,7 @@ public class MainConfig {
         private ListCmd list = new ListCmd();
         private MapCmd map = new MapCmd();
         private Near near = new Near();
+        private Perms perms = new Perms();
         private SeeChunk seeChunk = new SeeChunk();
         private Show show = new Show();
         private Stuck stuck = new Stuck();
@@ -516,6 +534,10 @@ public class MainConfig {
 
         public Near near() {
             return near;
+        }
+
+        public Perms perms() {
+            return perms;
         }
 
         public SeeChunk seeChunk() {

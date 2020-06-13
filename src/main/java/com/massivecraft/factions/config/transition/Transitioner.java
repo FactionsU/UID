@@ -196,8 +196,10 @@ public class Transitioner {
         node.getNode("scoreboard").getNode("constant").getNode("prefixTemplate").setValue(TL.DEFAULT_PREFIX.toString());
 
         this.plugin.getLogger().info("Detected a config from before 0.5.14");
-        this.plugin.getLogger().info("  Setting default scoreboard prefixTemplate based on lang.yml default-prefix setting.");
-        this.plugin.getLogger().info("  Be aware that \"warZonePreventMonsterSpawns\" has been removed entirely, and there is");
-        this.plugin.getLogger().info("   now a new spawning control system added.");
+        this.plugin.getLogger().info("  1. Setting default scoreboard prefixTemplate based on lang.yml default-prefix setting.");
+        this.plugin.getLogger().info("  2. Be aware that \"warZonePreventMonsterSpawns\" has been removed entirely, and there is");
+        this.plugin.getLogger().info("     now a new spawning control system added.");
+        this.plugin.getLogger().info("  3. The perms gui hover text can now be customized in config, and the allow/deny/locked text");
+        this.plugin.getLogger().info("     can now be customized in lang.yml under GUI->PERMS->ACTION");
     }
 }

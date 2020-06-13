@@ -925,6 +925,10 @@ public enum TL {
     GUI_PERMS_ONLINE("online"),
     GUI_PERMS_OFFLINE("offline"),
 
+    GUI_PERMS_ACTION_LOCKED("(Locked)"),
+    GUI_PERMS_ACTION_ALLOW("Allow"),
+    GUI_PERMS_ACTION_DENY("Deny"),
+
     GUI_BUTTON_NEXT("NEXT"),
     GUI_BUTTON_PREV("PREVIOUS"),
     GUI_BUTTON_BACK("BACK"),
