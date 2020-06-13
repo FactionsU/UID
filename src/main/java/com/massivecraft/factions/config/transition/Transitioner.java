@@ -194,6 +194,7 @@ public class Transitioner {
 
     private void migrateV3(CommentedConfigurationNode node) {
         node.getNode("scoreboard").getNode("constant").getNode("prefixTemplate").setValue(TL.DEFAULT_PREFIX.toString());
+        node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(4);
 
         this.plugin.getLogger().info("Detected a config from before 0.5.14");
         this.plugin.getLogger().info("  1. Setting default scoreboard prefixTemplate based on lang.yml default-prefix setting.");
