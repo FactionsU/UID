@@ -1934,7 +1934,7 @@ public class MainConfig {
         private Other other = new Other();
         @Comment("Should we send titles when players enter Factions? Durations are in ticks (20 ticks every second)")
         private EnterTitles enterTitles = new EnterTitles();
-        @Comment("Spawn control. Options are \"NATURAL\" or \"SPAWNER\" for what to block.\n" +
+        @Comment("Spawn control.\n" +
                 "Exception names are entity type names as seen at the below URL.\n" +
                 "Note that any name with an underscore MUST have quotes around it.\n" +
                 "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html\n" +
