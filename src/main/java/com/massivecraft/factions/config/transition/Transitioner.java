@@ -197,7 +197,7 @@ public class Transitioner {
 
         this.plugin.getLogger().info("Detected a config from before 0.5.14");
         this.plugin.getLogger().info("  Setting default scoreboard prefixTemplate based on lang.yml default-prefix setting.");
-
-        // Removed warZonePreventMonsterSpawns
+        this.plugin.getLogger().info("  Be aware that \"warZonePreventMonsterSpawns\" has been removed entirely, and there is");
+        this.plugin.getLogger().info("   now a new spawning control system added.");
     }
 }
