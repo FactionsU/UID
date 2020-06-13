@@ -5,10 +5,13 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.config.annotation.WipeOnReload;
 import com.massivecraft.factions.perms.Role;
+import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +26,7 @@ import java.util.Set;
 public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @Comment("Don't change this value yourself, unless you WANT a broken config!")
-        private int version = 3;
+        private int version = 4;
 
         @Comment("Debug\n" +
                 "Turn this on if you are having issues with something and working on resolving them.\n" +
@@ -1226,7 +1229,6 @@ public class MainConfig {
             private boolean warZoneBlockOtherExplosions = true;
             private boolean warZoneFriendlyFire = false;
             private boolean warZoneDenyEndermanBlocks = true;
-            private boolean warZonePreventMonsterSpawns = false;
 
             private boolean wildernessDenyBuild = false;
             private boolean wildernessDenyUsage = false;
@@ -1388,10 +1390,6 @@ public class MainConfig {
                 return warZoneDenyEndermanBlocks;
             }
 
-            public boolean isWarZonePreventMonsterSpawns() {
-                return warZonePreventMonsterSpawns;
-            }
-
             public boolean isWildernessDenyBuild() {
                 return wildernessDenyBuild;
             }
@@ -1490,6 +1488,158 @@ public class MainConfig {
 
             public Set<String> getWorldsNoWildernessProtection() {
                 return worldsNoWildernessProtection == null ? Collections.emptySet() : Collections.unmodifiableSet(worldsNoWildernessProtection);
+            }
+        }
+
+        public class Spawning {
+            private Set<String> preventSpawningInSafezone = new HashSet<String>() {
+                {
+                    this.add("BREEDING");
+                    this.add("BUILD_IRONGOLEM");
+                    this.add("BUILD_SNOWMAN");
+                    this.add("BUILD_WITHER");
+                    this.add("CURED");
+                    this.add("DEFAULT");
+                    this.add("DISPENSE_EGG");
+                    this.add("DROWNED");
+                    this.add("EGG");
+                    this.add("ENDER_PEARL");
+                    this.add("EXPLOSION");
+                    this.add("INFECTION");
+                    this.add("LIGHTNING");
+                    this.add("MOUNT");
+                    this.add("NATURAL");
+                    this.add("NETHER_PORTAL");
+                    this.add("OCELOT_BABY");
+                    this.add("PATROL");
+                    this.add("RAID");
+                    this.add("REINFORCEMENTS");
+                    this.add("SILVERFISH_BLOCK");
+                    this.add("SLIME_SPLIT");
+                    this.add("SPAWNER");
+                    this.add("SPAWNER_EGG");
+                    this.add("TRAP");
+                    this.add("VILLAGE_DEFENSE");
+                    this.add("VILLAGE_INVASION");
+                }
+            };
+            @WipeOnReload
+            private transient Set<CreatureSpawnEvent.SpawnReason> preventSpawningInSafezoneReason;
+            private Set<String> preventSpawningInSafezoneExceptions = new HashSet<String>() {
+                {
+                    this.add("BAT");
+                    this.add("CAT");
+                    this.add("CHICKEN");
+                    this.add("COD");
+                    this.add("COW");
+                    this.add("DOLPHIN");
+                    this.add("DONKEY");
+                    this.add("FOX");
+                    this.add("HORSE");
+                    this.add("IRON_GOLEM");
+                    this.add("LLAMA");
+                    this.add("MULE");
+                    this.add("MUSHROOM_COW");
+                    this.add("OCELOT");
+                    this.add("PANDA");
+                    this.add("PARROT");
+                    this.add("PIG");
+                    this.add("POLAR_BEAR");
+                    this.add("PUFFERFISH");
+                    this.add("RABBIT");
+                    this.add("SALMON");
+                    this.add("SHEEP");
+                    this.add("SQUID");
+                    this.add("TRADER_LLAMA");
+                    this.add("TROPICAL_FISH");
+                    this.add("TURTLE");
+                    this.add("VILLAGER");
+                    this.add("WANDERING_TRADER");
+                    this.add("WOLF");
+                }
+            };
+            @WipeOnReload
+            private transient Set<EntityType> preventSpawningInSafezoneExceptionsType;
+            private Set<String> preventSpawningInWarzone = new HashSet<>();
+            @WipeOnReload
+            private transient Set<CreatureSpawnEvent.SpawnReason> preventSpawningInWarzoneReason;
+            private Set<String> preventSpawningInWarzoneExceptions = new HashSet<>();
+            @WipeOnReload
+            private transient Set<EntityType> preventSpawningInWarzoneExceptionsType;
+            private Set<String> preventSpawningInWilderness = new HashSet<>();
+            @WipeOnReload
+            private transient Set<CreatureSpawnEvent.SpawnReason> preventSpawningInWildernessReason;
+            private Set<String> preventSpawningInWildernessExceptions = new HashSet<>();
+            @WipeOnReload
+            private transient Set<EntityType> preventSpawningInWildernessExceptionsType;
+            private Set<String> preventSpawningInTerritory = new HashSet<>();
+            @WipeOnReload
+            private transient Set<CreatureSpawnEvent.SpawnReason> preventSpawningInTerritoryReason;
+            private Set<String> preventSpawningInTerritoryExceptions = new HashSet<>();
+            @WipeOnReload
+            private transient Set<EntityType> preventSpawningInTerritoryExceptionsType;
+            @Comment("If true, FactionsUUID will automatically add in its new defaults such as\n" +
+                    "adding new friendly mobs to the safe zone exception list")
+            private boolean updateAutomatically = true;
+
+            public boolean isUpdateAutomatically() {
+                return updateAutomatically;
+            }
+
+            public Set<CreatureSpawnEvent.SpawnReason> getPreventInSafezone() {
+                if (preventSpawningInSafezoneReason == null) {
+                    preventSpawningInSafezoneReason = MiscUtil.typeSetFromStringSet(preventSpawningInSafezone, MiscUtil.SPAWN_REASON_FUNCTION);
+                }
+                return preventSpawningInSafezoneReason;
+            }
+
+            public Set<EntityType> getPreventInSafezoneExceptions() {
+                if (preventSpawningInSafezoneExceptionsType == null) {
+                    preventSpawningInSafezoneExceptionsType = MiscUtil.typeSetFromStringSet(preventSpawningInSafezoneExceptions, MiscUtil.ENTITY_TYPE_FUNCTION);
+                }
+                return preventSpawningInSafezoneExceptionsType;
+            }
+
+            public Set<CreatureSpawnEvent.SpawnReason> getPreventInTerritory() {
+                if (preventSpawningInTerritoryReason == null) {
+                    preventSpawningInTerritoryReason = MiscUtil.typeSetFromStringSet(preventSpawningInTerritory, MiscUtil.SPAWN_REASON_FUNCTION);
+                }
+                return preventSpawningInTerritoryReason;
+            }
+
+            public Set<EntityType> getPreventInTerritoryExceptions() {
+                if (preventSpawningInTerritoryExceptionsType == null) {
+                    preventSpawningInTerritoryExceptionsType = MiscUtil.typeSetFromStringSet(preventSpawningInTerritoryExceptions, MiscUtil.ENTITY_TYPE_FUNCTION);
+                }
+                return preventSpawningInTerritoryExceptionsType;
+            }
+
+            public Set<CreatureSpawnEvent.SpawnReason> getPreventInWarzone() {
+                if (preventSpawningInWarzoneReason == null) {
+                    preventSpawningInWarzoneReason = MiscUtil.typeSetFromStringSet(preventSpawningInWarzone, MiscUtil.SPAWN_REASON_FUNCTION);
+                }
+                return preventSpawningInWarzoneReason;
+            }
+
+            public Set<EntityType> getPreventInWarzoneExceptions() {
+                if (preventSpawningInWarzoneExceptionsType == null) {
+                    preventSpawningInWarzoneExceptionsType = MiscUtil.typeSetFromStringSet(preventSpawningInWarzoneExceptions, MiscUtil.ENTITY_TYPE_FUNCTION);
+                }
+                return preventSpawningInWarzoneExceptionsType;
+            }
+
+            public Set<CreatureSpawnEvent.SpawnReason> getPreventInWilderness() {
+                if (preventSpawningInWildernessReason == null) {
+                    preventSpawningInWildernessReason = MiscUtil.typeSetFromStringSet(preventSpawningInWilderness, MiscUtil.SPAWN_REASON_FUNCTION);
+                }
+                return preventSpawningInWildernessReason;
+            }
+
+            public Set<EntityType> getPreventInWildernessExceptions() {
+                if (preventSpawningInWildernessExceptionsType == null) {
+                    preventSpawningInWildernessExceptionsType = MiscUtil.typeSetFromStringSet(preventSpawningInWildernessExceptions, MiscUtil.ENTITY_TYPE_FUNCTION);
+                }
+                return preventSpawningInWildernessExceptionsType;
             }
         }
 
@@ -1757,6 +1907,13 @@ public class MainConfig {
         private Other other = new Other();
         @Comment("Should we send titles when players enter Factions? Durations are in ticks (20 ticks every second)")
         private EnterTitles enterTitles = new EnterTitles();
+        @Comment("Spawn control. Options are \"NATURAL\" or \"SPAWNER\" for what to block.\n" +
+                "Exception names are entity type names as seen at the below URL.\n" +
+                "Note that any name with an underscore MUST have quotes around it.\n" +
+                "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html\n" +
+                "Spawn types are those at the below URL:\n" +
+                "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html")
+        private Spawning spawning = new Spawning();
 
         public EnterTitles enterTitles() {
             return enterTitles;
@@ -1808,6 +1965,10 @@ public class MainConfig {
 
         public LandRaidControl landRaidControl() {
             return landRaidControl;
+        }
+
+        public Spawning spawning() {
+            return spawning;
         }
     }
 
@@ -2185,6 +2346,8 @@ public class MainConfig {
             @Comment("Set the length limit for prefixes.\n" +
                     "If 0, will use a sane default for your Minecraft version (16 for pre-1.13, 32 for 1.13+).")
             private int prefixLength = 0;
+            @Comment("Only takes {relationcolor} and {faction} and &-prefixed color codes")
+            private String prefixTemplate = "{relationcolor}[{faction}] &r";
             private List<String> content = new ArrayList<String>() {
                 {
                     this.add("&6Your Faction");
@@ -2218,6 +2381,10 @@ public class MainConfig {
 
             public int getPrefixLength() {
                 return prefixLength < 1 ? (FactionsPlugin.getMCVersion() < 1300 ? 16 : 32) : prefixLength;
+            }
+
+            public String getPrefixTemplate() {
+                return prefixTemplate;
             }
 
             public List<String> getContent() {

@@ -20,6 +20,7 @@ import com.massivecraft.factions.util.EnumTypeAdapter;
 import com.massivecraft.factions.util.LazyLocation;
 import com.massivecraft.factions.util.MapFLocToStringSetTypeAdapter;
 import com.massivecraft.factions.util.MyLocationTypeAdapter;
+import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import com.massivecraft.factions.util.material.adapter.FactionMaterialAdapter;
 import com.massivecraft.factions.util.material.adapter.MaterialAdapter;
@@ -69,6 +70,9 @@ public class Transitioner {
             int version = rootNode.getNode("aVeryFriendlyFactionsConfig").getNode("version").getInt();
             if (version < 3) {
                 transitioner.migrateV2(rootNode);
+            }
+            if (version < 4) {
+                transitioner.migrateV3(rootNode);
             }
 
             loader.save(rootNode);
@@ -186,5 +190,14 @@ public class Transitioner {
         this.plugin.getLogger().info("Detected a config from before 0.5.7");
         this.plugin.getLogger().info("  Setting default enterTitles settings based on old style. Visit main.conf to edit.");
         this.plugin.getLogger().info("  Setting default constant scoreboard factionlessTitle settings based on normal title. Visit main.conf to edit.");
+    }
+
+    private void migrateV3(CommentedConfigurationNode node) {
+        node.getNode("scoreboard").getNode("constant").getNode("prefixTemplate").setValue(TL.DEFAULT_PREFIX.toString());
+
+        this.plugin.getLogger().info("Detected a config from before 0.5.14");
+        this.plugin.getLogger().info("  Setting default scoreboard prefixTemplate based on lang.yml default-prefix setting.");
+
+        // Removed warZonePreventMonsterSpawns
     }
 }

@@ -6,7 +6,6 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.tag.Tag;
-import com.massivecraft.factions.util.TL;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
@@ -179,7 +178,7 @@ public class FTeamWrapper {
             Team team = teams.get(fboard);
 
             int maxLength = FactionsPlugin.getInstance().conf().scoreboard().constant().getPrefixLength();
-            String prefix = TL.DEFAULT_PREFIX.toString();
+            String prefix = FactionsPlugin.getInstance().conf().scoreboard().constant().getPrefixTemplate();
             prefix = Tag.parsePlaceholders(fplayer.getPlayer(), prefix);
             prefix = prefix.replace("{relationcolor}", faction.getRelationTo(fplayer).getColor().toString());
             int remaining = Math.min("{faction}".length() + maxLength - prefix.length(), faction.getTag().length());

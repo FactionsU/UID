@@ -3,28 +3,63 @@ package com.massivecraft.factions.util;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Role;
+import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Entity;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.logging.Level;
 
 public class MiscUtil {
+    private static final Map<String, EntityType> entityTypeMap;
+    public static final Function<String, EntityType> ENTITY_TYPE_FUNCTION;
+    public static final Function<String, Material> MATERIAL_FUNCTION;
+    private static final Map<String, CreatureSpawnEvent.SpawnReason> spawnReasonMap;
+    public static final Function<String, CreatureSpawnEvent.SpawnReason> SPAWN_REASON_FUNCTION;
 
-    public static EntityType creatureTypeFromEntity(Entity entity) {
-        if (!(entity instanceof Creature)) {
-            return null;
+    static {
+        entityTypeMap = new HashMap<>();
+        for (EntityType entityType : EntityType.values()) {
+            entityTypeMap.put(entityType.name(), entityType);
         }
+        ENTITY_TYPE_FUNCTION = (string) -> string == null ? null : entityTypeMap.get(string.toUpperCase());
 
-        String name = entity.getClass().getSimpleName();
-        name = name.substring(5); // Remove "Craft"
+        MATERIAL_FUNCTION = (string) -> {
+            Material mat = null;
+            if (string != null) {
+                mat = FactionMaterial.from(string).get();
+            }
+            return mat == null ? null : (mat == Material.AIR ? null : mat);
+        };
 
-        return EntityType.fromName(name);
+        spawnReasonMap = new HashMap<>();
+        for (CreatureSpawnEvent.SpawnReason reason : CreatureSpawnEvent.SpawnReason.values()) {
+            spawnReasonMap.put(reason.name(), reason);
+        }
+        SPAWN_REASON_FUNCTION = (string) -> string == null ? null : spawnReasonMap.get(string.toUpperCase());
+    }
+
+    public static <Type> Set<Type> typeSetFromStringSet(Set<String> stringSet, Function<String, Type> function) {
+        Set<Type> typeSet = new HashSet<>();
+        for (String string : stringSet) {
+            if (string != null) {
+                Type item = function.apply(string);
+                if (item != null) {
+                    typeSet.add(item);
+                }
+            }
+        }
+        return Collections.unmodifiableSet(typeSet);
     }
 
     // Inclusive range

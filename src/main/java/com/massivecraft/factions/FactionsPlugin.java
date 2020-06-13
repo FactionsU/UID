@@ -63,7 +63,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -90,7 +89,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -171,7 +169,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private SeeChunkUtil seeChunkUtil;
     private ParticleProvider particleProvider;
     private IWorldguard worldguard;
-    private final Set<EntityType> safeZoneNerfedCreatureTypes = EnumSet.noneOf(EntityType.class);
     private LandRaidControl landRaidControl;
     private boolean luckPermsSetup;
 
@@ -286,7 +283,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         this.gson = this.getGsonBuilder().create();
 
         // Load Conf from disk
-        this.setNerfedEntities();
         this.configManager.startup();
 
         if (this.conf().data().json().useEfficientStorage()) {
@@ -631,50 +627,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return map;
     }
 
-    private void setNerfedEntities() {
-        safeZoneNerfedCreatureTypes.add(EntityType.BLAZE);
-        safeZoneNerfedCreatureTypes.add(EntityType.CAVE_SPIDER);
-        safeZoneNerfedCreatureTypes.add(EntityType.CREEPER);
-        safeZoneNerfedCreatureTypes.add(EntityType.ENDER_DRAGON);
-        safeZoneNerfedCreatureTypes.add(EntityType.ENDERMITE);
-        safeZoneNerfedCreatureTypes.add(EntityType.ENDERMAN);
-        safeZoneNerfedCreatureTypes.add(EntityType.GHAST);
-        safeZoneNerfedCreatureTypes.add(EntityType.GUARDIAN);
-        safeZoneNerfedCreatureTypes.add(EntityType.MAGMA_CUBE);
-        safeZoneNerfedCreatureTypes.add(EntityType.PIG_ZOMBIE);
-        safeZoneNerfedCreatureTypes.add(EntityType.SILVERFISH);
-        safeZoneNerfedCreatureTypes.add(EntityType.SKELETON);
-        safeZoneNerfedCreatureTypes.add(EntityType.SPIDER);
-        safeZoneNerfedCreatureTypes.add(EntityType.SLIME);
-        safeZoneNerfedCreatureTypes.add(EntityType.WITCH);
-        safeZoneNerfedCreatureTypes.add(EntityType.WITHER);
-        safeZoneNerfedCreatureTypes.add(EntityType.ZOMBIE);
-        if (FactionsPlugin.getMCVersion() >= 900) {
-            safeZoneNerfedCreatureTypes.add(EntityType.SHULKER);
-        }
-        if (FactionsPlugin.getMCVersion() >= 1100) {
-            safeZoneNerfedCreatureTypes.add(EntityType.ELDER_GUARDIAN);
-            safeZoneNerfedCreatureTypes.add(EntityType.EVOKER);
-            safeZoneNerfedCreatureTypes.add(EntityType.HUSK);
-            safeZoneNerfedCreatureTypes.add(EntityType.STRAY);
-            safeZoneNerfedCreatureTypes.add(EntityType.VEX);
-            safeZoneNerfedCreatureTypes.add(EntityType.VINDICATOR);
-            safeZoneNerfedCreatureTypes.add(EntityType.WITHER_SKELETON);
-            safeZoneNerfedCreatureTypes.add(EntityType.ZOMBIE_VILLAGER);
-        }
-        if (FactionsPlugin.getMCVersion() >= 1300) {
-            safeZoneNerfedCreatureTypes.add(EntityType.DROWNED);
-            safeZoneNerfedCreatureTypes.add(EntityType.PHANTOM);
-        }
-        if (FactionsPlugin.getMCVersion() >= 1400) {
-            safeZoneNerfedCreatureTypes.add(EntityType.PILLAGER);
-            safeZoneNerfedCreatureTypes.add(EntityType.RAVAGER);
-        }
-        if (FactionsPlugin.getMCVersion() >= 1500) {
-            safeZoneNerfedCreatureTypes.add(EntityType.BEE);
-        }
-    }
-
     private void loadWorldguard() {
         if (!this.conf().worldGuard().isChecking() && !this.conf().worldGuard().isBuildPriority()) {
             getLogger().info("Not enabling WorldGuard check since no options for it are enabled.");
@@ -925,10 +877,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     public LandRaidControl getLandRaidControl() {
         return this.landRaidControl;
-    }
-
-    public Set<EntityType> getSafeZoneNerfedCreatureTypes() {
-        return safeZoneNerfedCreatureTypes;
     }
 
     public IWorldguard getWorldguard() {
