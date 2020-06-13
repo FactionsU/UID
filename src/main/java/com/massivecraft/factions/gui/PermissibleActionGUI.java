@@ -1,6 +1,5 @@
 package com.massivecraft.factions.gui;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
@@ -13,21 +12,24 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.inventory.ClickType;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.Backable {
     private static final SimpleItem backItem = SimpleItem.builder().setMaterial(FactionMaterial.from("ARROW").get()).setName(TL.GUI_BUTTON_BACK.toString()).build();
     private static final SimpleItem base;
+    private static final String locked;
+    private static final String allow;
+    private static final String deny;
+    private static final String allowLower;
+    private static final String denyLower;
 
     static {
-        List<String> lore = ImmutableList.of(
-                "&8Access: {action-access-color}{action-access}",
-                "&8{action-desc}",
-                "",
-                "&8Left click to &a&lAllow",
-                "&8Right click to &c&lDeny");
-        base = SimpleItem.builder().setLore(lore).setName("&8[{action-access-color}{action}&8]").build();
+        base = SimpleItem.builder().setLore(FactionsPlugin.getInstance().conf().commands().perms().getGuiLore()).setName("&8[{action-access-color}{action}&8]").build();
+        locked = ' ' + TL.GUI_PERMS_ACTION_LOCKED.toString();
+        allow = TL.GUI_PERMS_ACTION_ALLOW.toString();
+        allowLower = allow.toLowerCase();
+        deny = TL.GUI_PERMS_ACTION_DENY.toString();
+        denyLower = deny.toLowerCase();
     }
 
     private final Permissible permissible;
@@ -56,10 +58,10 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
         boolean access = user.getFaction().hasAccess(online, permissible, action);
         String extra = "";
         if (user.getFaction().isLocked(online, permissible, action)) {
-            extra = " (Locked)";
+            extra = locked;
         }
 
-        toParse = toParse.replace("{action-access}", (access ? "Allow" : "Deny") + extra);
+        toParse = toParse.replace("{action-access}", (access ? allow : deny) + extra);
         toParse = toParse.replace("{action-access-color}", access ? ChatColor.GREEN.toString() : ChatColor.DARK_RED.toString());
         toParse = toParse.replace("{action-desc}", action.getDescription());
 
@@ -88,7 +90,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
         if (user.getFaction().setPermission(online, permissible, action, access)) {
             // Reload item to reparse placeholders
             buildItem(action);
-            user.msg(TL.COMMAND_PERM_SET, action.getShortDescription(), access ? "allow" : "deny", permissible.name());
+            user.msg(TL.COMMAND_PERM_SET, action.getShortDescription(), access ? allowLower : denyLower, permissible.name());
             FactionsPlugin.getInstance().log(TL.COMMAND_PERM_SET.format(action.getShortDescription(), access ? "Allow" : "Deny", permissible.name()) + " for faction " + user.getTag());
         } else {
             user.msg(TL.COMMAND_PERM_INVALID_SET);
@@ -111,6 +113,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
     @Override
     protected SimpleItem getItem(PermissibleAction permissibleAction) {
         SimpleItem item = new SimpleItem(base);
+
         item.setEnchant(user.getFaction().hasAccess(online, permissible, permissibleAction));
         item.setMaterial(permissibleAction.getMaterial());
         return item;
