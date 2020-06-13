@@ -9,7 +9,6 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
-import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,8 +16,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
@@ -523,12 +524,36 @@ public class FactionsEntityListener extends AbstractListener {
             return;
         }
 
-        if (event.getLocation() == null) {
+        if (event.getLocation() == null) { // Just in case
             return;
         }
 
-        if (FactionsPlugin.getInstance().getSafeZoneNerfedCreatureTypes().contains(event.getEntityType()) && Board.getInstance().getFactionAt(new FLocation(event.getLocation())).noMonstersInTerritory()) {
-            event.setCancelled(true);
+        Faction faction = Board.getInstance().getFactionAt(new FLocation(event.getLocation()));
+        CreatureSpawnEvent.SpawnReason reason = event.getSpawnReason();
+        EntityType type = event.getEntityType();
+        MainConfig.Factions.Spawning spawning = FactionsPlugin.getInstance().conf().factions().spawning();
+
+        if (faction.isNormal()) {
+            if (faction.isPeaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters()) {
+                if (event.getEntity() instanceof Monster) {
+                    event.setCancelled(true);
+                }
+            }
+            if (spawning.getPreventInTerritory().contains(reason) && !spawning.getPreventInTerritoryExceptions().contains(type)) {
+                event.setCancelled(true);
+            }
+        } else if (faction.isSafeZone()) {
+            if (spawning.getPreventInSafezone().contains(reason) && !spawning.getPreventInSafezoneExceptions().contains(type)) {
+                event.setCancelled(true);
+            }
+        } else if (faction.isWarZone()) {
+            if (spawning.getPreventInWarzone().contains(reason) && !spawning.getPreventInWarzoneExceptions().contains(type)) {
+                event.setCancelled(true);
+            }
+        } else if (faction.isWilderness()) {
+            if (spawning.getPreventInWilderness().contains(reason) && !spawning.getPreventInWildernessExceptions().contains(type)) {
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -544,13 +569,7 @@ public class FactionsEntityListener extends AbstractListener {
             return;
         }
 
-        // We are interested in blocking targeting for certain mobs:
-        if (!FactionsPlugin.getInstance().getSafeZoneNerfedCreatureTypes().contains(MiscUtil.creatureTypeFromEntity(event.getEntity()))) {
-            return;
-        }
-
-        // in case the target is in a safe zone.
-        if (Board.getInstance().getFactionAt(new FLocation(target.getLocation())).noMonstersInTerritory()) {
+        if (event.getEntity() instanceof Monster && Board.getInstance().getFactionAt(new FLocation(target.getLocation())).noMonstersInTerritory()) {
             event.setCancelled(true);
         }
     }
