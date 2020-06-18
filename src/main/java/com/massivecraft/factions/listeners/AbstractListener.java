@@ -50,20 +50,21 @@ public abstract class AbstractListener implements Listener {
             return true;
         }
 
+        MainConfig.Factions.Protection protection = FactionsPlugin.getInstance().conf().factions().protection();
         if (otherFaction.isWilderness()) {
-            if (!FactionsPlugin.getInstance().conf().factions().protection().isWildernessDenyUsage() || FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(location.getWorld().getName())) {
+            if (!protection.isWildernessDenyUsage() || protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) {
                 return true; // This is not faction territory. Use whatever you like here.
             }
             me.msg(TL.PLAYER_USE_WILDERNESS, "this");
             return false;
         } else if (otherFaction.isSafeZone()) {
-            if (!FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneDenyUsage() || Permission.MANAGE_SAFE_ZONE.has(player)) {
+            if (!protection.isSafeZoneDenyUsage() || Permission.MANAGE_SAFE_ZONE.has(player)) {
                 return true;
             }
             me.msg(TL.PLAYER_USE_SAFEZONE, "this");
             return false;
         } else if (otherFaction.isWarZone()) {
-            if (!FactionsPlugin.getInstance().conf().factions().protection().isWarZoneDenyUsage() || Permission.MANAGE_WAR_ZONE.has(player)) {
+            if (!protection.isWarZoneDenyUsage() || Permission.MANAGE_WAR_ZONE.has(player)) {
                 return true;
             }
             me.msg(TL.PLAYER_USE_WARZONE, "this");
