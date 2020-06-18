@@ -33,6 +33,7 @@ public class EssentialsListener implements Listener {
             FactionsPlugin.getInstance().log(Level.WARNING, "Attempted to remove Essentials homes for " + event.getfPlayer().getName() + " " +
                     "but no Essentials data at all was found for this user. " +
                     "This may be a bug in Essentials, or may be that the player only played prior to adding Essentials to the server");
+            return;
         }
 
         List<String> homes = user.getHomes();
