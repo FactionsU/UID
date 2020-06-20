@@ -1571,6 +1571,7 @@ public class MainConfig {
                     this.add("RABBIT");
                     this.add("SALMON");
                     this.add("SHEEP");
+                    this.add("STRIDER"); // TODO confirm for 1.16
                     this.add("SQUID");
                     this.add("TRADER_LLAMA");
                     this.add("TROPICAL_FISH");
