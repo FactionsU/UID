@@ -122,6 +122,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
     public CmdTrail cmdTrail = new CmdTrail();
     public CmdDebug cmdDebug = new CmdDebug();
     public CmdTNT cmdTNT = new CmdTNT();
+    public CmdListClaims cmdListClaims = new CmdListClaims();
 
     public FCmdRoot() {
         super();
@@ -209,6 +210,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.addSubCommand(this.cmdColeader);
         this.addSubCommand(this.cmdNear);
         this.addSubCommand(this.cmdDebug);
+        this.addSubCommand(this.cmdListClaims);
         if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
             FactionsPlugin.getInstance().getLogger().info("Using POWER for land/raid control. Enabling power commands.");
             this.addSubCommand(this.cmdPermanentPower);
