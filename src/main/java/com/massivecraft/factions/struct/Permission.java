@@ -50,6 +50,8 @@ public enum Permission {
     KICK_ANY("kick.any"),
     LEAVE("leave"),
     LIST("list"),
+    LISTCLAIMS("listclaims"),
+    LISTCLAIMS_OTHER("listclaims.other"),
     LOCK("lock"),
     MAP("map"),
     MAPHEIGHT("mapheight"),

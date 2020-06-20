@@ -338,6 +338,11 @@ public enum TL {
     COMMAND_LIST_ONLINEFACTIONLESS("Online factionless: "),
     COMMAND_LIST_DESCRIPTION("See a list of the factions"),
 
+    COMMAND_LISTCLAIMS_MESSAGE("&eClaims by %s&c in %s:"),
+    COMMAND_LISTCLAIMS_INVALIDWORLD("&cInvalid world name %s"),
+    COMMAND_LISTCLAIMS_NOCLAIMS("&cNo claims by %s&c in world %s"),
+    COMMAND_LISTCLAIMS_DESCRIPTION("List your faction's claims"),
+
     COMMAND_LOCK_LOCKED("&eFactions is now locked"),
     COMMAND_LOCK_UNLOCKED("&eFactions in now unlocked"),
     COMMAND_LOCK_DESCRIPTION("Lock all write stuff. Apparently."),
@@ -871,6 +876,7 @@ public enum TL {
     PERM_TERRITORY("Claiming or unclaiming faction territory"),
     PERM_HOME("Visiting the faction home"),
     PERM_SETHOME("Setting the faction home"),
+    PERM_LISTCLAIMS("View listed faction claims"),
     PERM_SETWARP("Setting and unsetting faction warps"),
     PERM_TNTDEPOSIT("Deposit TNT into faction bank"),
     PERM_TNTWITHDRAW("Withdraw TNT from faction bank"),
@@ -897,6 +903,7 @@ public enum TL {
     PERM_SHORT_TERRITORY("manage faction territory"),
     PERM_SHORT_HOME("visit home"),
     PERM_SHORT_SETHOME("set home"),
+    PERM_SHORT_LISTCLAIMS("list claims"),
     PERM_SHORT_SETWARP("set warps"),
     PERM_SHORT_TNTDEPOSIT("deposit TNT"),
     PERM_SHORT_TNTWITHDRAW("withdraw TNT"),

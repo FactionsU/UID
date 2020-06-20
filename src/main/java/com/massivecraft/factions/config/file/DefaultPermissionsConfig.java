@@ -125,6 +125,10 @@ public class DefaultPermissionsConfig {
             return this.sethome;
         }
 
+        public FactionOnlyPermInfo getListClaims() {
+            return this.listClaims;
+        }
+
         public FactionOnlyPermInfo getEconomy() {
             return this.economy;
         }
@@ -273,6 +277,13 @@ public class DefaultPermissionsConfig {
                 this.moderator.value = true;
                 this.normal.value = true;
                 this.recruit.value = true;
+            }
+        };
+        @Comment("Can see faction claim list")
+        private FactionOnlyPermInfo listClaims = new FactionOnlyPermInfo() {
+            {
+                this.coleader.value = true;
+                this.moderator.value = true;
             }
         };
         @Comment("Can set the faction home")

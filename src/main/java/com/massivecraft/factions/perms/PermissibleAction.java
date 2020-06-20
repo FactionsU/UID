@@ -30,6 +30,7 @@ public enum PermissibleAction {
     OWNER(true, DefaultPermissionsConfig.Permissions::getOwner, TL.PERM_OWNER, TL.PERM_SHORT_OWNER, "FENCE_GATE"),
     HOME(DefaultPermissionsConfig.Permissions::getHome, TL.PERM_HOME, TL.PERM_SHORT_HOME, "TORCH"),
     SETHOME(true, DefaultPermissionsConfig.Permissions::getSetHome, TL.PERM_SETHOME, TL.PERM_SHORT_SETHOME, "COMPASS"),
+    LISTCLAIMS(true, DefaultPermissionsConfig.Permissions::getListClaims, TL.PERM_LISTCLAIMS, TL.PERM_SHORT_LISTCLAIMS, "MAP"),
     SETWARP(true, DefaultPermissionsConfig.Permissions::getSetWarp, TL.PERM_SETWARP, TL.PERM_SHORT_SETWARP, "END_PORTAL_FRAME"),
     TNTDEPOSIT(true, DefaultPermissionsConfig.Permissions::getTNTDeposit, TL.PERM_TNTDEPOSIT, TL.PERM_SHORT_TNTDEPOSIT, "TNT"),
     TNTWITHDRAW(true, DefaultPermissionsConfig.Permissions::getTNTWithdraw, TL.PERM_TNTWITHDRAW, TL.PERM_SHORT_TNTWITHDRAW, "TNT"),
