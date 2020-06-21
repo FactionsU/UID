@@ -52,6 +52,8 @@ Below is a full list of all permission nodes. A check mark (✔) is next to any 
 | factions.kick.any           |                                                                                         |
 | factions.leave ✔            |                                                                                         |
 | factions.list ✔             |                                                                                         |
+| factions.listclaims         | Can run /f listclaims                                                                   |
+| factions.listclaims.other   | Can run /f listclaims on other factions                                                 |
 | factions.lock               |                                                                                         |
 | factions.managesafezone     |                                                                                         |
 | factions.managewarzone      |                                                                                         |
