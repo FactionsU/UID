@@ -265,15 +265,15 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
         if (versionInteger == null) {
             getLogger().warning("");
-            getLogger().warning("Could not identify version. Going with least supported version, 1.8.8.");
+            getLogger().warning("Could not identify version. Going with least supported version, 1.7.10.");
             getLogger().warning("Please visit our support live chat for help - https://factions.support/help/");
             getLogger().warning("");
-            versionInteger = 808;
+            versionInteger = 710;
         }
         mcVersion = versionInteger;
         if (mcVersion < 808) {
             getLogger().info("");
-            getLogger().warning("FactionsUUID works best with at least Minecraft 1.8.8");
+            getLogger().warning("FactionsUUID works better with at least Minecraft 1.8.8");
         }
         getLogger().info("");
         this.buildNumber = this.getBuildNumber(this.getDescription().getVersion());
