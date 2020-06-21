@@ -338,9 +338,9 @@ public enum TL {
     COMMAND_LIST_ONLINEFACTIONLESS("Online factionless: "),
     COMMAND_LIST_DESCRIPTION("See a list of the factions"),
 
-    COMMAND_LISTCLAIMS_MESSAGE("&eClaims by %s&c in %s:"),
+    COMMAND_LISTCLAIMS_MESSAGE("&eClaims by %s&e in %s:"),
     COMMAND_LISTCLAIMS_INVALIDWORLD("&cInvalid world name %s"),
-    COMMAND_LISTCLAIMS_NOCLAIMS("&cNo claims by %s&c in world %s"),
+    COMMAND_LISTCLAIMS_NOCLAIMS("&cNo claims by %s&e in world %s"),
     COMMAND_LISTCLAIMS_DESCRIPTION("List your faction's claims"),
 
     COMMAND_LOCK_LOCKED("&eFactions is now locked"),
