@@ -1,6 +1,6 @@
 package com.massivecraft.factions;
 
-import com.earth2me.essentials.IEssentials;
+import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -15,15 +15,12 @@ import com.massivecraft.factions.integration.ClipPlaceholderAPIManager;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.integration.IWorldguard;
+import com.massivecraft.factions.integration.IntegrationManager;
 import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.integration.LuckPerms;
-import com.massivecraft.factions.integration.Sentinel;
-import com.massivecraft.factions.integration.Worldguard6;
-import com.massivecraft.factions.integration.Worldguard7;
 import com.massivecraft.factions.integration.dynmap.EngineDynmap;
 import com.massivecraft.factions.integration.permcontext.ContextManager;
 import com.massivecraft.factions.landraidcontrol.LandRaidControl;
-import com.massivecraft.factions.listeners.EssentialsListener;
 import com.massivecraft.factions.listeners.FactionsBlockListener;
 import com.massivecraft.factions.listeners.FactionsChatListener;
 import com.massivecraft.factions.listeners.FactionsEntityListener;
@@ -68,6 +65,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -82,6 +80,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
@@ -162,7 +161,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     private Integer autoLeaveTask = null;
 
-    private boolean hookedPlayervaults;
     private ClipPlaceholderAPIManager clipPlaceholderAPIManager;
     private boolean mvdwPlaceholderAPIManager = false;
     private final Set<String> pluginsHandlingChat = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -172,6 +170,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private IWorldguard worldguard;
     private LandRaidControl landRaidControl;
     private boolean luckPermsSetup;
+    private IntegrationManager integrationManager;
 
     private Metrics metrics;
     private final Pattern factionsVersionPattern = Pattern.compile("b(\\d{1,4})");
@@ -194,6 +193,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         Handler handler = new Handler() {
             @Override
             public void publish(LogRecord record) {
+                if (record.getMessage() != null && record.getMessage().contains("Loaded class {0}")) {
+                    return;
+                }
                 startupBuilder.append('[').append(record.getLevel().getName()).append("] ").append(record.getMessage()).append('\n');
                 if (record.getThrown() != null) {
                     StringWriter stringWriter = new StringWriter();
@@ -325,22 +327,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             saveTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new SaveTask(this), saveTicks, saveTicks);
         }
 
-        // Check for Essentials
-        IEssentials ess = Essentials.setup();
-
-        if (ess != null) {
-            getLogger().info("Found and connected to Essentials");
-            if (conf().factions().other().isDeleteEssentialsHomes()) {
-                getLogger().info("Based on main.conf will delete Essentials player homes in their old faction when they leave");
-                getServer().getPluginManager().registerEvents(new EssentialsListener(ess), this);
-            }
-            if (conf().factions().homes().isTeleportCommandEssentialsIntegration()) {
-                getLogger().info("Using Essentials for teleportation");
-            }
-        }
-
-        hookedPlayervaults = setupPlayervaults();
-
         int loadedPlayers = FPlayers.getInstance().load();
         int loadedFactions = Factions.getInstance().load();
         for (FPlayer fPlayer : FPlayers.getInstance().getAllFPlayers()) {
@@ -360,30 +346,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         FCmdRoot cmdBase = new FCmdRoot();
 
         ContextManager.init(this);
-        // LuckPerms time
-        if (this.getServer().getPluginManager().isPluginEnabled("LuckPerms")) {
-            String[] version = this.getServer().getPluginManager().getPlugin("LuckPerms").getDescription().getVersion().split("\\.");
-            boolean notSupported = true;
-            try {
-                int major = Integer.parseInt(version[0]);
-                int minor = Integer.parseInt(version[1]);
-                if ((major == 5 && minor > 0) || major > 5) {
-                    notSupported = false;
-                }
-            } catch (NumberFormatException ignored) {
-            }
-            if (notSupported) {
-                this.log("Found an outdated LuckPerms. With LuckPerms 5.1.0 and above, FactionsUUID supports permission contexts!");
-            } else {
-                this.luckPermsSetup = LuckPerms.init(this);
-            }
-        }
-        Econ.setup();
-        LWC.setup();
-        setupPermissions();
-        if (perms != null) {
-            getLogger().info("Using Vault with permissions plugin " + perms.getName());
-        }
         if (getServer().getPluginManager().getPlugin("PermissionsEx") != null) {
             if (getServer().getPluginManager().getPlugin("PermissionsEx").getDescription().getVersion().startsWith("1")) {
                 getLogger().info(" ");
@@ -401,14 +363,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             getLogger().info(" ");
             getLogger().warning("Notice: LWC Extended is the updated, and best supported, continuation of LWC. https://www.spigotmc.org/resources/lwc-extended.69551/");
             getLogger().info(" ");
-        }
-
-        loadWorldguard();
-
-        EngineDynmap.getInstance().init();
-
-        if (this.getServer().getPluginManager().isPluginEnabled("Sentinel")) {
-            Sentinel.init(this.getServer().getPluginManager());
         }
 
         // start up task which runs the autoLeaveAfterDaysOfInactivity routine
@@ -454,15 +408,30 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
 
         new TitleAPI();
-        setupPlaceholderAPI();
-
-        // Grand metrics adventure!
-        this.setupMetrics();
 
         if (ChatColor.stripColor(TL.NOFACTION_PREFIX.toString()).equals("[4-]")) {
             getLogger().warning("Looks like you have an old, mistaken 'nofactions-prefix' in your lang.yml. It currently displays [4-] which is... strange.");
         }
 
+        // Integration time
+        getServer().getPluginManager().registerEvents(integrationManager = new IntegrationManager(this), this);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Econ.setup();
+                setupPermissions();
+                if (perms != null) {
+                    getLogger().info("Using Vault with permissions plugin " + perms.getName());
+                }
+                cmdBase.done();
+                // Grand metrics adventure!
+                setupMetrics();
+                getLogger().removeHandler(handler);
+                startupLog = startupBuilder.toString();
+                startupExceptionLog = startupExceptionBuilder.toString();
+            }
+        }.runTask(this);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -479,9 +448,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }.runTaskTimerAsynchronously(this, 0, 20 * 60 * 10); // ten minutes
 
         getLogger().info("=== Ready to go after " + (System.currentTimeMillis() - timeEnableStart) + "ms! ===");
-        getLogger().removeHandler(handler);
-        this.startupLog = startupBuilder.toString();
-        this.startupExceptionLog = startupExceptionBuilder.toString();
         this.loadSuccessful = true;
     }
 
@@ -631,27 +597,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return map;
     }
 
-    private void loadWorldguard() {
-        if (!this.conf().worldGuard().isChecking() && !this.conf().worldGuard().isBuildPriority()) {
-            getLogger().info("Not enabling WorldGuard check since no options for it are enabled.");
-            return;
-        }
-
-        Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
-        if (plugin != null) {
-            String version = plugin.getDescription().getVersion();
-            if (version.startsWith("6")) {
-                this.worldguard = new Worldguard6(plugin);
-                getLogger().info("Found support for WorldGuard version " + version);
-            } else if (version.startsWith("7")) {
-                this.worldguard = new Worldguard7();
-                getLogger().info("Found support for WorldGuard version " + version);
-            } else {
-                log(Level.WARNING, "Found WorldGuard but couldn't support this version: " + version);
-            }
-        } else {
-            log(Level.WARNING, "WorldGuard checks were turned in on config/main.conf, but WorldGuard isn't present on the server.");
-        }
+    public void setWorldGuard(IWorldguard wg) {
+        this.worldguard = wg;
     }
 
     public void loadLang() {
@@ -887,20 +834,16 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.worldguard;
     }
 
-    private void setupPlaceholderAPI() {
-        Plugin clip = getServer().getPluginManager().getPlugin("PlaceholderAPI");
-        if (clip != null && clip.isEnabled()) {
-            this.clipPlaceholderAPIManager = new ClipPlaceholderAPIManager();
-            if (this.clipPlaceholderAPIManager.register()) {
-                getLogger().info("Successfully registered placeholders with PlaceholderAPI.");
-            }
+    public void setupPlaceholderAPI() {
+        this.clipPlaceholderAPIManager = new ClipPlaceholderAPIManager();
+        if (this.clipPlaceholderAPIManager.register()) {
+            getLogger().info("Successfully registered placeholders with PlaceholderAPI.");
         }
+    }
 
-        Plugin mvdw = getServer().getPluginManager().getPlugin("MVdWPlaceholderAPI");
-        if (mvdw != null && mvdw.isEnabled()) {
-            this.mvdwPlaceholderAPIManager = true;
-            getLogger().info("Found MVdWPlaceholderAPI. Adding hooks.");
-        }
+    public void setupOtherPlaceholderAPI() {
+        this.mvdwPlaceholderAPIManager = true;
+        getLogger().info("Found MVdWPlaceholderAPI.");
     }
 
     public boolean isClipPlaceholderAPIHooked() {
@@ -921,11 +864,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             return false;
         }
         return perms != null;
-    }
-
-    private boolean setupPlayervaults() {
-        Plugin plugin = getServer().getPluginManager().getPlugin("PlayerVaults");
-        return plugin != null && plugin.isEnabled();
     }
 
     private GsonBuilder getGsonBuilder() {
@@ -1146,10 +1084,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return players;
     }
 
-    public boolean isHookedPlayervaults() {
-        return hookedPlayervaults;
-    }
-
     public String getPrimaryGroup(OfflinePlayer player) {
         return perms == null || !perms.hasGroupSupport() ? " " : perms.getPrimaryGroup(Bukkit.getWorlds().get(0).toString(), player);
     }
@@ -1162,5 +1096,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     public void debug(String s) {
         debug(Level.INFO, s);
+    }
+
+    public void luckpermsEnabled() {
+        this.luckPermsSetup = true;
     }
 }

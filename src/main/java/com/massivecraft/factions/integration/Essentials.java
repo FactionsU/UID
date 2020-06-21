@@ -5,7 +5,7 @@ import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Trade;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.iface.EconomyParticipator;
-import org.bukkit.Bukkit;
+import com.massivecraft.factions.listeners.EssentialsListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -15,14 +15,17 @@ public class Essentials {
 
     private static IEssentials essentials;
 
-    public static IEssentials setup() {
-        Plugin ess = Bukkit.getPluginManager().getPlugin("Essentials");
-        if (ess != null) {
-            essentials = (IEssentials) ess;
-            return essentials;
+    public static void setup(Plugin ess) {
+        essentials = (IEssentials) ess;
+        FactionsPlugin plugin = FactionsPlugin.getInstance();
+        plugin.getLogger().info("Found and connected to Essentials");
+        if (plugin.conf().factions().other().isDeleteEssentialsHomes()) {
+            plugin.getLogger().info("Based on main.conf will delete Essentials player homes in their old faction when they leave");
+            plugin.getServer().getPluginManager().registerEvents(new EssentialsListener(essentials), plugin);
         }
-
-        return null;
+        if (plugin.conf().factions().homes().isTeleportCommandEssentialsIntegration()) {
+            plugin.getLogger().info("Using Essentials for teleportation");
+        }
     }
 
     // return false if feature is disabled or Essentials isn't available

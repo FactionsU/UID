@@ -225,17 +225,6 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
             this.addSubCommand(this.cmdTNT);
             FactionsPlugin.getInstance().getLogger().info("Enabling TNT bank management");
         }
-        if (Bukkit.getServer().getPluginManager().isPluginEnabled("FactionsTop")) {
-            FactionsPlugin.getInstance().getLogger().info("Found FactionsTop plugin. Disabling our own /f top command.");
-        } else {
-            this.addSubCommand(this.cmdTop);
-        }
-        if (FactionsPlugin.getInstance().isHookedPlayervaults()) {
-            FactionsPlugin.getInstance().getLogger().info("Found PlayerVaults hook, adding /f vault and /f setmaxvault commands.");
-            this.addSubCommand(new CmdSetMaxVaults());
-            this.addSubCommand(new CmdVault());
-        }
-
         if (FactionsPlugin.getInstance().conf().commands().fly().isEnable()) {
             this.addSubCommand(this.cmdFly);
             this.addSubCommand(this.cmdTrail);
@@ -244,6 +233,19 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
             FactionsPlugin.getInstance().getLogger().info("Faction flight set to false in main.conf. Not enabling /f fly command.");
         }
 
+    }
+
+    public void done() {
+        if (Bukkit.getServer().getPluginManager().isPluginEnabled("FactionsTop")) {
+            FactionsPlugin.getInstance().getLogger().info("Found FactionsTop plugin. Disabling our own /f top command.");
+        } else {
+            this.addSubCommand(this.cmdTop);
+        }
+        if (Bukkit.getServer().getPluginManager().isPluginEnabled("PlayerVaults")) {
+            FactionsPlugin.getInstance().getLogger().info("Found PlayerVaults hook, adding /f vault and /f setmaxvault commands.");
+            this.addSubCommand(new CmdSetMaxVaults());
+            this.addSubCommand(new CmdVault());
+        }
         if (CommodoreProvider.isSupported()) {
             brigadierManager.build();
         }
