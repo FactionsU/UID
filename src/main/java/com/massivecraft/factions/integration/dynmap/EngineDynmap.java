@@ -78,13 +78,7 @@ public class EngineDynmap {
         return this.dynmapApi == null ? null : this.dynmapApi.getDynmapVersion();
     }
 
-    public void init() {
-        Plugin dynmap = Bukkit.getServer().getPluginManager().getPlugin("dynmap");
-
-        if (dynmap == null || !dynmap.isEnabled()) {
-            return;
-        }
-
+    public void init(Plugin dynmap) {
         this.dynmapApi = (DynmapAPI) dynmap;
 
         // Should we even use dynmap?
