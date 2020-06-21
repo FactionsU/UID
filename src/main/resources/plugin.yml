@@ -326,3 +326,7 @@ permissions:
     description: Use TNT siphon command
   factions.coords:
     description: Send coordinates to your teammates
+  factions.listclaims:
+    description: List claims
+  factions.listclaims.other:
+    description: List claims of other factions
