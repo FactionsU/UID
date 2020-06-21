@@ -96,6 +96,15 @@ Click on any command for more details.
     !!! success "Requirements"
         `factions.managewarzone` node.
 
+??? abstract "/f listclaims [world] [faction]"
+    Defaults: world = current, faction = current  
+    Lists all coordinates of faction claims, merging attached claims into one coordinate with number of claims in parentheses.
+    
+    !!! success "Requirements"
+        `factions.listclaims` node.  
+        Must be faction admin, or be granted `listclaims` perms in the faction.  
+        To view other factions, must have`factions.listclaims.other`.
+
 ### Faction Management
 
 ??? abstract "/f admin &lt;player&gt;"
