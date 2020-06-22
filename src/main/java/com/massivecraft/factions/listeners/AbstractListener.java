@@ -13,6 +13,7 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
 import com.massivecraft.factions.util.material.MaterialDb;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -29,6 +30,7 @@ import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public abstract class AbstractListener implements Listener {
@@ -94,12 +96,15 @@ public abstract class AbstractListener implements Listener {
             return;
         }
 
-        if (explosionDisallowed(boomer, loc)) {
+        if (explosionDisallowed(boomer, new FLocation(loc))) {
             event.setCancelled(true);
             return;
         }
 
-        blockList.removeIf(block -> explosionDisallowed(boomer, block.getLocation()));
+        List<Chunk> chunks = blockList.stream().map(Block::getChunk).distinct().collect(Collectors.toList());
+        if (chunks.removeIf(chunk -> explosionDisallowed(boomer, new FLocation(chunk)))) {
+            blockList.removeIf(block -> !chunks.contains(block.getChunk()));
+        }
 
         if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && FactionsPlugin.getInstance().conf().exploits().isTntWaterlog()) {
             // TNT in water/lava doesn't normally destroy any surrounding blocks, which is usually desired behavior, but...
@@ -116,10 +121,6 @@ public abstract class AbstractListener implements Listener {
                 targets.add(center.getRelative(1, 0, 0));
                 targets.add(center.getRelative(-1, 0, 0));
                 for (Block target : targets) {
-                    if (explosionDisallowed(boomer, target.getLocation())) {
-                        continue;
-                    }
-                    boolean go = true;
                     // TODO get resistance value via NMS for future-proofing
                     switch (target.getType()) {
                         case AIR:
@@ -135,9 +136,9 @@ public abstract class AbstractListener implements Listener {
                         case END_PORTAL:
                         case END_PORTAL_FRAME:
                         case ENDER_CHEST:
-                            go = false;
+                            continue;
                     }
-                    if (go) {
+                    if (!explosionDisallowed(boomer, new FLocation(target.getLocation()))) {
                         target.breakNaturally();
                     }
                 }
@@ -145,35 +146,35 @@ public abstract class AbstractListener implements Listener {
         }
     }
 
-    private boolean explosionDisallowed(Entity boomer, Location location) {
-        Faction faction = Board.getInstance().getFactionAt(new FLocation(location));
+    private boolean explosionDisallowed(Entity boomer, FLocation location) {
+        Faction faction = Board.getInstance().getFactionAt(location);
         boolean online = faction.hasPlayersOnline();
         if (faction.noExplosionsInTerritory() || (faction.isPeaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
             // faction is peaceful and has explosions set to disabled
             return true;
         }
         MainConfig.Factions.Protection protection = FactionsPlugin.getInstance().conf().factions().protection();
-        if (boomer instanceof Creeper && ((faction.isWilderness() && protection.isWildernessBlockCreepers() && !protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+        if (boomer instanceof Creeper && ((faction.isWilderness() && protection.isWildernessBlockCreepers() && !protection.getWorldsNoWildernessProtection().contains(location.getWorldName())) ||
                 (faction.isNormal() && (online ? protection.isTerritoryBlockCreepers() : protection.isTerritoryBlockCreepersWhenOffline())) ||
                 (faction.isWarZone() && protection.isWarZoneBlockCreepers()) ||
                 faction.isSafeZone())) {
             // creeper which needs prevention
             return true;
         } else if (
-                (boomer instanceof Fireball || boomer instanceof WitherSkull || boomer instanceof Wither) && ((faction.isWilderness() && protection.isWildernessBlockFireballs() && !protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+                (boomer instanceof Fireball || boomer instanceof WitherSkull || boomer instanceof Wither) && ((faction.isWilderness() && protection.isWildernessBlockFireballs() && !protection.getWorldsNoWildernessProtection().contains(location.getWorldName())) ||
                         (faction.isNormal() && (online ? protection.isTerritoryBlockFireballs() : protection.isTerritoryBlockFireballsWhenOffline())) ||
                         (faction.isWarZone() && protection.isWarZoneBlockFireballs()) ||
                         faction.isSafeZone())) {
             // ghast fireball which needs prevention
             // it's a bit crude just using fireball protection for Wither boss too, but I'd rather not add in a whole new set of xxxBlockWitherExplosion or whatever
             return true;
-        } else if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && ((faction.isWilderness() && protection.isWildernessBlockTNT() && !protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+        } else if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && ((faction.isWilderness() && protection.isWildernessBlockTNT() && !protection.getWorldsNoWildernessProtection().contains(location.getWorldName())) ||
                 (faction.isNormal() && (online ? protection.isTerritoryBlockTNT() : protection.isTerritoryBlockTNTWhenOffline())) ||
                 (faction.isWarZone() && protection.isWarZoneBlockTNT()) ||
                 (faction.isSafeZone() && protection.isSafeZoneBlockTNT()))) {
             // TNT which needs prevention
             return true;
-        } else if (((faction.isWilderness() && protection.isWildernessBlockOtherExplosions() && !protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) ||
+        } else if (((faction.isWilderness() && protection.isWildernessBlockOtherExplosions() && !protection.getWorldsNoWildernessProtection().contains(location.getWorldName())) ||
                 (faction.isNormal() && (online ? protection.isTerritoryBlockOtherExplosions() : protection.isTerritoryBlockOtherExplosionsWhenOffline())) ||
                 (faction.isWarZone() && protection.isWarZoneBlockOtherExplosions()) ||
                 (faction.isSafeZone() && protection.isSafeZoneBlockOtherExplosions()))) {
