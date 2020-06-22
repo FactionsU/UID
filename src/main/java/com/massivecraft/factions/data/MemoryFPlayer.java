@@ -8,6 +8,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
+import com.massivecraft.factions.event.FactionAutoDisbandEvent;
 import com.massivecraft.factions.event.LandClaimEvent;
 import com.massivecraft.factions.iface.EconomyParticipator;
 import com.massivecraft.factions.iface.RelationParticipator;
@@ -736,6 +737,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 fplayer.msg(TL.LEAVE_DISBANDED, myFaction.describeTo(fplayer, true));
             }
 
+            FactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(myFaction));
             Factions.getInstance().removeFaction(myFaction.getId());
             if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
                 FactionsPlugin.getInstance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.getTag(), myFaction.getId(), this.getName()));

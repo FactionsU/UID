@@ -8,6 +8,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.DefaultPermissionsConfig;
+import com.massivecraft.factions.event.FactionAutoDisbandEvent;
 import com.massivecraft.factions.iface.EconomyParticipator;
 import com.massivecraft.factions.iface.RelationParticipator;
 import com.massivecraft.factions.integration.Econ;
@@ -984,6 +985,8 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
             for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
                 fplayer.msg(TL.LEAVE_DISBANDED, this.getTag(fplayer));
             }
+
+            FactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(this));
 
             Factions.getInstance().removeFaction(getId());
         } else { // promote new faction admin
