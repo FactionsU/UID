@@ -51,6 +51,10 @@ public class FLocation implements Serializable {
         this(location.getWorld().getName(), blockToChunk(location.getBlockX()), blockToChunk(location.getBlockZ()));
     }
 
+    public FLocation(Chunk chunk) {
+        this(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+    }
+
     public FLocation(Player player) {
         this(player.getLocation());
     }
