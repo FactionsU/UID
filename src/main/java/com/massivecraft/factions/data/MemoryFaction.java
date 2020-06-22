@@ -465,6 +465,9 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     public void checkPerms() {
         if (this.permissions == null || this.permissions.isEmpty()) {
             this.resetPerms();
+        } else {
+            this.updatePerms(this.permissions, FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getPermissions(), true);
+            this.updatePerms(this.permissionsOffline, FactionsPlugin.getInstance().getConfigManager().getOfflinePermissionsConfig().getPermissions(), false);
         }
     }
 
@@ -501,6 +504,34 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
                     entry.getValue().put(permissibleAction, permissibleAction.getFullPerm(defaults).get(entry.getKey()).defaultAllowed());
                 }
             }
+        }
+    }
+
+    private void updatePerms(Map<Permissible, Map<PermissibleAction, Boolean>> permissions, DefaultPermissionsConfig.Permissions defaults, boolean online) {
+        for (Relation relation : Relation.values()) {
+            if (relation != Relation.MEMBER) {
+                permissions.computeIfAbsent(relation, p -> new HashMap<>());
+            }
+        }
+        if (online) {
+            for (Role role : Role.values()) {
+                if (role != Role.ADMIN) {
+                    permissions.computeIfAbsent(role, p -> new HashMap<>());
+                }
+            }
+        }
+
+        for (Map.Entry<Permissible, Map<PermissibleAction, Boolean>> entry : permissions.entrySet()) {
+            for (PermissibleAction permissibleAction : PermissibleAction.values()) {
+                if (permissibleAction.isFactionOnly()) {
+                    if (online && !(entry.getKey() instanceof Relation)) {
+                        entry.getValue().computeIfAbsent(permissibleAction, p -> p.getFactionOnly(defaults).get(entry.getKey()).defaultAllowed());
+                    }
+                } else {
+                    entry.getValue().computeIfAbsent(permissibleAction, p -> p.getFullPerm(defaults).get(entry.getKey()).defaultAllowed());
+                }
+            }
+            entry.getValue().remove(null);
         }
     }
 
