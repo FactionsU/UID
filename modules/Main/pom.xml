@@ -444,7 +444,7 @@
         <dependency>
             <groupId>org.kitteh</groupId>
             <artifactId>paste-gg-api</artifactId>
-            <version>0.9.0</version>
+            <version>0.9.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
