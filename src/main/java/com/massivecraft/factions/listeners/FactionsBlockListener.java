@@ -1,6 +1,5 @@
 package com.massivecraft.factions.listeners;
 
-import com.google.common.collect.ImmutableList;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
@@ -29,6 +28,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -160,7 +160,7 @@ public class FactionsBlockListener implements Listener {
 
         List<Block> blocks;
         if (FactionsPlugin.getMCVersion()<800) {
-            blocks = ImmutableList.of(event.getBlock().getRelative(event.getDirection(), 2));
+            blocks = Collections.singletonList(event.getBlock().getRelative(event.getDirection(), 2));
         } else {
             blocks = event.getBlocks();
         }

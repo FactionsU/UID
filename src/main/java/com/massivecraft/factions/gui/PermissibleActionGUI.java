@@ -1,6 +1,5 @@
 package com.massivecraft.factions.gui;
 
-import com.google.common.collect.ImmutableMap;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Permissible;
@@ -123,11 +122,12 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
 
     @Override
     protected Map<Integer, SimpleItem> createDummyItems() {
-        ImmutableMap.Builder<Integer, SimpleItem> builder = ImmutableMap.<Integer, SimpleItem>builder().put(this.back = ((PermissibleAction.values().length / 9) + 1) * 9, backItem);
+        Map<Integer, SimpleItem> map = new HashMap<>();
+        map.put(this.back = ((PermissibleAction.values().length / 9) + 1) * 9, backItem);
         if (FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() && permissible instanceof Relation) {
-            builder.put(this.back + 4, PermissibleRelationGUI.offlineSwitch);
+            map.put(this.back + 4, PermissibleRelationGUI.offlineSwitch);
         }
-        return builder.build();
+        return map;
     }
 
     // For dummy items only parseDefault is called, but we want to provide the relation placeholders, so: Override

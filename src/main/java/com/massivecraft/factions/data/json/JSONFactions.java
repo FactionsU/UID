@@ -1,6 +1,5 @@
 package com.massivecraft.factions.data.json;
 
-import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.FLocation;
@@ -244,7 +243,7 @@ public class JSONFactions extends MemoryFactions {
 
     @Override
     public void convertFrom(MemoryFactions old) {
-        this.factions.putAll(Maps.transformValues(old.factions, faction -> new JSONFaction((MemoryFaction) faction)));
+        old.factions.forEach((tag, faction) -> this.factions.put(tag, new JSONFaction((MemoryFaction) faction)));
         this.nextId = old.nextId;
         forceSave();
         Factions.instance = this;

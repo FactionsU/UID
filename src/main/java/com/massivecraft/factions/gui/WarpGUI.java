@@ -1,6 +1,5 @@
 package com.massivecraft.factions.gui;
 
-import com.google.common.collect.ImmutableList;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
@@ -41,7 +40,7 @@ public class WarpGUI extends GUI<Integer> {
         passwordModifier = SimpleItem.builder()
                 .setMaterial(FactionMaterial.from("BLACK_STAINED_GLASS").get())
                 .setColor(DyeColor.BLACK)
-                .setLore(ImmutableList.of("&8Password Protected"))
+                .setLore(Collections.singletonList("&8Password Protected"))
                 .build();
     }
 
