@@ -1,6 +1,5 @@
 package com.massivecraft.factions.config.file;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.config.annotation.DefinedType;
@@ -103,10 +102,12 @@ public class DynmapConfig {
 
         @Comment("Per-faction overrides")
         @DefinedType
-        private Map<String, Style> factionStyles = ImmutableMap.of(
-                "-1", new DynmapConfig.Style("#FF00FF", "#FF00FF"),
-                "-2", new DynmapConfig.Style("#FF0000", "#FF0000")
-        );
+        private Map<String, Style> factionStyles = new HashMap<String, Style>() {
+            {
+                this.put("-1", new DynmapConfig.Style("#FF00FF", "#FF00FF"));
+                this.put("-2", new DynmapConfig.Style("#FF0000", "#FF0000"));
+            }
+        };
 
         private transient TypeToken<Map<String, Style>> factionStylesToken = new TypeToken<Map<String, Style>>() {
         };

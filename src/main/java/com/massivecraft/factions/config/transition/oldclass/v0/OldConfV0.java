@@ -1,10 +1,10 @@
 package com.massivecraft.factions.config.transition.oldclass.v0;
 
-import com.google.common.collect.Sets;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -244,7 +244,7 @@ public class OldConfV0 {
 
     public boolean pistonProtectionThroughDenyBuild = true;
 
-    public Set<Material> territoryProtectedMaterials = Sets.newHashSet();
+    public Set<Material> territoryProtectedMaterials = Collections.emptySet();
     public Set<Material> territoryDenyUseageMaterials = EnumSet.noneOf(Material.class);
     public Set<Material> territoryProtectedMaterialsWhenOffline = EnumSet.noneOf(Material.class);
     public Set<Material> territoryDenyUseageMaterialsWhenOffline = EnumSet.noneOf(Material.class);

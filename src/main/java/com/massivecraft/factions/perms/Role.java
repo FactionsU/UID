@@ -1,10 +1,11 @@
 package com.massivecraft.factions.perms;
 
-import com.google.common.collect.ImmutableSet;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.ChatColor;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public enum Role implements Permissible {
@@ -122,13 +123,13 @@ public enum Role implements Permissible {
      */
     public Set<String> getRoleNamesAtOrAbove() {
         if (this.roleNamesAtOrAbove == null) {
-            ImmutableSet.Builder<String> builder = ImmutableSet.builder();
+            Set<String> set = new HashSet<>();
             for (Role role : values()) {
                 if (this.isAtMost(role)) {
-                    builder.add(role.name().toLowerCase());
+                    set.add(role.name().toLowerCase());
                 }
             }
-            this.roleNamesAtOrAbove = builder.build();
+            this.roleNamesAtOrAbove = Collections.unmodifiableSet(set);
         }
         return this.roleNamesAtOrAbove;
     }
@@ -141,13 +142,13 @@ public enum Role implements Permissible {
      */
     public Set<String> getRoleNamesAtOrBelow() {
         if (this.roleNamesAtOrBelow == null) {
-            ImmutableSet.Builder<String> builder = ImmutableSet.builder();
+            Set<String> set = new HashSet<>();
             for (Role role : values()) {
                 if (this.isAtLeast(role)) {
-                    builder.add(role.name().toLowerCase());
+                    set.add(role.name().toLowerCase());
                 }
             }
-            this.roleNamesAtOrBelow = builder.build();
+            this.roleNamesAtOrBelow = Collections.unmodifiableSet(set);
         }
         return this.roleNamesAtOrBelow;
     }

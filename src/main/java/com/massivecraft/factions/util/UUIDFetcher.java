@@ -1,6 +1,5 @@
 package com.massivecraft.factions.util;
 
-import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -10,6 +9,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +29,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private final boolean rateLimiting;
 
     public UUIDFetcher(List<String> names, boolean rateLimiting) {
-        this.names = ImmutableList.copyOf(names);
+        this.names = new ArrayList<>(names);
         this.rateLimiting = rateLimiting;
     }
 

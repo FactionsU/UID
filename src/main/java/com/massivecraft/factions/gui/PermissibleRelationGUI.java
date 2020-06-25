@@ -1,6 +1,5 @@
 package com.massivecraft.factions.gui;
 
-import com.google.common.collect.ImmutableMap;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Permissible;
@@ -127,6 +126,6 @@ public class PermissibleRelationGUI extends GUI<Permissible> {
 
     @Override
     protected Map<Integer, SimpleItem> createDummyItems() {
-        return FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() ? ImmutableMap.of(13, offlineSwitch) : Collections.emptyMap();
+        return FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() ? Collections.singletonMap(13, offlineSwitch) : Collections.emptyMap();
     }
 }

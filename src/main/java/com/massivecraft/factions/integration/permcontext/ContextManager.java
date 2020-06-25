@@ -1,7 +1,6 @@
 package com.massivecraft.factions.integration.permcontext;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.massivecraft.factions.FactionsPlugin;
@@ -12,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -48,7 +48,7 @@ public class ContextManager implements Listener {
         if (registeredContexts == null) {
             return Collections.emptySet();
         }
-        return ImmutableSet.copyOf(registeredContexts.values());
+        return Collections.unmodifiableSet(new HashSet<>(registeredContexts.values()));
     }
 
     /**

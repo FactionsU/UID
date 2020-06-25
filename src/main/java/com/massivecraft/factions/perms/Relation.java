@@ -1,10 +1,10 @@
 package com.massivecraft.factions.perms;
 
-import com.google.common.collect.ImmutableSet;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.ChatColor;
 
+import java.util.Collections;
 import java.util.Set;
 
 public enum Relation implements Permissible {
@@ -137,7 +137,7 @@ public enum Relation implements Permissible {
      */
     public Set<String> getNameInASet() {
         if (this.justMyNameInASet == null) {
-            this.justMyNameInASet = ImmutableSet.of(this.name().toLowerCase());
+            this.justMyNameInASet = Collections.singleton(this.name().toLowerCase());
         }
         return this.justMyNameInASet;
     }

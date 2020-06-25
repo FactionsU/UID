@@ -1,6 +1,5 @@
 package com.massivecraft.factions.cmd;
 
-import com.google.common.base.Charsets;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -15,6 +14,7 @@ import org.kitteh.pastegg.PasteFile;
 import org.kitteh.pastegg.Visibility;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,7 +79,7 @@ public class CmdDebug extends FCommand {
 
             private String getFile(Path file) {
                 try {
-                    return new String(Files.readAllBytes(file), Charsets.UTF_8);
+                    return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
                 } catch (IOException e) {
                     return ExceptionUtils.getFullStackTrace(e);
                 }

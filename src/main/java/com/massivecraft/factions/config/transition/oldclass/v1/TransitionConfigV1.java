@@ -1,6 +1,5 @@
 package com.massivecraft.factions.config.transition.oldclass.v1;
 
-import com.google.common.collect.ImmutableList;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.util.material.FactionMaterial;
 import org.bukkit.ChatColor;
@@ -2022,7 +2021,7 @@ public class TransitionConfigV1 {
     private WorldBorder worldBorder = new WorldBorder();
 
     public List<String> getCommandBase() {
-        return commandBase == null ? ImmutableList.of("f") : commandBase;
+        return commandBase == null ? (commandBase = Collections.singletonList("f")) : commandBase;
     }
 
     public Colors colors() {
