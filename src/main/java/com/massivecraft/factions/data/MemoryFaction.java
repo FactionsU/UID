@@ -527,7 +527,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
                     if (online && !(entry.getKey() instanceof Relation)) {
                         entry.getValue().computeIfAbsent(permissibleAction, p -> p.getFactionOnly(defaults).get(entry.getKey()).defaultAllowed());
                     }
-                } else {
+                } else if (online || (entry.getKey() instanceof Relation)) {
                     entry.getValue().computeIfAbsent(permissibleAction, p -> p.getFullPerm(defaults).get(entry.getKey()).defaultAllowed());
                 }
             }
