@@ -42,16 +42,16 @@ Below is a full list of all permission nodes. A check mark (✔) is next to any 
 | factions.fly.trails         | Grants ability to have particle trails while flying                                     |
 | factions.fly.warzone        | Grants ability to fly in warzone territory                                              |
 | factions.fly.wilderness     | Grants ability to fly in wilderness territory                                           |
-| factions.help ✔             |                                                                                         |
-| factions.home ✔             |                                                                                         |
-| factions.invite ✔           |                                                                                         |
-| factions.join ✔             |                                                                                         |
-| factions.join.any           |                                                                                         |
-| factions.join.others        |                                                                                         |
-| factions.kick ✔             |                                                                                         |
-| factions.kick.any           |                                                                                         |
-| factions.leave ✔            |                                                                                         |
-| factions.list ✔             |                                                                                         |
+| factions.help ✔             | Can use /f help                                                                         |
+| factions.home ✔             | Can use /f home                                                                         |
+| factions.invite ✔           | Can use /f invite                                                                       |
+| factions.join ✔             | Can use /f join                                                                         |
+| factions.join.any           | Can use /f join to join a faction regardless of open/invite status                      |
+| factions.join.others        | Can use /f join to add other players to factions                                        |
+| factions.kick ✔             | Can use /f kick                                                                         |
+| factions.kick.any           | Can use /f kick to kick any player from any faction                                     |
+| factions.leave ✔            | Can use /f leave                                                                        |
+| factions.list ✔             | Can use /f list                                                                         |
 | factions.listclaims         | Can run /f listclaims                                                                   |
 | factions.listclaims.other   | Can run /f listclaims on other factions                                                 |
 | factions.lock               |                                                                                         |

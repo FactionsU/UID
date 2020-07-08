@@ -10,7 +10,7 @@ repo_url: 'https://github.com/drtshock/Factions'
 edit_uri: 'edit/1.6.x/docs/'
 
 # Copyright
-copyright: 'Copyright &copy; 2019 MOSS'
+copyright: 'Copyright &copy; 2019-2020 MOSS'
 
 # Configuration
 theme:
