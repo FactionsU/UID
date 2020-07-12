@@ -6,6 +6,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerJoinEvent;
+import com.massivecraft.factions.event.FactionAttemptCreateEvent;
 import com.massivecraft.factions.event.FactionCreateEvent;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
@@ -51,6 +52,12 @@ public class CmdCreate extends FCommand {
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make sure they can pay
         if (!context.canAffordCommand(FactionsPlugin.getInstance().conf().economy().getCostCreate(), TL.COMMAND_CREATE_TOCREATE.toString())) {
+            return;
+        }
+
+        FactionAttemptCreateEvent attemptEvent = new FactionAttemptCreateEvent(context.player, tag);
+        Bukkit.getServer().getPluginManager().callEvent(attemptEvent);
+        if (attemptEvent.isCancelled()) {
             return;
         }
 
