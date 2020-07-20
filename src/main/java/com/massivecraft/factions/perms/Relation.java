@@ -24,7 +24,9 @@ public enum Relation implements Permissible {
     }
 
     public static Relation fromString(String s) {
-        // Because Java 6 doesn't allow String switches :(
+        if (s == null) {
+            return NEUTRAL;
+        }
         if (s.equalsIgnoreCase(MEMBER.nicename)) {
             return MEMBER;
         } else if (s.equalsIgnoreCase(ALLY.nicename)) {
@@ -34,7 +36,19 @@ public enum Relation implements Permissible {
         } else if (s.equalsIgnoreCase(ENEMY.nicename)) {
             return ENEMY;
         } else {
-            return NEUTRAL; // If they somehow mess things up, go back to default behavior.
+            switch (s.toUpperCase()) {
+                case "MEMBER":
+                    return MEMBER;
+                case "ALLY":
+                    return ALLY;
+                case "TRUCE":
+                    return TRUCE;
+                case "ENEMY":
+                    return ENEMY;
+                case "NEUTRAL":
+                default: // If they somehow mess things up, go back to default behavior.
+                    return NEUTRAL;
+            }
         }
     }
 
