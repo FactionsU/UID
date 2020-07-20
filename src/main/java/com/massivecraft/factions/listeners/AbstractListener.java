@@ -336,7 +336,7 @@ public abstract class AbstractListener implements Listener {
     }
 
     private boolean isDupeMaterial(Material material) {
-        if (MaterialDb.getInstance().provider.isSign(material)) {
+        if (material.name().toUpperCase().contains("SIGN")) {
             return true;
         }
 

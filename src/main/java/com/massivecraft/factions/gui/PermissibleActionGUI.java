@@ -6,7 +6,7 @@ import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
-import com.massivecraft.factions.util.material.FactionMaterial;
+import com.massivecraft.factions.util.material.MaterialDb;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.Backable {
-    private static final SimpleItem backItem = SimpleItem.builder().setMaterial(FactionMaterial.from("ARROW").get()).setName(TL.GUI_BUTTON_BACK.toString()).build();
+    private static final SimpleItem backItem = SimpleItem.builder().setMaterial(MaterialDb.get("ARROW")).setName(TL.GUI_BUTTON_BACK.toString()).build();
     private static final SimpleItem base;
     private static final String locked;
     private static final String allow;

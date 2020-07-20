@@ -7,51 +7,53 @@ import org.bukkit.Material;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
 
 public class MaterialDb {
-
-    /*
-
-    This utility has no concept of block metadata, converts if necessary 1.13
-    material names to < 1.12 materials, or keeps 1.13 materials.
-
-    Useful as we don't really need extra metadata for stuff like territory block breaking checking.
-
-        "ACACIA_BOAT": {
-            "material": "ACACIA_BOAT",
-            "legacy": "BOAT_ACACIA"
-        }
-
-     */
-
-    private static MaterialDb instance;
-
-    public boolean legacy = true;
-    public MaterialProvider provider;
+    private static Map<String, Material> map;
 
     private MaterialDb() {
     }
 
-    public Material get(String name) {
-        return provider.resolve(name);
+    public static Material get(String name) {
+        return get(name, Material.AIR);
+    }
+
+    public static Material get(String name, Material defaultMaterial) {
+        if (name == null) {
+            FactionsPlugin.getInstance().log("Null material name found");
+            return defaultMaterial;
+        }
+
+        Material material = Material.getMaterial(name);
+        if (material == null) {
+            material = map.get(name.toUpperCase());
+        }
+
+        if (material == null) {
+            FactionsPlugin.getInstance().log(Level.INFO, "Material does not exist: " + name.toUpperCase());
+            return defaultMaterial;
+        }
+
+        return material;
     }
 
     public static void load() {
-        instance = new MaterialDb();
-        if (instance.legacy = FactionsPlugin.getMCVersion() < 1300) { // Before 1.13
-            FactionsPlugin.getInstance().getLogger().info("Using legacy support for materials");
-        }
-
         InputStreamReader reader = new InputStreamReader(FactionsPlugin.getInstance().getResource("materials.json"));
-        Type typeToken = new TypeToken<HashMap<String, MaterialProvider.MaterialData>>() {
+        Type typeToken = new TypeToken<HashMap<String, String>>() {
         }.getType();
-        HashMap<String, MaterialProvider.MaterialData> materialData = FactionsPlugin.getInstance().getGson().fromJson(reader, typeToken);
-        FactionsPlugin.getInstance().getLogger().info(String.format("Loaded %s material mappings.", materialData.keySet().size()));
-        instance.provider = new MaterialProvider(materialData);
+        HashMap<String, String> materialData = FactionsPlugin.getInstance().getGson().fromJson(reader, typeToken);
+        map = new HashMap<>();
+        materialData.forEach((n, l) -> {
+            Material matN = Material.getMaterial(n);
+            Material matL = Material.getMaterial(l);
+            boolean nNull = matN == null;
+            if (nNull == (matL == null)) {
+                return;
+            }
+            map.put(nNull ? n : l, nNull ? matL : matN);
+        });
+        FactionsPlugin.getInstance().getLogger().info(String.format("Loaded %s material mappings.", map.size()));
     }
-
-    public static MaterialDb getInstance() {
-        return instance;
-    }
-
 }
