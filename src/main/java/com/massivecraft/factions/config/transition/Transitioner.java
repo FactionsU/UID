@@ -21,9 +21,7 @@ import com.massivecraft.factions.util.LazyLocation;
 import com.massivecraft.factions.util.MapFLocToStringSetTypeAdapter;
 import com.massivecraft.factions.util.MyLocationTypeAdapter;
 import com.massivecraft.factions.util.TL;
-import com.massivecraft.factions.util.material.FactionMaterial;
-import com.massivecraft.factions.util.material.adapter.FactionMaterialAdapter;
-import com.massivecraft.factions.util.material.adapter.MaterialAdapter;
+import com.massivecraft.factions.config.transition.oldclass.v0.MaterialAdapter;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.bukkit.Material;
@@ -138,9 +136,6 @@ public class Transitioner {
         Type accessTypeAdatper = new TypeToken<Map<OldPermissableV0, Map<OldPermissableActionV0, OldAccessV0>>>() {
         }.getType();
 
-        Type factionMaterialType = new TypeToken<FactionMaterial>() {
-        }.getType();
-
         Type materialType = new TypeToken<Material>() {
         }.getType();
 
@@ -149,7 +144,6 @@ public class Transitioner {
                 .disableHtmlEscaping()
                 .enableComplexMapKeySerialization()
                 .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
-                .registerTypeAdapter(factionMaterialType, new FactionMaterialAdapter())
                 .registerTypeAdapter(materialType, new MaterialAdapter())
                 .registerTypeAdapter(accessTypeAdatper, new OldPermissionsMapTypeAdapterV0())
                 .registerTypeAdapter(LazyLocation.class, new MyLocationTypeAdapter())

@@ -5,7 +5,7 @@ import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.config.annotation.WipeOnReload;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.MiscUtil;
-import com.massivecraft.factions.util.material.FactionMaterial;
+import com.massivecraft.factions.util.material.MaterialDb;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -1057,7 +1057,7 @@ public class MainConfig {
             public Set<Material> getIgnoreBuildMaterials() {
                 if (ignoreBuildMaterialsMat == null) {
                     ignoreBuildMaterialsMat = new HashSet<>();
-                    ignoreBuildMaterials.forEach(m -> ignoreBuildMaterialsMat.add(FactionMaterial.from(m).get()));
+                    ignoreBuildMaterials.forEach(m -> ignoreBuildMaterialsMat.add(MaterialDb.get(m)));
                     ignoreBuildMaterialsMat.remove(Material.AIR);
                     ignoreBuildMaterials = Collections.unmodifiableSet(ignoreBuildMaterials);
                 }
@@ -1462,7 +1462,7 @@ public class MainConfig {
             public Set<Material> getTerritoryDenyUsageMaterials() {
                 if (territoryDenyUsageMaterialsMat == null) {
                     territoryDenyUsageMaterialsMat = new HashSet<>();
-                    territoryDenyUsageMaterials.forEach(m -> territoryDenyUsageMaterialsMat.add(FactionMaterial.from(m).get()));
+                    territoryDenyUsageMaterials.forEach(m -> territoryDenyUsageMaterialsMat.add(MaterialDb.get(m)));
                     territoryDenyUsageMaterialsMat.remove(Material.AIR);
                     territoryDenyUsageMaterialsMat = Collections.unmodifiableSet(territoryDenyUsageMaterialsMat);
                 }
@@ -1472,7 +1472,7 @@ public class MainConfig {
             public Set<Material> getTerritoryDenyUsageMaterialsWhenOffline() {
                 if (territoryDenyUsageMaterialsWhenOfflineMat == null) {
                     territoryDenyUsageMaterialsWhenOfflineMat = new HashSet<>();
-                    territoryDenyUsageMaterialsWhenOffline.forEach(m -> territoryDenyUsageMaterialsWhenOfflineMat.add(FactionMaterial.from(m).get()));
+                    territoryDenyUsageMaterialsWhenOffline.forEach(m -> territoryDenyUsageMaterialsWhenOfflineMat.add(MaterialDb.get(m)));
                     territoryDenyUsageMaterialsWhenOfflineMat.remove(Material.AIR);
                     territoryDenyUsageMaterialsWhenOfflineMat = Collections.unmodifiableSet(territoryDenyUsageMaterialsWhenOfflineMat);
                 }
@@ -1482,7 +1482,7 @@ public class MainConfig {
             public Set<Material> getContainerExceptions() {
                 if (containerExceptionsMat == null) {
                     containerExceptionsMat = new HashSet<>();
-                    containerExceptions.forEach(m -> containerExceptionsMat.add(FactionMaterial.from(m).get()));
+                    containerExceptions.forEach(m -> containerExceptionsMat.add(MaterialDb.get(m)));
                     containerExceptionsMat.remove(Material.AIR);
                     containerExceptionsMat = Collections.unmodifiableSet(containerExceptionsMat);
                 }
@@ -1492,7 +1492,7 @@ public class MainConfig {
             public Set<Material> getBreakExceptions() {
                 if (breakExceptionsMat == null) {
                     breakExceptionsMat = new HashSet<>();
-                    breakExceptions.forEach(m -> breakExceptionsMat.add(FactionMaterial.from(m).get()));
+                    breakExceptions.forEach(m -> breakExceptionsMat.add(MaterialDb.get(m)));
                     breakExceptionsMat.remove(Material.AIR);
                     breakExceptionsMat = Collections.unmodifiableSet(breakExceptionsMat);
                 }

@@ -1,7 +1,7 @@
 package com.massivecraft.factions.config.transition.oldclass.v1;
 
 import com.massivecraft.factions.config.annotation.Comment;
-import com.massivecraft.factions.util.material.FactionMaterial;
+import com.massivecraft.factions.util.material.MaterialDb;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -1158,7 +1158,7 @@ public class TransitionConfigV1 {
             public Set<Material> getTerritoryDenyUsageMaterials() {
                 if (territoryDenyUsageMaterialsMat == null) {
                     territoryDenyUsageMaterialsMat = new HashSet<>();
-                    territoryDenyUsageMaterials.forEach(m -> territoryDenyUsageMaterialsMat.add(FactionMaterial.from(m).get()));
+                    territoryDenyUsageMaterials.forEach(m -> territoryDenyUsageMaterialsMat.add(MaterialDb.get(m)));
                     territoryDenyUsageMaterialsMat.remove(Material.AIR);
                 }
                 return territoryDenyUsageMaterialsMat;
@@ -1167,7 +1167,7 @@ public class TransitionConfigV1 {
             public Set<Material> getTerritoryDenyUsageMaterialsWhenOffline() {
                 if (territoryDenyUsageMaterialsWhenOfflineMat == null) {
                     territoryDenyUsageMaterialsWhenOfflineMat = new HashSet<>();
-                    territoryDenyUsageMaterialsWhenOffline.forEach(m -> territoryDenyUsageMaterialsWhenOfflineMat.add(FactionMaterial.from(m).get()));
+                    territoryDenyUsageMaterialsWhenOffline.forEach(m -> territoryDenyUsageMaterialsWhenOfflineMat.add(MaterialDb.get(m)));
                     territoryDenyUsageMaterialsWhenOfflineMat.remove(Material.AIR);
                 }
                 return territoryDenyUsageMaterialsWhenOfflineMat;
