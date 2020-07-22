@@ -94,6 +94,10 @@
                             <pattern>org.kitteh</pattern>
                             <shadedPattern>moss.factions.shade.org.kitteh</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>io.papermc.lib</pattern>
+                            <shadedPattern>moss.factions.shade.io.paperlib</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -113,6 +117,12 @@
             <groupId>com.massivecraft</groupId>
             <artifactId>Factions-Legacy</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.papermc</groupId>
+            <artifactId>paperlib</artifactId>
+            <version>1.0.4</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -469,6 +479,10 @@
         <repository>
             <id>ess-repo</id>
             <url>http://ci.ender.zone/plugin/repository/everything/</url>
+        </repository>
+        <repository>
+            <id>papermc</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
         <repository>
             <id>spigot-repo</id>

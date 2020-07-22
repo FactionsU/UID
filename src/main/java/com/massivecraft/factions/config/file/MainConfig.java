@@ -2507,6 +2507,15 @@ public class MainConfig {
         }
     }
 
+    public class Paper {
+        @Comment("Utilize Paper's async teleportation if available (Paper 1.9+).")
+        private boolean asyncTeleport = true;
+
+        public boolean isAsyncTeleport() {
+            return asyncTeleport;
+        }
+    }
+
     public class PlayerVaults {
         @Comment("The %s is for the faction id")
         private String vaultPrefix = "faction-%s";
@@ -2583,6 +2592,8 @@ public class MainConfig {
             "You can find it here: https://www.spigotmc.org/resources/lwc-extended.69551/\n" +
             "Note: Modern LWC is no longer supported, and its former maintainer now runs LWC Extended")
     private LWC lwc = new LWC();
+    @Comment("Paper features, when accessible.")
+    private Paper paper = new Paper();
     @Comment("PlayerVaults faction vault settings.\n" +
             "Enable faction-owned vaults!\n" +
             "https://www.spigotmc.org/resources/playervaultsx.51204/")
@@ -2633,6 +2644,10 @@ public class MainConfig {
 
     public Scoreboard scoreboard() {
         return scoreboard;
+    }
+
+    public Paper paper() {
+        return paper;
     }
 
     public PlayerVaults playerVaults() {

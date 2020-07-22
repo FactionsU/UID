@@ -2,12 +2,12 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerTeleportEvent;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class CmdAHome extends FCommand {
 
@@ -37,9 +37,13 @@ public class CmdAHome extends FCommand {
                 if (tpEvent.isCancelled()) {
                     return;
                 }
-                target.getPlayer().teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                context.msg(TL.COMMAND_AHOME_SUCCESS, target.getName());
-                target.msg(TL.COMMAND_AHOME_TARGET);
+                FactionsPlugin.getInstance().teleport(target.getPlayer(), destination).thenAccept(success -> {
+                    if (success) {
+                        context.msg(TL.COMMAND_AHOME_SUCCESS, target.getName());
+                        target.msg(TL.COMMAND_AHOME_TARGET);
+                    }
+                });
+
             } else {
                 context.msg(TL.COMMAND_AHOME_NOHOME, target.getName());
             }

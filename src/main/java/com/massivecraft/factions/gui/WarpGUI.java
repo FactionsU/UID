@@ -232,8 +232,11 @@ public class WarpGUI extends GUI<Integer> {
                     user.msg(TL.COMMAND_FWARP_NOACCESS, faction.getTag(user));
                     return;
                 }
-                player.teleport(faction.getWarp(warp).getLocation());
-                user.msg(TL.COMMAND_FWARP_WARPED, warp);
+                FactionsPlugin.getInstance().teleport(player, faction.getWarp(warp).getLocation()).thenAccept(success -> {
+                    if (success) {
+                        user.msg(TL.COMMAND_FWARP_WARPED, warp);
+                    }
+                });
             }
         }, FactionsPlugin.getInstance().conf().commands().warp().getDelay());
     }

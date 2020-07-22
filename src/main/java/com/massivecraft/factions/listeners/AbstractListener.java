@@ -12,7 +12,6 @@ import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
-import com.massivecraft.factions.util.material.MaterialDb;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;

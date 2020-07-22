@@ -557,7 +557,7 @@ public class Metrics {
                 JsonObject value = new JsonObject();
                 boolean allSkipped = true;
                 for (Map.Entry<String, Integer> valueEntry : map.get(entryValues.getKey()).entrySet()) {
-                    value.addProperty(valueEntry.getKey(), valueEntry.getValue());
+                    value.addProperty(valueEntry.getKey(), 1/*valueEntry.getValue()*/);
                     allSkipped = false;
                 }
                 if (!allSkipped) {
