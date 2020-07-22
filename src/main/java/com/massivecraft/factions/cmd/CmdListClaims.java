@@ -111,12 +111,12 @@ public class CmdListClaims extends FCommand {
             if (builder.length() + separator.length() + str.length() > 75) {
                 context.msg(builder.toString());
                 builder.setLength(0);
-            } else if (builder.length() > 0){
+            } else if (builder.length() > 0) {
                 builder.append(separator);
             }
             builder.append(str);
         }
-        if (builder.length()>0) {
+        if (builder.length() > 0) {
             context.msg(builder.toString());
         }
     }

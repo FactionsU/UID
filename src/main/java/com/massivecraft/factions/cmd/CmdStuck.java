@@ -93,7 +93,7 @@ public class CmdStuck extends FCommand {
                                 FactionsPlugin.getInstance().getTimers().remove(player.getUniqueId());
                                 FactionsPlugin.getInstance().getStuckMap().remove(player.getUniqueId());
                                 if (!Essentials.handleTeleport(player, tp)) {
-                                    player.teleport(tp);
+                                    FactionsPlugin.getInstance().teleport(player, tp);
                                     FactionsPlugin.getInstance().debug("/f stuck used regular teleport, not essentials!");
                                 }
                                 this.stop();

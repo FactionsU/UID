@@ -159,7 +159,7 @@ public class FactionsBlockListener implements Listener {
         }
 
         List<Block> blocks;
-        if (FactionsPlugin.getMCVersion()<800) {
+        if (FactionsPlugin.getMCVersion() < 800) {
             blocks = Collections.singletonList(event.getBlock().getRelative(event.getDirection(), 2));
         } else {
             blocks = event.getBlocks();

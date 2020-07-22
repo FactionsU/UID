@@ -45,7 +45,7 @@ public class CmdHome extends FCommand {
 
         if (targetFaction != context.faction && context.fPlayer.isAdminBypassing()) {
             if (targetFaction.hasHome()) {
-                context.player.teleport(targetFaction.getHome());
+                FactionsPlugin.getInstance().teleport(context.player, targetFaction.getHome());
             } else {
                 context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString());
             }
@@ -157,7 +157,7 @@ public class CmdHome extends FCommand {
                 SmokeUtil.spawnCloudRandom(smokeLocations, FactionsPlugin.getInstance().conf().factions().homes().getTeleportCommandSmokeEffectThickness());
             }
 
-            context.player.teleport(destination);
+            FactionsPlugin.getInstance().teleport(context.player, destination);
         }, this.plugin.conf().commands().home().getDelay());
     }
 
