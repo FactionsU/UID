@@ -104,6 +104,14 @@ public class FactionsEntityListener extends AbstractListener {
             Entity damagee = sub.getEntity();
             Entity damager = sub.getDamager();
 
+            if (damager instanceof Projectile) {
+                Projectile projectile = (Projectile) damager;
+
+                if (projectile.getShooter() instanceof Entity) {
+                    damager = (Entity) projectile.getShooter();
+                }
+            }
+
             if (damagee instanceof Player) {
                 cancelFStuckTeleport((Player) damagee);
                 cancelFFly((Player) damagee);
