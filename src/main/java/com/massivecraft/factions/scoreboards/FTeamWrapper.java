@@ -5,7 +5,9 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.tag.Tag;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
@@ -38,7 +40,7 @@ public class FTeamWrapper {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes()) {
+        if (!FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes() && !FactionsPlugin.getInstance().conf().scoreboard().constant().isSuffixes()) {
             return;
         }
 
@@ -63,7 +65,7 @@ public class FTeamWrapper {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes()) {
+        if (!FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes() && !FactionsPlugin.getInstance().conf().scoreboard().constant().isSuffixes()) {
             return;
         }
 
@@ -103,7 +105,7 @@ public class FTeamWrapper {
             wrapper.addPlayer(fmember.getPlayer());
         }
 
-        wrapper.updatePrefixes();
+        wrapper.updatePrefixesAndSuffixes();
     }
 
     public static void updatePrefixes(Faction faction) {
@@ -114,7 +116,7 @@ public class FTeamWrapper {
         if (!wrappers.containsKey(faction)) {
             applyUpdates(faction);
         } else {
-            wrappers.get(faction).updatePrefixes();
+            wrappers.get(faction).updatePrefixesAndSuffixes();
         }
     }
 
@@ -157,39 +159,53 @@ public class FTeamWrapper {
             team.addPlayer(player);
         }
 
-        updatePrefix(fboard);
+        updatePrefixAndSuffix(fboard);
     }
 
     private void remove(FScoreboard fboard) {
         teams.remove(fboard).unregister();
     }
 
-    private void updatePrefixes() {
-        if (FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes()) {
+    private void updatePrefixesAndSuffixes() {
+        if (FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes() || FactionsPlugin.getInstance().conf().scoreboard().constant().isSuffixes()) {
             for (FScoreboard fboard : teams.keySet()) {
-                updatePrefix(fboard);
+                updatePrefixAndSuffix(fboard);
             }
         }
     }
 
-    private void updatePrefix(FScoreboard fboard) {
-        if (FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes()) {
-            FPlayer fplayer = fboard.getFPlayer();
+    private void updatePrefixAndSuffix(FScoreboard fboard) {
+        MainConfig.Scoreboard.Constant conf = FactionsPlugin.getInstance().conf().scoreboard().constant();
+        if (conf.isPrefixes()) {
             Team team = teams.get(fboard);
+            String prefix = this.apply(conf.getPrefixTemplate(), fboard.getFPlayer(), conf.getPrefixLength());
 
-            int maxLength = FactionsPlugin.getInstance().conf().scoreboard().constant().getPrefixLength();
-            String prefix = FactionsPlugin.getInstance().conf().scoreboard().constant().getPrefixTemplate();
-            prefix = Tag.parsePlaceholders(fplayer.getPlayer(), prefix);
-            prefix = prefix.replace("{relationcolor}", faction.getRelationTo(fplayer).getColor().toString());
-            int remaining = Math.min("{faction}".length() + maxLength - prefix.length(), faction.getTag().length());
-            prefix = prefix.replace("{faction}", remaining > 0 ? faction.getTag().substring(0, remaining) : "");
-            if (prefix.length() > maxLength) {
-                prefix = prefix.substring(0, maxLength);
-            }
             if (!prefix.equals(team.getPrefix())) {
                 team.setPrefix(prefix);
             }
         }
+        if (conf.isSuffixes()) {
+            Team team = teams.get(fboard);
+            String suffix = this.apply(conf.getSuffixTemplate(), fboard.getFPlayer(), conf.getSuffixLength());
+
+            if (!suffix.equals(team.getSuffix())) {
+                team.setSuffix(suffix);
+            }
+        }
+    }
+
+    private String apply(String prefixOrSuffix, FPlayer fplayer, int maxLength) {
+        prefixOrSuffix = Tag.parsePlaceholders(fplayer.getPlayer(), prefixOrSuffix);
+        prefixOrSuffix = prefixOrSuffix.replace("{relationcolor}", faction.getRelationTo(fplayer).getColor().toString());
+        int remaining = Math.min("{faction}".length() + maxLength - prefixOrSuffix.length(), faction.getTag().length());
+        prefixOrSuffix = prefixOrSuffix.replace("{faction}", remaining > 0 ? faction.getTag().substring(0, remaining) : "");
+        prefixOrSuffix = Tag.parsePlain(fplayer, prefixOrSuffix);
+        prefixOrSuffix = ChatColor.translateAlternateColorCodes('&', prefixOrSuffix);
+
+        if (prefixOrSuffix.length() > maxLength) {
+            prefixOrSuffix = prefixOrSuffix.substring(0, maxLength);
+        }
+        return prefixOrSuffix;
     }
 
     private void addPlayer(OfflinePlayer player) {

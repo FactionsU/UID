@@ -2373,8 +2373,17 @@ public class MainConfig {
             @Comment("Set the length limit for prefixes.\n" +
                     "If 0, will use a sane default for your Minecraft version (16 for pre-1.13, 32 for 1.13+).")
             private int prefixLength = 0;
-            @Comment("Only takes {relationcolor} and {faction} and &-prefixed color codes")
+            @Comment("Takes {relationcolor}, {faction}, player-specific tags, &-prefixed color codes")
             private String prefixTemplate = "{relationcolor}[{faction}] &r";
+
+            @Comment("If true, show suffixes on nametags and in tab list if scoreboard is enabled")
+            private boolean suffixes = false;
+            @Comment("Set the length limit for suffixes.\n" +
+                    "If 0, will use a sane default for your Minecraft version (16 for pre-1.13, 32 for 1.13+).")
+            private int suffixLength = 0;
+            @Comment("Takes {relationcolor}, {faction}, player-specific tags, &-prefixed color codes")
+            private String suffixTemplate = " {relationcolor}[{faction}]";
+
             private List<String> content = new ArrayList<String>() {
                 {
                     this.add("&6Your Faction");
@@ -2412,6 +2421,18 @@ public class MainConfig {
 
             public String getPrefixTemplate() {
                 return prefixTemplate;
+            }
+
+            public boolean isSuffixes() {
+                return suffixes;
+            }
+
+            public int getSuffixLength() {
+                return suffixLength < 1 ? (FactionsPlugin.getMCVersion() < 1300 ? 16 : 32) : suffixLength;
+            }
+
+            public String getSuffixTemplate() {
+                return suffixTemplate;
             }
 
             public List<String> getContent() {
