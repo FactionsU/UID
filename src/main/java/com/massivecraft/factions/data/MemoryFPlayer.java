@@ -94,6 +94,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected transient boolean loginPvpDisabled;
     protected transient long lastFrostwalkerMessage;
     protected transient boolean shouldTakeFallDamage = true;
+    protected transient OfflinePlayer offlinePlayer;
 
     public void login() {
         this.kills = getPlayer().getStatistic(Statistic.PLAYER_KILLS);
@@ -265,6 +266,17 @@ public abstract class MemoryFPlayer implements FPlayer {
     // FIELD: account
     public String getAccountId() {
         return this.getId();
+    }
+
+    public OfflinePlayer getOfflinePlayer() {
+        if (this.offlinePlayer == null) {
+            this.offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(getId()));
+        }
+        return this.offlinePlayer;
+    }
+
+    public void setOfflinePlayer(Player player) {
+        this.offlinePlayer = player;
     }
 
     public MemoryFPlayer() {
@@ -713,7 +725,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (myFaction.getFPlayers().size() == 1) {
             // Transfer all money
             if (Econ.shouldBeUsed()) {
-                Econ.transferMoney(this, myFaction, this, Econ.getBalance(myFaction.getAccountId()));
+                Econ.transferMoney(this, myFaction, this, Econ.getBalance(myFaction));
             }
         }
 

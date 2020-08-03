@@ -283,4 +283,5 @@ public interface FPlayer extends EconomyParticipator {
 
     void clearWarmup();
 
+    void setOfflinePlayer(Player player);
 }

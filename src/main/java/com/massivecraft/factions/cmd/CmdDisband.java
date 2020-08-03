@@ -86,7 +86,7 @@ public class CmdDisband extends FCommand {
 
         if (Econ.shouldBeUsed() && context.player != null) {
             //Give all the faction's money to the disbander
-            double amount = Econ.getBalance(faction.getAccountId());
+            double amount = Econ.getBalance(faction);
             Econ.transferMoney(context.fPlayer, faction, context.fPlayer, amount, false);
 
             if (amount > 0.0) {

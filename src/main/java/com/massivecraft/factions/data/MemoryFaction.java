@@ -308,15 +308,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public String getAccountId() {
-        String aid = "faction-" + this.getId();
-
-        // We need to override the default money given to players.
-        if (!Econ.hasAccount(aid)) {
-            Econ.createAccount(aid);
-            Econ.setBalance(aid, 0);
-        }
-
-        return aid;
+        return "faction-" + this.getId();
     }
 
     public OfflinePlayer getOfflinePlayer() {
@@ -1189,7 +1181,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     // ----------------------------------------------//
     public void remove() {
         if (Econ.shouldBeUsed()) {
-            Econ.setBalance(getAccountId(), 0);
+            Econ.setBalance(this, 0);
         }
 
         // Clean the board
