@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.text.DecimalFormat;
@@ -66,6 +67,10 @@ public class Econ {
         return econ;
     }
 
+    private static String getWorld(OfflinePlayer op) {
+        return (op instanceof Player) ? ((Player) op).getWorld().getName() : FactionsPlugin.getInstance().conf().economy().getDefaultWorld();
+    }
+
     public static void modifyUniverseMoney(double delta) {
         if (!shouldBeUsed()) {
             return;
@@ -77,7 +82,7 @@ public class Econ {
         if (FactionsPlugin.getInstance().conf().economy().getUniverseAccount().length() == 0) {
             return;
         }
-        if (!econ.hasAccount(FactionsPlugin.getInstance().conf().economy().getUniverseAccount())) {
+        if (!hasAccount(FactionsPlugin.getInstance().conf().economy().getUniverseAccount())) {
             return;
         }
 
@@ -89,7 +94,7 @@ public class Econ {
             FactionsPlugin.getInstance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
-        to.msg(TL.ECON_BALANCE, about.describeTo(to, true), Econ.moneyString(econ.getBalance(about.getAccountId())));
+        to.msg(TL.ECON_BALANCE, about.describeTo(to, true), Econ.moneyString(getBalance(about)));
     }
 
     public static void sendBalanceInfo(CommandSender to, Faction about) {
@@ -97,7 +102,7 @@ public class Econ {
             FactionsPlugin.getInstance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
-        to.sendMessage(ChatColor.stripColor(String.format(TL.ECON_BALANCE.toString(), about.getTag(), Econ.moneyString(econ.getBalance(about.getAccountId())))));
+        to.sendMessage(ChatColor.stripColor(String.format(TL.ECON_BALANCE.toString(), about.getTag(), Econ.moneyString(getBalance(about)))));
     }
 
     public static boolean canIControlYou(EconomyParticipator i, EconomyParticipator you) {
@@ -165,29 +170,11 @@ public class Econ {
             return false;
         }
 
-        OfflinePlayer fromAcc;
-        OfflinePlayer toAcc;
-
-        if (isUUID(from.getAccountId())) {
-            fromAcc = Bukkit.getOfflinePlayer(UUID.fromString(from.getAccountId()));
-            if (fromAcc.getName() == null) {
-                return false;
-            }
-        } else {
-            fromAcc = Bukkit.getOfflinePlayer(from.getAccountId());
-        }
-
-        if (isUUID(to.getAccountId())) {
-            toAcc = Bukkit.getOfflinePlayer(UUID.fromString(to.getAccountId()));
-            if (toAcc.getName() == null) {
-                return false;
-            }
-        } else {
-            toAcc = Bukkit.getOfflinePlayer(to.getAccountId());
-        }
+        OfflinePlayer fromAcc = checkStatus(from.getOfflinePlayer());
+        OfflinePlayer toAcc = checkStatus(to.getOfflinePlayer());
 
         // Is there enough money for the transaction to happen?
-        if (!econ.has(fromAcc, amount)) {
+        if (!has(fromAcc, amount)) {
             // There was not enough money to pay
             if (invoker != null && notify) {
                 invoker.msg(TL.ECON_CANTAFFORD_TRANSFER, from.describeTo(invoker, true), moneyString(amount), to.describeTo(invoker));
@@ -197,24 +184,22 @@ public class Econ {
         }
 
         // Check if the new balance is over Essential's money cap.
-        if (Essentials.isOverBalCap(to, econ.getBalance(toAcc) + amount)) {
+        if (Essentials.isOverBalCap(to, getBalance(toAcc) + amount)) {
             invoker.msg(TL.ECON_OVER_BAL_CAP, amount);
             return false;
         }
 
         // Transfer money
-        EconomyResponse erw = econ.withdrawPlayer(fromAcc, amount);
 
-        if (erw.transactionSuccess()) {
-            EconomyResponse erd = econ.depositPlayer(toAcc, amount);
-            if (erd.transactionSuccess()) {
+        if (withdraw(fromAcc, amount)) {
+            if (deposit(toAcc, amount)) {
                 if (notify) {
                     sendTransferInfo(invoker, from, to, amount);
                 }
                 return true;
             } else {
                 // transaction failed, refund account
-                econ.depositPlayer(fromAcc, amount);
+                deposit(fromAcc, amount);
             }
         }
 
@@ -270,20 +255,8 @@ public class Econ {
             return true;
         }
 
-        // going the hard way round as econ.has refuses to work.
         boolean affordable = false;
-        double currentBalance;
-
-        if (isUUID(ep.getAccountId())) {
-            OfflinePlayer offline = Bukkit.getOfflinePlayer(UUID.fromString(ep.getAccountId()));
-            if (offline.getName() != null) {
-                currentBalance = econ.getBalance(Bukkit.getOfflinePlayer(UUID.fromString(ep.getAccountId())));
-            } else {
-                currentBalance = 0;
-            }
-        } else {
-            currentBalance = econ.getBalance(ep.getAccountId());
-        }
+        double currentBalance = getBalance(ep);
 
         if (currentBalance >= delta) {
             affordable = true;
@@ -309,24 +282,14 @@ public class Econ {
             return true;
         }
 
-        OfflinePlayer acc;
-
-        if (isUUID(ep.getAccountId())) {
-            acc = Bukkit.getOfflinePlayer(UUID.fromString(ep.getAccountId()));
-            if (acc.getName() == null) {
-                return false;
-            }
-        } else {
-            acc = ep instanceof Faction ? ((Faction) ep).getOfflinePlayer() : Bukkit.getOfflinePlayer(ep.getAccountId());
-        }
+        OfflinePlayer acc = checkStatus(ep.getOfflinePlayer());
 
         String You = ep.describeTo(ep, true);
 
         if (delta > 0) {
             // The player should gain money
             // The account might not have enough space
-            EconomyResponse er = econ.depositPlayer(acc, delta);
-            if (er.transactionSuccess()) {
+            if (deposit(acc, delta)) {
                 modifyUniverseMoney(-delta);
                 if (forDoingThis != null && !forDoingThis.isEmpty()) {
                     ep.msg(TL.ECON_GAIN_SUCCESS, You, moneyString(delta), forDoingThis);
@@ -343,7 +306,7 @@ public class Econ {
             // The player should loose money
             // The player might not have enough.
 
-            if (econ.has(acc, -delta) && econ.withdrawPlayer(acc, -delta).transactionSuccess()) {
+            if (has(acc, -delta) && withdraw(acc,  -delta)) {
                 // There is enough money to pay
                 modifyUniverseMoney(-delta);
                 if (forDoingThis != null && !forDoingThis.isEmpty()) {
@@ -398,70 +361,163 @@ public class Econ {
     // Standard account management methods
     // -------------------------------------------- //
 
-    public static boolean hasAccount(String name) {
-        return econ.hasAccount(name);
+    private static OfflinePlayer getOfflinePlayerForName(String name) {
+        try {
+            return Bukkit.getOfflinePlayer(UUID.fromString(name));
+        } catch (IllegalArgumentException ex) {
+            return Bukkit.getOfflinePlayer(name);
+        }
     }
 
+    @Deprecated
+    public static boolean hasAccount(String name) {
+        return hasAccount(getOfflinePlayerForName(name));
+    }
+
+    public static boolean hasAccount(EconomyParticipator ep) {
+        return hasAccount(ep.getOfflinePlayer());
+    }
+
+    private static boolean hasAccount(OfflinePlayer op) {
+        return econ.hasAccount(op, getWorld(op));
+    }
+
+    @Deprecated
     public static double getBalance(String account) {
-        return econ.getBalance(account);
+        return getBalance(getOfflinePlayerForName(account));
+    }
+
+    public static double getBalance(EconomyParticipator ep) {
+        return getBalance(ep.getOfflinePlayer());
+    }
+
+    private static double getBalance(OfflinePlayer op) {
+        return econ.getBalance(checkStatus(op), getWorld(op));
+    }
+
+    public static boolean has(EconomyParticipator ep, double amount) {
+        return has(ep.getOfflinePlayer(), amount);
+    }
+
+    private static boolean has(OfflinePlayer op, double amount) {
+        return econ.has(checkStatus(op), getWorld(op), amount);
     }
 
     private static final DecimalFormat format = new DecimalFormat(TL.ECON_FORMAT.toString());
 
+    @Deprecated
     public static String getFriendlyBalance(UUID uuid) {
         OfflinePlayer offline = Bukkit.getOfflinePlayer(uuid);
         if (offline.getName() == null) {
             return "0";
         }
-        return format.format(econ.getBalance(offline));
+        return format.format(getBalance(offline));
     }
 
     public static String getFriendlyBalance(FPlayer player) {
-        return getFriendlyBalance(UUID.fromString(player.getId()));
+        OfflinePlayer p;
+        if ((p = player.getPlayer()) == null) {
+            return "0";
+        }
+        return format.format(getBalance(p));
     }
 
+    @Deprecated
     public static boolean setBalance(String account, double amount) {
-        double current = econ.getBalance(account);
+        return setBalance(getOfflinePlayerForName(account), amount);
+    }
+
+    public static boolean setBalance(EconomyParticipator ep, double amount) {
+        return setBalance(ep.getOfflinePlayer(), amount);
+    }
+
+    private static boolean setBalance(OfflinePlayer op, double amount) {
+        double current = getBalance(op); // Already checks status
         if (current > amount) {
-            return econ.withdrawPlayer(account, current - amount).transactionSuccess();
+            return econ.withdrawPlayer(op, getWorld(op), current - amount).transactionSuccess();
         } else {
-            return econ.depositPlayer(account, amount - current).transactionSuccess();
+            return econ.depositPlayer(op, getWorld(op), amount - current).transactionSuccess();
         }
     }
 
+    @Deprecated
     public static boolean modifyBalance(String account, double amount) {
+        return modifyBalance(getOfflinePlayerForName(account), amount);
+    }
+
+    public static boolean modifyBalance(EconomyParticipator ep, double amount) {
+        return modifyBalance(ep.getOfflinePlayer(), amount);
+    }
+
+    private static boolean modifyBalance(OfflinePlayer op, double amount) {
         if (amount < 0) {
-            return econ.withdrawPlayer(account, -amount).transactionSuccess();
+            return econ.withdrawPlayer(checkStatus(op), getWorld(op), -amount).transactionSuccess();
         } else {
-            return econ.depositPlayer(account, amount).transactionSuccess();
+            return econ.depositPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
         }
     }
 
+    @Deprecated
     public static boolean deposit(String account, double amount) {
-        return econ.depositPlayer(account, amount).transactionSuccess();
+        return deposit(getOfflinePlayerForName(account), amount);
     }
 
+    public static boolean deposit(EconomyParticipator ep, double amount) {
+        return deposit(ep.getOfflinePlayer(), amount);
+    }
+
+    private static boolean deposit(OfflinePlayer op, double amount) {
+        return econ.depositPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
+    }
+
+    @Deprecated
     public static boolean withdraw(String account, double amount) {
-        return econ.withdrawPlayer(account, amount).transactionSuccess();
+        return withdraw(getOfflinePlayerForName(account), amount);
     }
 
+    public static boolean withdraw(EconomyParticipator ep, double amount) {
+        return withdraw(ep.getOfflinePlayer(), amount);
+    }
+
+    private static boolean withdraw(OfflinePlayer op, double amount) {
+        return econ.withdrawPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
+    }
+
+    @Deprecated
     public static void createAccount(String name) {
-        if (!econ.createPlayerAccount(name)) {
-            FactionsPlugin.getInstance().getLogger().warning("FAILED TO CREATE ECONOMY ACCOUNT " + name);
+        createAccount(getOfflinePlayerForName(name));
+    }
+
+    public static void createAccount(EconomyParticipator ep) {
+        createAccount(ep.getOfflinePlayer());
+    }
+
+    private static void createAccount(OfflinePlayer op) {
+        if (!econ.createPlayerAccount(op, getWorld(op))) {
+            FactionsPlugin.getInstance().getLogger().warning("FAILED TO CREATE ECONOMY ACCOUNT " + op.getName() + '/' + op.getUniqueId());
         }
     }
 
-    // ---------------------------------------
-    // Helpful Utilities
-    // ---------------------------------------
+    public static OfflinePlayer checkStatus(OfflinePlayer op) {
+        if (op.getName() == null || !op.getName().startsWith("faction-")) {
+            return op;
+        }
+        // We need to override the default money given to players.
+        String world = getWorld(op);
+        if (!hasAccount(op)) {
+            createAccount(op);
+            setBalance(op, 0);
+        }
+        return op;
+    }
 
+    @Deprecated
     public static boolean isUUID(String uuid) {
         try {
             UUID.fromString(uuid);
+            return true;
         } catch (IllegalArgumentException ex) {
             return false;
         }
-
-        return true;
     }
 }

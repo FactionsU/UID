@@ -86,6 +86,7 @@ public class FactionsPlayerListener extends AbstractListener {
         me.setLastStoodAt(new FLocation(player.getLocation()));
 
         me.login(); // set kills / deaths
+        me.setOfflinePlayer(player);
 
         if (me.isSpyingChat() && !player.hasPermission(Permission.CHATSPY.node)) {
             me.setSpyingChat(false);
@@ -175,6 +176,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (FactionsPlugin.getInstance().getSeeChunkUtil() != null) {
             FactionsPlugin.getInstance().getSeeChunkUtil().updatePlayerInfo(UUID.fromString(me.getId()), false);
         }
+        me.setOfflinePlayer(null);
     }
 
     // Holds the next time a player can have a map shown.

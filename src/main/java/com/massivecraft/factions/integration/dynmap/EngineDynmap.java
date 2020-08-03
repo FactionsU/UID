@@ -626,7 +626,7 @@ public class EngineDynmap {
 
         String money = "unavailable";
         if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && dynmapConf.dynmap().isDescriptionMoney()) {
-            money = String.format("%.2f", Econ.getBalance(faction.getAccountId()));
+            money = String.format("%.2f", Econ.getBalance(faction));
         }
         ret = ret.replace("%money%", money);
 

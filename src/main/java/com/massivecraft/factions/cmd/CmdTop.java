@@ -95,14 +95,14 @@ public class CmdTop extends FCommand {
             });
         } else if (criteria.equalsIgnoreCase("money") || criteria.equalsIgnoreCase("balance") || criteria.equalsIgnoreCase("bal")) {
             factionList.sort((f1, f2) -> {
-                double f1Size = Econ.getBalance(f1.getAccountId());
+                double f1Size = Econ.getBalance(f1);
                 // Lets get the balance of /all/ the players in the Faction.
                 for (FPlayer fp : f1.getFPlayers()) {
-                    f1Size = f1Size + Econ.getBalance(fp.getAccountId());
+                    f1Size = f1Size + Econ.getBalance(fp);
                 }
-                double f2Size = Econ.getBalance(f2.getAccountId());
+                double f2Size = Econ.getBalance(f2);
                 for (FPlayer fp : f2.getFPlayers()) {
-                    f2Size = f2Size + Econ.getBalance(fp.getAccountId());
+                    f2Size = f2Size + Econ.getBalance(fp);
                 }
                 if (f1Size < f2Size) {
                     return 1;
@@ -157,9 +157,9 @@ public class CmdTop extends FCommand {
         } else if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl && criteria.equalsIgnoreCase("power")) {
             return String.valueOf(faction.getPowerRounded());
         } else { // Last one is balance, and it has 3 different things it could be.
-            double balance = Econ.getBalance(faction.getAccountId());
+            double balance = Econ.getBalance(faction);
             for (FPlayer fp : faction.getFPlayers()) {
-                balance = balance + Econ.getBalance(fp.getAccountId());
+                balance = balance + Econ.getBalance(fp);
             }
             return String.valueOf(balance);
         }

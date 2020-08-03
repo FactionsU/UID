@@ -2081,9 +2081,20 @@ public class MainConfig {
     }
 
     public class Economy {
-        @Comment("Must be true for any economy features")
+        @Comment("\n******************\n\n" +
+                "The value \"enabled\" must be true for any economy features\n" +
+                "Make sure that you confirm the \"defaultWorld\" setting is a valid world name\n"+
+                "\n******************\n")
         private boolean enabled = false;
         private String universeAccount = "";
+        @Comment("This setting matters in particular if you have per-world economy.\n" +
+                "This setting is the world to use for:\n" +
+                " faction banks,\n" +
+                " the universe account (if used),\n" +
+                " transferring money to a player who is presently offline,\n" +
+                " or any other situation where the player's world is unknown.\n\n" +
+                "Note that you should set up your per-world plugin to treat all your Factions worlds as one group/world.")
+        private String defaultWorld = "world";
         private double costClaimWilderness = 30.0;
         private double costClaimFromFactionBonus = 30.0;
         private double overclaimRewardMultiplier = 0.0;
@@ -2119,7 +2130,8 @@ public class MainConfig {
         private double costSetWarp = 0.0;
         private double costDelWarp = 0.0;
 
-        @Comment("Faction banks, to pay for land claiming and other costs instead of individuals paying for them")
+        @Comment("Faction banks, to pay for land claiming and other costs instead of individuals paying for them\n" +
+                "This IS NOT the setting for enabling economy features overall. That setting is just named \"enabled\"")
         private boolean bankEnabled = true;
         @Comment("Have to be at least moderator to withdraw or pay money to another faction")
         private boolean bankMembersCanWithdraw = false;
@@ -2130,6 +2142,10 @@ public class MainConfig {
 
         public boolean isEnabled() {
             return enabled;
+        }
+
+        public String getDefaultWorld() {
+            return defaultWorld;
         }
 
         public double getCostDTR() {
