@@ -173,6 +173,10 @@ public class MainConfig {
             private int radiusCheck = 1;
             @Comment("Should we disable flight if the player has suffered generic damage")
             private boolean disableOnGenericDamage = false;
+            @Comment("Should flight be disabled if the player has hurt mobs?")
+            private boolean disableOnHurtingMobs = true;
+            @Comment("Should flight be disabled if the player has hurt players?")
+            private boolean disableOnHurtingPlayers = true;
 
             @Comment("Trails show below the players foot when flying, faction.fly.trails\n" +
                     "Players can enable them with /f trail on/off\n" +
@@ -201,6 +205,14 @@ public class MainConfig {
 
             public boolean isDisableOnGenericDamage() {
                 return disableOnGenericDamage;
+            }
+
+            public boolean isDisableOnHurtingMobs() {
+                return disableOnHurtingMobs;
+            }
+
+            public boolean isDisableOnHurtingPlayers() {
+                return disableOnHurtingPlayers;
             }
 
             public Particles particles() {
