@@ -32,7 +32,7 @@ public class CmdAHome extends FCommand {
             Faction faction = target.getFaction();
             if (faction.hasHome()) {
                 Location destination = faction.getHome();
-                FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(context.fPlayer, destination, FPlayerTeleportEvent.PlayerTeleportReason.AHOME);
+                FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(target, destination, FPlayerTeleportEvent.PlayerTeleportReason.AHOME);
                 Bukkit.getServer().getPluginManager().callEvent(tpEvent);
                 if (tpEvent.isCancelled()) {
                     return;
