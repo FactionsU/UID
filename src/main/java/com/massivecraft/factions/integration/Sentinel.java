@@ -16,6 +16,7 @@ import java.util.logging.Level;
 
 public class Sentinel extends SentinelIntegration {
     public static void init(Plugin plugin) {
+        FactionsPlugin.getInstance().getLogger().info("Disregarding any whining from Sentinel and trying to integrate anyway!");
         try {
             ((SentinelPlugin) plugin).registerIntegration(new Sentinel());
         } catch (Exception e) {
@@ -66,6 +67,9 @@ public class Sentinel extends SentinelIntegration {
         try {
             if (prefix.equals("factions") && ent instanceof Player) {
                 Faction faction = Factions.getInstance().getByTag(value);
+                if (faction == null) {
+                    return false;
+                }
                 for (FPlayer pl : faction.getFPlayers()) {
                     if (pl.getPlayer() != null && pl.getPlayer().getUniqueId() != null
                             && pl.getPlayer().getUniqueId().equals(ent.getUniqueId())) {
@@ -74,12 +78,18 @@ public class Sentinel extends SentinelIntegration {
                 }
             } else if (prefix.equals("factionsenemy") && ent instanceof Player) {
                 Faction faction = Factions.getInstance().getByTag(value);
+                if (faction == null) {
+                    return false;
+                }
                 Faction plf = FPlayers.getInstance().getByPlayer((Player) ent).getFaction();
                 if (faction.getRelationTo(plf).equals(Relation.ENEMY)) {
                     return true;
                 }
             } else if (prefix.equals("factionsally") && ent instanceof Player) {
                 Faction faction = Factions.getInstance().getByTag(value);
+                if (faction == null) {
+                    return false;
+                }
                 Faction plf = FPlayers.getInstance().getByPlayer((Player) ent).getFaction();
                 if (faction.getRelationTo(plf).equals(Relation.ALLY)) {
                     return true;

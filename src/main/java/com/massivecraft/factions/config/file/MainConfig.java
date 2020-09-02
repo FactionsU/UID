@@ -177,6 +177,8 @@ public class MainConfig {
             private boolean disableOnHurtingMobs = true;
             @Comment("Should flight be disabled if the player has hurt players?")
             private boolean disableOnHurtingPlayers = true;
+            @Comment("Should players lose flight status while autoclaiming into territory they cannot fly in?")
+            private boolean disableFlightDuringAutoclaim = false;
 
             @Comment("Trails show below the players foot when flying, faction.fly.trails\n" +
                     "Players can enable them with /f trail on/off\n" +
@@ -213,6 +215,10 @@ public class MainConfig {
 
             public boolean isDisableOnHurtingPlayers() {
                 return disableOnHurtingPlayers;
+            }
+
+            public boolean isDisableFlightDuringAutoclaim() {
+                return disableFlightDuringAutoclaim;
             }
 
             public Particles particles() {

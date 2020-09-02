@@ -257,6 +257,8 @@ public interface FPlayer extends EconomyParticipator {
 
     boolean canFlyAtLocation(FLocation location);
 
+    boolean canFlyInFactionTerritory(Faction faction);
+
     boolean isSeeingChunk();
 
     void setSeeingChunk(boolean seeingChunk);

@@ -79,8 +79,8 @@ public class TitleAPI {
         }
 
         try {
-            Object chatTitle = methodChatTitle.invoke(null, "{\"text\": \"" + title + "\"}");
-            Object chatsubTitle = methodChatTitle.invoke(null, "{\"text\": \"" + subtitle + "\"}");
+            Object chatTitle = methodChatTitle.invoke(null, "{\"text\": \"" + sanitize(title) + "\"}");
+            Object chatsubTitle = methodChatTitle.invoke(null, "{\"text\": \"" + sanitize(subtitle) + "\"}");
 
             Object titlePacket = titleConstructor.newInstance(fieldTitle.get(null), chatTitle, fadeInTime, showTime, fadeOutTime);
             Object subTitlePacket = titleConstructor.newInstance(fieldSubTitle.get(null), chatsubTitle, fadeInTime, showTime, fadeOutTime);
@@ -90,6 +90,10 @@ public class TitleAPI {
         } catch (Exception e) {
             FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to send title via reflection", e);
         }
+    }
+
+    private String sanitize(String string) {
+        return string.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 
     private void sendPacket(Player player, Object packet) {

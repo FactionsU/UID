@@ -28,7 +28,7 @@ public class FPromoteCommand extends FCommand {
     public void perform(CommandContext context) {
         FPlayer target = context.argAsBestFPlayerMatch(0);
         if (target == null) {
-            context.msg(TL.GENERIC_NOPLAYERFOUND, context.argAsString(0));
+            // context.msg(TL.GENERIC_NOPLAYERFOUND, context.argAsString(0));
             return;
         }
 
