@@ -217,6 +217,8 @@ public class FactionsPlayerListener extends AbstractListener {
 
         me.setLastStoodAt(to);
 
+        boolean canFlyPreClaim = me.canFlyAtLocation();
+
         if (me.getAutoClaimFor() != null) {
             me.attemptClaim(me.getAutoClaimFor(), event.getTo(), true);
         } else if (me.isAutoSafeClaimEnabled()) {
@@ -244,8 +246,14 @@ public class FactionsPlayerListener extends AbstractListener {
         Faction factionTo = Board.getInstance().getFactionAt(to);
         boolean changedFaction = (factionFrom != factionTo);
 
-        if (plugin.conf().commands().fly().isEnable() && changedFaction && !me.isAdminBypassing()) {
-            boolean canFly = me.canFlyAtLocation();
+        free: if (plugin.conf().commands().fly().isEnable() && !me.isAdminBypassing()) {
+            boolean canFly = me.canFlyInFactionTerritory(factionTo);
+            if (!changedFaction){
+                if (canFly && !canFlyPreClaim && me.isFlying() && plugin.conf().commands().fly().isDisableFlightDuringAutoclaim()) {
+                    me.setFlying(false);
+                }
+                break free;
+            }
             if (me.isFlying() && !canFly) {
                 me.setFlying(false);
             } else if (me.isAutoFlying() && !me.isFlying() && canFly) {

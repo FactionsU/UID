@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class MiscUtil {
     private static final Map<String, EntityType> entityTypeMap;
@@ -114,10 +115,17 @@ public class MiscUtil {
             errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), FactionsPlugin.getInstance().conf().factions().other().getTagLengthMax()));
         }
 
+        List<String> badChars = null;
         for (char c : str.toCharArray()) {
             if (!substanceChars.contains(String.valueOf(c))) {
-                errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_ALPHANUMERIC.toString(), c));
+                if (badChars == null) {
+                    badChars = new ArrayList<>();
+                }
+                badChars.add(Character.toString(c));
             }
+        }
+        if (badChars!=null) {
+            errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_ALPHANUMERIC.toString(), String.join("", badChars)));
         }
 
         return errors;

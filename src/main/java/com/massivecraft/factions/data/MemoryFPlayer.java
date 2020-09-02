@@ -1024,7 +1024,10 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public boolean canFlyAtLocation(FLocation location) {
-        Faction faction = Board.getInstance().getFactionAt(location);
+        return this.canFlyInFactionTerritory(Board.getInstance().getFactionAt(location));
+    }
+
+    public boolean canFlyInFactionTerritory(Faction faction) {
         if (faction.isWilderness()) {
             return Permission.FLY_WILDERNESS.has(getPlayer());
         } else if (faction.isSafeZone()) {
