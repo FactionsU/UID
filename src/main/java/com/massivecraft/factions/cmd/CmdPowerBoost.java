@@ -5,6 +5,11 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.tree.ArgumentCommandNode;
 
 public class CmdPowerBoost extends FCommand {
 
@@ -12,16 +17,40 @@ public class CmdPowerBoost extends FCommand {
         super();
         this.aliases.add("powerboost");
 
+        this.requiredArgs.add("set/add");
         this.requiredArgs.add("p/f/player/faction");
         this.requiredArgs.add("name");
-        this.requiredArgs.add("#/reset");
+        this.optionalArgs.put("#/reset", "");
 
-        this.requirements = new CommandRequirements.Builder(Permission.POWERBOOST).build();
+        this.requirements = new CommandRequirements.Builder(Permission.POWERBOOST)
+                .brigadier(parent -> {
+                    ArgumentCommandNode<Object, ?> generic = RequiredArgumentBuilder.argument("p/f/player/faction", StringArgumentType.word())
+                            .then(RequiredArgumentBuilder.argument("name", StringArgumentType.word())
+                                    .then(RequiredArgumentBuilder.argument("amount", IntegerArgumentType.integer()))).build();
+
+                    return parent.then(generic)
+                            .then(LiteralArgumentBuilder.literal("set").then(generic))
+                            .then(LiteralArgumentBuilder.literal("add").then(generic));
+                })
+                .build();
     }
 
     @Override
     public void perform(CommandContext context) {
-        String type = context.argAsString(0).toLowerCase();
+        boolean legacy = context.args.size() == 3;
+        String subcommand = "add";
+        if (!legacy) {
+            subcommand = context.argAsString(0).toLowerCase();
+            if (!subcommand.equals("set") && !subcommand.equals("add")) {
+                context.msg(TL.COMMAND_POWERBOOST_UNKNOWN_SUBCOMMAND, subcommand);
+                return;
+            }
+        }
+
+        // this offset is in case add/set is being used, args must be shifted to accommodate
+        int offset = legacy ? 0 : 1;
+
+        String type = context.argAsString(offset).toLowerCase();
         boolean doPlayer = true;
         if (type.equals("f") || type.equals("faction")) {
             doPlayer = false;
@@ -31,9 +60,9 @@ public class CmdPowerBoost extends FCommand {
             return;
         }
 
-        Double targetPower = context.argAsDouble(2);
+        Double targetPower = context.argAsDouble(2 + offset);
         if (targetPower == null) {
-            if (context.argAsString(2).equalsIgnoreCase("reset")) {
+            if (context.argAsString(2 + offset).equalsIgnoreCase("reset")) {
                 targetPower = 0D;
             } else {
                 context.msg(TL.COMMAND_POWERBOOST_INVALIDNUM);
@@ -44,23 +73,23 @@ public class CmdPowerBoost extends FCommand {
         String target;
 
         if (doPlayer) {
-            FPlayer targetPlayer = context.argAsBestFPlayerMatch(1);
+            FPlayer targetPlayer = context.argAsBestFPlayerMatch(1 + offset);
             if (targetPlayer == null) {
                 return;
             }
 
-            if (targetPower != 0) {
+            if (subcommand.equals("add") && targetPower != 0) {
                 targetPower += targetPlayer.getPowerBoost();
             }
             targetPlayer.setPowerBoost(targetPower);
             target = TL.COMMAND_POWERBOOST_PLAYER.format(targetPlayer.getName());
         } else {
-            Faction targetFaction = context.argAsFaction(1);
+            Faction targetFaction = context.argAsFaction(1 + offset);
             if (targetFaction == null) {
                 return;
             }
 
-            if (targetPower != 0) {
+            if (subcommand.equals("add") && targetPower != 0) {
                 targetPower += targetFaction.getPowerBoost();
             }
             targetFaction.setPowerBoost(targetPower);
