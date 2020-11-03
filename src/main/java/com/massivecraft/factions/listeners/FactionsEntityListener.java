@@ -238,9 +238,10 @@ public class FactionsEntityListener extends AbstractListener {
     }
 
     public boolean canDamagerHurtDamagee(EntityDamageByEntityEvent sub, boolean notify) {
-        Entity damager = sub.getDamager();
-        Entity damagee = sub.getEntity();
+        return canDamage(sub.getDamager(), sub.getEntity(), notify);
+    }
 
+    public static boolean canDamage(Entity damager, Entity damagee, boolean notify) {
         // for damage caused by projectiles, getDamager() returns the projectile... what we need to know is the source
         if (damager instanceof Projectile) {
             Projectile projectile = (Projectile) damager;
@@ -255,7 +256,7 @@ public class FactionsEntityListener extends AbstractListener {
         if (damager instanceof Player) {
             Player player = (Player) damager;
             Material material = null;
-            switch (sub.getEntity().getType()) {
+            switch (damagee.getType()) {
                 case ITEM_FRAME:
                     material = Material.ITEM_FRAME;
                     break;
@@ -263,7 +264,7 @@ public class FactionsEntityListener extends AbstractListener {
                     material = Material.ARMOR_STAND;
                     break;
             }
-            if (material != null && !canPlayerUseBlock(player, material, damagee.getLocation(), false)) {
+            if (material != null && !canUseBlock(player, material, damagee.getLocation(), false)) {
                 return false;
             }
         }

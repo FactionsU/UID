@@ -3,7 +3,7 @@
 !!! warning "This page contains information only useful to plugin developers"
 
 ### Maven details:  
-Repository: `http://ci.ender.zone/plugin/repository/everything/`  
+Repository: `https://ci.ender.zone/plugin/repository/everything/`  
 groupId: `com.massivecraft`  
 artificatId: `Factions`  
 version: `1.6.9.5-U0.5.18`

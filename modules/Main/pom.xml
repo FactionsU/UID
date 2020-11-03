@@ -464,6 +464,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.elmakers.mine.bukkit.plugins</groupId>
+            <artifactId>Magic</artifactId>
+            <version>8.0-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.5.1</version>
@@ -478,7 +485,7 @@
         </repository>
         <repository>
             <id>ess-repo</id>
-            <url>http://ci.ender.zone/plugin/repository/everything/</url>
+            <url>https://ci.ender.zone/plugin/repository/everything/</url>
         </repository>
         <repository>
             <id>papermc</id>
@@ -511,6 +518,10 @@
         <repository>
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+        </repository>
+        <repository>
+            <id>magic</id>
+            <url>http://maven.elmakers.com/repository/</url>
         </repository>
         <repository>
             <id>minecraft-libraries</id>
