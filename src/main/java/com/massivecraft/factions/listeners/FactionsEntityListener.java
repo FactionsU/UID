@@ -114,7 +114,9 @@ public class FactionsEntityListener extends AbstractListener {
 
             if (playerHurt) {
                 cancelFStuckTeleport((Player) damagee);
-                cancelFFly((Player) damagee);
+                if ((damager instanceof Player) || plugin.conf().commands().fly().isDisableOnHurtByMobs()) {
+                    cancelFFly((Player) damagee);
+                }
             }
             if (damager instanceof Player) {
                 cancelFStuckTeleport((Player) damager);
