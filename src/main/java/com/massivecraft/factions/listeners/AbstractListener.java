@@ -34,6 +34,10 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractListener implements Listener {
     public boolean playerCanInteractHere(Player player, Location location) {
+        return canInteractHere(player, location);
+    }
+
+    public static boolean canInteractHere(Player player, Location location) {
         String name = player.getName();
         if (FactionsPlugin.getInstance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(name)) {
             return true;
@@ -183,6 +187,10 @@ public abstract class AbstractListener implements Listener {
     }
 
     public boolean canPlayerUseBlock(Player player, Material material, Location location, boolean justCheck) {
+        return canUseBlock(player, material, location, justCheck);
+    }
+
+    public static boolean canUseBlock(Player player, Material material, Location location, boolean justCheck) {
         if (FactionsPlugin.getInstance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
             return true;
         }
@@ -200,7 +208,7 @@ public abstract class AbstractListener implements Listener {
             switch (material) {
                 case ITEM_FRAME:
                 case ARMOR_STAND:
-                    return playerCanInteractHere(player, location);
+                    return canInteractHere(player, location);
             }
             return true;
         }
@@ -334,7 +342,7 @@ public abstract class AbstractListener implements Listener {
         return true;
     }
 
-    private boolean isDupeMaterial(Material material) {
+    private static boolean isDupeMaterial(Material material) {
         if (material.name().toUpperCase().contains("SIGN")) {
             return true;
         }

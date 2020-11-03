@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class IntegrationManager implements Listener {
+    @SuppressWarnings("Convert2MethodRef")
     private enum Integration {
         DYNMAP("dynmap", EngineDynmap.getInstance()::init),
         ESS("Essentials", Essentials::setup),
@@ -39,6 +40,7 @@ public class IntegrationManager implements Listener {
             }
         }),
         LWC("LWC", com.massivecraft.factions.integration.LWC::setup),
+        MAGIC("Magic", (p) -> Magic.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         PLACEHOLDERAPI("PlaceholderAPI", (p) -> FactionsPlugin.getInstance().setupPlaceholderAPI()),
         PLACEHOLDERAPI_OTHER("MVdWPlaceholderAPI", (p) -> FactionsPlugin.getInstance().setupOtherPlaceholderAPI()),
         SENTINEL("Sentinel", (p) -> Sentinel.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
