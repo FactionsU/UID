@@ -4,7 +4,7 @@
 
 First, make sure you have the latest version from the [resource page](https://www.spigotmc.org/resources/factionsuuid.1035/).
 
-FactionsUUID supports versions of Minecraft as far back as 1.8.8, from one plugin jar.
+FactionsUUID supports versions of Minecraft as far back as 1.7.10, from one plugin jar.
 
 !!! help "Can't find the answer you're looking for?"
     Visit the [support page](help.md) for more information on assistance.
