@@ -287,6 +287,9 @@ public abstract class AbstractListener implements Listener {
                 if (material.name().contains("BUTTON")) {
                     action = PermissibleAction.BUTTON;
                 }
+                if (material.name().contains("FURNACE")) {
+                    action = PermissibleAction.CONTAINER;
+                }
                 // Lazier than checking all the combinations
                 if (material.name().contains("SHULKER") || material.name().contains("ANVIL") || material.name().startsWith("POTTED")) {
                     action = PermissibleAction.CONTAINER;
