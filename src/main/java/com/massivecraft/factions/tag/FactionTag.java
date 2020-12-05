@@ -31,7 +31,8 @@ public enum FactionTag implements Tag {
         return fAdmin == null ? "Server" : fAdmin.getName().substring(0, fAdmin.getName().length() > 14 ? 13 : fAdmin.getName().length());
     }),
     JOINING("joining", (fac) -> (fac.getOpen() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString())),
-    FACTION("faction", (Function<Faction, String>) Faction::getTag),
+    @SuppressWarnings("Convert2MethodRef")
+    FACTION("faction", (fac) -> fac.getTag()),
     FACTION_RELATION_COLOR("faction-relation-color", (fac, fp) -> fp == null ? "" : fp.getColorTo(fac).toString()),
     HOME_WORLD("world", (fac) -> fac.hasHome() ? fac.getHome().getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
     RAIDABLE("raidable", (fac) -> {

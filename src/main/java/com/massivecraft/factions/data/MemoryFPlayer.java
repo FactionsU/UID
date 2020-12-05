@@ -110,7 +110,13 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (this.factionId == null) {
             this.factionId = "0";
         }
-        return Factions.getInstance().getFactionById(this.factionId);
+        Faction faction = Factions.getInstance().getFactionById(this.factionId);
+        if (faction == null) {
+            FactionsPlugin.getInstance().getLogger().warning("Found null faction (id " + this.factionId + ") for player " + this.getName());
+            this.factionId = "0";
+            faction = Factions.getInstance().getFactionById(this.factionId);
+        }
+        return faction;
     }
 
     public String getFactionId() {
