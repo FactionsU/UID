@@ -726,8 +726,11 @@ public class MainConfig {
                 @Comment("Allow a faction to be raided if they have more land than power.\n" +
                         "This will make claimed territory lose all protections\n" +
                         "  allowing factions to open chests, break blocks, etc. if they\n" +
-                        "  have claimed chunks >= power.")
+                        "  have more claimed chunks (land) than power. (See raidabilityOnEqualLandAndPower)")
                 private boolean raidability = false;
+                @Comment("Determines if the requirement for raidability is land>=power (true) or\n" +
+                        "land>power (false)")
+                private boolean raidabilityOnEqualLandAndPower = true;
                 @Comment("After a player dies, how long should the faction not be able to regen power?\n" +
                         "This resets on each death but does not accumulate.\n" +
                         "Set to 0 for no freeze. Time is in seconds.")
@@ -735,6 +738,10 @@ public class MainConfig {
 
                 public boolean isRaidability() {
                     return raidability;
+                }
+
+                public boolean isRaidabilityOnEqualLandAndPower() {
+                    return raidabilityOnEqualLandAndPower;
                 }
 
                 public int getPowerFreeze() {
