@@ -46,6 +46,8 @@ public class CmdDebug extends FCommand {
             return;
         }
         mainInfo.append('\n');
+        mainInfo.append("Command run by: ").append(context.sender.getName()).append('\n');
+        mainInfo.append('\n');
         mainInfo.append("Plugins:\n");
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             mainInfo.append(' ').append(plugin.getName()).append(" - ").append(plugin.getDescription().getVersion()).append('\n');
