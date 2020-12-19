@@ -246,9 +246,10 @@ public class FactionsPlayerListener extends AbstractListener {
         Faction factionTo = Board.getInstance().getFactionAt(to);
         boolean changedFaction = (factionFrom != factionTo);
 
-        free: if (plugin.conf().commands().fly().isEnable() && !me.isAdminBypassing()) {
+        free:
+        if (plugin.conf().commands().fly().isEnable() && !me.isAdminBypassing()) {
             boolean canFly = me.canFlyInFactionTerritory(factionTo);
-            if (!changedFaction){
+            if (!changedFaction) {
                 if (canFly && !canFlyPreClaim && me.isFlying() && plugin.conf().commands().fly().isDisableFlightDuringAutoclaim()) {
                     me.setFlying(false);
                 }
@@ -336,6 +337,12 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (block == null) {
             return;  // clicked in air, apparently
+        }
+
+        if (event.getAction() == Action.PHYSICAL && block.getType().name().contains("SOIL")) {
+            if (!FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleAction.DESTROY, false)) {
+                event.setCancelled(true);
+            }
         }
 
         if (!canPlayerUseBlock(player, block.getType(), block.getLocation(), false)) {
