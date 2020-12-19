@@ -149,7 +149,7 @@ public abstract class AbstractListener implements Listener {
         }
     }
 
-    private boolean explosionDisallowed(Entity boomer, FLocation location) {
+    public static boolean explosionDisallowed(Entity boomer, FLocation location) {
         Faction faction = Board.getInstance().getFactionAt(location);
         boolean online = faction.hasPlayersOnline();
         if (faction.noExplosionsInTerritory() || (faction.isPeaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
