@@ -710,7 +710,8 @@ public class MainConfig {
                 private double offlineLossPerDay = 0.0;
                 @Comment("A player stops losing power from being offline once they reach this amount")
                 private double offlineLossLimit = 0.0;
-                @Comment("If greater than 0, used as a cap for how much power a faction can have\nAdditional power from players beyond this acts as a \"buffer\" of sorts")
+                @Comment("If greater than 0, used as a cap for how much power a faction can have\n" +
+                        "Additional power from players beyond this acts as a \"buffer\" of sorts")
                 private double factionMax = 0.0;
                 private boolean respawnHomeFromNoPowerLossWorlds = true;
                 private Set<String> worldsNoPowerLoss = new HashSet<String>() {
@@ -735,6 +736,10 @@ public class MainConfig {
                         "This resets on each death but does not accumulate.\n" +
                         "Set to 0 for no freeze. Time is in seconds.")
                 private int powerFreeze = 0;
+                @Comment("Power stealing. 0 to disable, 1 to give the killing player all of the target player's lost power,\n" +
+                        "0.5 to give the killing player half of what was lost, etc.\n" +
+                        "Negative values will give the incredibly wild option of taking power from the killer too.")
+                private double vampirism = 0;
 
                 public boolean isRaidability() {
                     return raidability;
@@ -806,6 +811,10 @@ public class MainConfig {
 
                 public boolean isPeacefulMembersDisablePowerLoss() {
                     return peacefulMembersDisablePowerLoss;
+                }
+
+                public double getVampirism() {
+                    return vampirism;
                 }
             }
 
