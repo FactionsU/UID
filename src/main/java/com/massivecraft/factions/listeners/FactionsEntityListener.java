@@ -12,6 +12,7 @@ import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -19,7 +20,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Wither;
+import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -253,6 +256,17 @@ public class FactionsEntityListener extends AbstractListener {
             }
 
             damager = (Entity) projectile.getShooter();
+        }
+
+        if (damager instanceof TNTPrimed || damager instanceof Creeper || damager instanceof ExplosiveMinecart) {
+            switch (damagee.getType()) {
+                case ITEM_FRAME:
+                case ARMOR_STAND:
+                case PAINTING:
+                    if (explosionDisallowed(damager, new FLocation(damagee.getLocation()))) {
+                        return false;
+                    }
+            }
         }
 
         if (damager instanceof Player) {
