@@ -846,6 +846,7 @@ public enum TL {
     PLAYER_POWER_NOLOSS_WARZONE("&eYou didn't lose any power since you were in a war zone."),
     PLAYER_POWER_LOSS_WARZONE("&cThe world you are in has power loss normally disabled, but you still lost power since you were in a war zone.\n&eYour power is now &d%d / %d"),
     PLAYER_POWER_NOW("&eYour power is now &d%d / %d"),
+    PLAYER_POWER_VAMPIRISM_GAIN("&eStole &d%.2f&e power from %s&e. Your power is now &d%d / %d"),
 
     PLAYER_PVP_LOGIN("&eYou can't hurt other players for %d seconds after logging in."),
     PLAYER_PVP_REQUIREFACTION("&eYou can't hurt other players until you join a faction."),
