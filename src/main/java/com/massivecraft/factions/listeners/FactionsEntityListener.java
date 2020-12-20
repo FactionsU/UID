@@ -518,6 +518,7 @@ public class FactionsEntityListener extends AbstractListener {
                     faction.isSafeZone()) {
                 // explosion which needs prevention
                 event.setCancelled(true);
+                return;
             }
         }
 
