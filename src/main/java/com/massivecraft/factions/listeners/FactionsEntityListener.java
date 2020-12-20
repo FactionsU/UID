@@ -500,7 +500,7 @@ public class FactionsEntityListener extends AbstractListener {
             return;
         }
 
-        if (event.getCause() == RemoveCause.EXPLOSION) {
+        if (event.getCause() == RemoveCause.EXPLOSION || (event.getCause() == RemoveCause.ENTITY && event instanceof HangingBreakByEntityEvent && ((HangingBreakByEntityEvent) event).getRemover() instanceof Creeper)) {
             Location loc = event.getEntity().getLocation();
             Faction faction = Board.getInstance().getFactionAt(new FLocation(loc));
             if (faction.noExplosionsInTerritory()) {
