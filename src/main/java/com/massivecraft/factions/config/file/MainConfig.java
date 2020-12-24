@@ -134,6 +134,15 @@ public class MainConfig {
     }
 
     public class Commands {
+        public class Kick {
+            @Comment("If true, players can be kicked while standing in enemy territory")
+            private boolean allowKickInEnemyTerritory = false;
+
+            public boolean isAllowKickInEnemyTerritory() {
+                return allowKickInEnemyTerritory;
+            }
+        }
+
         public class Fly {
             public class Particles {
                 @Comment("Speed of the particles, can be decimal value")
@@ -520,6 +529,7 @@ public class MainConfig {
             }
         }
 
+        private Kick kick = new Kick();
         private Fly fly = new Fly();
         private Help help = new Help();
         private Home home = new Home();
@@ -534,6 +544,10 @@ public class MainConfig {
         private TNT tnt = new TNT();
         private ToolTips toolTips = new ToolTips();
         private Warp warp = new Warp();
+
+        public Kick kick() {
+            return kick;
+        }
 
         public Fly fly() {
             return fly;
