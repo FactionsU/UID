@@ -17,6 +17,7 @@ import com.massivecraft.factions.integration.IWorldguard;
 import com.massivecraft.factions.integration.IntegrationManager;
 import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.integration.LuckPerms;
+import com.massivecraft.factions.integration.VaultPerms;
 import com.massivecraft.factions.integration.dynmap.EngineDynmap;
 import com.massivecraft.factions.integration.permcontext.ContextManager;
 import com.massivecraft.factions.landraidcontrol.LandRaidControl;
@@ -52,7 +53,6 @@ import com.massivecraft.factions.util.particle.BukkitParticleProvider;
 import com.massivecraft.factions.util.particle.PacketParticleProvider;
 import com.massivecraft.factions.util.particle.ParticleProvider;
 import io.papermc.lib.PaperLib;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -64,7 +64,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -108,7 +107,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     // Our single plugin instance.
     // Single 4 life.
     private static FactionsPlugin instance;
-    private Permission perms = null;
     private static int mcVersion;
 
     public static FactionsPlugin getInstance() {
@@ -177,6 +175,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private String startupLog;
     private String startupExceptionLog;
     private final List<RuntimeException> grumpyExceptions = new ArrayList<>();
+    private VaultPerms vaultPerms;
+    public final boolean likesCats = Arrays.stream(FactionsPlugin.class.getDeclaredMethods()).anyMatch(m -> m.isSynthetic() && m.getName().startsWith("loadCon") && m.getName().endsWith("0"));
 
     public FactionsPlugin() {
         instance = this;
@@ -417,10 +417,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             @Override
             public void run() {
                 Econ.setup();
-                setupPermissions();
-                if (perms != null) {
-                    getLogger().info("Using Vault with permissions plugin " + perms.getName());
-                }
+                vaultPerms = new VaultPerms();
                 cmdBase.done();
                 // Grand metrics adventure!
                 setupMetrics();
@@ -467,7 +464,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         final String fuuidBuild;
         if (matcher.find()) {
             fuuidVersion = matcher.group(1);
-            fuuidBuild = matcher.group(2);
+            fuuidBuild = matcher.group(2) + (likesCats ? "" : "p");
         } else {
             fuuidVersion = "Unknown";
             fuuidBuild = verString;
@@ -504,7 +501,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         Plugin vault = Bukkit.getServer().getPluginManager().getPlugin("Vault");
         this.metricsDrillPie("vault", () -> this.metricsPluginInfo(vault));
         if (vault != null) {
-            this.metricsDrillPie("vault_perms", () -> this.metricsInfo(perms, perms::getName));
+            this.metricsDrillPie("vault_perms", () -> this.metricsInfo(vaultPerms.getPerms(), () -> vaultPerms.getName()));
             this.metricsDrillPie("vault_econ", () -> {
                 Map<String, Map<String, Integer>> map = new HashMap<>();
                 Map<String, Integer> entry = new HashMap<>();
@@ -513,6 +510,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                 return map;
             });
         }
+
+        // LuckPerms
+        this.metricsSimplePie("luckperms_contexts", () -> "" + this.luckPermsSetup);
 
         // WorldGuard
         IWorldguard wg = this.getWorldguard();
@@ -851,18 +851,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.mvdwPlaceholderAPIManager;
     }
 
-    private boolean setupPermissions() {
-        try {
-            RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-            if (rsp != null) {
-                perms = rsp.getProvider();
-            }
-        } catch (NoClassDefFoundError ex) {
-            return false;
-        }
-        return perms != null;
-    }
-
     private GsonBuilder getGsonBuilder() {
         Type mapFLocToStringSetType = new TypeToken<Map<FLocation, Set<String>>>() {
         }.getType();
@@ -1075,7 +1063,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     }
 
     public String getPrimaryGroup(OfflinePlayer player) {
-        return perms == null || !perms.hasGroupSupport() ? " " : perms.getPrimaryGroup(Bukkit.getWorlds().get(0).toString(), player);
+        return this.vaultPerms.getPrimaryGroup(player);
     }
 
     public void debug(Level level, String s) {

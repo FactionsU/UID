@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 public class MiscUtil {
     private static final Map<String, EntityType> entityTypeMap;
@@ -124,7 +123,7 @@ public class MiscUtil {
                 badChars.add(Character.toString(c));
             }
         }
-        if (badChars!=null) {
+        if (badChars != null) {
             errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_ALPHANUMERIC.toString(), String.join("", badChars)));
         }
 
