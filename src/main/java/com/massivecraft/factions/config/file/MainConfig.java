@@ -1288,6 +1288,7 @@ public class MainConfig {
             private boolean territoryBlockOtherExplosionsWhenOffline = false;
             private boolean territoryDenyEndermanBlocks = true;
             private boolean territoryDenyEndermanBlocksWhenOffline = true;
+            private boolean territoryBlockEntityDamageMatchingPerms = false;
 
             private boolean safeZoneDenyBuild = true;
             private boolean safeZoneDenyUsage = true;
@@ -1295,6 +1296,7 @@ public class MainConfig {
             private boolean safeZoneBlockOtherExplosions = true;
             private boolean safeZonePreventAllDamageToPlayers = false;
             private boolean safeZoneDenyEndermanBlocks = true;
+            private boolean safeZoneBlockAllEntityDamage = false;
 
             private boolean warZoneDenyBuild = true;
             private boolean warZoneDenyUsage = true;
@@ -1417,6 +1419,10 @@ public class MainConfig {
                 return territoryDenyEndermanBlocksWhenOffline;
             }
 
+            public boolean isTerritoryBlockEntityDamageMatchingPerms() {
+                return territoryBlockEntityDamageMatchingPerms;
+            }
+
             public boolean isSafeZoneDenyBuild() {
                 return safeZoneDenyBuild;
             }
@@ -1435,6 +1441,10 @@ public class MainConfig {
 
             public boolean isSafeZoneDenyEndermanBlocks() {
                 return safeZoneDenyEndermanBlocks;
+            }
+
+            public boolean isSafeZoneBlockAllEntityDamage() {
+                return safeZoneBlockAllEntityDamage;
             }
 
             public boolean isWarZoneDenyBuild() {

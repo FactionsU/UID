@@ -247,6 +247,8 @@ public class FactionsEntityListener extends AbstractListener {
     }
 
     public static boolean canDamage(Entity damager, Entity damagee, boolean notify) {
+        Faction defLocFaction = Board.getInstance().getFactionAt(new FLocation(damagee.getLocation()));
+
         // for damage caused by projectiles, getDamager() returns the projectile... what we need to know is the source
         if (damager instanceof Projectile) {
             Projectile projectile = (Projectile) damager;
@@ -286,6 +288,23 @@ public class FactionsEntityListener extends AbstractListener {
         }
 
         if (!(damagee instanceof Player)) {
+            if (FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneBlockAllEntityDamage() && defLocFaction.noPvPInTerritory()) {
+                if (damager instanceof Player && notify) {
+                    FPlayers.getInstance().getByPlayer((Player) damager).msg(defLocFaction.isSafeZone() ?
+                            TL.PERM_DENIED_SAFEZONE.format(TL.GENERIC_ATTACK.toString()) :
+                            TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString()));
+                }
+                return false;
+            }
+            if (FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockEntityDamageMatchingPerms() && damager instanceof Player && defLocFaction.isNormal()) {
+                FPlayer fPlayer = FPlayers.getInstance().getByPlayer((Player) damager);
+                if (!defLocFaction.hasAccess(fPlayer, PermissibleAction.DESTROY)) {
+                    if (notify) {
+                        fPlayer.msg(TL.PERM_DENIED_SAFEZONE.format(TL.GENERIC_ATTACK.toString()));
+                    }
+                    return false;
+                }
+            }
             return true;
         }
 
@@ -296,7 +315,6 @@ public class FactionsEntityListener extends AbstractListener {
         }
 
         Location defenderLoc = defender.getPlayer().getLocation();
-        Faction defLocFaction = Board.getInstance().getFactionAt(new FLocation(defenderLoc));
 
         if (damager == damagee) {  // ender pearl usage and other self-inflicted damage
             return true;

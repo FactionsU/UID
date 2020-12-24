@@ -743,6 +743,7 @@ public enum TL {
     GENERIC_FACTIONTAG_TOOLONG("&eThe faction tag can't be longer than &d%s&e chars."),
     GENERIC_FACTIONTAG_ALPHANUMERIC("&eFaction tag must be alphanumeric. \"&d%s&e\" is not allowed."),
     GENERIC_PLACEHOLDER("<This is a placeholder for a message you should not see>"),
+    GENERIC_ATTACK("attack"),
 
     /**
      * Clip placeholder stuff
