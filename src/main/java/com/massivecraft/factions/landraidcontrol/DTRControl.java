@@ -1,5 +1,6 @@
 package com.massivecraft.factions.landraidcontrol;
 
+import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
@@ -7,6 +8,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.event.DTRLossEvent;
+import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -75,6 +77,11 @@ public class DTRControl implements LandRaidControl {
     public boolean canKick(FPlayer toKick, CommandContext context) {
         if (toKick.getFaction().isNormal()) {
             Faction faction = toKick.getFaction();
+            if (!FactionsPlugin.getInstance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
+                    Board.getInstance().getFactionAt(toKick.getLastStoodAt()).getRelationTo(faction) == Relation.ENEMY) {
+                context.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
+                return false;
+            }
             if (faction.isFrozenDTR() && conf().getFreezeKickPenalty() > 0) {
                 faction.setDTR(Math.min(conf().getMinDTR(), faction.getDTR() - conf().getFreezeKickPenalty()));
                 context.msg(TL.DTR_KICK_PENALTY);

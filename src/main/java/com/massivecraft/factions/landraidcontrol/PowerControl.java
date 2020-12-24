@@ -9,6 +9,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.event.PowerLossEvent;
+import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -62,6 +63,11 @@ public class PowerControl implements LandRaidControl {
     public boolean canKick(FPlayer toKick, CommandContext context) {
         if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.getPower() < 0) {
             context.msg(TL.COMMAND_KICK_NEGATIVEPOWER);
+            return false;
+        }
+        if (!FactionsPlugin.getInstance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
+                Board.getInstance().getFactionAt(toKick.getLastStoodAt()).getRelationTo(toKick.getFaction()) == Relation.ENEMY) {
+            context.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
             return false;
         }
         return true;
