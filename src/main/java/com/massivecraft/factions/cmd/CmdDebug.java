@@ -37,7 +37,7 @@ public class CmdDebug extends FCommand {
         StringBuilder mainInfo = new StringBuilder();
         mainInfo.append(Bukkit.getName()).append(" version: ").append(Bukkit.getServer().getVersion()).append('\n');
         mainInfo.append("Server ID: ").append(FactionsPlugin.getInstance().getServerUUID()).append('\n');
-        mainInfo.append("Plugin version: ").append(FactionsPlugin.getInstance().getDescription().getVersion()).append('\n');
+        mainInfo.append("Plugin ").append(FactionsPlugin.getInstance().likesCats ? "version" : "Version").append(": ").append(FactionsPlugin.getInstance().getDescription().getVersion()).append('\n');
         mainInfo.append("Java version: ").append(System.getProperty("java.version")).append('\n');
         if (!context.args.isEmpty() && context.argAsString(0).equalsIgnoreCase("mini")) {
             for (String string : mainInfo.toString().split("\n")) {

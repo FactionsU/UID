@@ -2147,7 +2147,7 @@ public class MainConfig {
     public class Economy {
         @Comment("\n******************\n\n" +
                 "The value \"enabled\" must be true for any economy features\n" +
-                "Make sure that you confirm the \"defaultWorld\" setting is a valid world name\n"+
+                "Make sure that you confirm the \"defaultWorld\" setting is a valid world name\n" +
                 "\n******************\n")
         private boolean enabled = false;
         private String universeAccount = "";
