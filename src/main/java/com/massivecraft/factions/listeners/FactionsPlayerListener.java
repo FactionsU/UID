@@ -560,7 +560,7 @@ public class FactionsPlayerListener extends AbstractListener {
         Block block = event.getBlockClicked();
         Player player = event.getPlayer();
 
-        if (!playerCanUseItemHere(player, block.getLocation(), event.getBucket(), false)) {
+        if (!playerCanUseItemHere(player, block.getRelative(event.getBlockFace()).getLocation(), event.getBucket(), false)) {
             event.setCancelled(true);
         }
     }
