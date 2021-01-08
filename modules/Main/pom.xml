@@ -464,9 +464,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.elmakers.mine.bukkit.plugins</groupId>
-            <artifactId>Magic</artifactId>
-            <version>8.0</version>
+            <groupId>com.elmakers.mine.bukkit</groupId>
+            <artifactId>MagicAPI</artifactId>
+            <version>8.2</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
@@ -518,10 +518,6 @@
         <repository>
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
-        </repository>
-        <repository>
-            <id>magic</id>
-            <url>http://maven.elmakers.com/repository/</url>
         </repository>
         <repository>
             <id>minecraft-libraries</id>
