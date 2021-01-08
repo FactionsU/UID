@@ -56,7 +56,7 @@ public class FactionsEntityListener extends AbstractListener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onEntityDeath(EntityDeathEvent event) {
         if (!plugin.worldUtil().isEnabled(event.getEntity().getWorld())) {
             return;
