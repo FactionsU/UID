@@ -1298,6 +1298,8 @@ public class MainConfig {
             private boolean safeZoneDenyEndermanBlocks = true;
             private boolean safeZoneBlockAllEntityDamage = false;
 
+            private boolean peacefulBlockAllEntityDamage = false;
+
             private boolean warZoneDenyBuild = true;
             private boolean warZoneDenyUsage = true;
             private boolean warZoneBlockCreepers = true;
@@ -1445,6 +1447,10 @@ public class MainConfig {
 
             public boolean isSafeZoneBlockAllEntityDamage() {
                 return safeZoneBlockAllEntityDamage;
+            }
+
+            public boolean isPeacefulBlockAllEntityDamage() {
+                return peacefulBlockAllEntityDamage;
             }
 
             public boolean isWarZoneDenyBuild() {
