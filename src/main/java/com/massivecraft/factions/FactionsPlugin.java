@@ -464,7 +464,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         final String fuuidBuild;
         if (matcher.find()) {
             fuuidVersion = matcher.group(1);
-            fuuidBuild = matcher.group(2) + (likesCats ? "" : "p");
+            fuuidBuild = matcher.group(2) + ((likesCats || matcher.group(2).equals("selfbuilt")) ? "" : "p");
         } else {
             fuuidVersion = "Unknown";
             fuuidBuild = verString;
