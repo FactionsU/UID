@@ -288,11 +288,15 @@ public class FactionsEntityListener extends AbstractListener {
         }
 
         if (!(damagee instanceof Player)) {
-            if (FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneBlockAllEntityDamage() && defLocFaction.noPvPInTerritory()) {
+            if (FactionsPlugin.getInstance().conf().factions().protection().isSafeZoneBlockAllEntityDamage() && defLocFaction.isSafeZone()) {
                 if (damager instanceof Player && notify) {
-                    FPlayers.getInstance().getByPlayer((Player) damager).msg(defLocFaction.isSafeZone() ?
-                            TL.PERM_DENIED_SAFEZONE.format(TL.GENERIC_ATTACK.toString()) :
-                            TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.getTag(FPlayers.getInstance().getByPlayer((Player) damager))));
+                    FPlayers.getInstance().getByPlayer((Player) damager).msg(TL.PERM_DENIED_SAFEZONE.format(TL.GENERIC_ATTACK.toString()));
+                }
+                return false;
+            }
+            if (FactionsPlugin.getInstance().conf().factions().protection().isPeacefulBlockAllEntityDamage() && defLocFaction.isPeaceful()) {
+                if (damager instanceof Player && notify) {
+                    FPlayers.getInstance().getByPlayer((Player) damager).msg(TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.getTag(FPlayers.getInstance().getByPlayer((Player) damager))));
                 }
                 return false;
             }
@@ -300,7 +304,7 @@ public class FactionsEntityListener extends AbstractListener {
                 FPlayer fPlayer = FPlayers.getInstance().getByPlayer((Player) damager);
                 if (!defLocFaction.hasAccess(fPlayer, PermissibleAction.DESTROY)) {
                     if (notify) {
-                        fPlayer.msg(TL.PERM_DENIED_SAFEZONE.format(TL.GENERIC_ATTACK.toString()));
+                        fPlayer.msg(TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.getTag(FPlayers.getInstance().getByPlayer((Player) damager))));
                     }
                     return false;
                 }
