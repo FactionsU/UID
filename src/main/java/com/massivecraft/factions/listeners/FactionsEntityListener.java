@@ -292,7 +292,7 @@ public class FactionsEntityListener extends AbstractListener {
                 if (damager instanceof Player && notify) {
                     FPlayers.getInstance().getByPlayer((Player) damager).msg(defLocFaction.isSafeZone() ?
                             TL.PERM_DENIED_SAFEZONE.format(TL.GENERIC_ATTACK.toString()) :
-                            TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString()));
+                            TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.getTag(FPlayers.getInstance().getByPlayer((Player) damager))));
                 }
                 return false;
             }
