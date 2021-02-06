@@ -84,7 +84,7 @@ public class CmdDisband extends FCommand {
             FactionsPlugin.getInstance().log("The faction " + faction.getTag() + " (" + faction.getId() + ") was disbanded by " + (context.player == null ? "console command" : context.fPlayer.getName()) + ".");
         }
 
-        if (Econ.shouldBeUsed() && context.player != null) {
+        if (Econ.shouldBeUsed() && context.player != null && FactionsPlugin.getInstance().conf().economy().isBankEnabled()) {
             //Give all the faction's money to the disbander
             double amount = Econ.getBalance(faction);
             Econ.transferMoney(context.fPlayer, faction, context.fPlayer, amount, false);

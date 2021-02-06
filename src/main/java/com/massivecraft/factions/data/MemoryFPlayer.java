@@ -730,7 +730,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         // Am I the last one in the faction?
         if (myFaction.getFPlayers().size() == 1) {
             // Transfer all money
-            if (Econ.shouldBeUsed()) {
+            if (Econ.shouldBeUsed() && FactionsPlugin.getInstance().conf().economy().isBankEnabled()) {
                 Econ.transferMoney(this, myFaction, this, Econ.getBalance(myFaction));
             }
         }
