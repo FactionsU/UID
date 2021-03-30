@@ -25,7 +25,7 @@ public class CmdMoneyTransferFf extends MoneyCommand {
 
     @Override
     public void perform(CommandContext context) {
-        double amount = context.argAsDouble(0, 0d);
+        double amount = Math.abs(context.argAsDouble(0, 0d));
         EconomyParticipator from = context.argAsFaction(1);
         if (from == null) {
             return;

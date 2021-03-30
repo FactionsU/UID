@@ -27,7 +27,7 @@ public class CmdMoneyDeposit extends MoneyCommand {
 
     @Override
     public void perform(CommandContext context) {
-        double amount = context.argAsDouble(0, 0d);
+        double amount = Math.abs(context.argAsDouble(0, 0d));
         EconomyParticipator faction = context.argAsFaction(1, context.faction);
         if (faction == null) {
             return;
