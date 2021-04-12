@@ -94,13 +94,17 @@ public class CmdTop extends FCommand {
                 return 0;
             });
         } else if (criteria.equalsIgnoreCase("money") || criteria.equalsIgnoreCase("balance") || criteria.equalsIgnoreCase("bal")) {
+            if (!this.plugin.conf().economy().isEnabled()) {
+                return;
+            }
+            boolean bank = this.plugin.conf().economy().isBankEnabled();
             factionList.sort((f1, f2) -> {
-                double f1Size = Econ.getBalance(f1);
+                double f1Size = bank ? Econ.getBalance(f1) : 0;
                 // Lets get the balance of /all/ the players in the Faction.
                 for (FPlayer fp : f1.getFPlayers()) {
                     f1Size = f1Size + Econ.getBalance(fp);
                 }
-                double f2Size = Econ.getBalance(f2);
+                double f2Size = bank ? Econ.getBalance(f2) : 0;
                 for (FPlayer fp : f2.getFPlayers()) {
                     f2Size = f2Size + Econ.getBalance(fp);
                 }
