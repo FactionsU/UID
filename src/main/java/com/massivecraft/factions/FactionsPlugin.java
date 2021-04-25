@@ -27,6 +27,7 @@ import com.massivecraft.factions.listeners.FactionsEntityListener;
 import com.massivecraft.factions.listeners.FactionsExploitListener;
 import com.massivecraft.factions.listeners.FactionsPlayerListener;
 import com.massivecraft.factions.listeners.OneEightPlusListener;
+import com.massivecraft.factions.listeners.OneFourteenPlusListener;
 import com.massivecraft.factions.listeners.versionspecific.PortalHandler;
 import com.massivecraft.factions.listeners.versionspecific.PortalListenerLegacy;
 import com.massivecraft.factions.listeners.versionspecific.PortalListener_114;
@@ -388,6 +389,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         getServer().getPluginManager().registerEvents(new FactionsBlockListener(this), this);
         if (mcVersion >= 800) {
             getServer().getPluginManager().registerEvents(new OneEightPlusListener(this), this);
+        }
+        if (mcVersion >= 1400) {
+            getServer().getPluginManager().registerEvents(new OneFourteenPlusListener(this), this);
         }
 
         // Version specific portal listener check.

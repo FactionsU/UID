@@ -308,7 +308,11 @@ public abstract class AbstractListener implements Listener {
         }
 
         // Ignored types
-        if (action == PermissibleAction.CONTAINER && FactionsPlugin.getInstance().conf().factions().protection().getContainerExceptions().contains(material)) {
+        if (action == PermissibleAction.CONTAINER &&
+                (
+                        FactionsPlugin.getInstance().conf().factions().protection().getContainerExceptions().contains(material) ||
+                                material == Material.LECTERN && FactionsPlugin.getInstance().conf().factions().protection().isTerritoryAllowLecternReading()
+                )) {
             return true;
         }
 
