@@ -44,7 +44,7 @@ public class CmdClaimFill extends FCommand {
             return;
         }
 
-        final Faction forFaction = context.argAsFaction(2, context.faction);
+        final Faction forFaction = context.argAsFaction(1, context.faction);
         Location location = context.player.getLocation();
         FLocation loc = new FLocation(location);
 
