@@ -60,7 +60,15 @@ public class CmdClaimFill extends FCommand {
             return;
         }
 
-        if (!context.fPlayer.isAdminBypassing() && !forFaction.hasAccess(context.fPlayer, PermissibleAction.TERRITORY)) {
+        if (!context.fPlayer.isAdminBypassing() &&
+                (
+                        (forFaction.isNormal() && !forFaction.hasAccess(context.fPlayer, PermissibleAction.TERRITORY))
+                                ||
+                                (forFaction.isWarZone() && !Permission.MANAGE_WAR_ZONE.has(context.player))
+                                ||
+                                (forFaction.isSafeZone() && !Permission.MANAGE_SAFE_ZONE.has(context.player))
+                )
+        ) {
             context.msg(TL.CLAIM_CANTCLAIM, forFaction.describeTo(context.fPlayer));
             return;
         }
@@ -93,7 +101,7 @@ public class CmdClaimFill extends FCommand {
             return;
         }
 
-        if (toClaim.size() > this.plugin.getLandRaidControl().getPossibleClaimCount(forFaction)) {
+        if (forFaction.isNormal() && toClaim.size() > this.plugin.getLandRaidControl().getPossibleClaimCount(forFaction)) {
             context.msg(TL.COMMAND_CLAIMFILL_NOTENOUGHLANDLEFT, forFaction.describeTo(context.fPlayer), toClaim.size());
             return;
         }
