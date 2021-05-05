@@ -71,24 +71,26 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().conf().exploits().isLiquidFlow()) {
-            return;
-        }
-        if (event.getBlock().isLiquid()) {
-            if (event.getToBlock().isEmpty()) {
-                Faction from = Board.getInstance().getFactionAt(new FLocation(event.getBlock()));
-                Faction to = Board.getInstance().getFactionAt(new FLocation(event.getToBlock()));
-                if (from == to) {
-                    // not concerned with inter-faction events
+        boolean exp = FactionsPlugin.getInstance().conf().exploits().isLiquidFlow();
+        boolean safe = FactionsPlugin.getInstance().conf().factions().protection().isSafeZonePreventLiquidFlowIn();
+        boolean war = FactionsPlugin.getInstance().conf().factions().protection().isWarZonePreventLiquidFlowIn();
+
+        if ((exp || safe || war) && event.getBlock().isLiquid() && event.getToBlock().isEmpty()) {
+            Faction from = Board.getInstance().getFactionAt(new FLocation(event.getBlock()));
+            Faction to = Board.getInstance().getFactionAt(new FLocation(event.getToBlock()));
+            if (from == to) {
+                // not concerned with inter-faction events
+                return;
+            }
+            // from faction != to faction
+            if (exp && to.isNormal()) {
+                if (from.isNormal() && from.getRelationTo(to).isAlly()) {
                     return;
                 }
-                // from faction != to faction
-                if (to.isNormal()) {
-                    if (from.isNormal() && from.getRelationTo(to).isAlly()) {
-                        return;
-                    }
-                    event.setCancelled(true);
-                }
+                event.setCancelled(true);
+            }
+            if ((safe && to.isSafeZone() || (war && to.isWarZone()))) {
+                event.setCancelled(true);
             }
         }
     }

@@ -1297,6 +1297,7 @@ public class MainConfig {
             private boolean safeZoneBlockTNT = true;
             private boolean safeZoneBlockOtherExplosions = true;
             private boolean safeZonePreventAllDamageToPlayers = false;
+            private boolean safeZonePreventLiquidFlowIn = true;
             private boolean safeZoneDenyEndermanBlocks = true;
             private boolean safeZoneBlockAllEntityDamage = false;
 
@@ -1309,6 +1310,7 @@ public class MainConfig {
             private boolean warZoneBlockTNT = true;
             private boolean warZoneBlockOtherExplosions = true;
             private boolean warZoneFriendlyFire = false;
+            private boolean warZonePreventLiquidFlowIn = true;
             private boolean warZoneDenyEndermanBlocks = true;
 
             private boolean wildernessDenyBuild = false;
@@ -1447,6 +1449,10 @@ public class MainConfig {
                 return safeZonePreventAllDamageToPlayers;
             }
 
+            public boolean isSafeZonePreventLiquidFlowIn() {
+                return safeZonePreventLiquidFlowIn;
+            }
+
             public boolean isSafeZoneDenyEndermanBlocks() {
                 return safeZoneDenyEndermanBlocks;
             }
@@ -1481,6 +1487,10 @@ public class MainConfig {
 
             public boolean isWarZoneFriendlyFire() {
                 return warZoneFriendlyFire;
+            }
+
+            public boolean isWarZonePreventLiquidFlowIn() {
+                return warZonePreventLiquidFlowIn;
             }
 
             public boolean isWarZoneDenyEndermanBlocks() {
@@ -2128,6 +2138,7 @@ public class MainConfig {
         private boolean enderPearlClipping = true;
         private boolean interactionSpam = true;
         private boolean tntWaterlog = false;
+        @Comment("If true, prevents water flow into claimed territory")
         private boolean liquidFlow = false;
         private boolean preventDuping = true;
 
