@@ -87,7 +87,7 @@ public class IntegrationManager implements Listener {
         }
     }
 
-    public IntegrationManager(FactionsPlugin plugin) {
+    public static void onLoad(FactionsPlugin plugin) {
         try {
             Field depGraph = SimplePluginManager.class.getDeclaredField("dependencyGraph");
             depGraph.setAccessible(true);
@@ -99,6 +99,9 @@ public class IntegrationManager implements Listener {
             }
         } catch (Exception ignored) {
         }
+    }
+
+    public IntegrationManager(FactionsPlugin plugin) {
         for (Integration integration : Integration.values()) {
             Plugin plug = plugin.getServer().getPluginManager().getPlugin(integration.pluginName);
             if (plug != null && plug.isEnabled()) {
