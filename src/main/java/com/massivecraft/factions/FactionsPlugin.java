@@ -1,5 +1,6 @@
 package com.massivecraft.factions;
 
+import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -82,6 +83,8 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -178,9 +181,88 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private final List<RuntimeException> grumpyExceptions = new ArrayList<>();
     private VaultPerms vaultPerms;
     public final boolean likesCats = Arrays.stream(FactionsPlugin.class.getDeclaredMethods()).anyMatch(m -> m.isSynthetic() && m.getName().startsWith("loadCon") && m.getName().endsWith("0"));
+    private boolean gottaSlapEssentials;
 
     public FactionsPlugin() {
         instance = this;
+    }
+
+    // Everything is pain.
+    @Override
+    public void onLoad() {
+        IntegrationManager.onLoad(this);
+        try {
+            Class.forName("com.earth2me.essentials.economy.vault.VaultEconomyProvider");
+            Path dataFolder = this.getDataFolder().toPath().resolve("data");
+            Path essDataFolder = this.getDataFolder().toPath().getParent().resolve("Essentials").resolve("userdata");
+            Path essUserMap = this.getDataFolder().toPath().getParent().resolve("Essentials").resolve("usermap.csv");
+            if (!Files.exists(dataFolder) || !Files.isDirectory(dataFolder) || !Files.exists(essDataFolder) || !Files.isDirectory(essDataFolder)) {
+                return;
+            }
+            Path conversionCompleteFile = dataFolder.resolve("modernEssXAccountsComplete.txt");
+            if (Files.exists(conversionCompleteFile)) {
+                return; // My work here is done.
+            }
+
+            this.getLogger().info("");
+            this.getLogger().info("     We interrupt this server startup for an important message");
+            this.getLogger().info("");
+            this.getLogger().info("  FactionsUUID has identified a version of EssentialsX that has");
+            this.getLogger().info("  fixed Vault integration. However, there may be older pre-EssX-fix");
+            this.getLogger().info("  bank data present, so this plugin will attempt to move any such");
+            this.getLogger().info("  accounts in a one-time event");
+            this.getLogger().info("");
+
+            Map<String, Object> data = new Gson().fromJson(new String(Files.readAllBytes(dataFolder.resolve("factions.json"))), new TypeToken<Map<String, Object>>() {
+            }.getType());
+
+            int count = 0;
+            for (String faction : data.keySet()) {
+                String name = UUID.nameUUIDFromBytes(("NPC:" + "faction_" + faction).getBytes(Charsets.UTF_8)) + ".yml";
+                String newName = UUID.nameUUIDFromBytes(("OfflinePlayer:" + "faction-" + faction).getBytes(Charsets.UTF_8)) + ".yml";
+                Path oldFile = essDataFolder.resolve(name);
+                Path newFile = essDataFolder.resolve(newName);
+                Path oldNewFile = essDataFolder.resolve(newName + ".bak");
+                this.getLogger().info("Testing for " + "faction-" + faction + " (" + name + ")");
+                if (Files.exists(oldFile)) {
+                    try {
+                        if (Files.exists(newFile)) {
+                            Files.move(newFile, oldNewFile);
+                        }
+                        Files.move(oldFile, newFile);
+                        this.getLogger().info("Moved faction " + faction + " from " + name + " to " + newName);
+                    } catch (IOException e) {
+                        this.getLogger().warning("Failed to migrate faction " + faction + " file " + oldFile + ": " + e.getMessage());
+                    }
+                    count++;
+                }
+            }
+
+            if (count > 0) {
+                this.gottaSlapEssentials = true;
+                try {
+                    Files.delete(essUserMap);
+                } catch (IOException e) {
+                    this.getLogger().warning("Failed to migrate delete usermap.csv, which may cause issues: " + e.getMessage());
+                }
+            }
+
+            this.getLogger().info("Done!");
+            this.getLogger().info("");
+            if (count == 0) {
+                this.getLogger().info("Found no data to migrate!");
+            } else {
+                this.getLogger().info("Migrated " + count + " files!");
+            }
+
+            Files.write(conversionCompleteFile, "Do not delete unless you want to waste time at startup!".getBytes(StandardCharsets.UTF_8));
+
+            this.getLogger().info("  We did it! Yay!");
+        } catch (ClassNotFoundException e) {
+            // Good.
+        } catch (Exception e) {
+            this.getLogger().log(Level.SEVERE, "Failed to migrate EssX accounts", e);
+        }
     }
 
     @Override
@@ -420,6 +502,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         new BukkitRunnable() {
             @Override
             public void run() {
+                if (FactionsPlugin.this.gottaSlapEssentials) {
+                    FactionsPlugin.this.getServer().dispatchCommand(FactionsPlugin.this.getServer().getConsoleSender(), "baltop force");
+                }
                 Econ.setup();
                 vaultPerms = new VaultPerms();
                 cmdBase.done();
