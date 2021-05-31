@@ -21,10 +21,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Econ {
 
     private static Economy econ = null;
+    private static final Pattern FACTION_PATTERN = Pattern.compile("^faction-(\\d+)$");
 
     public static void setup() {
         if (isSetup()) {
@@ -360,10 +363,15 @@ public class Econ {
     // Standard account management methods
     // -------------------------------------------- //
 
+    @Deprecated
     private static OfflinePlayer getOfflinePlayerForName(String name) {
         try {
+            Matcher matcher = FACTION_PATTERN.matcher(name);
+            if (matcher.find()) {
+                return com.massivecraft.factions.Factions.getInstance().getFactionById(matcher.group(1)).getOfflinePlayer();
+            }
             return Bukkit.getOfflinePlayer(UUID.fromString(name));
-        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
             return Bukkit.getOfflinePlayer(name);
         }
     }
