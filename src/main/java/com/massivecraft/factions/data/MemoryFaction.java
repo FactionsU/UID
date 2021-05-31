@@ -313,7 +313,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
     public OfflinePlayer getOfflinePlayer() {
         if (this.offlinePlayer == null) {
-            this.offlinePlayer = Bukkit.getOfflinePlayer(this.getAccountId());
+            this.offlinePlayer = FactionsPlugin.getInstance().getFactionOfflinePlayer(this.getAccountId());
         }
         return this.offlinePlayer;
     }
