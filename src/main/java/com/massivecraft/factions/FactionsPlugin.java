@@ -54,6 +54,7 @@ import com.massivecraft.factions.util.material.MaterialDb;
 import com.massivecraft.factions.util.particle.BukkitParticleProvider;
 import com.massivecraft.factions.util.particle.PacketParticleProvider;
 import com.massivecraft.factions.util.particle.ParticleProvider;
+import com.mojang.authlib.GameProfile;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -78,6 +79,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
@@ -182,6 +184,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private VaultPerms vaultPerms;
     public final boolean likesCats = Arrays.stream(FactionsPlugin.class.getDeclaredMethods()).anyMatch(m -> m.isSynthetic() && m.getName().startsWith("loadCon") && m.getName().endsWith("0"));
     private boolean gottaSlapEssentials;
+    private Method getOffline;
 
     public FactionsPlugin() {
         instance = this;
@@ -491,6 +494,12 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
 
         new TitleAPI();
+
+        try {
+            this.getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", GameProfile.class);
+        } catch (Exception e) {
+            this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", e);
+        }
 
         if (ChatColor.stripColor(TL.NOFACTION_PREFIX.toString()).equals("[4-]")) {
             getLogger().warning("Looks like you have an old, mistaken 'nofactions-prefix' in your lang.yml. It currently displays [4-] which is... strange.");
@@ -1175,5 +1184,17 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         } else {
             return CompletableFuture.completedFuture(player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN));
         }
+    }
+
+    public OfflinePlayer getFactionOfflinePlayer(String name) {
+        if (this.getOffline != null) {
+            try {
+                return (OfflinePlayer) this.getOffline.invoke(this.getServer(), new GameProfile(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)), name));
+            } catch (Exception e) {
+                this.getLogger().log(Level.SEVERE, "Failed to get offline player the fast way, reverting to slow mode", e);
+                this.getOffline = null;
+            }
+        }
+        return this.getServer().getOfflinePlayer(name);
     }
 }
