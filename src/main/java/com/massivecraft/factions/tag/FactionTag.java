@@ -14,6 +14,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public enum FactionTag implements Tag {
+    @SuppressWarnings("Convert2MethodRef")
+    INTERNAL_ID("faction-internal-id", (fac) -> fac.getId()),
     HOME_X("x", (fac) -> fac.hasHome() ? String.valueOf(fac.getHome().getBlockX()) : Tag.isMinimalShow() ? null : "{ig}"),
     HOME_Y("y", (fac) -> fac.hasHome() ? String.valueOf(fac.getHome().getBlockY()) : Tag.isMinimalShow() ? null : "{ig}"),
     HOME_Z("z", (fac) -> fac.hasHome() ? String.valueOf(fac.getHome().getBlockZ()) : Tag.isMinimalShow() ? null : "{ig}"),
