@@ -141,7 +141,7 @@ public enum FancyTag implements Tag {
             everythingOnYourWayOut:
             if (line.contains("{group}")) {
                 if (groupMap != null) {
-                    String group = groupMap.get(UUID.fromString(fplayer.getId()));
+                    String group = groupMap.getOrDefault(UUID.fromString(fplayer.getId()), "");
                     if (!group.trim().isEmpty()) {
                         newLine = newLine.replace("{group}", group);
                         break everythingOnYourWayOut;
