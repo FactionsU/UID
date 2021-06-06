@@ -2631,6 +2631,15 @@ public class MainConfig {
         }
     }
 
+    public class MagicPlugin {
+        @Comment("If true, magic mobs will follow whatever pvp allowed/disallowed setting is present for the territory they're attacking into.")
+        private boolean usePVPSettingForMagicMobs = false;
+
+        public boolean isUsePVPSettingForMagicMobs() {
+            return usePVPSettingForMagicMobs;
+        }
+    }
+
     public class Paper {
         @Comment("Utilize Paper's async teleportation if available (Paper 1.9+).")
         private boolean asyncTeleport = true;
@@ -2716,6 +2725,8 @@ public class MainConfig {
             "You can find it here: https://www.spigotmc.org/resources/lwc-extended.69551/\n" +
             "Note: Modern LWC is no longer supported, and its former maintainer now runs LWC Extended")
     private LWC lwc = new LWC();
+    @Comment("Integration with the Magic plugin")
+    private MagicPlugin magicPlugin = new MagicPlugin();
     @Comment("Paper features, when accessible.")
     private Paper paper = new Paper();
     @Comment("PlayerVaults faction vault settings.\n" +
@@ -2768,6 +2779,10 @@ public class MainConfig {
 
     public Scoreboard scoreboard() {
         return scoreboard;
+    }
+
+    public MagicPlugin magicPlugin() {
+        return magicPlugin;
     }
 
     public Paper paper() {
