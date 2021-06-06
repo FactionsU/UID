@@ -70,18 +70,26 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         if (facConf.pvp().getWorldsIgnorePvP().contains(location.getWorld().getName())) {
             return true;
         }
-        if (facConf.protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
+        if (player != null && facConf.protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
             return true;
         }
         Faction defFaction = Board.getInstance().getFactionAt(new FLocation(location));
         if (defFaction.noPvPInTerritory()) {
             return false;
         }
-        FPlayer attacker = FPlayers.getInstance().getByPlayer(player);
-        if (attacker.hasLoginPvpDisabled()) {
-            return false;
+        if (player != null) {
+            FPlayer attacker = FPlayers.getInstance().getByPlayer(player);
+            if (attacker.hasLoginPvpDisabled()) {
+                return false;
+            }
+
+            Faction locFaction = Board.getInstance().getFactionAt(new FLocation(attacker));
+            if (locFaction.noPvPInTerritory() || locFaction.isSafeZone()) {
+                return false;
+            }
         }
-        Faction locFaction = Board.getInstance().getFactionAt(new FLocation(attacker));
+
+        Faction locFaction = Board.getInstance().getFactionAt(new FLocation(location));
         if (locFaction.noPvPInTerritory()) {
             return false;
         }
