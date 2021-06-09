@@ -14,12 +14,17 @@ convert a Location or Chunk into an FLocation, both of which are super easy :)
 
 **Getting from a Bukkit Location.**
 ```java
-FLocation flocation = new FLocation(Location);
+FLocation flocation = new FLocation(location);
 ```
 
 **Getting from a Chunk**
 ```java
-FLocation flocation = new FLocation(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+// Broken apart just to avoid making an overly wide example
+String worldName = chunk.getWorld().getName();
+int x = chunk.getX();
+int z = chunk.getZ();
+
+FLocation flocation = new FLocation(worldName, x, z);
 ```
 
 ## FPlayers
@@ -28,7 +33,7 @@ get the associated FPlayer if you already have the Bukkit Player or their UUID.
 
 **By Bukkit Player**
 ```java
-FPlayer fplayer = FPlayers.getInstance().getByPlayer(Player);
+FPlayer fplayer = FPlayers.getInstance().getByPlayer(player);
 ```
 
 **By UUID**
