@@ -1,3 +1,5 @@
+# Config for mkdocs-material 7
+
 # Project information
 site_name: 'FactionsUUID'
 site_description: 'Premium Factions for premium people.'
@@ -10,13 +12,14 @@ repo_url: 'https://github.com/drtshock/Factions'
 edit_uri: 'edit/1.6.x/docs/'
 
 # Copyright
-copyright: 'Copyright &copy; 2019-2020 MOSS'
+copyright: 'Copyright &copy; 2019-2021 MOSS'
 
 # Configuration
 theme:
   name: 'material'
   language: 'en'
   palette:
+    scheme: 'slate'
     primary: 'green'
     accent: 'light green'
   font:
@@ -46,7 +49,7 @@ nav:
 # Customization
 extra:
   social:
-    - type: 'globe'
+    - icon: 'fontawesome/solid/globe-americas'
       link: 'https://discord.gg/PHpuzZS'
 
 # Plugins
