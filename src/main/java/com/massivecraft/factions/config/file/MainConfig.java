@@ -25,7 +25,7 @@ import java.util.Set;
 public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @Comment("Don't change this value yourself, unless you WANT a broken config!")
-        private int version = 4;
+        private int version = 5;
 
         @Comment("Debug\n" +
                 "Turn this on if you are having issues with something and working on resolving them.\n" +
@@ -1634,6 +1634,7 @@ public class MainConfig {
             private transient Set<CreatureSpawnEvent.SpawnReason> preventSpawningInSafezoneReason;
             private Set<String> preventSpawningInSafezoneExceptions = new HashSet<String>() {
                 {
+                    this.add("AXOLOTL");
                     this.add("BAT");
                     this.add("CAT");
                     this.add("CHICKEN");
@@ -1644,6 +1645,7 @@ public class MainConfig {
                     this.add("FOX");
                     this.add("HORSE");
                     this.add("IRON_GOLEM");
+                    this.add("GLOW_SQUID");
                     this.add("LLAMA");
                     this.add("MULE");
                     this.add("MUSHROOM_COW");

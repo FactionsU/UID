@@ -297,6 +297,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         switch (event.getRightClicked().getType()) {
             case ITEM_FRAME:
+            case GLOW_ITEM_FRAME:
                 if (!canPlayerUseBlock(event.getPlayer(), Material.ITEM_FRAME, event.getRightClicked().getLocation(), false)) {
                     event.setCancelled(true);
                 }

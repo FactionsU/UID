@@ -33,7 +33,9 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -71,6 +73,9 @@ public class Transitioner {
             }
             if (version < 4) {
                 transitioner.migrateV3(rootNode);
+            }
+            if (version < 5) {
+                transitioner.migrateV4(rootNode);
             }
 
             loader.save(rootNode);
@@ -196,5 +201,27 @@ public class Transitioner {
         this.plugin.getLogger().info("     now a new spawning control system added.");
         this.plugin.getLogger().info("  3. The perms gui hover text can now be customized in config, and the allow/deny/locked text");
         this.plugin.getLogger().info("     can now be customized in lang.yml under GUI->PERMS->ACTION");
+    }
+
+    private void migrateV4(CommentedConfigurationNode node) {
+        node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(5);
+
+        boolean update = node.getNode("factions").getNode("spawning").getNode("updateAutomatically").getBoolean(true);
+
+        if (update) {
+            List<String> list = new ArrayList<>(node.getNode("factions").getNode("spawning").getNode("preventSpawningInSafezoneExceptions").getList(Object::toString));
+            list.add("AXOLOTL");
+            list.add("GLOW_SQUID");
+            node.getNode("factions").getNode("spawning").getNode("preventSpawningInSafezoneExceptions").setValue(list);
+        }
+
+        this.plugin.getLogger().info("Detected a config from before 0.5.24 (which adds 1.17 entities)");
+        if (update) {
+            this.plugin.getLogger().info("  Because you had auto updating enabled, added AXOLOTL and GLOW_SQUID to the safe zone spawning exception list.");
+            this.plugin.getLogger().info("  We chose not to add GOAT due to its affection for ramming.");
+        } else {
+            this.plugin.getLogger().info("  If you had auto updating enabled, this would have added AXOLOTL and GLOW_SQUID to the safe zone spawning exception list.");
+            this.plugin.getLogger().info("  We chose not to add GOAT due to its affection for ramming.");
+        }
     }
 }

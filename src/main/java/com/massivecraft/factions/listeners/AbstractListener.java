@@ -207,6 +207,7 @@ public abstract class AbstractListener implements Listener {
         if (!otherFaction.isNormal()) {
             switch (material) {
                 case ITEM_FRAME:
+                case GLOW_ITEM_FRAME:
                 case ARMOR_STAND:
                     return canInteractHere(player, location);
             }
@@ -266,6 +267,7 @@ public abstract class AbstractListener implements Listener {
             case STONECUTTER:
             case LECTERN:
             case ITEM_FRAME:
+            case GLOW_ITEM_FRAME:
             case JUKEBOX:
             case ARMOR_STAND:
             case REPEATER:
