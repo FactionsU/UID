@@ -263,6 +263,7 @@ public class FactionsEntityListener extends AbstractListener {
         if (damager instanceof TNTPrimed || damager instanceof Creeper || damager instanceof ExplosiveMinecart) {
             switch (damagee.getType()) {
                 case ITEM_FRAME:
+                case GLOW_ITEM_FRAME:
                 case ARMOR_STAND:
                 case PAINTING:
                     if (explosionDisallowed(damager, new FLocation(damagee.getLocation()))) {
@@ -276,6 +277,7 @@ public class FactionsEntityListener extends AbstractListener {
             Material material = null;
             switch (damagee.getType()) {
                 case ITEM_FRAME:
+                case GLOW_ITEM_FRAME:
                     material = Material.ITEM_FRAME;
                     break;
                 case ARMOR_STAND:
