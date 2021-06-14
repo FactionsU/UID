@@ -47,6 +47,7 @@ public class CmdClaimFill extends FCommand {
         final Faction forFaction = context.argAsFaction(1, context.faction);
         Location location = context.player.getLocation();
         FLocation loc = new FLocation(location);
+        final boolean bypass = context.fPlayer.isAdminBypassing();
 
         Faction currentFaction = Board.getInstance().getFactionAt(loc);
 
@@ -55,12 +56,12 @@ public class CmdClaimFill extends FCommand {
             return;
         }
 
-        if (!currentFaction.isWilderness()) {
+        if (!bypass && !currentFaction.isWilderness()) {
             context.msg(TL.COMMAND_CLAIMFILL_ALREADYCLAIMED);
             return;
         }
 
-        if (!context.fPlayer.isAdminBypassing() &&
+        if (!bypass &&
                 (
                         (forFaction.isNormal() && !forFaction.hasAccess(context.fPlayer, PermissibleAction.TERRITORY))
                                 ||
@@ -90,10 +91,10 @@ public class CmdClaimFill extends FCommand {
                 return;
             }
 
-            addIf(toClaim, queue, currentHead.getRelative(0, 1));
-            addIf(toClaim, queue, currentHead.getRelative(0, -1));
-            addIf(toClaim, queue, currentHead.getRelative(1, 0));
-            addIf(toClaim, queue, currentHead.getRelative(-1, 0));
+            addIf(toClaim, queue, currentHead.getRelative(0, 1), currentFaction);
+            addIf(toClaim, queue, currentHead.getRelative(0, -1), currentFaction);
+            addIf(toClaim, queue, currentHead.getRelative(1, 0), currentFaction);
+            addIf(toClaim, queue, currentHead.getRelative(-1, 0), currentFaction);
         }
 
         if (toClaim.size() > limit) {
@@ -119,8 +120,8 @@ public class CmdClaimFill extends FCommand {
         }
     }
 
-    private void addIf(Set<FLocation> toClaim, Queue<FLocation> queue, FLocation examine) {
-        if (Board.getInstance().getFactionAt(examine).isWilderness() && !toClaim.contains(examine)) {
+    private void addIf(Set<FLocation> toClaim, Queue<FLocation> queue, FLocation examine, Faction replacement) {
+        if (Board.getInstance().getFactionAt(examine) == replacement && !toClaim.contains(examine)) {
             toClaim.add(examine);
             queue.add(examine);
         }
