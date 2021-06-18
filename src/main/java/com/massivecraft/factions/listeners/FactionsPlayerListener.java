@@ -24,6 +24,7 @@ import com.massivecraft.factions.util.TextUtil;
 import com.massivecraft.factions.util.VisualizeUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -79,11 +80,53 @@ public class FactionsPlayerListener extends AbstractListener {
         ((MemoryFPlayer) me).setName(player.getName());
 
         this.plugin.getLandRaidControl().onJoin(me);
+
+        FLocation standing = new FLocation(player.getLocation());
+
+        if (this.plugin.conf().factions().protection().territoryTeleport().isEnabled()) {
+            long diff = System.currentTimeMillis() - me.getLastLoginTime();
+            MainConfig.Factions.Protection.TerritoryTeleport terry = this.plugin.conf().factions().protection().territoryTeleport();
+            if (diff > (1000L * terry.getTimeSinceLastSignedIn())) {
+                Relation relation = me.getRelationTo(Board.getInstance().getFactionAt(standing));
+                if (terry.isRelationToTeleportOut(relation)) {
+                    Location target = null;
+                    for (String destination : terry.getDestination().split(",")) {
+                        switch (destination.trim().toLowerCase()) {
+                            case "spawn":
+                                World world = this.plugin.getServer().getWorld(terry.getDestinationSpawnWorld());
+                                if (world != null) {
+                                    target = world.getSpawnLocation();
+                                }
+                                break;
+                            case "home":
+                                if (me.hasFaction()) {
+                                    target = me.getFaction().getHome();
+                                }
+                                break;
+                            case "bed":
+                                target = player.getBedSpawnLocation();
+                        }
+                        if (target != null) {
+                            break;
+                        }
+                    }
+                    if (target == null) {
+                        target = this.plugin.getServer().getWorlds().get(0).getSpawnLocation();
+                    }
+                    this.plugin.teleport(player, target).thenAccept(success -> {
+                        if (success) {
+                            me.msg(TL.PLAYER_TELEPORTEDONJOIN, relation.nicename);
+                        }
+                    });
+                }
+            }
+        }
+
         // Update the lastLoginTime for this fplayer
         me.setLastLoginTime(System.currentTimeMillis());
 
         // Store player's current FLocation and notify them where they are
-        me.setLastStoodAt(new FLocation(player.getLocation()));
+        me.setLastStoodAt(standing);
 
         me.login(); // set kills / deaths
         me.setOfflinePlayer(player);
