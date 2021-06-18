@@ -58,7 +58,10 @@ public class AutoLeaveProcessTask extends BukkitRunnable {
             }
 
             if (fplayer.isOffline() && now - fplayer.getLastLoginTime() > toleranceMillis) {
-                if (FactionsPlugin.getInstance().conf().logging().isFactionLeave() || FactionsPlugin.getInstance().conf().logging().isFactionKick()) {
+                if (
+                        (FactionsPlugin.getInstance().conf().logging().isFactionLeave() || FactionsPlugin.getInstance().conf().logging().isFactionKick()) &&
+                                (fplayer.hasFaction() || FactionsPlugin.getInstance().conf().factions().other().isAutoLeaveDeleteFPlayerData())
+                ) {
                     FactionsPlugin.getInstance().log("Player " + fplayer.getName() + " was auto-removed due to inactivity.");
                 }
 
