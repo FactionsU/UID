@@ -4,6 +4,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.perms.Role;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -27,7 +28,8 @@ public class AutoLeaveProcessTask extends BukkitRunnable {
     }
 
     public void run() {
-        if (FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveAfterDaysOfInactivity() <= 0.0 || FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveRoutineMaxMillisecondsPerTick() <= 0.0) {
+        MainConfig conf = FactionsPlugin.getInstance().conf();
+        if (conf.factions().other().getAutoLeaveAfterDaysOfInactivity() <= 0.0 || conf.factions().other().getAutoLeaveRoutineMaxMillisecondsPerTick() <= 0.0) {
             this.stop();
             return;
         }
@@ -44,7 +46,7 @@ public class AutoLeaveProcessTask extends BukkitRunnable {
             long now = System.currentTimeMillis();
 
             // if this iteration has been running for maximum time, stop to take a breather until next tick
-            if (now > loopStartTime + FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveRoutineMaxMillisecondsPerTick()) {
+            if (now > loopStartTime + conf.factions().other().getAutoLeaveRoutineMaxMillisecondsPerTick()) {
                 readyToGo = true;
                 return;
             }
@@ -58,10 +60,7 @@ public class AutoLeaveProcessTask extends BukkitRunnable {
             }
 
             if (fplayer.isOffline() && now - fplayer.getLastLoginTime() > toleranceMillis) {
-                if (
-                        (FactionsPlugin.getInstance().conf().logging().isFactionLeave() || FactionsPlugin.getInstance().conf().logging().isFactionKick()) &&
-                                (fplayer.hasFaction() || FactionsPlugin.getInstance().conf().factions().other().isAutoLeaveDeleteFPlayerData())
-                ) {
+                if ((conf.logging().isFactionLeave() || conf.logging().isFactionKick()) && (fplayer.hasFaction() || conf.factions().other().isAutoLeaveDeleteFPlayerData())) {
                     FactionsPlugin.getInstance().log("Player " + fplayer.getName() + " was auto-removed due to inactivity.");
                 }
 
@@ -75,7 +74,7 @@ public class AutoLeaveProcessTask extends BukkitRunnable {
 
                 fplayer.leave(false);
                 iterator.remove();  // go ahead and remove this list's link to the FPlayer object
-                if (FactionsPlugin.getInstance().conf().factions().other().isAutoLeaveDeleteFPlayerData()) {
+                if (conf.factions().other().isAutoLeaveDeleteFPlayerData()) {
                     fplayer.remove();
                 }
             }
