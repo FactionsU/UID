@@ -3,6 +3,7 @@ package com.massivecraft.factions.config.file;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.config.annotation.WipeOnReload;
+import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.material.MaterialDb;
@@ -1235,6 +1236,72 @@ public class MainConfig {
         }
 
         public class Protection {
+            public class TerritoryTeleport {
+                private boolean enable = false;
+
+                @Comment("Time, in seconds, since last on the server to trigger this feature.")
+                private long timeSinceLastSignedIn = 300;
+                @Comment("Destination options. Order them, separated by commas, for priority.\n" +
+                        "For example, if a faction home does not exist then the next option is chosen.\n" +
+                        "Absolute fallback is the spawn of the first world loaded\n" +
+                        "Options:\n" +
+                        "  home: Faction home\n" +
+                        "  bed: Bed")
+                private String destination = "home, bed, spawn";
+                @Comment("The world in which the spawn exists")
+                private String destinationSpawnWorld = "world";
+
+                @Comment("Options: MEMBER, ALLY, TRUCE, NEUTRAL, ENEMY\n" +
+                        "Incorrectly spelled entries default to NEUTRAL")
+                private Set<String> relationsToTeleportOut = new HashSet<String>() {
+                    {
+                        this.add("ENEMY");
+                        this.add("NEUTRAL");
+                        this.add("TRUCE");
+                    }
+                };
+
+                @WipeOnReload
+                private transient Set<Relation> relations = null;
+
+                public boolean isEnabled() {
+                    return enable;
+                }
+
+                public long getTimeSinceLastSignedIn() {
+                    return timeSinceLastSignedIn;
+                }
+
+                public String getDestination() {
+                    return destination;
+                }
+
+                public String getDestinationSpawnWorld() {
+                    return destinationSpawnWorld;
+                }
+
+                public Set<String> getRelationsToTeleportOut() {
+                    return relationsToTeleportOut;
+                }
+
+                public boolean isRelationToTeleportOut(Relation relation) {
+                    if (relations ==null) {
+                        relations = new HashSet<>();
+                        for (String rel : relationsToTeleportOut) {
+                            Relation r = Relation.fromString(rel);
+                            if (r != null) {
+                                relations.add(r);
+                            }
+                        }
+                    }
+                    return relations.contains(relation);
+                }
+            }
+
+            @Comment("Teleport joining players (or arriving from a plugin-disabled world) out of\n" +
+                    "territories (such as enemy territory) back to a designated location.")
+            private TerritoryTeleport territoryTeleport = new TerritoryTeleport();
+
             @Comment("Commands which will be prevented if the player is a member of a permanent faction")
             private Set<String> permanentFactionMemberDenyCommands = new HashSet<String>() {
                 {
@@ -1367,6 +1434,10 @@ public class MainConfig {
             private void protectUsage(String material) {
                 territoryDenyUsageMaterials.add(material);
                 territoryDenyUsageMaterialsWhenOffline.add(material);
+            }
+
+            public TerritoryTeleport territoryTeleport() {
+                return territoryTeleport;
             }
 
             public Set<String> getPermanentFactionMemberDenyCommands() {

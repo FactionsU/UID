@@ -860,6 +860,8 @@ public enum TL {
     PLAYER_PVP_NEUTRALFAIL("&eYou can't hurt %s&e in their own territory unless you declare them as an enemy."),
     PLAYER_PVP_TRIED("%s&e tried to hurt you."),
 
+    PLAYER_TELEPORTEDONJOIN("&eYou were teleported out of %s territory"),
+
     PERM_BUILD("Building blocks"),
     PERM_DESTROY("Breaking blocks"),
     PERM_PAINBUILD("If allow, can build but hurts to do so"),
