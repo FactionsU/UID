@@ -24,7 +24,7 @@ public class CmdVault extends FCommand {
         this.requirements = new CommandRequirements.Builder(Permission.VAULT)
                 .memberOnly()
                 .noDisableOnLock()
-                .brigadier(VaultBrigadier.class)
+                .brigadier(parent -> parent.then(RequiredArgumentBuilder.argument("number", IntegerArgumentType.integer(0, 99))))
                 .build();
     }
 
