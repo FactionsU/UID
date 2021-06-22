@@ -80,6 +80,7 @@ permissions:
       factions.join: true
       factions.kick: true
       factions.leave: true
+      factions.link: true
       factions.list: true
       factions.map: true
       factions.mod: true
@@ -163,6 +164,8 @@ permissions:
     description: leave your faction
   factions.list:
     description: see a list of the factions
+  factions.link:
+    description: see or set the faction's link
   factions.lock:
     description: lock all write stuff
   factions.managesafezone:

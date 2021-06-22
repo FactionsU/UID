@@ -98,6 +98,10 @@ public interface Faction extends EconomyParticipator {
 
     void setDescription(String value);
 
+    String getLink();
+
+    void setLink(String value);
+
     void setHome(Location home);
 
     void delHome();

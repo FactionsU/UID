@@ -300,10 +300,21 @@ public class MainConfig {
             }
         }
 
+        public class Link {
+            @Comment("Default URL")
+            private String defaultURL = "No link set";
+
+            public String getDefaultURL() {
+                return defaultURL;
+            }
+        }
+
         public class ListCmd {
-            @Comment("You can only use {pagenumber} and {pagecount} in the header.\nBlank entry results in nothing being displayed.")
+            @Comment("You can only use {pagenumber} and {pagecount} in the header.\n" +
+                    "Blank entry results in nothing being displayed.")
             private String header = "&e&m----------&r&e[ &2Faction List &9{pagenumber}&e/&9{pagecount} &e]&m----------";
-            @Comment("You can only use {pagenumber} and {pagecount} in the footer.\nBlank entry results in nothing being displayed.")
+            @Comment("You can only use {pagenumber} and {pagecount} in the footer.\n" +
+                    "Blank entry results in nothing being displayed.")
             private String footer = "";
             @Comment("You can use any variables here")
             private String factionlessEntry = "<i>Factionless<i> {factionless} online";
@@ -534,6 +545,7 @@ public class MainConfig {
         private Fly fly = new Fly();
         private Help help = new Help();
         private Home home = new Home();
+        private Link link = new Link();
         private ListCmd list = new ListCmd();
         private MapCmd map = new MapCmd();
         private Near near = new Near();
@@ -560,6 +572,10 @@ public class MainConfig {
 
         public Home home() {
             return home;
+        }
+
+        public Link link() {
+            return link;
         }
 
         public ListCmd list() {
@@ -1285,7 +1301,7 @@ public class MainConfig {
                 }
 
                 public boolean isRelationToTeleportOut(Relation relation) {
-                    if (relations ==null) {
+                    if (relations == null) {
                         relations = new HashSet<>();
                         for (String rel : relationsToTeleportOut) {
                             Relation r = Relation.fromString(rel);

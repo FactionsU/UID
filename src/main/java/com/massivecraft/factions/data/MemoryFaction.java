@@ -48,6 +48,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected boolean permanent;
     protected String tag;
     protected String description;
+    protected String link;
     protected boolean open;
     protected boolean peaceful;
     protected Integer permanentPower;
@@ -268,6 +269,17 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
     public void setDescription(String value) {
         this.description = value;
+    }
+
+    public String getLink() {
+        if (this.link == null) {
+            this.link = FactionsPlugin.getInstance().conf().commands().link().getDefaultURL();
+        }
+        return this.link;
+    }
+
+    public void setLink(String value) {
+        this.link = value;
     }
 
     public void setHome(Location home) {

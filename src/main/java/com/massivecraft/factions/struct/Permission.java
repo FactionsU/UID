@@ -49,6 +49,7 @@ public enum Permission {
     KICK("kick"),
     KICK_ANY("kick.any"),
     LEAVE("leave"),
+    LINK("link"),
     LIST("list"),
     LISTCLAIMS("listclaims"),
     LISTCLAIMS_OTHER("listclaims.other"),

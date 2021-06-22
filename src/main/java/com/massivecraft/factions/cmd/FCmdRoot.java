@@ -62,6 +62,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
     public CmdKick cmdKick = new CmdKick();
     public CmdLeave cmdLeave = new CmdLeave();
     public CmdList cmdList = new CmdList();
+    public CmdLink cmdLink = new CmdLink();
     public CmdLock cmdLock = new CmdLock();
     public CmdMap cmdMap = new CmdMap();
     public CmdMod cmdMod = new CmdMod();
@@ -159,6 +160,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.addSubCommand(this.cmdKick);
         this.addSubCommand(this.cmdLeave);
         this.addSubCommand(this.cmdList);
+        this.addSubCommand(this.cmdLink);
         this.addSubCommand(this.cmdLock);
         this.addSubCommand(this.cmdMap);
         this.addSubCommand(this.cmdMod);
