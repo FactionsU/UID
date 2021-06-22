@@ -333,6 +333,13 @@ public enum TL {
     COMMAND_KICK_KICKED("%1$s&e kicked you from %2$s&e! :O"), //kicked player perspective
     COMMAND_KICK_DESCRIPTION("Kick a player from the faction"),
 
+    COMMAND_LINK_CHANGED("%s&e changed their link to:"),
+    COMMAND_LINK_INVALIDURL("&cInvalid URL!"),
+    COMMAND_LINK_TOCHANGE("to change faction link"),
+    COMMAND_LINK_FORCHANGE("for changing faction link"),
+    COMMAND_LINK_SHOW("%sFaction link: &e%s"),
+    COMMAND_LINK_DESCRIPTION("Change the faction link"),
+
     COMMAND_LIST_FACTIONLIST("Faction List "),
     COMMAND_LIST_TOLIST("to list the factions"),
     COMMAND_LIST_FORLIST("for listing the factions"),
