@@ -79,7 +79,7 @@ public class JSONFactions extends MemoryFactions {
         }
 
         String content = DiscUtil.readCatch(this.file);
-        if (content == null) {
+        if (content == null || content.trim().isEmpty()) {
             return null;
         }
 

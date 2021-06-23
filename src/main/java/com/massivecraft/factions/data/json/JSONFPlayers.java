@@ -81,7 +81,7 @@ public class JSONFPlayers extends MemoryFPlayers {
         }
 
         String content = DiscUtil.readCatch(this.file);
-        if (content == null) {
+        if (content == null || content.trim().isEmpty()) {
             return null;
         }
 
