@@ -1928,6 +1928,8 @@ public class MainConfig {
 
             private double saveToFileEveryXMinutes = 30.0;
 
+            @Comment("If anything greater than 0 (can be decimal values like 0.1), players will automatically leave their faction\n" +
+                    "after being inactive for this many days.")
             private double autoLeaveAfterDaysOfInactivity = 10.0;
             private double autoLeaveRoutineRunsEveryXMinutes = 5.0;
             private int autoLeaveRoutineMaxMillisecondsPerTick = 5;  // 1 server tick is roughly 50ms, so default max 10% of a tick
