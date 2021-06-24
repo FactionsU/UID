@@ -1362,6 +1362,12 @@ public class MainConfig {
                     this.add("exampleCommand");
                 }
             };
+            @Comment("Commands which will be prevented when in claimed territory of a truced faction")
+            private Set<String> territoryTruceDenyCommands = new HashSet<String>() {
+                {
+                    this.add("exampleCommand");
+                }
+            };
             @Comment("Commands which will be prevented when in warzone")
             private Set<String> warzoneDenyCommands = new HashSet<String>() {
                 {
@@ -1484,6 +1490,10 @@ public class MainConfig {
 
             public Set<String> getTerritoryAllyDenyCommands() {
                 return territoryAllyDenyCommands == null ? Collections.emptySet() : Collections.unmodifiableSet(territoryAllyDenyCommands);
+            }
+
+            public Set<String> getTerritoryTruceDenyCommands() {
+                return territoryTruceDenyCommands == null ? Collections.emptySet() : Collections.unmodifiableSet(territoryTruceDenyCommands);
             }
 
             public Set<String> getWarzoneDenyCommands() {

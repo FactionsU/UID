@@ -847,6 +847,7 @@ public enum TL {
     PLAYER_COMMAND_ENEMY("&cYou can't use the command '%s' in enemy territory."),
     PLAYER_COMMAND_PERMANENT("&cYou can't use the command '%s' because you are in a permanent faction."),
     PLAYER_COMMAND_ALLY("&cYou can't use the command '%s' in ally territory."),
+    PLAYER_COMMAND_TRUCE("&cYou can't use the command '%s' in truce territory."),
     PLAYER_COMMAND_WILDERNESS("&cYou can't use the command '%s' in the wilderness."),
 
     PLAYER_PORTAL_NOTALLOWED("&cDestination portal can't be created there."),
