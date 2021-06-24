@@ -5,7 +5,7 @@ import com.massivecraft.factions.FactionsPlugin;
 public class AutoLeaveTask implements Runnable {
 
     private static AutoLeaveProcessTask task;
-    double rate;
+    private final double rate;
 
     public AutoLeaveTask() {
         this.rate = FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes();

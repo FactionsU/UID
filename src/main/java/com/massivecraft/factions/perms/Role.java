@@ -84,8 +84,9 @@ public enum Role implements Permissible {
         return this.nicename;
     }
 
-    public TL getTranslation() {
-        return translation;
+    @Override
+    public String getTranslation() {
+        return translation.toString();
     }
 
     public String getPrefix() {
