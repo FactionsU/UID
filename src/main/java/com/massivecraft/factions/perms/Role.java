@@ -1,5 +1,6 @@
 package com.massivecraft.factions.perms;
 
+import com.google.gson.annotations.SerializedName;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.ChatColor;
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum Role implements Permissible {
+    @SerializedName(value="ADMIN", alternate = {"LEADER"}) // Import
     ADMIN(4, TL.ROLE_ADMIN),
     COLEADER(3, TL.ROLE_COLEADER),
     MODERATOR(2, TL.ROLE_MODERATOR),
