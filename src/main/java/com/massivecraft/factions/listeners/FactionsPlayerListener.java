@@ -630,6 +630,7 @@ public class FactionsPlayerListener extends AbstractListener {
                 protection.getPermanentFactionMemberDenyCommands().isEmpty() &&
                 protection.getWildernessDenyCommands().isEmpty() &&
                 protection.getTerritoryAllyDenyCommands().isEmpty() &&
+                protection.getTerritoryTruceDenyCommands().isEmpty() &&
                 protection.getWarzoneDenyCommands().isEmpty())) {
             return false;
         }
@@ -664,6 +665,11 @@ public class FactionsPlayerListener extends AbstractListener {
         Relation rel = at.getRelationTo(me);
         if (at.isNormal() && rel.isAlly() && !protection.getTerritoryAllyDenyCommands().isEmpty() && !me.isAdminBypassing() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryAllyDenyCommands())) {
             me.msg(TL.PLAYER_COMMAND_ALLY, fullCmd);
+            return true;
+        }
+
+        if (at.isNormal() && rel.isTruce() && !protection.getTerritoryTruceDenyCommands().isEmpty() && !me.isAdminBypassing() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryTruceDenyCommands())) {
+            me.msg(TL.PLAYER_COMMAND_TRUCE, fullCmd);
             return true;
         }
 
