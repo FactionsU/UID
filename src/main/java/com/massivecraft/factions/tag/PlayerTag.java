@@ -28,7 +28,15 @@ public enum PlayerTag implements Tag {
     PLAYER_MAXPOWER("player-maxpower", (fp) -> String.valueOf(fp.getPowerMaxRounded())),
     PLAYER_KILLS("player-kills", (fp) -> String.valueOf(fp.getKills())),
     PLAYER_DEATHS("player-deaths", (fp) -> String.valueOf(fp.getDeaths())),
+    PLAYER_DISPLAYNAME("player-displayname", (fp) -> {
+        if (fp.isOnline()) {
+            return fp.getPlayer().getDisplayName();
+        } else {
+            return fp.getName();
+        }
+    }),
     PLAYER_NAME("name", FPlayer::getName),
+    PLAYER_ROLE("player-role-prefix", (fp) -> fp.hasFaction() ? fp.getRole().getPrefix() : ""),
     TOTAL_ONLINE_VISIBLE("total-online-visible", (fp) -> {
         if (fp == null) {
             return String.valueOf(Bukkit.getOnlinePlayers().size());
