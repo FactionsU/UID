@@ -6,4 +6,6 @@ public interface Permissible {
     String name();
 
     ChatColor getColor();
+
+    String getTranslation();
 }

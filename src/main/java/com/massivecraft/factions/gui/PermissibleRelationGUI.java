@@ -23,22 +23,22 @@ public class PermissibleRelationGUI extends GUI<Permissible> {
         SimpleItem.Builder starter = SimpleItem.builder().setName("&8[{relation-color}{relation}&8]");
 
         SimpleItem recruit = starter.build();
-        recruit.setName(Role.RECRUIT.getTranslation().toString());
+        recruit.setName(Role.RECRUIT.getTranslation());
         recruit.setMaterial(MaterialDb.get("WOODEN_SWORD"));
         items.put(Role.RECRUIT, recruit);
 
         SimpleItem normal = starter.build();
-        normal.setName(Role.NORMAL.getTranslation().toString());
+        normal.setName(Role.NORMAL.getTranslation());
         normal.setMaterial(MaterialDb.get("STONE_SWORD"));
         items.put(Role.NORMAL, normal);
 
         SimpleItem moderator = starter.build();
-        moderator.setName(Role.MODERATOR.getTranslation().toString());
+        moderator.setName(Role.MODERATOR.getTranslation());
         moderator.setMaterial(MaterialDb.get("IRON_SWORD"));
         items.put(Role.MODERATOR, moderator);
 
         SimpleItem coleader = starter.build();
-        coleader.setName(Role.COLEADER.getTranslation().toString());
+        coleader.setName(Role.COLEADER.getTranslation());
         coleader.setMaterial(MaterialDb.get("DIAMOND_SWORD"));
         items.put(Role.COLEADER, coleader);
 

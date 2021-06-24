@@ -47,7 +47,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
         String bit = FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() ?
                 TL.GUI_PERMS_ACTION_ONLINEOFFLINEBIT.format(online ? TL.GUI_PERMS_ONLINE.toString() : TL.GUI_PERMS_OFFLINE)
                 : "";
-        return TL.GUI_PERMS_ACTION_NAME.format(permissible.name().toLowerCase(), bit);
+        return TL.GUI_PERMS_ACTION_NAME.format(permissible.getTranslation(), bit);
     }
 
     @Override
@@ -90,8 +90,8 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
         if (user.getFaction().setPermission(online, permissible, action, access)) {
             // Reload item to reparse placeholders
             buildItem(action);
-            user.msg(TL.COMMAND_PERM_SET, action.getShortDescription(), access ? allowLower : denyLower, permissible.name());
-            FactionsPlugin.getInstance().log(TL.COMMAND_PERM_SET.format(action.getShortDescription(), access ? "Allow" : "Deny", permissible.name()) + " for faction " + user.getTag());
+            user.msg(TL.COMMAND_PERM_SET, action.getShortDescription(), access ? allowLower : denyLower, permissible.getTranslation());
+            FactionsPlugin.getInstance().log(TL.COMMAND_PERM_SET.format(action.getShortDescription(), access ? "Allow" : "Deny", permissible.getTranslation()) + " for faction " + user.getTag());
         } else {
             user.msg(TL.COMMAND_PERM_INVALID_SET);
         }

@@ -57,6 +57,7 @@ public enum Relation implements Permissible {
         return this.nicename;
     }
 
+    @Override
     public String getTranslation() {
         try {
             return TL.valueOf("RELATION_" + name() + "_SINGULAR").toString();
