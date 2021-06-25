@@ -315,8 +315,8 @@ public abstract class AbstractListener implements Listener {
                         FactionsPlugin.getInstance().conf().factions().protection().getContainerExceptions().contains(material) ||
                                 (
                                         otherFaction.isNormal() &&
-                                        material.name().equals("LECTERN") &&
-                                        FactionsPlugin.getInstance().conf().factions().protection().isTerritoryAllowLecternReading()
+                                                material.name().equals("LECTERN") &&
+                                                FactionsPlugin.getInstance().conf().factions().protection().isTerritoryAllowLecternReading()
                                 )
                 )) {
             return true;

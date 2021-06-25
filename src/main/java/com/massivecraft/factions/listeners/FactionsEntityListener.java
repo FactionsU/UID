@@ -216,7 +216,15 @@ public class FactionsEntityListener extends AbstractListener {
         if (thrower instanceof Player) {
             Player player = (Player) thrower;
             FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
-            if (badjuju && fPlayer.getFaction().isPeaceful()) {
+            if (fPlayer.getFaction().isPeaceful()) {
+                if (event.getPotion().getEffects().stream().allMatch(e -> e.getType() == PotionEffectType.WEAKNESS)) {
+                    for (LivingEntity target : event.getAffectedEntities()) {
+                        if (target.getType() != EntityType.ZOMBIE_VILLAGER) {
+                            event.setIntensity(target, 0);
+                        }
+                    }
+                    return;
+                }
                 event.setCancelled(true);
                 return;
             }
