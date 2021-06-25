@@ -1187,9 +1187,13 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     }
 
     public OfflinePlayer getFactionOfflinePlayer(String name) {
+        return this.getOfflinePlayer(name, UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
+    }
+
+    public OfflinePlayer getOfflinePlayer(String name, UUID uuid) {
         if (this.getOffline != null) {
             try {
-                return (OfflinePlayer) this.getOffline.invoke(this.getServer(), new GameProfile(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)), name));
+                return (OfflinePlayer) this.getOffline.invoke(this.getServer(), new GameProfile(uuid, name));
             } catch (Exception e) {
                 this.getLogger().log(Level.SEVERE, "Failed to get offline player the fast way, reverting to slow mode", e);
                 this.getOffline = null;

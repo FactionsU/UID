@@ -276,7 +276,11 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public OfflinePlayer getOfflinePlayer() {
         if (this.offlinePlayer == null) {
-            this.offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(getId()));
+            UUID uuid = UUID.fromString(getId());
+            this.offlinePlayer = Bukkit.getPlayer(uuid);
+            if (this.offlinePlayer == null) {
+                this.offlinePlayer = FactionsPlugin.getInstance().getOfflinePlayer(this.name, uuid);
+            }
         }
         return this.offlinePlayer;
     }
