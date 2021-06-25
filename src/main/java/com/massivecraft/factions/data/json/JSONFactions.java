@@ -55,6 +55,9 @@ public class JSONFactions extends MemoryFactions {
             entitiesThatShouldBeSaved.put(entity.getId(), (JSONFaction) entity);
         }
 
+        JSONFaction f = new JSONFaction("```storage``");
+        f.setMaxVaults(this.nextId);
+        entitiesThatShouldBeSaved.put("```storage``", f);
         saveCore(file, entitiesThatShouldBeSaved, sync);
     }
 
@@ -64,13 +67,16 @@ public class JSONFactions extends MemoryFactions {
 
     public int load() {
         Map<String, JSONFaction> factions = this.loadCore();
-        if (factions == null) {
-            return 0;
+        if (factions != null) {
+            Faction storage = factions.remove("```storage``");
+            if (storage != null) {
+                this.nextId = Math.max(this.nextId, storage.getMaxVaults());
+            }
+            this.factions.putAll(factions);
         }
-        this.factions.putAll(factions);
 
         super.load();
-        return factions.size();
+        return this.factions.size();
     }
 
     private Map<String, JSONFaction> loadCore() {
