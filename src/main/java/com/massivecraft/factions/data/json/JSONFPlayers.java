@@ -52,8 +52,9 @@ public class JSONFPlayers extends MemoryFPlayers {
 
     public void forceSave(boolean sync) {
         final Map<String, JSONFPlayer> entitiesThatShouldBeSaved = new HashMap<>();
+        boolean saveAll = FactionsPlugin.getInstance().conf().data().json().isSaveAllPlayers();
         for (FPlayer entity : this.fPlayers.values()) {
-            if (((MemoryFPlayer) entity).shouldBeSaved()) {
+            if (saveAll || ((MemoryFPlayer) entity).shouldBeSaved()) {
                 entitiesThatShouldBeSaved.put(entity.getId(), (JSONFPlayer) entity);
             }
         }

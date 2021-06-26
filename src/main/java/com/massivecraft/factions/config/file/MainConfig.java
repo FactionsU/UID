@@ -2515,6 +2515,12 @@ public class MainConfig {
             @Comment("If true, data files will be stored without extra whitespace and linebreaks.\n" +
                     "This becomes less readable, but can cut storage use in half.")
             private boolean efficientStorage = false;
+            @Comment("If true, even players with the default power will be saved")
+            private boolean saveAllPlayers = false;
+
+            public boolean isSaveAllPlayers() {
+                return saveAllPlayers;
+            }
 
             public boolean useEfficientStorage() {
                 return efficientStorage;
