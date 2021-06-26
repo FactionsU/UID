@@ -192,6 +192,7 @@ public enum TL {
 
     COMMAND_DESCRIPTION_CHANGES("You have changed the description for &d%1$s&e to:"),
     COMMAND_DESCRIPTION_CHANGED("&eThe faction %1$s&e changed their description to:"),
+    COMMAND_DESCRIPTION_TOOLONG("&cDescription too long! Limit is %s characters."),
     COMMAND_DESCRIPTION_TOCHANGE("to change faction description"),
     COMMAND_DESCRIPTION_FORCHANGE("for changing faction description"),
     COMMAND_DESCRIPTION_DESCRIPTION("Change the faction description"),

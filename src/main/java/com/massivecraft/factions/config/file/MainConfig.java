@@ -135,6 +135,15 @@ public class MainConfig {
     }
 
     public class Commands {
+        public class Description {
+            @Comment("If -1, no limit.")
+            private int maxLength = -1;
+
+            public int getMaxLength() {
+                return maxLength;
+            }
+        }
+
         public class Kick {
             @Comment("If true, players can be kicked while standing in enemy territory")
             private boolean allowKickInEnemyTerritory = false;
@@ -541,6 +550,7 @@ public class MainConfig {
             }
         }
 
+        private Description description = new Description();
         private Kick kick = new Kick();
         private Fly fly = new Fly();
         private Help help = new Help();
@@ -557,6 +567,10 @@ public class MainConfig {
         private TNT tnt = new TNT();
         private ToolTips toolTips = new ToolTips();
         private Warp warp = new Warp();
+
+        public Description description() {
+            return description;
+        }
 
         public Kick kick() {
             return kick;
