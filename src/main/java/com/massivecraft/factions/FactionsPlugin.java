@@ -19,6 +19,7 @@ import com.massivecraft.factions.integration.IntegrationManager;
 import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.integration.LuckPerms;
 import com.massivecraft.factions.integration.VaultPerms;
+import com.massivecraft.factions.integration.Worldguard7;
 import com.massivecraft.factions.integration.dynmap.EngineDynmap;
 import com.massivecraft.factions.integration.permcontext.ContextManager;
 import com.massivecraft.factions.landraidcontrol.LandRaidControl;
@@ -265,6 +266,12 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             // Good.
         } catch (Exception e) {
             this.getLogger().log(Level.SEVERE, "Failed to migrate EssX accounts", e);
+        }
+        try {
+            Class.forName("com/sk89q/worldguard/protection/regions/ProtectedRegion");
+            Worldguard7.onLoad();
+        } catch (Exception ignored) {
+            // eh
         }
     }
 

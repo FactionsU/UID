@@ -2785,11 +2785,23 @@ public class MainConfig {
     }
 
     public class WorldGuard {
+        @Comment("If true, disallows claiming a chunk if any WG region is at least partially inside the chunk")
         private boolean checking = false;
+        @Comment("If true, disallows claiming a chunk if any WG region with the flag 'fuuid-claim' denied for the claiming player is at least partially inside the chunk")
+        private boolean checkingFlag = false;
+        @Comment("If true, allows building in a WG region where the player has the BUILD flag")
         private boolean buildPriority = false;
 
         public boolean isChecking() {
             return checking;
+        }
+
+        public boolean isCheckingFlag() {
+            return checkingFlag;
+        }
+
+        public boolean isCheckingEither() {
+            return checking || checkingFlag;
         }
 
         public boolean isBuildPriority() {
