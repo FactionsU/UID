@@ -5,6 +5,7 @@ import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 public class CmdChat extends FCommand {
@@ -19,11 +20,7 @@ public class CmdChat extends FCommand {
         this.requirements = new CommandRequirements.Builder(Permission.CHAT)
                 .memberOnly()
                 .noDisableOnLock()
-                .brigadier(parent -> parent.then(LiteralArgumentBuilder.literal("public"))
-                        .then(LiteralArgumentBuilder.literal("mod"))
-                        .then(LiteralArgumentBuilder.literal("alliance"))
-                        .then(LiteralArgumentBuilder.literal("faction"))
-                        .then(LiteralArgumentBuilder.literal("truce")))
+                .brigadier(ChatBrigadier.class)
                 .build();
     }
 
@@ -86,4 +83,16 @@ public class CmdChat extends FCommand {
     public TL getUsageTranslation() {
         return TL.COMMAND_CHAT_DESCRIPTION;
     }
+
+    protected class ChatBrigadier implements BrigadierProvider {
+        @Override
+        public ArgumentBuilder<Object, ?> get(ArgumentBuilder<Object, ?> parent) {
+            return parent.then(LiteralArgumentBuilder.literal("public"))
+                    .then(LiteralArgumentBuilder.literal("mod"))
+                    .then(LiteralArgumentBuilder.literal("alliance"))
+                    .then(LiteralArgumentBuilder.literal("faction"))
+                    .then(LiteralArgumentBuilder.literal("truce"));
+        }
+    }
+
 }

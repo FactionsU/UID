@@ -5,6 +5,7 @@ import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
@@ -22,7 +23,7 @@ public class CmdAnnounce extends FCommand {
         this.requirements = new CommandRequirements.Builder(Permission.ANNOUNCE).memberOnly().withRole(Role.MODERATOR)
                 .noErrorOnManyArgs()
                 .noDisableOnLock()
-                .brigadier(parent -> parent.then(RequiredArgumentBuilder.argument("message", StringArgumentType.greedyString())))
+                .brigadier(AnnounceBrigadier.class)
                 .build();
     }
 
@@ -45,4 +46,12 @@ public class CmdAnnounce extends FCommand {
     public TL getUsageTranslation() {
         return TL.COMMAND_ANNOUNCE_DESCRIPTION;
     }
+
+    protected class AnnounceBrigadier implements BrigadierProvider {
+        @Override
+        public ArgumentBuilder<Object, ?> get(ArgumentBuilder<Object, ?> parent) {
+            return parent.then(RequiredArgumentBuilder.argument("message", StringArgumentType.greedyString()));
+        }
+    }
+
 }

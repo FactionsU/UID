@@ -49,7 +49,14 @@ public class BrigadierManager {
 
             if (subCommand.requirements.getBrigadier() != null) {
                 // If the requirements explicitly provide a BrigadierProvider then use it
-                starting.then(subCommand.requirements.getBrigadier().get(literal));
+                Class<? extends BrigadierProvider> brigadierProvider = subCommand.requirements.getBrigadier();
+
+                try {
+                    Constructor<? extends BrigadierProvider> constructor = brigadierProvider.getDeclaredConstructor(subCommand.getClass());
+                    starting.then(constructor.newInstance(subCommand).get(literal));
+                } catch (Exception e) {
+                    FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to reflectively access brigadier", e);
+                }
             } else {
                 // Generate our own based on args - quite ugly
 
