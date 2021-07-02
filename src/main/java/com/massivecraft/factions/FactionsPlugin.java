@@ -195,6 +195,16 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     @Override
     public void onLoad() {
         IntegrationManager.onLoad(this);
+        this.tryEssXMigrationOnLoad();
+        try {
+            Class.forName("com.sk89q.worldguard.protection.regions.ProtectedRegion");
+            Worldguard7.onLoad();
+        } catch (Exception ignored) {
+            // eh
+        }
+    }
+
+    private void tryEssXMigrationOnLoad() {
         try {
             Class.forName("com.earth2me.essentials.economy.vault.VaultEconomyProvider");
             Path dataFolder = this.getDataFolder().toPath().resolve("data");
@@ -266,12 +276,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             // Good.
         } catch (Exception e) {
             this.getLogger().log(Level.SEVERE, "Failed to migrate EssX accounts", e);
-        }
-        try {
-            Class.forName("com/sk89q/worldguard/protection/regions/ProtectedRegion");
-            Worldguard7.onLoad();
-        } catch (Exception ignored) {
-            // eh
         }
     }
 
