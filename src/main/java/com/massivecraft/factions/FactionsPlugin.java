@@ -197,7 +197,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         IntegrationManager.onLoad(this);
         this.tryEssXMigrationOnLoad();
         try {
-            Class.forName("com.sk89q.worldguard.protection.regions.ProtectedRegion");
+            Class.forName("com.sk89q.worldguard.WorldGuard");
             Worldguard7.onLoad();
         } catch (Exception ignored) {
             // eh
