@@ -8,7 +8,6 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flag;
-import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -22,40 +21,55 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class Worldguard7 implements IWorldguard {
-    public static final String FLAG_NAME = "fuuid-claim";
-    private static StateFlag FLAG;
+    public static final String FLAG_CLAIM_NAME = "fuuid-claim";
+    public static final String FLAG_PVP_NAME = "fuuid-pvp";
+    private static StateFlag FLAG_CLAIM;
+    private static StateFlag FLAG_PVP;
 
     public static void onLoad() {
-        boolean success = false;
+        boolean claimSuccess = false;
+        boolean pvpSuccess = false;
         try {
             try {
-                StateFlag claimFlag = new StateFlag(FLAG_NAME, false);
+                StateFlag claimFlag = new StateFlag(FLAG_CLAIM_NAME, true);
                 WorldGuard.getInstance().getFlagRegistry().register(claimFlag);
-                FLAG = claimFlag;
-                success = true;
+                FLAG_CLAIM = claimFlag;
+                claimSuccess = true;
             } catch (FlagConflictException e) {
-                Flag<?> existing = WorldGuard.getInstance().getFlagRegistry().get(FLAG_NAME);
+                Flag<?> existing = WorldGuard.getInstance().getFlagRegistry().get(FLAG_CLAIM_NAME);
                 if (existing instanceof StateFlag) {
-                    FLAG = (StateFlag) existing;
-                    success = true;
+                    FLAG_CLAIM = (StateFlag) existing;
+                    claimSuccess = true;
+                }
+            }
+            try {
+                StateFlag pvpFlag = new StateFlag(FLAG_PVP_NAME, false);
+                WorldGuard.getInstance().getFlagRegistry().register(pvpFlag);
+                FLAG_PVP = pvpFlag;
+                pvpSuccess = true;
+            } catch (FlagConflictException e) {
+                Flag<?> existing = WorldGuard.getInstance().getFlagRegistry().get(FLAG_PVP_NAME);
+                if (existing instanceof StateFlag) {
+                    FLAG_PVP = (StateFlag) existing;
+                    pvpSuccess = true;
                 }
             }
         } catch (Exception ignored) {
             // Nah
         }
-        FactionsPlugin.getInstance().getLogger().info((success ? "Registered" : "Failed to register") + " flag '" + FLAG_NAME + "' with WorldGuard.");
+        FactionsPlugin.getInstance().getLogger().info((claimSuccess ? "Registered" : "Failed to register") + " flag '" + FLAG_CLAIM_NAME + "' with WorldGuard.");
+        FactionsPlugin.getInstance().getLogger().info((pvpSuccess ? "Registered" : "Failed to register") + " flag '" + FLAG_PVP_NAME + "' with WorldGuard.");
     }
 
-    // PVP Flag check
-    // Returns:
-    //   True: PVP is allowed
-    //   False: PVP is disallowed
-    public boolean isPVP(Player player) {
+    public boolean isCustomPVPFlag(Player player) {
+        if (FLAG_PVP == null) {
+            return false;
+        }
         LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionQuery query = container.createQuery();
 
-        return query.testState(localPlayer.getLocation(), localPlayer, Flags.PVP);
+        return query.testState(localPlayer.getLocation(), localPlayer, FLAG_PVP);
     }
 
     // Check if player can build at location by worldguards rules.
@@ -93,11 +107,11 @@ public class Worldguard7 implements IWorldguard {
         if (FactionsPlugin.getInstance().conf().worldGuard().isChecking()) {
             return set.size() > 0;
         }
-        if (FLAG == null) {
+        if (FLAG_CLAIM == null) {
             return false;
         }
         for (ProtectedRegion reg : set.getRegions()) {
-            StateFlag.State s = reg.getFlag(FLAG);
+            StateFlag.State s = reg.getFlag(FLAG_CLAIM);
             if (s == StateFlag.State.DENY) {
                 return true;
             }

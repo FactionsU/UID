@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 public interface IWorldguard {
 
-    boolean isPVP(Player player);
+    boolean isCustomPVPFlag(Player player);
 
     boolean playerCanBuild(Player player, Location loc);
 
