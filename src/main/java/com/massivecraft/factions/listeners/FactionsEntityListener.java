@@ -334,6 +334,10 @@ public class FactionsEntityListener extends AbstractListener {
             return true;
         }
 
+        if (FactionsPlugin.getInstance().conf().worldGuard().isPVPPriority() && FactionsPlugin.getInstance().getWorldguard() != null && FactionsPlugin.getInstance().getWorldguard().isCustomPVPFlag((Player) damagee)) {
+            return true;
+        }
+
         // Players can not take attack damage in a SafeZone, or possibly peaceful territory
         if (defLocFaction.noPvPInTerritory()) {
             if (damager instanceof Player) {

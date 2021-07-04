@@ -2791,6 +2791,8 @@ public class MainConfig {
         private boolean checkingFlag = false;
         @Comment("If true, allows building in a WG region where the player has the BUILD flag")
         private boolean buildPriority = false;
+        @Comment("If true, allows pvp in a WG region where the flag `fuuid-pvp` is allowed")
+        private boolean pvpPriority = false;
 
         public boolean isChecking() {
             return checking;
@@ -2806,6 +2808,10 @@ public class MainConfig {
 
         public boolean isBuildPriority() {
             return buildPriority;
+        }
+
+        public boolean isPVPPriority() {
+            return pvpPriority;
         }
     }
 
@@ -2866,7 +2872,8 @@ public class MainConfig {
             "Enable faction-owned vaults!\n" +
             "https://www.spigotmc.org/resources/playervaultsx.51204/")
     private PlayerVaults playerVaults = new PlayerVaults();
-    @Comment("WorldGuard settings")
+    @Comment("WorldGuard settings.\n" +
+            "Note that flag stuff only works on WG 7")
     private WorldGuard worldGuard = new WorldGuard();
     private WorldBorder worldBorder = new WorldBorder();
 

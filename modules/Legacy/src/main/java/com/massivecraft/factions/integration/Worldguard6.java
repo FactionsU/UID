@@ -3,8 +3,6 @@ package com.massivecraft.factions.integration;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -24,7 +22,7 @@ import static com.sk89q.worldguard.bukkit.BukkitUtil.toVector;
 /**
  * Worldguard Region Checking.
  *
- * @author Spathizilla
+ * original author Spathizilla
  */
 public class Worldguard6 implements IWorldguard {
 
@@ -34,18 +32,8 @@ public class Worldguard6 implements IWorldguard {
         this.wg = (WorldGuardPlugin) wg;
     }
 
-    // PVP Flag check
-    // Returns:
-    //   True: PVP is allowed
-    //   False: PVP is disallowed
-    public boolean isPVP(Player player) {
-        Location loc = player.getLocation();
-        World world = loc.getWorld();
-        Vector pt = toVector(loc);
-
-        RegionManager regionManager = wg.getRegionManager(world);
-        ApplicableRegionSet set = regionManager.getApplicableRegions(pt);
-        return set.allows(DefaultFlag.PVP);
+    public boolean isCustomPVPFlag(Player player) {
+        return false;
     }
 
     // Check if player can build at location by worldguards rules.
