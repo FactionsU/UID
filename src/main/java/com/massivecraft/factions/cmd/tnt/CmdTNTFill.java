@@ -6,6 +6,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.Pair;
@@ -32,7 +33,7 @@ public class CmdTNTFill extends FCommand {
         this.requiredArgs.add("radius");
         this.requiredArgs.add("amount");
 
-        this.requirements = new CommandRequirements.Builder(Permission.TNT_FILL).withAction(PermissibleAction.TNTWITHDRAW).memberOnly().build();
+        this.requirements = new CommandRequirements.Builder(Permission.TNT_FILL).withAction(PermissibleActions.TNTWITHDRAW).memberOnly().build();
     }
 
     @Override

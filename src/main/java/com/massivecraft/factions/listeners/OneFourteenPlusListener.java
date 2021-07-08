@@ -6,6 +6,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.entity.Player;
@@ -36,7 +37,7 @@ public class OneFourteenPlusListener extends AbstractListener {
             return;
         }
 
-        PermissibleAction action = PermissibleAction.CONTAINER;
+        PermissibleAction action = PermissibleActions.CONTAINER;
         if (!otherFaction.hasAccess(me, action)) {
             me.msg(TL.GENERIC_NOPERMISSION, action);
             event.setCancelled(true);

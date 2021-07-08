@@ -8,6 +8,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerTeleportEvent;
 import com.massivecraft.factions.integration.Essentials;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.struct.Permission;
@@ -64,7 +65,7 @@ public class CmdHome extends FCommand {
 
         if (!targetFaction.hasHome()) {
             if (targetFaction == context.faction) {
-                if (context.faction.hasAccess(context.fPlayer, PermissibleAction.SETHOME)) {
+                if (context.faction.hasAccess(context.fPlayer, PermissibleActions.SETHOME)) {
                     context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString() + TL.GENERIC_YOUSHOULD.toString());
                 } else {
                     context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString() + TL.GENERIC_ASKYOURLEADER.toString());
@@ -76,7 +77,7 @@ public class CmdHome extends FCommand {
             return;
         }
 
-        if (!targetFaction.hasAccess(context.fPlayer, PermissibleAction.HOME)) {
+        if (!targetFaction.hasAccess(context.fPlayer, PermissibleActions.HOME)) {
             context.fPlayer.msg(TL.COMMAND_HOME_DENIED, targetFaction.getTag(context.fPlayer));
             return;
         }

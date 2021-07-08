@@ -3,6 +3,7 @@ package com.massivecraft.factions.cmd;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -14,7 +15,7 @@ public class CmdSethome extends FCommand {
 
         this.requirements = new CommandRequirements.Builder(Permission.SETHOME)
                 .memberOnly()
-                .withAction(PermissibleAction.SETHOME)
+                .withAction(PermissibleActions.SETHOME)
                 .build();
     }
 

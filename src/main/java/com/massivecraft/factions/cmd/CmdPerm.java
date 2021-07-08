@@ -5,13 +5,15 @@ import com.massivecraft.factions.gui.PermissibleActionGUI;
 import com.massivecraft.factions.gui.PermissibleRelationGUI;
 import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.perms.PermissibleAction;
+import com.massivecraft.factions.perms.PermissibleActionRegistry;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CmdPerm extends FCommand {
@@ -51,7 +53,7 @@ public class CmdPerm extends FCommand {
             return;
         }
 
-        Set<Permissible> permissibles = new HashSet<>();
+        List<Permissible> permissibles = new ArrayList<>();
         Set<PermissibleAction> permissibleActions = new HashSet<>();
 
         boolean allRelations = context.argAsString(0).equalsIgnoreCase("all");
@@ -62,7 +64,14 @@ public class CmdPerm extends FCommand {
         }
 
         if (allRelations) {
-            permissibles.addAll(context.faction.getPermissions().keySet());
+            permissibles.add(Role.COLEADER);
+            permissibles.add(Role.MODERATOR);
+            permissibles.add(Role.NORMAL);
+            permissibles.add(Role.RECRUIT);
+            permissibles.add(Relation.ALLY);
+            permissibles.add(Relation.TRUCE);
+            permissibles.add(Relation.NEUTRAL);
+            permissibles.add(Relation.ENEMY);
         } else {
             Permissible permissible = getPermissible(context.argAsString(0));
 
@@ -75,10 +84,13 @@ public class CmdPerm extends FCommand {
         }
 
         if (allActions) {
-            permissibleActions.addAll(Arrays.asList(PermissibleAction.values()));
+            permissibleActions.addAll(PermissibleActionRegistry.get());
         } else {
-            PermissibleAction permissibleAction = PermissibleAction.fromString(context.argAsString(1));
-            if (permissibleAction == null) {
+            PermissibleAction permissibleAction = PermissibleActionRegistry.get(context.argAsString(1));
+            if (permissibleAction != null && permissibleAction.isFactionOnly()) {
+                permissibles.removeIf(p -> p instanceof Relation);
+            }
+            if (permissibleAction == null || permissibles.isEmpty()) {
                 context.fPlayer.msg(TL.COMMAND_PERM_INVALID_ACTION);
                 return;
             }
@@ -112,13 +124,15 @@ public class CmdPerm extends FCommand {
     }
 
     private Permissible getPermissible(String name) {
-        if (Role.fromString(name.toUpperCase()) != null) {
-            return Role.fromString(name.toUpperCase());
-        } else if (Relation.fromString(name.toUpperCase()) != null) {
-            return Relation.fromString(name.toUpperCase());
-        } else {
-            return null;
+        Role role = Role.fromString(name.toUpperCase());
+        if (role != null && role != Role.ADMIN) {
+            return role;
         }
+        Relation relation = Relation.fromString(name.toUpperCase());
+        if (relation != null && relation != Relation.MEMBER) {
+            return relation;
+        }
+        return null;
     }
 
     @Override

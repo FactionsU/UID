@@ -7,6 +7,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -63,7 +64,7 @@ public class CmdClaimFill extends FCommand {
 
         if (!bypass &&
                 (
-                        (forFaction.isNormal() && !forFaction.hasAccess(context.fPlayer, PermissibleAction.TERRITORY))
+                        (forFaction.isNormal() && !forFaction.hasAccess(context.fPlayer, PermissibleActions.TERRITORY))
                                 ||
                                 (forFaction.isWarZone() && !Permission.MANAGE_WAR_ZONE.has(context.player))
                                 ||

@@ -4,6 +4,8 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.perms.PermissibleAction;
+import com.massivecraft.factions.perms.PermissibleActionRegistry;
+import com.massivecraft.factions.perms.PermissiblePermDefaultInfo;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.material.MaterialDb;
@@ -12,7 +14,10 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.Backable {
     private static final SimpleItem backItem = SimpleItem.builder().setMaterial(MaterialDb.get("ARROW")).setName(TL.GUI_BUTTON_BACK.toString()).build();
@@ -34,9 +39,22 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
 
     private final Permissible permissible;
     private final boolean online;
+    private final List<? extends PermissibleAction> actions;
 
+    private static Stream<? extends PermissibleAction> perms(boolean online, Permissible permissible) {
+        return PermissibleActionRegistry.get().stream().filter(a -> {
+            if (permissible instanceof Relation && a.isFactionOnly()) {
+                return false;
+            }
+            PermissiblePermDefaultInfo p = a.getDefaultPermInfo(online, permissible);
+            return p != null && p.shouldShowInGame();
+        });
+    }
+
+    // TODO pages
     public PermissibleActionGUI(boolean online, FPlayer user, Permissible permissible) {
-        super(user, (int) Math.ceil(((double) PermissibleAction.values().length) / 9d) + 1);
+        super(user, (int) Math.ceil(((double) perms(online, permissible).count()) / 9d) + 1);
+        this.actions = perms(online, permissible).sorted((a, b) -> a.getName().compareToIgnoreCase(b.getName())).collect(Collectors.toList());
         this.permissible = permissible;
         this.online = online;
         build();
@@ -101,10 +119,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
     protected Map<Integer, PermissibleAction> createSlotMap() {
         Map<Integer, PermissibleAction> map = new HashMap<>();
         int i = 0;
-        for (PermissibleAction action : PermissibleAction.values()) {
-            if (this.permissible instanceof Relation && action.isFactionOnly()) {
-                continue;
-            }
+        for (PermissibleAction action : this.actions) {
             map.put(i++, action);
         }
         return map;
@@ -123,7 +138,7 @@ public class PermissibleActionGUI extends GUI<PermissibleAction> implements GUI.
     @Override
     protected Map<Integer, SimpleItem> createDummyItems() {
         Map<Integer, SimpleItem> map = new HashMap<>();
-        map.put(this.back = ((PermissibleAction.values().length / 9) + 1) * 9, backItem);
+        map.put(this.back = ((this.actions.size() / 9) + 1) * 9, backItem);
         if (FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms() && permissible instanceof Relation) {
             map.put(this.back + 4, PermissibleRelationGUI.offlineSwitch);
         }

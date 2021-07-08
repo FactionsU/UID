@@ -4,6 +4,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.WarmUpUtil;
@@ -94,7 +95,7 @@ public class WarpGUI extends GUI<Integer> {
 
     @Override
     protected void onClick(Integer index, ClickType clickType) {
-        if (!faction.hasAccess(this.user, PermissibleAction.WARP)) {
+        if (!faction.hasAccess(this.user, PermissibleActions.WARP)) {
             user.msg(TL.COMMAND_FWARP_NOACCESS, faction.getTag(user));
             this.user.getPlayer().closeInventory();
             return;
@@ -228,7 +229,7 @@ public class WarpGUI extends GUI<Integer> {
         WarmUpUtil.process(user, WarmUpUtil.Warmup.WARP, TL.WARMUPS_NOTIFY_TELEPORT, warp, () -> {
             Player player = Bukkit.getPlayer(user.getPlayer().getUniqueId());
             if (player != null) {
-                if (!faction.hasAccess(this.user, PermissibleAction.WARP)) {
+                if (!faction.hasAccess(this.user, PermissibleActions.WARP)) {
                     user.msg(TL.COMMAND_FWARP_NOACCESS, faction.getTag(user));
                     return;
                 }
@@ -252,7 +253,7 @@ public class WarpGUI extends GUI<Integer> {
             return true;
         }
 
-        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && user.hasFaction() && user.getFaction().hasAccess(user, PermissibleAction.ECONOMY)) {
+        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && user.hasFaction() && user.getFaction().hasAccess(user, PermissibleActions.ECONOMY)) {
             return Econ.modifyMoney(user.getFaction(), -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());
         } else {
             return Econ.modifyMoney(user, -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());

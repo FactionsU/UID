@@ -7,6 +7,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.MainConfig;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.struct.Permission;
@@ -77,7 +78,7 @@ public abstract class AbstractListener implements Listener {
             return false;
         }
 
-        boolean access = otherFaction.hasAccess(me, PermissibleAction.ITEM);
+        boolean access = otherFaction.hasAccess(me, PermissibleActions.ITEM);
 
         // Cancel if we are not in our own territory
         if (!access) {
@@ -222,7 +223,7 @@ public abstract class AbstractListener implements Listener {
 
         switch (material) {
             case LEVER:
-                action = PermissibleAction.LEVER;
+                action = PermissibleActions.LEVER;
                 break;
             case STONE_BUTTON:
             case BIRCH_BUTTON:
@@ -231,7 +232,7 @@ public abstract class AbstractListener implements Listener {
             case JUNGLE_BUTTON:
             case OAK_BUTTON:
             case SPRUCE_BUTTON:
-                action = PermissibleAction.BUTTON;
+                action = PermissibleActions.BUTTON;
                 break;
             case DARK_OAK_DOOR:
             case ACACIA_DOOR:
@@ -247,7 +248,7 @@ public abstract class AbstractListener implements Listener {
             case JUNGLE_TRAPDOOR:
             case OAK_TRAPDOOR:
             case SPRUCE_TRAPDOOR:
-                action = PermissibleAction.DOOR;
+                action = PermissibleActions.DOOR;
                 break;
             case CHEST:
             case ENDER_CHEST:
@@ -279,28 +280,28 @@ public abstract class AbstractListener implements Listener {
             case DAMAGED_ANVIL:
             case FLOWER_POT:
             case BEE_NEST:
-                action = PermissibleAction.CONTAINER;
+                action = PermissibleActions.CONTAINER;
                 break;
             default:
                 // Check for doors that might have diff material name in old version.
                 if (material.name().contains("DOOR") || material.name().contains("GATE")) {
-                    action = PermissibleAction.DOOR;
+                    action = PermissibleActions.DOOR;
                 }
                 if (material.name().contains("BUTTON")) {
-                    action = PermissibleAction.BUTTON;
+                    action = PermissibleActions.BUTTON;
                 }
                 if (material.name().contains("FURNACE")) {
-                    action = PermissibleAction.CONTAINER;
+                    action = PermissibleActions.CONTAINER;
                 }
                 // Lazier than checking all the combinations
                 if (material.name().contains("SHULKER") || material.name().contains("ANVIL") || material.name().startsWith("POTTED")) {
-                    action = PermissibleAction.CONTAINER;
+                    action = PermissibleActions.CONTAINER;
                 }
                 if (material.name().endsWith("_PLATE")) {
-                    action = PermissibleAction.PLATE;
+                    action = PermissibleActions.PLATE;
                 }
                 if (material.name().contains("SIGN")) {
-                    action = PermissibleAction.ITEM;
+                    action = PermissibleActions.ITEM;
                 }
                 break;
         }
@@ -310,7 +311,7 @@ public abstract class AbstractListener implements Listener {
         }
 
         // Ignored types
-        if (action == PermissibleAction.CONTAINER &&
+        if (action == PermissibleActions.CONTAINER &&
                 (
                         FactionsPlugin.getInstance().conf().factions().protection().getContainerExceptions().contains(material) ||
                                 (
@@ -324,7 +325,7 @@ public abstract class AbstractListener implements Listener {
 
         // F PERM check runs through before other checks.
         if (!otherFaction.hasAccess(me, action)) {
-            if (action != PermissibleAction.PLATE) {
+            if (action != PermissibleActions.PLATE) {
                 me.msg(TL.GENERIC_NOPERMISSION, action);
             }
             return false;

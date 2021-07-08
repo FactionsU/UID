@@ -17,6 +17,7 @@ import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.landraidcontrol.PowerControl;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
@@ -770,7 +771,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public boolean canClaimForFaction(Faction forFaction) {
-        return this.isAdminBypassing() || !forFaction.isWilderness() && (forFaction == this.getFaction() && this.getFaction().hasAccess(this, PermissibleAction.TERRITORY)) || (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(getPlayer())) || (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(getPlayer()));
+        return this.isAdminBypassing() || !forFaction.isWilderness() && (forFaction == this.getFaction() && this.getFaction().hasAccess(this, PermissibleActions.TERRITORY)) || (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(getPlayer())) || (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(getPlayer()));
     }
 
     // Not used
@@ -802,7 +803,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(getPlayer())) {
             // Warzone and can claim for such
             return true;
-        } else if (!forFaction.hasAccess(this, PermissibleAction.TERRITORY)) {
+        } else if (!forFaction.hasAccess(this, PermissibleActions.TERRITORY)) {
             // Lacking perms to territory claim
             denyReason = plugin.txt().parse(TL.CLAIM_CANTCLAIM.toString(), forFaction.describeTo(this));
         } else if (forFaction == currentFaction) {
@@ -899,7 +900,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 cost += FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee();
             }
 
-            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysLandCosts() && this.hasFaction() && this.getFaction().hasAccess(this, PermissibleAction.ECONOMY)) {
+            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysLandCosts() && this.hasFaction() && this.getFaction().hasAccess(this, PermissibleActions.ECONOMY)) {
                 payee = this.getFaction();
             } else {
                 payee = this;
@@ -1055,7 +1056,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             return true;
         }
 
-        return faction.hasAccess(this, PermissibleAction.FLY);
+        return faction.hasAccess(this, PermissibleActions.FLY);
     }
 
     public boolean shouldTakeFallDamage() {

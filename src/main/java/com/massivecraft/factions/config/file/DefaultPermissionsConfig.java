@@ -1,34 +1,21 @@
 package com.massivecraft.factions.config.file;
 
 import com.massivecraft.factions.config.annotation.Comment;
-import com.massivecraft.factions.config.annotation.ConfigName;
 import com.massivecraft.factions.perms.Permissible;
+import com.massivecraft.factions.perms.PermissiblePermDefaultInfo;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
 
+@SuppressWarnings("FieldMayBeFinal")
 public class DefaultPermissionsConfig {
     public static class Permissions {
-        public class PermissiblePermInfo {
-            public boolean isLocked() {
-                return this.locked;
-            }
+        public static class FactionOnlyPermInfo {
+            protected PermissiblePermDefaultInfo coleader = PermissiblePermDefaultInfo.defaultFalse();
+            protected PermissiblePermDefaultInfo moderator = PermissiblePermDefaultInfo.defaultFalse();
+            protected PermissiblePermDefaultInfo normal = PermissiblePermDefaultInfo.defaultFalse();
+            protected PermissiblePermDefaultInfo recruit = PermissiblePermDefaultInfo.defaultFalse();
 
-            public boolean defaultAllowed() {
-                return this.value;
-            }
-
-            private boolean locked = false;
-            @ConfigName("default")
-            private boolean value = false;
-        }
-
-        public class FactionOnlyPermInfo {
-            protected PermissiblePermInfo coleader = new PermissiblePermInfo();
-            protected PermissiblePermInfo moderator = new PermissiblePermInfo();
-            protected PermissiblePermInfo normal = new PermissiblePermInfo();
-            protected PermissiblePermInfo recruit = new PermissiblePermInfo();
-
-            public PermissiblePermInfo get(Permissible permissible) {
+            public PermissiblePermDefaultInfo get(Permissible permissible) {
                 if (permissible instanceof Role) {
                     switch ((Role) permissible) {
                         case COLEADER:
@@ -46,13 +33,13 @@ public class DefaultPermissionsConfig {
             }
         }
 
-        public class FullPermInfo extends FactionOnlyPermInfo {
-            protected PermissiblePermInfo ally = new PermissiblePermInfo();
-            protected PermissiblePermInfo truce = new PermissiblePermInfo();
-            protected PermissiblePermInfo neutral = new PermissiblePermInfo();
-            protected PermissiblePermInfo enemy = new PermissiblePermInfo();
+        public static class FullPermInfo extends FactionOnlyPermInfo {
+            protected PermissiblePermDefaultInfo ally = PermissiblePermDefaultInfo.defaultFalse();
+            protected PermissiblePermDefaultInfo truce = PermissiblePermDefaultInfo.defaultFalse();
+            protected PermissiblePermDefaultInfo neutral = PermissiblePermDefaultInfo.defaultFalse();
+            protected PermissiblePermDefaultInfo enemy = PermissiblePermDefaultInfo.defaultFalse();
 
-            public PermissiblePermInfo get(Permissible permissible) {
+            public PermissiblePermDefaultInfo get(Permissible permissible) {
                 if (permissible instanceof Relation) {
                     switch ((Relation) permissible) {
                         case ALLY:
@@ -176,35 +163,35 @@ public class DefaultPermissionsConfig {
         @Comment("Can ban others from the faction")
         private FactionOnlyPermInfo ban = new FactionOnlyPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can build in faction territory (while not raidable)")
         private FullPermInfo build = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can destroy in faction territory (while not raidable)")
         private FullPermInfo destroy = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can frost walk in faction territory (while not raidable)")
         private FullPermInfo frostWalk = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Allows building/destroying in faction territory but causes pain (while not raidable)")
@@ -212,113 +199,113 @@ public class DefaultPermissionsConfig {
         @Comment("Use doors in faction territory (while not raidable)")
         private FullPermInfo door = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
-                this.ally.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
+                this.ally= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Use buttons in faction territory (while not raidable)")
         private FullPermInfo button = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
-                this.ally.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
+                this.ally= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Use levers in faction territory (while not raidable)")
         private FullPermInfo lever = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
-                this.ally.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
+                this.ally= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Use containers in faction territory (while not raidable)")
         private FullPermInfo container = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Able to invite others to the faction")
         private FactionOnlyPermInfo invite = new FactionOnlyPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         private FactionOnlyPermInfo kick = new FactionOnlyPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Use items in faction territory (while not raidable)")
         private FullPermInfo item = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can visit the faction home")
         private FullPermInfo home = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can see faction claim list")
         private FactionOnlyPermInfo listClaims = new FactionOnlyPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can set the faction home")
         private FactionOnlyPermInfo sethome = new FactionOnlyPermInfo() {
             {
-                this.coleader.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can access faction economy")
         private FactionOnlyPermInfo economy = new FactionOnlyPermInfo() {
             {
-                this.coleader.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can claim/unclaim faction territory")
         private FactionOnlyPermInfo territory = new FactionOnlyPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can deposit TNT into the bank")
         private FactionOnlyPermInfo tntDeposit = new FactionOnlyPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can withdraw TNT from the bank")
         private FactionOnlyPermInfo tntWithdraw = new FactionOnlyPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can created owned areas with /f owner")
@@ -326,45 +313,45 @@ public class DefaultPermissionsConfig {
         @Comment("Can interact with plates")
         private FullPermInfo plate = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
-                this.ally.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
+                this.ally= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         private FactionOnlyPermInfo disband = new FactionOnlyPermInfo();
         @Comment("Can promote members up to their own role within the faction")
         private FactionOnlyPermInfo promote = new FactionOnlyPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can set a faction warp")
         private FactionOnlyPermInfo setwarp = new FactionOnlyPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can use faction warps")
         private FullPermInfo warp = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
         @Comment("Can fly in faction territory")
         private FullPermInfo fly = new FullPermInfo() {
             {
-                this.coleader.value = true;
-                this.moderator.value = true;
-                this.normal.value = true;
-                this.recruit.value = true;
-                this.ally.value = true;
+                this.coleader= PermissiblePermDefaultInfo.defaultTrue();
+                this.moderator= PermissiblePermDefaultInfo.defaultTrue();
+                this.normal= PermissiblePermDefaultInfo.defaultTrue();
+                this.recruit= PermissiblePermDefaultInfo.defaultTrue();
+                this.ally= PermissiblePermDefaultInfo.defaultTrue();
             }
         };
     }

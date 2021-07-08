@@ -3,6 +3,7 @@ package com.massivecraft.factions.cmd;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.BanInfo;
 import com.massivecraft.factions.struct.Permission;
@@ -21,7 +22,7 @@ public class CmdBan extends FCommand {
 
         this.requirements = new CommandRequirements.Builder(Permission.BAN)
                 .memberOnly()
-                .withAction(PermissibleAction.BAN)
+                .withAction(PermissibleActions.BAN)
                 .build();
     }
 

@@ -7,6 +7,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.MainConfig;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.struct.Permission;
@@ -60,7 +61,7 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
-        if (!playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.BUILD, false)) {
+        if (!playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleActions.BUILD, false)) {
             event.setCancelled(true);
         }
     }
@@ -106,7 +107,7 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
-        if (!playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.DESTROY, false)) {
+        if (!playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleActions.DESTROY, false)) {
             event.setCancelled(true);
         }
     }
@@ -122,7 +123,7 @@ public class FactionsBlockListener implements Listener {
             return;
         }
 
-        if (event.getInstaBreak() && !playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleAction.DESTROY, false)) {
+        if (event.getInstaBreak() && !playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleActions.DESTROY, false)) {
             event.setCancelled(true);
         }
     }
@@ -206,7 +207,7 @@ public class FactionsBlockListener implements Listener {
                 return false;
             }
             Relation rel = pistonFaction.getRelationTo(otherFaction);
-            if (!otherFaction.hasAccess(otherFaction.hasPlayersOnline(), rel, PermissibleAction.BUILD)) {
+            if (!otherFaction.hasAccess(otherFaction.hasPlayersOnline(), rel, PermissibleActions.BUILD)) {
                 return false;
             }
         }
@@ -234,7 +235,7 @@ public class FactionsBlockListener implements Listener {
         }
 
         // Check if they have build permissions here. If not, block this from happening.
-        if (!playerCanBuildDestroyBlock(player, location, PermissibleAction.FROSTWALK, justCheck)) {
+        if (!playerCanBuildDestroyBlock(player, location, PermissibleActions.FROSTWALK, justCheck)) {
             event.setCancelled(true);
         }
     }
@@ -302,11 +303,11 @@ public class FactionsBlockListener implements Listener {
         }
 
         Faction myFaction = me.getFaction();
-        boolean pain = !justCheck && otherFaction.hasAccess(me, PermissibleAction.PAINBUILD);
+        boolean pain = !justCheck && otherFaction.hasAccess(me, PermissibleActions.PAINBUILD);
 
         // If the faction hasn't: defined access or denied, fallback to config values
         if (!otherFaction.hasAccess(me, permissibleAction)) {
-            if (pain && permissibleAction != PermissibleAction.FROSTWALK) {
+            if (pain && permissibleAction != PermissibleActions.FROSTWALK) {
                 player.damage(conf.factions().other().getActionDeniedPainAmount());
                 me.msg(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.getShortDescription(), otherFaction.getTag(myFaction));
                 return true;

@@ -15,6 +15,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.listeners.FactionsBlockListener;
 import com.massivecraft.factions.listeners.FactionsEntityListener;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import org.bukkit.Location;
@@ -50,7 +51,7 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         if (player == null) {
             return Board.getInstance().getFactionAt(new FLocation(block)).isWilderness();
         }
-        return FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleAction.BUILD, true);
+        return FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleActions.BUILD, true);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         if (player == null) {
             return Board.getInstance().getFactionAt(new FLocation(block)).isWilderness();
         }
-        return FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleAction.DESTROY, true);
+        return FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleActions.DESTROY, true);
     }
 
     @Override

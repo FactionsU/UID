@@ -2,6 +2,7 @@ package com.massivecraft.factions;
 
 import com.massivecraft.factions.iface.EconomyParticipator;
 import com.massivecraft.factions.perms.Permissible;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
@@ -151,6 +152,7 @@ public interface Faction extends EconomyParticipator {
 
     void resetPerms();
 
+    @Deprecated
     Map<Permissible, Map<PermissibleAction, Boolean>> getPermissions();
 
     int getLandRounded();
