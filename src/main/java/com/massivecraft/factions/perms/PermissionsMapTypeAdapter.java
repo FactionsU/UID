@@ -14,10 +14,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
-public class PermissionsMapTypeAdapter implements JsonDeserializer<Map<Permissible, Map<PermissibleAction, Boolean>>> {
+public class PermissionsMapTypeAdapter implements JsonDeserializer<Map<Permissible, Map<String, Boolean>>> {
 
     @Override
-    public Map<Permissible, Map<PermissibleAction, Boolean>> deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
+    public Map<Permissible, Map<String, Boolean>> deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
 
         try {
             JsonObject obj = json.getAsJsonObject();
@@ -25,7 +25,7 @@ public class PermissionsMapTypeAdapter implements JsonDeserializer<Map<Permissib
                 return null;
             }
 
-            Map<Permissible, Map<PermissibleAction, Boolean>> permissionsMap = new ConcurrentHashMap<>();
+            Map<Permissible, Map<String, Boolean>> permissionsMap = new ConcurrentHashMap<>();
 
             // Top level is Relation
             for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
@@ -36,16 +36,15 @@ public class PermissionsMapTypeAdapter implements JsonDeserializer<Map<Permissib
                 }
 
                 // Second level is the map between action -> access
-                Map<PermissibleAction, Boolean> accessMap = new HashMap<>();
+                Map<String, Boolean> accessMap = new HashMap<>();
                 for (Map.Entry<String, JsonElement> entry2 : entry.getValue().getAsJsonObject().entrySet()) {
-                    PermissibleAction permissibleAction = PermissibleAction.fromString(entry2.getKey());
                     boolean bool;
                     try {
                         bool = entry2.getValue().getAsBoolean();
                     } catch (Exception e) {
                         continue;
                     }
-                    accessMap.put(permissibleAction, bool);
+                    accessMap.put(entry2.getKey(), bool);
                 }
                 permissionsMap.put(permissible, accessMap);
             }

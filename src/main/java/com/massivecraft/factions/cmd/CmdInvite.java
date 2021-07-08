@@ -2,6 +2,7 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -19,7 +20,7 @@ public class CmdInvite extends FCommand {
 
         this.requirements = new CommandRequirements.Builder(Permission.INVITE)
                 .memberOnly()
-                .withAction(PermissibleAction.INVITE)
+                .withAction(PermissibleActions.INVITE)
                 .build();
     }
 

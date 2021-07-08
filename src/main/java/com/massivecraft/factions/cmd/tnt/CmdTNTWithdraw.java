@@ -5,6 +5,7 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -23,7 +24,7 @@ public class CmdTNTWithdraw extends FCommand {
         this.aliases.add("w");
         this.requiredArgs.add("amount");
 
-        this.requirements = new CommandRequirements.Builder(Permission.TNT_WITHDRAW).withAction(PermissibleAction.TNTWITHDRAW).memberOnly().build();
+        this.requirements = new CommandRequirements.Builder(Permission.TNT_WITHDRAW).withAction(PermissibleActions.TNTWITHDRAW).memberOnly().build();
     }
 
     @Override

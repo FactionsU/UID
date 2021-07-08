@@ -4,6 +4,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerTeleportEvent;
 import com.massivecraft.factions.gui.WarpGUI;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -24,7 +25,7 @@ public class CmdWarp extends FCommand {
 
         this.requirements = new CommandRequirements.Builder(Permission.WARP)
                 .memberOnly()
-                .withAction(PermissibleAction.WARP)
+                .withAction(PermissibleActions.WARP)
                 .build();
     }
 
@@ -32,7 +33,7 @@ public class CmdWarp extends FCommand {
     public void perform(CommandContext context) {
         // TODO: check if in combat.
 
-        if (!context.faction.hasAccess(context.fPlayer, PermissibleAction.WARP)) {
+        if (!context.faction.hasAccess(context.fPlayer, PermissibleActions.WARP)) {
             context.msg(TL.COMMAND_FWARP_NOACCESS, context.faction.getTag(context.fPlayer));
             return;
         }

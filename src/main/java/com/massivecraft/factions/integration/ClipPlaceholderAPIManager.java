@@ -33,12 +33,6 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
         return "drtshock";
     }
 
-    // Since we are registering this expansion from the dependency, this can be null
-    @Override
-    public String getPlugin() {
-        return null;
-    }
-
     // Return the plugin version since this expansion is bundled with the dependency
     @Override
     public String getVersion() {

@@ -49,6 +49,14 @@ public class ConfigManager {
         return this.offlinePermissionsConfig;
     }
 
+    public DefaultPermissionsConfig.Permissions getDefaultPermissions(boolean online) {
+        if (online || !this.mainConfig.factions().other().isSeparateOfflinePerms()) {
+            return this.permissionsConfig.getPermissions();
+        } else {
+            return this.offlinePermissionsConfig.getPermissions();
+        }
+    }
+
     public MainConfig getMainConfig() {
         return this.mainConfig;
     }

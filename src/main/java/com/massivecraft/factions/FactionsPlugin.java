@@ -34,6 +34,7 @@ import com.massivecraft.factions.listeners.versionspecific.PortalHandler;
 import com.massivecraft.factions.listeners.versionspecific.PortalListenerLegacy;
 import com.massivecraft.factions.listeners.versionspecific.PortalListener_114;
 import com.massivecraft.factions.perms.Permissible;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.PermissionsMapTypeAdapter;
 import com.massivecraft.factions.struct.ChatMode;
@@ -964,7 +965,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         Type mapFLocToStringSetType = new TypeToken<Map<FLocation, Set<String>>>() {
         }.getType();
 
-        Type accessType = new TypeToken<Map<Permissible, Map<PermissibleAction, Boolean>>>() {
+        Type accessType = new TypeToken<Map<Permissible, Map<String, Boolean>>>() {
         }.getType();
 
         GsonBuilder builder = new GsonBuilder();

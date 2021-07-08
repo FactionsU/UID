@@ -1,29 +1,30 @@
 package com.massivecraft.factions.config.transition.oldclass.v0;
 
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 
 public enum OldPermissableActionV0 {
-    BAN("ban", PermissibleAction.BAN),
-    BUILD("build", PermissibleAction.BUILD),
-    DESTROY("destroy", PermissibleAction.DESTROY),
-    FROST_WALK("frostwalk", PermissibleAction.FROSTWALK),
-    PAIN_BUILD("painbuild", PermissibleAction.PAINBUILD),
-    DOOR("door", PermissibleAction.DOOR),
-    BUTTON("button", PermissibleAction.BUTTON),
-    LEVER("lever", PermissibleAction.LEVER),
-    CONTAINER("container", PermissibleAction.CONTAINER),
-    INVITE("invite", PermissibleAction.INVITE),
-    KICK("kick", PermissibleAction.KICK),
-    ITEM("items", PermissibleAction.ITEM), // generic for most items
-    SETHOME("sethome", PermissibleAction.SETHOME),
-    WITHDRAW("withdraw", PermissibleAction.ECONOMY),
-    TERRITORY("territory", PermissibleAction.TERRITORY),
-    ACCESS("access", PermissibleAction.PLATE),
-    DISBAND("disband", PermissibleAction.DISBAND),
-    PROMOTE("promote", PermissibleAction.PROMOTE),
-    SETWARP("setwarp", PermissibleAction.SETWARP),
-    WARP("warp", PermissibleAction.WARP),
-    FLY("fly", PermissibleAction.FLY),
+    BAN("ban", PermissibleActions.BAN),
+    BUILD("build", PermissibleActions.BUILD),
+    DESTROY("destroy", PermissibleActions.DESTROY),
+    FROST_WALK("frostwalk", PermissibleActions.FROSTWALK),
+    PAIN_BUILD("painbuild", PermissibleActions.PAINBUILD),
+    DOOR("door", PermissibleActions.DOOR),
+    BUTTON("button", PermissibleActions.BUTTON),
+    LEVER("lever", PermissibleActions.LEVER),
+    CONTAINER("container", PermissibleActions.CONTAINER),
+    INVITE("invite", PermissibleActions.INVITE),
+    KICK("kick", PermissibleActions.KICK),
+    ITEM("items", PermissibleActions.ITEM), // generic for most items
+    SETHOME("sethome", PermissibleActions.SETHOME),
+    WITHDRAW("withdraw", PermissibleActions.ECONOMY),
+    TERRITORY("territory", PermissibleActions.TERRITORY),
+    ACCESS("access", PermissibleActions.PLATE),
+    DISBAND("disband", PermissibleActions.DISBAND),
+    PROMOTE("promote", PermissibleActions.PROMOTE),
+    SETWARP("setwarp", PermissibleActions.SETWARP),
+    WARP("warp", PermissibleActions.WARP),
+    FLY("fly", PermissibleActions.FLY),
     ;
 
     private String name;

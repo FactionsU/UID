@@ -5,6 +5,7 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -19,7 +20,7 @@ public class CmdOwner extends FCommand {
         this.optionalArgs.put("player", "you");
 
         this.requirements = new CommandRequirements.Builder(Permission.OWNER)
-                .withAction(PermissibleAction.OWNER)
+                .withAction(PermissibleActions.OWNER)
                 .playerOnly()
                 .build();
     }

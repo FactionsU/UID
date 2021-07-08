@@ -1,6 +1,7 @@
 package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
@@ -13,7 +14,7 @@ public class CmdDelhome extends FCommand {
 
         this.requirements = new CommandRequirements.Builder(Permission.DELHOME)
                 .memberOnly()
-                .withAction(PermissibleAction.SETHOME)
+                .withAction(PermissibleActions.SETHOME)
                 .build();
     }
 

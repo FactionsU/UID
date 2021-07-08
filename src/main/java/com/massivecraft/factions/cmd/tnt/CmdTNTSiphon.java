@@ -6,6 +6,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -22,7 +23,7 @@ public class CmdTNTSiphon extends FCommand {
         this.requiredArgs.add("radius");
         this.optionalArgs.put("amount", "all");
 
-        this.requirements = new CommandRequirements.Builder(Permission.TNT_SIPHON).withAction(PermissibleAction.TNTDEPOSIT).memberOnly().build();
+        this.requirements = new CommandRequirements.Builder(Permission.TNT_SIPHON).withAction(PermissibleActions.TNTDEPOSIT).memberOnly().build();
     }
 
     @Override

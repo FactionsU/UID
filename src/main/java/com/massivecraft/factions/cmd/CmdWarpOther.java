@@ -5,6 +5,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerTeleportEvent;
 import com.massivecraft.factions.gui.WarpGUI;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -41,7 +42,7 @@ public class CmdWarpOther extends FCommand {
             return;
         }
 
-        if (!context.fPlayer.isAdminBypassing() && !faction.hasAccess(context.fPlayer, PermissibleAction.WARP)) {
+        if (!context.fPlayer.isAdminBypassing() && !faction.hasAccess(context.fPlayer, PermissibleActions.WARP)) {
             context.msg(TL.COMMAND_FWARP_NOACCESS, faction.getTag(context.fPlayer));
             return;
         }

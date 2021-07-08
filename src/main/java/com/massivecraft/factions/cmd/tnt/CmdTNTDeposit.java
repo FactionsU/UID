@@ -6,6 +6,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -22,7 +23,7 @@ public class CmdTNTDeposit extends FCommand {
         this.aliases.add("d");
         this.requiredArgs.add("amount");
 
-        this.requirements = new CommandRequirements.Builder(Permission.TNT_DEPOSIT).withAction(PermissibleAction.TNTDEPOSIT).memberOnly().build();
+        this.requirements = new CommandRequirements.Builder(Permission.TNT_DEPOSIT).withAction(PermissibleActions.TNTDEPOSIT).memberOnly().build();
     }
 
     @Override

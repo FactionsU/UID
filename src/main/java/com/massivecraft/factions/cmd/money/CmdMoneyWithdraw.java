@@ -5,6 +5,7 @@ import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.iface.EconomyParticipator;
 import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -33,7 +34,7 @@ public class CmdMoneyWithdraw extends MoneyCommand {
             return;
         }
 
-        if (!context.faction.hasAccess(context.fPlayer, PermissibleAction.ECONOMY)) {
+        if (!context.faction.hasAccess(context.fPlayer, PermissibleActions.ECONOMY)) {
             context.msg(TL.GENERIC_NOPERMISSION, "withdraw");
             return;
         }

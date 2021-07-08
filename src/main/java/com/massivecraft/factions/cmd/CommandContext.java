@@ -6,6 +6,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.TL;
@@ -383,7 +384,7 @@ public class CommandContext {
             return true;
         }
 
-        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.getFaction().hasAccess(fPlayer, PermissibleAction.ECONOMY)) {
+        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.getFaction().hasAccess(fPlayer, PermissibleActions.ECONOMY)) {
             return Econ.modifyMoney(faction, -cost, toDoThis, forDoingThis);
         } else {
             return Econ.modifyMoney(fPlayer, -cost, toDoThis, forDoingThis);

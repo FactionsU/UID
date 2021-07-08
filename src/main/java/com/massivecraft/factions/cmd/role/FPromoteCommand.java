@@ -5,6 +5,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.CommandRequirements;
 import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
@@ -21,7 +22,7 @@ public class FPromoteCommand extends FCommand {
 
         this.requirements = new CommandRequirements.Builder(Permission.PROMOTE)
                 .memberOnly()
-                .withAction(PermissibleAction.PROMOTE)
+                .withAction(PermissibleActions.PROMOTE)
                 .build();
     }
 

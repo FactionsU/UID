@@ -12,6 +12,7 @@ import com.massivecraft.factions.data.MemoryFPlayer;
 import com.massivecraft.factions.event.FPlayerJoinEvent;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.gui.GUI;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
@@ -384,7 +385,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         if (event.getAction() == Action.PHYSICAL && block.getType().name().contains("SOIL")) {
-            if (!FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleAction.DESTROY, false)) {
+            if (!FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleActions.DESTROY, false)) {
                 event.setCancelled(true);
             }
         }
@@ -431,7 +432,7 @@ public class FactionsPlayerListener extends AbstractListener {
             }
             if (ohNo &&
                     !FactionsPlugin.getInstance().conf().factions().specialCase().getIgnoreBuildMaterials().contains(item.getType()) &&
-                    !FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleAction.BUILD, false)) {
+                    !FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleActions.BUILD, false)) {
                 event.setCancelled(true);
             }
         }
@@ -523,7 +524,7 @@ public class FactionsPlayerListener extends AbstractListener {
             return false;
         }
 
-        if (!otherFaction.hasAccess(me, PermissibleAction.ITEM)) {
+        if (!otherFaction.hasAccess(me, PermissibleActions.ITEM)) {
             if (!justCheck) {
                 me.msg(TL.PLAYER_USE_TERRITORY, TextUtil.getMaterialName(material), otherFaction.getTag(me.getFaction()));
             }
