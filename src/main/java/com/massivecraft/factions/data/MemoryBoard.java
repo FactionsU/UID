@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-
 public abstract class MemoryBoard extends Board {
 
     public class MemoryBoardMap extends HashMap<FLocation, String> {

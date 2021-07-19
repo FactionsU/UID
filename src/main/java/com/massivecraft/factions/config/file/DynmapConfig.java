@@ -16,22 +16,22 @@ import java.util.Set;
 @SuppressWarnings({"FieldCanBeLocal", "InnerClassMayBeStatic"})
 public class DynmapConfig {
     public class Dynmap {
-        // Should the dynmap integration be used?
+        @Comment ("Should the dynmap integration be used?")
         private boolean enabled = true;
 
-        // Name of the Factions layer
+        @Comment ("Name of the Factions layer")
         private String layerName = "Factions";
 
-        // Should the layer be visible per default
+        @Comment ("Should the layer be visible per default")
         private boolean layerVisible = true;
 
-        // Ordering priority in layer menu (low goes before high - default is 0)
+        @Comment ("Ordering priority in layer menu (low goes before high - default is 0)")
         private int layerPriority = 2;
 
-        // (optional) set minimum zoom level before layer is visible (0 = default, always visible)
+        @Comment ("(optional) set minimum zoom level before layer is visible (0 = default, always visible)")
         private int layerMinimumZoom = 0;
 
-        // Format for popup - substitute values for macros
+        @Comment ("Format for popup")
         private String description =
                 "<div class=\"infowindow\">\n"
                         + "<span style=\"font-weight: bold; font-size: 150%;\">%name%</span><br>\n"
@@ -58,7 +58,14 @@ public class DynmapConfig {
         private Set<String> visibleFactions = new HashSet<>();
 
         @Comment("To hide all factions in a world, use 'world:worldnamehere'")
-        private Set<String> hiddenFactions = new HashSet<String>();
+        private Set<String> hiddenFactions = new HashSet<>();
+
+        @Comment("Set to true if you do a permanent country map")
+        private boolean onlyUpdateWorldOnce = false;
+
+        @Comment("Update claims and homes with dynmap every X seconds. Default is 300 (5 minutes)\n" +
+                "Minimum value: 1. To disable updating claims, edit onlyUpdateWorldOnce instead")
+        private int claimUpdatePeriod = 300;
 
         public boolean isEnabled() {
             return enabled;
@@ -98,6 +105,14 @@ public class DynmapConfig {
 
         public Set<String> getHiddenFactions() {
             return hiddenFactions;
+        }
+
+        public boolean isOnlyUpdateWorldOnce() {
+            return onlyUpdateWorldOnce;
+        }
+
+        public int getClaimUpdatePeriod() {
+            return claimUpdatePeriod;
         }
 
         @Comment("Per-faction overrides")
