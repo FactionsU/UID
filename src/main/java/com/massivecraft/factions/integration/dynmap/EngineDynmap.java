@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -69,6 +68,7 @@ public class EngineDynmap {
     public MarkerAPI markerApi;
     public MarkerSet markerset;
     private boolean enabled;
+    private boolean stillNeedsToRunOnce = true;
 
     public boolean isRunning() {
         return enabled;
@@ -93,12 +93,32 @@ public class EngineDynmap {
         // Schedule non thread safe sync at the end!
         Bukkit.getScheduler().scheduleSyncRepeatingTask(FactionsPlugin.getInstance(), () -> {
 
-            final Map<String, TempMarker> homes = createHomes();
-            final Map<String, TempAreaMarker> areas = createAreas();
+            if (!updateCore()) {
+                return;
+            }
+
             final Map<String, Set<String>> playerSets = createPlayersets();
+
+            updatePlayersets(playerSets);
+        }, 101L, 100L);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(FactionsPlugin.getInstance(), () -> {
+            boolean doIt = true;
+            if (FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().dynmap().isOnlyUpdateWorldOnce()) {
+                if (this.stillNeedsToRunOnce) {
+                    this.stillNeedsToRunOnce = false;
+                } else {
+                    doIt = false;
+                }
+            }
 
             if (!updateCore()) {
                 return;
+            }
+
+            final Map<String, TempMarker> homes = createHomes();
+            Map<String, TempAreaMarker> areas = null;
+            if (doIt) {
+                areas = createAreas();
             }
 
             // createLayer() is thread safe but it makes use of fields set in updateCore() so we must have it after.
@@ -107,9 +127,10 @@ public class EngineDynmap {
             }
 
             updateHomes(homes);
-            updateAreas(areas);
-            updatePlayersets(playerSets);
-        }, 100L, 100L);
+            if (doIt) {
+                updateAreas(areas);
+            }
+        }, 100L, Math.max(1, dynmapConf.dynmap().getClaimUpdatePeriod()) * 20L);
 
         this.enabled = true;
         FactionsPlugin.getInstance().getLogger().info("Enabled Dynmap integration");
@@ -234,14 +255,14 @@ public class EngineDynmap {
 
     // Thread Safe: YES
     public Map<String, TempAreaMarker> createAreas() {
-        Map<String, Map<Faction, Set<FLocation>>> worldFactionChunks = createWorldFactionChunks();
+        Map<String, Map<Faction, List<FLocation>>> worldFactionChunks = createWorldFactionChunks();
         return createAreas(worldFactionChunks);
     }
 
     // Thread Safe: YES
-    public Map<String, Map<Faction, Set<FLocation>>> createWorldFactionChunks() {
+    public Map<String, Map<Faction, List<FLocation>>> createWorldFactionChunks() {
         // Create map "world name --> faction --> set of chunk coords"
-        Map<String, Map<Faction, Set<FLocation>>> worldFactionChunks = new HashMap<>();
+        Map<String, Map<Faction, List<FLocation>>> worldFactionChunks = new HashMap<>();
 
         // Note: The board is the world. The board id is the world name.
         MemoryBoard board = (MemoryBoard) Board.getInstance();
@@ -250,9 +271,9 @@ public class EngineDynmap {
             String world = entry.getKey().getWorldName();
             Faction chunkOwner = Factions.getInstance().getFactionById(entry.getValue());
 
-            Map<Faction, Set<FLocation>> factionChunks = worldFactionChunks.computeIfAbsent(world, k -> new HashMap<>());
+            Map<Faction, List<FLocation>> factionChunks = worldFactionChunks.computeIfAbsent(world, k -> new HashMap<>());
 
-            Set<FLocation> factionTerritory = factionChunks.computeIfAbsent(chunkOwner, k -> new HashSet<>());
+            List<FLocation> factionTerritory = factionChunks.computeIfAbsent(chunkOwner, k -> new ArrayList<>());
 
             factionTerritory.add(entry.getKey());
         }
@@ -261,18 +282,18 @@ public class EngineDynmap {
     }
 
     // Thread Safe: YES
-    public Map<String, TempAreaMarker> createAreas(Map<String, Map<Faction, Set<FLocation>>> worldFactionChunks) {
+    public Map<String, TempAreaMarker> createAreas(Map<String, Map<Faction, List<FLocation>>> worldFactionChunks) {
         Map<String, TempAreaMarker> ret = new HashMap<>();
 
         // For each world
-        for (Entry<String, Map<Faction, Set<FLocation>>> entry : worldFactionChunks.entrySet()) {
+        for (Entry<String, Map<Faction, List<FLocation>>> entry : worldFactionChunks.entrySet()) {
             String world = entry.getKey();
-            Map<Faction, Set<FLocation>> factionChunks = entry.getValue();
+            Map<Faction, List<FLocation>> factionChunks = entry.getValue();
 
             // For each faction and its chunks in that world
-            for (Entry<Faction, Set<FLocation>> entry1 : factionChunks.entrySet()) {
+            for (Entry<Faction, List<FLocation>> entry1 : factionChunks.entrySet()) {
                 Faction faction = entry1.getKey();
-                Set<FLocation> chunks = entry1.getValue();
+                List<FLocation> chunks = entry1.getValue();
                 Map<String, TempAreaMarker> worldFactionMarkers = createAreas(world, faction, chunks);
                 ret.putAll(worldFactionMarkers);
             }
@@ -284,7 +305,7 @@ public class EngineDynmap {
     // Thread Safe: YES
     // Handle specific faction on specific world
     // "handle faction on world"
-    public Map<String, TempAreaMarker> createAreas(String world, Faction faction, Set<FLocation> chunks) {
+    public Map<String, TempAreaMarker> createAreas(String world, Faction faction, List<FLocation> chunks) {
         Map<String, TempAreaMarker> ret = new HashMap<>();
 
         // If the faction is visible ...
@@ -308,17 +329,16 @@ public class EngineDynmap {
 
         // Loop through chunks: set flags on chunk map
         TileFlags allChunkFlags = new TileFlags();
-        LinkedList<FLocation> allChunks = new LinkedList<>();
+        ArrayList<FLocation> allChunks = new ArrayList<>(chunks.size());
         for (FLocation chunk : chunks) {
             allChunkFlags.setFlag((int) chunk.getX(), (int) chunk.getZ(), true); // Set flag for chunk
-            allChunks.addLast(chunk);
+            allChunks.add(chunk);
         }
 
         // Loop through until we don't find more areas
         while (allChunks != null) {
             TileFlags ourChunkFlags = null;
-            LinkedList<FLocation> ourChunks = null;
-            LinkedList<FLocation> newChunks = null;
+            ArrayList<FLocation> newChunks = null;
 
             int minimumX = Integer.MAX_VALUE;
             int minimumZ = Integer.MAX_VALUE;
@@ -329,15 +349,12 @@ public class EngineDynmap {
                 // If we need to start shape, and this block is not part of one yet
                 if (ourChunkFlags == null && allChunkFlags.getFlag(chunkX, chunkZ)) {
                     ourChunkFlags = new TileFlags(); // Create map for shape
-                    ourChunks = new LinkedList<>();
                     floodFillTarget(allChunkFlags, ourChunkFlags, chunkX, chunkZ); // Copy shape
-                    ourChunks.add(chunk); // Add it to our chunk list
                     minimumX = chunkX;
                     minimumZ = chunkZ;
                 }
                 // If shape found, and we're in it, add to our node list
                 else if (ourChunkFlags != null && ourChunkFlags.getFlag(chunkX, chunkZ)) {
-                    ourChunks.add(chunk);
                     if (chunkX < minimumX) {
                         minimumX = chunkX;
                         minimumZ = chunkZ;
@@ -348,7 +365,7 @@ public class EngineDynmap {
                 // Else, keep it in the list for the next polygon
                 else {
                     if (newChunks == null) {
-                        newChunks = new LinkedList<>();
+                        newChunks = new ArrayList<>();
                     }
                     newChunks.add(chunk);
                 }
