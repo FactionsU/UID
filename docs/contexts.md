@@ -6,10 +6,30 @@ running at least LuckPerms version 5.1.0 for FactionsUUID to utilize this featur
 
 ## Contexts Offered
 
+### Faction ID
+
+`factionsuuid:faction-id`  
+**Possible values**: Any number matching an existing faction's ID  
+**Description**: The ID of the faction the player is in. If not in a faction, they get the 
+wilderness ID which is 0. Presently you need to check `data/factions.json` for the faction ID. 
+The tag is not used because factions could change tag and that would be painful to juggle.
+
+### Is peaceful?
+
+`factionsuuid:is-peaceful`  
+**Possible values**: true, false  
+**Description**: True if the player is in a peaceful faction.
+
+### Is permanent?
+
+`factionsuuid:is-permanent`  
+**Possible values**: true, false  
+**Description**: True if the player is in a permanent faction.
+
 ### Territory relation
 
 `factionsuuid:territory-relation`  
-**Possible values**: member, ally, truce, neutral, enemy
+**Possible values**: member, ally, truce, neutral, enemy  
 **Description**: The player's relation to the land they are in. Only one value at a time. Could be used to, for example, 
 prevent players in enemy territory from using particular features of another plugin that are permission-based (not 
 just limited to commands).

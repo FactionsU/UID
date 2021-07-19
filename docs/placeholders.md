@@ -64,6 +64,7 @@ Variable | Explanation
 {dtr-frozen-time} | Time remaining in frozen state (configure in main.conf) or blank if not frozen
 {tnt-balance} | TNT bank balance
 {tnt-max-balance} | Maximum TNT bank balance
+{faction-link} | Faction link from `/f link`
 
  
 Faction Permissions GUI variables. Can only be used in GUI
