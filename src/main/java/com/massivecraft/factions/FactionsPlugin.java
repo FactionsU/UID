@@ -273,7 +273,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             Files.write(conversionCompleteFile, "Do not delete unless you want to waste time at startup!".getBytes(StandardCharsets.UTF_8));
 
             this.getLogger().info("  We did it! Yay!");
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
             // Good.
         } catch (Exception e) {
             this.getLogger().log(Level.SEVERE, "Failed to migrate EssX accounts", e);
