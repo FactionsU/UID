@@ -2,6 +2,7 @@ package com.massivecraft.factions.cmd.top;
 
 /**
  * Implementation of FTopValue which sorts itself by virtue of value being greater than another FTopGTNumberValue.
+ *
  * @param <T> derived class
  * @param <N> value type
  */

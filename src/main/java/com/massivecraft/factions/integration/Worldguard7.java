@@ -69,7 +69,9 @@ public class Worldguard7 implements IWorldguard {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionQuery query = container.createQuery();
 
-        return query.testState(localPlayer.getLocation(), localPlayer, FLAG_PVP);
+        boolean q = query.testState(localPlayer.getLocation(), localPlayer, FLAG_PVP);
+        FactionsPlugin.getInstance().debug("Testing PVP flag for player " + player.getName() + ": " + q);
+        return q;
     }
 
     // Check if player can build at location by worldguards rules.
