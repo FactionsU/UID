@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.Marker;
@@ -114,22 +115,41 @@ public class EngineDynmap {
             if (!updateCore()) {
                 return;
             }
-
-            final Map<String, TempMarker> homes = createHomes();
-            Map<String, TempAreaMarker> areas = null;
-            if (doIt) {
-                areas = createAreas();
-            }
-
             // createLayer() is thread safe but it makes use of fields set in updateCore() so we must have it after.
             if (!updateLayer(createLayer())) {
                 return;
             }
 
-            updateHomes(homes);
+
             if (doIt) {
-                updateAreas(areas);
+                Map<String, Map<String, List<FLocation>>> worldFactionChunks = createWorldFactionChunks();
+                Map<String, String> factionTag = new HashMap<>();
+                Map<String, String> factionDesc = new HashMap<>();
+                Map<String, DynmapStyle> factionStyle = new HashMap<>();
+                worldFactionChunks.values().stream().flatMap(m -> m.keySet().stream()).distinct().forEach(factionId -> {
+                    Faction faction = Factions.getInstance().getFactionById(factionId);
+                    factionTag.put(factionId, faction.getTag());
+                    factionDesc.put(factionId, getDescription(faction));
+                    factionStyle.put(factionId, getStyle(faction));
+                });
+
+                new BukkitRunnable(){
+                    @Override
+                    public void run() {
+                        Map<String, TempAreaMarker> areas = createAreas(worldFactionChunks, factionTag, factionDesc, factionStyle);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                updateAreas(areas);
+                            }
+                        }.runTask(FactionsPlugin.getInstance());
+                    }
+                }.runTaskAsynchronously(FactionsPlugin.getInstance());
+
             }
+
+            final Map<String, TempMarker> homes = createHomes();
+            updateHomes(homes);
         }, 100L, Math.max(1, dynmapConf.dynmap().getClaimUpdatePeriod()) * 20L);
 
         this.enabled = true;
@@ -254,26 +274,19 @@ public class EngineDynmap {
     // -------------------------------------------- //
 
     // Thread Safe: YES
-    public Map<String, TempAreaMarker> createAreas() {
-        Map<String, Map<Faction, List<FLocation>>> worldFactionChunks = createWorldFactionChunks();
-        return createAreas(worldFactionChunks);
-    }
-
-    // Thread Safe: YES
-    public Map<String, Map<Faction, List<FLocation>>> createWorldFactionChunks() {
+    public Map<String, Map<String, List<FLocation>>> createWorldFactionChunks() {
         // Create map "world name --> faction --> set of chunk coords"
-        Map<String, Map<Faction, List<FLocation>>> worldFactionChunks = new HashMap<>();
+        Map<String, Map<String, List<FLocation>>> worldFactionChunks = new HashMap<>();
 
         // Note: The board is the world. The board id is the world name.
         MemoryBoard board = (MemoryBoard) Board.getInstance();
 
         for (Entry<FLocation, String> entry : board.flocationIds.entrySet()) {
             String world = entry.getKey().getWorldName();
-            Faction chunkOwner = Factions.getInstance().getFactionById(entry.getValue());
 
-            Map<Faction, List<FLocation>> factionChunks = worldFactionChunks.computeIfAbsent(world, k -> new HashMap<>());
+            Map<String, List<FLocation>> factionChunks = worldFactionChunks.computeIfAbsent(world, k -> new HashMap<>());
 
-            List<FLocation> factionTerritory = factionChunks.computeIfAbsent(chunkOwner, k -> new ArrayList<>());
+            List<FLocation> factionTerritory = factionChunks.computeIfAbsent(entry.getValue(), k -> new ArrayList<>());
 
             factionTerritory.add(entry.getKey());
         }
@@ -282,19 +295,19 @@ public class EngineDynmap {
     }
 
     // Thread Safe: YES
-    public Map<String, TempAreaMarker> createAreas(Map<String, Map<Faction, List<FLocation>>> worldFactionChunks) {
+    public Map<String, TempAreaMarker> createAreas(Map<String, Map<String, List<FLocation>>> worldFactionChunks, Map<String, String> factionTag, Map<String, String> factionDesc, Map<String, DynmapStyle> factionStyle) {
         Map<String, TempAreaMarker> ret = new HashMap<>();
 
         // For each world
-        for (Entry<String, Map<Faction, List<FLocation>>> entry : worldFactionChunks.entrySet()) {
+        for (Entry<String, Map<String, List<FLocation>>> entry : worldFactionChunks.entrySet()) {
             String world = entry.getKey();
-            Map<Faction, List<FLocation>> factionChunks = entry.getValue();
+            Map<String, List<FLocation>> factionChunks = entry.getValue();
 
             // For each faction and its chunks in that world
-            for (Entry<Faction, List<FLocation>> entry1 : factionChunks.entrySet()) {
-                Faction faction = entry1.getKey();
+            for (Entry<String, List<FLocation>> entry1 : factionChunks.entrySet()) {
+                String factionId = entry1.getKey();
                 List<FLocation> chunks = entry1.getValue();
-                Map<String, TempAreaMarker> worldFactionMarkers = createAreas(world, faction, chunks);
+                Map<String, TempAreaMarker> worldFactionMarkers = createAreas(world, factionId, chunks, factionTag, factionDesc, factionStyle);
                 ret.putAll(worldFactionMarkers);
             }
         }
@@ -305,11 +318,11 @@ public class EngineDynmap {
     // Thread Safe: YES
     // Handle specific faction on specific world
     // "handle faction on world"
-    public Map<String, TempAreaMarker> createAreas(String world, Faction faction, List<FLocation> chunks) {
+    public Map<String, TempAreaMarker> createAreas(String world, String factionId, List<FLocation> chunks, Map<String, String> factionTag, Map<String, String> factionDesc, Map<String, DynmapStyle> factionStyle) {
         Map<String, TempAreaMarker> ret = new HashMap<>();
 
         // If the faction is visible ...
-        if (!isVisible(faction, world)) {
+        if (!isVisible(factionId, factionTag.get(factionId), world)) {
             return ret;
         }
 
@@ -322,10 +335,10 @@ public class EngineDynmap {
         int markerIndex = 0;
 
         // Create the info window
-        String description = getDescription(faction);
+        String description = factionDesc.get(factionId);
 
         // Fetch Style
-        DynmapStyle style = this.getStyle(faction);
+        DynmapStyle style = factionStyle.get(factionId);
 
         // Loop through chunks: set flags on chunk map
         TileFlags allChunkFlags = new TileFlags();
@@ -453,10 +466,10 @@ public class EngineDynmap {
             }
 
             // Build information for specific area
-            String markerId = FACTIONS_ + world + "__" + faction.getId() + "__" + markerIndex;
+            String markerId = FACTIONS_ + world + "__" + factionId + "__" + markerIndex;
 
             TempAreaMarker temp = new TempAreaMarker();
-            temp.label = faction.getTag();
+            temp.label = factionTag.get(factionId);
             temp.world = world;
             temp.x = x;
             temp.z = z;
@@ -720,27 +733,15 @@ public class EngineDynmap {
     }
 
     // Thread Safe / Asynchronous: Yes
-    private boolean isVisible(Faction faction, String world) {
-        if (faction == null) {
-            return false;
-        }
-        final String factionId = faction.getId();
-        if (factionId == null) {
-            return false;
-        }
-        final String factionName = faction.getTag();
-        if (factionName == null) {
-            return false;
-        }
-
+    private boolean isVisible(String factionId, String factionTag, String world) {
         Set<String> visible = dynmapConf.dynmap().getVisibleFactions();
         Set<String> hidden = dynmapConf.dynmap().getHiddenFactions();
 
-        if (!visible.isEmpty() && !visible.contains(factionId) && !visible.contains(factionName) && !visible.contains("world:" + world)) {
+        if (!visible.isEmpty() && !visible.contains(factionId) && !visible.contains(factionTag) && !visible.contains("world:" + world)) {
             return false;
         }
 
-        return !hidden.contains(factionId) && !hidden.contains(factionName) && !hidden.contains("world:" + world);
+        return !hidden.contains(factionId) && !hidden.contains(factionTag) && !hidden.contains("world:" + world);
     }
 
     // Thread Safe / Asynchronous: Yes
