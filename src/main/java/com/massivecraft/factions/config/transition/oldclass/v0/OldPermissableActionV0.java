@@ -1,7 +1,7 @@
 package com.massivecraft.factions.config.transition.oldclass.v0;
 
-import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
+import com.massivecraft.factions.perms.PermissibleActions;
 
 public enum OldPermissableActionV0 {
     BAN("ban", PermissibleActions.BAN),

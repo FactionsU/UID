@@ -30,7 +30,7 @@ public enum FactionTag implements Tag {
     }),
     LEADER("leader", (fac) -> {
         FPlayer fAdmin = fac.getFPlayerAdmin();
-        return fAdmin == null ? "Server" : fAdmin.getName().substring(0, fAdmin.getName().length() > 14 ? 13 : fAdmin.getName().length());
+        return fAdmin == null ? TL.TAG_LEADER_OWNERLESS.toString() : fAdmin.getName().substring(0, fAdmin.getName().length() > 14 ? 13 : fAdmin.getName().length());
     }),
     JOINING("joining", (fac) -> (fac.getOpen() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString())),
     @SuppressWarnings("Convert2MethodRef")

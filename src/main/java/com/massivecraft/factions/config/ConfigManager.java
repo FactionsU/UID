@@ -1,10 +1,10 @@
 package com.massivecraft.factions.config;
 
 import com.massivecraft.factions.FactionsPlugin;
-import com.massivecraft.factions.config.file.DefaultOfflinePermissionsConfig;
-import com.massivecraft.factions.config.file.DefaultPermissionsConfig;
 import com.massivecraft.factions.config.file.DynmapConfig;
 import com.massivecraft.factions.config.file.MainConfig;
+import com.massivecraft.factions.config.file.PermissionsConfig;
+import com.massivecraft.factions.config.file.TranslationsConfig;
 import com.massivecraft.factions.config.transition.Transitioner;
 
 import java.io.IOException;
@@ -12,23 +12,23 @@ import java.util.logging.Level;
 
 public class ConfigManager {
     private final FactionsPlugin plugin;
-    private final DefaultPermissionsConfig permissionsConfig = new DefaultPermissionsConfig();
-    private final DefaultOfflinePermissionsConfig offlinePermissionsConfig = new DefaultOfflinePermissionsConfig();
+    private PermissionsConfig permissionsConfig = null;
     private final MainConfig mainConfig = new MainConfig();
     private final DynmapConfig dynmapConfig = new DynmapConfig();
+    private final TranslationsConfig translationsConfig = new TranslationsConfig();
 
     public ConfigManager(FactionsPlugin plugin) {
         this.plugin = plugin;
-    }
-
-    public void startup() {
         Transitioner.transition(this.plugin);
-        this.loadConfigs();
     }
 
     public void loadConfigs() {
-        this.loadConfig("default_permissions", this.permissionsConfig);
-        this.loadConfig("default_permissions_offline", this.offlinePermissionsConfig);
+        if (this.permissionsConfig == null) {
+            this.permissionsConfig = new PermissionsConfig();
+        }
+
+        this.loadConfig("translations", this.translationsConfig);
+        this.loadConfig("permissions", this.permissionsConfig);
         this.loadConfig("main", this.mainConfig);
         this.loadConfig("dynmap", this.dynmapConfig);
     }
@@ -37,24 +37,12 @@ public class ConfigManager {
         try {
             Loader.loadAndSave(name, config);
         } catch (IOException | IllegalAccessException e) {
-            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Could not load config '" + name + ".conf'", e);
+            this.plugin.getLogger().log(Level.SEVERE, "Could not load config '" + name + ".conf'", e);
         }
     }
 
-    public DefaultPermissionsConfig getPermissionsConfig() {
+    public PermissionsConfig getPermissionsConfig() {
         return this.permissionsConfig;
-    }
-
-    public DefaultOfflinePermissionsConfig getOfflinePermissionsConfig() {
-        return this.offlinePermissionsConfig;
-    }
-
-    public DefaultPermissionsConfig.Permissions getDefaultPermissions(boolean online) {
-        if (online || !this.mainConfig.factions().other().isSeparateOfflinePerms()) {
-            return this.permissionsConfig.getPermissions();
-        } else {
-            return this.offlinePermissionsConfig.getPermissions();
-        }
     }
 
     public MainConfig getMainConfig() {
@@ -62,6 +50,10 @@ public class ConfigManager {
     }
 
     public DynmapConfig getDynmapConfig() {
-        return dynmapConfig;
+        return this.dynmapConfig;
+    }
+
+    public TranslationsConfig getTranslationsConfig() {
+        return this.translationsConfig;
     }
 }

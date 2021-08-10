@@ -4,7 +4,7 @@
 
     <groupId>com.massivecraft</groupId>
     <artifactId>Factions-aggregator</artifactId>
-    <version>1.6.9.5-U0.5.25</version>
+    <version>1.6.9.5-U0.6.0</version>
     <packaging>pom</packaging>
 
     <name>Factions Aggregator Project</name>
@@ -16,6 +16,7 @@
     <modules>
         <module>modules/Legacy</module>
         <module>modules/Main</module>
+        <module>modules/FinalCombination</module>
     </modules>
 
     <build>

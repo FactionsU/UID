@@ -26,7 +26,7 @@ import java.util.Set;
 public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @Comment("Don't change this value yourself, unless you WANT a broken config!")
-        private int version = 5;
+        private int version = 6;
 
         @Comment("Debug\n" +
                 "Turn this on if you are having issues with something and working on resolving them.\n" +
@@ -932,6 +932,10 @@ public class MainConfig {
             private String modChatFormat = "\u00A7c%s:\u00A7f %s";
             private boolean broadcastDescriptionChanges = false;
             private boolean broadcastTagChanges = false;
+            @Comment("Add items here (comma-separated) for commands to listen to that will auto-return the user to public chat")
+            private List<String> triggerPublicChatOnCommand = new ArrayList<>();
+            @WipeOnReload
+            private transient List<String> triggerPublicChatLowerCased;
 
             public boolean isFactionOnlyChat() {
                 return factionOnlyChat;
@@ -999,6 +1003,20 @@ public class MainConfig {
 
             public boolean isBroadcastTagChanges() {
                 return broadcastTagChanges;
+            }
+
+            public List<String> getTriggerPublicChatOnCommand() {
+                if (triggerPublicChatLowerCased == null) {
+                    triggerPublicChatLowerCased = new ArrayList<>();
+                    if (triggerPublicChatOnCommand != null) {
+                        triggerPublicChatOnCommand.forEach(c -> triggerPublicChatLowerCased.add(c.toLowerCase()));
+                    }
+                }
+                return triggerPublicChatLowerCased;
+            }
+
+            public boolean isTriggerPublicChat(String command) {
+                return getTriggerPublicChatOnCommand().contains(command.toLowerCase());
             }
         }
 
@@ -1948,9 +1966,6 @@ public class MainConfig {
             private double considerFactionsReallyOfflineAfterXMinutes = 0.0;
             private int actionDeniedPainAmount = 1;
 
-            @Comment("If enabled, perms can be managed separately for when the faction is offline")
-            private boolean separateOfflinePerms = false;
-
             @Comment("Should we delete player homes that they set via Essentials when they leave a Faction\n" +
                     "if they have homes set in that Faction's territory?")
             private boolean deleteEssentialsHomes = true;
@@ -2003,10 +2018,6 @@ public class MainConfig {
                     }
                 }
                 return defaultRoleRole;
-            }
-
-            public boolean isSeparateOfflinePerms() {
-                return separateOfflinePerms;
             }
 
             public boolean isAllowMultipleColeaders() {

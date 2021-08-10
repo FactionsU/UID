@@ -39,8 +39,6 @@ public class CmdHome extends FCommand {
 
     @Override
     public void perform(final CommandContext context) {
-        // TODO: Hide this command on help also.
-
         Faction targetFaction = context.argAsFaction(0, context.fPlayer == null ? null : context.faction);
 
         if (targetFaction != context.faction && context.fPlayer.isAdminBypassing()) {
@@ -64,7 +62,7 @@ public class CmdHome extends FCommand {
 
         if (!targetFaction.hasHome()) {
             if (targetFaction == context.faction) {
-                if (context.faction.hasAccess(context.fPlayer, PermissibleActions.SETHOME)) {
+                if (context.faction.hasAccess(context.fPlayer, PermissibleActions.SETHOME, context.fPlayer.getLastStoodAt())) {
                     context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString() + TL.GENERIC_YOUSHOULD.toString());
                 } else {
                     context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString() + TL.GENERIC_ASKYOURLEADER.toString());
@@ -76,7 +74,7 @@ public class CmdHome extends FCommand {
             return;
         }
 
-        if (!targetFaction.hasAccess(context.fPlayer, PermissibleActions.HOME)) {
+        if (!targetFaction.hasAccess(context.fPlayer, PermissibleActions.HOME, context.fPlayer.getLastStoodAt())) {
             context.fPlayer.msg(TL.COMMAND_HOME_DENIED, targetFaction.getTag(context.fPlayer));
             return;
         }

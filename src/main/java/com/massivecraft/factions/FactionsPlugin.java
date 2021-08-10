@@ -7,10 +7,12 @@ import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.cmd.FCmdRoot;
 import com.massivecraft.factions.config.ConfigManager;
 import com.massivecraft.factions.config.file.MainConfig;
+import com.massivecraft.factions.config.file.TranslationsConfig;
 import com.massivecraft.factions.data.SaveTask;
 import com.massivecraft.factions.event.FactionCreateEvent;
 import com.massivecraft.factions.event.FactionEvent;
 import com.massivecraft.factions.event.FactionRelationEvent;
+import com.massivecraft.factions.event.FactionsPluginRegistrationTimeEvent;
 import com.massivecraft.factions.integration.ClipPlaceholderAPIManager;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.integration.Essentials;
@@ -33,10 +35,11 @@ import com.massivecraft.factions.listeners.OneFourteenPlusListener;
 import com.massivecraft.factions.listeners.versionspecific.PortalHandler;
 import com.massivecraft.factions.listeners.versionspecific.PortalListenerLegacy;
 import com.massivecraft.factions.listeners.versionspecific.PortalListener_114;
+import com.massivecraft.factions.perms.PermSelector;
+import com.massivecraft.factions.perms.PermSelectorRegistry;
+import com.massivecraft.factions.perms.PermSelectorTypeAdapter;
 import com.massivecraft.factions.perms.Permissible;
-import com.massivecraft.factions.perms.PermissibleActions;
-import com.massivecraft.factions.perms.PermissibleAction;
-import com.massivecraft.factions.perms.PermissionsMapTypeAdapter;
+import com.massivecraft.factions.perms.PermissibleActionRegistry;
 import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.util.AutoLeaveTask;
 import com.massivecraft.factions.util.EnumTypeAdapter;
@@ -58,6 +61,7 @@ import com.massivecraft.factions.util.particle.PacketParticleProvider;
 import com.massivecraft.factions.util.particle.ParticleProvider;
 import com.mojang.authlib.GameProfile;
 import io.papermc.lib.PaperLib;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -125,7 +129,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return mcVersion;
     }
 
-    private final ConfigManager configManager = new ConfigManager(this);
+    private ConfigManager configManager;
 
     private Integer saveTask = null;
     private boolean autoSave = true;
@@ -187,6 +191,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     public final boolean likesCats = Arrays.stream(FactionsPlugin.class.getDeclaredMethods()).anyMatch(m -> m.isSynthetic() && m.getName().startsWith("loadCon") && m.getName().endsWith("0"));
     private boolean gottaSlapEssentials;
     private Method getOffline;
+    private BukkitAudiences adventure;
 
     public FactionsPlugin() {
         instance = this;
@@ -219,6 +224,14 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                 return; // My work here is done.
             }
 
+            Map<String, Object> data = new Gson().fromJson(new String(Files.readAllBytes(dataFolder.resolve("factions.json"))), new TypeToken<Map<String, Object>>() {
+            }.getType());
+
+            if (data == null || data.isEmpty()) {
+                Files.write(conversionCompleteFile, "Do not delete unless you want to waste time at startup!".getBytes(StandardCharsets.UTF_8));
+                return;
+            }
+
             this.getLogger().info("");
             this.getLogger().info("     We interrupt this server startup for an important message");
             this.getLogger().info("");
@@ -227,9 +240,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             this.getLogger().info("  bank data present, so this plugin will attempt to move any such");
             this.getLogger().info("  accounts in a one-time event");
             this.getLogger().info("");
-
-            Map<String, Object> data = new Gson().fromJson(new String(Files.readAllBytes(dataFolder.resolve("factions.json"))), new TypeToken<Map<String, Object>>() {
-            }.getType());
 
             int count = 0;
             for (String faction : data.keySet()) {
@@ -283,6 +293,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     @Override
     public void onEnable() {
         this.loadSuccessful = false;
+        this.adventure = BukkitAudiences.create(this);
         StringBuilder startupBuilder = new StringBuilder();
         StringBuilder startupExceptionBuilder = new StringBuilder();
         Handler handler = new Handler() {
@@ -378,10 +389,12 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         this.getLogger().info("Server UUID " + this.serverUUID);
 
         loadLang();
-        this.gson = this.getGsonBuilder().create();
 
         // Load Conf from disk
-        this.configManager.startup();
+        this.configManager = new ConfigManager(this);
+        this.configManager.loadConfigs();
+
+        this.gson = this.getGsonBuilder().create();
 
         if (this.conf().data().json().useEfficientStorage()) {
             getLogger().info("Using space efficient (less readable) storage.");
@@ -523,9 +536,22 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         new BukkitRunnable() {
             @Override
             public void run() {
+                getServer().getPluginManager().callEvent(new FactionsPluginRegistrationTimeEvent());
+
+                try {
+                    Method close = PermissibleActionRegistry.class.getDeclaredMethod("close");
+                    close.setAccessible(true);
+                    close.invoke(null);
+                    close = PermSelectorRegistry.class.getDeclaredMethod("close");
+                    close.setAccessible(true);
+                    close.invoke(null);
+                } catch (Exception e) {
+                    getLogger().log(Level.SEVERE, "Failed to close registries", e);
+                }
                 if (FactionsPlugin.this.gottaSlapEssentials) {
                     FactionsPlugin.this.getServer().dispatchCommand(FactionsPlugin.this.getServer().getConsoleSender(), "baltop force");
                 }
+
                 Econ.setup();
                 vaultPerms = new VaultPerms();
                 cmdBase.done();
@@ -933,6 +959,10 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.configManager.getMainConfig();
     }
 
+    public TranslationsConfig tl() {
+        return this.configManager.getTranslationsConfig();
+    }
+
     public LandRaidControl getLandRaidControl() {
         return this.landRaidControl;
     }
@@ -978,7 +1008,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                 .disableHtmlEscaping()
                 .enableComplexMapKeySerialization()
                 .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
-                .registerTypeAdapter(accessType, new PermissionsMapTypeAdapter())
+                .registerTypeAdapter(PermSelector.class, new PermSelectorTypeAdapter())
                 .registerTypeAdapter(LazyLocation.class, new MyLocationTypeAdapter())
                 .registerTypeAdapter(mapFLocToStringSetType, new MapFLocToStringSetTypeAdapter())
                 .registerTypeAdapterFactory(EnumTypeAdapter.ENUM_FACTORY);
@@ -1005,6 +1035,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             LuckPerms.shutdown(this);
         }
         ContextManager.shutdown();
+        this.adventure.close();
         log("Disabled");
     }
 
@@ -1063,7 +1094,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     @Override
     public boolean shouldLetFactionsHandleThisChat(AsyncPlayerChatEvent event) {
-        return event != null && (isPlayerFactionChatting(event.getPlayer()) || isFactionsCommand(event.getMessage()));
+        return event != null && isPlayerFactionChatting(event.getPlayer());
     }
 
     // Does player have Faction Chat enabled? If so, chat plugins should preferably not do channels,
@@ -1079,12 +1110,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     }
 
     // Is this chat message actually a Factions command, and thus should be left alone by other plugins?
-
-    // TODO: GET THIS BACK AND WORKING
-
-    public boolean isFactionsCommand(String check) {
-        return !(check == null || check.isEmpty()); //&& this.handleCommand(null, check, true);
-    }
 
     // Get a player's faction tag (faction name), mainly for usage by chat plugins for local/channel chat
     @Override
@@ -1202,6 +1227,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.getOfflinePlayer(name, UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
     }
 
+    @SuppressWarnings("deprecation")
     public OfflinePlayer getOfflinePlayer(String name, UUID uuid) {
         if (this.getOffline != null) {
             try {
@@ -1212,5 +1238,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             }
         }
         return this.getServer().getOfflinePlayer(name);
+    }
+
+    public BukkitAudiences getAdventure() {
+        return this.adventure;
     }
 }

@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum Role implements Permissible {
-    @SerializedName(value="ADMIN", alternate = {"LEADER"}) // Import
+    @SerializedName(value = "ADMIN", alternate = {"LEADER"}) // Import
     ADMIN(4, TL.ROLE_ADMIN),
     COLEADER(3, TL.ROLE_COLEADER),
     MODERATOR(2, TL.ROLE_MODERATOR),

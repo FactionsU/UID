@@ -3,6 +3,7 @@ package com.massivecraft.factions;
 import com.massivecraft.factions.iface.EconomyParticipator;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
+import com.massivecraft.factions.perms.Selectable;
 import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.util.WarmUpUtil;
 import mkremins.fanciful.FancyMessage;
@@ -24,7 +25,7 @@ import java.util.List;
  * necessary.
  */
 
-public interface FPlayer extends EconomyParticipator {
+public interface FPlayer extends EconomyParticipator, Selectable {
     void login();
 
     void logout();
@@ -243,6 +244,8 @@ public interface FPlayer extends EconomyParticipator {
 
     void setId(String id);
 
+    void flightCheck();
+
     boolean isFlying();
 
     void setFlying(boolean fly);
@@ -257,7 +260,10 @@ public interface FPlayer extends EconomyParticipator {
 
     boolean canFlyAtLocation(FLocation location);
 
-    boolean canFlyInFactionTerritory(Faction faction);
+    @Deprecated
+    default boolean canFlyInFactionTerritory(Faction faction) {
+        return false;
+    }
 
     boolean isSeeingChunk();
 

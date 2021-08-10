@@ -8,7 +8,6 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.perms.PermissibleActions;
-import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Location;
@@ -256,7 +255,8 @@ public class FactionsEntityListener extends AbstractListener {
     }
 
     public static boolean canDamage(Entity damager, Entity damagee, boolean notify) {
-        Faction defLocFaction = Board.getInstance().getFactionAt(new FLocation(damagee.getLocation()));
+        FLocation defLoc = new FLocation(damagee.getLocation());
+        Faction defLocFaction = Board.getInstance().getFactionAt(defLoc);
 
         // for damage caused by projectiles, getDamager() returns the projectile... what we need to know is the source
         if (damager instanceof Projectile) {
@@ -313,7 +313,7 @@ public class FactionsEntityListener extends AbstractListener {
             }
             if (FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockEntityDamageMatchingPerms() && damager instanceof Player && defLocFaction.isNormal()) {
                 FPlayer fPlayer = FPlayers.getInstance().getByPlayer((Player) damager);
-                if (!defLocFaction.hasAccess(fPlayer, PermissibleActions.DESTROY)) {
+                if (!defLocFaction.hasAccess(fPlayer, PermissibleActions.DESTROY, defLoc)) {
                     if (notify) {
                         fPlayer.msg(TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.getTag(FPlayers.getInstance().getByPlayer((Player) damager))));
                     }

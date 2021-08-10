@@ -18,7 +18,6 @@ import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.perms.PermissibleActions;
-import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.scoreboards.FScoreboard;
@@ -771,7 +770,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public boolean canClaimForFaction(Faction forFaction) {
-        return this.isAdminBypassing() || !forFaction.isWilderness() && (forFaction == this.getFaction() && this.getFaction().hasAccess(this, PermissibleActions.TERRITORY)) || (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(getPlayer())) || (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(getPlayer()));
+        return this.isAdminBypassing() || !forFaction.isWilderness() && (forFaction == this.getFaction() && this.getFaction().hasAccess(this, PermissibleActions.TERRITORY, null)) || (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(getPlayer())) || (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(getPlayer()));
     }
 
     // Not used
@@ -803,7 +802,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(getPlayer())) {
             // Warzone and can claim for such
             return true;
-        } else if (!forFaction.hasAccess(this, PermissibleActions.TERRITORY)) {
+        } else if (!forFaction.hasAccess(this, PermissibleActions.TERRITORY, null)) {
             // Lacking perms to territory claim
             denyReason = plugin.txt().parse(TL.CLAIM_CANTCLAIM.toString(), forFaction.describeTo(this));
         } else if (forFaction == currentFaction) {
@@ -900,7 +899,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 cost += FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee();
             }
 
-            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysLandCosts() && this.hasFaction() && this.getFaction().hasAccess(this, PermissibleActions.ECONOMY)) {
+            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysLandCosts() && this.hasFaction() && this.getFaction().hasAccess(this, PermissibleActions.ECONOMY, null)) {
                 payee = this.getFaction();
             } else {
                 payee = this;
@@ -983,6 +982,18 @@ public abstract class MemoryFPlayer implements FPlayer {
         return !isOnline();
     }
 
+    public void flightCheck() {
+        // Check the location they're teleporting to and check if they can fly there.
+        if (FactionsPlugin.getInstance().conf().commands().fly().isEnable() && !this.isAdminBypassing()) {
+            boolean canFly = this.canFlyAtLocation(this.getLastStoodAt());
+            if (this.isFlying() && !canFly) {
+                this.setFlying(false, false);
+            } else if (this.isAutoFlying() && !this.isFlying() && canFly) {
+                this.setFlying(true);
+            }
+        }
+    }
+
     public boolean isFlying() {
         return isFlying;
     }
@@ -1039,10 +1050,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public boolean canFlyAtLocation(FLocation location) {
-        return this.canFlyInFactionTerritory(Board.getInstance().getFactionAt(location));
-    }
-
-    public boolean canFlyInFactionTerritory(Faction faction) {
+        Faction faction = Board.getInstance().getFactionAt(location);
         if (faction.isWilderness()) {
             return Permission.FLY_WILDERNESS.has(getPlayer());
         } else if (faction.isSafeZone()) {
@@ -1056,7 +1064,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             return true;
         }
 
-        return faction.hasAccess(this, PermissibleActions.FLY);
+        return faction.hasAccess(this, PermissibleActions.FLY, location);
     }
 
     public boolean shouldTakeFallDamage() {

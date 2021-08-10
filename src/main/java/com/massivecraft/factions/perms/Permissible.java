@@ -2,7 +2,7 @@ package com.massivecraft.factions.perms;
 
 import org.bukkit.ChatColor;
 
-public interface Permissible {
+public interface Permissible extends Selectable {
     String name();
 
     ChatColor getColor();

@@ -1,11 +1,10 @@
 package com.massivecraft.factions;
 
 import com.massivecraft.factions.iface.EconomyParticipator;
-import com.massivecraft.factions.perms.Permissible;
-import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
+import com.massivecraft.factions.perms.Selectable;
 import com.massivecraft.factions.struct.BanInfo;
 import com.massivecraft.factions.util.LazyLocation;
 import org.bukkit.Location;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public interface Faction extends EconomyParticipator {
+public interface Faction extends EconomyParticipator, Selectable {
     Map<String, List<String>> getAnnouncements();
 
     Map<String, LazyLocation> getWarps();
@@ -123,8 +122,16 @@ public interface Faction extends EconomyParticipator {
 
     boolean isNormal();
 
+    /**
+     * Players in the wilderness faction are consdiered not in a faction.
+     *
+     * @return true if wilderness
+     * @deprecated use {@link #isWilderness()} instead
+     */
     @Deprecated
-    boolean isNone();
+    default boolean isNone() {
+        return isWilderness();
+    }
 
     boolean isWilderness();
 
@@ -140,20 +147,15 @@ public interface Faction extends EconomyParticipator {
 
     int getDeaths();
 
-    boolean hasAccess(boolean online, Permissible permissible, PermissibleAction permissibleAction);
-
-    boolean hasAccess(FPlayer player, PermissibleAction permissibleAction);
-
-    boolean isLocked(boolean online, Permissible permissible, PermissibleAction permissibleAction);
-
-    boolean setPermission(boolean online, Permissible permissible, PermissibleAction permissibleAction, boolean value);
-
-    void checkPerms();
-
-    void resetPerms();
-
-    @Deprecated
-    Map<Permissible, Map<PermissibleAction, Boolean>> getPermissions();
+    /**
+     * Get the access of a selectable for a given chunk.
+     *
+     * @param selectable        selectable
+     * @param permissibleAction permissible
+     * @param location          location
+     * @return player's access
+     */
+    boolean hasAccess(Selectable selectable, PermissibleAction permissibleAction, FLocation location);
 
     int getLandRounded();
 

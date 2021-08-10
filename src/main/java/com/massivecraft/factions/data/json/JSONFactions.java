@@ -57,6 +57,10 @@ public class JSONFactions extends MemoryFactions {
 
         JSONFaction f = new JSONFaction("```storage``");
         f.setMaxVaults(this.nextId);
+        f.setDescription("Storage-only faction, not present in game. Do not touch.");
+        f.setFoundedDate(0);
+        f.getPermissions().clear();
+        f.setTag("MissingNo.");
         entitiesThatShouldBeSaved.put("```storage``", f);
         saveCore(file, entitiesThatShouldBeSaved, sync);
     }
@@ -98,7 +102,7 @@ public class JSONFactions extends MemoryFactions {
         int needsUpdate = 0;
         for (Entry<String, JSONFaction> entry : data.entrySet()) {
             String id = entry.getKey();
-            Faction f = entry.getValue();
+            MemoryFaction f = entry.getValue();
             f.checkPerms();
             f.setId(id);
             this.updateNextIdForId(id);
@@ -209,7 +213,7 @@ public class JSONFactions extends MemoryFactions {
         while (!isIdFree(this.nextId)) {
             this.nextId += 1;
         }
-        return Integer.toString(this.nextId);
+        return Integer.toString(this.nextId++);
     }
 
     public boolean isIdFree(String id) {

@@ -13,12 +13,12 @@ import com.massivecraft.factions.event.FPlayerJoinEvent;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.gui.GUI;
 import com.massivecraft.factions.perms.PermissibleActions;
-import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.scoreboards.FScoreboard;
 import com.massivecraft.factions.scoreboards.FTeamWrapper;
 import com.massivecraft.factions.scoreboards.sidebar.FDefaultSidebar;
+import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
@@ -176,9 +176,7 @@ public class FactionsPlayerListener extends AbstractListener {
         // If they have the permission, don't let them autoleave. Bad inverted setter :\
         me.setAutoLeave(!me.getPlayer().hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
         me.setTakeFallDamage(true);
-        if (plugin.conf().commands().fly().isEnable() && me.isFlying()) { // TODO allow flight to continue
-            me.setFlying(false);
-        }
+        me.flightCheck();
 
         if (FactionsPlugin.getInstance().getSeeChunkUtil() != null) {
             FactionsPlugin.getInstance().getSeeChunkUtil().updatePlayerInfo(UUID.fromString(me.getId()), me.isSeeingChunk());
@@ -292,7 +290,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         free:
         if (plugin.conf().commands().fly().isEnable() && !me.isAdminBypassing()) {
-            boolean canFly = me.canFlyInFactionTerritory(factionTo);
+            boolean canFly = me.canFlyAtLocation(to);
             if (!changedFaction) {
                 if (canFly && !canFlyPreClaim && me.isFlying() && plugin.conf().commands().fly().isDisableFlightDuringAutoclaim()) {
                     me.setFlying(false);
@@ -524,7 +522,7 @@ public class FactionsPlayerListener extends AbstractListener {
             return false;
         }
 
-        if (!otherFaction.hasAccess(me, PermissibleActions.ITEM)) {
+        if (!otherFaction.hasAccess(me, PermissibleActions.ITEM, loc)) {
             if (!justCheck) {
                 me.msg(TL.PLAYER_USE_TERRITORY, TextUtil.getMaterialName(material), otherFaction.getTag(me.getFaction()));
             }
@@ -574,24 +572,13 @@ public class FactionsPlayerListener extends AbstractListener {
             }
             return;
         }
+        FLocation to = new FLocation(event.getTo());
+        me.setLastStoodAt(to);
+        me.flightCheck();
         if (!event.getFrom().getWorld().equals(event.getTo().getWorld()) && !plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
             FactionsPlugin.getInstance().getLandRaidControl().update(me);
             this.initFactionWorld(me);
         }
-
-        FLocation to = new FLocation(event.getTo());
-        me.setLastStoodAt(to);
-
-        // Check the location they're teleporting to and check if they can fly there.
-        if (plugin.conf().commands().fly().isEnable() && !me.isAdminBypassing()) {
-            boolean canFly = me.canFlyAtLocation(to);
-            if (me.isFlying() && !canFly) {
-                me.setFlying(false, false);
-            } else if (me.isAutoFlying() && !me.isFlying() && canFly) {
-                me.setFlying(true);
-            }
-        }
-
     }
 
     // For some reason onPlayerInteract() sometimes misses bucket events depending on distance (something like 2-3 blocks away isn't detected),
@@ -779,6 +766,14 @@ public class FactionsPlayerListener extends AbstractListener {
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
             return;
+        }
+
+        String cmd = event.getMessage().split(" ")[0];
+
+        if (FactionsPlugin.getInstance().conf().factions().chat().isTriggerPublicChat(cmd.startsWith("/") ? cmd.substring(1) : cmd)) {
+            FPlayer p = FPlayers.getInstance().getByPlayer(event.getPlayer());
+            p.setChatMode(ChatMode.PUBLIC);
+            p.msg(TL.COMMAND_CHAT_MODE_PUBLIC);
         }
 
         if (FactionsPlayerListener.preventCommand(event.getMessage(), event.getPlayer())) {

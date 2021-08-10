@@ -41,7 +41,7 @@ public class CmdWarpOther extends FCommand {
             return;
         }
 
-        if (!context.fPlayer.isAdminBypassing() && !faction.hasAccess(context.fPlayer, PermissibleActions.WARP)) {
+        if (!context.fPlayer.isAdminBypassing() && !faction.hasAccess(context.fPlayer, PermissibleActions.WARP, context.fPlayer.getLastStoodAt())) {
             context.msg(TL.COMMAND_FWARP_NOACCESS, faction.getTag(context.fPlayer));
             return;
         }

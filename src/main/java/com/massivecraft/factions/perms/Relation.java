@@ -21,6 +21,7 @@ public enum Relation implements Permissible {
     Relation(final int value, final String nicename) {
         this.value = value;
         this.nicename = nicename;
+        this.justMyNameInASet = Collections.singleton(this.name().toLowerCase());
     }
 
     public static Relation fromString(String s) {
@@ -151,9 +152,6 @@ public enum Relation implements Permissible {
      * @return an immutable set of just this name
      */
     public Set<String> getNameInASet() {
-        if (this.justMyNameInASet == null) {
-            this.justMyNameInASet = Collections.singleton(this.name().toLowerCase());
-        }
         return this.justMyNameInASet;
     }
 }

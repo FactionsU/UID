@@ -7,6 +7,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.config.file.PermissionsConfig;
 import com.massivecraft.factions.event.FactionAutoDisbandEvent;
 import com.massivecraft.factions.event.FactionNewAdminEvent;
 import com.massivecraft.factions.iface.EconomyParticipator;
@@ -15,12 +16,11 @@ import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.landraidcontrol.LandRaidControl;
-import com.massivecraft.factions.perms.Permissible;
+import com.massivecraft.factions.perms.PermSelector;
 import com.massivecraft.factions.perms.PermissibleAction;
-import com.massivecraft.factions.perms.PermissibleActions;
-import com.massivecraft.factions.perms.PermissiblePermDefaultInfo;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
+import com.massivecraft.factions.perms.Selectable;
 import com.massivecraft.factions.struct.BanInfo;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.LazyLocation;
@@ -34,15 +34,16 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected String id = null;
@@ -68,8 +69,8 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     private long lastDeath;
     protected int maxVaults;
     protected Role defaultRole;
-    protected Map<Permissible, Map<String, Boolean>> permissions = new HashMap<>();
-    protected Map<Permissible, Map<String, Boolean>> permissionsOffline = new HashMap<>();
+    protected LinkedHashMap<PermSelector, Map<String, Boolean>> permissions = new LinkedHashMap<>();
+    protected List<PermSelector> permissionsOrder = new ArrayList<>();
     protected Set<BanInfo> bans = new HashSet<>();
     protected double dtr;
     protected long lastDTRUpdateTime;
@@ -362,178 +363,65 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     // F Permissions stuff
     // -------------------------------------------- //
 
-
-    public boolean hasAccess(boolean online, Permissible permissible, PermissibleAction permissibleAction) {
-        if (permissible == null || permissibleAction == null) {
+    public boolean hasAccess(Selectable selectable, PermissibleAction permissibleAction, FLocation location) {
+        if (selectable == null || permissibleAction == null) {
             return false; // Fail in a safe way
         }
-        if (permissible == Role.ADMIN) {
+
+        if (selectable == Role.ADMIN || (selectable instanceof FPlayer && ((FPlayer) selectable).getRole() == Role.ADMIN)) {
             return true;
         }
 
-        Map<Permissible, Map<String, Boolean>> permissionsMap = this.getPermissionsMap(online);
-
-        PermissiblePermDefaultInfo permInfo = permissibleAction.getDefaultPermInfo(online, permissible);
-        if (permInfo == null) { // Not valid lookup, like a role-only lookup of a relation
-            return false;
-        }
-        if (permInfo.isLocked()) { // Locked, so ignore the faction's setting
-            return permInfo.defaultAllowed();
-        }
-
-        Map<String, Boolean> accessMap = permissionsMap.get(permissible);
-        if (accessMap != null && accessMap.containsKey(permissibleAction.getName())) {
-            return accessMap.get(permissibleAction.getName());
+        PermissionsConfig permConf = FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig();
+        List<PermSelector> priority = permConf.getOverridePermissionsOrder().stream().filter(s -> s.test(selectable, this)).collect(Collectors.toList());
+        for (PermSelector selector : priority) {
+            Boolean bool = permConf.getOverridePermissions().get(selector).get(permissibleAction.getName());
+            if (bool != null) {
+                return bool;
+            }
         }
 
-        return permInfo.defaultAllowed(); // Fall back on default if something went wrong
+        if (location != null) {
+            // TODO migrate ownership stuffs
+        }
+
+        List<PermSelector> applicable = this.permissionsOrder.stream().filter(s -> s.test(selectable, this)).collect(Collectors.toList());
+        for (PermSelector selector : applicable) {
+            Boolean bool = this.permissions.get(selector).get(permissibleAction.getName());
+            if (bool != null) {
+                return bool;
+            }
+        }
+
+        return false;
     }
 
-    public boolean isLocked(boolean online, Permissible permissible, PermissibleAction permissibleAction) {
-        PermissiblePermDefaultInfo permInfo = permissibleAction.getDefaultPermInfo(online, permissible);
-        if (permInfo == null) { // Not valid lookup, like a role-only lookup of a relation
-            return false;
-        }
-        return permInfo.isLocked();
+    public LinkedHashMap<PermSelector, Map<String, Boolean>> getPermissions() {
+        return permissions;
     }
 
-    private Map<Permissible, Map<String, Boolean>> getPermissionsMap(boolean online) {
-        if (online || !FactionsPlugin.getInstance().conf().factions().other().isSeparateOfflinePerms()) {
-            return this.permissions;
-        } else {
-            return this.permissionsOffline;
-        }
-    }
-
-    /**
-     * Get the Access of a player. Will use player's Role if they are a faction member. Otherwise, uses their Relation.
-     *
-     * @param player            player
-     * @param permissibleAction permissible
-     * @return player's access
-     */
-    public boolean hasAccess(FPlayer player, PermissibleAction permissibleAction) {
-        if (player == null || permissibleAction == null) {
-            return false; // Fail in a safe way
-        }
-
-        Permissible perm;
-        boolean online = true;
-        if (player.getFaction() == this) {
-            perm = player.getRole();
-        } else {
-            perm = player.getFaction().getRelationTo(this);
-            online = this.hasPlayersOnline();
-        }
-
-        return this.hasAccess(online, perm, permissibleAction);
-    }
-
-    public boolean setPermission(boolean online, Permissible permissible, PermissibleAction permissibleAction, boolean value) {
-        Map<Permissible, Map<String, Boolean>> permissionsMap = this.getPermissionsMap(online);
-
-        PermissiblePermDefaultInfo permInfo = permissibleAction.getDefaultPermInfo(online, permissible);
-        if (permInfo == null || permInfo.isLocked()) {
-            return false; // Locked, can't continue;
-        }
-
-        Map<String, Boolean> accessMap = permissionsMap.get(permissible);
-        if (accessMap == null) {
-            accessMap = new HashMap<>();
-        }
-
-        accessMap.put(permissibleAction.getName(), value);
-        return true;
+    public void setPermissions(LinkedHashMap<PermSelector, Map<String, Boolean>> permissions) {
+        this.permissions = permissions;
     }
 
     public void checkPerms() {
         if (this.permissions == null || this.permissions.isEmpty()) {
             this.resetPerms();
+        }
+    }
+
+    private void resetPerms() {
+        if (permissions == null) {
+            permissions = new LinkedHashMap<>();
         } else {
-            this.updatePerms(this.permissions, true);
-            this.updatePerms(this.permissionsOffline, false);
-        }
-    }
-
-    public void resetPerms() {
-        // FactionsPlugin.getInstance().log(Level.WARNING, "Resetting permissions for Faction: " + tag);
-
-        this.resetPerms(this.permissions, true);
-        this.resetPerms(this.permissionsOffline, false);
-    }
-
-    private void resetPerms(Map<Permissible, Map<String, Boolean>> permissions, boolean online) {
-        permissions.clear();
-
-        for (Relation relation : Relation.values()) {
-            if (relation != Relation.MEMBER) {
-                permissions.put(relation, new HashMap<>());
-            }
-        }
-        if (online) {
-            for (Role role : Role.values()) {
-                if (role != Role.ADMIN) {
-                    permissions.put(role, new HashMap<>());
-                }
-            }
+            permissions.clear();
         }
 
-        for (Map.Entry<Permissible, Map<String, Boolean>> entry : permissions.entrySet()) {
-            for (PermissibleAction permissibleAction : PermissibleActions.values()) {
-                if (permissibleAction.isFactionOnly()) {
-                    if (online && !(entry.getKey() instanceof Relation)) {
-                        entry.getValue().put(permissibleAction.getName(), permissibleAction.getDefaultPermInfo(true, entry.getKey()).defaultAllowed());
-                    }
-                } else {
-                    entry.getValue().put(permissibleAction.getName(), permissibleAction.getDefaultPermInfo(online, entry.getKey()).defaultAllowed());
-                }
-            }
+        PermissionsConfig permConf = FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig();
+        for (PermSelector selector : permConf.getDefaultPermissionsOrder()) {
+            Map<String, Boolean> map = new LinkedHashMap<>(permConf.getDefaultPermissions().get(selector));
+            permissions.put(selector, map);
         }
-    }
-
-    private void updatePerms(Map<Permissible, Map<String, Boolean>> permissions, boolean online) {
-        for (Relation relation : Relation.values()) {
-            if (relation != Relation.MEMBER) {
-                permissions.computeIfAbsent(relation, p -> new HashMap<>());
-            }
-        }
-        if (online) {
-            for (Role role : Role.values()) {
-                if (role != Role.ADMIN) {
-                    permissions.computeIfAbsent(role, p -> new HashMap<>());
-                }
-            }
-        }
-
-        for (Map.Entry<Permissible, Map<String, Boolean>> entry : permissions.entrySet()) {
-            for (PermissibleAction permissibleAction : PermissibleActions.values()) {
-                if (permissibleAction.isFactionOnly()) {
-                    if (online && !(entry.getKey() instanceof Relation)) {
-                        entry.getValue().computeIfAbsent(permissibleAction.getName(), p -> permissibleAction.getDefaultPermInfo(true, entry.getKey()).defaultAllowed());
-                    }
-                } else if (online || (entry.getKey() instanceof Relation)) {
-                    entry.getValue().computeIfAbsent(permissibleAction.getName(), p -> permissibleAction.getDefaultPermInfo(online, entry.getKey()).defaultAllowed());
-                }
-            }
-            entry.getValue().remove(null);
-        }
-    }
-
-    /**
-     * Read only map of Permissions.
-     *
-     * @return map of permissions
-     */
-    public Map<Permissible, Map<PermissibleAction, Boolean>> getPermissions() {
-        Map<Permissible, Map<PermissibleAction, Boolean>> map = new HashMap<>();
-        for (Entry<Permissible, Map<String, Boolean>> entry : this.permissions.entrySet()) {
-            Map<PermissibleAction, Boolean> m = new HashMap<>();
-            for (PermissibleAction action : PermissibleActions.values()) {
-                m.put(action, entry.getValue().get(action.getName()));
-            }
-            map.put(entry.getKey(), m);
-        }
-        return Collections.unmodifiableMap(map);
     }
 
     public Role getDefaultRole() {
@@ -610,10 +498,6 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
     public boolean isNormal() {
         return !(this.isWilderness() || this.isSafeZone() || this.isWarZone());
-    }
-
-    public boolean isNone() {
-        return this.getId().equals("0");
     }
 
     public boolean isWilderness() {
@@ -799,7 +683,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
     public boolean isPowerFrozen() {
         int freezeSeconds = FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getPowerFreeze();
-        return freezeSeconds != 0 && System.currentTimeMillis() - lastDeath < freezeSeconds * 1000;
+        return freezeSeconds != 0 && System.currentTimeMillis() - lastDeath < freezeSeconds * 1000L;
     }
 
     public int getLandRounded() {
