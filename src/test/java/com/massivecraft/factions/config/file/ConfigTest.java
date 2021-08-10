@@ -14,7 +14,7 @@ public class ConfigTest {
 
     @Test
     public void testPerms() {
-        testConfig(new DefaultPermissionsConfig());
+        testConfig(new PermissionsConfig());
     }
 
     private void testConfig(Object o) {

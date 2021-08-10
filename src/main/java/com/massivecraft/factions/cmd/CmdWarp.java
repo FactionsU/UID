@@ -32,7 +32,7 @@ public class CmdWarp extends FCommand {
     public void perform(CommandContext context) {
         // TODO: check if in combat.
 
-        if (!context.faction.hasAccess(context.fPlayer, PermissibleActions.WARP)) {
+        if (!context.faction.hasAccess(context.fPlayer, PermissibleActions.WARP, context.fPlayer.getLastStoodAt())) {
             context.msg(TL.COMMAND_FWARP_NOACCESS, context.faction.getTag(context.fPlayer));
             return;
         }

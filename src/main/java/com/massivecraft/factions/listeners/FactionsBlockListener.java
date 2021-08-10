@@ -7,8 +7,8 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.MainConfig;
-import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -182,16 +182,15 @@ public class FactionsBlockListener implements Listener {
 
     private boolean canPistonMoveBlock(Faction pistonFaction, List<Block> blocks, BlockFace direction) {
         String world = blocks.get(0).getWorld().getName();
-        List<Faction> factions = (direction == null ? blocks.stream() : blocks.stream().map(b -> b.getRelative(direction)))
+        List<FLocation> locations = (direction == null ? blocks.stream() : blocks.stream().map(b -> b.getRelative(direction)))
                 .map(Block::getLocation)
                 .map(FLocation::new)
-                .distinct()
-                .map(Board.getInstance()::getFactionAt)
                 .distinct()
                 .collect(Collectors.toList());
 
         boolean disableOverall = FactionsPlugin.getInstance().conf().factions().other().isDisablePistonsInTerritory();
-        for (Faction otherFaction : factions) {
+        for (FLocation location : locations) {
+            Faction otherFaction = Board.getInstance().getFactionAt(location);
             if (pistonFaction == otherFaction) {
                 continue;
             }
@@ -207,7 +206,7 @@ public class FactionsBlockListener implements Listener {
                 return false;
             }
             Relation rel = pistonFaction.getRelationTo(otherFaction);
-            if (!otherFaction.hasAccess(otherFaction.hasPlayersOnline(), rel, PermissibleActions.BUILD)) {
+            if (!otherFaction.hasAccess(rel, PermissibleActions.BUILD, location)) {
                 return false;
             }
         }
@@ -303,10 +302,10 @@ public class FactionsBlockListener implements Listener {
         }
 
         Faction myFaction = me.getFaction();
-        boolean pain = !justCheck && otherFaction.hasAccess(me, PermissibleActions.PAINBUILD);
+        boolean pain = !justCheck && otherFaction.hasAccess(me, PermissibleActions.PAINBUILD, loc);
 
         // If the faction hasn't: defined access or denied, fallback to config values
-        if (!otherFaction.hasAccess(me, permissibleAction)) {
+        if (!otherFaction.hasAccess(me, permissibleAction, loc)) {
             if (pain && permissibleAction != PermissibleActions.FROSTWALK) {
                 player.damage(conf.factions().other().getActionDeniedPainAmount());
                 me.msg(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.getShortDescription(), otherFaction.getTag(myFaction));

@@ -63,7 +63,7 @@ public class CmdClaimFill extends FCommand {
 
         if (!bypass &&
                 (
-                        (forFaction.isNormal() && !forFaction.hasAccess(context.fPlayer, PermissibleActions.TERRITORY))
+                        (forFaction.isNormal() && !forFaction.hasAccess(context.fPlayer, PermissibleActions.TERRITORY, null))
                                 ||
                                 (forFaction.isWarZone() && !Permission.MANAGE_WAR_ZONE.has(context.player))
                                 ||

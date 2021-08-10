@@ -5,7 +5,6 @@ import com.massivecraft.factions.util.TL;
 
 public class CmdLock extends FCommand {
 
-    // TODO: This solution needs refactoring.
     /*
        factions.lock:
 	description: use the /f lock [on/off] command to temporarily lock the data files from being overwritten

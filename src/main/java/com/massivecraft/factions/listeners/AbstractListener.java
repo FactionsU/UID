@@ -7,8 +7,8 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.MainConfig;
-import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
+import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
@@ -78,7 +78,7 @@ public abstract class AbstractListener implements Listener {
             return false;
         }
 
-        boolean access = otherFaction.hasAccess(me, PermissibleActions.ITEM);
+        boolean access = otherFaction.hasAccess(me, PermissibleActions.ITEM, loc);
 
         // Cancel if we are not in our own territory
         if (!access) {
@@ -324,7 +324,7 @@ public abstract class AbstractListener implements Listener {
         }
 
         // F PERM check runs through before other checks.
-        if (!otherFaction.hasAccess(me, action)) {
+        if (!otherFaction.hasAccess(me, action, loc)) {
             if (action != PermissibleActions.PLATE) {
                 me.msg(TL.GENERIC_NOPERMISSION, action);
             }

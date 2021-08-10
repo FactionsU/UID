@@ -2,7 +2,6 @@ package com.massivecraft.factions.config.transition.oldclass.v0;
 
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.perms.Permissible;
-import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;

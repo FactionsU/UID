@@ -12,6 +12,7 @@
 # maven
 /target
 /modules/Legacy/target
+/modules/Main/target
 
 # vim
 .*.sw[a-p]

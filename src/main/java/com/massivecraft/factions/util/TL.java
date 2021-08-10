@@ -165,12 +165,6 @@ public enum TL {
     COMMAND_CREATE_CREATEDLOG(" created a new faction: "),
     COMMAND_CREATE_DESCRIPTION("Create a new faction"),
 
-    COMMAND_DEBUG_RUNNING("&eNow running..."),
-    COMMAND_DEBUG_COMPLETE("&eDebug generated! Share this URL: %s"),
-    COMMAND_DEBUG_DESCRIPTION("Create a debug paste"),
-    COMMAND_DEBUG_DELETIONKEY("&eDeletion key: %s"),
-    COMMAND_DEBUG_FAIL("&eERROR! Could not debug. See console for why."),
-
     COMMAND_DEINVITE_CANDEINVITE("Players you can deinvite: "),
     COMMAND_DEINVITE_CLICKTODEINVITE("Click to revoke invite for %1$s"),
     COMMAND_DEINVITE_ALREADYMEMBER("%1$s&e is already a member of %2$s"),
@@ -443,13 +437,9 @@ public enum TL {
     COMMAND_PEACEFUL_GRANT("granted peaceful status to"),
     COMMAND_PEACEFUL_REVOKE("removed peaceful status from"),
 
-    COMMAND_PERM_DESCRIPTION("&6Edit or list your Faction's permissions."),
-    COMMAND_PERM_INVALID_RELATION("Invalid relation defined. Try something like 'ally'"),
-    COMMAND_PERM_INVALID_ACCESS("Invalid access defined. Try something like 'allow'"),
-    COMMAND_PERM_INVALID_ACTION("Invalid action defined. Try something like 'build'"),
     COMMAND_PERM_SET("&aSet permission &e%1$s &ato &b%2$s &afor relation &c%3$s"),
-    COMMAND_PERM_INVALID_SET("&cCannot set a locked permission"),
-    COMMAND_PERM_TOP("RCT MEM OFF ALLY TRUCE NEUT ENEMY"),
+
+    COMMAND_PERMS_DESCRIPTION("&6Edit or list your Faction's permissions."),
 
     COMMAND_PERMANENT_DESCRIPTION("Toggles a faction's permanence"),
     COMMAND_PERMANENT_GRANT("added permanent status to"),
@@ -620,6 +610,8 @@ public enum TL {
     COMMAND_TAG_FACTION("%1$s&e changed your faction tag to %2$s"),
     COMMAND_TAG_CHANGED("&eThe faction %1$s&e changed their name to %2$s."),
     COMMAND_TAG_DESCRIPTION("Change the faction tag"),
+
+    COMMAND_TICKETINFO_DESCRIPTION("Create requested ticket info"),
 
     COMMAND_TITLE_TOCHANGE("to change a players title"),
     COMMAND_TITLE_FORCHANGE("for changing a players title"),
@@ -954,6 +946,8 @@ public enum TL {
     GUI_BUTTON_NEXT("NEXT"),
     GUI_BUTTON_PREV("PREVIOUS"),
     GUI_BUTTON_BACK("BACK"),
+
+    TAG_LEADER_OWNERLESS("Server"),
 
     /**
      * Strings lying around in other bits of the plugins

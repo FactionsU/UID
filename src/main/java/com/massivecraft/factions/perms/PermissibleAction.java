@@ -12,6 +12,4 @@ public interface PermissibleAction {
     String getDescription();
 
     String getShortDescription();
-
-    PermissiblePermDefaultInfo getDefaultPermInfo(boolean online, Permissible permissible);
 }

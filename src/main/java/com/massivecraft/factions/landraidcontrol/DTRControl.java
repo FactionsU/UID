@@ -83,7 +83,7 @@ public class DTRControl implements LandRaidControl {
                 return false;
             }
             if (faction.isFrozenDTR() && conf().getFreezeKickPenalty() > 0) {
-                faction.setDTR(Math.min(conf().getMinDTR(), faction.getDTR() - conf().getFreezeKickPenalty()));
+                faction.setDTR(Math.max(conf().getMinDTR(), faction.getDTR() - conf().getFreezeKickPenalty()));
                 context.msg(TL.DTR_KICK_PENALTY);
             }
         }

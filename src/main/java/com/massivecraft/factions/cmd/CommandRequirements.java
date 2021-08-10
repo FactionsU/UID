@@ -59,7 +59,7 @@ public class CommandRequirements {
 
             // Permissible Action provided compute that before role
             if (action != null) {
-                boolean access = context.faction.hasAccess(context.fPlayer, action);
+                boolean access = context.faction.hasAccess(context.fPlayer, action, context.fPlayer.getLastStoodAt());
                 if (!access) {
                     if (informIfNot) {
                         context.msg(TL.GENERIC_NOPERMISSION, action.getShortDescription());

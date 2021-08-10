@@ -33,7 +33,7 @@ public class CmdMoneyWithdraw extends MoneyCommand {
             return;
         }
 
-        if (!context.faction.hasAccess(context.fPlayer, PermissibleActions.ECONOMY)) {
+        if (!context.faction.hasAccess(context.fPlayer, PermissibleActions.ECONOMY, context.fPlayer.getLastStoodAt())) {
             context.msg(TL.GENERIC_NOPERMISSION, "withdraw");
             return;
         }

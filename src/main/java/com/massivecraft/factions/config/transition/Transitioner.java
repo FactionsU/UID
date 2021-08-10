@@ -26,7 +26,6 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.bukkit.Material;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
@@ -47,9 +46,10 @@ public class Transitioner {
     public static void transition(FactionsPlugin plugin) {
         Transitioner transitioner = new Transitioner(plugin);
         transitioner.migrateV0();
+        transitioner.migrateV5A();
 
         Path confPath = plugin.getDataFolder().toPath().resolve("config").resolve("main.conf");
-        if (!confPath.toFile().exists()) {
+        if (!Files.exists(confPath)) {
             return;
         }
 
@@ -77,6 +77,9 @@ public class Transitioner {
             if (version < 5) {
                 transitioner.migrateV4(rootNode);
             }
+            if (version < 6) {
+                transitioner.migrateV5B(rootNode);
+            }
 
             loader.save(rootNode);
         } catch (IOException e) {
@@ -84,25 +87,28 @@ public class Transitioner {
         }
     }
 
+    private final Path pluginFolder;
+    private final Path configFolder;
+    private final Path oldConfigFolder;
+
     private Transitioner(FactionsPlugin plugin) {
         this.plugin = plugin;
+        this.pluginFolder = this.plugin.getDataFolder().toPath();
+        configFolder = pluginFolder.resolve("config");
+        oldConfigFolder = pluginFolder.resolve("oldConfig");
     }
 
     private void migrateV0() {
-        Path pluginFolder = this.plugin.getDataFolder().toPath();
-        Path configFolder = pluginFolder.resolve("config");
-        if (configFolder.toFile().exists()) {
+        if (Files.exists(configFolder)) {
             // Found existing config, so nothing to do here.
             return;
         }
         Path oldConf = pluginFolder.resolve("conf.json");
-        if (!oldConf.toFile().exists()) {
+        if (!Files.exists(oldConf)) {
             // No config, no conversion!
             return;
         }
-        Path oldConfigFolder = pluginFolder.resolve("oldConfig");
-        File oldConfigFolderFile = oldConfigFolder.toFile();
-        if (oldConfigFolderFile.exists()) {
+        if (Files.exists(oldConfigFolder)) {
             // Found existing oldConfig, implying it was already upgraded once
             this.plugin.getLogger().warning("Found no 'config' folder, but an 'oldConfig' exists. Not attempting conversion.");
             return;
@@ -113,9 +119,9 @@ public class Transitioner {
             OldConfV0 conf = this.gsonV0.fromJson(new String(Files.readAllBytes(oldConf), StandardCharsets.UTF_8), OldConfV0.class);
             TransitionConfigV0 newConfig = new TransitionConfigV0(conf);
             Loader.loadAndSave("main", newConfig);
-            oldConfigFolderFile.mkdir();
+            Files.createDirectories(oldConfigFolder);
             Path dataFolder = pluginFolder.resolve("data");
-            dataFolder.toFile().mkdir();
+            Files.createDirectories(dataFolder);
             Files.move(pluginFolder.resolve("board.json"), dataFolder.resolve("board.json"));
             Files.move(pluginFolder.resolve("players.json"), dataFolder.resolve("players.json"));
 
@@ -160,7 +166,7 @@ public class Transitioner {
         Path pluginFolder = this.plugin.getDataFolder().toPath();
         Path configPath = pluginFolder.resolve("config.yml");
         Path oldConfigFolder = pluginFolder.resolve("oldConfig");
-        if (!configPath.toFile().exists()) {
+        if (!Files.exists(configPath)) {
             this.plugin.getLogger().warning("Found a main.conf from before 0.5.4 but no config.yml was found! Might lose some config information!");
             return;
         }
@@ -171,9 +177,7 @@ public class Transitioner {
             Loader.load(loader, newConf);
             newConf.update(oldConf, this.plugin.getConfig());
             Loader.loadAndSave(loader, newConf);
-            if (!oldConfigFolder.toFile().exists()) {
-                oldConfigFolder.toFile().mkdir();
-            }
+            Files.createDirectories(oldConfigFolder);
             Files.move(configPath, oldConfigFolder.resolve("config.yml"));
         } catch (Exception e) {
             this.plugin.getLogger().log(Level.SEVERE, "Could not migrate configuration", e);
@@ -208,8 +212,13 @@ public class Transitioner {
 
         boolean update = node.getNode("factions").getNode("spawning").getNode("updateAutomatically").getBoolean(true);
 
+        out:
         if (update) {
-            List<String> list = new ArrayList<>(node.getNode("factions").getNode("spawning").getNode("preventSpawningInSafezoneExceptions").getList(Object::toString));
+            CommentedConfigurationNode exNode = node.getNode("factions").getNode("spawning").getNode("preventSpawningInSafezoneExceptions");
+            if (exNode.isVirtual()) {
+                break out;
+            }
+            List<String> list = new ArrayList<>(exNode.getList(Object::toString));
             list.add("AXOLOTL");
             list.add("GLOW_SQUID");
             node.getNode("factions").getNode("spawning").getNode("preventSpawningInSafezoneExceptions").setValue(list);
@@ -223,5 +232,61 @@ public class Transitioner {
             this.plugin.getLogger().info("  If you had auto updating enabled, this would have added AXOLOTL and GLOW_SQUID to the safe zone spawning exception list.");
             this.plugin.getLogger().info("  We chose not to add GOAT due to its affection for ramming.");
         }
+    }
+
+    private void migrateV5A() {
+        Path defPermPath = configFolder.resolve("default_permissions.conf");
+        Path defPermOffPath = configFolder.resolve("default_permissions_offline.conf");
+        boolean defExists = Files.exists(defPermPath);
+        boolean defOffExists = Files.exists(defPermOffPath);
+        if ((defExists || defOffExists)) {
+            this.plugin.getLogger().info("Detected now-unused default permissions files.");
+            if (!Files.exists(oldConfigFolder)) {
+                try {
+                    Files.createDirectories(oldConfigFolder);
+                } catch (IOException e) {
+                    this.plugin.getLogger().log(Level.WARNING, "Failed to create oldConfig folder!", e);
+                    return;
+                }
+            }
+        }
+        if (defExists) {
+            try {
+                Files.move(defPermPath, oldConfigFolder.resolve("default_permissions.conf"));
+                this.plugin.getLogger().info("  Moved default_permissions.conf to oldConfig");
+            } catch (IOException e) {
+                this.plugin.getLogger().log(Level.WARNING, "Failed to move old default_permissions.conf to oldConfig folder!", e);
+            }
+        }
+        if (defOffExists) {
+            try {
+                Files.move(defPermOffPath, oldConfigFolder.resolve("default_permissions_offline.conf"));
+                this.plugin.getLogger().info("  Moved default_permissions_offline.conf to oldConfig");
+            } catch (IOException e) {
+                this.plugin.getLogger().log(Level.WARNING, "Failed to move old default_permissions_offline.conf to oldConfig folder!", e);
+            }
+        }
+    }
+
+    private void migrateV5B(CommentedConfigurationNode node) {
+        node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(6);
+
+        this.plugin.getLogger().info("");
+        this.plugin.getLogger().info("              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        this.plugin.getLogger().info("");
+        this.plugin.getLogger().info("You are upgrading from a version prior to 0.6.0, so please read closely.");
+        this.plugin.getLogger().info("  Faction permissions (/f perms) have changed significantly.");
+        this.plugin.getLogger().info("  Permissions in already created factions are preserved, but if you modified the");
+        this.plugin.getLogger().info("    default_permissions files you will need to set those again.");
+        this.plugin.getLogger().info("  Your old default entries in the default_permissions files are not migrated.");
+        this.plugin.getLogger().info("    The original defaults have been restored to the new format.");
+        this.plugin.getLogger().info("  'Locked' actions have been replaced with 'override' settings. You will need to");
+        this.plugin.getLogger().info("    set up new 'override' settings, if you had any locked actions before.");
+        this.plugin.getLogger().info("  See the new file config/permissions.conf for more,");
+        this.plugin.getLogger().info("    and be sure to read the changelog for this release.");
+        this.plugin.getLogger().info("");
+        this.plugin.getLogger().info("              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        this.plugin.getLogger().info("");
+        // TODO
     }
 }

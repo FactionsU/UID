@@ -93,7 +93,7 @@ public class Loader {
             String confName = configName == null || configName.value().isEmpty() ? field.getName() : configName.value();
             CommentedConfigurationNode curNode = current.getNode(confName);
             CommentedConfigurationNode newNewNode = newNode.getNode(confName);
-            boolean needsValue = curNode.isVirtual() || curNode.getValue() == null;
+            boolean needsValue = curNode.isVirtual() || curNode.getValue() == null || field.getAnnotation(WipeOnReload.class) != null;
             if (comment != null) {
                 newNewNode.setComment(comment.value());
             }

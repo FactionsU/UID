@@ -383,7 +383,7 @@ public class CommandContext {
             return true;
         }
 
-        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.getFaction().hasAccess(fPlayer, PermissibleActions.ECONOMY)) {
+        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.getFaction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.getLastStoodAt())) {
             return Econ.modifyMoney(faction, -cost, toDoThis, forDoingThis);
         } else {
             return Econ.modifyMoney(fPlayer, -cost, toDoThis, forDoingThis);

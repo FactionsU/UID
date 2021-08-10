@@ -154,11 +154,6 @@ public abstract class MemoryFactions extends Factions {
     }
 
     @Override
-    public Faction getNone() {
-        return factions.get("0");
-    }
-
-    @Override
     public Faction getWilderness() {
         return factions.get("0");
     }

@@ -27,7 +27,9 @@ public abstract class Factions {
     public abstract ArrayList<Faction> getAllFactions();
 
     @Deprecated
-    public abstract Faction getNone();
+    public Faction getNone() {
+        return getWilderness();
+    }
 
     public abstract Faction getWilderness();
 

@@ -25,7 +25,7 @@ public class CmdUnclaimall extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        if (!context.faction.hasAccess(context.fPlayer, PermissibleActions.TERRITORY)) {
+        if (!context.faction.hasAccess(context.fPlayer, PermissibleActions.TERRITORY, context.fPlayer.getLastStoodAt())) {
             context.msg(TL.CLAIM_CANTCLAIM, context.faction.describeTo(context.fPlayer));
             return;
         }

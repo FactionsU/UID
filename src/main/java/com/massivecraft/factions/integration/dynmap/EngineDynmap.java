@@ -59,7 +59,7 @@ public class EngineDynmap {
     // -------------------------------------------- //
 
     private static final EngineDynmap instance = new EngineDynmap();
-    private final DynmapConfig dynmapConf = FactionsPlugin.getInstance().getConfigManager().getDynmapConfig();
+    private DynmapConfig dynmapConf;
 
     public static EngineDynmap getInstance() {
         return instance;
@@ -81,6 +81,8 @@ public class EngineDynmap {
 
     public void init(Plugin dynmap) {
         this.dynmapApi = (DynmapAPI) dynmap;
+
+        dynmapConf = FactionsPlugin.getInstance().getConfigManager().getDynmapConfig();
 
         // Should we even use dynmap?
         if (!dynmapConf.dynmap().isEnabled()) {
@@ -133,7 +135,7 @@ public class EngineDynmap {
                     factionStyle.put(factionId, getStyle(faction));
                 });
 
-                new BukkitRunnable(){
+                new BukkitRunnable() {
                     @Override
                     public void run() {
                         Map<String, TempAreaMarker> areas = createAreas(worldFactionChunks, factionTag, factionDesc, factionStyle);
