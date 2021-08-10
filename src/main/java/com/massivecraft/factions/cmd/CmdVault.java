@@ -1,7 +1,6 @@
 package com.massivecraft.factions.cmd;
 
 import com.drtshock.playervaults.PlayerVaults;
-import com.drtshock.playervaults.translations.Lang;
 import com.drtshock.playervaults.vaultmanagement.VaultManager;
 import com.drtshock.playervaults.vaultmanagement.VaultOperations;
 import com.drtshock.playervaults.vaultmanagement.VaultViewInfo;
@@ -56,14 +55,13 @@ public class CmdVault extends FCommand {
             // List the target
             YamlConfiguration file = VaultManager.getInstance().getPlayerVaultFile(vaultName, false);
             if (file == null) {
-                context.sender.sendMessage(Lang.TITLE.toString() + Lang.VAULT_DOES_NOT_EXIST.toString());
+                PlayerVaults.getInstance().getTL().vaultDoesNotExist().title().send(context.sender);
             } else {
                 StringBuilder sb = new StringBuilder();
                 for (String key : file.getKeys(false)) {
                     sb.append(key.replace("vault", "")).append(" ");
                 }
-
-                context.sender.sendMessage(Lang.TITLE.toString() + Lang.EXISTING_VAULTS.toString().replaceAll("%p", context.fPlayer.getTag()).replaceAll("%v", sb.toString().trim()));
+                PlayerVaults.getInstance().getTL().existingVaults().title().with("player", context.fPlayer.getTag()).with("vault", sb.toString().trim()).send(context.sender);
             }
             return;
         } // end listing vaults.
