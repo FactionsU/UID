@@ -40,6 +40,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -429,7 +431,48 @@ public abstract class MemoryFPlayer implements FPlayer {
         return name;
     }
 
+    private static class NameLookup {
+        String name;
+    }
+
     public void setName(String name) {
+        if (!name.equalsIgnoreCase(this.name)) {
+            for (FPlayer fplayer : FPlayers.getInstance().getAllFPlayers()) {
+                if (fplayer.getName().equalsIgnoreCase(name)) {
+                    String uuidName = fplayer.getId();
+                    ((MemoryFPlayer) fplayer).name = uuidName;
+                    UUID u;
+                    try {
+                        u = UUID.fromString(uuidName);
+                    } catch (IllegalArgumentException e) {
+                        continue;
+                    }
+                    if (u.version() != 4) {
+                        continue;
+                    }
+                    String uuid = uuidName.replace("-", "");
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
+                                NameLookup lookup = FactionsPlugin.getInstance().getGson().fromJson(new InputStreamReader(url.openStream()), NameLookup.class);
+                                String newName = lookup.name;
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        if (newName != null && fplayer.getName().equals(uuidName)) {
+                                            ((MemoryFPlayer) fplayer).setName(newName);
+                                        }
+                                    }
+                                }.runTask(FactionsPlugin.getInstance());
+                            } catch (Exception e) {
+                            }
+                        }
+                    }.runTaskAsynchronously(FactionsPlugin.getInstance());
+                }
+            }
+        }
         this.name = name;
     }
 
