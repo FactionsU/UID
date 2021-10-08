@@ -37,7 +37,7 @@ import java.util.Set;
 import java.util.logging.Level;
 
 public class Transitioner {
-    private FactionsPlugin plugin;
+    private final FactionsPlugin plugin;
     private Gson gsonV0;
 
     public static void transition(FactionsPlugin plugin) {

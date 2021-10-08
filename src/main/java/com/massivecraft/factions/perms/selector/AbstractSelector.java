@@ -8,6 +8,10 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Default, abstract implementations of basics that all built-in
+ * PermSelectors utilize.
+ */
 public abstract class AbstractSelector implements PermSelector {
     public static class BasicDescriptor implements Descriptor {
         private final Function<String, PermSelector> function;
