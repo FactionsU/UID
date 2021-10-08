@@ -1,8 +1,6 @@
 package com.massivecraft.factions.config.transition.oldclass.v0;
 
 import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.perms.Permissible;
-import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.BanInfo;
@@ -14,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "MismatchedQueryAndUpdateOfCollection", "unused"})
 public class NewMemoryFaction {
     private String id;
     private boolean peacefulExplosionsEnabled;
@@ -35,8 +34,8 @@ public class NewMemoryFaction {
     private long lastDeath;
     private int maxVaults;
     private Role defaultRole;
-    private Map<Permissible, Map<PermissibleAction, Boolean>> permissions;
-    private Map<Permissible, Map<PermissibleAction, Boolean>> permissionsOffline;
+    private Map<String, Map<String, Boolean>> permissions;
+    private Map<String, Map<String, Boolean>> permissionsOffline;
     private Set<BanInfo> bans;
 
     public NewMemoryFaction(OldMemoryFactionV0 old) {
@@ -63,14 +62,26 @@ public class NewMemoryFaction {
         this.permissions = new HashMap<>();
         this.permissionsOffline = new HashMap<>();
         old.permissions.forEach((permiss, map) -> {
-            Map<PermissibleAction, Boolean> newMap = new HashMap<>();
+            Map<String, Boolean> newMap = new HashMap<>();
             map.forEach((permact, access) -> {
+                switch(permact.toUpperCase()) {
+                    case "FROST_WALK":
+                        permact = "FROSTWALK";
+                        break;
+                    case "PAIN_BUILD":
+                        permact = "PAINBUILD";
+                        break;
+                    case "WITHDRAW":
+                        permact = "ECONOMY";
+                        break;
+
+                }
                 if (access == OldAccessV0.ALLOW || access == OldAccessV0.DENY) {
-                    newMap.put(permact.getNew(), access == OldAccessV0.ALLOW);
+                    newMap.put(permact, access == OldAccessV0.ALLOW);
                 }
             });
-            this.permissions.put(permiss.newPermissible(), newMap);
-            this.permissionsOffline.put(permiss.newPermissible(), newMap);
+            this.permissions.put(permiss, newMap);
+            this.permissionsOffline.put(permiss, newMap);
         });
         this.bans = old.bans;
     }

@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@SuppressWarnings({"InnerClassMayBeStatic", "FieldMayBeFinal", "unused", "FieldCanBeLocal", "UnusedAssignment", "MismatchedQueryAndUpdateOfCollection"})
 public class TransitionConfigV0 {
     public class Colors {
         public class Relations {
