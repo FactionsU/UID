@@ -390,11 +390,11 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
         loadLang();
 
+        this.gson = this.getGsonBuilder(true).create();
         // Load Conf from disk
         this.configManager = new ConfigManager(this);
         this.configManager.loadConfigs();
-
-        this.gson = this.getGsonBuilder().create();
+        this.gson = this.getGsonBuilder(false).create();
 
         if (this.conf().data().json().useEfficientStorage()) {
             getLogger().info("Using space efficient (less readable) storage.");
@@ -991,16 +991,13 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.mvdwPlaceholderAPIManager;
     }
 
-    private GsonBuilder getGsonBuilder() {
+    private GsonBuilder getGsonBuilder(boolean confNotLoaded) {
         Type mapFLocToStringSetType = new TypeToken<Map<FLocation, Set<String>>>() {
-        }.getType();
-
-        Type accessType = new TypeToken<Map<Permissible, Map<String, Boolean>>>() {
         }.getType();
 
         GsonBuilder builder = new GsonBuilder();
 
-        if (!this.conf().data().json().useEfficientStorage()) {
+        if (confNotLoaded || !this.conf().data().json().useEfficientStorage()) {
             builder.setPrettyPrinting();
         }
 

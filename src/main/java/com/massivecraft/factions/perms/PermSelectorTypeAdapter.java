@@ -5,7 +5,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.selector.PlayerSelector;
 import com.massivecraft.factions.perms.selector.RelationSingleSelector;
 import com.massivecraft.factions.perms.selector.RoleSingleSelector;
@@ -46,21 +45,24 @@ public class PermSelectorTypeAdapter extends TypeAdapter<PermSelector> {
             PermSelector s = getLegacy(string);
             if (s != null) {
                 selector = s;
-                legacy = true;
-                FactionsPlugin.getInstance().debug("Legacy PermSelector import go!");
+                setLegacy();
             }
         }
         return selector;
     }
 
+    public static void setLegacy() {
+        legacy = true;
+    }
+
     private PermSelector getLegacy(String string) {
-        Permissible permissible = Role.fromString(string.toUpperCase());
-        if (permissible != null) {
-            return new RoleSingleSelector((Role) permissible);
+        Role role = Role.fromString(string.toUpperCase());
+        if (role != null) {
+            return new RoleSingleSelector(role);
         }
-        permissible = Relation.fromString(string.toUpperCase());
-        if (permissible != null && permissible != Relation.NEUTRAL) {
-            return new RelationSingleSelector((Relation) permissible);
+        Relation relation = Relation.fromString(string.toUpperCase());
+        if (relation != null && relation != Relation.MEMBER) {
+            return new RelationSingleSelector(relation);
         }
         try {
             UUID uuid = UUID.fromString(string);

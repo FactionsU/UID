@@ -8,15 +8,12 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.Loader;
 import com.massivecraft.factions.config.transition.oldclass.v0.MaterialAdapter;
 import com.massivecraft.factions.config.transition.oldclass.v0.NewMemoryFaction;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldAccessV0;
 import com.massivecraft.factions.config.transition.oldclass.v0.OldConfV0;
 import com.massivecraft.factions.config.transition.oldclass.v0.OldMemoryFactionV0;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissableActionV0;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissableV0;
-import com.massivecraft.factions.config.transition.oldclass.v0.OldPermissionsMapTypeAdapterV0;
 import com.massivecraft.factions.config.transition.oldclass.v0.TransitionConfigV0;
 import com.massivecraft.factions.config.transition.oldclass.v1.OldMainConfigV1;
 import com.massivecraft.factions.config.transition.oldclass.v1.TransitionConfigV1;
+import com.massivecraft.factions.perms.PermSelectorTypeAdapter;
 import com.massivecraft.factions.util.EnumTypeAdapter;
 import com.massivecraft.factions.util.LazyLocation;
 import com.massivecraft.factions.util.MapFLocToStringSetTypeAdapter;
@@ -144,9 +141,6 @@ public class Transitioner {
         Type mapFLocToStringSetType = new TypeToken<Map<FLocation, Set<String>>>() {
         }.getType();
 
-        Type accessTypeAdatper = new TypeToken<Map<OldPermissableV0, Map<OldPermissableActionV0, OldAccessV0>>>() {
-        }.getType();
-
         Type materialType = new TypeToken<Material>() {
         }.getType();
 
@@ -156,7 +150,6 @@ public class Transitioner {
                 .enableComplexMapKeySerialization()
                 .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
                 .registerTypeAdapter(materialType, new MaterialAdapter())
-                .registerTypeAdapter(accessTypeAdatper, new OldPermissionsMapTypeAdapterV0())
                 .registerTypeAdapter(LazyLocation.class, new MyLocationTypeAdapter())
                 .registerTypeAdapter(mapFLocToStringSetType, new MapFLocToStringSetTypeAdapter())
                 .registerTypeAdapterFactory(EnumTypeAdapter.ENUM_FACTORY).create();
@@ -287,6 +280,7 @@ public class Transitioner {
         this.plugin.getLogger().info("");
         this.plugin.getLogger().info("              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         this.plugin.getLogger().info("");
-        // TODO
+
+        PermSelectorTypeAdapter.setLegacy();
     }
 }
