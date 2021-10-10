@@ -49,7 +49,7 @@ kick | Can kick faction members
 lever | Use levers in faction territory (while not raidable)
 owner | Can created owned areas with /f owner
 pain | Allows building/destroying in faction territory but causes pain (while not raidable)
-plate | Can interact with plates
+plate | Can interact with pressure plates
 promote | Can promote members up to their own role within the faction
 sethome | Can set the faction home
 setwarp | Can set a faction warp
