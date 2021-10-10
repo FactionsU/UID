@@ -2,7 +2,6 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.perms.PermissibleActions;
-import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 
@@ -17,7 +16,6 @@ public class CmdUnban extends FCommand {
         this.requirements = new CommandRequirements.Builder(Permission.BAN)
                 .memberOnly()
                 .withAction(PermissibleActions.BAN)
-                .withRole(Role.MODERATOR)
                 .build();
     }
 
