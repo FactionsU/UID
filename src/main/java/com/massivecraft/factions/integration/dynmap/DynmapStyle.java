@@ -21,8 +21,14 @@ public class DynmapStyle {
             .setHomeMarker(DEFAULT_HOME_MARKER)
             .setBoost(DEFAULT_BOOST);
 
+    private static final DynmapStyle empty = new DynmapStyle();
+
     public static DynmapStyle getDefault() {
         return defaultStyle;
+    }
+
+    public static DynmapStyle getEmpty() {
+        return empty;
     }
 
     private static DynmapConfig.Style styleConf() {

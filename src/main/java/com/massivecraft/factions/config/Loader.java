@@ -108,7 +108,7 @@ public class Loader {
                             tokenField.setAccessible(true);
                             newNewNode.setValue((TypeToken<Object>) tokenField.get(object), defaultValue);
                         } catch (ObjectMappingException | NoSuchFieldException e) {
-                            System.out.println("Failed horrifically to handle " + confName);
+                            FactionsPlugin.getInstance().getLogger().severe("Failed horrifically to handle " + confName);
                         }
                     }
                 } else {
@@ -120,7 +120,7 @@ public class Loader {
                         }
                         newNewNode.setValue(curNode.getValue());
                     } catch (IllegalArgumentException ex) {
-                        System.out.println("Found incorrect type for " + getNodeName(curNode.getPath()) + ": Expected " + field.getType() + ", found " + curNode.getValue().getClass());
+                        FactionsPlugin.getInstance().getLogger().severe("Found incorrect type for " + getNodeName(curNode.getPath()) + ": Expected " + field.getType() + ", found " + curNode.getValue().getClass());
                         field.set(object, defaultValue);
                     }
                 }

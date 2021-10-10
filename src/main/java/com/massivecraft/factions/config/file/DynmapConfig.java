@@ -251,6 +251,19 @@ public class DynmapConfig {
         public boolean isStyleBoost() {
             return styleBoost;
         }
+
+        @Override
+        public String toString() {
+            return "Style{" +
+                    "lineColor='" + lineColor + '\'' +
+                    ", lineOpacity=" + lineOpacity +
+                    ", lineWeight=" + lineWeight +
+                    ", fillColor='" + fillColor + '\'' +
+                    ", fillOpacity=" + fillOpacity +
+                    ", homeMarker='" + homeMarker + '\'' +
+                    ", styleBoost=" + styleBoost +
+                    '}';
+        }
     }
 
     private Dynmap dynmap = new Dynmap();
