@@ -20,7 +20,8 @@ public class CmdAnnounce extends FCommand {
 
         this.requiredArgs.add("message");
 
-        this.requirements = new CommandRequirements.Builder(Permission.ANNOUNCE).memberOnly().withRole(Role.MODERATOR)
+        this.requirements = new CommandRequirements.Builder(Permission.ANNOUNCE).memberOnly()
+                .withRole(Role.MODERATOR)
                 .noErrorOnManyArgs()
                 .noDisableOnLock()
                 .brigadier(AnnounceBrigadier.class)
