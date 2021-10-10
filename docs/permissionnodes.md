@@ -27,7 +27,7 @@ Below is a full list of all permission nodes. A check mark (✔) is next to any 
 | factions.coleader.any       | Set new coleader for any faction                                                        |
 | factions.coords ✔           | Can send your current coordinates to fellow faction members using /f coords             |
 | factions.create ✔           | Can create factions                                                                     |
-| factions.debug              | Can use the `/f debug` command                                                          |
+| factions.debug              | Can use the `/f ticketinfo` command                                                          |
 | factions.defaultrank        | Can set the faction's default role                                                      |
 | factions.deinvite ✔         | Can remove invite to your faction                                                       |
 | factions.delhome ✔          | Can delete your faction's home                                                          |
