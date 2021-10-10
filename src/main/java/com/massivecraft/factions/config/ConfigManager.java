@@ -6,6 +6,7 @@ import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.config.file.PermissionsConfig;
 import com.massivecraft.factions.config.file.TranslationsConfig;
 import com.massivecraft.factions.config.transition.Transitioner;
+import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.util.logging.Level;

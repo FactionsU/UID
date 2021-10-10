@@ -760,19 +760,13 @@ public class EngineDynmap {
             return ret;
         }
 
-        return DynmapStyle.getDefault();
+        return DynmapStyle.getEmpty();
     }
 
     // Thread Safe / Asynchronous: Yes
-    public static void info(String msg) {
-        String message = DYNMAP_INTEGRATION + msg;
-        System.out.println(message);
-    }
-
-    // Thread Safe / Asynchronous: Yes
-    public static void severe(String msg) {
+    static void severe(String msg) {
         String message = DYNMAP_INTEGRATION + ChatColor.RED.toString() + msg;
-        System.out.println(message);
+        FactionsPlugin.getInstance().getLogger().severe(message);
     }
 
     enum Direction {
