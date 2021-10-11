@@ -116,6 +116,11 @@ public class DynmapConfig {
             return claimUpdatePeriod;
         }
 
+        // This is used for config loading
+        @SuppressWarnings("unused")
+        private transient TypeToken<Map<String, Style>> factionStylesToken = new TypeToken<Map<String, Style>>() {
+        };
+
         @Comment("Per-faction overrides")
         @DefinedType
         private Map<String, Style> factionStyles = new HashMap<String, Style>() {
