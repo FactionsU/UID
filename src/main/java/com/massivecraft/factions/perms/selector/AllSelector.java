@@ -26,6 +26,6 @@ public class AllSelector extends AbstractSelector {
 
     @Override
     public Component displayValue(Faction context) {
-        return MiniMessage.get().parse(FactionsPlugin.getInstance().tl().permissions().selectors().all().getDisplayValue());
+        return MiniMessage.miniMessage().parse(FactionsPlugin.getInstance().tl().permissions().selectors().all().getDisplayValue());
     }
 }

@@ -57,6 +57,6 @@ public class PlayerSelector extends AbstractSelector {
     @Override
     public Component displayValue(Faction context) {
         FPlayer player = FPlayers.getInstance().getById(this.uuid.toString());
-        return player == null ? MiniMessage.get().parse(FactionsPlugin.getInstance().tl().permissions().selectors().player().getUuidValue(), "uuid", this.uuid.toString()) : LegacyComponentSerializer.legacySection().deserialize(player.getRelationTo(context).getColor() + player.getName());
+        return player == null ? MiniMessage.miniMessage().parse(FactionsPlugin.getInstance().tl().permissions().selectors().player().getUuidValue(), "uuid", this.uuid.toString()) : LegacyComponentSerializer.legacySection().deserialize(player.getRelationTo(context).getColor() + player.getName());
     }
 }
