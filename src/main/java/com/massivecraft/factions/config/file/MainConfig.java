@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "InnerClassMayBeStatic", "BooleanMethodIsAlwaysInverted"})
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "InnerClassMayBeStatic", "BooleanMethodIsAlwaysInverted", "MismatchedQueryAndUpdateOfCollection"})
 public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @Comment("Don't change this value yourself, unless you WANT a broken config!")
@@ -371,23 +371,6 @@ public class MainConfig {
             }
         }
 
-        public class Perms {
-            @Comment("Placeholders: {action-access-color}, {action-access}, {action-desc}")
-            private List<String> guiLore = new ArrayList<String>() {
-                {
-                    this.add("&8Access: {action-access-color}{action-access}");
-                    this.add("&8{action-desc}");
-                    this.add("");
-                    this.add("&8Left click to &a&lAllow");
-                    this.add("&8Right click to &c&lDeny");
-                }
-            };
-
-            public List<String> getGuiLore() {
-                return Collections.unmodifiableList(guiLore);
-            }
-        }
-
         public class SeeChunk {
             private boolean particles = true;
             @Comment("Get a list of particle names here: https://factions.support/particles/")
@@ -559,7 +542,6 @@ public class MainConfig {
         private ListCmd list = new ListCmd();
         private MapCmd map = new MapCmd();
         private Near near = new Near();
-        private Perms perms = new Perms();
         private SeeChunk seeChunk = new SeeChunk();
         private Show show = new Show();
         private Stuck stuck = new Stuck();
@@ -602,10 +584,6 @@ public class MainConfig {
 
         public Near near() {
             return near;
-        }
-
-        public Perms perms() {
-            return perms;
         }
 
         public SeeChunk seeChunk() {
@@ -729,6 +707,7 @@ public class MainConfig {
                  * @return loss per death
                  * @see #getLossPerDeath(World)
                  */
+                @SuppressWarnings("unused")
                 public double getLossPerDeathBase() {
                     return this.lossPerDeath;
                 }
@@ -1328,6 +1307,7 @@ public class MainConfig {
                     return destinationSpawnWorld;
                 }
 
+                @SuppressWarnings("unused")
                 public Set<String> getRelationsToTeleportOut() {
                     return relationsToTeleportOut;
                 }
@@ -1821,6 +1801,7 @@ public class MainConfig {
                     "adding new friendly mobs to the safe zone exception list")
             private boolean updateAutomatically = true;
 
+            @SuppressWarnings("unused")
             public boolean isUpdateAutomatically() {
                 return updateAutomatically;
             }
@@ -2564,6 +2545,7 @@ public class MainConfig {
             }
         }
 
+        @SuppressWarnings("unused")
         @Comment("Presently, the only option is JSON.")
         private String storage = "JSON";
         private Json json = new Json();
@@ -2809,6 +2791,7 @@ public class MainConfig {
             return checking;
         }
 
+        @SuppressWarnings("unused")
         public boolean isCheckingFlag() {
             return checkingFlag;
         }

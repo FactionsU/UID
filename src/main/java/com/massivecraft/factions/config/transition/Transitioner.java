@@ -220,11 +220,10 @@ public class Transitioner {
         this.plugin.getLogger().info("Detected a config from before 0.5.24 (which adds 1.17 entities)");
         if (update) {
             this.plugin.getLogger().info("  Because you had auto updating enabled, added AXOLOTL and GLOW_SQUID to the safe zone spawning exception list.");
-            this.plugin.getLogger().info("  We chose not to add GOAT due to its affection for ramming.");
         } else {
             this.plugin.getLogger().info("  If you had auto updating enabled, this would have added AXOLOTL and GLOW_SQUID to the safe zone spawning exception list.");
-            this.plugin.getLogger().info("  We chose not to add GOAT due to its affection for ramming.");
         }
+        this.plugin.getLogger().info("  We chose not to add GOAT due to its affection for ramming.");
     }
 
     private void migrateV5A() {

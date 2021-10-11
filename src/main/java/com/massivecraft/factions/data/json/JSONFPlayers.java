@@ -27,6 +27,7 @@ public class JSONFPlayers extends MemoryFPlayers {
         return FactionsPlugin.getInstance().getGson();
     }
 
+    @Deprecated
     public void setGson(Gson gson) {
         // NOOP
     }

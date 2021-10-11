@@ -260,6 +260,7 @@ public interface FPlayer extends EconomyParticipator, Selectable {
 
     boolean canFlyAtLocation(FLocation location);
 
+    @SuppressWarnings("SameReturnValue")
     @Deprecated
     default boolean canFlyInFactionTerritory(Faction faction) {
         return false;

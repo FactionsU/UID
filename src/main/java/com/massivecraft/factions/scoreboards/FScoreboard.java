@@ -135,7 +135,7 @@ public class FScoreboard {
                     updateObjective();
                 }
             }
-        }.runTaskLater(FactionsPlugin.getInstance(), FactionsPlugin.getInstance().conf().scoreboard().info().getExpiration() * 20);
+        }.runTaskLater(FactionsPlugin.getInstance(), FactionsPlugin.getInstance().conf().scoreboard().info().getExpiration() * 20L);
     }
 
     private void updateObjective() {

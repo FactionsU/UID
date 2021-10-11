@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractRoleSelector extends AbstractSelector {
     public static class RoleDescriptor extends BasicDescriptor {
         private List<PermSelector> roleSelectors;
-        private Function<Role, PermSelector> function;
+        private final Function<Role, PermSelector> function;
 
         public RoleDescriptor(String name, Supplier<String> displayName, Function<Role, PermSelector> function) {
             super(name, displayName, input -> function.apply(Role.fromString(input)));

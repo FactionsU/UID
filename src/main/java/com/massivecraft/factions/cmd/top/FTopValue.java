@@ -6,7 +6,7 @@ package com.massivecraft.factions.cmd.top;
  *
  * @param <T> derived class
  */
-public interface FTopValue<T extends FTopValue> extends Comparable<T> {
+public interface FTopValue<T extends FTopValue<T>> extends Comparable<T> {
     /**
      * Returns a string which is suitable to display to the user
      *

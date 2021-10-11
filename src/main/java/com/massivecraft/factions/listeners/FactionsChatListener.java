@@ -20,7 +20,7 @@ import java.util.logging.Level;
 
 public class FactionsChatListener implements Listener {
 
-    public FactionsPlugin plugin;
+    public final FactionsPlugin plugin;
 
     public FactionsChatListener(FactionsPlugin plugin) {
         this.plugin = plugin;

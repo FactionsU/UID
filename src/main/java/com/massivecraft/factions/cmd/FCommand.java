@@ -22,15 +22,14 @@ public abstract class FCommand {
         INVISIBLE // Invisible commands are invisible to everyone, even those who can use the command.
     }
 
-    public FactionsPlugin plugin;
-    public SimpleDateFormat sdf = new SimpleDateFormat(TL.DATE_FORMAT.toString());
+    public final FactionsPlugin plugin;
 
     // Command Aliases
-    public List<String> aliases;
+    public final List<String> aliases;
 
     // Information on the args
-    public List<String> requiredArgs;
-    public LinkedHashMap<String, String> optionalArgs;
+    public final List<String> requiredArgs;
+    public final LinkedHashMap<String, String> optionalArgs;
 
     // Requirements to execute this command
     public CommandRequirements requirements;
@@ -113,7 +112,7 @@ public abstract class FCommand {
     /*
         Subcommands
      */
-    public List<FCommand> subCommands;
+    public final List<FCommand> subCommands;
 
     public void addSubCommand(FCommand subCommand) {
         this.subCommands.add(subCommand);
@@ -122,8 +121,8 @@ public abstract class FCommand {
     /*
         Help
      */
-    public List<String> helpLong;
-    public CommandVisibility visibility;
+    public final List<String> helpLong;
+    public final CommandVisibility visibility;
 
     private String helpShort;
 

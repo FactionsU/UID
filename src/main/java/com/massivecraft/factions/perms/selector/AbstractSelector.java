@@ -18,7 +18,7 @@ public abstract class AbstractSelector implements PermSelector {
         private final String name;
         private boolean acceptsEmpty;
         private Supplier<String> instructions;
-        private Supplier<String> displayName;
+        private final Supplier<String> displayName;
 
         public BasicDescriptor(String name, Supplier<String> displayName, Function<String, PermSelector> function) {
             this.name = name;

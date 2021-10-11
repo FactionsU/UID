@@ -16,7 +16,7 @@ public enum Relation implements Permissible {
 
     public final int value;
     public final String nicename;
-    private Set<String> justMyNameInASet;
+    private final Set<String> justMyNameInASet;
 
     Relation(final int value, final String nicename) {
         this.value = value;

@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 public class FactionsBlockListener implements Listener {
 
-    public FactionsPlugin plugin;
+    public final FactionsPlugin plugin;
 
     public FactionsBlockListener(FactionsPlugin plugin) {
         this.plugin = plugin;

@@ -386,7 +386,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (!loginPvpDisabled) {
             return false;
         }
-        if (this.lastLoginTime + (FactionsPlugin.getInstance().conf().factions().pvp().getNoPVPDamageToOthersForXSecondsAfterLogin() * 1000) < System.currentTimeMillis()) {
+        if (this.lastLoginTime + (FactionsPlugin.getInstance().conf().factions().pvp().getNoPVPDamageToOthersForXSecondsAfterLogin() * 1000L) < System.currentTimeMillis()) {
             this.loginPvpDisabled = false;
             return false;
         }
@@ -466,7 +466,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                                         }
                                     }
                                 }.runTask(FactionsPlugin.getInstance());
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                             }
                         }
                     }.runTaskAsynchronously(FactionsPlugin.getInstance());

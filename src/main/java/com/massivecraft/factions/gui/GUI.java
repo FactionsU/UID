@@ -21,7 +21,7 @@ public abstract class GUI<Type> implements InventoryHolder {
 
     private Map<Integer, Type> slotMap = new HashMap<>();
 
-    protected FPlayer user;
+    protected final FPlayer user;
 
     public GUI(FPlayer user, int rows) {
         this.size = rows * 9;

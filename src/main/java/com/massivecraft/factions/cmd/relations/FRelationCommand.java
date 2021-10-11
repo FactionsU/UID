@@ -17,7 +17,7 @@ import org.bukkit.ChatColor;
 
 public abstract class FRelationCommand extends FCommand {
 
-    public Relation targetRelation;
+    public final Relation targetRelation;
 
     public FRelationCommand(Relation targetRelation, String alias) {
         super();

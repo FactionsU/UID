@@ -1,6 +1,7 @@
 package com.massivecraft.factions.config.file;
 
 import com.google.common.reflect.TypeToken;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.config.annotation.DefinedType;
 import com.massivecraft.factions.config.annotation.WipeOnReload;
@@ -13,7 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@SuppressWarnings({"FieldCanBeLocal", "InnerClassMayBeStatic"})
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "InnerClassMayBeStatic"})
 public class DynmapConfig {
     public class Dynmap {
         @Comment("Should the dynmap integration be used?")
@@ -124,17 +125,14 @@ public class DynmapConfig {
             }
         };
 
-        private transient TypeToken<Map<String, Style>> factionStylesToken = new TypeToken<Map<String, Style>>() {
-        };
-
         @WipeOnReload
         private transient Map<String, DynmapStyle> styles;
 
         public Map<String, DynmapStyle> getFactionStyles() {
             if (styles == null) {
                 styles = new HashMap<>();
-                Map<String, ? extends Object> mappy = factionStyles;
-                for (Map.Entry<String, ? extends Object> e : mappy.entrySet()) {
+                Map<String, ?> mappy = factionStyles;
+                for (Map.Entry<String, ?> e : mappy.entrySet()) {
                     String faction = e.getKey();
                     Object s = e.getValue();
                     if (s instanceof Style) {
@@ -173,7 +171,7 @@ public class DynmapConfig {
                         }
                         styles.put(faction, style);
                     } else {
-                        // Panic!
+                        FactionsPlugin.getInstance().getLogger().severe("Found broken Dynmap style entry for faction '" + faction + '\'');
                     }
                 }
             }

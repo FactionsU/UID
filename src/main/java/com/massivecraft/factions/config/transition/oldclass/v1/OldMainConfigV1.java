@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings({"InnerClassMayBeStatic", "unused"})
 public class OldMainConfigV1 {
     public class Colors {
         public class Relations {

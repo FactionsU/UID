@@ -10,9 +10,9 @@ import java.util.Map;
 
 public class PermUtil {
 
-    public Map<String, String> permissionDescriptions = new HashMap<>();
+    public final Map<String, String> permissionDescriptions = new HashMap<>();
 
-    protected FactionsPlugin plugin;
+    protected final FactionsPlugin plugin;
 
     public PermUtil(FactionsPlugin plugin) {
         this.plugin = plugin;
