@@ -4,11 +4,11 @@
 
 [![Discord](https://imgur.com/MFRRBn4.png)](https://discord.gg/FfAz3eE)
 
-<rant>
+&lt;rant&gt;  
 I'd appreciate it if you could pay for the (http://www.spigotmc.org/resources/factionsuuid.1035/) if your server makes money. If you only run your server for your kids or some friends and don't make any money, then I don't want to stop you from doing so by forcing you to buy a $15 plugin. If that's the case, then just send me a message and we can work something out.
 
-The repo is open because of that and because I still hope to see people contributing upstream :)
-</rant>
+The repo is open because of that and because I still hope to see people contributing upstream :)  
+&lt;/rant&gt;
 
 This plugin will allow the players on the server to create factions/guilds. The factions can claim territory that will be protected from non-members. Factions can forge alliances and declare themselves enemies with others. Land may be taken from other factions through war.
 
@@ -21,16 +21,10 @@ The goals of this plugin:
 
 Versioning
 ----------
-All versions prefixed with `1.6.9.5` as that is the legacy version.
+All versions are prefixed with `1.6.9.5` as that is the legacy version.
 Followed by -U noting that it's the FactionsUUID fork.
 
-FactionsUUID versioning: `U<major>.<minor>.<patch>-<tag>`
-
-* Major version: Incompatible API changes
-* Minor version: Add backwards compatible features
-* Patch: Fixing bugs 
-* SNAPSHOT: Version is in bug fixing stage
-* Release Candidate (RC): Potentially a release
+FactionsUUID versioning: `1.6.9.5-U<major>.<minor>.<patch>-b<buildnumber>`
 
 Usage
 ---------
@@ -67,6 +61,6 @@ A default config file will be created on the first run.
 
 License
 ----------
-This project has a LGPL license just like the Bukkit project.<br>
+This project has a GPL license just like the Bukkit project.<br>
 This project uses [GSON](http://code.google.com/p/google-gson/) which has a [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0 ).
 

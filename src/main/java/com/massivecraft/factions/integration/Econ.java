@@ -518,6 +518,7 @@ public class Econ {
         return op;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Deprecated
     public static boolean isUUID(String uuid) {
         try {

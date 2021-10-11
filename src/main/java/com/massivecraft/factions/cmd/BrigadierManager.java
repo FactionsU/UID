@@ -17,8 +17,8 @@ import java.util.logging.Level;
 
 public class BrigadierManager {
 
-    public Commodore commodore;
-    public LiteralArgumentBuilder<Object> brigadier = LiteralArgumentBuilder.literal("factions");
+    public final Commodore commodore;
+    public final LiteralArgumentBuilder<Object> brigadier = LiteralArgumentBuilder.literal("factions");
 
     public BrigadierManager() {
         commodore = CommodoreProvider.getCommodore(FactionsPlugin.getInstance());

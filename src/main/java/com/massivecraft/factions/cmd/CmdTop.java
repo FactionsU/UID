@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 public class CmdTop extends FCommand {
 
-    private static final Map<String, Function<Faction, FTopValue>> topValueGenerators = new HashMap<>();
+    private static final Map<String, Function<Faction, FTopValue<?>>> topValueGenerators = new HashMap<>();
 
     static {
         topValueGenerators.put("members", f -> new FTopGTIntValue(f.getFPlayers().size()));
@@ -31,7 +31,7 @@ public class CmdTop extends FCommand {
         topValueGenerators.put("power", f -> new FTopGTIntValue(f.getPowerRounded()));
         topValueGenerators.put("land", f -> new FTopGTIntValue(f.getLandRounded()));
         topValueGenerators.put("online", f -> new FTopGTIntValue(f.getFPlayersWhereOnline(true).size()));
-        Function<Faction, FTopValue> money = f -> {
+        Function<Faction, FTopValue<?>> money = f -> {
             double monies = FactionsPlugin.getInstance().conf().economy().isEnabled() ? Econ.getBalance(f) : 0;
             monies += f.getFPlayers().stream()
                     .mapToDouble(Econ::getBalance)
@@ -62,7 +62,7 @@ public class CmdTop extends FCommand {
 
         String criteria = context.argAsString(0);
 
-        Function<Faction, FTopValue> ftopGenerator = topValueGenerators.get(criteria);
+        Function<Faction, FTopValue<?>> ftopGenerator = topValueGenerators.get(criteria);
         if (ftopGenerator == null || (!(FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) && criteria.equalsIgnoreCase("power"))) {
             context.msg(TL.COMMAND_TOP_INVALID, criteria);
             return;

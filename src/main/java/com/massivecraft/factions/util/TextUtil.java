@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class TextUtil {
 
-    public Map<String, String> tags;
+    public final Map<String, String> tags;
 
     public TextUtil() {
         this.tags = new HashMap<>();

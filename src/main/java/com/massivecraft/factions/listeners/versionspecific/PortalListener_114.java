@@ -20,7 +20,7 @@ import org.bukkit.event.world.PortalCreateEvent;
   to create at the target destination.
  */
 public class PortalListener_114 implements Listener {
-    public FactionsPlugin plugin;
+    public final FactionsPlugin plugin;
 
     public PortalListener_114(FactionsPlugin plugin) {
         this.plugin = plugin;

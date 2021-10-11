@@ -117,7 +117,7 @@ public class DTRControl implements LandRaidControl {
 
         if (!dtrLossEvent.isCancelled()) {
             faction.setDTR(Math.max(conf().getMinDTR(), faction.getDTR() - conf().getLossPerDeath(player.getWorld())));
-            faction.setFrozenDTR(System.currentTimeMillis() + (conf().getFreezeTime() * 1000));
+            faction.setFrozenDTR(System.currentTimeMillis() + (conf().getFreezeTime() * 1000L));
         }
     }
 

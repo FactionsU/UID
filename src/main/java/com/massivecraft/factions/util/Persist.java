@@ -130,12 +130,10 @@ public class Persist {
 
 
     // LOAD BY TYPE
-    @SuppressWarnings("unchecked")
     public <T> T load(Type typeOfT, String name) {
-        return (T) load(typeOfT, getFile(name));
+        return load(typeOfT, getFile(name));
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T load(Type typeOfT, File file) {
         String content = DiscUtil.readCatch(file);
         if (content == null) {
@@ -143,7 +141,7 @@ public class Persist {
         }
 
         try {
-            return (T) plugin.getGson().fromJson(content, typeOfT);
+            return plugin.getGson().fromJson(content, typeOfT);
         } catch (Exception ex) {    // output the error message rather than full stack trace; error parsing the file, most likely
             plugin.log(Level.WARNING, ex.getMessage());
         }

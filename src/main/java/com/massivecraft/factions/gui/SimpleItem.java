@@ -35,6 +35,7 @@ public class SimpleItem {
         this.lore = item.lore;
         this.material = item.material;
         this.color = item.color;
+        this.enchant = item.enchant;
     }
 
     public ItemStack get() {

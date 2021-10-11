@@ -6,9 +6,7 @@ package com.massivecraft.factions.cmd.top;
  * @param <T> derived class
  * @param <N> value type
  */
-public abstract class FTopGTNumberValue<T extends FTopGTNumberValue<T, N>, N extends Comparable<N>>
-        implements FTopValue<T> {
-
+public abstract class FTopGTNumberValue<T extends FTopGTNumberValue<T, N>, N extends Comparable<N>> implements FTopValue<T> {
     public FTopGTNumberValue(N value) {
         this.value = value;
     }

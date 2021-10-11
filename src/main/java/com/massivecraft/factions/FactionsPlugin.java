@@ -38,7 +38,6 @@ import com.massivecraft.factions.listeners.versionspecific.PortalListener_114;
 import com.massivecraft.factions.perms.PermSelector;
 import com.massivecraft.factions.perms.PermSelectorRegistry;
 import com.massivecraft.factions.perms.PermSelectorTypeAdapter;
-import com.massivecraft.factions.perms.Permissible;
 import com.massivecraft.factions.perms.PermissibleActionRegistry;
 import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.util.AutoLeaveTask;
@@ -173,7 +172,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private final Set<String> pluginsHandlingChat = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private SeeChunkUtil seeChunkUtil;
-    private ParticleProvider particleProvider;
+    private ParticleProvider<?> particleProvider;
     private IWorldguard worldguard;
     private LandRaidControl landRaidControl;
     private boolean luckPermsSetup;

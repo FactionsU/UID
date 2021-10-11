@@ -50,7 +50,7 @@ import java.util.UUID;
 
 public class FactionsEntityListener extends AbstractListener {
 
-    public FactionsPlugin plugin;
+    public final FactionsPlugin plugin;
 
     public FactionsEntityListener(FactionsPlugin plugin) {
         this.plugin = plugin;

@@ -33,7 +33,7 @@ public abstract class MemoryBoard extends Board {
     public class MemoryBoardMap extends HashMap<FLocation, String> {
         private static final long serialVersionUID = -6689617828610585368L;
 
-        Multimap<String, FLocation> factionToLandMap = HashMultimap.create();
+        final Multimap<String, FLocation> factionToLandMap = HashMultimap.create();
 
         @Override
         public String put(FLocation floc, String factionId) {

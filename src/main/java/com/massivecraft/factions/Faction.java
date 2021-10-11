@@ -8,7 +8,6 @@ import com.massivecraft.factions.perms.Selectable;
 import com.massivecraft.factions.struct.BanInfo;
 import com.massivecraft.factions.util.LazyLocation;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -297,6 +296,4 @@ public interface Faction extends EconomyParticipator, Selectable {
     Set<FLocation> getAllClaims();
 
     void setId(String id);
-
-    OfflinePlayer getOfflinePlayer();
 }

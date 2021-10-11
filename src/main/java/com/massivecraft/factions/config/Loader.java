@@ -57,7 +57,7 @@ public class Loader {
         loadNode(node, loader.createEmptyNode(), config);
     }
 
-    private static Set<Class<?>> types = new HashSet<>();
+    private static final Set<Class<?>> types = new HashSet<>();
 
     static {
         types.add(Boolean.TYPE);
@@ -114,7 +114,7 @@ public class Loader {
                 } else {
                     try {
                         if (Set.class.isAssignableFrom(field.getType()) && List.class.isAssignableFrom(curNode.getValue().getClass())) {
-                            field.set(object, new HashSet((List<?>) curNode.getValue()));
+                            field.set(object, new HashSet<Object>((List<?>) curNode.getValue()));
                         } else {
                             field.set(object, curNode.getValue());
                         }
@@ -125,12 +125,11 @@ public class Loader {
                     }
                 }
             } else {
-                Object o = defaultValue;
-                if (o == null) {
+                if (defaultValue == null) {
                     curNode.setValue(null);
                     newNewNode.setValue(null);
                 } else {
-                    loadNode(curNode, newNewNode, o);
+                    loadNode(curNode, newNewNode, defaultValue);
                 }
             }
         }
@@ -154,7 +153,7 @@ public class Loader {
         StringBuilder builder = new StringBuilder();
         for (Object o : path) {
             if (o != null) {
-                builder.append(o.toString()).append('.');
+                builder.append(o).append('.');
             }
         }
         return builder.substring(0, builder.length() - 1);

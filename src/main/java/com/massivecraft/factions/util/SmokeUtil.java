@@ -24,7 +24,7 @@ import java.util.Random;
 
 public class SmokeUtil {
 
-    public static Random random = new Random();
+    public static final Random random = new Random();
 
     // -------------------------------------------- //
     // Spawn once

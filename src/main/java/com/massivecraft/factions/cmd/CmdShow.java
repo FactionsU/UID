@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 public class CmdShow extends FCommand {
 
-    List<String> defaults = new ArrayList<>();
+    final List<String> defaults = new ArrayList<>();
 
     public CmdShow() {
         this.aliases.add("show");
