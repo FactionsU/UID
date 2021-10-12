@@ -117,7 +117,7 @@ public class DynmapConfig {
         }
 
         // This is used for config loading
-        @SuppressWarnings("unused")
+        @SuppressWarnings({"unused", "UnstableApiUsage"})
         private transient TypeToken<Map<String, Style>> factionStylesToken = new TypeToken<Map<String, Style>>() {
         };
 
@@ -152,6 +152,7 @@ public class DynmapConfig {
                                 .setBoost(style.isStyleBoost()));
                     } else if (s instanceof Map) {
                         DynmapStyle style = new DynmapStyle();
+                        @SuppressWarnings("unchecked")
                         Map<String, Object> map = (Map<String, Object>) s;
                         if (map.containsKey("homeMarker")) {
                             style.setHomeMarker(map.get("homeMarker").toString());
