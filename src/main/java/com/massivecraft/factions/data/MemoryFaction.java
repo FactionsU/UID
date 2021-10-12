@@ -70,7 +70,6 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected int maxVaults;
     protected Role defaultRole;
     protected LinkedHashMap<PermSelector, Map<String, Boolean>> permissions = new LinkedHashMap<>();
-    protected List<PermSelector> permissionsOrder = new ArrayList<>();
     protected Set<BanInfo> bans = new HashSet<>();
     protected double dtr;
     protected long lastDTRUpdateTime;
@@ -385,11 +384,12 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
             // TODO migrate ownership stuffs
         }
 
-        List<PermSelector> applicable = this.permissionsOrder.stream().filter(s -> s.test(selectable, this)).collect(Collectors.toList());
-        for (PermSelector selector : applicable) {
-            Boolean bool = this.permissions.get(selector).get(permissibleAction.getName());
-            if (bool != null) {
-                return bool;
+        for (Map.Entry<PermSelector, Map<String, Boolean>> entry : permissions.entrySet()) {
+            if (entry.getKey().test(selectable, this)) {
+                Boolean bool = entry.getValue().get(permissibleAction.getName());
+                if (bool != null) {
+                    return bool;
+                }
             }
         }
 
