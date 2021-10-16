@@ -35,7 +35,7 @@ public class PermSelectorTypeAdapter extends TypeAdapter<PermSelector> {
         String string = in.nextString();
 
         PermSelector selector = null;
-        if (legacy) {
+        if (legacy && !string.contains(":")) {
             selector = getLegacy(string);
         }
         if (selector == null) {
@@ -60,9 +60,12 @@ public class PermSelectorTypeAdapter extends TypeAdapter<PermSelector> {
         if (role != null) {
             return new RoleSingleSelector(role);
         }
-        Relation relation = Relation.fromString(string.toUpperCase());
-        if (relation != null && relation != Relation.MEMBER) {
-            return new RelationSingleSelector(relation);
+        try {
+            Relation relation = Relation.valueOf(string.toUpperCase());
+            if (relation != Relation.MEMBER) {
+                return new RelationSingleSelector(relation);
+            }
+        } catch (IllegalArgumentException ignored) {
         }
         try {
             UUID uuid = UUID.fromString(string);
