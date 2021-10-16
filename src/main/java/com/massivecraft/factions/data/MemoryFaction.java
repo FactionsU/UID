@@ -367,7 +367,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
             return false; // Fail in a safe way
         }
 
-        if (selectable == Role.ADMIN || (selectable instanceof FPlayer && ((FPlayer) selectable).getRole() == Role.ADMIN)) {
+        if (selectable == Role.ADMIN || (selectable instanceof FPlayer && ((FPlayer) selectable).getFaction() == this && ((FPlayer) selectable).getRole() == Role.ADMIN)) {
             return true;
         }
 
