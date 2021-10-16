@@ -4,7 +4,7 @@
 
     <groupId>com.massivecraft</groupId>
     <artifactId>Factions-Plugin</artifactId>
-    <version>1.6.9.5-U0.6.2</version>
+    <version>1.6.9.5-U0.6.3</version>
     <packaging>jar</packaging>
 
     <name>Factions Plugin (mostly)</name>
