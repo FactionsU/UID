@@ -24,7 +24,7 @@ public class FactionSelector extends AbstractSelector {
             this.id = Integer.parseInt(faction.getId());
             this.lastKnown = faction.getTag();
         } else {
-            Faction faction = Factions.getInstance().getByTag(split[0]);
+            Faction faction = Factions.getInstance().getFactionById(split[0]);
             this.id = Integer.parseInt(split[0]);
             this.lastKnown = faction == null ? split[1] : faction.getTag();
         }
@@ -37,13 +37,13 @@ public class FactionSelector extends AbstractSelector {
 
     @Override
     public String serializeValue() {
-        Faction faction = Factions.getInstance().getByTag(Integer.toString(this.id));
-        return this.id + ' ' + (faction == null ? this.lastKnown : faction.getTag());
+        Faction faction = Factions.getInstance().getFactionById(Integer.toString(this.id));
+        return Integer.toString(this.id) + ' ' + (faction == null ? this.lastKnown : faction.getTag());
     }
 
     @Override
     public Component displayValue(Faction context) {
-        Faction faction = Factions.getInstance().getByTag(Integer.toString(this.id));
+        Faction faction = Factions.getInstance().getFactionById(Integer.toString(this.id));
         return faction == null ? MiniMessage.miniMessage().parse(FactionsPlugin.getInstance().tl().permissions().selectors().faction().getDisbandedValue(), "lastknown", this.lastKnown) : LegacyComponentSerializer.legacySection().deserialize(faction.getTag(context));
     }
 }

@@ -56,7 +56,7 @@ public class PermSelectorRegistry {
         String[] split = input.split(":", 2);
         PermSelector.Descriptor descriptor = getDescriptor(split[0]);
         if (split.length < 2 || descriptor == null) {
-            throw new IllegalArgumentException("Missing ':'");
+            throw new IllegalArgumentException(split.length < 2 ? "Missing ':'" : "Unknown selector");
         }
         return descriptor.create(split[1]);
     }
