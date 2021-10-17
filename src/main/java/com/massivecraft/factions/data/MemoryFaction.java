@@ -410,7 +410,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         }
     }
 
-    private void resetPerms() {
+    public void resetPerms() {
         if (permissions == null) {
             permissions = new LinkedHashMap<>();
         } else {

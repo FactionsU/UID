@@ -47,6 +47,7 @@ public class CmdPerm extends FCommand {
         this.addSubCommand(new CmdPermRemove());
         this.addSubCommand(new CmdPermShow());
         this.addSubCommand(new CmdPermShowOverride());
+        this.addSubCommand(new CmdPermReset());
     }
 
     private static int length(ComponentBuilder<TextComponent, TextComponent.Builder> builder) {
@@ -328,6 +329,23 @@ public class CmdPerm extends FCommand {
                     map.keySet().removeIf(s -> s.equalsIgnoreCase(target));
                 }
                 showSelector(context, -1, selector, audience, permissions, tl);
+            }
+        }
+    }
+
+    class CmdPermReset extends CmdPermAbstract {
+        CmdPermReset() {
+            this.aliases.addAll(FactionsPlugin.getInstance().tl().commands().permissions().reset().getAliases());
+        }
+
+        void perform(CommandContext context, Audience audience, LinkedHashMap<PermSelector, Map<String, Boolean>> permissions, TranslationsConfig.Commands.Permissions tl) {
+            if (context.args.size() == 1 && context.argAsString(0, "").equals(tl.reset().getConfirmWord())) {
+                ((MemoryFaction) context.faction).resetPerms();
+                audience.sendMessage(MiniMessage.miniMessage().parse(tl.reset().getResetComplete()));
+            } else {
+                String cmd = '/' + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + ' ' + tl.getAliases().get(0) + ' ' + tl.reset().getAliases().get(0) + ' ' + tl.reset().getConfirmWord();
+                audience.sendMessage(MiniMessage.miniMessage().parse(tl.reset().getWarning(),
+                        "command", cmd));
             }
         }
     }
