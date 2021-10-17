@@ -210,6 +210,29 @@ public class TranslationsConfig {
                 }
             }
 
+            public static class SubCmdReset extends AbsCommand {
+                private String warning = "<#ff6666>Warning:</#ff6666> Are you sure you wish to reset all permissions? <click:run_command:\"<command>\"><#ff6666>[CONFIRM]</#ff6666></click>";
+                private String resetComplete = "<color:#66ebff>Permissions reset!";
+                @Comment("must be a single word, to confirm resetting")
+                private String confirmWord = "confirm";
+
+                public SubCmdReset() {
+                    super("reset");
+                }
+
+                public String getConfirmWord() {
+                    return confirmWord;
+                }
+
+                public String getWarning() {
+                    return warning;
+                }
+
+                public String getResetComplete() {
+                    return resetComplete;
+                }
+            }
+
             public static class SubCmdShow extends AbsCommand {
                 private String header = "#<rownumber> <color:#66ebff><name></color:#66ebff>:<color:#66ffb0><value>";
                 private String footer = "   <click:run_command:\"<command>\"><color:#66ebff>[Add]";
@@ -276,6 +299,7 @@ public class TranslationsConfig {
             private SubCmdListOverride listOverride = new SubCmdListOverride();
             private SubCmdMove move = new SubCmdMove();
             private SubCmdRemove remove = new SubCmdRemove();
+            private SubCmdReset reset = new SubCmdReset();
             private SubCmdShow show = new SubCmdShow();
             private SubCmdShowOverride showOverride = new SubCmdShowOverride();
 
@@ -297,6 +321,10 @@ public class TranslationsConfig {
 
             public SubCmdRemove remove() {
                 return remove;
+            }
+
+            public SubCmdReset reset() {
+                return reset;
             }
 
             public SubCmdShow show() {
