@@ -16,6 +16,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Dispenser;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,11 +24,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
@@ -64,6 +67,62 @@ public class FactionsBlockListener implements Listener {
         if (!playerCanBuildDestroyBlock(event.getPlayer(), event.getBlock().getLocation(), PermissibleActions.BUILD, false)) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onDispense(BlockDispenseEvent event) {
+        if (!plugin.worldUtil().isEnabled(event.getBlock().getWorld())) {
+            return;
+        }
+
+        ItemStack item = event.getItem();
+        if (item == null) {
+            return;
+        }
+        Material material = item.getType();
+        FLocation start = new FLocation(event.getBlock());
+        FLocation end = new FLocation(event.getBlock().getRelative(((Dispenser) event.getBlock().getBlockData()).getFacing()));
+        if (start.equals(end)) {
+            return;
+        }
+
+        Faction startFaction = Board.getInstance().getFactionAt(start);
+        Faction endFaction = Board.getInstance().getFactionAt(end);
+        if (startFaction == endFaction) {
+            return;
+        }
+        if (FactionsPlugin.getInstance().getLandRaidControl().isRaidable(endFaction)) {
+            return;
+        }
+
+        MainConfig.Factions.Protection protConf = FactionsPlugin.getInstance().conf().factions().protection();
+
+        if (endFaction.hasPlayersOnline()) {
+            if (!protConf.getTerritoryDenyUsageMaterials().contains(material)) {
+                return; // Item isn't one we're preventing for online factions.
+            }
+        } else {
+            if (!protConf.getTerritoryDenyUsageMaterialsWhenOffline().contains(material)) {
+                return; // Item isn't one we're preventing for offline factions.
+            }
+        }
+
+        if (endFaction.isWilderness()) {
+            if (!protConf.isWildernessDenyUsage() || protConf.getWorldsNoWildernessProtection().contains(event.getBlock().getLocation().getWorld().getName())) {
+                return; // This is not faction territory. Use whatever you like here.
+            }
+        } else if (endFaction.isSafeZone()) {
+            if (!protConf.isSafeZoneDenyUsage()) {
+                return;
+            }
+        } else if (endFaction.isWarZone()) {
+            if (!protConf.isWarZoneDenyUsage()) {
+                return;
+            }
+        } else if (endFaction.hasAccess(startFaction, PermissibleActions.ITEM, end)) {
+            return;
+        }
+        event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
