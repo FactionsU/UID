@@ -130,7 +130,7 @@ public class CmdUnclaim extends FCommand {
         }
 
         if (!targetFaction.hasAccess(context.fPlayer, PermissibleActions.TERRITORY, target)) {
-            context.msg(TL.CLAIM_CANTCLAIM, targetFaction.describeTo(context.fPlayer));
+            context.msg(TL.CLAIM_CANTUNCLAIM, targetFaction.describeTo(context.fPlayer));
             return false;
         }
 

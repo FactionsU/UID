@@ -101,6 +101,7 @@ public enum Permission {
     TNT_SIPHON("tnt.siphon"),
     TOGGLE_ALLIANCE_CHAT("togglealliancechat"),
     UNCLAIM("unclaim"),
+    UNCLAIM_FILL("unclaim.fill"),
     UNCLAIM_ALL("unclaimall"),
     VERSION("version"),
     SCOREBOARD("scoreboard"),

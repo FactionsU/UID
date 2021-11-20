@@ -9,6 +9,7 @@ import com.massivecraft.factions.cmd.claim.CmdClaimLine;
 import com.massivecraft.factions.cmd.claim.CmdSafeunclaimall;
 import com.massivecraft.factions.cmd.claim.CmdUnclaim;
 import com.massivecraft.factions.cmd.claim.CmdUnclaimall;
+import com.massivecraft.factions.cmd.claim.CmdUnclaimfill;
 import com.massivecraft.factions.cmd.claim.CmdWarunclaimall;
 import com.massivecraft.factions.cmd.money.CmdMoney;
 import com.massivecraft.factions.cmd.relations.CmdRelationAlly;
@@ -107,6 +108,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
     public final CmdLogins cmdLogins = new CmdLogins();
     public final CmdClaimLine cmdClaimLine = new CmdClaimLine();
     public final CmdClaimFill cmdClaimFill = new CmdClaimFill();
+    public final CmdUnclaimfill cmdUnclaimfill = new CmdUnclaimfill();
     public final CmdTop cmdTop = new CmdTop();
     public final CmdAHome cmdAHome = new CmdAHome();
     public final CmdPerm cmdPerm = new CmdPerm();
@@ -199,6 +201,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.addSubCommand(this.cmdLogins);
         this.addSubCommand(this.cmdClaimLine);
         this.addSubCommand(this.cmdClaimFill);
+        this.addSubCommand(this.cmdUnclaimfill);
         this.addSubCommand(this.cmdAHome);
         this.addSubCommand(this.cmdPerm);
         this.addSubCommand(this.cmdPromote);
