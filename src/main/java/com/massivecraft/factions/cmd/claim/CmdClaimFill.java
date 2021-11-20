@@ -12,7 +12,7 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Location;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
@@ -78,7 +78,7 @@ public class CmdClaimFill extends FCommand {
         long startX = loc.getX();
         long startZ = loc.getZ();
 
-        Set<FLocation> toClaim = new HashSet<>();
+        Set<FLocation> toClaim = new LinkedHashSet<>();
         Queue<FLocation> queue = new LinkedList<>();
         FLocation currentHead;
         queue.add(loc);
