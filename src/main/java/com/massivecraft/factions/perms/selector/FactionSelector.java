@@ -1,5 +1,6 @@
 package com.massivecraft.factions.perms.selector;
 
+import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
@@ -15,10 +16,18 @@ public class FactionSelector extends AbstractSelector {
 
     private final int id;
     private final String lastKnown;
+    private static final String delimiter = "¤";
 
     public FactionSelector(String str) {
         super(DESCRIPTOR);
-        String[] split = str.split(" ");
+        String[] split = str.split(" "); // Old mistake
+        if (split.length == 2) {
+            Faction faction = Factions.getInstance().getFactionById(split[0]);
+            this.id = Integer.parseInt(split[0]);
+            this.lastKnown = faction == null ? split[1] : faction.getTag();
+            return;
+        }
+        split = str.split(delimiter);
         if (split.length == 1) {
             Faction faction = Factions.getInstance().getByTag(str);
             this.id = Integer.parseInt(faction.getId());
@@ -32,13 +41,19 @@ public class FactionSelector extends AbstractSelector {
 
     @Override
     public boolean test(Selectable selectable, Faction faction) {
-        return selectable instanceof Faction && ((Faction) selectable).getId().equals(Integer.toString(this.id));
+        Faction fac = null;
+        if (selectable instanceof Faction) {
+            fac = (Faction) selectable;
+        } else if (selectable instanceof FPlayer) {
+            fac = ((FPlayer) selectable).getFaction();
+        }
+        return fac != null && fac.getId().equals(Integer.toString(this.id));
     }
 
     @Override
     public String serializeValue() {
         Faction faction = Factions.getInstance().getFactionById(Integer.toString(this.id));
-        return Integer.toString(this.id) + ' ' + (faction == null ? this.lastKnown : faction.getTag());
+        return this.id + delimiter + (faction == null ? this.lastKnown : faction.getTag());
     }
 
     @Override
