@@ -5,12 +5,17 @@
 [![Discord](https://imgur.com/MFRRBn4.png)](https://discord.gg/FfAz3eE)
 
 &lt;rant&gt;  
-I'd appreciate it if you could pay for the (http://www.spigotmc.org/resources/factionsuuid.1035/) if your server makes money. If you only run your server for your kids or some friends and don't make any money, then I don't want to stop you from doing so by forcing you to buy a $15 plugin. If that's the case, then just send me a message and we can work something out.
+I'd appreciate it if you could pay for the (http://www.spigotmc.org/resources/factionsuuid.1035/) if your 
+server makes money. If you only run your server for your kids or some friends and don't make any money, 
+then I don't want to stop you from doing so by forcing you to buy a $15 plugin. If that's the case, 
+then just open a ticket on Discord and we can work something out.
 
 The repo is open because of that and because I still hope to see people contributing upstream :)  
 &lt;/rant&gt;
 
-This plugin will allow the players on the server to create factions/guilds. The factions can claim territory that will be protected from non-members. Factions can forge alliances and declare themselves enemies with others. Land may be taken from other factions through war.
+This plugin will allow the players on the server to create factions/guilds. The factions can claim territory 
+that will be protected from non-members. Factions can forge alliances and declare themselves enemies with others. 
+Land may be taken from other factions through war.
 
 The goals of this plugin:
 
@@ -42,7 +47,8 @@ This command has subcommands like:
 * `/f map`
 * ... etc
 
-You may also read the documentation ingame as the plugin ships with an ingame help manual. Read the help pages like this:
+You may also read the documentation ingame as the plugin ships with an ingame help manual. Read the help pages 
+like this:
 
 * `/f help 1`
 * `/f help 2`
