@@ -1935,6 +1935,8 @@ public class MainConfig {
             @Comment("Maximum faction tag length")
             private int tagLengthMax = 10;
             private boolean tagForceUpperCase = false;
+            private String tagValidCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            private transient List<Character> tagValidCharactersList;
 
             private boolean newFactionsDefaultOpen = false;
             private boolean newFactionsDefaultPeaceful = false;
@@ -1990,6 +1992,21 @@ public class MainConfig {
 
             public List<String> getNameBlacklist() {
                 return nameBlacklist == null ? Collections.emptyList() : Collections.unmodifiableList(this.nameBlacklist);
+            }
+
+            public List<Character> getTagValidCharacters() {
+                if (tagValidCharactersList == null) {
+                    List<Character> list = new ArrayList<>();
+                    for (char c : this.tagValidCharacters.toCharArray()) {
+                        list.add(c);
+                    }
+                    this.tagValidCharactersList = Collections.unmodifiableList(list);
+                }
+                return this.tagValidCharactersList;
+            }
+
+            public boolean isValidTagCharacter(char c) {
+                return this.tagValidCharacters.indexOf(c) > -1;
             }
 
             public boolean isDisablePistonsInTerritory() {
