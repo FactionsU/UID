@@ -1950,6 +1950,8 @@ public class MainConfig {
             @Comment("If anything greater than 0 (can be decimal values like 0.1), players will automatically leave their faction\n" +
                     "after being inactive for this many days.")
             private double autoLeaveAfterDaysOfInactivity = 10.0;
+            @Comment("If true, autoleave only processes on players if all faction members meet the inactivity criteria.")
+            private boolean autoLeaveOnlyEntireFactionInactive = false;
             private double autoLeaveRoutineRunsEveryXMinutes = 5.0;
             private int autoLeaveRoutineMaxMillisecondsPerTick = 5;  // 1 server tick is roughly 50ms, so default max 10% of a tick
             private boolean removePlayerDataWhenBanned = true;
@@ -2049,6 +2051,10 @@ public class MainConfig {
 
             public double getAutoLeaveAfterDaysOfInactivity() {
                 return autoLeaveAfterDaysOfInactivity;
+            }
+
+            public boolean isAutoLeaveOnlyEntireFactionInactive() {
+                return autoLeaveOnlyEntireFactionInactive;
             }
 
             public double getAutoLeaveRoutineRunsEveryXMinutes() {
