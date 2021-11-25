@@ -18,13 +18,11 @@ public class AutoLeaveProcessTask extends AutoLeaveTask.AutoLeaveProcessor<FPlay
     public void go(MainConfig conf) {
         FPlayer fplayer = iterator.next();
 
-        // Check if they should be exempt from this.
-        if (!fplayer.willAutoLeave()) {
-            FactionsPlugin.getInstance().debug(Level.INFO, fplayer.getName() + " was going to be auto-removed but was set not to.");
-            return;
-        }
-
         if (fplayer.isOffline() && now - fplayer.getLastLoginTime() > toleranceMillis) {
+            if (!fplayer.willAutoLeave()) {
+                FactionsPlugin.getInstance().debug(Level.INFO, fplayer.getName() + " was going to be auto-removed but was set not to.");
+                return;
+            }
             if ((conf.logging().isFactionLeave() || conf.logging().isFactionKick()) && (fplayer.hasFaction() || conf.factions().other().isAutoLeaveDeleteFPlayerData())) {
                 FactionsPlugin.getInstance().log("Player " + fplayer.getName() + " was auto-removed due to inactivity.");
             }
