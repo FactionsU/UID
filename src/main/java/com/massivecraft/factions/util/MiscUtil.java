@@ -2,6 +2,7 @@ package com.massivecraft.factions.util;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.material.MaterialDb;
 import org.bukkit.ChatColor;
@@ -79,7 +80,7 @@ public class MiscUtil {
         return values;
     }
 
-    /// TODO create tag whitelist!!
+    @Deprecated
     public static HashSet<String> substanceChars = new HashSet<>(Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"));
 
     public static String getComparisonString(String str) {
@@ -88,8 +89,9 @@ public class MiscUtil {
         str = ChatColor.stripColor(str);
         str = str.toLowerCase();
 
+        MainConfig.Factions.Other conf = FactionsPlugin.getInstance().conf().factions().other();
         for (char c : str.toCharArray()) {
-            if (substanceChars.contains(String.valueOf(c))) {
+            if (conf.isValidTagCharacter(c)) {
                 ret.append(c);
             }
         }
@@ -114,9 +116,10 @@ public class MiscUtil {
             errors.add(FactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), FactionsPlugin.getInstance().conf().factions().other().getTagLengthMax()));
         }
 
+        MainConfig.Factions.Other conf = FactionsPlugin.getInstance().conf().factions().other();
         List<String> badChars = null;
         for (char c : str.toCharArray()) {
-            if (!substanceChars.contains(String.valueOf(c))) {
+            if (!conf.isValidTagCharacter(c)) {
                 if (badChars == null) {
                     badChars = new ArrayList<>();
                 }
