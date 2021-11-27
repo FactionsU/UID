@@ -4,7 +4,7 @@
 
     <groupId>com.massivecraft</groupId>
     <artifactId>Factions</artifactId>
-    <version>1.6.9.5-U0.6.3</version>
+    <version>1.6.9.5-U0.6.4</version>
     <packaging>jar</packaging>
 
     <name>Factions</name>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <version>4.0.1-SNAPSHOT</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
