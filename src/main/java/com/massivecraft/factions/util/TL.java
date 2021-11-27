@@ -660,7 +660,7 @@ public enum TL {
     COMMAND_UNCLAIMFILL_TOOFAR("&cThis unclaim would exceed the maximum distance of %.2f"),
     COMMAND_UNCLAIMFILL_PASTLIMIT("&cThis unclaim would exceed the limit!"),
     COMMAND_UNCLAIMFILL_TOOMUCHFAIL("&cAborting unclaim fill after %d failures"),
-    COMMAND_UNCLAIMFILL_UNCLAIMED("%1$s&e unclaimed %d claims of your faction's land around %s."),
+    COMMAND_UNCLAIMFILL_UNCLAIMED("%s&e unclaimed %d claims of your faction's land around %s."),
     COMMAND_UNCLAIMFILL_BYPASSCOMPLETE("&eUnclaimed %d claims."),
 
     COMMAND_VERSION_VERSION("&eYou are running %1$s"),

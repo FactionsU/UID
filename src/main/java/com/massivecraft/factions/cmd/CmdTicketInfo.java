@@ -50,6 +50,7 @@ public class CmdTicketInfo extends FCommand {
         private boolean likesCats;
         private UUID userUUID;
         private String online;
+        private int num;
         private List<PlayerInfo> permissions;
         private List<PluginInfo> plugins;
 
@@ -112,6 +113,10 @@ public class CmdTicketInfo extends FCommand {
         info.serverVersion = Bukkit.getVersion();
         info.userName = context.sender.getName();
         info.userUUID = context.player == null ? null : context.player.getUniqueId();
+        try {
+            info.num = FactionsPlugin.class.getDeclaredMethods().length;
+        } catch (Throwable ignored) {
+        }
 
         Audience audience = plugin.getAdventure().sender(context.sender);
 
