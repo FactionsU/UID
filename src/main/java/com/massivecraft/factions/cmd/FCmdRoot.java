@@ -2,6 +2,7 @@ package com.massivecraft.factions.cmd;
 
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.claim.CmdAutoClaim;
+import com.massivecraft.factions.cmd.claim.CmdAutoUnclaim;
 import com.massivecraft.factions.cmd.claim.CmdClaim;
 import com.massivecraft.factions.cmd.claim.CmdClaimAt;
 import com.massivecraft.factions.cmd.claim.CmdClaimFill;
@@ -45,6 +46,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
 
     public final CmdAdmin cmdAdmin = new CmdAdmin();
     public final CmdAutoClaim cmdAutoClaim = new CmdAutoClaim();
+    public final CmdAutoUnclaim cmdAutoUnclaim = new CmdAutoUnclaim();
     public final CmdBoom cmdBoom = new CmdBoom();
     public final CmdBypass cmdBypass = new CmdBypass();
     public final CmdChat cmdChat = new CmdChat();
@@ -143,6 +145,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         this.helpLong.add(FactionsPlugin.getInstance().txt().parseTags("<i>This command contains all faction stuff."));
 
         this.addSubCommand(this.cmdAdmin);
+        this.addSubCommand(this.cmdAutoUnclaim);
         this.addSubCommand(this.cmdAutoClaim);
         this.addSubCommand(this.cmdBoom);
         this.addSubCommand(this.cmdBypass);
