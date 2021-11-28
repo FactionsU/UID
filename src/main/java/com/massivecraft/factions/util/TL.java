@@ -838,7 +838,9 @@ public enum TL {
      * In the player and entity listeners
      */
     PLAYER_CANTHURT("&eYou may not harm other players in %s"),
+    @Deprecated
     PLAYER_SAFEAUTO("&eThis land is now a safe zone."),
+    @Deprecated
     PLAYER_WARAUTO("&eThis land is now a war zone."),
     PLAYER_OUCH("&cOuch, that is starting to hurt. You should give it a rest."),
     PLAYER_USE_WILDERNESS("&cYou can't use &d%s&c in the wilderness."),

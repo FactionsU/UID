@@ -91,8 +91,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected transient FLocation lastStoodAt = new FLocation(); // Where did this player stand the last time we checked?
     protected transient boolean mapAutoUpdating;
     protected transient Faction autoClaimFor;
-    protected transient boolean autoSafeZoneEnabled;
-    protected transient boolean autoWarZoneEnabled;
     protected transient boolean loginPvpDisabled;
     protected transient long lastFrostwalkerMessage;
     protected transient boolean shouldTakeFallDamage = true;
@@ -190,35 +188,26 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public void setAutoClaimFor(Faction faction) {
         this.autoClaimFor = faction;
-        if (this.autoClaimFor != null) {
-            // TODO: merge these into same autoclaim
-            this.autoSafeZoneEnabled = false;
-            this.autoWarZoneEnabled = false;
-        }
     }
 
+    @Deprecated
     public boolean isAutoSafeClaimEnabled() {
-        return autoSafeZoneEnabled;
+        return autoClaimFor != null && autoClaimFor.isSafeZone();
     }
 
+    @Deprecated
     public void setIsAutoSafeClaimEnabled(boolean enabled) {
-        this.autoSafeZoneEnabled = enabled;
-        if (enabled) {
-            this.autoClaimFor = null;
-            this.autoWarZoneEnabled = false;
-        }
+        this.setAutoClaimFor(enabled ? Factions.getInstance().getSafeZone() : null);
     }
 
+    @Deprecated
     public boolean isAutoWarClaimEnabled() {
-        return autoWarZoneEnabled;
+        return autoClaimFor != null && autoClaimFor.isWarZone();
     }
 
+    @Deprecated
     public void setIsAutoWarClaimEnabled(boolean enabled) {
-        this.autoWarZoneEnabled = enabled;
-        if (enabled) {
-            this.autoClaimFor = null;
-            this.autoSafeZoneEnabled = false;
-        }
+        this.setAutoClaimFor(enabled ? Factions.getInstance().getWarZone() : null);
     }
 
     public boolean isAdminBypassing() {
@@ -302,8 +291,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.lastLoginTime = System.currentTimeMillis();
         this.mapAutoUpdating = false;
         this.autoClaimFor = null;
-        this.autoSafeZoneEnabled = false;
-        this.autoWarZoneEnabled = false;
         this.loginPvpDisabled = FactionsPlugin.getInstance().conf().factions().pvp().getNoPVPDamageToOthersForXSecondsAfterLogin() > 0;
         this.powerBoost = 0.0;
         this.kills = 0;
@@ -322,8 +309,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.lastLoginTime = other.lastLoginTime;
         this.mapAutoUpdating = other.mapAutoUpdating;
         this.autoClaimFor = other.autoClaimFor;
-        this.autoSafeZoneEnabled = other.autoSafeZoneEnabled;
-        this.autoWarZoneEnabled = other.autoWarZoneEnabled;
         this.loginPvpDisabled = other.loginPvpDisabled;
         this.powerBoost = other.powerBoost;
         this.role = other.role;

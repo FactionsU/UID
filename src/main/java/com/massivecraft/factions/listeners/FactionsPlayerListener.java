@@ -263,24 +263,6 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (me.getAutoClaimFor() != null) {
             me.attemptClaim(me.getAutoClaimFor(), event.getTo(), true);
-        } else if (me.isAutoSafeClaimEnabled()) {
-            if (!Permission.MANAGE_SAFE_ZONE.has(player)) {
-                me.setIsAutoSafeClaimEnabled(false);
-            } else {
-                if (!Board.getInstance().getFactionAt(to).isSafeZone()) {
-                    Board.getInstance().setFactionAt(Factions.getInstance().getSafeZone(), to);
-                    me.msg(TL.PLAYER_SAFEAUTO);
-                }
-            }
-        } else if (me.isAutoWarClaimEnabled()) {
-            if (!Permission.MANAGE_WAR_ZONE.has(player)) {
-                me.setIsAutoWarClaimEnabled(false);
-            } else {
-                if (!Board.getInstance().getFactionAt(to).isWarZone()) {
-                    Board.getInstance().setFactionAt(Factions.getInstance().getWarZone(), to);
-                    me.msg(TL.PLAYER_WARAUTO);
-                }
-            }
         }
 
         // Did we change "host"(faction)?

@@ -66,12 +66,16 @@ public interface FPlayer extends EconomyParticipator, Selectable {
 
     void setAutoClaimFor(Faction faction);
 
+    @Deprecated
     boolean isAutoSafeClaimEnabled();
 
+    @Deprecated
     void setIsAutoSafeClaimEnabled(boolean enabled);
 
+    @Deprecated
     boolean isAutoWarClaimEnabled();
 
+    @Deprecated
     void setIsAutoWarClaimEnabled(boolean enabled);
 
     boolean isAdminBypassing();
@@ -210,6 +214,7 @@ public interface FPlayer extends EconomyParticipator, Selectable {
 
     boolean canClaimForFaction(Faction forFaction);
 
+    @Deprecated
     boolean canClaimForFactionAtLocation(Faction forFaction, Location location, boolean notifyFailure);
 
     boolean canClaimForFactionAtLocation(Faction forFaction, FLocation location, boolean notifyFailure);
