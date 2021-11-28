@@ -223,6 +223,8 @@ public interface FPlayer extends EconomyParticipator, Selectable {
 
     boolean attemptClaim(Faction forFaction, FLocation location, boolean notifyFailure);
 
+    boolean attemptUnclaim(Faction forFaction, FLocation flocation, boolean notifyFailure);
+
     String getId();
 
     Player getPlayer();

@@ -10,6 +10,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.event.FactionAutoDisbandEvent;
 import com.massivecraft.factions.event.LandClaimEvent;
+import com.massivecraft.factions.event.LandUnclaimEvent;
 import com.massivecraft.factions.iface.EconomyParticipator;
 import com.massivecraft.factions.iface.RelationParticipator;
 import com.massivecraft.factions.integration.Econ;
@@ -971,6 +972,116 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         if (FactionsPlugin.getInstance().conf().logging().isLandClaims()) {
             FactionsPlugin.getInstance().log(TL.CLAIM_CLAIMEDLOG.toString(), this.getName(), flocation.getCoordString(), forFaction.getTag());
+        }
+
+        return true;
+    }
+
+    public boolean attemptUnclaim(Faction forFaction, FLocation flocation, boolean notifyFailure) {
+        Faction targetFaction = Board.getInstance().getFactionAt(flocation);
+
+        if (!targetFaction.equals(forFaction)) {
+            this.msg(TL.COMMAND_UNCLAIM_WRONGFACTIONOTHER);
+            return false;
+        }
+
+        if (targetFaction.isSafeZone()) {
+            if (Permission.MANAGE_SAFE_ZONE.has(this.getPlayer())) {
+                Board.getInstance().removeAt(flocation);
+                this.msg(TL.COMMAND_UNCLAIM_SAFEZONE_SUCCESS);
+
+                if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
+                    FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.getName(), flocation.getCoordString(), targetFaction.getTag()));
+                }
+                return true;
+            } else {
+                if (notifyFailure) {
+                    this.msg(TL.COMMAND_UNCLAIM_SAFEZONE_NOPERM);
+                }
+                return false;
+            }
+        } else if (targetFaction.isWarZone()) {
+            if (Permission.MANAGE_WAR_ZONE.has(this.getPlayer())) {
+                Board.getInstance().removeAt(flocation);
+                this.msg(TL.COMMAND_UNCLAIM_WARZONE_SUCCESS);
+
+                if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
+                    FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.getName(), flocation.getCoordString(), targetFaction.getTag()));
+                }
+                return true;
+            } else {
+                if (notifyFailure) {
+                    this.msg(TL.COMMAND_UNCLAIM_WARZONE_NOPERM);
+                }
+                return false;
+            }
+        }
+
+        if (this.isAdminBypassing()) {
+            LandUnclaimEvent unclaimEvent = new LandUnclaimEvent(flocation, targetFaction, this);
+            Bukkit.getServer().getPluginManager().callEvent(unclaimEvent);
+            if (unclaimEvent.isCancelled()) {
+                return false;
+            }
+
+            Board.getInstance().removeAt(flocation);
+
+            targetFaction.msg(TL.COMMAND_UNCLAIM_UNCLAIMED, this.describeTo(targetFaction, true));
+            this.msg(TL.COMMAND_UNCLAIM_UNCLAIMS);
+
+            if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
+                FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.getName(), flocation.getCoordString(), targetFaction.getTag()));
+            }
+
+            return true;
+        }
+
+        if (!this.hasFaction()) {
+            if (notifyFailure) {
+                this.msg("You are not member of any faction.");
+            }
+            return false;
+        }
+
+        if (!targetFaction.hasAccess(this, PermissibleActions.TERRITORY, flocation)) {
+            if (notifyFailure) {
+                this.msg(TL.CLAIM_CANTUNCLAIM, targetFaction.describeTo(this));
+            }
+            return false;
+        }
+
+        if (this.getFaction() != targetFaction) {
+            if (notifyFailure) {
+                this.msg(TL.COMMAND_UNCLAIM_WRONGFACTION);
+            }
+            return false;
+        }
+
+        LandUnclaimEvent unclaimEvent = new LandUnclaimEvent(flocation, targetFaction, this);
+        Bukkit.getServer().getPluginManager().callEvent(unclaimEvent);
+        if (unclaimEvent.isCancelled()) {
+            return false;
+        }
+
+        if (Econ.shouldBeUsed()) {
+            double refund = Econ.calculateClaimRefund(this.getFaction().getLandRounded());
+
+            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysLandCosts()) {
+                if (!Econ.modifyMoney(this.getFaction(), refund, TL.COMMAND_UNCLAIM_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIM_FORUNCLAIM.toString())) {
+                    return false;
+                }
+            } else {
+                if (!Econ.modifyMoney(this, refund, TL.COMMAND_UNCLAIM_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIM_FORUNCLAIM.toString())) {
+                    return false;
+                }
+            }
+        }
+
+        Board.getInstance().removeAt(flocation);
+        this.getFaction().msg(TL.COMMAND_UNCLAIM_FACTIONUNCLAIMED, this.describeTo(this.getFaction(), true));
+
+        if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
+            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.getName(), flocation.getCoordString(), targetFaction.getTag()));
         }
 
         return true;
