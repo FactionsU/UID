@@ -30,6 +30,11 @@ public class CmdDelhome extends FCommand {
             return;
         }
 
+        if (FactionsPlugin.getInstance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && context.faction.getWarps().size() > 0) {
+            context.msg(TL.COMMAND_HOME_WARPSREMAIN);
+            return;
+        }
+
         if (!context.payForCommand(FactionsPlugin.getInstance().conf().economy().getCostDelhome(), TL.COMMAND_DELHOME_TOSET, TL.COMMAND_DELHOME_FORSET)) {
             return;
         }

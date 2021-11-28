@@ -284,6 +284,7 @@ public enum TL {
     COMMAND_HOME_ENEMYNEAR("&cYou cannot teleport to your faction home while an enemy is within %s blocks of you."),
     COMMAND_HOME_TOTELEPORT("to teleport to your faction home"),
     COMMAND_HOME_FORTELEPORT("for teleporting to your faction home"),
+    COMMAND_HOME_WARPSREMAIN("&cCannot delete home while the faction has warps!"),
     COMMAND_HOME_DESCRIPTION("Teleport to the faction home"),
 
     COMMAND_INVITE_TOINVITE("to invite someone"),
@@ -518,6 +519,7 @@ public enum TL {
     COMMAND_SETFWARP_SET("&eSet warp &6%1$s&e and password &b'%2$s' &eto your location."),
     COMMAND_SETFWARP_TOSET("to set warp"),
     COMMAND_SETFWARP_FORSET("for setting warp"),
+    COMMAND_SETFWARP_HOMEREQUIRED("&cCannot create warps until a home is set!"),
     COMMAND_SETFWARP_DESCRIPTION("Set a faction warp"),
 
     COMMAND_SETHOME_DISABLED("&cSorry, Faction homes are disabled on this server."),

@@ -38,6 +38,10 @@ public class CmdSetWarp extends FCommand {
             return;
         }
 
+        if (FactionsPlugin.getInstance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !context.faction.hasHome()) {
+            context.msg(TL.COMMAND_SETFWARP_HOMEREQUIRED);
+        }
+
         if (!transact(context.fPlayer, context)) {
             return;
         }
