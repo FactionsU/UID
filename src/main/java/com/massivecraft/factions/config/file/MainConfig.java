@@ -1011,6 +1011,7 @@ public class MainConfig {
             private boolean teleportAllowedFromDifferentWorld = true;
             private double teleportAllowedEnemyDistance = 32.0;
             private boolean teleportIgnoreEnemiesIfInOwnTerritory = true;
+            private boolean requiredToHaveHomeBeforeSettingWarps = false;
 
             public boolean isEnabled() {
                 return enabled;
@@ -1054,6 +1055,10 @@ public class MainConfig {
 
             public boolean isTeleportIgnoreEnemiesIfInOwnTerritory() {
                 return teleportIgnoreEnemiesIfInOwnTerritory;
+            }
+
+            public boolean isRequiredToHaveHomeBeforeSettingWarps() {
+                return requiredToHaveHomeBeforeSettingWarps;
             }
         }
 
