@@ -35,38 +35,22 @@ Usage
 ---------
 <b>Read the full userguide here: [Factions Documentation](https://factions.support)</b>
 
-The chat console command is:
-
- * `/f`
-
-This command has subcommands like:
-
-* `/f create MyFactionName`
-* `/f invite MyFriendsName`
-* `/f claim`
-* `/f map`
-* ... etc
-
-You may also read the documentation ingame as the plugin ships with an ingame help manual. Read the help pages 
-like this:
-
-* `/f help 1`
-* `/f help 2`
-* `/f help 3`
-
-Note that you may optionally skip the slash and just write
-
-* `f`
-
 Installing
 ----------
-1. Download the latest release [on Spigot](https://www.spigotmc.org/resources/factionsuuid.1035/)<br>
+1. Download the latest release [on Spigot](https://www.spigotmc.org/resources/factionsuuid.1035/)
 1. Put Factions.jar in the plugins folder.
 
-A default config file will be created on the first run.
+Default config files will be created on the first run.
+
+Upgrading
+---------
+
+1. Create a folder in the plugins folder named `update`.
+2. Download the [latest release](https://www.spigotmc.org/resources/factionsuuid.1035/) to that `update` folder.
+3. Stop and then start the server.
 
 License
 ----------
-This project has a GPL license just like the Bukkit project.<br>
+This project is licensed under the GPL just like the Bukkit project.<br>
 This project uses [GSON](http://code.google.com/p/google-gson/) which has a [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0 ).
 
