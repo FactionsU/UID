@@ -92,6 +92,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected transient FLocation lastStoodAt = new FLocation(); // Where did this player stand the last time we checked?
     protected transient boolean mapAutoUpdating;
     protected transient Faction autoClaimFor;
+    protected transient Faction autoUnclaimFor;
     protected transient boolean loginPvpDisabled;
     protected transient long lastFrostwalkerMessage;
     protected transient boolean shouldTakeFallDamage = true;
@@ -189,6 +190,20 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public void setAutoClaimFor(Faction faction) {
         this.autoClaimFor = faction;
+        if (faction != null) {
+            this.autoUnclaimFor = null;
+        }
+    }
+
+    public Faction getAutoUnclaimFor() {
+        return autoUnclaimFor;
+    }
+
+    public void setAutoUnclaimFor(Faction faction) {
+        this.autoUnclaimFor = faction;
+        if (faction != null) {
+            this.autoClaimFor = null;
+        }
     }
 
     @Deprecated

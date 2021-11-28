@@ -5,7 +5,6 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.data.MemoryFPlayer;
@@ -263,6 +262,8 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (me.getAutoClaimFor() != null) {
             me.attemptClaim(me.getAutoClaimFor(), event.getTo(), true);
+        } else if (me.getAutoUnclaimFor() != null) {
+            me.attemptUnclaim(me.getAutoUnclaimFor(), new FLocation(event.getTo()), true);
         }
 
         // Did we change "host"(faction)?

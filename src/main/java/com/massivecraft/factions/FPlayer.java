@@ -66,6 +66,10 @@ public interface FPlayer extends EconomyParticipator, Selectable {
 
     void setAutoClaimFor(Faction faction);
 
+    Faction getAutoUnclaimFor();
+
+    void setAutoUnclaimFor(Faction faction);
+
     @Deprecated
     boolean isAutoSafeClaimEnabled();
 

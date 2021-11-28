@@ -69,9 +69,15 @@ public enum TL {
 
     COMMAND_AUTOCLAIM_ENABLED("&eNow auto-claiming land for &d%1$s&e."),
     COMMAND_AUTOCLAIM_DISABLED("&eAuto-claiming of land disabled."),
+    @Deprecated
     COMMAND_AUTOCLAIM_REQUIREDRANK("&cYou must be &d%1$s&c to claim land."),
     COMMAND_AUTOCLAIM_OTHERFACTION("&cYou can't claim land for &d%1$s&c."),
     COMMAND_AUTOCLAIM_DESCRIPTION("Auto-claim land as you walk around"),
+
+    COMMAND_AUTOUNCLAIM_ENABLED("&eNow auto-unclaiming land for &d%1$s&e."),
+    COMMAND_AUTOUNCLAIM_DISABLED("&eAuto-unclaiming of land disabled."),
+    COMMAND_AUTOUNCLAIM_OTHERFACTION("&cYou can't unclaim land for &d%1$s&c."),
+    COMMAND_AUTOUNCLAIM_DESCRIPTION("Auto-unclaim land as you walk around"),
 
     COMMAND_AUTOHELP_HELPFOR("Help for command \""),
 
