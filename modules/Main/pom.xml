@@ -504,6 +504,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.ranull</groupId>
+            <artifactId>Graves</artifactId>
+            <version>4.5</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.5.1</version>
