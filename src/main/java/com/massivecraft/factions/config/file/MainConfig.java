@@ -2801,6 +2801,34 @@ public class MainConfig {
         }
     }
 
+    public class Plugins {
+        public class Graves {
+            @Comment("If true, will allow any Graves plugin graves to be opened by anyone, regardless of permissions")
+            private boolean allowAnyoneToOpenGraves = false;
+            private boolean preventGravesInSafezone = false;
+            private boolean preventGravesInWarzone = false;
+
+            public boolean isAllowAnyoneToOpenGraves() {
+                return allowAnyoneToOpenGraves;
+            }
+
+            public boolean isPreventGravesInSafezone() {
+                return preventGravesInSafezone;
+            }
+
+            public boolean isPreventGravesInWarzone() {
+                return preventGravesInWarzone;
+            }
+        }
+
+        @Comment("Ranull's Graves plugin")
+        private Graves graves = new Graves();
+
+        public Graves graves() {
+            return graves;
+        }
+    }
+
     public class PlayerVaults {
         @Comment("The %s is for the faction id")
         private String vaultPrefix = "faction-%s";
@@ -2900,6 +2928,9 @@ public class MainConfig {
     private MagicPlugin magicPlugin = new MagicPlugin();
     @Comment("Paper features, when accessible.")
     private Paper paper = new Paper();
+    @Comment("Lists plugin integrations. Some other plugins (PVX, LWC, Magic, WG, WB) are currently\n" +
+            " elsewhere but will migrate here in the future")
+    private Plugins plugins = new Plugins();
     @Comment("PlayerVaults faction vault settings.\n" +
             "Enable faction-owned vaults!\n" +
             "https://www.spigotmc.org/resources/playervaultsx.51204/")
@@ -2963,6 +2994,10 @@ public class MainConfig {
 
     public PlayerVaults playerVaults() {
         return playerVaults;
+    }
+
+    public Plugins plugins() {
+        return plugins;
     }
 
     public WorldGuard worldGuard() {

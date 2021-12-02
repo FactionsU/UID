@@ -20,6 +20,7 @@ public class IntegrationManager implements Listener {
     private enum Integration {
         DYNMAP("dynmap", EngineDynmap.getInstance()::init),
         ESS("Essentials", Essentials::setup),
+        GRAVES("Graves", Graves::init),
         LUCKPERMS("LuckPerms", (plugin) -> {
             String[] version = plugin.getDescription().getVersion().split("\\.");
             boolean notSupported = true;
