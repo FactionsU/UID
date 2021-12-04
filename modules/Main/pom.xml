@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.massivecraft</groupId>
-    <artifactId>Factions-Plugin</artifactId>
+    <artifactId>Factions</artifactId>
     <version>1.6.9.5-U0.6.4</version>
     <packaging>jar</packaging>
 
-    <name>Factions Plugin (mostly)</name>
+    <name>Factions Plugin</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,7 +15,8 @@
 
     <build>
         <defaultGoal>clean package install</defaultGoal>
-        <finalName>${project.name}</finalName>
+        <finalName>Factions</finalName>
+        <directory>${project.basedir}/../../target</directory>
         <sourceDirectory>${project.basedir}/../../src/main/java</sourceDirectory>
         <testSourceDirectory>${project.basedir}/../../src/test/java</testSourceDirectory>
         <resources>
@@ -469,12 +470,16 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <version>4.0.1</version>
+            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <artifactId>checker-qual</artifactId>
                     <groupId>org.checkerframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jetbrains</groupId>
+                    <artifactId>annotations</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -482,11 +487,15 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
             <version>4.2.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <artifactId>checker-qual</artifactId>
                     <groupId>org.checkerframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jetbrains</groupId>
+                    <artifactId>annotations</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
