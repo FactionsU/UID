@@ -35,6 +35,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -549,10 +550,10 @@ public class FactionsPlayerListener extends AbstractListener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onTeleport(PlayerTeleportEvent event) {
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onChangedWorld(PlayerChangedWorldEvent event) {
         FPlayer me = FPlayers.getInstance().getByPlayer(event.getPlayer());
-        boolean isEnabled = plugin.worldUtil().isEnabled(event.getTo().getWorld());
+        boolean isEnabled = plugin.worldUtil().isEnabled(event.getPlayer().getWorld());
         if (!isEnabled) {
             FScoreboard.remove(me, event.getPlayer());
             if (me.isFlying()) {
@@ -560,10 +561,10 @@ public class FactionsPlayerListener extends AbstractListener {
             }
             return;
         }
-        FLocation to = new FLocation(event.getTo());
+        FLocation to = new FLocation(event.getPlayer().getLocation());
         me.setLastStoodAt(to);
         me.flightCheck();
-        if (!event.getFrom().getWorld().equals(event.getTo().getWorld()) && !plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
+        if (!event.getFrom().equals(event.getPlayer().getWorld()) && !plugin.worldUtil().isEnabled(event.getFrom())) {
             FactionsPlugin.getInstance().getLandRaidControl().update(me);
             this.initFactionWorld(me);
         }
