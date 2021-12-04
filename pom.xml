@@ -16,7 +16,6 @@
     <modules>
         <module>modules/Legacy</module>
         <module>modules/Main</module>
-        <module>modules/FinalCombination</module>
     </modules>
 
     <build>
