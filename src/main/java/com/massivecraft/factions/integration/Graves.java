@@ -37,8 +37,12 @@ public class Graves {
     }
 
     public static boolean allowAnyway(Block block) {
-        if (plugin != null && FactionsPlugin.getInstance().conf().plugins().graves().isAllowAnyoneToOpenGraves()) {
-            return plugin.getBlockManager().getGraveFromBlock(block) != null;
+        try {
+            if (plugin != null && FactionsPlugin.getInstance().conf().plugins().graves().isAllowAnyoneToOpenGraves()) {
+                return plugin.getBlockManager().getGraveFromBlock(block) != null;
+            }
+        } catch (Exception oops) {
+            oops.printStackTrace(); // OBNOXIOUS!
         }
         return false;
     }
