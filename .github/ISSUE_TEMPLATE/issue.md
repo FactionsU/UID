@@ -28,7 +28,7 @@ Please also check to see if this issue has already been reported.
     "Details:".
 -->
 ### Debug info
-*Run `/f debug mini` and paste or screenshot all four lines here.* 
+*Run `/f ticketinfo` and paste the URL here.*
 
 
 ### Logs
