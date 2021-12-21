@@ -16,7 +16,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.Dispenser;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,6 +30,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Directional;
 
 import java.util.Collections;
 import java.util.List;
@@ -81,7 +81,7 @@ public class FactionsBlockListener implements Listener {
         }
         Material material = item.getType();
         FLocation start = new FLocation(event.getBlock());
-        FLocation end = new FLocation(event.getBlock().getRelative(((Dispenser) event.getBlock().getBlockData()).getFacing()));
+        FLocation end = new FLocation(event.getBlock().getRelative(((Directional) event.getBlock().getState().getData()).getFacing())); // ((Dispenser) event.getBlock().getBlockData()).getFacing()
         if (start.equals(end)) {
             return;
         }
