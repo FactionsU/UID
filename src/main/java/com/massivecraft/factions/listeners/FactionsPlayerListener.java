@@ -227,16 +227,23 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
+        this.handleMovement(event.getPlayer(), event.getFrom(), event.getTo());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        this.handleMovement(event.getPlayer(), event.getFrom(), event.getTo());
+    }
+
+    private void handleMovement(Player player, Location fromLoc, Location toLoc) {
+        if (!plugin.worldUtil().isEnabled(player.getWorld())) {
             return;
         }
-
-        Player player = event.getPlayer();
         FPlayer me = FPlayers.getInstance().getByPlayer(player);
 
         // clear visualization
-        if (event.getFrom().getBlockX() != event.getTo().getBlockX() || event.getFrom().getBlockY() != event.getTo().getBlockY() || event.getFrom().getBlockZ() != event.getTo().getBlockZ()) {
-            VisualizeUtil.clear(event.getPlayer());
+        if (fromLoc.getBlockX() != toLoc.getBlockX() || fromLoc.getBlockY() != toLoc.getBlockY() || fromLoc.getBlockZ() != toLoc.getBlockZ() || fromLoc.getWorld() == toLoc.getWorld()) {
+            VisualizeUtil.clear(player);
             if (me.isWarmingUp()) {
                 me.clearWarmup();
                 me.msg(TL.WARMUPS_CANCELLED);
@@ -244,13 +251,17 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         // quick check to make sure player is moving between chunks; good performance boost
-        if (event.getFrom().getBlockX() >> 4 == event.getTo().getBlockX() >> 4 && event.getFrom().getBlockZ() >> 4 == event.getTo().getBlockZ() >> 4 && event.getFrom().getWorld() == event.getTo().getWorld()) {
+        if (fromLoc.getBlockX() >> 4 == toLoc.getBlockX() >> 4 && fromLoc.getBlockZ() >> 4 == toLoc.getBlockZ() >> 4 && fromLoc.getWorld() == toLoc.getWorld()) {
+            return;
+        }
+
+        if (!plugin.worldUtil().isEnabled(toLoc.getWorld())) {
             return;
         }
 
         // Did we change coord?
         FLocation from = me.getLastStoodAt();
-        FLocation to = new FLocation(event.getTo());
+        FLocation to = new FLocation(toLoc);
 
         if (from.equals(to)) {
             return;
@@ -263,9 +274,9 @@ public class FactionsPlayerListener extends AbstractListener {
         boolean canFlyPreClaim = me.canFlyAtLocation();
 
         if (me.getAutoClaimFor() != null) {
-            me.attemptClaim(me.getAutoClaimFor(), event.getTo(), true);
+            me.attemptClaim(me.getAutoClaimFor(), to, true);
         } else if (me.getAutoUnclaimFor() != null) {
-            me.attemptUnclaim(me.getAutoUnclaimFor(), new FLocation(event.getTo()), true);
+            me.attemptUnclaim(me.getAutoUnclaimFor(), to, true);
         }
 
         // Did we change "host"(faction)?
