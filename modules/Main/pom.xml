@@ -252,6 +252,10 @@
                     <artifactId>worldedit</artifactId>
                     <groupId>com.sk89q</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>bstats-bukkit</artifactId>
+                    <groupId>org.bstats</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -307,6 +311,10 @@
                 <exclusion>
                     <artifactId>snakeyaml</artifactId>
                     <groupId>org.yaml</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>bstats-bukkit</artifactId>
+                    <groupId>org.bstats</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -545,12 +553,12 @@
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
-            <id>maven.sk89q.com</id>
-            <url>http://maven.sk89q.com/repo/</url>
+            <id>EngineHub</id>
+            <url>https://maven.enginehub.org/repo/</url>
         </repository>
         <repository>
             <id>repo.mikeprimm.com</id>
-            <url>http://repo.mikeprimm.com/</url>
+            <url>https://repo.mikeprimm.com/</url>
         </repository>
         <repository>
             <id>sponge</id>
@@ -575,7 +583,7 @@
         </repository>
         <repository>
             <id>sonatype</id>
-            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
