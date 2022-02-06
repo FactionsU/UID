@@ -1472,6 +1472,11 @@ public class MainConfig {
                 }
             };
 
+            @Comment("Add material names here that you wish to see treated as containers for interaction.")
+            private Set<String> customContainers = new HashSet<>();
+            @WipeOnReload
+            private transient Set<Material> customContainersMat;
+
             private Protection() {
                 protectUsage("FIRE_CHARGE");
                 protectUsage("FLINT_AND_STEEL");
@@ -1719,6 +1724,16 @@ public class MainConfig {
 
             public Set<String> getWorldsNoWildernessProtection() {
                 return worldsNoWildernessProtection == null ? Collections.emptySet() : Collections.unmodifiableSet(worldsNoWildernessProtection);
+            }
+
+            public Set<Material> getCustomContainers() {
+                if (customContainersMat == null) {
+                    customContainersMat = new HashSet<>();
+                    customContainers.forEach(m -> customContainersMat.add(MaterialDb.get(m)));
+                    customContainersMat.remove(Material.AIR);
+                    customContainersMat = Collections.unmodifiableSet(customContainersMat);
+                }
+                return customContainersMat;
             }
         }
 
