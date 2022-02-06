@@ -45,6 +45,9 @@ public class MaterialDb {
         }.getType();
         HashMap<String, String> materialData = FactionsPlugin.getInstance().getGson().fromJson(reader, typeToken);
         map = new HashMap<>();
+        for (Material m : Material.values()) {
+            map.put(m.name(), m);
+        }
         materialData.forEach((n, l) -> {
             Material matN = Material.getMaterial(n);
             Material matL = Material.getMaterial(l);
