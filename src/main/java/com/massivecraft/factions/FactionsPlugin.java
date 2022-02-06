@@ -191,6 +191,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private boolean gottaSlapEssentials;
     private Method getOffline;
     private BukkitAudiences adventure;
+    private String mcVersionString;
 
     public FactionsPlugin() {
         instance = this;
@@ -366,6 +367,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                 String patchS = versionMatcher.group(2);
                 int patch = (patchS == null || patchS.isEmpty()) ? 0 : Integer.parseInt(patchS);
                 versionInteger = (minor * 100) + patch;
+                this.mcVersionString = "1." + minor + (patchS == null ? "" : ('.' + patchS));
                 getLogger().info("Detected Minecraft " + versionMatcher.group());
             } catch (NumberFormatException ignored) {
             }
@@ -376,6 +378,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             getLogger().warning("Please visit our support live chat for help - https://factions.support/help/");
             getLogger().warning("");
             versionInteger = 710;
+            this.mcVersionString = this.getServer().getVersion();
         }
         mcVersion = versionInteger;
         if (mcVersion < 808) {
@@ -608,6 +611,14 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             Map<String, Map<String, Integer>> map = new HashMap<>();
             Map<String, Integer> entry = new HashMap<>();
             entry.put(fuuidBuild, 1);
+            map.put(fuuidVersion, entry);
+            return map;
+        });
+
+        this.metricsDrillPie("fuuid_version_mc", () -> {
+            Map<String, Map<String, Integer>> map = new HashMap<>();
+            Map<String, Integer> entry = new HashMap<>();
+            entry.put(this.mcVersionString, 1);
             map.put(fuuidVersion, entry);
             return map;
         });
