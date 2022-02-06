@@ -213,8 +213,8 @@
 
     <repositories>
         <repository>
-            <id>maven.sk89q.com</id>
-            <url>http://maven.sk89q.com/repo/</url>
+            <id>EngineHub</id>
+            <url>https://maven.enginehub.org/repo/</url>
         </repository>
         <repository>
             <id>spigot-repo</id>
