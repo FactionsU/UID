@@ -58,7 +58,7 @@ public class Worldguard7 implements IWorldguard {
                 }
             }
             try {
-                StateFlag noLossFlag = new StateFlag(FLAG_NOLOSS_NAME, true);
+                StateFlag noLossFlag = new StateFlag(FLAG_NOLOSS_NAME, false);
                 WorldGuard.getInstance().getFlagRegistry().register(noLossFlag);
                 FLAG_NOLOSS = noLossFlag;
                 noLossSuccess = true;
