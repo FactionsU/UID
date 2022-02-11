@@ -23,12 +23,15 @@ import org.bukkit.entity.Player;
 public class Worldguard7 implements IWorldguard {
     public static final String FLAG_CLAIM_NAME = "fuuid-claim";
     public static final String FLAG_PVP_NAME = "fuuid-pvp";
+    public static final String FLAG_NOLOSS_NAME = "fuuid-noloss";
     private static StateFlag FLAG_CLAIM;
     private static StateFlag FLAG_PVP;
+    private static StateFlag FLAG_NOLOSS;
 
     public static void onLoad() {
         boolean claimSuccess = false;
         boolean pvpSuccess = false;
+        boolean noLossSuccess = false;
         try {
             try {
                 StateFlag claimFlag = new StateFlag(FLAG_CLAIM_NAME, true);
@@ -54,23 +57,48 @@ public class Worldguard7 implements IWorldguard {
                     pvpSuccess = true;
                 }
             }
+            try {
+                StateFlag noLossFlag = new StateFlag(FLAG_NOLOSS_NAME, true);
+                WorldGuard.getInstance().getFlagRegistry().register(noLossFlag);
+                FLAG_NOLOSS = noLossFlag;
+                noLossSuccess = true;
+            } catch (FlagConflictException e) {
+                Flag<?> existing = WorldGuard.getInstance().getFlagRegistry().get(FLAG_NOLOSS_NAME);
+                if (existing instanceof StateFlag) {
+                    FLAG_NOLOSS = (StateFlag) existing;
+                    noLossSuccess = true;
+                }
+            }
         } catch (Exception ignored) {
             // Nah
         }
-        FactionsPlugin.getInstance().getLogger().info((claimSuccess ? "Registered" : "Failed to register") + " flag '" + FLAG_CLAIM_NAME + "' with WorldGuard.");
-        FactionsPlugin.getInstance().getLogger().info((pvpSuccess ? "Registered" : "Failed to register") + " flag '" + FLAG_PVP_NAME + "' with WorldGuard.");
+        status(claimSuccess, FLAG_CLAIM_NAME);
+        status(pvpSuccess, FLAG_PVP_NAME);
+        status(noLossSuccess, FLAG_NOLOSS_NAME);
+    }
+
+    private static void status(boolean success, String name) {
+        FactionsPlugin.getInstance().getLogger().info((success ? "Registered" : "Failed to register") + " flag '" + name + "' with WorldGuard.");
+    }
+
+    public boolean isNoLossFlag(Player player) {
+        return this.isFlag(player, FLAG_NOLOSS, "noloss");
     }
 
     public boolean isCustomPVPFlag(Player player) {
-        if (FLAG_PVP == null) {
+        return this.isFlag(player, FLAG_PVP, "PVP");
+    }
+
+    private boolean isFlag(Player player, StateFlag flag, String name) {
+        if (flag == null) {
             return false;
         }
         LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionQuery query = container.createQuery();
 
-        boolean q = query.testState(localPlayer.getLocation(), localPlayer, FLAG_PVP);
-        FactionsPlugin.getInstance().debug("Testing PVP flag for player " + player.getName() + ": " + q);
+        boolean q = query.testState(localPlayer.getLocation(), localPlayer, flag);
+        FactionsPlugin.getInstance().debug("Testing " + name + " flag for player " + player.getName() + ": " + q);
         return q;
     }
 

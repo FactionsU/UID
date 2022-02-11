@@ -12,6 +12,8 @@ public interface IWorldguard {
 
     boolean checkForRegionsInChunk(Chunk chunk);
 
+    boolean isNoLossFlag(Player player);
+
     String getVersion();
 
 }

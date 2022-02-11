@@ -101,7 +101,10 @@ public class PowerControl implements LandRaidControl {
         MainConfig.Factions.LandRaidControl.Power powerConf = FactionsPlugin.getInstance().conf().factions().landRaidControl().power();
         PowerLossEvent powerLossEvent = new PowerLossEvent(faction, fplayer);
         // Check for no power loss conditions
-        if (faction.isWarZone()) {
+        if (FactionsPlugin.getInstance().getWorldguard() != null && FactionsPlugin.getInstance().getWorldguard().isNoLossFlag(player)) {
+            powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_REGION.toString());
+            powerLossEvent.setCancelled(true);
+        } else if (faction.isWarZone()) {
             // war zones always override worldsNoPowerLoss either way, thus this layout
             if (!powerConf.isWarZonePowerLoss()) {
                 powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WARZONE.toString());

@@ -866,6 +866,7 @@ public enum TL {
 
     PLAYER_POWER_NOLOSS_PEACEFUL("&eYou didn't lose any power since you are in a peaceful faction."),
     PLAYER_POWER_NOLOSS_WORLD("&eYou didn't lose any power due to the world you died in."),
+    PLAYER_POWER_NOLOSS_REGION("&eYou didn't lose any power due to the region you were in."),
     PLAYER_POWER_NOLOSS_WILDERNESS("&eYou didn't lose any power since you were in the wilderness."),
     PLAYER_POWER_NOLOSS_WARZONE("&eYou didn't lose any power since you were in a war zone."),
     PLAYER_POWER_LOSS_WARZONE("&cThe world you are in has power loss normally disabled, but you still lost power since you were in a war zone.\n&eYour power is now &d%d / %d"),

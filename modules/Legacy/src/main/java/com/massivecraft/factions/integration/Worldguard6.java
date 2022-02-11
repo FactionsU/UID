@@ -36,6 +36,10 @@ public class Worldguard6 implements IWorldguard {
         return false;
     }
 
+    public boolean isNoLossFlag(Player player) {
+        return false;
+    }
+
     // Check if player can build at location by worldguards rules.
     // Returns:
     //	True: Player can build in the region.
