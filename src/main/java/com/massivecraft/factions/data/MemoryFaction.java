@@ -376,6 +376,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         for (PermSelector selector : priority) {
             Boolean bool = permConf.getOverridePermissions().get(selector).get(permissibleAction.getName());
             if (bool != null) {
+                //FactionsPlugin.getInstance().debug("Permissions for " + selectable.getClass().getSimpleName() + ' ' + (selectable instanceof FPlayer ? ((FPlayer) selectable).getName() : (selectable instanceof Faction) ? ((Faction) selectable).getTag() : "") + " override " + selector.serialize() + ": " + bool);
                 return bool;
             }
         }
@@ -388,6 +389,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
             if (entry.getKey().test(selectable, this)) {
                 Boolean bool = entry.getValue().get(permissibleAction.getName());
                 if (bool != null) {
+                    //FactionsPlugin.getInstance().debug("Permissions for " + selectable.getClass().getSimpleName() + ' ' + (selectable instanceof FPlayer ? ((FPlayer) selectable).getName() : (selectable instanceof Faction) ? ((Faction) selectable).getTag() : "") + " override " + entry.getKey().serialize() + ": " + bool);
                     return bool;
                 }
             }
