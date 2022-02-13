@@ -6,6 +6,7 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.Bukkit;
@@ -182,9 +183,10 @@ public class CmdTicketInfo extends FCommand {
                         public void run() {
                             if (result.getPaste().isPresent()) {
                                 String delKey = result.getPaste().get().getDeletionKey().orElse("No deletion key");
-                                audience.sendMessage(Component.text().color(NamedTextColor.YELLOW).content("Share this URL: https://info.factions.support/" + result.getPaste().get().getId()));
+                                String url = "https://info.factions.support/" + result.getPaste().get().getId();
+                                audience.sendMessage(Component.text().color(NamedTextColor.YELLOW).content("Share this URL: " + url).clickEvent(ClickEvent.openUrl(url)));
                                 if (context.sender instanceof Player) {
-                                    FactionsPlugin.getInstance().getLogger().info("Share this URL: https://info.factions.support/" + result.getPaste().get().getId());
+                                    FactionsPlugin.getInstance().getLogger().info("Share this URL: " + url);
                                 }
                             } else {
                                 audience.sendMessage(Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
