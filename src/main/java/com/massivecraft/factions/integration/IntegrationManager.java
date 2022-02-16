@@ -47,10 +47,6 @@ public class IntegrationManager implements Listener {
         SENTINEL("Sentinel", (p) -> Sentinel.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         WORLDGUARD("WorldGuard", (plugin) -> {
             FactionsPlugin f = FactionsPlugin.getInstance();
-            if (!f.conf().worldGuard().isPVPPriority() && !f.conf().worldGuard().isCheckingEither() && !f.conf().worldGuard().isBuildPriority()) {
-                return;
-            }
-
             String version = plugin.getDescription().getVersion();
             if (version.startsWith("6")) {
                 f.setWorldGuard(new Worldguard6(plugin));
