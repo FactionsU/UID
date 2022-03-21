@@ -279,8 +279,8 @@ Click on any command for more details.
         To claim for warzone, must have `factions.managewarzone`.
 
 ??? abstract "/f autounclaim [faction]"
-Defaults: faction = yours  
-Turns autounclaiming on or off. If on, any chunk you enter that you *can* unclaim, *will* be unclaimed.
+    Defaults: faction = yours  
+    Turns autounclaiming on or off. If on, any chunk you enter that you *can* unclaim, *will* be unclaimed.
 
     !!! success "Requirements"
         `factions.autoclaim` node.  
@@ -308,8 +308,8 @@ Turns autounclaiming on or off. If on, any chunk you enter that you *can* unclai
         To claim for warzone, must have `factions.managewarzone`.
 
 ??? abstract "/f unclaimfill [amount] [faction]"
-Defaults: amount = config limit, faction = yours  
-Attempts to unclaim all claims connected to the current claim.
+    Defaults: amount = config limit, faction = yours  
+    Attempts to unclaim all claims connected to the current claim.
 
     !!! success "Requirements"
         `factions.unclaim.fill` node.  
