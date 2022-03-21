@@ -1137,7 +1137,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public void flightCheck() {
-        // Check the location they're teleporting to and check if they can fly there.
         if (FactionsPlugin.getInstance().conf().commands().fly().isEnable() && !this.isAdminBypassing()) {
             boolean canFly = this.canFlyAtLocation(this.getLastStoodAt());
             if (this.isFlying() && !canFly) {
