@@ -177,6 +177,10 @@ public class FactionsPlayerListener extends AbstractListener {
         // If they have the permission, don't let them autoleave. Bad inverted setter :\
         me.setAutoLeave(!me.getPlayer().hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
         me.setTakeFallDamage(true);
+        if (me.isFlying()) {
+            me.getPlayer().setAllowFlight(true);
+            me.getPlayer().setFlying(true);
+        }
         me.flightCheck();
 
         if (FactionsPlugin.getInstance().getSeeChunkUtil() != null) {
