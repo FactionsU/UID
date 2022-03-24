@@ -84,6 +84,8 @@ public class FactionsPlayerListener extends AbstractListener {
         this.plugin.getLandRaidControl().onJoin(me);
 
         FLocation standing = new FLocation(player.getLocation());
+        // Store player's current FLocation
+        me.setLastStoodAt(standing);
 
         if (this.plugin.conf().factions().protection().territoryTeleport().isEnabled()) {
             long diff = System.currentTimeMillis() - me.getLastLoginTime();
@@ -126,9 +128,6 @@ public class FactionsPlayerListener extends AbstractListener {
 
         // Update the lastLoginTime for this fplayer
         me.setLastLoginTime(System.currentTimeMillis());
-
-        // Store player's current FLocation and notify them where they are
-        me.setLastStoodAt(standing);
 
         me.login(); // set kills / deaths
         me.setOfflinePlayer(player);
