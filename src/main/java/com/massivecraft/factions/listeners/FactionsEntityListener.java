@@ -356,6 +356,7 @@ public class FactionsEntityListener extends AbstractListener {
         }
 
         FPlayer attacker = FPlayers.getInstance().getByPlayer((Player) damager);
+        notify = notify && ((Player) damager).canSee((Player) damagee);
 
         if (attacker == null || attacker.getPlayer() == null) {
             return true;

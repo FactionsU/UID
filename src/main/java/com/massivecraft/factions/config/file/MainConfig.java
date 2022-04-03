@@ -451,6 +451,8 @@ public class MainConfig {
                     "may travel while waiting to be unstuck. If they leave this radius, the\n" +
                     "command will be cancelled.")
             private int radius = 10;
+            @Comment("Search radius allowed for finding safe chunks.")
+            private int searchRadius = 30;
 
             public int getDelay() {
                 return delay;
@@ -458,6 +460,10 @@ public class MainConfig {
 
             public int getRadius() {
                 return radius;
+            }
+
+            public int getSearchRadius() {
+                return searchRadius;
             }
         }
 

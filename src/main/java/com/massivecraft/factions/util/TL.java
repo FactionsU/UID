@@ -608,6 +608,7 @@ public enum TL {
     COMMAND_STUCK_EXISTS("&6You are already teleporting, you must wait &e%1$s"),
     COMMAND_STUCK_START("&6Teleport will commence in &e%s&6. Don't take or deal damage. "),
     COMMAND_STUCK_TELEPORT("&6Teleported safely to %1$d, %2$d, %3$d."),
+    COMMAND_STUCK_FAILED("&cFailed to find a safe place to get you out."),
     COMMAND_STUCK_TOSTUCK("to safely teleport %1$s out"),
     COMMAND_STUCK_FORSTUCK("for %1$s initiating a safe teleport out"),
     COMMAND_STUCK_DESCRIPTION("Safely teleports you out of enemy faction"),
