@@ -35,6 +35,7 @@ public class CmdStuck extends FCommand {
         // TODO handle delay 0
         final long delay = FactionsPlugin.getInstance().conf().commands().stuck().getDelay();
         final int radius = FactionsPlugin.getInstance().conf().commands().stuck().getRadius();
+        final int searchRadius = FactionsPlugin.getInstance().conf().commands().stuck().getSearchRadius();
 
         if (FactionsPlugin.getInstance().getStuckMap().containsKey(player.getUniqueId())) {
             long wait = FactionsPlugin.getInstance().getTimers().get(player.getUniqueId()) - System.currentTimeMillis();
@@ -72,7 +73,7 @@ public class CmdStuck extends FCommand {
 
                     final Board board = Board.getInstance();
                     // spiral task to find nearest wilderness chunk
-                    new SpiralTask(new FLocation(context.player), radius * 2) {
+                    new SpiralTask(new FLocation(context.player), searchRadius) {
 
                         final int buffer = FactionsPlugin.getInstance().conf().worldBorder().getBuffer();
 
@@ -100,6 +101,11 @@ public class CmdStuck extends FCommand {
                                 return false;
                             }
                             return true;
+                        }
+
+                        @Override
+                        public void finish() {
+                            context.msg(TL.COMMAND_STUCK_FAILED);
                         }
                     };
                 }

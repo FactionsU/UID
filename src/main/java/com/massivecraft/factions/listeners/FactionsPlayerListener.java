@@ -23,6 +23,7 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
 import com.massivecraft.factions.util.VisualizeUtil;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -37,6 +38,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -225,6 +227,26 @@ public class FactionsPlayerListener extends AbstractListener {
         me.setOfflinePlayer(null);
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onGameMode(PlayerGameModeChangeEvent event) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer())) {
+            return;
+        }
+        if (event.getNewGameMode() == GameMode.SURVIVAL) {
+            FPlayer me = FPlayers.getInstance().getByPlayer(event.getPlayer());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (me.isFlying()) {
+                        me.getPlayer().setAllowFlight(true);
+                        me.getPlayer().setFlying(true);
+                    }
+                    me.flightCheck();
+                }
+            }.runTask(this.plugin);
+        }
+    }
+
     // Holds the next time a player can have a map shown.
     private final HashMap<UUID, Long> showTimes = new HashMap<>();
 
@@ -239,7 +261,7 @@ public class FactionsPlayerListener extends AbstractListener {
     }
 
     private void handleMovement(Player player, Location fromLoc, Location toLoc) {
-        if (!plugin.worldUtil().isEnabled(player.getWorld())) {
+        if (!plugin.worldUtil().isEnabled(player)) {
             return;
         }
         FPlayer me = FPlayers.getInstance().getByPlayer(player);
