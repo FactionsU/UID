@@ -7,6 +7,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Selectable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class FactionSelector extends AbstractSelector {
@@ -59,6 +60,8 @@ public class FactionSelector extends AbstractSelector {
     @Override
     public Component displayValue(Faction context) {
         Faction faction = Factions.getInstance().getFactionById(Integer.toString(this.id));
-        return faction == null ? MiniMessage.miniMessage().parse(FactionsPlugin.getInstance().tl().permissions().selectors().faction().getDisbandedValue(), "lastknown", this.lastKnown) : LegacyComponentSerializer.legacySection().deserialize(faction.getTag(context));
+        return faction == null ?
+                MiniMessage.miniMessage().deserialize(FactionsPlugin.getInstance().tl().permissions().selectors().faction().getDisbandedValue(), Placeholder.unparsed("lastknown", this.lastKnown)) :
+                LegacyComponentSerializer.legacySection().deserialize(faction.getTag(context));
     }
 }

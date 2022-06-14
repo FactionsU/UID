@@ -38,7 +38,7 @@ public abstract class AbstractSelector implements PermSelector {
 
         @Override
         public Component getDisplayName() {
-            return MiniMessage.miniMessage().parse(this.displayName.get());
+            return MiniMessage.miniMessage().deserialize(this.displayName.get());
         }
 
         public BasicDescriptor acceptEmpty() {
