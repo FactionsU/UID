@@ -358,6 +358,7 @@ public class FactionsPlayerListener extends AbstractListener {
             return;
         }
 
+        boolean check = false;
         switch (event.getRightClicked().getType()) {
             case ITEM_FRAME:
             case GLOW_ITEM_FRAME:
@@ -377,11 +378,16 @@ public class FactionsPlayerListener extends AbstractListener {
             case MINECART_CHEST:
             case MINECART_FURNACE:
             case MINECART_HOPPER:
-                if (!FactionsPlugin.getInstance().conf().factions().protection().getEntityInteractExceptions().contains(event.getRightClicked().getType().name()) &&
-                        !this.playerCanInteractHere(event.getPlayer(), event.getRightClicked().getLocation())) {
-                    event.setCancelled(true);
-                }
+                check = true;
                 break;
+        }
+        if (event.getRightClicked().getType().name().equalsIgnoreCase("CHEST_BOAT")) {
+            check = true;
+        }
+
+        if (check && !FactionsPlugin.getInstance().conf().factions().protection().getEntityInteractExceptions().contains(event.getRightClicked().getType().name()) &&
+                !this.playerCanInteractHere(event.getPlayer(), event.getRightClicked().getLocation())) {
+            event.setCancelled(true);
         }
     }
 
