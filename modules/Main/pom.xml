@@ -398,7 +398,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>21.0</version>
+            <version>31.1-jre</version>
             <scope>compile</scope>
             <optional>true</optional>
             <exclusions>
@@ -487,7 +487,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.0.1</version>
+            <version>4.1.1</version>
             <scope>compile</scope>
             <optional>true</optional>
             <exclusions>
@@ -504,7 +504,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.2.0-SNAPSHOT</version>
+            <version>4.11.0</version>
             <scope>compile</scope>
             <optional>true</optional>
             <exclusions>
