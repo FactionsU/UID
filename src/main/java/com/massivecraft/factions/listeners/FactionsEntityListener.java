@@ -20,6 +20,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Wither;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
@@ -593,15 +594,15 @@ public class FactionsEntityListener extends AbstractListener {
 
         Entity entity = event.getEntity();
 
-        // for now, only interested in Enderman and Wither boss tomfoolery
-        if (!(entity instanceof Enderman) && !(entity instanceof Wither)) {
-            return;
-        }
-
         Location loc = event.getBlock().getLocation();
 
         if (entity instanceof Enderman) {
             if (stopEndermanBlockManipulation(loc)) {
+                event.setCancelled(true);
+            }
+        } else if (entity instanceof Silverfish) {
+            Faction faction = Board.getInstance().getFactionAt(new FLocation(loc));
+            if (faction.isSafeZone() || faction.isWarZone() || faction.isPeaceful()) {
                 event.setCancelled(true);
             }
         } else if (entity instanceof Wither) {
