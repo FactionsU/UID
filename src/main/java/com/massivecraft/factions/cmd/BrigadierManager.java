@@ -17,10 +17,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class BrigadierManager {
-    public static boolean canCommodore() {
-        return (FactionsPlugin.getMCVersion() < 1900 || PaperLib.isPaper()) && CommodoreProvider.isSupported();
-    }
-
     public final Commodore commodore;
     public final LiteralArgumentBuilder<Object> brigadier = LiteralArgumentBuilder.literal("factions");
 
