@@ -22,7 +22,6 @@ import com.massivecraft.factions.cmd.role.CmdPromote;
 import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.util.TL;
-import me.lucko.commodore.CommodoreProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -134,7 +133,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
 
         cmdBase = this;
 
-        if (CommodoreProvider.isSupported()) {
+        if (BrigadierManager.canCommodore()) {
             brigadierManager = new BrigadierManager();
         }
 
@@ -254,7 +253,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
             this.addSubCommand(new CmdSetMaxVaults());
             this.addSubCommand(new CmdVault());
         }
-        if (CommodoreProvider.isSupported()) {
+        if (BrigadierManager.canCommodore()) {
             brigadierManager.build();
         }
     }
@@ -279,7 +278,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
     @Override
     public void addSubCommand(FCommand subCommand) {
         super.addSubCommand(subCommand);
-        if (CommodoreProvider.isSupported()) {
+        if (BrigadierManager.canCommodore()) {
             brigadierManager.addSubCommand(subCommand);
         }
     }

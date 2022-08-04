@@ -6,6 +6,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
+import io.papermc.lib.PaperLib;
 import me.lucko.commodore.Commodore;
 import me.lucko.commodore.CommodoreProvider;
 
@@ -16,6 +17,9 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class BrigadierManager {
+    public static boolean canCommodore() {
+        return (FactionsPlugin.getMCVersion() < 1900 || PaperLib.isPaper()) && CommodoreProvider.isSupported();
+    }
 
     public final Commodore commodore;
     public final LiteralArgumentBuilder<Object> brigadier = LiteralArgumentBuilder.literal("factions");
