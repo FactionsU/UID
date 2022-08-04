@@ -22,6 +22,8 @@ import com.massivecraft.factions.cmd.role.CmdPromote;
 import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.util.TL;
+import io.papermc.lib.PaperLib;
+import me.lucko.commodore.CommodoreProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -133,7 +135,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
 
         cmdBase = this;
 
-        if (BrigadierManager.canCommodore()) {
+        if (canCommodore()) {
             brigadierManager = new BrigadierManager();
         }
 
@@ -253,7 +255,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
             this.addSubCommand(new CmdSetMaxVaults());
             this.addSubCommand(new CmdVault());
         }
-        if (BrigadierManager.canCommodore()) {
+        if (canCommodore()) {
             brigadierManager.build();
         }
     }
@@ -278,7 +280,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
     @Override
     public void addSubCommand(FCommand subCommand) {
         super.addSubCommand(subCommand);
-        if (BrigadierManager.canCommodore()) {
+        if (canCommodore()) {
             brigadierManager.addSubCommand(subCommand);
         }
     }
@@ -288,4 +290,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         return TL.GENERIC_PLACEHOLDER;
     }
 
+    private boolean canCommodore() {
+        return (FactionsPlugin.getMCVersion() < 1900 || PaperLib.isPaper()) && CommodoreProvider.isSupported();
+    }
 }
