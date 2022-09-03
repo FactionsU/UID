@@ -48,7 +48,7 @@ public class CmdList extends FCommand {
         factionList.sort(this.compare(Faction::getFPlayers));
 
         // Then sort by how many members are online now
-        factionList.sort(this.compare(f -> f.getFPlayersWhereOnline(true)));
+        factionList.sort(this.compare(f -> f.getFPlayersWhereOnline(true, context.fPlayer)));
 
         ArrayList<String> lines = new ArrayList<>();
 
