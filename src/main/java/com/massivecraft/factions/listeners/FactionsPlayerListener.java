@@ -75,7 +75,7 @@ public class FactionsPlayerListener extends AbstractListener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent event) {
         initPlayer(event.getPlayer());
-        this.plugin.updatesOnJoin(event.getPlayer());
+        this.plugin.updateNotification(event.getPlayer());
     }
 
     private void initPlayer(Player player) {
