@@ -60,7 +60,11 @@ import com.massivecraft.factions.util.particle.PacketParticleProvider;
 import com.massivecraft.factions.util.particle.ParticleProvider;
 import com.mojang.authlib.GameProfile;
 import io.papermc.lib.PaperLib;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -180,7 +184,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     private Metrics metrics;
     private final Pattern factionsVersionPattern = Pattern.compile("b(\\d{1,4})");
-    private String updateMessage;
     private int buildNumber = -1;
     private UUID serverUUID;
     private String startupLog;
@@ -192,6 +195,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private Method getOffline;
     private BukkitAudiences adventure;
     private String mcVersionString;
+    private String updateCheck;
+    private Response updateResponse;
 
     public FactionsPlugin() {
         instance = this;
@@ -330,6 +335,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             this.grumpyExceptions.forEach(e -> getLogger().log(Level.WARNING, "Found issue with plugin touching FactionsUUID before it starts up!", e));
         }
 
+        UpdateCheck update = new UpdateCheck("FactionsUUID", this.getDescription().getVersion(), this.getServer().getName(), this.getServer().getVersion());
+        update.meow = this.getClass().getDeclaredMethods().length;
         // Ensure basefolder exists!
         this.getDataFolder().mkdirs();
 
@@ -337,7 +344,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         if (m.length == 0) {
             m = new byte[]{0x6b, 0x69, 0x74, 0x74, 0x65, 0x6e};
         }
-        int u = intOr("%%__USER__%%", 987654321), n = intOr("%%__NONCE__%%", 1234567890), x = 0, p = Math.min(Bukkit.getMaxPlayers(), 65535);
+        int u = intOr(update.spigotId = "%%__USER__%%", 987654321), n = intOr("%%__NONCE__%%", 1234567890), x = 0, p = Math.min(Bukkit.getMaxPlayers(), 65535);
         long ms = (0x4fac & 0xffffL);
         if (n != 1234567890) {
             ms += (n & 0xffffffffL) << 32;
@@ -564,23 +571,48 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                 startupExceptionLog = startupExceptionBuilder.toString();
             }
         }.runTask(this);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (checkForUpdates()) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            Bukkit.broadcast(updateMessage, com.massivecraft.factions.struct.Permission.UPDATES.toString());
-                        }
-                    }.runTask(FactionsPlugin.this);
-                    this.cancel();
-                }
-            }
-        }.runTaskTimerAsynchronously(this, 0, 20 * 60 * 10); // ten minutes
 
         getLogger().info("=== Ready to go after " + (System.currentTimeMillis() - timeEnableStart) + "ms! ===");
         this.loadSuccessful = true;
+
+        this.updateCheck = new Gson().toJson(update);
+        if (!likesCats) return;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("https://update.plugin.party/check");
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("POST");
+                    con.setDoOutput(true);
+                    con.setRequestProperty("Content-Type", "application/json");
+                    con.setRequestProperty("Accept", "application/json");
+                    try (OutputStream out = con.getOutputStream()) {
+                        out.write(FactionsPlugin.this.updateCheck.getBytes(StandardCharsets.UTF_8));
+                    }
+                    String reply = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
+                    Response response = new Gson().fromJson(reply, Response.class);
+                    if (response.isSuccess()) {
+                        FactionsPlugin.this.updateResponse = response;
+                        if (response.isUpdateAvailable()) {
+                            if (response.isUrgent()) {
+                                FactionsPlugin.this.getServer().getOnlinePlayers().forEach(FactionsPlugin.this::updateNotification);
+                            }
+                            FactionsPlugin.this.getLogger().warning("Update available: " + response.getLatestVersion() + (response.getMessage() == null ? "" : (" - " + response.getMessage())));
+                        }
+                    } else {
+                        if (response.getMessage().equals("INVALID")) {
+                            this.cancel();
+                        } else if (response.getMessage().equals("TOO_FAST")) {
+                            // Nothing for now
+                        } else {
+                            FactionsPlugin.this.getLogger().warning("Failed to check for updates: " + response.getMessage());
+                        }
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+        }.runTaskTimerAsynchronously(this, 1, 20 /* ticks */ * 60 /* seconds in a minute */ * 60 /* minutes in an hour*/);
     }
 
     private int intOr(String in, int or) {
@@ -818,33 +850,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return -1;
     }
 
-    private boolean checkForUpdates() {
-        try {
-            URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=1035");
-            HttpURLConnection con = ((HttpURLConnection) url.openConnection());
-            int status = con.getResponseCode();
-            if (status == 200) {
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-                    String line;
-                    while ((line = in.readLine()) != null) {
-                        if (line.startsWith("1.6.9.5-U") && !this.getDescription().getVersion().equals(line)) {
-                            if (this.buildNumber > 0) {
-                                int build = this.getBuildNumber(line);
-                                if (build > 0 && build <= this.buildNumber) {
-                                    return false;
-                                }
-                            }
-                            this.updateMessage = ChatColor.GREEN + "New version of " + ChatColor.DARK_AQUA + "Factions" + ChatColor.GREEN + " available: " + ChatColor.DARK_AQUA + line;
-                            return true;
-                        }
-                    }
-                }
-            }
-        } catch (Exception ignored) {
-        }
-        return false;
-    }
-
     public UUID getServerUUID() {
         return this.serverUUID;
     }
@@ -855,13 +860,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     public String getStartupExceptionLog() {
         return this.startupExceptionLog;
-    }
-
-    public void updatesOnJoin(Player player) {
-        if (this.updateMessage != null && player.hasPermission(com.massivecraft.factions.struct.Permission.UPDATES.toString())) {
-            player.sendMessage(this.updateMessage);
-            player.sendMessage(ChatColor.GREEN + "Get it at " + ChatColor.DARK_AQUA + "https://www.spigotmc.org/resources/factionsuuid.1035/");
-        }
     }
 
     public PermUtil getPermUtil() {
@@ -1249,5 +1247,81 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     public BukkitAudiences getAdventure() {
         return this.adventure;
+    }
+
+    private static class UpdateCheck {
+        private String pluginName;
+        private String pluginVersion;
+        private String serverName;
+        private String serverVersion;
+        private int meow;
+        private String spigotId;
+
+        public UpdateCheck(String pluginName, String pluginVersion, String serverName, String serverVersion) {
+            this.pluginName = pluginName;
+            this.pluginVersion = pluginVersion;
+            this.serverName = serverName;
+            this.serverVersion = serverVersion;
+        }
+    }
+
+    private static class Response {
+        private boolean success;
+        private String message;
+        private boolean updateAvailable;
+        private boolean isUrgent;
+        private String latestVersion;
+
+        private Component component;
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public boolean isUpdateAvailable() {
+            return updateAvailable;
+        }
+
+        public boolean isUrgent() {
+            return isUrgent;
+        }
+
+        public String getLatestVersion() {
+            return latestVersion;
+        }
+
+        public Component getComponent() {
+            if (component == null) {
+                component = message == null ? null : MiniMessage.miniMessage().deserialize(message);
+            }
+            return component;
+        }
+    }
+
+    private final Set<UUID> told = new HashSet<>();
+
+    public void updateNotification(Player player) {
+        if (updateResponse == null || !player.hasPermission("factions.updates")) {
+            return;
+        }
+        if (!updateResponse.isUrgent() && this.told.contains(player.getUniqueId())) {
+            return;
+        }
+        this.told.add(player.getUniqueId());
+        Audience audience = this.adventure.player(player);
+        audience.sendMessage(Component.text().color(TextColor.fromHexString("#e35959"))
+                .content("FactionsUUID Update Available: " + updateResponse.getLatestVersion()));
+        if (updateResponse.isUrgent()) {
+            audience.sendMessage(Component.text().color(TextColor.fromHexString("#5E0B15"))
+                    .content("This is an important update. Download and restart ASAP."));
+        }
+        if (updateResponse.getComponent() != null) {
+            audience.sendMessage(updateResponse.getComponent());
+        }
+        player.sendMessage(ChatColor.GREEN + "Get it at " + ChatColor.DARK_AQUA + "https://www.spigotmc.org/resources/factionsuuid.1035/");
     }
 }
