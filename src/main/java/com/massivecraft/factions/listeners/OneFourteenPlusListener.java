@@ -40,7 +40,7 @@ public class OneFourteenPlusListener extends AbstractListener {
 
         PermissibleAction action = PermissibleActions.CONTAINER;
         if (!otherFaction.hasAccess(me, action, location)) {
-            me.msg(TL.GENERIC_NOPERMISSION, action);
+            me.msg(TL.GENERIC_NOPERMISSION, action.getShortDescription());
             event.setCancelled(true);
         }
     }
