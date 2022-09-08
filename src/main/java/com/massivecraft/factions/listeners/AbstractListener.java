@@ -329,7 +329,7 @@ public abstract class AbstractListener implements Listener {
         // F PERM check runs through before other checks.
         if (!otherFaction.hasAccess(me, action, loc)) {
             if (action != PermissibleActions.PLATE) {
-                me.msg(TL.GENERIC_NOPERMISSION, action);
+                me.msg(TL.GENERIC_NOPERMISSION, action.getShortDescription());
             }
             return false;
         }
