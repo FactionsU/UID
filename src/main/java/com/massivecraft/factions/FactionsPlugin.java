@@ -593,8 +593,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                     String reply = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
                     Response response = new Gson().fromJson(reply, Response.class);
                     if (response.isSuccess()) {
-                        FactionsPlugin.this.updateResponse = response;
                         if (response.isUpdateAvailable()) {
+                            FactionsPlugin.this.updateResponse = response;
                             if (response.isUrgent()) {
                                 FactionsPlugin.this.getServer().getOnlinePlayers().forEach(FactionsPlugin.this::updateNotification);
                             }
