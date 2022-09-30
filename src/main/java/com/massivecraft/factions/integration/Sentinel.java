@@ -1,6 +1,5 @@
 package com.massivecraft.factions.integration;
 
-import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
@@ -15,8 +14,12 @@ import org.mcmonkey.sentinel.SentinelPlugin;
 import java.util.logging.Level;
 
 public class Sentinel extends SentinelIntegration {
+    public static String TARGET_FACTIONS = "factions";
+    public static String TARGET_FACTIONS_ENEMY = "factionsEnemy";
+    public static String TARGET_FACTIONS_ALLY = "factionsAlly";
+
     public static void init(Plugin plugin) {
-        FactionsPlugin.getInstance().getLogger().info("Disregarding any whining from Sentinel and trying to integrate anyway!");
+        FactionsPlugin.getInstance().getLogger().info("Attempting to integrate with Sentinel!");
         try {
             ((SentinelPlugin) plugin).registerIntegration(new Sentinel());
         } catch (Exception e) {
@@ -24,10 +27,14 @@ public class Sentinel extends SentinelIntegration {
             return;
         }
         FactionsPlugin.getInstance().getLogger().info("Loaded Sentinel integration!");
+        FactionsPlugin.getInstance().getLogger().info("");
+        FactionsPlugin.getInstance().getLogger().info("You may safely ignore the Sentinel message warning you about compatibility, as we run our own integration.");
+        FactionsPlugin.getInstance().getLogger().info("");
     }
 
     /*
-     * Everything below this point is from the Sentinel developer, with only edits to use FactionsUUID classes.
+     * Everything below this point is adapted from the Sentinel plugin's integration.
+     * It has been heavily rewritten, but credit is important! :)
      *
      * The code below was released under this license:
      *
@@ -54,49 +61,30 @@ public class Sentinel extends SentinelIntegration {
 
     @Override
     public String getTargetHelp() {
-        return "factions:FACTION_NAME, factionsenemy:NAME, factionsally:NAME";
+        return TARGET_FACTIONS + ":FACTION_NAME, " + TARGET_FACTIONS_ENEMY + ":NAME, " + TARGET_FACTIONS_ALLY + ":NAME";
     }
 
     @Override
     public String[] getTargetPrefixes() {
-        return new String[]{"factions", "factionsenemy", "factionsally"};
+        return new String[]{TARGET_FACTIONS, TARGET_FACTIONS_ENEMY, TARGET_FACTIONS_ALLY};
     }
 
     @Override
     public boolean isTarget(LivingEntity ent, String prefix, String value) {
-        try {
-            if (prefix.equals("factions") && ent instanceof Player) {
-                Faction faction = Factions.getInstance().getByTag(value);
-                if (faction == null) {
-                    return false;
-                }
-                for (FPlayer pl : faction.getFPlayers()) {
-                    if (pl.getPlayer() != null && pl.getPlayer().getUniqueId() != null
-                            && pl.getPlayer().getUniqueId().equals(ent.getUniqueId())) {
-                        return true;
-                    }
-                }
-            } else if (prefix.equals("factionsenemy") && ent instanceof Player) {
-                Faction faction = Factions.getInstance().getByTag(value);
-                if (faction == null) {
-                    return false;
-                }
-                Faction plf = FPlayers.getInstance().getByPlayer((Player) ent).getFaction();
-                if (faction.getRelationTo(plf).equals(Relation.ENEMY)) {
-                    return true;
-                }
-            } else if (prefix.equals("factionsally") && ent instanceof Player) {
-                Faction faction = Factions.getInstance().getByTag(value);
-                if (faction == null) {
-                    return false;
-                }
-                Faction plf = FPlayers.getInstance().getByPlayer((Player) ent).getFaction();
-                if (faction.getRelationTo(plf).equals(Relation.ALLY)) {
-                    return true;
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (!(ent instanceof Player)) {
+            return false;
+        }
+        Faction faction = Factions.getInstance().getByTag(value);
+        if (faction == null) {
+            return false;
+        }
+        Faction plf = FPlayers.getInstance().getByPlayer((Player) ent).getFaction();
+        if (prefix.equals(TARGET_FACTIONS)) {
+            return faction == plf;
+        } else if (prefix.equals(TARGET_FACTIONS_ENEMY)) {
+            return faction.getRelationTo(plf).equals(Relation.ENEMY);
+        } else if (prefix.equals(TARGET_FACTIONS_ALLY)) {
+            return faction.getRelationTo(plf).equals(Relation.ALLY);
         }
         return false;
     }
