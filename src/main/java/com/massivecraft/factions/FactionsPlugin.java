@@ -21,6 +21,7 @@ import com.massivecraft.factions.integration.IntegrationManager;
 import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.integration.LuckPerms;
 import com.massivecraft.factions.integration.VaultPerms;
+import com.massivecraft.factions.integration.Worldguard6;
 import com.massivecraft.factions.integration.Worldguard7;
 import com.massivecraft.factions.integration.dynmap.EngineDynmap;
 import com.massivecraft.factions.integration.permcontext.ContextManager;
@@ -211,6 +212,12 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             Class.forName("com.sk89q.worldguard.WorldGuard");
             Worldguard7.onLoad();
         } catch (Exception ignored) {
+            // eh
+        }
+        try {
+            Class.forName("com.sk89q.worldguard.bukkit.WGBukkit");
+            Worldguard6.onLoad(this.getLogger(), () -> this.conf().worldGuard().isChecking());
+        } catch (Exception ignoredAgain) {
             // eh
         }
     }
