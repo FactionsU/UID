@@ -106,6 +106,8 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                 return fPlayer.hasFaction() ? fPlayer.getRole().getPrefix() : "";
             case "player_role_name":
                 return fPlayer.hasFaction() ? fPlayer.getRole().getTranslation() : TL.PLACEHOLDER_ROLE_NAME.toString();
+            case "player_factionless":
+                return fPlayer.hasFaction() ? "" : TL.GENERIC_FACTIONLESS.toString();
             // Then Faction stuff
             case "faction_name":
                 return (fPlayer.hasFaction() || territory) ? faction.getTag() : TL.NOFACTION_PREFIX.toString();
