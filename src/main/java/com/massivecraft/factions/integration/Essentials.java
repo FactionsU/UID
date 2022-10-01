@@ -48,6 +48,10 @@ public class Essentials {
         return essentials != null && player != null && essentials.getUser(player).isVanished();
     }
 
+    public static boolean isIgnored(Player viewer, Player chatter) {
+        return essentials != null && essentials.getUser(viewer).isIgnoredPlayer(essentials.getUser(chatter));
+    }
+
     public static boolean isOverBalCap(EconomyParticipator participator, double amount) {
         if (essentials == null) {
             return false;
