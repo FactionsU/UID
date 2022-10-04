@@ -2392,6 +2392,9 @@ public class MainConfig {
         private boolean bankFactionPaysCosts = true;
         @Comment("The faction pays for land claiming costs.")
         private boolean bankFactionPaysLandCosts = true;
+        @Comment("If true, the bank balance will transfer to a player leaving a permanent faction that is about to have 0 players in it\n" +
+                "Set to false to keep the balance in an empty permanent faction")
+        private boolean bankPermanentFactionSendBalanceToLastLeaver = true;
 
         public boolean isEnabled() {
             return enabled;
@@ -2551,6 +2554,10 @@ public class MainConfig {
 
         public boolean isBankFactionPaysLandCosts() {
             return bankFactionPaysLandCosts;
+        }
+
+        public boolean isBankPermanentFactionSendBalanceToLastLeaver() {
+            return bankPermanentFactionSendBalanceToLastLeaver;
         }
     }
 
