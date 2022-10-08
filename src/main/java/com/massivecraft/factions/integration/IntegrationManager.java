@@ -19,7 +19,7 @@ public class IntegrationManager implements Listener {
     @SuppressWarnings("Convert2MethodRef")
     private enum Integration {
         DYNMAP("dynmap", EngineDynmap.getInstance()::init),
-        ESS("Essentials", Essentials::setup),
+        ESS("Essentials", (p) -> Essentials.setup(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         GRAVES("Graves", Graves::init),
         LUCKPERMS("LuckPerms", (plugin) -> {
             String[] version = plugin.getDescription().getVersion().split("\\.");
