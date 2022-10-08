@@ -663,11 +663,13 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         });
 
         // Essentials
-        Plugin ess = Essentials.getEssentials();
-        this.metricsDrillPie("essentials", () -> this.metricsPluginInfo(ess));
-        if (ess != null) {
-            this.metricsSimplePie("essentials_delete_homes", () -> "" + conf().factions().other().isDeleteEssentialsHomes());
-            this.metricsSimplePie("essentials_home_teleport", () -> "" + this.conf().factions().homes().isTeleportCommandEssentialsIntegration());
+        if (Bukkit.getServer().getPluginManager().isPluginEnabled("Essentials")) {
+            Plugin ess = Essentials.getEssentials();
+            this.metricsDrillPie("essentials", () -> this.metricsPluginInfo(ess));
+            if (ess != null) {
+                this.metricsSimplePie("essentials_delete_homes", () -> "" + conf().factions().other().isDeleteEssentialsHomes());
+                this.metricsSimplePie("essentials_home_teleport", () -> "" + this.conf().factions().homes().isTeleportCommandEssentialsIntegration());
+            }
         }
 
         // LWC
