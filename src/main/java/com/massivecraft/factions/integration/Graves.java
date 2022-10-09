@@ -14,7 +14,7 @@ import org.bukkit.plugin.Plugin;
 public class Graves {
     private static com.ranull.graves.Graves plugin;
 
-    public static void init(Plugin graves) {
+    public static boolean init(Plugin graves) {
         plugin = (com.ranull.graves.Graves) graves;
         FactionsPlugin plugin = FactionsPlugin.getInstance();
         plugin.getLogger().info("Found Graves plugin");
@@ -34,6 +34,7 @@ public class Graves {
             plugin.getLogger().info("Configured to prevent graves in " + s);
             FactionsPlugin.getInstance().getServer().getPluginManager().registerEvents(new GraveListener(), FactionsPlugin.getInstance());
         }
+        return true;
     }
 
     public static boolean allowAnyway(Block block) {

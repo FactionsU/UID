@@ -15,6 +15,7 @@ import com.massivecraft.factions.iface.EconomyParticipator;
 import com.massivecraft.factions.iface.RelationParticipator;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.integration.Essentials;
+import com.massivecraft.factions.integration.IntegrationManager;
 import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.landraidcontrol.PowerControl;
@@ -232,7 +233,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public boolean isVanished() {
         Player player = this.getPlayer();
-        if (Essentials.isVanished(player)) {
+        if (FactionsPlugin.getInstance().getIntegrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isVanished(player)) {
             return true;
         }
         if (player != null) {

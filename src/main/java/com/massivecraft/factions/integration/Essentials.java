@@ -15,7 +15,7 @@ public class Essentials {
 
     private static IEssentials essentials;
 
-    public static void setup(Plugin ess) {
+    public static boolean setup(Plugin ess) {
         essentials = (IEssentials) ess;
         FactionsPlugin plugin = FactionsPlugin.getInstance();
         plugin.getLogger().info("Found and connected to Essentials");
@@ -26,6 +26,7 @@ public class Essentials {
         if (plugin.conf().factions().homes().isTeleportCommandEssentialsIntegration()) {
             plugin.getLogger().info("Using Essentials for teleportation");
         }
+        return true;
     }
 
     // return false if feature is disabled or Essentials isn't available

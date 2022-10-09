@@ -20,13 +20,14 @@ import java.util.List;
 public class LWC {
     private static com.griefcraft.lwc.LWC lwc;
 
-    public static void setup(Plugin plugin) {
+    public static boolean setup(Plugin plugin) {
         if (!(plugin instanceof LWCPlugin)) {
-            return;
+            return false;
         }
 
         lwc = ((LWCPlugin) plugin).getLWC();
         FactionsPlugin.getInstance().log("Successfully hooked into LWC!" + (FactionsPlugin.getInstance().conf().lwc().isEnabled() ? "" : " Integration is currently disabled (\"lwc.integration\")."));
+        return true;
     }
 
     public static boolean getEnabled() {

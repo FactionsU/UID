@@ -6,6 +6,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.event.FPlayerTeleportEvent;
 import com.massivecraft.factions.integration.Essentials;
+import com.massivecraft.factions.integration.IntegrationManager;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.SpiralTask;
 import com.massivecraft.factions.util.TL;
@@ -93,7 +94,7 @@ public class CmdStuck extends FCommand {
                                 context.msg(TL.COMMAND_STUCK_TELEPORT, tp.getBlockX(), tp.getBlockY(), tp.getBlockZ());
                                 FactionsPlugin.getInstance().getTimers().remove(player.getUniqueId());
                                 FactionsPlugin.getInstance().getStuckMap().remove(player.getUniqueId());
-                                if (!Essentials.handleTeleport(player, tp)) {
+                                if (FactionsPlugin.getInstance().getIntegrationManager().isEnabled(IntegrationManager.Integration.ESS) && !Essentials.handleTeleport(player, tp)) {
                                     FactionsPlugin.getInstance().teleport(player, tp);
                                     FactionsPlugin.getInstance().debug("/f stuck used regular teleport, not essentials!");
                                 }

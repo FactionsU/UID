@@ -6,6 +6,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.integration.Essentials;
+import com.massivecraft.factions.integration.IntegrationManager;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.ChatMode;
@@ -165,7 +166,7 @@ public class FactionsChatListener implements Listener {
         // Relation Colored?
         if (chatConf.isTagRelationColored()) {
             for (Player listeningPlayer : event.getRecipients()) {
-                if (Essentials.isIgnored(listeningPlayer, talkingPlayer)) {
+                if (FactionsPlugin.getInstance().getIntegrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isIgnored(listeningPlayer, talkingPlayer)) {
                     continue;
                 }
                 FPlayer you = FPlayers.getInstance().getByPlayer(listeningPlayer);

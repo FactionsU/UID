@@ -79,7 +79,7 @@ public class EngineDynmap {
         return this.dynmapApi == null ? null : this.dynmapApi.getDynmapVersion();
     }
 
-    public void init(Plugin dynmap) {
+    public boolean init(Plugin dynmap) {
         this.dynmapApi = (DynmapAPI) dynmap;
 
         dynmapConf = FactionsPlugin.getInstance().getConfigManager().getDynmapConfig();
@@ -90,7 +90,7 @@ public class EngineDynmap {
                 this.markerset.deleteMarkerSet();
                 this.markerset = null;
             }
-            return;
+            return false;
         }
 
         // Schedule non thread safe sync at the end!
@@ -156,6 +156,7 @@ public class EngineDynmap {
 
         this.enabled = true;
         FactionsPlugin.getInstance().getLogger().info("Enabled Dynmap integration");
+        return true;
     }
 
     // Thread Safe / Asynchronous: No
