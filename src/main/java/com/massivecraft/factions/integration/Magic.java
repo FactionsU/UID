@@ -25,21 +25,23 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, TeamProvider, EntityTargetingManager, Listener {
-    public static void init(Plugin plugin) {
+    public static boolean init(Plugin plugin) {
         if (plugin instanceof MagicAPI) {
             try {
                 int v = Integer.parseInt(plugin.getDescription().getVersion().split("\\.")[0]);
                 if (v < 8) {
                     FactionsPlugin.getInstance().getLogger().info("Found Magic, but only supporting version 8+");
-                    return;
+                    return false;
                 }
             } catch (NumberFormatException ignored) {
                 FactionsPlugin.getInstance().getLogger().info("Found Magic, but could not determine version");
-                return;
+                return false;
             }
             FactionsPlugin.getInstance().getLogger().info("Integrating with Magic!");
             ((MagicAPI) plugin).getController().register(new Magic());
+            return true;
         }
+        return false;
     }
 
     @Override

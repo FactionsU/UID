@@ -18,18 +18,19 @@ public class Sentinel extends SentinelIntegration {
     public static String TARGET_FACTIONS_ENEMY = "factionsEnemy";
     public static String TARGET_FACTIONS_ALLY = "factionsAlly";
 
-    public static void init(Plugin plugin) {
+    public static boolean init(Plugin plugin) {
         FactionsPlugin.getInstance().getLogger().info("Attempting to integrate with Sentinel!");
         try {
             ((SentinelPlugin) plugin).registerIntegration(new Sentinel());
         } catch (Exception e) {
             FactionsPlugin.getInstance().getLogger().log(Level.WARNING, "Could not load Sentinel integration", e);
-            return;
+            return false;
         }
         FactionsPlugin.getInstance().getLogger().info("Loaded Sentinel integration!");
         FactionsPlugin.getInstance().getLogger().info("");
         FactionsPlugin.getInstance().getLogger().info("You may safely ignore the Sentinel message warning you about compatibility, as we run our own integration.");
         FactionsPlugin.getInstance().getLogger().info("");
+        return true;
     }
 
     /*

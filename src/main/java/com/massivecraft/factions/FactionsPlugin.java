@@ -988,16 +988,19 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.worldguard;
     }
 
-    public void setupPlaceholderAPI() {
+    public boolean setupPlaceholderAPI() {
         this.clipPlaceholderAPIManager = new ClipPlaceholderAPIManager();
         if (this.clipPlaceholderAPIManager.register()) {
             getLogger().info("Successfully registered placeholders with PlaceholderAPI.");
+            return true;
         }
+        return false;
     }
 
-    public void setupOtherPlaceholderAPI() {
+    public boolean setupOtherPlaceholderAPI() {
         this.mvdwPlaceholderAPIManager = true;
         getLogger().info("Found MVdWPlaceholderAPI.");
+        return true;
     }
 
     public boolean isClipPlaceholderAPIHooked() {
@@ -1332,5 +1335,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             audience.sendMessage(updateResponse.getComponent());
         }
         player.sendMessage(ChatColor.GREEN + "Get it at " + ChatColor.DARK_AQUA + "https://www.spigotmc.org/resources/factionsuuid.1035/");
+    }
+
+    public IntegrationManager getIntegrationManager() {
+        return this.integrationManager;
     }
 }

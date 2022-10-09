@@ -11,13 +11,14 @@ import org.bukkit.plugin.SimplePluginManager;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.logging.Level;
 
 public class IntegrationManager implements Listener {
-    @SuppressWarnings("Convert2MethodRef")
-    private enum Integration {
+    public enum Integration {
         DYNMAP("dynmap", EngineDynmap.getInstance()::init),
         ESS("Essentials", (p) -> Essentials.setup(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         GRAVES("Graves", Graves::init),
@@ -39,6 +40,7 @@ public class IntegrationManager implements Listener {
                     FactionsPlugin.getInstance().luckpermsEnabled();
                 }
             }
+            return true;
         }),
         LWC("LWC", com.massivecraft.factions.integration.LWC::setup),
         MAGIC("Magic", (p) -> Magic.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
@@ -51,38 +53,45 @@ public class IntegrationManager implements Listener {
             if (version.startsWith("6")) {
                 f.setWorldGuard(new Worldguard6(plugin));
                 f.getLogger().info("Found support for WorldGuard version " + version);
+                return true;
             } else if (version.startsWith("7")) {
                 f.setWorldGuard(new Worldguard7());
                 f.getLogger().info("Found support for WorldGuard version " + version);
+                return true;
             } else {
                 f.log(Level.WARNING, "Found WorldGuard but couldn't support this version: " + version);
             }
+            return false;
         });
 
-        private static final Map<String, Consumer<Plugin>> STARTUP_MAP = new HashMap<>();
+        private static final Map<String, Function<Plugin, Boolean>> STARTUP_MAP = new HashMap<>();
+        private static final Map<String, Integration> INT_MAP = new HashMap<>();
 
         static {
             for (Integration integration : values()) {
                 STARTUP_MAP.put(integration.pluginName, integration.startup);
+                INT_MAP.put(integration.pluginName, integration);
             }
         }
 
-        static Consumer<Plugin> getStartup(String pluginName) {
+        static Function<Plugin, Boolean> getStartup(String pluginName) {
             return STARTUP_MAP.getOrDefault(pluginName, Integration::omNomNom);
         }
 
-        private static void omNomNom(Plugin plugin) {
-            // NOOP
+        private static boolean omNomNom(Plugin plugin) {
+            return false;
         }
 
         private final String pluginName;
-        private final Consumer<Plugin> startup;
+        private final Function<Plugin, Boolean> startup;
 
-        Integration(String pluginName, Consumer<Plugin> startup) {
+        Integration(String pluginName, Function<Plugin, Boolean> startup) {
             this.pluginName = pluginName;
             this.startup = startup;
         }
     }
+
+    private final Set<Integration> integrations = new HashSet<>();
 
     public static void onLoad(FactionsPlugin plugin) {
         try {
@@ -103,7 +112,9 @@ public class IntegrationManager implements Listener {
             Plugin plug = plugin.getServer().getPluginManager().getPlugin(integration.pluginName);
             if (plug != null && plug.isEnabled()) {
                 try {
-                    integration.startup.accept(plug);
+                    if (integration.startup.apply(plug)) {
+                        this.integrations.add(integration);
+                    }
                 } catch (Exception e) {
                     plugin.getLogger().log(Level.WARNING, "Failed to start " + integration.pluginName + " integration", e);
                 }
@@ -113,6 +124,12 @@ public class IntegrationManager implements Listener {
 
     @EventHandler
     public void onPluginEnabled(PluginEnableEvent event) {
-        Integration.getStartup(event.getPlugin().getName()).accept(event.getPlugin());
+        if (Integration.getStartup(event.getPlugin().getName()).apply(event.getPlugin())) {
+            this.integrations.add(Integration.INT_MAP.get(event.getPlugin().getName()));
+        }
+    }
+
+    public boolean isEnabled(Integration integration) {
+        return this.integrations.contains(integration);
     }
 }
