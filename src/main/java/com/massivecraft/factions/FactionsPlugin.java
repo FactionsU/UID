@@ -216,6 +216,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
         try {
             Class.forName("com.sk89q.worldguard.bukkit.WGBukkit");
+            Class.forName("com.sk89q.worldguard.protection.flags.registry.FlagConflictException");
             Worldguard6.onLoad(this.getLogger(), () -> this.conf().worldGuard().isChecking());
         } catch (Exception ignoredAgain) {
             // eh
