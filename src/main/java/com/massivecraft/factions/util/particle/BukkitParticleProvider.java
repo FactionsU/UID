@@ -33,12 +33,20 @@ public class BukkitParticleProvider implements ParticleProvider<Particle> {
 
     @Override
     public void spawn(Particle particle, Location location, ParticleColor color) {
-        location.getWorld().spawnParticle(particle, location, 1, new Particle.DustOptions(color.getColor(), 1));
+        if (particle.getDataType().equals(Particle.DustOptions.class)) {
+            location.getWorld().spawnParticle(particle, location, 1, new Particle.DustOptions(color.getColor(), 1));
+        } else if (particle.getDataType()==Void.class){
+            location.getWorld().spawnParticle(particle, location, 1, null);
+        }
     }
 
     @Override
     public void playerSpawn(Player player, Particle particle, Location location, ParticleColor color) {
-        player.spawnParticle(particle, location, 1, new Particle.DustOptions(color.getColor(), 1.5f));
+        if (particle.getDataType().equals(Particle.DustOptions.class)) {
+            player.spawnParticle(particle, location, 1, new Particle.DustOptions(color.getColor(), 1.5f));
+        } else if (particle.getDataType()==Void.class){
+            player.spawnParticle(particle, location, 1, null);
+        }
     }
 
     @Override
