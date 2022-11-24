@@ -18,6 +18,7 @@ public class CmdMoney extends MoneyCommand {
         this.addSubCommand(new CmdMoneyTransferFf());
         this.addSubCommand(new CmdMoneyTransferFp());
         this.addSubCommand(new CmdMoneyTransferPf());
+        this.addSubCommand(new CmdMoneyModify());
     }
 
     @Override
