@@ -402,6 +402,12 @@ Click on any command for more details.
     !!! success "Requirements"
         `factions.money.withdraw` node.
 
+??? abstract  "/f money modify &lt;amount&gt; &lt;faction&gt;"
+    Modify a faction's bank account.
+
+    !!! success "Requirements"
+        `factions.money.modify` node.
+
 ### TNT Bank
 
 ??? abstract "/f tnt"

@@ -68,6 +68,7 @@ public enum Permission {
     MONEY_F2F("money.f2f"),
     MONEY_F2P("money.f2p"),
     MONEY_P2F("money.p2f"),
+    MONEY_MODIFY("money.modify"),
     MONITOR_LOGINS("monitorlogins"),
     NO_BOOM("noboom"),
     OPEN("open"),
