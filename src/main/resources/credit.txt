@@ -1,0 +1,61 @@
+This project overall is licensed under the GNU GENERAL PUBLIC LICENSE version 3
+and can be found at https://github.com/drtshock/Factions
+
+
+Shaded libraries into the jar include:
+
+Typesafe Config
+Apache License, Version 2.0
+https://github.com/lightbend/config
+
+Adventure, Adventure Bukkit Platform, and MiniMessage
+MIT License
+https://github.com/KyoriPowered
+
+commodore
+MIT License
+https://github.com/lucko/commodore
+
+Configurate
+Apache License, Version 2.0
+https://github.com/SpongePowered/Configurate
+
+DarkBlade12's ParticleEffect
+Legacy particle effects
+https://github.com/DarkBlade12/ParticleEffect
+
+Fanciful
+MIT License
+https://github.com/mkremins/fanciful
+
+Google Gson
+Apache License, Version 2.0
+https://github.com/google/gson
+
+Google Guava
+Apache License, Version 2.0
+https://github.com/google/guava
+
+PaperLib
+MIT License
+https://github.com/PaperMC/PaperLib
+
+PasteGGAPI
+MIT License
+https://github.com/KittehOrg/PasteGGAPI
+
+
+
+Modified versions of code from the following projects are included:
+
+Depenizen
+MIT License
+https://github.com/DenizenScript/Depenizen
+
+Dynmap-Factions
+Apache License, Version 2.0
+https://github.com/webbukkit/Dynmap-Factions
+
+Sentinel
+MIT License
+https://github.com/mcmonkeyprojects/Sentinel
