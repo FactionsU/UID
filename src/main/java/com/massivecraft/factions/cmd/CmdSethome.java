@@ -3,9 +3,11 @@ package com.massivecraft.factions.cmd;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.event.FactionSetHomeEvent;
 import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
+import org.bukkit.Bukkit;
 
 public class CmdSethome extends FCommand {
 
@@ -30,6 +32,16 @@ public class CmdSethome extends FCommand {
                 FactionsPlugin.getInstance().conf().factions().homes().isMustBeInClaimedTerritory() &&
                 Board.getInstance().getFactionAt(new FLocation(context.player)) != context.faction) {
             context.msg(TL.COMMAND_SETHOME_NOTCLAIMED);
+            return;
+        }
+
+        if (!context.canAffordCommand(FactionsPlugin.getInstance().conf().economy().getCostSethome(), TL.COMMAND_SETHOME_TOSET.toString())) {
+            return;
+        }
+
+        FactionSetHomeEvent setHomeEvent = new FactionSetHomeEvent(context.fPlayer, context.player.getLocation());
+        Bukkit.getServer().getPluginManager().callEvent(setHomeEvent);
+        if (setHomeEvent.isCancelled()) {
             return;
         }
 
