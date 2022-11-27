@@ -6,7 +6,7 @@
 Repository: `https://ci.ender.zone/plugin/repository/everything/`  
 groupId: `com.massivecraft`  
 artifactId: `Factions`  
-version: `1.6.9.5-U0.6.20`
+version: `1.6.9.5-U0.6.21`
 
 ## FLocation
 FLocation is a Chunk wrapper. If you ever want to deal with the map, claimed land, or something similar, you'll need to
@@ -49,9 +49,9 @@ Role fplayerRole = fplayer.getRole();
 ## Factions
 There are multiple ways you can get a Faction.
 
-**Most common is by name**
+**Most common is by name (aka tag)**
 ```java
-Faction faction = Factions.getInstance().getFactionById("name");
+Faction faction = Factions.getInstance().getByTag("name");
 ```
 
 If you have a FLocation, you can get the Faction that owns it (including Wilderness, Warzone, and Safezone)
