@@ -267,7 +267,7 @@ public class FactionsPlayerListener extends AbstractListener {
         FPlayer me = FPlayers.getInstance().getByPlayer(player);
 
         // clear visualization
-        if (fromLoc.getBlockX() != toLoc.getBlockX() || fromLoc.getBlockY() != toLoc.getBlockY() || fromLoc.getBlockZ() != toLoc.getBlockZ() || fromLoc.getWorld() == toLoc.getWorld()) {
+        if (fromLoc.getBlockX() != toLoc.getBlockX() || fromLoc.getBlockY() != toLoc.getBlockY() || fromLoc.getBlockZ() != toLoc.getBlockZ() || fromLoc.getWorld() != toLoc.getWorld()) {
             VisualizeUtil.clear(player);
             if (me.isWarmingUp()) {
                 me.clearWarmup();
