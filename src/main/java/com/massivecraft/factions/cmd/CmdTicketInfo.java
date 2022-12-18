@@ -14,24 +14,32 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.kitteh.pastegg.PasteBuilder;
-import org.kitteh.pastegg.PasteContent;
-import org.kitteh.pastegg.PasteFile;
-import org.kitteh.pastegg.Visibility;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.zip.GZIPOutputStream;
 
 public class CmdTicketInfo extends FCommand {
+    @SuppressWarnings("unused")
+    private static class TicketResponse {
+        private boolean success;
+        private String message;
+    }
+
     public CmdTicketInfo() {
         super();
         this.aliases.add("ticketinfo");
@@ -41,7 +49,8 @@ public class CmdTicketInfo extends FCommand {
     }
 
     @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "MismatchedQueryAndUpdateOfCollection", "unused"})
-    private static class Info {
+    private static class TicketInfo {
+        private final String type = "FUUID";
         private UUID uuid;
         private String pluginVersion;
         private String javaVersion;
@@ -54,6 +63,9 @@ public class CmdTicketInfo extends FCommand {
         private int num;
         private List<PlayerInfo> permissions;
         private List<PluginInfo> plugins;
+        private String startup;
+        private String exceptions;
+        private String mainconf;
 
         private static class PlayerInfo {
             private static class PermInfo {
@@ -105,7 +117,7 @@ public class CmdTicketInfo extends FCommand {
     @Override
     public void perform(CommandContext context) {
         FactionsPlugin plugin = FactionsPlugin.getInstance();
-        Info info = new Info();
+        TicketInfo info = new TicketInfo();
         info.uuid = plugin.getServerUUID();
         info.pluginVersion = plugin.getDescription().getVersion();
         info.javaVersion = System.getProperty("java.version");
@@ -126,26 +138,18 @@ public class CmdTicketInfo extends FCommand {
         if (full) {
             info.plugins = new ArrayList<>();
             for (Plugin plug : Bukkit.getPluginManager().getPlugins()) {
-                info.plugins.add(new Info.PluginInfo(plug));
+                info.plugins.add(new TicketInfo.PluginInfo(plug));
             }
 
             if (!Bukkit.getOnlinePlayers().isEmpty()) {
                 info.permissions = new ArrayList<>();
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    info.permissions.add(new Info.PlayerInfo(player));
+                    info.permissions.add(new TicketInfo.PlayerInfo(player));
                 }
             }
         }
 
         new BukkitRunnable() {
-            private final PasteBuilder builder = new PasteBuilder().name("FactionsUUID Ticket Info")
-                    .visibility(Visibility.UNLISTED)
-                    .expires(ZonedDateTime.now(ZoneOffset.UTC).plusDays(7));
-
-            private void add(String name, String content) {
-                builder.addFile(new PasteFile(name, new PasteContent(PasteContent.ContentType.TEXT, content)));
-            }
-
             private String getFile(Path file) {
                 try {
                     return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
@@ -168,29 +172,56 @@ public class CmdTicketInfo extends FCommand {
                             }
                         }
                     }
-                    add("info.json", new Gson().toJson(info));
                     if (full) {
-                        add("startup.txt", plugin.getStartupLog());
+                        info.startup = plugin.getStartupLog();
                         if (!plugin.getStartupExceptionLog().isEmpty()) {
-                            add("startupexceptions.txt", plugin.getStartupExceptionLog());
+                            info.exceptions = plugin.getStartupExceptionLog();
                         }
-                        add("main.conf", getFile(dataPath.resolve("config/main.conf")));
+                        info.mainconf = getFile(dataPath.resolve("config/main.conf"));
                     }
 
-                    PasteBuilder.PasteResult result = builder.build();
+                    Gson gson = new Gson();
+                    String string = gson.toJson(info);
+                    ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                    GZIPOutputStream gzip = new GZIPOutputStream(byteStream);
+                    gzip.write(string.getBytes(StandardCharsets.UTF_8));
+                    gzip.finish();
+                    byte[] bytes = byteStream.toByteArray();
+                    URL url = new URL("https://ticket.plugin.party/ticket");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setConnectTimeout(3000);
+                    connection.setReadTimeout(3000);
+                    connection.setRequestMethod("POST");
+                    connection.setRequestProperty("Content-Type", "application/octet-stream");
+                    connection.setRequestProperty("Accept", "application/json");
+                    connection.setDoOutput(true);
+                    try (OutputStream os = connection.getOutputStream()) {
+                        os.write(bytes, 0, bytes.length);
+                    }
+                    StringBuilder content = new StringBuilder();
+                    try (
+                            InputStream stream = connection.getInputStream();
+                            InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+                            BufferedReader in = new BufferedReader(reader)) {
+                        String inputLine;
+                        while ((inputLine = in.readLine()) != null) {
+                            content.append(inputLine);
+                        }
+                    }
+                    TicketResponse response = gson.fromJson(content.toString(), TicketResponse.class);
+
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if (result.getPaste().isPresent()) {
-                                String delKey = result.getPaste().get().getDeletionKey().orElse("No deletion key");
-                                String url = "https://info.factions.support/" + result.getPaste().get().getId();
+                            if (response.success) {
+                                String url = response.message;
                                 audience.sendMessage(Component.text().color(NamedTextColor.YELLOW).content("Share this URL: " + url).clickEvent(ClickEvent.openUrl(url)));
                                 if (context.sender instanceof Player) {
                                     FactionsPlugin.getInstance().getLogger().info("Share this URL: " + url);
                                 }
                             } else {
                                 audience.sendMessage(Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
-                                FactionsPlugin.getInstance().getLogger().warning("Received: " + result.getMessage());
+                                FactionsPlugin.getInstance().getLogger().warning("Received: " + response.message);
                             }
                         }
                     }.runTask(FactionsPlugin.getInstance());
