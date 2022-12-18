@@ -431,6 +431,12 @@
             <artifactId>PlayerVaultsX</artifactId>
             <version>4.2.3</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.kitteh</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
@@ -514,13 +520,6 @@
                     <groupId>org.checkerframework</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.kitteh</groupId>
-            <artifactId>paste-gg-api</artifactId>
-            <version>0.9.1</version>
-            <scope>compile</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>

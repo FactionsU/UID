@@ -590,6 +590,12 @@ public class FactionsPlayerListener extends AbstractListener {
                 (facConf.landRaidControl().power().isRespawnHomeFromNoPowerLossWorlds() || !facConf.landRaidControl().power().getWorldsNoPowerLoss().contains(event.getPlayer().getWorld().getName()))) {
             event.setRespawnLocation(home);
         }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                me.flightCheck();
+            }
+        }.runTask(FactionsPlugin.getInstance());
     }
 
     @EventHandler(priority = EventPriority.HIGH)
