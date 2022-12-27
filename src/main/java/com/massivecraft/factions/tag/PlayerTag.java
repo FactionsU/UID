@@ -20,8 +20,12 @@ public enum PlayerTag implements Tag {
         }
     }),
     LAST_SEEN("lastSeen", (fp) -> {
-        String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fp.getLastLoginTime(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
-        return fp.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fp.getLastLoginTime() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
+        if (fp.isOnline() && !fp.isVanished()) {
+            return ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString();
+        }
+        long duration = Math.max(System.currentTimeMillis() - fp.getLastLoginTime(), FactionsPlugin.getInstance().conf().factions().other().getMinimumLastSeenTime() * 1000L);
+        String humanized = DurationFormatUtils.formatDurationWords(duration, true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
+        return duration < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized;
     }),
     PLAYER_BALANCE("balance", (fp) -> Econ.isSetup() ? Econ.getFriendlyBalance(fp) : (Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance"))),
     PLAYER_POWER("player-power", (fp) -> String.valueOf(fp.getPowerRounded())),

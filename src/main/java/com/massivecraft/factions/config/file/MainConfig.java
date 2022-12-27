@@ -2016,6 +2016,13 @@ public class MainConfig {
                 }
             };
 
+            @Comment("Minimum time, in seconds, to display in last seen placeholder (such as in the tooltip).")
+            private int minimumLastSeenTime = 3600;
+
+            public int getMinimumLastSeenTime() {
+                return minimumLastSeenTime;
+            }
+
             public List<String> getNameBlacklist() {
                 return nameBlacklist == null ? Collections.emptyList() : Collections.unmodifiableList(this.nameBlacklist);
             }
