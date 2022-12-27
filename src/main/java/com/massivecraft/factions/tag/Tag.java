@@ -7,7 +7,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
 public interface Tag {
-    int ARBITRARY_LIMIT = 25000;
+    int ARBITRARY_LIMIT = 20000;
 
     /**
      * Replaces all variables in a plain raw line for a faction
