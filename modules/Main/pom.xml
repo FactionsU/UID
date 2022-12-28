@@ -519,6 +519,10 @@
                     <artifactId>checker-qual</artifactId>
                     <groupId>org.checkerframework</groupId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.google.inject</groupId>
+                    <artifactId>guice</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
