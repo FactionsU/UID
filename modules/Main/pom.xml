@@ -429,7 +429,7 @@
         <dependency>
             <groupId>com.drtshock</groupId>
             <artifactId>PlayerVaultsX</artifactId>
-            <version>4.2.3</version>
+            <version>4.2.14</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -575,7 +575,7 @@
         <dependency>
             <groupId>com.ranull</groupId>
             <artifactId>Graves</artifactId>
-            <version>4.5</version>
+            <version>4.9</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
