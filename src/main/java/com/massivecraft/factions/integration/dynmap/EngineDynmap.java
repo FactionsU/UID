@@ -224,7 +224,7 @@ public class EngineDynmap {
 
             TempMarker temp = new TempMarker();
             temp.label = ChatColor.stripColor(faction.getTag());
-            temp.world = ps.getWorld().toString();
+            temp.world = ps.getWorld().getName();
             temp.x = ps.getX();
             temp.y = ps.getY();
             temp.z = ps.getZ();

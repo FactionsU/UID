@@ -50,7 +50,7 @@ public class TempMarker {
         }
 
         MarkerIcon icon = getMarkerIcon(markerApi, this.iconName);
-        if (marker.getMarkerIcon() == null || marker.getMarkerIcon().equals(icon)) {
+        if (marker.getMarkerIcon() == null || !marker.getMarkerIcon().equals(icon)) {
             marker.setMarkerIcon(icon);
         }
 
