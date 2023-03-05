@@ -24,6 +24,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
@@ -152,6 +153,19 @@ public class FactionsBlockListener implements Listener {
             if ((safe && to.isSafeZone() || (war && to.isWarZone()))) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onBlockForm(BlockFormEvent event) {
+        if (!plugin.worldUtil().isEnabled(event.getBlock().getWorld())) {
+            return;
+        }
+
+        if (event.getBlock().getType() == Material.ICE &&
+                FactionsPlugin.getInstance().conf().factions().protection().isTerritoryDenyIceFormation() &&
+                Board.getInstance().getFactionAt(new FLocation(event.getBlock())).isNormal()) {
+            event.setCancelled(true);
         }
     }
 

@@ -1413,6 +1413,7 @@ public class MainConfig {
             private boolean territoryBlockEntityDamageMatchingPerms = false;
             @Comment("If true, lecterns can be interacted with, but taking the book will still be protected by CONTAINER perm")
             private boolean territoryAllowLecternReading = false;
+            private boolean territoryDenyIceFormation = false;
 
             private boolean safeZoneDenyBuild = true;
             private boolean safeZoneDenyUsage = true;
@@ -1566,6 +1567,10 @@ public class MainConfig {
 
             public boolean isTerritoryAllowLecternReading() {
                 return territoryAllowLecternReading;
+            }
+
+            public boolean isTerritoryDenyIceFormation() {
+                return territoryDenyIceFormation;
             }
 
             public boolean isSafeZoneDenyBuild() {
