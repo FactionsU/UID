@@ -29,6 +29,17 @@ public class Econ {
     private static Economy econ = null;
     private static final Pattern FACTION_PATTERN = Pattern.compile("^faction-(\\d+)$");
 
+    static {
+        DecimalFormat f;
+        try {
+            f = new DecimalFormat(TL.ECON_FORMAT.toString());
+        } catch (Exception e) {
+            FactionsPlugin.getInstance().getLogger().warning("Fell over on invalid default econ format '" + TL.ECON_FORMAT + "'");
+            f = new DecimalFormat("###,###.###"); // TODO better defaulting
+        }
+        format = f;
+    }
+
     public static void setup() {
         if (isSetup()) {
             return;
@@ -410,7 +421,7 @@ public class Econ {
         return econ.has(checkStatus(op), getWorld(op), amount);
     }
 
-    private static final DecimalFormat format = new DecimalFormat(TL.ECON_FORMAT.toString());
+    private static final DecimalFormat format;
 
     @Deprecated
     public static String getFriendlyBalance(UUID uuid) {
