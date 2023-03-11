@@ -187,8 +187,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private final Pattern factionsVersionPattern = Pattern.compile("b(\\d{1,4})");
     private int buildNumber = -1;
     private UUID serverUUID;
-    private String startupLog;
-    private String startupExceptionLog;
+    private String startupLog = "NOTFINISHED";
+    private String startupExceptionLog = "NOTFINISHED";
     private final List<RuntimeException> grumpyExceptions = new ArrayList<>();
     private VaultPerms vaultPerms;
     public final boolean likesCats = Arrays.stream(FactionsPlugin.class.getDeclaredMethods()).anyMatch(m -> m.isSynthetic() && m.getName().startsWith("loadCon") && m.getName().endsWith("0"));
