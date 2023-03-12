@@ -1,6 +1,8 @@
 package com.massivecraft.factions.util;
 
 import mkremins.fanciful.FancyMessage;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
@@ -66,39 +68,7 @@ public class TextUtil {
     }
 
     public static FancyMessage toFancy(String first) {
-        String text = "";
-        FancyMessage message = new FancyMessage(text);
-        ChatColor color = null;
-        char[] chars = first.toCharArray();
-
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == '§') {
-                if (color != null) {
-                    if (color.isColor()) {
-                        message.then(text).color(color);
-                    } else {
-                        message.then(text).style(color);
-                    }
-                    text = "";
-                }
-                color = ChatColor.getByChar(chars[i + 1]);
-                i++; // skip color char
-            } else {
-                text += chars[i];
-            }
-        }
-        if (text.length() > 0) {
-            if (color != null) {
-                if (color.isColor()) {
-                    message.then(text).color(color);
-                } else {
-                    message.then(text).style(color);
-                }
-            } else {
-                message.text(text);
-            }
-        }
-        return message;
+        return FancyMessage.deserialize(GsonComponentSerializer.gson().serialize(LegacyComponentSerializer.legacySection().deserialize(first)));
     }
 
     // -------------------------------------------- //
