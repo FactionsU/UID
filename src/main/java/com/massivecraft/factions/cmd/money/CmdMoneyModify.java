@@ -17,6 +17,7 @@ public class CmdMoneyModify extends MoneyCommand {
 
         this.requiredArgs.add("amount");
         this.requiredArgs.add("faction");
+        this.optionalArgs.put("notify", "true/false");
 
         this.requirements = new CommandRequirements.Builder(Permission.MONEY_MODIFY).build();
     }
@@ -32,11 +33,15 @@ public class CmdMoneyModify extends MoneyCommand {
         if (faction == null) {
             return;
         }
+        boolean notify = context.argAsBool(2, false);
 
         if (Econ.modifyBalance(faction, amount)) {
             String success = FactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYMODIFY_MODIFIED.toString(), faction.describeTo(null), Econ.moneyString(amount));
 
             context.sendMessage(success);
+            if (notify) {
+                faction.msg(FactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYMODIFY_NOTIFY.toString(), faction.describeTo(null), Econ.moneyString(amount)));
+            }
 
             if (FactionsPlugin.getInstance().conf().logging().isMoneyTransactions()) {
                 FactionsPlugin.getInstance().log(ChatColor.stripColor(success));

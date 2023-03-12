@@ -395,6 +395,7 @@ public enum TL {
     COMMAND_MONEYDEPOSIT_DEPOSITED("%1$s deposited %2$s in the faction bank: %3$s"),
     COMMAND_MONEYMODIFY_DESCRIPTION("Modify faction bank money."),
     COMMAND_MONEYMODIFY_MODIFIED("Modified %1$s bank by %2$s"),
+    COMMAND_MONEYMODIFY_NOTIFY("Modified %1$s bank by %2$s"),
 
     COMMAND_MONEYTRANSFERFF_DESCRIPTION("Transfer f -> f"),
     COMMAND_MONEYTRANSFERFF_TRANSFER("%1$s transferred %2$s from the faction \"%3$s\" to the faction \"%4$s\""),
