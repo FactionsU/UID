@@ -781,7 +781,16 @@ public abstract class MemoryFPlayer implements FPlayer {
             // Transfer all money
             if (Econ.shouldBeUsed() && FactionsPlugin.getInstance().conf().economy().isBankEnabled()) {
                 if (!perm || FactionsPlugin.getInstance().conf().economy().isBankPermanentFactionSendBalanceToLastLeaver()) {
-                    Econ.transferMoney(this, myFaction, this, Econ.getBalance(myFaction));
+                    //Give all the faction's money to the disbander
+                    double amount = Econ.getBalance(myFaction);
+                    Econ.transferMoney(this, myFaction, this, amount, false);
+
+                    if (amount > 0.0) {
+                        String amountString = Econ.moneyString(amount);
+                        this.msg(TL.COMMAND_DISBAND_HOLDINGS, amountString);
+                        //TODO: Format this correctly and translate
+                        FactionsPlugin.getInstance().log(this.getName() + " has been given bank holdings of " + amountString + " from disbanding " + myFaction.getTag() + ".");
+                    }
                 }
             }
         }
