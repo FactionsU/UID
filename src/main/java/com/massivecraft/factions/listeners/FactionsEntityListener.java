@@ -271,28 +271,22 @@ public class FactionsEntityListener extends AbstractListener {
         }
 
         if (damager instanceof TNTPrimed || damager instanceof Creeper || damager instanceof ExplosiveMinecart) {
-            switch (damagee.getType()) {
-                case ITEM_FRAME:
-                case GLOW_ITEM_FRAME:
-                case ARMOR_STAND:
-                case PAINTING:
-                    if (explosionDisallowed(damager, new FLocation(damagee.getLocation()))) {
-                        return false;
-                    }
+            EntityType type = damagee.getType();
+            if (type == EntityType.ITEM_FRAME || type == EntityType.GLOW_ITEM_FRAME || type == EntityType.ARMOR_STAND || type == EntityType.PAINTING) {
+                if (explosionDisallowed(damager, new FLocation(damagee.getLocation()))) {
+                    return false;
+                }
             }
         }
 
         if (damager instanceof Player) {
             Player player = (Player) damager;
             Material material = null;
-            switch (damagee.getType()) {
-                case ITEM_FRAME:
-                case GLOW_ITEM_FRAME:
-                    material = Material.ITEM_FRAME;
-                    break;
-                case ARMOR_STAND:
-                    material = Material.ARMOR_STAND;
-                    break;
+            EntityType type = damagee.getType();
+            if (type == EntityType.ITEM_FRAME || type == EntityType.GLOW_ITEM_FRAME) {
+                material = Material.ITEM_FRAME;
+            } else if (type == EntityType.ARMOR_STAND) {
+                material = Material.ARMOR_STAND;
             }
             if (material != null && !canUseBlock(player, material, damagee.getLocation(), false)) {
                 return false;

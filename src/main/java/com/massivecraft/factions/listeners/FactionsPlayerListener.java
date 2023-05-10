@@ -28,6 +28,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -359,27 +360,25 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         boolean check = false;
-        switch (event.getRightClicked().getType()) {
-            case ITEM_FRAME:
-            case GLOW_ITEM_FRAME:
-                if (!canPlayerUseBlock(event.getPlayer(), Material.ITEM_FRAME, event.getRightClicked().getLocation(), false)) {
-                    event.setCancelled(true);
-                }
-                break;
-            case HORSE:
-            case SKELETON_HORSE:
-            case ZOMBIE_HORSE:
-            case DONKEY:
-            case MULE:
-            case LLAMA:
-            case TRADER_LLAMA:
-            case PIG:
-            case LEASH_HITCH:
-            case MINECART_CHEST:
-            case MINECART_FURNACE:
-            case MINECART_HOPPER:
-                check = true;
-                break;
+        EntityType type = event.getRightClicked().getType();
+        if (type == EntityType.ITEM_FRAME || type == EntityType.GLOW_ITEM_FRAME) {
+            if (!canPlayerUseBlock(event.getPlayer(), Material.ITEM_FRAME, event.getRightClicked().getLocation(), false)) {
+                event.setCancelled(true);
+            }
+        } else if (type == EntityType.HORSE ||
+                type == EntityType.SKELETON_HORSE ||
+                type == EntityType.ZOMBIE_HORSE ||
+                type == EntityType.DONKEY ||
+                type == EntityType.MULE ||
+                type == EntityType.LLAMA ||
+                type == EntityType.TRADER_LLAMA ||
+                type == EntityType.PIG ||
+                type == EntityType.LEASH_HITCH ||
+                type == EntityType.MINECART_CHEST ||
+                type == EntityType.MINECART_FURNACE ||
+                type == EntityType.MINECART_HOPPER
+        ) {
+            check = true;
         }
         if (event.getRightClicked().getType().name().equalsIgnoreCase("CHEST_BOAT")) {
             check = true;
@@ -447,23 +446,22 @@ public class FactionsPlayerListener extends AbstractListener {
 
         ItemStack item;
         if ((item = event.getItem()) != null) {
-            boolean ohNo = false;
-            switch (item.getType()) {
-                case ARMOR_STAND:
-                case END_CRYSTAL:
-                case MINECART:
-                case CHEST_MINECART:
-                case COMMAND_BLOCK_MINECART:
-                case FURNACE_MINECART:
-                case HOPPER_MINECART:
-                case TNT_MINECART:
-                    ohNo = true;
+            Material type = item.getType();
+            if (type == Material.ARMOR_STAND ||
+                    type == Material.END_CRYSTAL ||
+                    type == Material.MINECART ||
+                    type == Material.CHEST_MINECART ||
+                    type == Material.COMMAND_BLOCK_MINECART ||
+                    type == Material.FURNACE_MINECART ||
+                    type == Material.HOPPER_MINECART ||
+                    type == Material.TNT_MINECART
+            ) {
+                if (!FactionsPlugin.getInstance().conf().factions().specialCase().getIgnoreBuildMaterials().contains(item.getType()) &&
+                        !FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleActions.BUILD, false)) {
+                    event.setCancelled(true);
+                }
             }
-            if (ohNo &&
-                    !FactionsPlugin.getInstance().conf().factions().specialCase().getIgnoreBuildMaterials().contains(item.getType()) &&
-                    !FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleActions.BUILD, false)) {
-                event.setCancelled(true);
-            }
+
         }
 
         if (!playerCanUseItemHere(player, block.getLocation(), event.getMaterial(), false)) {
