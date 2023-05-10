@@ -126,21 +126,21 @@ public abstract class AbstractListener implements Listener {
                 targets.add(center.getRelative(-1, 0, 0));
                 for (Block target : targets) {
                     // TODO get resistance value via NMS for future-proofing
-                    switch (target.getType()) {
-                        case AIR:
-                        case BEDROCK:
-                        case WATER:
-                        case LAVA:
-                        case OBSIDIAN:
-                        case NETHER_PORTAL:
-                        case ENCHANTING_TABLE:
-                        case ANVIL:
-                        case CHIPPED_ANVIL:
-                        case DAMAGED_ANVIL:
-                        case END_PORTAL:
-                        case END_PORTAL_FRAME:
-                        case ENDER_CHEST:
-                            continue;
+                    Material type = target.getType();
+                    if (type == Material.AIR ||
+                            type == Material.BEDROCK ||
+                            type == Material.WATER ||
+                            type == Material.LAVA ||
+                            type == Material.OBSIDIAN ||
+                            type == Material.NETHER_PORTAL ||
+                            type == Material.ENCHANTING_TABLE ||
+                            type == Material.ANVIL ||
+                            type == Material.CHIPPED_ANVIL ||
+                            type == Material.DAMAGED_ANVIL ||
+                            type == Material.END_PORTAL ||
+                            type == Material.END_PORTAL_FRAME ||
+                            type == Material.ENDER_CHEST) {
+                        continue;
                     }
                     if (!explosionDisallowed(boomer, new FLocation(target.getLocation()))) {
                         target.breakNaturally();
@@ -206,11 +206,10 @@ public abstract class AbstractListener implements Listener {
 
         // no door/chest/whatever protection in wilderness, war zones, or safe zones
         if (!otherFaction.isNormal()) {
-            switch (material) {
-                case ITEM_FRAME:
-                case GLOW_ITEM_FRAME:
-                case ARMOR_STAND:
-                    return canInteractHere(player, location);
+            if (material == Material.ITEM_FRAME ||
+                    material == Material.GLOW_ITEM_FRAME ||
+                    material == Material.ARMOR_STAND) {
+                return canInteractHere(player, location);
             }
             return true;
         }
@@ -221,92 +220,57 @@ public abstract class AbstractListener implements Listener {
 
         PermissibleAction action = null;
 
-        switch (material) {
-            case LEVER:
-                action = PermissibleActions.LEVER;
-                break;
-            case STONE_BUTTON:
-            case BIRCH_BUTTON:
-            case ACACIA_BUTTON:
-            case DARK_OAK_BUTTON:
-            case JUNGLE_BUTTON:
-            case OAK_BUTTON:
-            case SPRUCE_BUTTON:
-                action = PermissibleActions.BUTTON;
-                break;
-            case DARK_OAK_DOOR:
-            case ACACIA_DOOR:
-            case BIRCH_DOOR:
-            case IRON_DOOR:
-            case JUNGLE_DOOR:
-            case SPRUCE_DOOR:
-            case ACACIA_TRAPDOOR:
-            case OAK_DOOR:
-            case BIRCH_TRAPDOOR:
-            case DARK_OAK_TRAPDOOR:
-            case IRON_TRAPDOOR:
-            case JUNGLE_TRAPDOOR:
-            case OAK_TRAPDOOR:
-            case SPRUCE_TRAPDOOR:
-                action = PermissibleActions.DOOR;
-                break;
-            case CHEST:
-            case ENDER_CHEST:
-            case TRAPPED_CHEST:
-            case BARREL:
-            case FURNACE:
-            case DROPPER:
-            case DISPENSER:
-            case HOPPER:
-            case BLAST_FURNACE:
-            case CAULDRON:
-            case CAMPFIRE:
-            case BREWING_STAND:
-            case CARTOGRAPHY_TABLE:
-            case GRINDSTONE:
-            case SMOKER:
-            case STONECUTTER:
-            case LECTERN:
-            case ITEM_FRAME:
-            case GLOW_ITEM_FRAME:
-            case JUKEBOX:
-            case ARMOR_STAND:
-            case REPEATER:
-            case ENCHANTING_TABLE:
-            case FARMLAND:
-            case BEACON:
-            case ANVIL:
-            case CHIPPED_ANVIL:
-            case DAMAGED_ANVIL:
-            case FLOWER_POT:
-            case BEE_NEST:
-                action = PermissibleActions.CONTAINER;
-                break;
-            default:
-                // Check for doors that might have diff material name in old version.
-                if (material.name().contains("DOOR") || material.name().contains("GATE")) {
-                    action = PermissibleActions.DOOR;
-                }
-                if (material.name().contains("BUTTON")) {
-                    action = PermissibleActions.BUTTON;
-                }
-                if (material.name().contains("FURNACE")) {
-                    action = PermissibleActions.CONTAINER;
-                }
-                if (FactionsPlugin.getInstance().conf().factions().protection().getCustomContainers().contains(material)) {
-                    action = PermissibleActions.CONTAINER;
-                }
-                // Lazier than checking all the combinations
-                if (material.name().contains("SHULKER") || material.name().contains("ANVIL") || material.name().startsWith("POTTED")) {
-                    action = PermissibleActions.CONTAINER;
-                }
-                if (material.name().endsWith("_PLATE")) {
-                    action = PermissibleActions.PLATE;
-                }
-                if (material.name().contains("SIGN")) {
-                    action = PermissibleActions.ITEM;
-                }
-                break;
+        String materialName = material.name();
+        if (material == Material.LEVER) {
+            action = PermissibleActions.LEVER;
+        } else if (materialName.contains("BUTTON")) {
+            action = PermissibleActions.BUTTON;
+        } else if (material == Material.DARK_OAK_DOOR ||
+                materialName.contains("DOOR") ||
+                materialName.contains("GATE")
+        ) {
+            action = PermissibleActions.DOOR;
+        } else if (materialName.endsWith("_PLATE")) {
+            action = PermissibleActions.PLATE;
+        } else if (materialName.contains("SIGN")) {
+            action = PermissibleActions.ITEM;
+        } else if (material == Material.CHEST ||
+                material == Material.ENDER_CHEST ||
+                material == Material.TRAPPED_CHEST ||
+                material == Material.BARREL ||
+                material == Material.FURNACE ||
+                material == Material.DROPPER ||
+                material == Material.DISPENSER ||
+                material == Material.HOPPER ||
+                material == Material.BLAST_FURNACE ||
+                material == Material.CAULDRON ||
+                material == Material.CAMPFIRE ||
+                material == Material.BREWING_STAND ||
+                material == Material.CARTOGRAPHY_TABLE ||
+                material == Material.GRINDSTONE ||
+                material == Material.SMOKER ||
+                material == Material.STONECUTTER ||
+                material == Material.LECTERN ||
+                material == Material.ITEM_FRAME ||
+                material == Material.GLOW_ITEM_FRAME ||
+                material == Material.JUKEBOX ||
+                material == Material.ARMOR_STAND ||
+                material == Material.REPEATER ||
+                material == Material.ENCHANTING_TABLE ||
+                material == Material.FARMLAND ||
+                material == Material.BEACON ||
+                material == Material.ANVIL ||
+                material == Material.CHIPPED_ANVIL ||
+                material == Material.DAMAGED_ANVIL ||
+                material == Material.FLOWER_POT ||
+                material == Material.BEE_NEST ||
+                materialName.contains("SHULKER") ||
+                materialName.contains("ANVIL") ||
+                materialName.startsWith("POTTED") ||
+                materialName.contains("FURNACE") ||
+                FactionsPlugin.getInstance().conf().factions().protection().getCustomContainers().contains(material)
+        ) {
+            action = PermissibleActions.CONTAINER;
         }
 
         if (action == null) {
@@ -360,25 +324,6 @@ public abstract class AbstractListener implements Listener {
     }
 
     private static boolean isDupeMaterial(Material material) {
-        if (material.name().toUpperCase().contains("SIGN")) {
-            return true;
-        }
-
-        switch (material) {
-            case CHEST:
-            case TRAPPED_CHEST:
-            case DARK_OAK_DOOR:
-            case ACACIA_DOOR:
-            case BIRCH_DOOR:
-            case JUNGLE_DOOR:
-            case OAK_DOOR:
-            case SPRUCE_DOOR:
-            case IRON_DOOR:
-                return true;
-            default:
-                break;
-        }
-
-        return false;
+        return material.name().contains("SIGN") || material.name().contains("DOOR") || material.name().contains("CHEST");
     }
 }
