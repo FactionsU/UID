@@ -646,6 +646,10 @@ public class MainConfig {
                         this.put("world_the_end", 0.25D);
                     }
                 };
+                @Comment("DTR stealing. 0 to disable, 1 to give the killing player's faction all of the target player's faction's lost DTR,\n" +
+                        "0.5 to give the killing faction half of what was lost, etc.\n" +
+                        "Negative values will give the incredibly wild option of taking DTR from the killer's faction too.")
+                private double vampirism = 0;
 
                 public int getDecimalDigits() {
                     return decimalDigits;
@@ -723,6 +727,10 @@ public class MainConfig {
                         this.worldDeathModifiers = new HashMap<>();
                     }
                     return this.lossPerDeath * this.worldDeathModifiers.getOrDefault(world.getName(), 1D).doubleValue();
+                }
+
+                public double getVampirism() {
+                    return vampirism;
                 }
             }
 

@@ -116,7 +116,20 @@ public class DTRControl implements LandRaidControl {
         Bukkit.getPluginManager().callEvent(dtrLossEvent);
 
         if (!dtrLossEvent.isCancelled()) {
+            double startingDTR = faction.getDTR();
             faction.setDTR(Math.max(conf().getMinDTR(), faction.getDTR() - conf().getLossPerDeath(player.getWorld())));
+            double diff = faction.getDTR() - startingDTR;
+            double vamp = conf().getVampirism();
+            if (player.getKiller() != null && vamp != 0D && diff > 0) {
+                FPlayer fKiller = FPlayers.getInstance().getByPlayer(player.getKiller());
+                if (faction != fKiller.getFaction()) {
+                    double change = vamp * diff;
+                    double startingOther = fKiller.getFaction().getDTR();
+                    fKiller.getFaction().setDTR(Math.min(conf().getMaxDTR(), faction.getDTR() + change));
+                    double killDiff = fKiller.getFaction().getDTR() - startingOther;
+                    fKiller.msg(TL.DTR_VAMPIRISM_GAIN, killDiff, fplayer.describeTo(fKiller), fKiller.getFaction().getDTR());
+                }
+            }
             faction.setFrozenDTR(System.currentTimeMillis() + (conf().getFreezeTime() * 1000L));
         }
     }
