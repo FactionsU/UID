@@ -1490,6 +1490,12 @@ public class MainConfig {
                 protectUsage("BUCKET");
                 protectUsage("WATER_BUCKET");
                 protectUsage("LAVA_BUCKET");
+                protectUsage("PUFFERFISH_BUCKET");
+                protectUsage("SALMON_BUCKET");
+                protectUsage("COD_BUCKET");
+                protectUsage("TROPICAL_FISH_BUCKET");
+                protectUsage("AXOLOTL_BUCKET");
+                protectUsage("TADPOLE_BUCKET");
             }
 
             private void protectUsage(String material) {
