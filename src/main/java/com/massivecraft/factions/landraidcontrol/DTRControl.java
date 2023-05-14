@@ -8,6 +8,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.event.DTRLossEvent;
+import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.Bukkit;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.stream.Stream;
 
 public class DTRControl implements LandRaidControl {
     private static FactionsPlugin plugin;
@@ -157,7 +159,11 @@ public class DTRControl implements LandRaidControl {
             return;
         }
         long millisPassed = now - Math.max(faction.getLastDTRUpdateTime(), faction.getFrozenDTRUntilTime());
-        long onlineInEnabledWorlds = faction.getOnlinePlayers().stream().filter(p -> plugin.worldUtil().isEnabled(p.getWorld())).count();
+        Stream<Player> stream = faction.getOnlinePlayers().stream().filter(p -> plugin.worldUtil().isEnabled(p.getWorld()));
+        if (FactionsPlugin.getInstance().conf().plugins().essentialsX().isPreventRegenWhileAfk()) {
+            stream = stream.filter(Essentials::isAfk);
+        }
+        long onlineInEnabledWorlds = stream.count();
         double rate = Math.min(conf().getRegainPerMinuteMaxRate(), Math.max(0, onlineInEnabledWorlds - minusPlayer) * conf().getRegainPerMinutePerPlayer());
         double regain = (millisPassed / (60D * 1000D)) * rate;
         faction.setDTR(Math.min(faction.getDTRWithoutUpdate() + regain, this.getMaxDTR(faction)));

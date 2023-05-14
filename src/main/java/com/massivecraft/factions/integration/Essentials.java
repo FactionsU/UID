@@ -53,6 +53,10 @@ public class Essentials {
         return essentials != null && essentials.getUser(viewer).isIgnoredPlayer(essentials.getUser(chatter));
     }
 
+    public static boolean isAfk(Player player) {
+        return essentials != null && player != null && essentials.getUser(player).isAfk();
+    }
+
     public static boolean isOverBalCap(EconomyParticipator participator, double amount) {
         if (essentials == null) {
             return false;
