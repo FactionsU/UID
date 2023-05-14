@@ -134,9 +134,7 @@ public abstract class AbstractListener implements Listener {
                             type == Material.OBSIDIAN ||
                             type == Material.NETHER_PORTAL ||
                             type == Material.ENCHANTING_TABLE ||
-                            type == Material.ANVIL ||
-                            type == Material.CHIPPED_ANVIL ||
-                            type == Material.DAMAGED_ANVIL ||
+                            type.name().contains("ANVIL") ||
                             type == Material.END_PORTAL ||
                             type == Material.END_PORTAL_FRAME ||
                             type == Material.ENDER_CHEST) {
@@ -203,12 +201,13 @@ public abstract class AbstractListener implements Listener {
 
         FLocation loc = new FLocation(location);
         Faction otherFaction = Board.getInstance().getFactionAt(loc);
+        String materialName = material.name();
 
         // no door/chest/whatever protection in wilderness, war zones, or safe zones
         if (!otherFaction.isNormal()) {
-            if (material == Material.ITEM_FRAME ||
-                    material == Material.GLOW_ITEM_FRAME ||
-                    material == Material.ARMOR_STAND) {
+            if (materialName.equals("ITEM_FRAME") ||
+                    materialName.equals("GLOW_ITEM_FRAME") ||
+                    materialName.equals("ARMOR_STAND")) {
                 return canInteractHere(player, location);
             }
             return true;
@@ -220,15 +219,11 @@ public abstract class AbstractListener implements Listener {
 
         PermissibleAction action = null;
 
-        String materialName = material.name();
         if (material == Material.LEVER) {
             action = PermissibleActions.LEVER;
         } else if (materialName.contains("BUTTON")) {
             action = PermissibleActions.BUTTON;
-        } else if (material == Material.DARK_OAK_DOOR ||
-                materialName.contains("DOOR") ||
-                materialName.contains("GATE")
-        ) {
+        } else if (materialName.contains("DOOR") || materialName.contains("GATE")) {
             action = PermissibleActions.DOOR;
         } else if (materialName.endsWith("_PLATE")) {
             action = PermissibleActions.PLATE;
@@ -237,33 +232,30 @@ public abstract class AbstractListener implements Listener {
         } else if (material == Material.CHEST ||
                 material == Material.ENDER_CHEST ||
                 material == Material.TRAPPED_CHEST ||
-                material == Material.BARREL ||
-                material == Material.FURNACE ||
-                material == Material.DROPPER ||
-                material == Material.DISPENSER ||
-                material == Material.HOPPER ||
-                material == Material.BLAST_FURNACE ||
-                material == Material.CAULDRON ||
-                material == Material.CAMPFIRE ||
-                material == Material.BREWING_STAND ||
-                material == Material.CARTOGRAPHY_TABLE ||
-                material == Material.GRINDSTONE ||
-                material == Material.SMOKER ||
-                material == Material.STONECUTTER ||
-                material == Material.LECTERN ||
-                material == Material.ITEM_FRAME ||
-                material == Material.GLOW_ITEM_FRAME ||
-                material == Material.JUKEBOX ||
-                material == Material.ARMOR_STAND ||
-                material == Material.REPEATER ||
-                material == Material.ENCHANTING_TABLE ||
-                material == Material.FARMLAND ||
-                material == Material.BEACON ||
-                material == Material.ANVIL ||
-                material == Material.CHIPPED_ANVIL ||
-                material == Material.DAMAGED_ANVIL ||
-                material == Material.FLOWER_POT ||
-                material == Material.BEE_NEST ||
+                materialName.equals("BARREL") ||
+                materialName.equals("DROPPER") ||
+                materialName.equals("DISPENSER") ||
+                materialName.equals("HOPPER") ||
+                materialName.contains("CAULDRON") ||
+                materialName.equals("CAMPFIRE") ||
+                materialName.equals("BREWING_STAND") ||
+                materialName.equals("CARTOGRAPHY_TABLE") ||
+                materialName.equals("GRINDSTONE") ||
+                materialName.equals("SMOKER") ||
+                materialName.equals("STONECUTTER") ||
+                materialName.equals("LECTERN") ||
+                materialName.equals("ITEM_FRAME") ||
+                materialName.equals("GLOW_ITEM_FRAME") ||
+                materialName.equals("JUKEBOX") ||
+                materialName.equals("ARMOR_STAND") ||
+                materialName.equals("REPEATER") ||
+                materialName.equals("ENCHANTING_TABLE") ||
+                materialName.equals("BEACON") ||
+                materialName.equals("CHIPPED_ANVIL") ||
+                materialName.equals("DAMAGED_ANVIL") ||
+                materialName.equals("FLOWER_POT") ||
+                materialName.contains("POTTED") ||
+                materialName.equals("BEE_NEST") ||
                 materialName.contains("SHULKER") ||
                 materialName.contains("ANVIL") ||
                 materialName.startsWith("POTTED") ||
