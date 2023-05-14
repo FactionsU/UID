@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -200,9 +201,9 @@ public class OldConfV0 {
     boolean pistonProtectionThroughDenyBuild = true;
 
     Set<Material> territoryProtectedMaterials = Collections.emptySet();
-    Set<Material> territoryDenyUseageMaterials = EnumSet.noneOf(Material.class);
-    Set<Material> territoryProtectedMaterialsWhenOffline = EnumSet.noneOf(Material.class);
-    Set<Material> territoryDenyUseageMaterialsWhenOffline = EnumSet.noneOf(Material.class);
+    Set<Material> territoryDenyUseageMaterials = new HashSet<>();
+    Set<Material> territoryProtectedMaterialsWhenOffline = new HashSet<>();
+    Set<Material> territoryDenyUseageMaterialsWhenOffline = new HashSet<>();
 
     boolean econEnabled = false;
     String econUniverseAccount = "";

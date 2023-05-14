@@ -856,10 +856,15 @@ public class MainConfig {
                 }
             }
 
-            @Comment("Sets the mode of land/raid control")
+            @Comment("\nSets the mode of land/raid control")
             private String system = "power";
+
+            @Comment("Controls the DTR system of land/raid control\n" +
+                    "Set the 'system' value to 'dtr' to use this system")
             private DTR dtr = new DTR();
-            @Comment("Controls the power system of land/raid control\nSet the 'system' value to 'power' to use this system")
+
+            @Comment("Controls the power system of land/raid control\n" +
+                    "Set the 'system' value to 'power' to use this system")
             private Power power = new Power();
 
             public String getSystem() {
