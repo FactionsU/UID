@@ -628,6 +628,8 @@ public abstract class MemoryFPlayer implements FPlayer {
             }
         } else if (hasFaction() && getFaction().isPowerFrozen()) {
             return; // Don't let power regen if faction power is frozen.
+        } else if (FactionsPlugin.getInstance().conf().plugins().essentialsX().isPreventRegenWhileAfk() && Essentials.isAfk(this.getPlayer())) {
+            return;
         }
         long now = System.currentTimeMillis();
         long millisPassed = now - this.lastPowerUpdateTime;

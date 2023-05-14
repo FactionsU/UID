@@ -2861,6 +2861,15 @@ public class MainConfig {
     }
 
     public class Plugins {
+        public class EssentialsX {
+            @Comment("If true, prevents regeneration of dtr/power while marked as AFK")
+            private boolean preventRegenWhileAfk = false;
+
+            public boolean isPreventRegenWhileAfk() {
+                return preventRegenWhileAfk;
+            }
+        }
+
         public class Graves {
             @Comment("If true, will allow any Graves plugin graves to be opened by anyone, regardless of permissions")
             private boolean allowAnyoneToOpenGraves = false;
@@ -2880,8 +2889,15 @@ public class MainConfig {
             }
         }
 
+        @Comment("EssentialsX")
+        private EssentialsX essentialsX = new EssentialsX();
+
         @Comment("Ranull's Graves plugin")
         private Graves graves = new Graves();
+
+        public EssentialsX essentialsX() {
+            return essentialsX;
+        }
 
         public Graves graves() {
             return graves;
