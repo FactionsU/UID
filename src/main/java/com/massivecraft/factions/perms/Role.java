@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public enum Role implements Permissible {
@@ -59,7 +60,7 @@ public enum Role implements Permissible {
     }
 
     public static Role fromString(String check) {
-        switch (check.toLowerCase()) {
+        switch (check.toLowerCase(Locale.ROOT)) {
             case "admin":
                 return ADMIN;
             case "coleader":

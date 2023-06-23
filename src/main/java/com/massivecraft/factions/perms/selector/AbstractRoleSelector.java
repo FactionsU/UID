@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -47,7 +48,7 @@ public abstract class AbstractRoleSelector extends AbstractSelector {
 
     public AbstractRoleSelector(Descriptor descriptor, Role role) {
         super(descriptor);
-        this.role = role;
+        this.role = Objects.requireNonNull(role);
     }
 
     public Role getRole() {
@@ -71,6 +72,8 @@ public abstract class AbstractRoleSelector extends AbstractSelector {
             if (player.getFaction() == faction) {
                 return test(player.getRole());
             }
+        } else if (selectable instanceof Role) {
+            return test((Role) selectable);
         }
         return false;
     }
