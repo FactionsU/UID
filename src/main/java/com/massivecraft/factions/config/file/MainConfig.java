@@ -2595,6 +2595,8 @@ public class MainConfig {
     public class MapSettings {
         private int height = 17;
         private int width = 49;
+        private int scoreboardHeight = 7;
+        private int scoreboardWidth = 7;
         private boolean showFactionKey = true;
         private boolean showNeutralFactionsOnMap = true;
         private boolean showEnemyFactions = true;
@@ -2606,6 +2608,14 @@ public class MainConfig {
 
         public int getWidth() {
             return width;
+        }
+
+        public int getScoreboardHeight() {
+            return scoreboardHeight;
+        }
+
+        public int getScoreboardWidth() {
+            return scoreboardWidth;
         }
 
         public boolean isShowFactionKey() {
