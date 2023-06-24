@@ -363,5 +363,95 @@ public abstract class MemoryBoard extends Board {
         return ret;
     }
 
+    enum Dir {
+        N, E, S, W
+    }
+
+    public ArrayList<FancyMessage> getScoreboardMap(FPlayer fplayer, FLocation flocation) {
+        Faction faction = fplayer.getFaction();
+        ArrayList<FancyMessage> ret = new ArrayList<>();
+        Faction factionLoc = getFactionAt(flocation);
+
+        int halfWidth = FactionsPlugin.getInstance().conf().map().getScoreboardWidth() / 2;
+        int halfHeight = FactionsPlugin.getInstance().conf().map().getScoreboardHeight() / 2;
+        int width = halfWidth * 2 + 1;
+        int height = halfHeight * 2 + 1;
+        double degrees = (fplayer.getPlayer().getLocation().getYaw() - 180) % 360;
+        if (degrees < 0) {
+            degrees += 360;
+        }
+        Dir dir;
+        if (degrees < 45 || degrees >= 315) {
+            dir = Dir.N;
+        } else if (degrees < 135) {
+            dir = Dir.E;
+        } else if (degrees < 225) {
+            dir = Dir.S;
+        } else {
+            dir = Dir.W;
+        }
+
+        FLocation topLeft;
+        switch (dir) {
+            case N:
+                topLeft = flocation.getRelative(-halfWidth, -halfHeight);
+                break;
+            case S:
+                topLeft = flocation.getRelative(halfWidth, halfHeight);
+                break;
+            case E:
+                topLeft = flocation.getRelative(halfHeight, halfWidth);
+                break;
+            default:
+                topLeft = flocation.getRelative(-halfHeight, -halfWidth);
+        }
+
+        // For each row
+        for (int r = 0; r < height; r++) {
+            // Draw and add that row
+            FancyMessage row = new FancyMessage("");
+
+            for (int c = 0; c < width; c++) {
+                if (c == halfWidth && r == halfHeight) {
+                    row.then("\u2B1B").color(ChatColor.AQUA);
+                } else {
+                    FLocation flocationHere;
+                    switch (dir) {
+                        case N:
+                            flocationHere = topLeft.getRelative(c, r);
+                            break;
+                        case S:
+                            flocationHere = topLeft.getRelative(-c, -r);
+                            break;
+                        case E:
+                            flocationHere = topLeft.getRelative(-r, -(width - c - 1));
+                            break;
+                        default:
+                            flocationHere = topLeft.getRelative(r, width - c - 1);
+                    }
+                    Faction factionHere = getFactionAt(flocationHere);
+                    Relation relation = fplayer.getRelationTo(factionHere);
+                    if (factionHere.isWilderness()) {
+                        row.then("\u2B1B").color(FactionsPlugin.getInstance().conf().colors().factions().getWilderness());
+                    } else if (factionHere.isSafeZone()) {
+                        row.then("\u2B1B").color(FactionsPlugin.getInstance().conf().colors().factions().getSafezone());
+                    } else if (factionHere.isWarZone()) {
+                        row.then("\u2B1B").color(FactionsPlugin.getInstance().conf().colors().factions().getWarzone());
+                    } else if (factionHere == faction || factionHere == factionLoc || relation.isAtLeast(Relation.ALLY) ||
+                            (FactionsPlugin.getInstance().conf().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
+                            (FactionsPlugin.getInstance().conf().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
+                            FactionsPlugin.getInstance().conf().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
+                        row.then("\u2B1B").color(factionHere.getColorTo(faction));
+                    } else {
+                        row.then("-").color(ChatColor.GRAY);
+                    }
+                }
+            }
+            ret.add(row);
+        }
+
+        return ret;
+    }
+
     public abstract void convertFrom(MemoryBoard old);
 }

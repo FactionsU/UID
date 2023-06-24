@@ -1,8 +1,11 @@
 package com.massivecraft.factions.scoreboards.sidebar;
 
+import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.data.MemoryBoard;
 import com.massivecraft.factions.scoreboards.FSidebarProvider;
+import mkremins.fanciful.FancyMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,8 @@ public class FDefaultSidebar extends FSidebarProvider {
             return new ArrayList<>();
         }
 
+        List<FancyMessage> mapMap = null;
+        String mapC = "0123456789abcdef";
         lines = new ArrayList<>(lines);
 
         ListIterator<String> it = lines.listIterator();
@@ -39,6 +44,17 @@ public class FDefaultSidebar extends FSidebarProvider {
             if (next == null) {
                 it.remove();
                 continue;
+            }
+            if (next.contains("{map}")) {
+                if (mapMap == null) {
+                    mapMap = ((MemoryBoard) Board.getInstance()).getScoreboardMap(fplayer, fplayer.getLastStoodAt());
+                }
+                String rep = mapMap.isEmpty() ? "" : mapMap.remove(0).toOldMessageFormat();
+                if (!rep.isEmpty() && !mapC.isEmpty()) {
+                    rep = "\u00A7" + mapC.charAt(0) + "\u00A7r" + rep;
+                    mapC = mapC.substring(1);
+                }
+                next = next.replace("{map}", rep);
             }
             String replaced = replaceTags(fplayer, next);
             if (replaced == null) {

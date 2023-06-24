@@ -29,7 +29,7 @@ public abstract class FSidebarProvider {
 
     private String qualityAssure(String line) {
         if (line.contains("{notFrozen}") || line.contains("{notPermanent}")) {
-            return "n/a"; // we dont support support these error variables in scoreboards
+            return "n/a"; // we don't support these error variables in scoreboards
         }
         if (line.contains("{ig}")) {
             // since you can't really fit a whole "Faction Home: world, x, y, z" on one line
