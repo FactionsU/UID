@@ -87,3 +87,10 @@ Variable | Explanation
 {max-enemies}        | Max # of enemies a faction can have
 {factionless}        | Count of all factionless players online
 {factionless-total}  | Count of all factionless players online
+
+Scoreboard-only variable with special behavior.
+Configure the expected width and height of the board in the map section of the config.
+
+Variable | Explanation
+--| ---
+{map}       | Displays a line of the scoreboard map. Add one per line the scoreboard will appear on.
