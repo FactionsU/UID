@@ -238,7 +238,7 @@ public class FactionsPlayerListener extends AbstractListener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (me.isFlying()) {
+                    if (me.isFlying() && me.getPlayer() != null) {
                         me.getPlayer().setAllowFlight(true);
                         me.getPlayer().setFlying(true);
                     }
