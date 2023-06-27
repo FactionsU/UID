@@ -73,7 +73,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent event) {
         initPlayer(event.getPlayer());
         this.plugin.updateNotification(event.getPlayer());
@@ -190,7 +190,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         FPlayer me = FPlayers.getInstance().getByPlayer(event.getPlayer());
 
