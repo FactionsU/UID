@@ -6,21 +6,35 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
-import io.papermc.lib.PaperLib;
 import me.lucko.commodore.Commodore;
 import me.lucko.commodore.CommodoreProvider;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 
 public class BrigadierManager {
     public final Commodore commodore;
-    public final LiteralArgumentBuilder<Object> brigadier = LiteralArgumentBuilder.literal("factions");
+    public final LiteralArgumentBuilder<Object> brigadier;
+    public final Set<String> aliases = new HashSet<>();
 
     public BrigadierManager() {
+        Map<String, Map<String, Object>> commands = FactionsPlugin.getInstance().getDescription().getCommands();
+        String main = commands.keySet().stream().findFirst().get();
+        Map<String, Object> cmd = commands.get(main);
+        if (cmd.containsKey("aliases")) {
+            Object ali = cmd.get("aliases");
+            if (ali instanceof Collection) {
+                aliases.addAll((Collection<String>) ali);
+            }
+        }
+
+        brigadier = LiteralArgumentBuilder.literal(main);
         commodore = CommodoreProvider.getCommodore(FactionsPlugin.getInstance());
     }
 
@@ -28,11 +42,13 @@ public class BrigadierManager {
         commodore.register(brigadier.build());
 
         // Add factions children to f alias
-        LiteralArgumentBuilder<Object> fLiteral = LiteralArgumentBuilder.literal("f");
-        for (CommandNode<Object> node : brigadier.getArguments()) {
-            fLiteral.then(node);
+        for (String alias : aliases) {
+            LiteralArgumentBuilder<Object> fLiteral = LiteralArgumentBuilder.literal(alias);
+            for (CommandNode<Object> node : brigadier.getArguments()) {
+                fLiteral.then(node);
+            }
+            commodore.register(fLiteral.build());
         }
-        commodore.register(fLiteral.build());
     }
 
     public void addSubCommand(FCommand subCommand) {
