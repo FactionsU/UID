@@ -1119,8 +1119,8 @@ public abstract class MemoryFPlayer implements FPlayer {
     public boolean shouldBeSaved() {
         return this.hasFaction() ||
                 (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl &&
-                        this.getPowerRounded() != FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getPlayerStarting() &&
-                        this.getPowerBoost() != 0);
+                        (this.getPowerRounded() != FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getPlayerStarting() ||
+                        this.getPowerBoost() != 0));
     }
 
     public void msg(String str, Object... args) {
