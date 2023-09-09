@@ -68,6 +68,9 @@ public class DynmapConfig {
                 "Minimum value: 1. To disable updating claims, edit onlyUpdateWorldOnce instead")
         private int claimUpdatePeriod = 300;
 
+        @Comment("Should markers be shown?")
+        private boolean showMarkers = true;
+
         public boolean isEnabled() {
             return enabled;
         }
@@ -114,6 +117,10 @@ public class DynmapConfig {
 
         public int getClaimUpdatePeriod() {
             return claimUpdatePeriod;
+        }
+
+        public boolean isShowMarkers() {
+            return showMarkers;
         }
 
         // This is used for config loading
