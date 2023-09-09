@@ -211,6 +211,10 @@ public class EngineDynmap {
     public Map<String, TempMarker> createHomes() {
         Map<String, TempMarker> ret = new HashMap<>();
 
+        if (!FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().dynmap().isShowMarkers()) {
+            return ret;
+        }
+
         // Loop current factions
         for (Faction faction : Factions.getInstance().getAllFactions()) {
             Location ps = faction.getHome();
