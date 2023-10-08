@@ -6,7 +6,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
-import mkremins.fanciful.FancyMessage;
+import com.massivecraft.factions.lib.mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 
 public class CmdColeader extends FCommand {

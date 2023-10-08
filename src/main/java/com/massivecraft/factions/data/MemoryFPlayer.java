@@ -31,7 +31,7 @@ import com.massivecraft.factions.util.RelationUtil;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TitleAPI;
 import com.massivecraft.factions.util.WarmUpUtil;
-import mkremins.fanciful.FancyMessage;
+import com.massivecraft.factions.lib.mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
