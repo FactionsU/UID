@@ -4,7 +4,7 @@
 
     <groupId>com.massivecraft</groupId>
     <artifactId>Factions</artifactId>
-    <version>1.6.9.5-U0.6.32</version>
+    <version>1.6.9.5-U0.6.33</version>
     <packaging>jar</packaging>
 
     <name>Factions Plugin</name>
@@ -350,19 +350,6 @@
                 <exclusion>
                     <artifactId>Essentials</artifactId>
                     <groupId>net.ess3</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>mkremins</groupId>
-            <artifactId>fanciful</artifactId>
-            <version>0.4.0-SNAPSHOT</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-            <exclusions>
-                <exclusion>
-                    <artifactId>gson</artifactId>
-                    <groupId>com.google.code.gson</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
