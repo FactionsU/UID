@@ -1,6 +1,10 @@
 package com.massivecraft.factions.util;
 
 import mkremins.fanciful.FancyMessage;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
@@ -16,9 +20,67 @@ import java.util.regex.Pattern;
 public class TextUtil {
 
     public final Map<String, String> tags;
+    private static boolean noHex = true;
 
-    public TextUtil() {
+    public TextUtil(boolean noHex) {
+        TextUtil.noHex = noHex;
         this.tags = new HashMap<>();
+    }
+
+    public static String getString(TextColor color) {
+        if (noHex || color instanceof NamedTextColor) {
+            return getClosest(color).toString();
+        }
+        String hexed = String.format("%06x", color.value());
+        final StringBuilder builder = new StringBuilder(ChatColor.COLOR_CHAR + "x");
+        for (int x = 0; x < hexed.length(); x++) {
+            builder.append(ChatColor.COLOR_CHAR).append(hexed.charAt(x));
+        }
+        return builder.toString();
+    }
+
+    public static ChatColor getClosest(TextColor color) {
+        NamedTextColor namedTextColor;
+        if (color instanceof NamedTextColor) {
+            namedTextColor = (NamedTextColor) color;
+        } else {
+            namedTextColor = NamedTextColor.nearestTo(color);
+        }
+        switch (namedTextColor.toString()) {
+            case "black":
+                return ChatColor.BLACK;
+            case "dark_blue":
+                return ChatColor.DARK_BLUE;
+            case "dark_green":
+                return ChatColor.DARK_GREEN;
+            case "dark_aqua":
+                return ChatColor.DARK_AQUA;
+            case "dark_red":
+                return ChatColor.DARK_RED;
+            case "dark_purple":
+                return ChatColor.DARK_PURPLE;
+            case "gold":
+                return ChatColor.GOLD;
+            case "gray":
+                return ChatColor.GRAY;
+            case "dark_gray":
+                return ChatColor.DARK_GRAY;
+            case "blue":
+                return ChatColor.BLUE;
+            case "green":
+                return ChatColor.GREEN;
+            case "aqua":
+                return ChatColor.AQUA;
+            case "red":
+                return ChatColor.RED;
+            case "light_purple":
+                return ChatColor.LIGHT_PURPLE;
+            case "yellow":
+                return ChatColor.YELLOW;
+            case "white":
+            default:
+                return ChatColor.WHITE;
+        }
     }
 
     // -------------------------------------------- //
@@ -150,6 +212,21 @@ public class TextUtil {
             return parseTags("<a>") + titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
         } else {
             return parseTags("<a>") + center;
+        }
+    }
+
+    public static Component titleizeC(String string) {
+        String str = MiniMessage.miniMessage().serialize(LegacyComponentSerializer.legacySection().deserialize(string));
+        String center = ".[ <dark_green>" + str + "<gold> ].";
+        int centerLen = ChatColor.stripColor(LegacyComponentSerializer.legacySection().serialize(Mini.parse(center))).length();
+        int pivot = titleizeLine.length() / 2;
+        int eatLeft = (centerLen / 2) - titleizeBalance;
+        int eatRight = (centerLen - eatLeft) + titleizeBalance;
+
+        if (eatLeft < pivot) {
+            return Mini.parse("<gold>" + titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight));
+        } else {
+            return Mini.parse("<gold>" + center);
         }
     }
 

@@ -5,6 +5,8 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 
 
 public class CmdMap extends FCommand {
@@ -53,7 +55,10 @@ public class CmdMap extends FCommand {
     }
 
     public void showMap(CommandContext context) {
-        context.sendFancyMessage(Board.getInstance().getMap(context.fPlayer, new FLocation(context.fPlayer), context.fPlayer.getPlayer().getLocation().getYaw()));
+        Audience audience = FactionsPlugin.getInstance().getAdventure().player(context.player);
+        for (Component component : Board.getInstance().getMap(context.fPlayer, new FLocation(context.fPlayer), context.fPlayer.getPlayer().getLocation().getYaw())) {
+            audience.sendMessage(component);
+        }
     }
 
     @Override

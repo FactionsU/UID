@@ -35,7 +35,7 @@ public enum FactionTag implements Tag {
     JOINING("joining", (fac) -> (fac.getOpen() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString())),
     @SuppressWarnings("Convert2MethodRef")
     FACTION("faction", (fac) -> fac.getTag()),
-    FACTION_RELATION_COLOR("faction-relation-color", (fac, fp) -> fp == null ? "" : fp.getColorTo(fac).toString()),
+    FACTION_RELATION_COLOR("faction-relation-color", (fac, fp) -> fp == null ? "" : fp.getColorStringTo(fac)),
     HOME_WORLD("world", (fac) -> fac.hasHome() ? fac.getHome().getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
     RAIDABLE("raidable", (fac) -> {
         boolean raid = FactionsPlugin.getInstance().getLandRaidControl().isRaidable(fac);

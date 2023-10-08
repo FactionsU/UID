@@ -3,6 +3,7 @@ package com.massivecraft.factions.perms;
 import com.google.gson.annotations.SerializedName;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.util.TL;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
 
 import java.util.Collections;
@@ -117,6 +118,11 @@ public enum Role implements Permissible {
     @Override
     public ChatColor getColor() {
         return Relation.MEMBER.getColor();
+    }
+
+    @Override
+    public TextColor getTextColor() {
+        return Relation.MEMBER.getTextColor();
     }
 
     /**

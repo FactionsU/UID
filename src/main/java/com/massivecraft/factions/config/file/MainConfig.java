@@ -7,7 +7,8 @@ import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.material.MaterialDb;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
@@ -43,86 +44,89 @@ public class MainConfig {
         public class Relations {
             private String member = "GREEN";
             @WipeOnReload
-            private transient ChatColor memberColor;
+            private transient TextColor memberColor;
             private String ally = "LIGHT_PURPLE";
             @WipeOnReload
-            private transient ChatColor allyColor;
+            private transient TextColor allyColor;
             private String truce = "DARK_PURPLE";
             @WipeOnReload
-            private transient ChatColor truceColor;
+            private transient TextColor truceColor;
             private String neutral = "WHITE";
             @WipeOnReload
-            private transient ChatColor neutralColor;
+            private transient TextColor neutralColor;
             private String enemy = "RED";
             @WipeOnReload
-            private transient ChatColor enemyColor;
+            private transient TextColor enemyColor;
             private String peaceful = "GOLD";
             @WipeOnReload
-            private transient ChatColor peacefulColor;
+            private transient TextColor peacefulColor;
 
-            public ChatColor getMember() {
-                return memberColor = Colors.this.getColor(this.member, this.memberColor, ChatColor.GREEN);
+            public TextColor getMember() {
+                return memberColor = Colors.this.getColor(this.member, this.memberColor, NamedTextColor.GREEN);
             }
 
-            public ChatColor getAlly() {
-                return allyColor = Colors.this.getColor(this.ally, this.allyColor, ChatColor.LIGHT_PURPLE);
+            public TextColor getAlly() {
+                return allyColor = Colors.this.getColor(this.ally, this.allyColor, NamedTextColor.LIGHT_PURPLE);
             }
 
-            public ChatColor getTruce() {
-                return truceColor = Colors.this.getColor(this.truce, this.truceColor, ChatColor.DARK_PURPLE);
+            public TextColor getTruce() {
+                return truceColor = Colors.this.getColor(this.truce, this.truceColor, NamedTextColor.DARK_PURPLE);
             }
 
-            public ChatColor getNeutral() {
-                return neutralColor = Colors.this.getColor(this.neutral, this.neutralColor, ChatColor.WHITE);
+            public TextColor getNeutral() {
+                return neutralColor = Colors.this.getColor(this.neutral, this.neutralColor, NamedTextColor.WHITE);
             }
 
-            public ChatColor getEnemy() {
-                return enemyColor = Colors.this.getColor(this.enemy, this.enemyColor, ChatColor.RED);
+            public TextColor getEnemy() {
+                return enemyColor = Colors.this.getColor(this.enemy, this.enemyColor, NamedTextColor.RED);
             }
 
-            public ChatColor getPeaceful() {
-                return peacefulColor = Colors.this.getColor(this.peaceful, this.peacefulColor, ChatColor.GOLD);
+            public TextColor getPeaceful() {
+                return peacefulColor = Colors.this.getColor(this.peaceful, this.peacefulColor, NamedTextColor.GOLD);
             }
         }
 
         public class Factions {
             private String wilderness = "GRAY";
             @WipeOnReload
-            private transient ChatColor wildernessColor;
+            private transient TextColor wildernessColor;
             private String safezone = "GOLD";
             @WipeOnReload
-            private transient ChatColor safezoneColor;
+            private transient TextColor safezoneColor;
             private String warzone = "DARK_RED";
             @WipeOnReload
-            private transient ChatColor warzoneColor;
+            private transient TextColor warzoneColor;
 
-            public ChatColor getWilderness() {
-                return wildernessColor = Colors.this.getColor(this.wilderness, this.wildernessColor, ChatColor.GRAY);
+            public TextColor getWilderness() {
+                return wildernessColor = Colors.this.getColor(this.wilderness, this.wildernessColor, NamedTextColor.GRAY);
             }
 
-            public ChatColor getSafezone() {
-                return safezoneColor = Colors.this.getColor(this.safezone, this.safezoneColor, ChatColor.GOLD);
+            public TextColor getSafezone() {
+                return safezoneColor = Colors.this.getColor(this.safezone, this.safezoneColor, NamedTextColor.GOLD);
             }
 
-            public ChatColor getWarzone() {
-                return warzoneColor = Colors.this.getColor(this.warzone, this.warzoneColor, ChatColor.DARK_RED);
+            public TextColor getWarzone() {
+                return warzoneColor = Colors.this.getColor(this.warzone, this.warzoneColor, NamedTextColor.DARK_RED);
             }
         }
 
         private Factions factions = new Factions();
         private Relations relations = new Relations();
 
-        private ChatColor getColor(String name, ChatColor current, ChatColor defaultColor) {
+        private TextColor getColor(String name, TextColor current, TextColor defaultColor) {
             if (current != null) {
                 return current;
             }
-            ChatColor ret;
-            try {
-                ret = ChatColor.valueOf(name);
-            } catch (IllegalArgumentException e) {
-                ret = defaultColor;
+
+            TextColor ret;
+
+            if (name.startsWith("#")) {
+                ret = TextColor.fromHexString(name);
+            } else {
+                ret = NamedTextColor.NAMES.value(name.toLowerCase());
             }
-            return ret;
+
+            return ret == null ? NamedTextColor.WHITE : ret;
         }
 
         public Factions factions() {

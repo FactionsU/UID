@@ -505,11 +505,11 @@ public abstract class MemoryFPlayer implements FPlayer {
     // These are used in information messages
 
     public String getNameAndTitle(Faction faction) {
-        return this.getColorTo(faction) + this.getNameAndTitle();
+        return this.getColorStringTo(faction) + this.getNameAndTitle();
     }
 
     public String getNameAndTitle(MemoryFPlayer fplayer) {
-        return this.getColorTo(fplayer) + this.getNameAndTitle();
+        return this.getColorStringTo(fplayer) + this.getNameAndTitle();
     }
 
     // Chat Tag:
@@ -566,9 +566,15 @@ public abstract class MemoryFPlayer implements FPlayer {
         return Board.getInstance().getFactionAt(new FLocation(this)).getRelationTo(this);
     }
 
+    @Deprecated
     @Override
     public ChatColor getColorTo(RelationParticipator rp) {
         return RelationUtil.getColorOfThatToMe(this, rp);
+    }
+
+    @Override
+    public String getColorStringTo(RelationParticipator rp) {
+        return RelationUtil.getColorStringOfThatToMe(this,rp);
     }
 
     //----------------------------------------------//
@@ -1329,7 +1335,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public String getNameAndTitle(FPlayer fplayer) {
-        return this.getColorTo(fplayer) + this.getNameAndTitle();
+        return this.getColorStringTo(fplayer) + this.getNameAndTitle();
     }
 
     @Override

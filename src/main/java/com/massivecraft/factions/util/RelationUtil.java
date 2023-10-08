@@ -5,6 +5,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.iface.RelationParticipator;
 import com.massivecraft.factions.perms.Relation;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
 
 public class RelationUtil {
@@ -41,7 +42,7 @@ public class RelationUtil {
             ret = TextUtil.upperCaseFirst(ret);
         }
 
-        return "" + getColorOfThatToMe(that, me) + ret;
+        return getColorStringOfThatToMe(that, me) + ret;
     }
 
     public static String describeThatToMe(RelationParticipator that, RelationParticipator me) {
@@ -95,7 +96,16 @@ public class RelationUtil {
         return null;
     }
 
+    @Deprecated
     public static ChatColor getColorOfThatToMe(RelationParticipator that, RelationParticipator me) {
+        return TextUtil.getClosest(getTextColorOfThatToMe(that, me));
+    }
+
+    public static String getColorStringOfThatToMe(RelationParticipator that, RelationParticipator me) {
+        return TextUtil.getString(getTextColorOfThatToMe(that, me));
+    }
+
+    public static TextColor getTextColorOfThatToMe(RelationParticipator that, RelationParticipator me) {
         Faction thatFaction = getFaction(that);
         if (thatFaction != null) {
             if (thatFaction.isPeaceful() && thatFaction != getFaction(me)) {
@@ -111,6 +121,6 @@ public class RelationUtil {
             }
         }
 
-        return getRelationTo(that, me).getColor();
+        return getRelationTo(that, me).getTextColor();
     }
 }
