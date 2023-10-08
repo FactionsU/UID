@@ -36,6 +36,7 @@ Player Placeholder | Description
 %factionsuuid_player_deaths% | Deaths by this player
 %factionsuuid_player_role% | Player's faction role
 %factionsuuid_player_role_name% | Player's faction role's name
+%factionsuuid_player_map_#% | Sidebar map (replace # with row number starting with 1)
 
 ### Factions
 

@@ -244,14 +244,14 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         if (otherFaction == null) {
             return getTag();
         }
-        return this.getTag(this.getColorTo(otherFaction).toString());
+        return this.getTag(this.getColorStringTo(otherFaction));
     }
 
     public String getTag(FPlayer otherFplayer) {
         if (otherFplayer == null) {
             return getTag();
         }
-        return this.getTag(this.getColorTo(otherFplayer).toString());
+        return this.getTag(this.getColorStringTo(otherFplayer));
     }
 
     public void setTag(String str) {
@@ -542,9 +542,15 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         return RelationUtil.getRelationTo(this, rp, ignorePeaceful);
     }
 
+    @Deprecated
     @Override
     public ChatColor getColorTo(RelationParticipator rp) {
         return RelationUtil.getColorOfThatToMe(this, rp);
+    }
+
+    @Override
+    public String getColorStringTo(RelationParticipator rp) {
+        return RelationUtil.getColorStringOfThatToMe(this, rp);
     }
 
     public Relation getRelationWish(Faction otherFaction) {

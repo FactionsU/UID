@@ -432,7 +432,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         this.persist = new Persist(this);
         this.worldUtil = new WorldUtil(this);
 
-        this.txt = new TextUtil();
+        this.txt = new TextUtil(mcVersion < 1600);
         initTXT();
 
         // attempt to get first command defined in plugin.yml as reference command, if any commands are defined in there

@@ -75,7 +75,7 @@ public class CmdTag extends FCommand {
             // Broadcast the tag change (if applicable)
             if (FactionsPlugin.getInstance().conf().factions().chat().isBroadcastTagChanges()) {
                 Faction faction = fplayer.getFaction();
-                fplayer.msg(TL.COMMAND_TAG_CHANGED, context.fPlayer.getColorTo(faction) + oldtag, context.faction.getTag(faction));
+                fplayer.msg(TL.COMMAND_TAG_CHANGED, context.fPlayer.getColorStringTo(faction) + oldtag, context.faction.getTag(faction));
             }
         }
 

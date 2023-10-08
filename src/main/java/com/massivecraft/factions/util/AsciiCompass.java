@@ -1,11 +1,11 @@
 package com.massivecraft.factions.util;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AsciiCompass {
-
     public enum Point {
 
         N('N'),
@@ -44,7 +44,7 @@ public class AsciiCompass {
             return toString();
         }
 
-        public String toString(boolean isActive, ChatColor colorActive, String colorDefault) {
+        public String toString(boolean isActive, String colorActive, String colorDefault) {
             return (isActive ? colorActive : colorDefault) + getTranslation();
         }
     }
@@ -78,32 +78,32 @@ public class AsciiCompass {
         }
     }
 
-    public static ArrayList<String> getAsciiCompass(Point point, ChatColor colorActive, String colorDefault) {
-        ArrayList<String> ret = new ArrayList<>();
+    public static List<Component> getAsciiCompass(Point point, String colorActive, String colorDefault) {
+        ArrayList<Component> ret = new ArrayList<>();
         String row;
 
         row = "";
         row += Point.NW.toString(Point.NW == point, colorActive, colorDefault);
         row += Point.N.toString(Point.N == point, colorActive, colorDefault);
         row += Point.NE.toString(Point.NE == point, colorActive, colorDefault);
-        ret.add(row);
+        ret.add(Mini.parse(row.replace("\\","\\\\")));
 
         row = "";
         row += Point.W.toString(Point.W == point, colorActive, colorDefault);
         row += colorDefault + "+";
         row += Point.E.toString(Point.E == point, colorActive, colorDefault);
-        ret.add(row);
+        ret.add(Mini.parse(row.replace("\\","\\\\")));
 
         row = "";
         row += Point.SW.toString(Point.SW == point, colorActive, colorDefault);
         row += Point.S.toString(Point.S == point, colorActive, colorDefault);
         row += Point.SE.toString(Point.SE == point, colorActive, colorDefault);
-        ret.add(row);
+        ret.add(Mini.parse(row.replace("\\","\\\\")));
 
         return ret;
     }
 
-    public static ArrayList<String> getAsciiCompass(double inDegrees, ChatColor colorActive, String colorDefault) {
+    public static List<Component> getAsciiCompass(double inDegrees, String colorActive, String colorDefault) {
         return getAsciiCompass(getCompassPointForDirection(inDegrees), colorActive, colorDefault);
     }
 }

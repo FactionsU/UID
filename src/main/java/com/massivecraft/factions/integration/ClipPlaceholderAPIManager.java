@@ -6,6 +6,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.data.MemoryBoard;
 import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.tag.FactionTag;
@@ -13,14 +14,18 @@ import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.TL;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements Relational {
+    private static final String mapChars = "0123456789abcdef";
 
     // Identifier for this expansion
     @Override
@@ -62,8 +67,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                 String relationName = fp1.getRelationTo(fp2).nicename;
                 return relationName != null ? relationName : "";
             case "relation_color":
-                ChatColor color = fp1.getColorTo(fp2);
-                return color != null ? color.toString() : "";
+                return fp1.getColorStringTo(fp2);
         }
 
         return null;
@@ -83,6 +87,25 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
             placeholder = placeholder.replace("_territory", "");
             territory = true;
         }
+
+        if (placeholder.startsWith("player_map_")) {
+            List<Component> list = ((MemoryBoard) Board.getInstance()).getScoreboardMap(fPlayer);
+            if (list.isEmpty()) {
+                return "";
+            }
+            int row;
+            try {
+                row = Integer.parseInt(placeholder.substring("player_map_".length()));
+            } catch (NumberFormatException ignored) {
+                return "";
+            }
+            if (row < 1 || row > list.size()) {
+                return "";
+            }
+            row--;
+            return ChatColor.COLOR_CHAR + mapChars.substring(row, row + 1) + LegacyComponentSerializer.legacySection().serialize(list.get(row));
+        }
+
         switch (placeholder) {
             // First list player stuff
             case "player_name":
@@ -214,7 +237,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
             case "faction_maxvaults":
                 return String.valueOf(faction.getMaxVaults());
             case "faction_relation_color":
-                return fPlayer.getColorTo(faction).toString();
+                return fPlayer.getColorStringTo(faction);
         }
 
         return null;

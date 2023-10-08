@@ -11,7 +11,8 @@ import com.massivecraft.factions.tag.FancyTag;
 import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.TL;
-import mkremins.fanciful.FancyMessage;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -126,14 +127,15 @@ public class CmdShow extends FCommand {
     }
 
     private void sendMessages(List<String> messageList, CommandSender recipient, Faction faction, FPlayer player, Map<UUID, String> groupMap) {
+        Audience audience = this.plugin.getAdventure().sender(recipient);
         FancyTag tag;
         for (String parsed : messageList) {
             if ((tag = FancyTag.getMatch(parsed)) != null) {
                 if (player != null) {
-                    List<FancyMessage> fancy = FancyTag.parse(parsed, faction, player, groupMap);
+                    List<Component> fancy = FancyTag.parse(parsed, faction, player, groupMap);
                     if (fancy != null) {
-                        for (FancyMessage fancyMessage : fancy) {
-                            fancyMessage.send(recipient);
+                        for (Component component : fancy) {
+                            audience.sendMessage(component);
                         }
                     }
                 } else {

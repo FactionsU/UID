@@ -7,7 +7,12 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.QuadFunction;
-import mkremins.fanciful.FancyMessage;
+import com.massivecraft.factions.util.TextUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -21,74 +26,97 @@ public enum FancyTag implements Tag {
     ENEMIES_LIST("enemies-list", (target, fme, prefix, gm) -> processRelation(prefix, target, fme, Relation.ENEMY)),
     TRUCES_LIST("truces-list", (target, fme, prefix, gm) -> processRelation(prefix, target, fme, Relation.TRUCE)),
     ONLINE_LIST("online-list", (target, fme, prefix, gm) -> {
-        List<FancyMessage> fancyMessages = new ArrayList<>();
-        FancyMessage currentOnline = FactionsPlugin.getInstance().txt().parseFancy(prefix);
-        boolean firstOnline = true;
+        List<Component> fancyMessages = new ArrayList<>();
+        TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(FactionsPlugin.getInstance().txt().parse(prefix)));
+        boolean first = true;
         for (FPlayer p : MiscUtil.rankOrder(target.getFPlayersWhereOnline(true, fme))) {
             if (fme.getPlayer() != null && !fme.getPlayer().canSee(p.getPlayer())) {
                 continue; // skip
             }
-            String name = p.getNameAndTitle();
-            currentOnline.then(firstOnline ? name : ", " + name);
-            currentOnline.tooltip(tipPlayer(p, gm)).color(fme.getColorTo(p));
-            firstOnline = false;
-            if (currentOnline.toJSONString().length() > ARBITRARY_LIMIT) {
-                fancyMessages.add(currentOnline);
-                currentOnline = new FancyMessage("");
+            if (!first) {
+                message.append(Component.text(", "));
+            }
+            Component tip = tip(tipPlayer(p, gm));
+            System.out.println(LegacyComponentSerializer.legacySection().serialize(tip));
+            message.append(LegacyComponentSerializer.legacySection().deserialize(p.getNameAndTitle()).color(fme.getTextColorTo(p)).hoverEvent(HoverEvent.showText(tip)));
+            first = false;
+            Component current = message.build();
+            if (GsonComponentSerializer.gson().serialize(current).length() > ARBITRARY_LIMIT) {
+                fancyMessages.add(current);
+                message = Component.text();
             }
         }
-        fancyMessages.add(currentOnline);
-        return firstOnline && Tag.isMinimalShow() ? null : fancyMessages;
+        fancyMessages.add(message.build());
+        return first && Tag.isMinimalShow() ? null : fancyMessages;
     }),
     OFFLINE_LIST("offline-list", (target, fme, prefix, gm) -> {
-        List<FancyMessage> fancyMessages = new ArrayList<>();
-        FancyMessage currentOffline = FactionsPlugin.getInstance().txt().parseFancy(prefix);
-        boolean firstOffline = true;
+        List<Component> fancyMessages = new ArrayList<>();
+        TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(FactionsPlugin.getInstance().txt().parse(prefix)));
+        boolean first = true;
         for (FPlayer p : MiscUtil.rankOrder(target.getFPlayers())) {
-            String name = p.getNameAndTitle();
             // Also make sure to add players that are online BUT can't be seen.
             if (!p.isOnline() || (fme.getPlayer() != null && p.isOnline() && !fme.getPlayer().canSee(p.getPlayer()))) {
-                currentOffline.then(firstOffline ? name : ", " + name);
-                currentOffline.tooltip(tipPlayer(p, gm)).color(fme.getColorTo(p));
-                firstOffline = false;
-                if (currentOffline.toJSONString().length() > ARBITRARY_LIMIT) {
-                    fancyMessages.add(currentOffline);
-                    currentOffline = new FancyMessage("");
+                if (!first) {
+                    message.append(Component.text(", "));
+                }
+                Component tip = tip(tipPlayer(p, gm));
+                message.append(LegacyComponentSerializer.legacySection().deserialize(p.getNameAndTitle()).color(fme.getTextColorTo(p)).hoverEvent(HoverEvent.showText(tip)));
+                first = false;
+                Component current = message.build();
+                if (GsonComponentSerializer.gson().serialize(current).length() > ARBITRARY_LIMIT) {
+                    fancyMessages.add(current);
+                    message = Component.text();
                 }
             }
         }
-        fancyMessages.add(currentOffline);
-        return firstOffline && Tag.isMinimalShow() ? null : fancyMessages;
+        fancyMessages.add(message.build());
+        return first && Tag.isMinimalShow() ? null : fancyMessages;
     }),
     ;
 
     private final String tag;
-    private final QuadFunction<Faction, FPlayer, String, Map<UUID, String>, List<FancyMessage>> function;
+    private final QuadFunction<Faction, FPlayer, String, Map<UUID, String>, List<Component>> function;
 
-    private static List<FancyMessage> processRelation(String prefix, Faction faction, FPlayer fPlayer, Relation relation) {
-        List<FancyMessage> fancyMessages = new ArrayList<>();
-        FancyMessage message = FactionsPlugin.getInstance().txt().parseFancy(prefix);
+    private static List<Component> processRelation(String prefix, Faction faction, FPlayer fPlayer, Relation relation) {
+        List<Component> fancyMessages = new ArrayList<>();
+        TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(FactionsPlugin.getInstance().txt().parse(prefix)));
         boolean first = true;
         for (Faction otherFaction : Factions.getInstance().getAllFactions()) {
             if (otherFaction == faction) {
                 continue;
             }
-            String s = otherFaction.getTag(fPlayer);
             if (otherFaction.getRelationTo(faction) == relation) {
-                message.then(first ? s : ", " + s);
-                message.tooltip(tipFaction(otherFaction, fPlayer)).color(fPlayer.getColorTo(otherFaction));
+                if (!first) {
+                    message.append(Component.text(", "));
+                }
+                Component tip = tip(tipFaction(otherFaction, fPlayer));
+                message.append(LegacyComponentSerializer.legacySection().deserialize(otherFaction.getTag(fPlayer)).color(fPlayer.getTextColorTo(otherFaction)).hoverEvent(HoverEvent.showText(tip)));
                 first = false;
-                if (message.toJSONString().length() > ARBITRARY_LIMIT) {
-                    fancyMessages.add(message);
-                    message = new FancyMessage("");
+                Component current = message.build();
+                if (GsonComponentSerializer.gson().serialize(current).length() > ARBITRARY_LIMIT) {
+                    fancyMessages.add(current);
+                    message = Component.text();
                 }
             }
         }
-        fancyMessages.add(message);
+        fancyMessages.add(message.build());
         return first && Tag.isMinimalShow() ? null : fancyMessages;
     }
 
-    public static List<FancyMessage> parse(String text, Faction faction, FPlayer player, Map<UUID, String> groupMap) {
+    private static Component tip(List<String> lines) {
+        TextComponent.Builder tip = Component.text();
+        boolean lb = false;
+        for (String tipLine : lines) {
+            if (lb) {
+                tip.appendNewline();
+            }
+            lb = true;
+            tip.append(LegacyComponentSerializer.legacySection().deserialize(tipLine));
+        }
+        return tip.build();
+    }
+
+    public static List<Component> parse(String text, Faction faction, FPlayer player, Map<UUID, String> groupMap) {
         for (FancyTag tag : FancyTag.values()) {
             if (tag.foundInString(text)) {
                 return tag.getMessage(text, faction, player, groupMap);
@@ -158,7 +186,7 @@ public enum FancyTag implements Tag {
         return lines;
     }
 
-    FancyTag(String tag, QuadFunction<Faction, FPlayer, String, Map<UUID, String>, List<FancyMessage>> function) {
+    FancyTag(String tag, QuadFunction<Faction, FPlayer, String, Map<UUID, String>, List<Component>> function) {
         this.tag = '{' + tag + '}';
         this.function = function;
     }
@@ -173,7 +201,7 @@ public enum FancyTag implements Tag {
         return test != null && test.contains(this.tag);
     }
 
-    public List<FancyMessage> getMessage(String text, Faction faction, FPlayer player, Map<UUID, String> groupMap) {
+    public List<Component> getMessage(String text, Faction faction, FPlayer player, Map<UUID, String> groupMap) {
         if (!this.foundInString(text)) {
             return Collections.emptyList(); // We really, really shouldn't be here.
         }

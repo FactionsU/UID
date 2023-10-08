@@ -2,6 +2,8 @@ package com.massivecraft.factions.perms;
 
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.util.TL;
+import com.massivecraft.factions.util.TextUtil;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
 
 import java.util.Collections;
@@ -105,6 +107,11 @@ public enum Relation implements Permissible {
     }
 
     public ChatColor getColor() {
+        return TextUtil.getClosest(this.getTextColor());
+    }
+
+    @Override
+    public TextColor getTextColor() {
         switch (this) {
             case MEMBER:
                 return FactionsPlugin.getInstance().conf().colors().relations().getMember();
