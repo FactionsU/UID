@@ -1,6 +1,6 @@
 package com.massivecraft.factions.util;
 
-import mkremins.fanciful.FancyMessage;
+import com.massivecraft.factions.lib.mkremins.fanciful.FancyMessage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;

@@ -5,7 +5,6 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.data.MemoryBoard;
 import com.massivecraft.factions.scoreboards.FSidebarProvider;
-import mkremins.fanciful.FancyMessage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
