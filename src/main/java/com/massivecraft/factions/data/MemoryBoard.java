@@ -303,9 +303,6 @@ public abstract class MemoryBoard extends Board {
 
         // Get the compass
         List<Component> asciiCompass = AsciiCompass.getAsciiCompass(inDegrees, "<red>", "<gold>");
-        for (Component compass : asciiCompass) {
-            System.out.println(LegacyComponentSerializer.legacySection().serialize(compass));
-        }
 
         int halfWidth = FactionsPlugin.getInstance().conf().map().getWidth() / 2;
         // Use player's value for height
