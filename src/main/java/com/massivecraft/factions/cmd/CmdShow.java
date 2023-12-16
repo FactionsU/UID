@@ -13,6 +13,7 @@ import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.TL;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -162,7 +163,7 @@ public class CmdShow extends FCommand {
                     }
                 }
             } else {
-                recipient.sendMessage(FactionsPlugin.getInstance().txt().parse(parsed));
+                audience.sendMessage(LegacyComponentSerializer.legacySection().deserialize(FactionsPlugin.getInstance().txt().parse(parsed)));
             }
         }
     }

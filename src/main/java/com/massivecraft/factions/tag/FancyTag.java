@@ -37,7 +37,6 @@ public enum FancyTag implements Tag {
                 message.append(Component.text(", "));
             }
             Component tip = tip(tipPlayer(p, gm));
-            System.out.println(LegacyComponentSerializer.legacySection().serialize(tip));
             message.append(LegacyComponentSerializer.legacySection().deserialize(p.getNameAndTitle()).color(fme.getTextColorTo(p)).hoverEvent(HoverEvent.showText(tip)));
             first = false;
             Component current = message.build();
