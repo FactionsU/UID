@@ -6,7 +6,7 @@
 Repository: `https://ci.ender.zone/plugin/repository/everything/`  
 groupId: `com.massivecraft`  
 artifactId: `Factions`  
-version: `1.6.9.5-U0.6.34`
+version: `1.6.9.5-U0.6.35`
 
 ## FLocation
 FLocation is a Chunk wrapper. If you ever want to deal with the map, claimed land, or something similar, you'll need to
