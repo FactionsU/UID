@@ -5,7 +5,10 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
-import com.massivecraft.factions.lib.mkremins.fanciful.FancyMessage;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 
 public class CmdInvite extends FCommand {
@@ -48,18 +51,13 @@ public class CmdInvite extends FCommand {
 
         context.faction.invite(target);
         if (target.isOnline()) {
-            // Tooltips, colors, and commands only apply to the string immediately before it.
-            FancyMessage message = new FancyMessage(context.fPlayer.describeTo(target, true))
-                    .tooltip(TL.COMMAND_INVITE_CLICKTOJOIN.toString())
-                    .command("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " join " + ChatColor.stripColor(context.faction.getTag()))
-                    .then(TL.COMMAND_INVITE_INVITEDYOU.toString())
-                    .color(ChatColor.YELLOW)
-                    .tooltip(TL.COMMAND_INVITE_CLICKTOJOIN.toString())
-                    .command("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " join " + context.faction.getTag())
-                    .then(context.faction.describeTo(target)).tooltip(TL.COMMAND_INVITE_CLICKTOJOIN.toString())
-                    .command("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " join " + context.faction.getTag());
-
-            message.send(target.getPlayer());
+            LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
+            Component component = legacy.deserialize(context.fPlayer.describeTo(target, true))
+                    .append(legacy.deserialize(TL.COMMAND_INVITE_INVITEDYOU.toString()).color(NamedTextColor.YELLOW))
+                    .append(legacy.deserialize(context.faction.describeTo(target)));
+            component = component.hoverEvent(legacy.deserialize(TL.COMMAND_INVITE_CLICKTOJOIN.toString()).asHoverEvent())
+                    .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " join " + ChatColor.stripColor(context.faction.getTag())));
+            FactionsPlugin.getInstance().getAdventure().player(target.getPlayer()).sendMessage(component);
         }
 
         //you.msg("%s<i> invited you to %s",context.fPlayer.describeTo(you, true), context.faction.describeTo(you));
