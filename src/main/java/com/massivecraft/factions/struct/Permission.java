@@ -114,7 +114,8 @@ public enum Permission {
     NEAR("near"),
     WARP("warp"),
     UPDATES("updates"),
-    DEBUG("debug");
+    DEBUG("debug"),
+    WARMUP_EXEMPT("warmups.exempt");
 
     public final String node;
 
