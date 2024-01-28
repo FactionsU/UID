@@ -6,8 +6,10 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
-import com.massivecraft.factions.lib.mkremins.fanciful.FancyMessage;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class CmdMod extends FCommand {
 
@@ -30,13 +32,18 @@ public class CmdMod extends FCommand {
     public void perform(CommandContext context) {
         FPlayer you = context.argAsBestFPlayerMatch(0);
         if (you == null) {
-            FancyMessage msg = new FancyMessage(TL.COMMAND_MOD_CANDIDATES.toString()).color(ChatColor.GOLD);
+            LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
+            Component component = legacy.deserialize(TL.COMMAND_MOD_CANDIDATES.toString()).color(NamedTextColor.GOLD);
             for (FPlayer player : context.faction.getFPlayersWhereRole(Role.NORMAL)) {
                 String s = player.getName();
-                msg.then(s + " ").color(ChatColor.WHITE).tooltip(TL.COMMAND_MOD_CLICKTOPROMOTE.toString() + s).command("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " mod " + s);
+                component = component.append(Component.text().color(NamedTextColor.WHITE)
+                        .content(s + " ")
+                        .hoverEvent(legacy.deserialize(TL.COMMAND_MOD_CLICKTOPROMOTE + s))
+                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " mod " + s))
+                );
             }
 
-            context.sendFancyMessage(msg);
+            FactionsPlugin.getInstance().getAdventure().player(context.player).sendMessage(component);
             return;
         }
 
