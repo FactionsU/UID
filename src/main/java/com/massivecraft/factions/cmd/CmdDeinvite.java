@@ -6,8 +6,10 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
-import com.massivecraft.factions.lib.mkremins.fanciful.FancyMessage;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class CmdDeinvite extends FCommand {
 
@@ -29,13 +31,17 @@ public class CmdDeinvite extends FCommand {
     public void perform(CommandContext context) {
         FPlayer you = context.argAsBestFPlayerMatch(0);
         if (you == null) {
-            FancyMessage msg = new FancyMessage(TL.COMMAND_DEINVITE_CANDEINVITE.toString()).color(ChatColor.GOLD);
+            LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
+            Component component = legacy.deserialize(TL.COMMAND_DEINVITE_CANDEINVITE.toString()).color(NamedTextColor.GOLD);
             for (String id : context.faction.getInvites()) {
                 FPlayer fp = FPlayers.getInstance().getById(id);
                 String name = fp != null ? fp.getName() : id;
-                msg.then(name + " ").color(ChatColor.WHITE).tooltip(TL.COMMAND_DEINVITE_CLICKTODEINVITE.format(name)).command("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " deinvite " + name);
+                component = component.append(Component.text().color(NamedTextColor.GRAY).content(name + " ")
+                        .hoverEvent(legacy.deserialize(TL.COMMAND_DEINVITE_CLICKTODEINVITE.format(name)).asHoverEvent())
+                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " deinvite " + name))
+                );
             }
-            context.sendFancyMessage(msg);
+            FactionsPlugin.getInstance().getAdventure().player(context.player).sendMessage(component);
             return;
         }
 
