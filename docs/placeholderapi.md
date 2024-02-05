@@ -68,6 +68,7 @@ Faction Placeholder | Description
 %factionsuuid_faction_home_x% | X coordinate of your faction's home
 %factionsuuid_faction_home_y% | Y coordinate of your faction's home
 %factionsuuid_faction_home_z% | Z coordinate of your faction's home
+%factionsuuid_faction_internal_id% | Internal ID for the faction
 %factionsuuid_faction_land_value% | Total value of your faction's land
 %factionsuuid_faction_land_refund% | How much your faction would get if they refunded the land
 %factionsuuid_faction_bank_balance% | Faction's bank balance
