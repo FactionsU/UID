@@ -114,9 +114,10 @@ Below is a full list of all permission nodes. A check mark (✔) is next to any 
 | factions.unclaim ✔            |                                                                                       |
 | factions.unclaimall ✔         |                                                                                       |
 | factions.updates              |                                                                                       |
-| factions.vault ✔              |                                                                                       |
-| factions.version ✔            |                                                                                       |
-| factions.warp                 |                                                                                       |
+| factions.vault ✔              | Access to the faction vault                                                           |
+| factions.version ✔            | Can run `/f version`                                                                  |
+| factions.warp                 | Ability to use faction warps                                                          |
+| factions.warmup.exempt        | Exempt from warmups                                                                   |
 
 
 ## Parent modes
