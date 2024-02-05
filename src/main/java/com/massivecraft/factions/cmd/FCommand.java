@@ -132,13 +132,16 @@ public abstract class FCommand {
 
     public String getHelpShort() {
         if (this.helpShort == null) {
-            return getUsageTranslation().toString();
+            TL tl = getUsageTranslation();
+            return tl == null ? "" : tl.toString();
         }
 
         return this.helpShort;
     }
 
-    public abstract TL getUsageTranslation();
+    public TL getUsageTranslation() {
+        return null;
+    }
 
     /*
         Common Logic
