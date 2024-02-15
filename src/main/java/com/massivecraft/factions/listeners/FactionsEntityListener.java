@@ -183,8 +183,7 @@ public class FactionsEntityListener extends AbstractListener {
             return;
         }
 
-        EntityDamageByEntityEvent sub = new EntityDamageByEntityEvent(event.getCombuster(), event.getEntity(), EntityDamageEvent.DamageCause.FIRE, 0d);
-        if (!this.canDamagerHurtDamagee(sub, false)) {
+        if (!canDamage(event.getCombuster(), event.getEntity(), false)) {
             event.setCancelled(true);
         }
     }
@@ -233,8 +232,7 @@ public class FactionsEntityListener extends AbstractListener {
 
         // scan through affected entities to make sure they're all valid targets
         for (LivingEntity target : event.getAffectedEntities()) {
-            EntityDamageByEntityEvent sub = new EntityDamageByEntityEvent((Entity) thrower, target, EntityDamageEvent.DamageCause.CUSTOM, 0);
-            if (!this.canDamagerHurtDamagee(sub, true)) {
+            if (!canDamage((Entity) thrower, target, true)) {
                 event.setIntensity(target, 0.0);  // affected entity list doesn't accept modification (so no iter.remove()), but this works
             }
         }
