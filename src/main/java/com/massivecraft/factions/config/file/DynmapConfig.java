@@ -35,8 +35,8 @@ public class DynmapConfig {
         @Comment("Format for popup")
         private String description =
                 "<div class=\"infowindow\">\n"
-                        + "<span style=\"font-weight: bold; font-size: 150%;\">%name%</span><br>\n"
-                        + "<span style=\"font-style: italic; font-size: 110%;\">%description%</span><br>"
+                        + "<span style=\"font-weight: bold; font-size: 150%;\">{faction}</span><br>\n"
+                        + "<span style=\"font-style: italic; font-size: 110%;\">{description}</span><br>"
                         + "<br>\n"
                         + "<span style=\"font-weight: bold;\">Leader:</span> %players.leader%<br>\n"
                         + "<span style=\"font-weight: bold;\">Admins:</span> %players.admins.count%<br>\n"
@@ -47,6 +47,9 @@ public class DynmapConfig {
                         + "<span style=\"font-weight: bold;\">Bank:</span> %money%<br>\n"
                         + "<br>\n"
                         + "</div>";
+
+        @Comment("Warp popup")
+        private String warpDescription = "Warp: %warpname%";
 
         @Comment("Enable the %money% macro. Only do this if you know your economy manager is thread-safe.")
         private boolean descriptionMoney = false;
@@ -68,8 +71,11 @@ public class DynmapConfig {
                 "Minimum value: 1. To disable updating claims, edit onlyUpdateWorldOnce instead")
         private int claimUpdatePeriod = 300;
 
-        @Comment("Should markers be shown?")
+        @Comment("Should home markers be shown?")
         private boolean showMarkers = true;
+
+        @Comment("Should warp markers be shown?")
+        private boolean showWarpMarkers = false;
 
         public boolean isEnabled() {
             return enabled;
@@ -93,6 +99,10 @@ public class DynmapConfig {
 
         public String getDescription() {
             return description;
+        }
+
+        public String getWarpDescription() {
+            return warpDescription;
         }
 
         public boolean isDescriptionMoney() {
@@ -121,6 +131,9 @@ public class DynmapConfig {
 
         public boolean isShowMarkers() {
             return showMarkers;
+        }
+        public boolean isShowWarpMarkers() {
+            return showWarpMarkers;
         }
 
         // This is used for config loading
@@ -224,6 +237,8 @@ public class DynmapConfig {
         @Setting
         private String homeMarker = DynmapStyle.DEFAULT_HOME_MARKER;
         @Setting
+        private String warpMarker = DynmapStyle.DEFAULT_WARP_MARKER;
+        @Setting
         private boolean styleBoost = DynmapStyle.DEFAULT_BOOST;
 
         private Style() {
@@ -259,6 +274,10 @@ public class DynmapConfig {
             return homeMarker;
         }
 
+        public String getWarpMarker() {
+            return warpMarker;
+        }
+
         public boolean isStyleBoost() {
             return styleBoost;
         }
@@ -272,6 +291,7 @@ public class DynmapConfig {
                     ", fillColor='" + fillColor + '\'' +
                     ", fillOpacity=" + fillOpacity +
                     ", homeMarker='" + homeMarker + '\'' +
+                    ", warpMarker='" + warpMarker + '\'' +
                     ", styleBoost=" + styleBoost +
                     '}';
         }

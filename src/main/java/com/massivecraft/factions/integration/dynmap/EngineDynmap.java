@@ -12,6 +12,7 @@ import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.tag.FactionTag;
 import com.massivecraft.factions.tag.GeneralTag;
+import com.massivecraft.factions.util.LazyLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Stream;
 
 // This source code is a heavily modified version of mikeprimms plugin Dynmap-Factions.
 public class EngineDynmap {
@@ -52,6 +54,8 @@ public class EngineDynmap {
 
     public final static String FACTIONS_HOME = FACTIONS_ + "home";
     public final static String FACTIONS_HOME_ = FACTIONS_HOME + "_";
+    public final static String FACTIONS_WARP = FACTIONS_ + "warp";
+    public final static String FACTIONS_WARP_ = FACTIONS_HOME + "_";
 
     public final static String FACTIONS_PLAYERSET = FACTIONS_ + "playerset";
     public final static String FACTIONS_PLAYERSET_ = FACTIONS_PLAYERSET + "_";
@@ -152,8 +156,7 @@ public class EngineDynmap {
 
             }
 
-            final Map<String, TempMarker> homes = createHomes();
-            updateHomes(homes);
+            updateHomesAndWarps(createHomes(), createWarps());
         }, 100L, Math.max(1, dynmapConf.dynmap().getClaimUpdatePeriod()) * 20L);
 
         this.enabled = true;
@@ -209,7 +212,7 @@ public class EngineDynmap {
     // UPDATE: HOMES
     // -------------------------------------------- //
 
-    // Thread Safe / Asynchronous: Yes
+    // Thread Safe / Asynchronous: No
     public Map<String, TempMarker> createHomes() {
         Map<String, TempMarker> ret = new HashMap<>();
 
@@ -245,15 +248,15 @@ public class EngineDynmap {
 
     // Thread Safe / Asynchronous: No
     // This method places out the faction home markers into the factions markerset.
-    public void updateHomes(Map<String, TempMarker> homes) {
+    public void updateHomesAndWarps(Map<String, TempMarker> homes, Map<String, TempMarker> warps) {
         // Put all current faction markers in a map
         Map<String, Marker> markers = new HashMap<>();
         for (Marker marker : this.markerset.getMarkers()) {
             markers.put(marker.getMarkerID(), marker);
         }
 
-        // Loop homes
-        for (Entry<String, TempMarker> entry : homes.entrySet()) {
+
+        Stream.of(homes, warps).map(Map::entrySet).flatMap(Collection::stream).forEach(entry -> {
             String markerId = entry.getKey();
             TempMarker temp = entry.getValue();
 
@@ -269,13 +272,51 @@ public class EngineDynmap {
             } else {
                 temp.update(this.markerApi, marker);
             }
-        }
+        });
 
         // Delete Deprecated Markers
         // Only old markers should now be left
         for (Marker marker : markers.values()) {
             marker.deleteMarker();
         }
+    }
+
+    // -------------------------------------------- //
+    // UPDATE: WARPS
+    // -------------------------------------------- //
+
+    // Thread Safe / Asynchronous: No
+    public Map<String, TempMarker> createWarps() {
+        Map<String, TempMarker> ret = new HashMap<>();
+
+        if (!FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().dynmap().isShowWarpMarkers()) {
+            return ret;
+        }
+
+        // Loop current factions
+        for (Faction faction : Factions.getInstance().getAllFactions()) {
+            Map<String, LazyLocation> warps = faction.getWarps();
+            for (String key : warps.keySet()) {
+                LazyLocation lazyLocation = warps.get(key);
+
+                DynmapStyle style = getStyle(faction);
+
+                String markerId = FACTIONS_WARP_ + faction.getId() + "_" + key;
+
+                TempMarker temp = new TempMarker();
+                temp.label = ChatColor.stripColor(faction.getTag());
+                temp.world = lazyLocation.getWorldName();
+                temp.x = lazyLocation.getX();
+                temp.y = lazyLocation.getY();
+                temp.z = lazyLocation.getZ();
+                temp.iconName = style.getWarpMarker();
+                temp.description = dynmapConf.dynmap().getWarpDescription().replace("%warpname%", key);
+
+                ret.put(markerId, temp);
+            }
+        }
+
+        return ret;
     }
 
     // -------------------------------------------- //
@@ -717,12 +758,12 @@ public class EngineDynmap {
 
         for (FactionTag tag : FactionTag.values()) {
             if (ret.contains(tag.getTag())) {
-                ret = ret.replace(tag.getTag(), escapeHtml(tag.replace(tag.getTag(), faction)));
+                ret = ret.replace(tag.getTag(), escapeHtml(ChatColor.stripColor(tag.replace(tag.getTag(), faction))));
             }
         }
         for (GeneralTag tag : GeneralTag.values()) {
             if (ret.contains(tag.getTag())) {
-                ret = ret.replace(tag.getTag(), escapeHtml(tag.replace(tag.getTag())));
+                ret = ret.replace(tag.getTag(), escapeHtml(ChatColor.stripColor(tag.replace(tag.getTag()))));
             }
         }
 

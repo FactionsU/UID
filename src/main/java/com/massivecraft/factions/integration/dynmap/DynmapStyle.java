@@ -10,6 +10,7 @@ public class DynmapStyle {
     public static final String DEFAULT_FILL_COLOR = "#00FF00";
     public static final double DEFAULT_FILL_OPACITY = 0.35D;
     public static final String DEFAULT_HOME_MARKER = "greenflag";
+    public static final String DEFAULT_WARP_MARKER ="blueflag";
     public static final boolean DEFAULT_BOOST = false;
 
     private static final DynmapStyle defaultStyle = new DynmapStyle()
@@ -101,6 +102,17 @@ public class DynmapStyle {
 
     public DynmapStyle setHomeMarker(String homeMarker) {
         this.homeMarker = homeMarker;
+        return this;
+    }
+
+    private String warpMarker = null;
+
+    public String getWarpMarker() {
+        return coalesce(this.warpMarker, styleConf().getWarpMarker(), DEFAULT_WARP_MARKER);
+    }
+
+    public DynmapStyle setWarpMarker(String warpMarker) {
+        this.warpMarker = warpMarker;
         return this;
     }
 
