@@ -40,6 +40,22 @@ public class MainConfig {
         }
     }
 
+    private static TextColor getColor(String name, TextColor current, TextColor defaultColor) {
+        if (current != null) {
+            return current;
+        }
+
+        TextColor ret;
+
+        if (name.startsWith("#")) {
+            ret = TextColor.fromHexString(name);
+        } else {
+            ret = NamedTextColor.NAMES.value(name.toLowerCase());
+        }
+
+        return ret == null ? NamedTextColor.WHITE : ret;
+    }
+
     public class Colors {
         public class Relations {
             private String member = "GREEN";
@@ -62,27 +78,27 @@ public class MainConfig {
             private transient TextColor peacefulColor;
 
             public TextColor getMember() {
-                return memberColor = Colors.this.getColor(this.member, this.memberColor, NamedTextColor.GREEN);
+                return memberColor = getColor(this.member, this.memberColor, NamedTextColor.GREEN);
             }
 
             public TextColor getAlly() {
-                return allyColor = Colors.this.getColor(this.ally, this.allyColor, NamedTextColor.LIGHT_PURPLE);
+                return allyColor = getColor(this.ally, this.allyColor, NamedTextColor.LIGHT_PURPLE);
             }
 
             public TextColor getTruce() {
-                return truceColor = Colors.this.getColor(this.truce, this.truceColor, NamedTextColor.DARK_PURPLE);
+                return truceColor = getColor(this.truce, this.truceColor, NamedTextColor.DARK_PURPLE);
             }
 
             public TextColor getNeutral() {
-                return neutralColor = Colors.this.getColor(this.neutral, this.neutralColor, NamedTextColor.WHITE);
+                return neutralColor = getColor(this.neutral, this.neutralColor, NamedTextColor.WHITE);
             }
 
             public TextColor getEnemy() {
-                return enemyColor = Colors.this.getColor(this.enemy, this.enemyColor, NamedTextColor.RED);
+                return enemyColor = getColor(this.enemy, this.enemyColor, NamedTextColor.RED);
             }
 
             public TextColor getPeaceful() {
-                return peacefulColor = Colors.this.getColor(this.peaceful, this.peacefulColor, NamedTextColor.GOLD);
+                return peacefulColor = getColor(this.peaceful, this.peacefulColor, NamedTextColor.GOLD);
             }
         }
 
@@ -98,36 +114,20 @@ public class MainConfig {
             private transient TextColor warzoneColor;
 
             public TextColor getWilderness() {
-                return wildernessColor = Colors.this.getColor(this.wilderness, this.wildernessColor, NamedTextColor.GRAY);
+                return wildernessColor = getColor(this.wilderness, this.wildernessColor, NamedTextColor.GRAY);
             }
 
             public TextColor getSafezone() {
-                return safezoneColor = Colors.this.getColor(this.safezone, this.safezoneColor, NamedTextColor.GOLD);
+                return safezoneColor = getColor(this.safezone, this.safezoneColor, NamedTextColor.GOLD);
             }
 
             public TextColor getWarzone() {
-                return warzoneColor = Colors.this.getColor(this.warzone, this.warzoneColor, NamedTextColor.DARK_RED);
+                return warzoneColor = getColor(this.warzone, this.warzoneColor, NamedTextColor.DARK_RED);
             }
         }
 
         private Factions factions = new Factions();
         private Relations relations = new Relations();
-
-        private TextColor getColor(String name, TextColor current, TextColor defaultColor) {
-            if (current != null) {
-                return current;
-            }
-
-            TextColor ret;
-
-            if (name.startsWith("#")) {
-                ret = TextColor.fromHexString(name);
-            } else {
-                ret = NamedTextColor.NAMES.value(name.toLowerCase());
-            }
-
-            return ret == null ? NamedTextColor.WHITE : ret;
-        }
 
         public Factions factions() {
             return factions;
@@ -2605,6 +2605,13 @@ public class MainConfig {
         private boolean showNeutralFactionsOnMap = true;
         private boolean showEnemyFactions = true;
         private boolean showTruceFactions = true;
+        private String selfColor = "AQUA";
+        @WipeOnReload
+        private transient TextColor selfColorColor; // Quality name, self.
+
+        public TextColor getSelfColor() {
+            return selfColorColor = getColor(this.selfColor, this.selfColorColor, NamedTextColor.GREEN);
+        }
 
         public int getHeight() {
             return height;
