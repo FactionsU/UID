@@ -10,6 +10,8 @@ import com.massivecraft.factions.config.file.DynmapConfig;
 import com.massivecraft.factions.data.MemoryBoard;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.perms.Role;
+import com.massivecraft.factions.tag.FactionTag;
+import com.massivecraft.factions.tag.GeneralTag;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -680,6 +682,10 @@ public class EngineDynmap {
         String playersAdminsCount = String.valueOf(playersAdminsList.size());
         String playersAdmins = getHtmlPlayerString(playersAdminsList);
 
+        List<FPlayer> playersCoLeadersList = faction.getFPlayersWhereRole(Role.COLEADER);
+        String playersCoLeadersCount = String.valueOf(playersCoLeadersList.size());
+        String playersCoLeaders = getHtmlPlayerString(playersCoLeadersList);
+
         List<FPlayer> playersModeratorsList = faction.getFPlayersWhereRole(Role.MODERATOR);
         String playersModeratorsCount = String.valueOf(playersModeratorsList.size());
         String playersModerators = getHtmlPlayerString(playersModeratorsList);
@@ -689,16 +695,36 @@ public class EngineDynmap {
         String playersNormalsCount = String.valueOf(playersNormalsList.size());
         String playersNormals = getHtmlPlayerString(playersNormalsList);
 
+        List<FPlayer> playersRecruitsList = faction.getFPlayersWhereRole(Role.RECRUIT);
+        String playersRecruitsCount = String.valueOf(playersRecruitsList.size());
+        String playersRecruits = getHtmlPlayerString(playersRecruitsList);
+
 
         ret = ret.replace("%players%", players);
         ret = ret.replace("%players.count%", playersCount);
         ret = ret.replace("%players.leader%", playersLeader);
         ret = ret.replace("%players.admins%", playersAdmins);
         ret = ret.replace("%players.admins.count%", playersAdminsCount);
+        ret = ret.replace("%players.coleaders%", playersCoLeaders);
+        ret = ret.replace("%players.coleaders.count%", playersCoLeadersCount);
         ret = ret.replace("%players.moderators%", playersModerators);
         ret = ret.replace("%players.moderators.count%", playersModeratorsCount);
         ret = ret.replace("%players.normals%", playersNormals);
         ret = ret.replace("%players.normals.count%", playersNormalsCount);
+        ret = ret.replace("%players.recruits%", playersRecruits);
+        ret = ret.replace("%players.recruits.count%", playersRecruitsCount);
+
+
+        for (FactionTag tag : FactionTag.values()) {
+            if (ret.contains(tag.getTag())) {
+                ret = ret.replace(tag.getTag(), escapeHtml(tag.replace(tag.getTag(), faction)));
+            }
+        }
+        for (GeneralTag tag : GeneralTag.values()) {
+            if (ret.contains(tag.getTag())) {
+                ret = ret.replace(tag.getTag(), escapeHtml(tag.replace(tag.getTag())));
+            }
+        }
 
         return ret;
     }
