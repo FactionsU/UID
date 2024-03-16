@@ -1,9 +1,15 @@
 package com.massivecraft.factions.landraidcontrol;
 
 import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
+import com.massivecraft.factions.perms.Relation;
+import com.massivecraft.factions.util.TL;
 import org.bukkit.entity.Player;
+
+import java.util.stream.Stream;
 
 public interface LandRaidControl {
     static LandRaidControl getByName(String name) {
@@ -43,4 +49,24 @@ public interface LandRaidControl {
     void onJoin(FPlayer player);
 
     void update(FPlayer player);
+
+    default void announceRaidable(Faction faction) {
+        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceRaidable()) {
+            Stream<FPlayer> stream = FPlayers.getInstance().getOnlinePlayers().stream();
+            if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
+                stream = stream.filter(fp -> fp.getRelationTo(faction) == Relation.ENEMY);
+            }
+            stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOWRAIDABLE.format(faction.getTag(fp))));
+        }
+    }
+
+    default void announceNotRaidable(Faction faction) {
+        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceRaidable()) {
+            Stream<FPlayer> stream = FPlayers.getInstance().getOnlinePlayers().stream();
+            if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
+                stream = stream.filter(fp -> fp.getRelationTo(faction) == Relation.ENEMY);
+            }
+            stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOLONGERRAIDABLE.format(faction.getTag(fp))));
+        }
+    }
 }

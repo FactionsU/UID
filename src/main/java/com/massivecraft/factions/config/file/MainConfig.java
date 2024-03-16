@@ -870,6 +870,13 @@ public class MainConfig {
             @Comment("Controls the power system of land/raid control\n" +
                     "Set the 'system' value to 'power' to use this system")
             private Power power = new Power();
+            @Comment("Announce in chat if a faction becomes raidable?")
+            private boolean announceRaidable = false;
+            @Comment("Announce in chat if a faction becomes no longer raidable?")
+            private boolean announceNotRaidable = false;
+            @Comment("If either announce on raidable or not raidable is true, only send to enemies.\n" +
+                    "If false, sends to all players.")
+            private boolean announceToEnemyOnly = true;
 
             public String getSystem() {
                 return system;
@@ -881,6 +888,18 @@ public class MainConfig {
 
             public Power power() {
                 return power;
+            }
+
+            public boolean isAnnounceRaidable() {
+                return announceRaidable;
+            }
+
+            public boolean isAnnounceNotRaidable() {
+                return announceNotRaidable;
+            }
+
+            public boolean isAnnounceToEnemyOnly() {
+                return announceToEnemyOnly;
             }
         }
 

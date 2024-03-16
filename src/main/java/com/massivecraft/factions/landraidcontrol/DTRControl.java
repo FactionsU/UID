@@ -7,6 +7,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.config.file.MainConfig;
+import com.massivecraft.factions.data.MemoryFaction;
 import com.massivecraft.factions.event.DTRLossEvent;
 import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.perms.Relation;
@@ -35,7 +36,11 @@ public class DTRControl implements LandRaidControl {
 
     @Override
     public boolean isRaidable(Faction faction) {
-        return !faction.isPeaceful() && faction.getDTR() <= 0;
+        return this.isRaidable(faction, faction.getDTR());
+    }
+
+    public boolean isRaidable(Faction faction, double dtr) {
+        return !faction.isPeaceful() && dtr <= 0;
     }
 
     @Override
@@ -171,5 +176,15 @@ public class DTRControl implements LandRaidControl {
 
     public double getMaxDTR(Faction faction) {
         return Math.min(conf().getStartingDTR() + (conf().getPerPlayer() * faction.getFPlayers().size()), conf().getMaxDTR());
+    }
+
+    public void onDTRChange(Faction faction, double start, double end) {
+        boolean raidStart = this.isRaidable(faction, start);
+        boolean raidEnd = this.isRaidable(faction, end);
+        if (raidEnd && !raidStart) {
+            this.announceRaidable(faction);
+        } else if (raidStart && !raidEnd) {
+            this.announceNotRaidable(faction);
+        }
     }
 }

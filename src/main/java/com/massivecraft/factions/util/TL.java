@@ -1022,7 +1022,10 @@ public enum TL {
     DTR_FROZEN_STATUS_FALSE("Not frozen"),
     DTR_FROZEN_TIME_MESSAGE("%s"),
     DTR_FROZEN_TIME_NOTFROZEN(""),
-    DTR_VAMPIRISM_GAIN("&eStole &d%.2f&e DTR from %s&e. Your DTR is now &d%d")
+    DTR_VAMPIRISM_GAIN("&eStole &d%.2f&e DTR from %s&e. Your DTR is now &d%d"),
+
+    RAIDABLE_NOWRAIDABLE("%s &cis now raidable!"),
+    RAIDABLE_NOLONGERRAIDABLE("%s &cis no longer raidable!")
     ;
 
     private String path;

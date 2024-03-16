@@ -598,8 +598,12 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
     @Override
     public void setDTR(double dtr) {
+        double start = this.dtr;
         this.dtr = dtr;
         this.lastDTRUpdateTime = System.currentTimeMillis();
+        if (start != this.dtr && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
+            ((DTRControl)FactionsPlugin.getInstance().getLandRaidControl()).onDTRChange(this, start, this.dtr);
+        }
     }
 
     @Override
