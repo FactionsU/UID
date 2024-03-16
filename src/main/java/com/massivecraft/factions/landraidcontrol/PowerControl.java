@@ -17,10 +17,14 @@ import org.bukkit.entity.Player;
 public class PowerControl implements LandRaidControl {
     @Override
     public boolean isRaidable(Faction faction) {
+        return this.isRaidable(faction, faction.getPowerRounded());
+    }
+
+    public boolean isRaidable(Faction faction, int power) {
         return FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability() && faction.isNormal() && !faction.isPeaceful() &&
                 (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidabilityOnEqualLandAndPower() ?
-                        (faction.getLandRounded() >= faction.getPowerRounded()) :
-                        (faction.getLandRounded() > faction.getPowerRounded())
+                        (faction.getLandRounded() >= power) :
+                        (faction.getLandRounded() > power)
                 );
     }
 
@@ -147,6 +151,16 @@ public class PowerControl implements LandRaidControl {
         final String msg = powerLossEvent.getMessage();
         if (msg != null && !msg.isEmpty()) {
             fplayer.msg(msg, fplayer.getPowerRounded(), fplayer.getPowerMaxRounded());
+        }
+    }
+
+    public void onPowerChange(Faction faction, int start, int end) {
+        boolean raidStart = this.isRaidable(faction, start);
+        boolean raidEnd = this.isRaidable(faction, end);
+        if (raidEnd && !raidStart) {
+            this.announceRaidable(faction);
+        } else if (raidStart && !raidEnd) {
+            this.announceNotRaidable(faction);
         }
     }
 }
