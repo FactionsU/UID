@@ -7,7 +7,6 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.config.file.MainConfig;
-import com.massivecraft.factions.data.MemoryFaction;
 import com.massivecraft.factions.event.DTRLossEvent;
 import com.massivecraft.factions.integration.Essentials;
 import com.massivecraft.factions.perms.Relation;
@@ -118,6 +117,9 @@ public class DTRControl implements LandRaidControl {
         }
 
         DTRLossEvent dtrLossEvent = new DTRLossEvent(faction, fplayer);
+        if (FactionsPlugin.getInstance().getWorldguard() != null && FactionsPlugin.getInstance().getWorldguard().isNoLossFlag(player)) {
+            dtrLossEvent.setCancelled(true);
+        }
 
         // call Event
         Bukkit.getPluginManager().callEvent(dtrLossEvent);
