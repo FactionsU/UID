@@ -874,9 +874,9 @@ public class MainConfig {
             private boolean announceRaidable = false;
             @Comment("Announce in chat if a faction becomes no longer raidable?")
             private boolean announceNotRaidable = false;
-            @Comment("If either announce on raidable or not raidable is true, only send to enemies.\n" +
+            @Comment("If either announce on raidable or not raidable is true, only send to the faction and its enemies.\n" +
                     "If false, sends to all players.")
-            private boolean announceToEnemyOnly = true;
+            private boolean announceToEnemyOnly = false;
 
             public String getSystem() {
                 return system;
