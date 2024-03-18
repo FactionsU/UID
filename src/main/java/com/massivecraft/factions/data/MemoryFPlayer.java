@@ -598,15 +598,16 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public void alterPower(double delta) {
-        int start = this.getPowerRounded();
+        int start = (int) Math.round(this.power);
         this.power += delta;
         if (this.power > this.getPowerMax()) {
             this.power = this.getPowerMax();
         } else if (this.power < this.getPowerMin()) {
             this.power = this.getPowerMin();
         }
-        if (this.hasFaction() && this.getPowerRounded() != start && FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
-            ((PowerControl) FactionsPlugin.getInstance().getLandRaidControl()).onPowerChange(this.getFaction(), start, this.getPowerRounded());
+        int end = (int) Math.round(this.power);
+        if (this.hasFaction() && end != start && FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
+            ((PowerControl) FactionsPlugin.getInstance().getLandRaidControl()).onPowerChange(this.getFaction(), start, end);
         }
     }
 
