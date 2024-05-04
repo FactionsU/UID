@@ -5,6 +5,7 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 public class BukkitParticleProvider implements ParticleProvider<Particle> {
+    private final Particle fallback = Particle.REDSTONE;
 
     @Override
     public String name() {
@@ -56,7 +57,7 @@ public class BukkitParticleProvider implements ParticleProvider<Particle> {
                 return particle;
             }
         }
-        return null;
+        return fallback;
     }
 
     @Override
