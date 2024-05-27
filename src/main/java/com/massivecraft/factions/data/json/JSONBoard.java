@@ -68,7 +68,8 @@ public class JSONBoard extends MemoryBoard {
     }
 
     public void forceSave(boolean sync) {
-        DiscUtil.writeCatch(file, FactionsPlugin.getInstance().getGson().toJson(dumpAsSaveFormat()), sync);
+        Map<String, Map<String, String>> map = dumpAsSaveFormat();
+        DiscUtil.write(file, () -> FactionsPlugin.getInstance().getGson().toJson(map), sync);
     }
 
     public int load() {

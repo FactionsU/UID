@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 
 public class DiscUtil {
@@ -47,7 +48,7 @@ public class DiscUtil {
     // STRING
     // -------------------------------------------- //
 
-    public static void write(File file, String content) throws IOException {
+    static void write(File file, String content) throws IOException {
         writeBytes(file, content.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -61,45 +62,37 @@ public class DiscUtil {
 
     private static final HashMap<String, Lock> locks = new HashMap<>();
 
-    public static boolean writeCatch(final File file, final String content, boolean sync) {
-        String name = file.getName();
-        final Lock lock;
 
-        // Create lock for each file if there isn't already one.
-        if (locks.containsKey(name)) {
-            lock = locks.get(name);
-        } else {
-            ReadWriteLock rwl = new ReentrantReadWriteLock();
-            lock = rwl.writeLock();
-            locks.put(name, lock);
-        }
+    public static boolean writeCatch(final File file, final String content, boolean sync) {
+        write(file, () -> content, sync);
+
+        return true; // don't really care but for some reason this is a boolean.
+    }
+
+    public static void write(File file, Supplier<String> content, boolean sync) {
+        final Lock lock = locks.computeIfAbsent(file.getName(), n -> new ReentrantReadWriteLock().writeLock());
 
         if (sync) {
-            lock.lock();
-            try {
-                write(file, content);
-            } catch (IOException e) {
-                FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to write file " + file.getAbsolutePath(), e);
-            } finally {
-                lock.unlock();
-            }
+            write(lock, file, content);
         } else {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    lock.lock();
-                    try {
-                        write(file, content);
-                    } catch (IOException e) {
-                        FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to write file " + file.getAbsolutePath(), e);
-                    } finally {
-                        lock.unlock();
-                    }
+                    write(lock, file, content);
                 }
             }.runTaskAsynchronously(FactionsPlugin.getInstance());
         }
+    }
 
-        return true; // don't really care but for some reason this is a boolean.
+    private static void write(Lock lock, File file, Supplier<String> content) {
+        lock.lock();
+        try {
+            write(file, content.get());
+        } catch (IOException e) {
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to write file " + file.getAbsolutePath(), e);
+        } finally {
+            lock.unlock();
+        }
     }
 
     public static String readCatch(File file) {
