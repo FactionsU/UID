@@ -1078,7 +1078,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         if (!this.hasFaction()) {
             if (notifyFailure) {
-                this.msg("You are not member of any faction.");
+                this.msg(TL.COMMAND_UNCLAIM_NOTAMEMBER);
             }
             return false;
         }

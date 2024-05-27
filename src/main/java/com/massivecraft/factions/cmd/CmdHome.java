@@ -46,7 +46,7 @@ public class CmdHome extends FCommand {
             if (targetFaction.hasHome()) {
                 FactionsPlugin.getInstance().teleport(context.player, targetFaction.getHome());
             } else {
-                context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString());
+                context.fPlayer.msg(TL.COMMAND_HOME_NOHOME);
             }
             return;
         }
@@ -64,13 +64,13 @@ public class CmdHome extends FCommand {
         if (!targetFaction.hasHome()) {
             if (targetFaction == context.faction) {
                 if (context.faction.hasAccess(context.fPlayer, PermissibleActions.SETHOME, context.fPlayer.getLastStoodAt())) {
-                    context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString() + TL.GENERIC_YOUSHOULD.toString());
+                    context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString() + TL.GENERIC_YOUSHOULD);
                 } else {
-                    context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString() + TL.GENERIC_ASKYOURLEADER.toString());
+                    context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString() + TL.GENERIC_ASKYOURLEADER);
                 }
                 context.fPlayer.sendMessage(FCmdRoot.getInstance().cmdSethome.getUsageTemplate(context));
             } else {
-                context.fPlayer.msg(TL.COMMAND_HOME_NOHOME.toString());
+                context.fPlayer.msg(TL.COMMAND_HOME_NOHOME);
             }
             return;
         }

@@ -652,7 +652,8 @@ public enum TL {
     COMMAND_UNCLAIM_WARZONE_NOPERM("&cThis is a war zone. You lack permissions to unclaim."),
     COMMAND_UNCLAIM_UNCLAIMED("%1$s&e unclaimed some of your land."),
     COMMAND_UNCLAIM_UNCLAIMS("&eYou unclaimed this land."),
-    COMMAND_UNCLAIM_WRONGFACTIONOTHER("&cAttempted to unclaim land for incorrect faction"),
+    COMMAND_UNCLAIM_NOTAMEMBER("&cYou are not a member of any faction."),
+    COMMAND_UNCLAIM_WRONGFACTIONOTHER("&cAttempted to unclaim land for incorrect faction."),
     COMMAND_UNCLAIM_LOG("%1$s unclaimed land at (%2$s) from the faction: %3$s"),
     COMMAND_UNCLAIM_WRONGFACTION("&cYou don't own this land."),
     COMMAND_UNCLAIM_TOUNCLAIM("to unclaim this land"),
@@ -1025,7 +1026,10 @@ public enum TL {
     DTR_VAMPIRISM_GAIN("&eStole &d%.2f&e DTR from %s&e. Your DTR is now &d%d"),
 
     RAIDABLE_NOWRAIDABLE("%s &cis now raidable!"),
-    RAIDABLE_NOLONGERRAIDABLE("%s &cis no longer raidable!")
+    RAIDABLE_NOLONGERRAIDABLE("%s &cis no longer raidable!"),
+
+    FACTION_HOME_UNSET("&cYour faction home has been un-set since it is no longer in your territory."),
+    FACTION_NEWLEADER("&eFaction admin &d%s&e has been removed. %s&e has been promoted as the new faction admin."),
     ;
 
     private String path;
