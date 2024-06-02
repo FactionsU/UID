@@ -124,6 +124,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     // Single 4 life.
     private static FactionsPlugin instance;
     private static int mcVersion;
+    private static final int OLDEST_MODERN_SUPPORTED = 2004; // 1.20.4
+    private static final String OLDEST_MODERN_SUPPORTED_STRING = "1.20.4";
 
     public static FactionsPlugin getInstance() {
         return instance;
@@ -369,6 +371,12 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         // Version party
         Pattern versionPattern = Pattern.compile("1\\.(\\d{1,2})(?:\\.(\\d{1,2}))?");
         Matcher versionMatcher = versionPattern.matcher(this.getServer().getVersion());
+        String javaDotVersion = System.getProperty("java.version");
+        if (javaDotVersion.startsWith("1.")) {
+            javaDotVersion = javaDotVersion.substring(2);
+        }
+        int javaVersion = Integer.parseInt(javaDotVersion.split("\\.")[0]);
+
         getLogger().info("");
         getLogger().info("Factions UUID!");
         getLogger().info("Version " + this.getDescription().getVersion());
@@ -398,7 +406,20 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         mcVersion = versionInteger;
         if (mcVersion < 808) {
             getLogger().info("");
-            getLogger().warning("FactionsUUID works better with at least Minecraft 1.8.8");
+            getLogger().warning("FactionsUUID works better with Minecraft 1.8.8 and MUCH better with at least " + OLDEST_MODERN_SUPPORTED_STRING);
+        } else if (mcVersion > 808 && mcVersion < OLDEST_MODERN_SUPPORTED) {
+            getLogger().info("");
+            getLogger().warning("FactionsUUID will soon no longer support your version.");
+            getLogger().warning("The plugin will soon only support 1.8.8 (minimally) and latest release or two only");
+            getLogger().warning("Upgrade to a newer version.");
+            getLogger().warning("The next feature/bugfix release will support modern MC as old as " + OLDEST_MODERN_SUPPORTED_STRING);
+            getLogger().warning("If you insist on staying, there will be one final release without this nag, before moving on.");
+        }
+        if (javaVersion < 17) {
+            getLogger().info("");
+            getLogger().warning("Detected Java " + javaVersion);
+            getLogger().warning("FactionsUUID will soon require Java 17");
+            getLogger().warning("You should start testing out Java 17 with your setup now, to prepare.");
         }
         getLogger().info("");
         this.buildNumber = this.getBuildNumber(this.getDescription().getVersion());
@@ -472,11 +493,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
         ContextManager.init(this);
         if (getServer().getPluginManager().getPlugin("PermissionsEx") != null) {
-            if (getServer().getPluginManager().getPlugin("PermissionsEx").getDescription().getVersion().startsWith("1")) {
-                getLogger().info(" ");
-                getLogger().warning("Notice: PermissionsEx version 1.x is dead. We suggest using LuckPerms (or PEX 2.0 when available). https://luckperms.net/");
-                getLogger().info(" ");
-            }
+            getLogger().info(" ");
+            getLogger().warning("Notice: PermissionsEx dead. We suggest using LuckPerms. https://luckperms.net/");
+            getLogger().info(" ");
         }
         if (getServer().getPluginManager().getPlugin("GroupManager") != null) {
             getLogger().info(" ");
