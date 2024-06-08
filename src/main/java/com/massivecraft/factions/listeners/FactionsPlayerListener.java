@@ -12,6 +12,7 @@ import com.massivecraft.factions.event.FPlayerJoinEvent;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.gui.GUI;
 import com.massivecraft.factions.integration.Graves;
+import com.massivecraft.factions.perms.PermissibleAction;
 import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
@@ -37,6 +38,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -50,6 +52,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -636,6 +639,42 @@ public class FactionsPlayerListener extends AbstractListener {
         Player player = event.getPlayer();
 
         if (!playerCanUseItemHere(player, block.getLocation(), event.getBucket(), false)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void doYouHaveALibraryCard(PlayerTakeLecternBookEvent event) {
+        Player player = event.getPlayer();
+        if (this.plugin.conf().factions().protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
+            return;
+        }
+
+        FPlayer me = FPlayers.getInstance().getByPlayer(player);
+        if (me.isAdminBypassing()) {
+            return;
+        }
+
+        FLocation location = new FLocation(event.getLectern().getLocation());
+        Faction otherFaction = Board.getInstance().getFactionAt(location);
+        if (this.plugin.getLandRaidControl().isRaidable(otherFaction)) {
+            return;
+        }
+
+        PermissibleAction action = PermissibleActions.CONTAINER;
+        if (!otherFaction.hasAccess(me, action, location)) {
+            me.msg(TL.GENERIC_NOPERMISSION, action.getShortDescription());
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerInteract(PlayerArmorStandManipulateEvent event) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
+            return;
+        }
+
+        if (!canPlayerUseBlock(event.getPlayer(), Material.ARMOR_STAND, event.getRightClicked().getLocation(), false)) {
             event.setCancelled(true);
         }
     }

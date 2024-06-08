@@ -20,7 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-public class Worldguard7 implements IWorldguard {
+public class Worldguard7 {
     public static final String FLAG_CLAIM_NAME = "fuuid-claim";
     public static final String FLAG_PVP_NAME = "fuuid-pvp";
     public static final String FLAG_NOLOSS_NAME = "fuuid-noloss";

@@ -14,7 +14,6 @@
     </properties>
 
     <modules>
-        <module>modules/Legacy</module>
         <module>modules/Main</module>
         <module>modules/Combiner</module>
     </modules>
@@ -28,7 +27,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <release>17</release>
+                    <release>21</release>
                 </configuration>
             </plugin>
         </plugins>
