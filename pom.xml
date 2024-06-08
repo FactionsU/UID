@@ -14,7 +14,6 @@
     </properties>
 
     <modules>
-        <module>modules/Legacy</module>
         <module>modules/Main</module>
         <module>modules/Combiner</module>
     </modules>

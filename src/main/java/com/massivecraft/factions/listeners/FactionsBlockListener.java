@@ -20,10 +20,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
@@ -35,9 +35,8 @@ import org.bukkit.material.Directional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class FactionsBlockListener implements Listener {
+public class FactionsBlockListener extends AbstractListener {
 
     public final FactionsPlugin plugin;
 
@@ -310,6 +309,11 @@ public class FactionsBlockListener implements Listener {
         if (!playerCanBuildDestroyBlock(player, location, PermissibleActions.FROSTWALK, justCheck)) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onBlockExplode(BlockExplodeEvent event) {
+        this.handleExplosion(event.getBlock().getLocation(), null, event, event.blockList());
     }
 
     public static boolean playerCanBuildDestroyBlock(Player player, Location location, PermissibleAction permissibleAction, boolean justCheck) {

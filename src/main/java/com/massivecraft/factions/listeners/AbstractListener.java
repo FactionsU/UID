@@ -132,11 +132,11 @@ public abstract class AbstractListener implements Listener {
                             type == Material.WATER ||
                             type == Material.LAVA ||
                             type == Material.OBSIDIAN ||
-                            type == Material.NETHER_PORTAL ||
-                            type == Material.ENCHANTING_TABLE ||
+                            type == Material.PORTAL ||
+                            type == Material.ENCHANTMENT_TABLE ||
                             type.name().contains("ANVIL") ||
-                            type == Material.END_PORTAL ||
-                            type == Material.END_PORTAL_FRAME ||
+                            type == Material.ENDER_PORTAL ||
+                            type == Material.ENDER_PORTAL_FRAME ||
                             type == Material.ENDER_CHEST) {
                         continue;
                     }

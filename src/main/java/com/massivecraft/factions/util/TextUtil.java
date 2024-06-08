@@ -20,23 +20,13 @@ import java.util.regex.Pattern;
 public class TextUtil {
 
     public final Map<String, String> tags;
-    private static boolean noHex = true;
 
-    public TextUtil(boolean noHex) {
-        TextUtil.noHex = noHex;
+    public TextUtil() {
         this.tags = new HashMap<>();
     }
 
     public static String getString(TextColor color) {
-        if (noHex || color instanceof NamedTextColor) {
-            return getClosest(color).toString();
-        }
-        String hexed = String.format("%06x", color.value());
-        final StringBuilder builder = new StringBuilder(ChatColor.COLOR_CHAR + "x");
-        for (int x = 0; x < hexed.length(); x++) {
-            builder.append(ChatColor.COLOR_CHAR).append(hexed.charAt(x));
-        }
-        return builder.toString();
+        return getClosest(color).toString();
     }
 
     public static ChatColor getClosest(TextColor color) {

@@ -37,6 +37,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -463,6 +464,16 @@ public class FactionsPlayerListener extends AbstractListener {
         }
     }
 
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerInteract(PlayerArmorStandManipulateEvent event) {
+        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
+            return;
+        }
+
+        if (!canPlayerUseBlock(event.getPlayer(), Material.ARMOR_STAND, event.getRightClicked().getLocation(), false)) {
+            event.setCancelled(true);
+        }
+    }
 
     // for handling people who repeatedly spam attempts to open a door (or similar) in another faction's territory
     private final Map<String, InteractAttemptSpam> interactSpammers = new HashMap<>();

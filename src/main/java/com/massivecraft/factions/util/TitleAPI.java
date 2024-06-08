@@ -17,7 +17,6 @@ import java.util.logging.Level;
 public class TitleAPI {
 
     private static TitleAPI instance;
-    private boolean supportsAPI = false;
     private boolean bailOut = false;
 
     private final Map<String, Class<?>> classCache = new HashMap<>();
@@ -40,21 +39,13 @@ public class TitleAPI {
         }
 
         try {
-            Player.class.getMethod("sendTitle", String.class, String.class, int.class, int.class, int.class);
-            supportsAPI = true;
-            FactionsPlugin.getInstance().getLogger().info("Found API support for sending player titles :D");
-        } catch (NoSuchMethodException e) {
-            try {
-                this.methodChatTitle = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class);
-                this.titleConstructor = getNMSClass("PacketPlayOutTitle").getConstructor(getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], getNMSClass("IChatBaseComponent"), int.class, int.class, int.class);
-                this.fieldTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE");
-                this.fieldSubTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE");
-
-                FactionsPlugin.getInstance().getLogger().info("Didn't find API support for sending titles, using reflection instead.");
-            } catch (Exception ex) {
-                bailOut = true;
-                FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Didn't find API support for sending titles, and failed to use reflection. Title support disabled.", ex);
-            }
+            this.methodChatTitle = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class);
+            this.titleConstructor = getNMSClass("PacketPlayOutTitle").getConstructor(getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], getNMSClass("IChatBaseComponent"), int.class, int.class, int.class);
+            this.fieldTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE");
+            this.fieldSubTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE");
+        } catch (Exception ex) {
+            bailOut = true;
+            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Didn't find API support for sending titles, and failed to use reflection. Title support disabled.", ex);
         }
     }
 
@@ -70,11 +61,6 @@ public class TitleAPI {
      */
     public void sendTitle(Player player, String title, String subtitle, int fadeInTime, int showTime, int fadeOutTime) {
         if (bailOut) {
-            return;
-        }
-
-        if (supportsAPI) {
-            player.sendTitle(title, subtitle, fadeInTime, showTime, fadeOutTime);
             return;
         }
 

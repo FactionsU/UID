@@ -22,7 +22,6 @@ import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.integration.LuckPerms;
 import com.massivecraft.factions.integration.VaultPerms;
 import com.massivecraft.factions.integration.Worldguard6;
-import com.massivecraft.factions.integration.Worldguard7;
 import com.massivecraft.factions.integration.dynmap.EngineDynmap;
 import com.massivecraft.factions.integration.permcontext.ContextManager;
 import com.massivecraft.factions.landraidcontrol.LandRaidControl;
@@ -31,11 +30,7 @@ import com.massivecraft.factions.listeners.FactionsChatListener;
 import com.massivecraft.factions.listeners.FactionsEntityListener;
 import com.massivecraft.factions.listeners.FactionsExploitListener;
 import com.massivecraft.factions.listeners.FactionsPlayerListener;
-import com.massivecraft.factions.listeners.OneEightPlusListener;
-import com.massivecraft.factions.listeners.OneFourteenPlusListener;
-import com.massivecraft.factions.listeners.versionspecific.PortalHandler;
-import com.massivecraft.factions.listeners.versionspecific.PortalListenerLegacy;
-import com.massivecraft.factions.listeners.versionspecific.PortalListener_114;
+import com.massivecraft.factions.listeners.PortalListenerLegacy;
 import com.massivecraft.factions.perms.PermSelector;
 import com.massivecraft.factions.perms.PermSelectorRegistry;
 import com.massivecraft.factions.perms.PermSelectorTypeAdapter;
@@ -56,7 +51,6 @@ import com.massivecraft.factions.util.TextUtil;
 import com.massivecraft.factions.util.TitleAPI;
 import com.massivecraft.factions.util.WorldUtil;
 import com.massivecraft.factions.util.material.MaterialDb;
-import com.massivecraft.factions.util.particle.BukkitParticleProvider;
 import com.massivecraft.factions.util.particle.PacketParticleProvider;
 import com.massivecraft.factions.util.particle.ParticleProvider;
 import com.mojang.authlib.GameProfile;
@@ -210,12 +204,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     public void onLoad() {
         IntegrationManager.onLoad(this);
         this.tryEssXMigrationOnLoad();
-        try {
-            Class.forName("com.sk89q.worldguard.WorldGuard");
-            Worldguard7.onLoad();
-        } catch (Exception ignored) {
-            // eh
-        }
         try {
             Class.forName("com.sk89q.worldguard.bukkit.WGBukkit");
             Class.forName("com.sk89q.worldguard.protection.flags.registry.FlagConflictException");
@@ -397,23 +385,19 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
         if (versionInteger == null) {
             getLogger().warning("");
-            getLogger().warning("Could not identify version. Going with least supported version, 1.7.10.");
+            getLogger().warning("Could not identify version. Assuming 1.8.8.");
             getLogger().warning("Please visit our support live chat for help - https://factions.support/help/");
-            getLogger().warning("");
-            versionInteger = 710;
+            versionInteger = 808;
             this.mcVersionString = this.getServer().getVersion();
         }
         mcVersion = versionInteger;
         if (mcVersion < 808) {
             getLogger().info("");
-            getLogger().warning("FactionsUUID works better with Minecraft 1.8.8 and MUCH better with at least " + OLDEST_MODERN_SUPPORTED_STRING);
-        } else if (mcVersion > 808 && mcVersion < OLDEST_MODERN_SUPPORTED) {
+            getLogger().warning("FactionsUUID Legacy works better with Minecraft 1.8.8");
+        } else if (mcVersion > 808) {
             getLogger().info("");
-            getLogger().warning("FactionsUUID will soon no longer support your version.");
-            getLogger().warning("The plugin will soon only support 1.8.8 (minimally) and latest release or two only");
-            getLogger().warning("Upgrade to a newer version.");
-            getLogger().warning("The next feature/bugfix release will support modern MC as old as " + OLDEST_MODERN_SUPPORTED_STRING);
-            getLogger().warning("If you insist on staying, there will be one final release without this nag, before moving on.");
+            getLogger().warning("FactionsUUID Legacy is designed for 1.8.8");
+            getLogger().warning("If you are running a supported modern version, use regular FactionsUUID!");
         }
         /*if (javaVersion < 17) { Commenting out for if later wanting to bump to 21
             getLogger().info("");
@@ -453,7 +437,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         this.persist = new Persist(this);
         this.worldUtil = new WorldUtil(this);
 
-        this.txt = new TextUtil(mcVersion < 1600);
+        this.txt = new TextUtil();
         initTXT();
 
         // attempt to get first command defined in plugin.yml as reference command, if any commands are defined in there
@@ -513,11 +497,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         startAutoLeaveTask(false);
 
         // Run before initializing listeners to handle reloads properly.
-        if (mcVersion < 1300) { // Before 1.13
-            particleProvider = new PacketParticleProvider();
-        } else {
-            particleProvider = new BukkitParticleProvider();
-        }
+        particleProvider = new PacketParticleProvider();
         getLogger().info(txt.parse("Using %1s as a particle provider", particleProvider.name()));
 
         if (conf().commands().seeChunk().isParticles()) {
@@ -533,19 +513,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         getServer().getPluginManager().registerEvents(new FactionsEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsExploitListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsBlockListener(this), this);
-        if (mcVersion >= 800) {
-            getServer().getPluginManager().registerEvents(new OneEightPlusListener(this), this);
-        }
-        if (mcVersion >= 1400) {
-            getServer().getPluginManager().registerEvents(new OneFourteenPlusListener(this), this);
-        }
-
-        // Version specific portal listener check.
-        if (mcVersion >= 1400) { // Starting with 1.14
-            getServer().getPluginManager().registerEvents(new PortalListener_114(this), this);
-        } else {
-            getServer().getPluginManager().registerEvents(new PortalListenerLegacy(new PortalHandler()), this);
-        }
+        getServer().getPluginManager().registerEvents(new PortalListenerLegacy(), this);
 
         // since some other plugins execute commands directly through this command interface, provide it
         this.getCommand(refCommand).setExecutor(cmdBase);

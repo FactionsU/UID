@@ -23,6 +23,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Wither;
+import org.bukkit.entity.Zombie;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -219,7 +220,7 @@ public class FactionsEntityListener extends AbstractListener {
             if (fPlayer.getFaction().isPeaceful()) {
                 if (event.getPotion().getEffects().stream().allMatch(e -> e.getType().equals(PotionEffectType.WEAKNESS))) {
                     for (LivingEntity target : event.getAffectedEntities()) {
-                        if (target.getType() != EntityType.ZOMBIE_VILLAGER) {
+                        if (!(target instanceof Zombie z && z.isVillager())) {
                             event.setIntensity(target, 0);
                         }
                     }

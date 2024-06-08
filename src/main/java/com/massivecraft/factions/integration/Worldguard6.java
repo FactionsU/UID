@@ -1,45 +1,56 @@
 package com.massivecraft.factions.integration;
 
-import com.massivecraft.factions.FactionsPlugin;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.Vector;
 import com.sk89q.worldguard.LocalPlayer;
-import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.bukkit.BukkitUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
-import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
-public class Worldguard7 implements IWorldguard {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+import java.util.logging.Logger;
+
+/**
+ * Worldguard Region Checking.
+ * <p>
+ * original author Spathizilla
+ */
+public class Worldguard6 implements IWorldguard {
     public static final String FLAG_CLAIM_NAME = "fuuid-claim";
     public static final String FLAG_PVP_NAME = "fuuid-pvp";
     public static final String FLAG_NOLOSS_NAME = "fuuid-noloss";
     private static StateFlag FLAG_CLAIM;
     private static StateFlag FLAG_PVP;
     private static StateFlag FLAG_NOLOSS;
+    private static Supplier<Boolean> isChecking;
 
-    public static void onLoad() {
+    public static void onLoad(Logger logger, Supplier<Boolean> isChecking) {
+        Worldguard6.isChecking = isChecking;
         boolean claimSuccess = false;
         boolean pvpSuccess = false;
         boolean noLossSuccess = false;
         try {
             try {
                 StateFlag claimFlag = new StateFlag(FLAG_CLAIM_NAME, true);
-                WorldGuard.getInstance().getFlagRegistry().register(claimFlag);
+                WorldGuardPlugin.inst().getFlagRegistry().register(claimFlag);
                 FLAG_CLAIM = claimFlag;
                 claimSuccess = true;
             } catch (FlagConflictException e) {
-                Flag<?> existing = WorldGuard.getInstance().getFlagRegistry().get(FLAG_CLAIM_NAME);
+                Flag<?> existing = WorldGuardPlugin.inst().getFlagRegistry().get(FLAG_CLAIM_NAME);
                 if (existing instanceof StateFlag) {
                     FLAG_CLAIM = (StateFlag) existing;
                     claimSuccess = true;
@@ -47,11 +58,11 @@ public class Worldguard7 implements IWorldguard {
             }
             try {
                 StateFlag pvpFlag = new StateFlag(FLAG_PVP_NAME, false);
-                WorldGuard.getInstance().getFlagRegistry().register(pvpFlag);
+                WorldGuardPlugin.inst().getFlagRegistry().register(pvpFlag);
                 FLAG_PVP = pvpFlag;
                 pvpSuccess = true;
             } catch (FlagConflictException e) {
-                Flag<?> existing = WorldGuard.getInstance().getFlagRegistry().get(FLAG_PVP_NAME);
+                Flag<?> existing = WorldGuardPlugin.inst().getFlagRegistry().get(FLAG_PVP_NAME);
                 if (existing instanceof StateFlag) {
                     FLAG_PVP = (StateFlag) existing;
                     pvpSuccess = true;
@@ -59,11 +70,11 @@ public class Worldguard7 implements IWorldguard {
             }
             try {
                 StateFlag noLossFlag = new StateFlag(FLAG_NOLOSS_NAME, false);
-                WorldGuard.getInstance().getFlagRegistry().register(noLossFlag);
+                WorldGuardPlugin.inst().getFlagRegistry().register(noLossFlag);
                 FLAG_NOLOSS = noLossFlag;
                 noLossSuccess = true;
             } catch (FlagConflictException e) {
-                Flag<?> existing = WorldGuard.getInstance().getFlagRegistry().get(FLAG_NOLOSS_NAME);
+                Flag<?> existing = WorldGuardPlugin.inst().getFlagRegistry().get(FLAG_NOLOSS_NAME);
                 if (existing instanceof StateFlag) {
                     FLAG_NOLOSS = (StateFlag) existing;
                     noLossSuccess = true;
@@ -72,34 +83,35 @@ public class Worldguard7 implements IWorldguard {
         } catch (Exception ignored) {
             // Nah
         }
-        status(claimSuccess, FLAG_CLAIM_NAME);
-        status(pvpSuccess, FLAG_PVP_NAME);
-        status(noLossSuccess, FLAG_NOLOSS_NAME);
+        status(logger, claimSuccess, FLAG_CLAIM_NAME);
+        status(logger, pvpSuccess, FLAG_PVP_NAME);
+        status(logger, noLossSuccess, FLAG_NOLOSS_NAME);
     }
 
-    private static void status(boolean success, String name) {
-        FactionsPlugin.getInstance().getLogger().info((success ? "Registered" : "Failed to register") + " flag '" + name + "' with WorldGuard.");
+    private static void status(Logger logger, boolean success, String name) {
+        logger.info((success ? "Registered" : "Failed to register") + " flag '" + name + "' with WorldGuard.");
+    }
+
+    private WorldGuardPlugin wg;
+
+    public Worldguard6(Plugin wg) {
+        this.wg = (WorldGuardPlugin) wg;
     }
 
     public boolean isNoLossFlag(Player player) {
-        return this.isFlag(player, FLAG_NOLOSS, "noloss");
+        return this.isFlag(player, FLAG_NOLOSS);
     }
 
     public boolean isCustomPVPFlag(Player player) {
-        return this.isFlag(player, FLAG_PVP, "PVP");
+        return this.isFlag(player, FLAG_PVP);
     }
 
-    private boolean isFlag(Player player, StateFlag flag, String name) {
+    private boolean isFlag(Player player, StateFlag flag) {
         if (flag == null) {
             return false;
         }
         LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
-        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionQuery query = container.createQuery();
-
-        boolean q = query.testState(localPlayer.getLocation(), localPlayer, flag);
-        FactionsPlugin.getInstance().debug("Testing " + name + " flag for player " + player.getName() + ": " + q);
-        return q;
+        return wg.getRegionManager(player.getWorld()).getApplicableRegions(BukkitUtil.toVector(player.getLocation())).testState(localPlayer, flag);
     }
 
     // Check if player can build at location by worldguards rules.
@@ -107,20 +119,17 @@ public class Worldguard7 implements IWorldguard {
     //	True: Player can build in the region.
     //	False: Player can not build in the region.
     public boolean playerCanBuild(Player player, Location loc) {
-        LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
-        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionQuery query = container.createQuery();
+        World world = loc.getWorld();
+        Vector pt = BukkitUtil.toVector(loc);
 
-        return query.testBuild(BukkitAdapter.adapt(loc), localPlayer);
+        return wg.getRegionManager(world).getApplicableRegions(pt).size() > 0 && wg.canBuild(player, loc);
     }
 
+    // Check for Regions in chunk the chunk
+    // Returns:
+    //   True: Regions found within chunk
+    //   False: No regions found within chunk
     public boolean checkForRegionsInChunk(Chunk chunk) {
-        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regions = container.get(BukkitAdapter.adapt(chunk.getWorld()));
-        if (regions == null) {
-            return false;
-        }
-
         World world = chunk.getWorld();
         int minChunkX = chunk.getX() << 4;
         int minChunkZ = chunk.getZ() << 4;
@@ -129,27 +138,34 @@ public class Worldguard7 implements IWorldguard {
 
         int worldHeight = world.getMaxHeight(); // Allow for heights other than default
 
-        BlockVector3 min = BlockVector3.at(minChunkX, 0, minChunkZ);
-        BlockVector3 max = BlockVector3.at(maxChunkX, worldHeight, maxChunkZ);
-        ProtectedRegion region = new ProtectedCuboidRegion("wgregionflagcheckforfactions", min, max);
-        ApplicableRegionSet set = regions.getApplicableRegions(region);
+        BlockVector minChunk = new BlockVector(minChunkX, 0, minChunkZ);
+        BlockVector maxChunk = new BlockVector(maxChunkX, worldHeight, maxChunkZ);
 
-        if (FactionsPlugin.getInstance().conf().worldGuard().isChecking()) {
-            return set.size() > 0;
+        RegionManager regionManager = wg.getRegionManager(world);
+        ProtectedCuboidRegion region = new ProtectedCuboidRegion("wgfactionoverlapcheck", minChunk, maxChunk);
+        Map<String, ProtectedRegion> allregions = regionManager.getRegions();
+        Collection<ProtectedRegion> allregionslist = new ArrayList<>(allregions.values());
+        List<ProtectedRegion> overlaps = region.getIntersectingRegions(allregionslist);
+        boolean foundregions = overlaps != null && !overlaps.isEmpty();
+
+        if (isChecking.get()) {
+            return foundregions;
         }
-        if (FLAG_CLAIM == null) {
+        if (FLAG_CLAIM == null || !foundregions) {
             return false;
         }
-        for (ProtectedRegion reg : set.getRegions()) {
+        for (ProtectedRegion reg : overlaps) {
             StateFlag.State s = reg.getFlag(FLAG_CLAIM);
             if (s == StateFlag.State.DENY) {
                 return true;
             }
         }
+
         return false;
     }
 
+    @Override
     public String getVersion() {
-        return WorldGuardPlugin.inst().getDescription().getVersion();
+        return wg.getDescription().getVersion();
     }
 }
