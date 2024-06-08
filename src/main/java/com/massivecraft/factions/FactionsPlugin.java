@@ -20,7 +20,7 @@ import com.massivecraft.factions.integration.IntegrationManager;
 import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.integration.LuckPerms;
 import com.massivecraft.factions.integration.VaultPerms;
-import com.massivecraft.factions.integration.Worldguard7;
+import com.massivecraft.factions.integration.Worldguard;
 import com.massivecraft.factions.integration.dynmap.EngineDynmap;
 import com.massivecraft.factions.integration.permcontext.ContextManager;
 import com.massivecraft.factions.landraidcontrol.LandRaidControl;
@@ -175,7 +175,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     private SeeChunkUtil seeChunkUtil;
     private ParticleProvider<?> particleProvider;
-    private Worldguard7 worldguard;
+    private Worldguard worldguard;
     private LandRaidControl landRaidControl;
     private boolean luckPermsSetup;
     private IntegrationManager integrationManager;
@@ -207,7 +207,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         this.tryEssXMigrationOnLoad();
         try {
             Class.forName("com.sk89q.worldguard.WorldGuard");
-            Worldguard7.onLoad();
+            Worldguard.onLoad();
         } catch (Exception ignored) {
             // eh
         }
@@ -680,7 +680,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         this.metricsSimplePie("luckperms_contexts", () -> "" + this.luckPermsSetup);
 
         // WorldGuard
-        Worldguard7 wg = this.getWorldguard();
+        Worldguard wg = this.getWorldguard();
         String wgVersion = wg == null ? "nope" : wg.getVersion();
         this.metricsDrillPie("worldguard", () -> this.metricsInfo(wg, () -> wgVersion));
 
@@ -759,7 +759,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return map;
     }
 
-    public void setWorldGuard(Worldguard7 wg) {
+    public void setWorldGuard(Worldguard wg) {
         this.worldguard = wg;
     }
 
@@ -962,7 +962,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.landRaidControl;
     }
 
-    public Worldguard7 getWorldguard() {
+    public Worldguard getWorldguard() {
         return this.worldguard;
     }
 
