@@ -95,11 +95,11 @@ public class Econ {
         if (FactionsPlugin.getInstance().conf().economy().getUniverseAccount().isEmpty()) {
             return;
         }
-        if (!hasAccount(FactionsPlugin.getInstance().conf().economy().getUniverseAccount())) {
+        if (!hasAccount(getOfflinePlayerForName(FactionsPlugin.getInstance().conf().economy().getUniverseAccount()))) {
             return;
         }
 
-        modifyBalance(FactionsPlugin.getInstance().conf().economy().getUniverseAccount(), delta);
+        modifyBalance(getOfflinePlayerForName(FactionsPlugin.getInstance().conf().economy().getUniverseAccount()), delta);
     }
 
     public static void sendBalanceInfo(FPlayer to, EconomyParticipator about) {
@@ -197,7 +197,7 @@ public class Econ {
         }
 
         // Check if the new balance is over Essential's money cap.
-        if (FactionsPlugin.getInstance().getIntegrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isOverBalCap(to, getBalance(toAcc) + amount)) {
+        if (FactionsPlugin.getInstance().getIntegrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isOverBalCap(getBalance(toAcc) + amount)) {
             invoker.msg(TL.ECON_OVER_BAL_CAP, amount);
             return false;
         }

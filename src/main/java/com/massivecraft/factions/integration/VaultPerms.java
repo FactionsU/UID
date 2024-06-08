@@ -32,6 +32,6 @@ public class VaultPerms {
     }
 
     public String getPrimaryGroup(OfflinePlayer player) {
-        return perms == null || !perms.hasGroupSupport() ? " " : perms.getPrimaryGroup(Bukkit.getWorlds().get(0).toString(), player);
+        return perms == null || !perms.hasGroupSupport() ? " " : perms.getPrimaryGroup(Bukkit.getWorlds().getFirst().toString(), player);
     }
 }

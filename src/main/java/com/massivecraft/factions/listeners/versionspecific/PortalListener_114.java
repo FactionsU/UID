@@ -8,7 +8,6 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
-import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -35,11 +34,10 @@ public class PortalListener_114 implements Listener {
             return; // Don't do anything if they don't want us to.
         }
 
-        if (!(entity instanceof Player) || !plugin.worldUtil().isEnabled(event.getEntity().getWorld())) {
+        if (!(entity instanceof Player player) || !plugin.worldUtil().isEnabled(event.getEntity().getWorld())) {
             return;
         }
 
-        Player player = (Player) entity;
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
 
         // Only 8 blocks so a loop should be fine.

@@ -101,7 +101,7 @@ public class CmdPowerBoost extends FCommand {
         return TL.COMMAND_POWERBOOST_DESCRIPTION;
     }
 
-    protected class Brigadier implements BrigadierProvider {
+    protected static class Brigadier implements BrigadierProvider {
         @Override
         public ArgumentBuilder<Object, ?> get(ArgumentBuilder<Object, ?> parent) {
             ArgumentCommandNode<Object, ?> generic = RequiredArgumentBuilder.argument("p/f/player/faction", StringArgumentType.word())

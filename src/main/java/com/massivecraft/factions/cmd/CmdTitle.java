@@ -28,7 +28,7 @@ public class CmdTitle extends FCommand {
             return;
         }
 
-        context.args.remove(0);
+        context.args.removeFirst();
         String title = TextUtil.implode(context.args, " ");
 
         title = title.replaceAll(",", "");

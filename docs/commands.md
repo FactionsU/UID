@@ -450,39 +450,39 @@ Click on any command for more details.
 
 Commands yet to be documented in the new format
 
-Command | Permission | Meaning
---- | --- | ---
-`/f ahome <target>` | factions.ahome | Teleport a player to their faction's home.
-`/f autohelp` | none | Show help for all commands.
-`/f boom [on/off]` | factions.noboom | Toggle peaceful explosions in your faction's territory on or off.
-`/f bypass` | factions.bypass | Set yourself to bypass faction permission checks.
-`/f chatspy` | factions.chatspy | Enable spying on all private chat channels.
-`/f coords` | factions.coords | Send faction members your current position
-`/f help <page>` | factions.help | List help pages for things.
-`/f list` | factions.list | List top Factions by players.
-`/f lock` | factions.lock | Lock datafiles from being overwritten. Will make anything on the server not get saved.
-`/f logins` | factions.monitorlogins | Toggle monitoring of logins for your faction.
-`/f map [on/off]` | factions.map | View the faction map of the area around you.
-`/f mapheight [value]` | factions.mapheight | Set how many lines your /f map will show.
-`/f modifypower <name> <power>` | factions.modifypower | Modify a player's power. The <power> variable adds power to the player's current power.
-`/f owner [name]` | factions.owner | Set claim ownership for this chunk. Admins can specify a target player.
-`/f ownerlist` | factions.ownerlist | Get the current owner of the chunk you're in if it's in your faction.
-`/f peaceful <faction>` | factions.setpeaceful | Set a faction to being peaceful.
-`/f permanent <faction>` | factions.setpermanent | Set a faction to permanent status. This will make the faction stay if there are zero members.
-`/f permanentpower <faction> [power]` | factions.setpermanentpower | Set permanent power to a faction.
-`/f power <player>` | factions.power | Check power of a player. Default is yourself.
-`/f powerboost <player/faction> <name> <number>` | factions.powerboost | Set powerboost of a player or faction. <player/faction> can be 'f' or 'p' to let the plugin know if you're specifying a player or faction.
-`/f rel <relation> <faction>` | factions.relation | Request to change your faction's relationship with a target faction. Relations can be ally, truce, neutral, enemy.
-`/f reload` | factions.reload | Reload configurations (lang.yml, config.yml, conf.json). This does not reload factions saved data from disk.
-`/f safeunclaimall [world]` | factions.managesafezone | Safely unclaim all territories in your world. Can specify another world.
-`/f saveall` | factions.save | Force save all factions data to disk.
-`/f sb` | factions.scoreboard | Toggle the factions scoreboard on or off.
-`/f sc` | factions.seechunk | See outlines around the border of the chunk you're standing in. No one else can see the outlines.
-`/f setmaxvaults <faction> <number>` | factions.setmaxvaults | Set the max vaults a faction can have.
-`/f show [faction]` | factions.show | Show info about a Faction. Default is yours.
-`/f status` | factions.status | Show status of all players in your faction.
-`/f stuck` | factions.stuck | Attempts to teleport you to the nearest wilderness chunk.
-`/f top <criteria> [page]` | factions.top | List top factions by criteria (members, start, power, land, online, money). 
-`/f version` | factions.version | Show the version string for FactionsUUID.
-`/f warunclaimall` | factions.managewarzone | Unclaim all warzone claims.
-`/f near` | factions.near | Show nearby faction members
+| Command                                          | Permission                 | Meaning                                                                                                                                    |
+|--------------------------------------------------|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| `/f ahome <target>`                              | factions.ahome             | Teleport a player to their faction's home.                                                                                                 |
+| `/f autohelp`                                    | none                       | Show help for all commands.                                                                                                                |
+| `/f boom [on/off]`                               | factions.noboom            | Toggle peaceful explosions in your faction's territory on or off.                                                                          |
+| `/f bypass`                                      | factions.bypass            | Set yourself to bypass faction permission checks.                                                                                          |
+| `/f chatspy`                                     | factions.chatspy           | Enable spying on all private chat channels.                                                                                                |
+| `/f coords`                                      | factions.coords            | Send faction members your current position                                                                                                 |
+| `/f help <page>`                                 | factions.help              | List help pages for things.                                                                                                                |
+| `/f list`                                        | factions.list              | List top Factions by players.                                                                                                              |
+| `/f lock`                                        | factions.lock              | Lock datafiles from being overwritten. Will make anything on the server not get saved.                                                     |
+| `/f logins`                                      | factions.monitorlogins     | Toggle monitoring of logins for your faction.                                                                                              |
+| `/f map [on/off]`                                | factions.map               | View the faction map of the area around you.                                                                                               |
+| `/f mapheight [value]`                           | factions.mapheight         | Set how many lines your /f map will show.                                                                                                  |
+| `/f modifypower <name> <power>`                  | factions.modifypower       | Modify a player's power. The <power> variable adds power to the player's current power.                                                    |
+| `/f owner [name]`                                | factions.owner             | Set claim ownership for this chunk. Admins can specify a target player.                                                                    |
+| `/f ownerlist`                                   | factions.ownerlist         | Get the current owner of the chunk you're in if it's in your faction.                                                                      |
+| `/f peaceful <faction>`                          | factions.setpeaceful       | Set a faction to being peaceful.                                                                                                           |
+| `/f permanent <faction>`                         | factions.setpermanent      | Set a faction to permanent status. This will make the faction stay if there are zero members.                                              |
+| `/f permanentpower <faction> [power]`            | factions.setpermanentpower | Set permanent power to a faction.                                                                                                          |
+| `/f power <player>`                              | factions.power             | Check power of a player. Default is yourself.                                                                                              |
+| `/f powerboost <player/faction> <name> <number>` | factions.powerboost        | Set powerboost of a player or faction. <player/faction> can be 'f' or 'p' to let the plugin know if you're specifying a player or faction. |
+| `/f rel <relation> <faction>`                    | factions.relation          | Request to change your faction's relationship with a target faction. Relations can be ally, truce, neutral, enemy.                         |
+| `/f reload`                                      | factions.reload            | Reload configurations (lang.yml, config.yml, conf.json). This does not reload factions saved data from disk.                               |
+| `/f safeunclaimall [world]`                      | factions.managesafezone    | Safely unclaim all territories in your world. Can specify another world.                                                                   |
+| `/f saveall`                                     | factions.save              | Force save all factions data to disk.                                                                                                      |
+| `/f sb`                                          | factions.scoreboard        | Toggle the factions scoreboard on or off.                                                                                                  |
+| `/f sc`                                          | factions.seechunk          | See outlines around the border of the chunk you're standing in. No one else can see the outlines.                                          |
+| `/f setmaxvaults <faction> <number>`             | factions.setmaxvaults      | Set the max vaults a faction can have.                                                                                                     |
+| `/f show [faction]`                              | factions.show              | Show info about a Faction. Default is yours.                                                                                               |
+| `/f status`                                      | factions.status            | Show status of all players in your faction.                                                                                                |
+| `/f stuck`                                       | factions.stuck             | Attempts to teleport you to the nearest wilderness chunk.                                                                                  |
+| `/f top <criteria> [page]`                       | factions.top               | List top factions by criteria (members, start, power, land, online, money).                                                                |
+| `/f version`                                     | factions.version           | Show the version string for FactionsUUID.                                                                                                  |
+| `/f warunclaimall`                               | factions.managewarzone     | Unclaim all warzone claims.                                                                                                                |
+| `/f near`                                        | factions.near              | Show nearby faction members                                                                                                                |

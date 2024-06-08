@@ -85,7 +85,7 @@ public class CmdShow extends FCommand {
         if (!faction.isNormal()) {
             String tag = faction.getTag(context.fPlayer);
             // send header and that's all
-            String header = show.get(0);
+            String header = show.getFirst();
             if (FactionTag.HEADER.foundInString(header)) {
                 context.msg(plugin.txt().titleize(tag));
             } else {

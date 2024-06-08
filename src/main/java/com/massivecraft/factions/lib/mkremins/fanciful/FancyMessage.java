@@ -464,12 +464,11 @@ public class FancyMessage implements JsonRepresentedObject, Cloneable, Iterable<
 	}
 
 	private void send(CommandSender sender, String jsonString) {
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			sender.sendMessage(toOldMessageFormat());
 			return;
 		}
-		Player player = (Player) sender;
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " " + jsonString);
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " " + jsonString);
 	}
 
 	/**
@@ -527,7 +526,7 @@ public class FancyMessage implements JsonRepresentedObject, Cloneable, Iterable<
 	}
 
 	private MessagePart latest() {
-		return messageParts.get(messageParts.size() - 1);
+		return messageParts.getLast();
 	}
 
 	private void onClick(final String name, final String data) {
@@ -575,8 +574,6 @@ public class FancyMessage implements JsonRepresentedObject, Cloneable, Iterable<
 		return messageParts.iterator();
 	}
 
-	private static JsonParser _stringParser = new JsonParser();
-
 	/**
 	 * Deserializes a fancy message from its JSON representation. This JSON representation is of the format of
 	 * that returned by {@link #toJSONString()}, and is compatible with vanilla inputs.
@@ -585,7 +582,7 @@ public class FancyMessage implements JsonRepresentedObject, Cloneable, Iterable<
 	 * @return A {@code FancyMessage} representing the parameterized JSON message.
 	 */
 	public static FancyMessage deserialize(String json) {
-		JsonObject serialized = _stringParser.parse(json).getAsJsonObject();
+		JsonObject serialized = JsonParser.parseString(json).getAsJsonObject();
 		JsonArray extra = serialized.getAsJsonArray("extra"); // Get the extra component
 		FancyMessage returnVal = new FancyMessage();
 		returnVal.messageParts.clear();

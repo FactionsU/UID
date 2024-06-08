@@ -50,7 +50,7 @@ public class FDefaultSidebar extends FSidebarProvider {
                 if (mapMap == null) {
                     mapMap = ((MemoryBoard) Board.getInstance()).getScoreboardMap(fplayer);
                 }
-                String rep = mapMap.isEmpty() ? "" : LegacyComponentSerializer.legacySection().serialize(mapMap.remove(0));
+                String rep = mapMap.isEmpty() ? "" : LegacyComponentSerializer.legacySection().serialize(mapMap.removeFirst());
                 if (!rep.isEmpty() && !mapC.isEmpty()) {
                     rep = "\u00A7" + mapC.charAt(0) + "\u00A7r" + rep;
                     mapC = mapC.substring(1);

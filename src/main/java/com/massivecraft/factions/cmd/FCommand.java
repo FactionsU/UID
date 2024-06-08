@@ -55,8 +55,8 @@ public abstract class FCommand {
         // Is there a matching sub command?
         if (!context.args.isEmpty()) {
             for (FCommand subCommand : this.subCommands) {
-                if (subCommand.aliases.contains(context.args.get(0).toLowerCase())) {
-                    context.args.remove(0);
+                if (subCommand.aliases.contains(context.args.getFirst().toLowerCase())) {
+                    context.args.removeFirst();
                     context.commandChain.add(this);
                     subCommand.execute(context);
                     return;

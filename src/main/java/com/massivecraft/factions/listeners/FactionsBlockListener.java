@@ -20,7 +20,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
@@ -36,7 +35,6 @@ import org.bukkit.material.Directional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FactionsBlockListener extends AbstractListener {
 
@@ -260,7 +258,7 @@ public class FactionsBlockListener extends AbstractListener {
     }
 
     private boolean canPistonMoveBlock(Faction pistonFaction, List<Block> blocks, BlockFace direction) {
-        String world = blocks.get(0).getWorld().getName();
+        String world = blocks.getFirst().getWorld().getName();
         List<FLocation> locations = (direction == null ? blocks.stream() : blocks.stream().map(b -> b.getRelative(direction)))
                 .map(Block::getLocation)
                 .map(FLocation::new)

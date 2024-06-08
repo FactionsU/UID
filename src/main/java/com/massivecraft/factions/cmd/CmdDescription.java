@@ -63,7 +63,7 @@ public class CmdDescription extends FCommand {
         return TL.COMMAND_DESCRIPTION_DESCRIPTION;
     }
 
-    protected class GreedyMessageBrigadier implements BrigadierProvider {
+    protected static class GreedyMessageBrigadier implements BrigadierProvider {
         @Override
         public ArgumentBuilder<Object, ?> get(ArgumentBuilder<Object, ?> parent) {
             return parent.then(RequiredArgumentBuilder.argument("message", StringArgumentType.greedyString()));

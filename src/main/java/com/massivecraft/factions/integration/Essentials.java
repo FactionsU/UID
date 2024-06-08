@@ -1,15 +1,18 @@
 package com.massivecraft.factions.integration;
 
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.Teleport;
+import com.earth2me.essentials.AsyncTeleport;
+import net.ess3.api.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.massivecraft.factions.FactionsPlugin;
-import com.massivecraft.factions.iface.EconomyParticipator;
 import com.massivecraft.factions.listeners.EssentialsListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
+
+import java.math.BigDecimal;
+import java.util.concurrent.CompletableFuture;
 
 public class Essentials {
 
@@ -35,13 +38,15 @@ public class Essentials {
             return false;
         }
 
-        Teleport teleport = essentials.getUser(player).getTeleport();
-        Trade trade = new Trade(FactionsPlugin.getInstance().conf().economy().getCostHome(), essentials);
-        try {
-            teleport.teleport(loc, trade);
-        } catch (Exception e) {
+        AsyncTeleport teleport = essentials.getUser(player).getAsyncTeleport();
+        Trade trade = new Trade(BigDecimal.valueOf(FactionsPlugin.getInstance().conf().economy().getCostHome()), essentials);
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        future.exceptionally(e -> {
             player.sendMessage(ChatColor.RED + e.getMessage());
-        }
+            return false;
+        });
+        teleport.teleport(loc, trade, PlayerTeleportEvent.TeleportCause.PLUGIN, future);
+
         return true;
     }
 
@@ -57,7 +62,7 @@ public class Essentials {
         return essentials != null && player != null && essentials.getUser(player).isAfk();
     }
 
-    public static boolean isOverBalCap(EconomyParticipator participator, double amount) {
+    public static boolean isOverBalCap(double amount) {
         if (essentials == null) {
             return false;
         }

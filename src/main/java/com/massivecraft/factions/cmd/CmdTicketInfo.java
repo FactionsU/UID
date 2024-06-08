@@ -23,6 +23,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -191,7 +192,7 @@ public class CmdTicketInfo extends FCommand {
                     gzip.write(string.getBytes(StandardCharsets.UTF_8));
                     gzip.finish();
                     byte[] bytes = byteStream.toByteArray();
-                    URL url = new URL("https://ticket.plugin.party/ticket");
+                    URL url = new URI("https://ticket.plugin.party/ticket").toURL();
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setConnectTimeout(3000);
                     connection.setReadTimeout(3000);

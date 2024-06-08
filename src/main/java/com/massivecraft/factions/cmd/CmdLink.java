@@ -56,7 +56,7 @@ public class CmdLink extends FCommand {
         return TL.COMMAND_LINK_DESCRIPTION;
     }
 
-    protected class Brigadier implements BrigadierProvider {
+    protected static class Brigadier implements BrigadierProvider {
         @Override
         public ArgumentBuilder<Object, ?> get(ArgumentBuilder<Object, ?> parent) {
             return parent.then(RequiredArgumentBuilder.argument("URL", StringArgumentType.greedyString()));

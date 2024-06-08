@@ -254,11 +254,10 @@ public class FLocation implements Serializable {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof FLocation)) {
+        if (!(obj instanceof FLocation that)) {
             return false;
         }
 
-        FLocation that = (FLocation) obj;
         return this.x == that.x && this.z == that.z && (Objects.equals(this.worldName, that.worldName));
     }
 }

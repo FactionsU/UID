@@ -116,14 +116,14 @@ public class FactionsPlayerListener extends AbstractListener {
                                 }
                                 break;
                             case "bed":
-                                target = player.getBedSpawnLocation();
+                                target = player.getRespawnLocation();
                         }
                         if (target != null) {
                             break;
                         }
                     }
                     if (target == null) {
-                        target = this.plugin.getServer().getWorlds().get(0).getSpawnLocation();
+                        target = this.plugin.getServer().getWorlds().getFirst().getSpawnLocation();
                     }
                     this.plugin.teleport(player, target).thenAccept(success -> {
                         if (success) {
@@ -770,9 +770,8 @@ public class FactionsPlayerListener extends AbstractListener {
         if (clickedInventory == null) {
             return;
         }
-        if (clickedInventory.getHolder() instanceof GUI) {
+        if (clickedInventory.getHolder() instanceof GUI<?> ui) {
             event.setCancelled(true);
-            GUI<?> ui = (GUI<?>) clickedInventory.getHolder();
             ui.click(event.getRawSlot(), event.getClick());
         }
     }

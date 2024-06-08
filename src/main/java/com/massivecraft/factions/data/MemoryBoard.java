@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class MemoryBoard extends Board {
 
-    public class MemoryBoardMap extends HashMap<FLocation, String> {
+    public static class MemoryBoardMap extends HashMap<FLocation, String> {
         private static final long serialVersionUID = -6689617828610585368L;
 
         final Multimap<String, FLocation> factionToLandMap = HashMultimap.create();

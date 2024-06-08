@@ -27,8 +27,7 @@ public class RelationUtil {
             } else {
                 ret = thatFaction.getTag();
             }
-        } else if (that instanceof FPlayer) {
-            FPlayer fplayerthat = (FPlayer) that;
+        } else if (that instanceof FPlayer fplayerthat) {
             if (that == me) {
                 ret = TL.GENERIC_YOU.toString();
             } else if (thatFaction == myFaction) {

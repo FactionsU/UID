@@ -9,7 +9,7 @@ import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.WarmUpUtil;
 import com.massivecraft.factions.util.material.MaterialDb;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.conversations.ConversationAbandonedListener;
 import org.bukkit.conversations.ConversationContext;
@@ -34,12 +34,10 @@ public class WarpGUI extends GUI<Integer> {
     static {
         warpItem = SimpleItem.builder()
                 .setName("&8[&7{warp}&8]")
-                .setMaterial(MaterialDb.get("LIME_STAINED_GLASS"))
-                .setColor(DyeColor.LIME)
+                .setMaterial(Material.LIME_STAINED_GLASS)
                 .build();
         passwordModifier = SimpleItem.builder()
-                .setMaterial(MaterialDb.get("BLACK_STAINED_GLASS"))
-                .setColor(DyeColor.BLACK)
+                .setMaterial(Material.BLACK_STAINED_GLASS)
                 .setLore(Collections.singletonList("&8Password Protected"))
                 .build();
     }

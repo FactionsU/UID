@@ -39,7 +39,7 @@ public class CmdColeader extends FCommand {
                 component = component.append(Component.text().color(NamedTextColor.WHITE)
                         .content(s + " ")
                         .hoverEvent(legacy.deserialize(TL.COMMAND_COLEADER_CLICKTOPROMOTE + s))
-                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " coleader " + s))
+                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " coleader " + s))
                 );
             }
             FactionsPlugin.getInstance().getAdventure().player(context.player).sendMessage(component);

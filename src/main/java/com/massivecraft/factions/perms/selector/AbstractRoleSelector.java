@@ -67,8 +67,7 @@ public abstract class AbstractRoleSelector extends AbstractSelector {
 
     @Override
     public boolean test(Selectable selectable, Faction faction) {
-        if (selectable instanceof FPlayer) {
-            FPlayer player = (FPlayer) selectable;
+        if (selectable instanceof FPlayer player) {
             if (player.getFaction() == faction) {
                 return test(player.getRole());
             }
