@@ -1,5 +1,5 @@
 name: Factions
-version: ${project.version}-b${build.number}
+version: 1.6.9.5-U${project.version}-b${build.number}
 main: com.massivecraft.factions.FactionsPlugin
 authors: [Olof Larsson, Brett Flannigan, drtshock, dariasc, CmdrKittens, mbaxter]
 softdepend: [LuckPerms, WorldGuard]
