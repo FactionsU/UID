@@ -4,7 +4,7 @@
 
     <groupId>com.massivecraft</groupId>
     <artifactId>Factions-Almost</artifactId>
-    <version>1.6.9.5-U0.6.39</version>
+    <version>1.6.9.5-U0.6.40</version>
     <packaging>jar</packaging>
 
     <name>Factions Plugin (minus Adventure shading)</name>
@@ -16,8 +16,6 @@
 
     <build>
         <defaultGoal>clean package install</defaultGoal>
-        <!--<finalName>Factions</finalName>-->
-        <!--<directory>${project.basedir}/../../target</directory>-->
         <sourceDirectory>${project.basedir}/../../src/main/java</sourceDirectory>
         <testSourceDirectory>${project.basedir}/../../src/test/java</testSourceDirectory>
         <resources>
