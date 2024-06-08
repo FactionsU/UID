@@ -61,6 +61,7 @@
             <groupId>com.massivecraft</groupId>
             <artifactId>Factions-Almost</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
