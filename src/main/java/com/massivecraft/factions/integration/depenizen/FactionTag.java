@@ -64,11 +64,7 @@ public class FactionTag implements ObjectTag {
     }
 
     public static boolean matches(String arg) {
-        if (valueOf(arg) != null) {
-            return true;
-        }
-
-        return false;
+        return valueOf(arg) != null;
     }
 
     Faction faction;

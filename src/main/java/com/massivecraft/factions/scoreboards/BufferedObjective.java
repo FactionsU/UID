@@ -1,10 +1,7 @@
 package com.massivecraft.factions.scoreboards;
 
 import org.bukkit.ChatColor;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.*;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -59,7 +56,8 @@ public class BufferedObjective {
         this.scoreboard = scoreboard;
         this.baseName = createBaseName();
 
-        current = scoreboard.registerNewObjective(getNextObjectiveName(), "dummy");
+        String name = getNextObjectiveName();
+        current = scoreboard.registerNewObjective(name, Criteria.DUMMY, name);
     }
 
     private String createBaseName() {
@@ -117,7 +115,8 @@ public class BufferedObjective {
         }
         requiresUpdate = false;
 
-        Objective buffer = scoreboard.registerNewObjective(getNextObjectiveName(), "dummy");
+        String objectiveName = getNextObjectiveName();
+        Objective buffer = scoreboard.registerNewObjective(objectiveName, Criteria.DUMMY, objectiveName);
         buffer.setDisplayName(title);
 
         List<Team> bufferTeams = new ArrayList<>();

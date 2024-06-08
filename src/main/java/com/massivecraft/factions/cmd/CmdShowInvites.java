@@ -30,7 +30,7 @@ public class CmdShowInvites extends FCommand {
             String name = fp != null ? fp.getName() : id;
             component = component.append(Component.text().color(NamedTextColor.WHITE).content(name + " ")
                     .hoverEvent(legacy.deserialize(TL.COMMAND_SHOWINVITES_CLICKTOREVOKE.format(name)).asHoverEvent())
-                    .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " deinvite " + name))
+                    .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " deinvite " + name))
             );
         }
 

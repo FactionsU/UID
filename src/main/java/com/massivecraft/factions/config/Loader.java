@@ -37,7 +37,7 @@ public class Loader {
         Path path = configFolder.resolve(file + ".conf");
         return HoconConfigurationLoader.builder()
                 .setPath(path)
-                .setDefaultOptions(ConfigurationOptions.defaults().setAcceptedTypes(null))
+                .setDefaultOptions(ConfigurationOptions.defaults().withNativeTypes(null))
                 .setRenderOptions(ConfigRenderOptions.defaults().setComments(true).setOriginComments(false).setJson(false))
                 .build();
     }
@@ -106,6 +106,7 @@ public class Loader {
                         try {
                             Field tokenField = field.getDeclaringClass().getDeclaredField(field.getName() + "Token");
                             tokenField.setAccessible(true);
+                            //noinspection unchecked
                             newNewNode.setValue((TypeToken<Object>) tokenField.get(object), defaultValue);
                         } catch (ObjectMappingException | NoSuchFieldException e) {
                             FactionsPlugin.getInstance().getLogger().severe("Failed horrifically to handle " + confName);

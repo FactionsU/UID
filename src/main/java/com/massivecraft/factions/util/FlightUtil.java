@@ -47,7 +47,7 @@ public class FlightUtil {
         }
     }
 
-    public class EnemiesTask extends BukkitRunnable {
+    public static class EnemiesTask extends BukkitRunnable {
 
         @Override
         public void run() {
@@ -94,7 +94,7 @@ public class FlightUtil {
         }
     }
 
-    public class ParticleTrailsTask extends BukkitRunnable {
+    public static class ParticleTrailsTask extends BukkitRunnable {
 
         private final int amount;
         private final float speed;

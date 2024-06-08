@@ -7,8 +7,9 @@ import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.tag.Tag;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -29,7 +30,7 @@ public class FTeamWrapper {
     private final Map<FScoreboard, Team> teams = new HashMap<>();
     private final String teamName;
     private final Faction faction;
-    private final Set<OfflinePlayer> members = new HashSet<>();
+    private final Set<String> members = new HashSet<>();
 
     public static void applyUpdatesLater(final Faction faction) {
         if (!FScoreboard.isSupportedByServer()) {
@@ -89,8 +90,9 @@ public class FTeamWrapper {
             wrappers.put(faction, wrapper);
         }
 
-        for (OfflinePlayer player : wrapper.getPlayers()) {
-            if (!player.isOnline() || !factionMembers.contains(FPlayers.getInstance().getByOfflinePlayer(player))) {
+        for (String player : wrapper.getPlayers()) {
+            Player plr = Bukkit.getPlayerExact(player);
+            if (plr == null || !plr.isOnline() || !factionMembers.contains(FPlayers.getInstance().getByOfflinePlayer(plr))) {
                 // Player is offline or no longer in faction
                 wrapper.removePlayer(player);
             }
@@ -102,7 +104,7 @@ public class FTeamWrapper {
             }
 
             // Scoreboard might not have player; add him/her
-            wrapper.addPlayer(fmember.getPlayer());
+            wrapper.addPlayer(fmember.getName());
         }
 
         wrapper.updatePrefixesAndSuffixes();
@@ -155,8 +157,8 @@ public class FTeamWrapper {
         Team team = board.registerNewTeam(teamName);
         teams.put(fboard, team);
 
-        for (OfflinePlayer player : getPlayers()) {
-            team.addPlayer(player);
+        for (String player : getPlayers()) {
+            team.addEntry(player);
         }
 
         updatePrefixAndSuffix(fboard);
@@ -208,23 +210,23 @@ public class FTeamWrapper {
         return prefixOrSuffix;
     }
 
-    private void addPlayer(OfflinePlayer player) {
+    private void addPlayer(String player) {
         if (members.add(player)) {
             for (Team team : teams.values()) {
-                team.addPlayer(player);
+                team.addEntry(player);
             }
         }
     }
 
-    private void removePlayer(OfflinePlayer player) {
+    private void removePlayer(String player) {
         if (members.remove(player)) {
             for (Team team : teams.values()) {
-                team.removePlayer(player);
+                team.removeEntry(player);
             }
         }
     }
 
-    private Set<OfflinePlayer> getPlayers() {
+    private Set<String> getPlayers() {
         return new HashSet<>(this.members);
     }
 

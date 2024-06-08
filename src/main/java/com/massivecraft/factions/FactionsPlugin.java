@@ -87,6 +87,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -565,7 +566,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("https://update.plugin.party/check");
+                    URL url = new URI("https://update.plugin.party/check").toURL();
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setRequestMethod("POST");
                     con.setDoOutput(true);

@@ -11,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
+import java.util.logging.Level;
+
 public class Graves {
     private static com.ranull.graves.Graves plugin;
 
@@ -43,6 +45,7 @@ public class Graves {
                 return plugin.getBlockManager().getGraveFromBlock(block) != null;
             }
         } catch (Exception oops) {
+            FactionsPlugin.getInstance().getLogger().log(Level.WARNING, "A Grave(s) error occurred!", oops);
             oops.printStackTrace(); // OBNOXIOUS!
         }
         return false;

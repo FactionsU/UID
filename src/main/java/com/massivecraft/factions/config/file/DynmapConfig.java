@@ -161,8 +161,7 @@ public class DynmapConfig {
                 for (Map.Entry<String, ?> e : mappy.entrySet()) {
                     String faction = e.getKey();
                     Object s = e.getValue();
-                    if (s instanceof Style) {
-                        Style style = (Style) s;
+                    if (s instanceof Style style) {
                         styles.put(faction, new DynmapStyle()
                                 .setLineColor(style.getLineColor())
                                 .setLineOpacity(style.getLineOpacity())

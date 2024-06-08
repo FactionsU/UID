@@ -79,16 +79,14 @@ public class FactionsEntityListener extends AbstractListener {
             return;
         }
 
-        if (event instanceof EntityDamageByEntityEvent) {
-            EntityDamageByEntityEvent sub = (EntityDamageByEntityEvent) event;
+        if (event instanceof EntityDamageByEntityEvent sub) {
             if (!this.canDamagerHurtDamagee(sub, true)) {
                 event.setCancelled(true);
             }
         } else if (FactionsPlugin.getInstance().conf().factions().protection().isSafeZonePreventAllDamageToPlayers() && isPlayerInSafeZone(event.getEntity())) {
             // Players can not take any damage in a Safe Zone
             event.setCancelled(true);
-        } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
+        } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && event.getEntity() instanceof Player player) {
             FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
             if (fPlayer != null && !fPlayer.shouldTakeFallDamage()) {
                 event.setCancelled(true); // Falling after /f fly
@@ -108,9 +106,7 @@ public class FactionsEntityListener extends AbstractListener {
         if (event instanceof EntityDamageByEntityEvent) {
             Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 
-            if (damager instanceof Projectile) {
-                Projectile projectile = (Projectile) damager;
-
+            if (damager instanceof Projectile projectile) {
                 if (projectile.getShooter() instanceof Entity) {
                     damager = (Entity) projectile.getShooter();
                 }
@@ -213,8 +209,7 @@ public class FactionsEntityListener extends AbstractListener {
             return;
         }
 
-        if (thrower instanceof Player) {
-            Player player = (Player) thrower;
+        if (thrower instanceof Player player) {
             FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
             if (fPlayer.getFaction().isPeaceful()) {
                 if (event.getPotion().getEffects().stream().allMatch(e -> e.getType().equals(PotionEffectType.WEAKNESS))) {
@@ -258,8 +253,7 @@ public class FactionsEntityListener extends AbstractListener {
         Faction defLocFaction = Board.getInstance().getFactionAt(defLoc);
 
         // for damage caused by projectiles, getDamager() returns the projectile... what we need to know is the source
-        if (damager instanceof Projectile) {
-            Projectile projectile = (Projectile) damager;
+        if (damager instanceof Projectile projectile) {
 
             if (!(projectile.getShooter() instanceof Entity)) {
                 return true;
@@ -277,8 +271,7 @@ public class FactionsEntityListener extends AbstractListener {
             }
         }
 
-        if (damager instanceof Player) {
-            Player player = (Player) damager;
+        if (damager instanceof Player player) {
             Material material = null;
             EntityType type = damagee.getType();
             if (type.name().contains("ITEM_FRAME")) {
@@ -588,24 +581,30 @@ public class FactionsEntityListener extends AbstractListener {
 
         Location loc = event.getBlock().getLocation();
 
-        if (entity instanceof Enderman) {
-            if (stopEndermanBlockManipulation(loc)) {
-                event.setCancelled(true);
+        switch (entity) {
+            case Enderman enderman -> {
+                if (stopEndermanBlockManipulation(loc)) {
+                    event.setCancelled(true);
+                }
             }
-        } else if (entity instanceof Silverfish) {
-            Faction faction = Board.getInstance().getFactionAt(new FLocation(loc));
-            if (faction.isSafeZone() || faction.isWarZone() || faction.isPeaceful()) {
-                event.setCancelled(true);
+            case Silverfish silverfish -> {
+                Faction faction = Board.getInstance().getFactionAt(new FLocation(loc));
+                if (faction.isSafeZone() || faction.isWarZone() || faction.isPeaceful()) {
+                    event.setCancelled(true);
+                }
             }
-        } else if (entity instanceof Wither) {
-            Faction faction = Board.getInstance().getFactionAt(new FLocation(loc));
-            MainConfig.Factions.Protection protection = FactionsPlugin.getInstance().conf().factions().protection();
-            // it's a bit crude just using fireball protection, but I'd rather not add in a whole new set of xxxBlockWitherExplosion or whatever
-            if ((faction.isWilderness() && protection.isWildernessBlockFireballs() && !protection.getWorldsNoWildernessProtection().contains(loc.getWorld().getName())) ||
-                    (faction.isNormal() && (faction.hasPlayersOnline() ? protection.isTerritoryBlockFireballs() : protection.isTerritoryBlockFireballsWhenOffline())) ||
-                    (faction.isWarZone() && protection.isWarZoneBlockFireballs()) ||
-                    faction.isSafeZone()) {
-                event.setCancelled(true);
+            case Wither wither -> {
+                Faction faction = Board.getInstance().getFactionAt(new FLocation(loc));
+                MainConfig.Factions.Protection protection = FactionsPlugin.getInstance().conf().factions().protection();
+                // it's a bit crude just using fireball protection, but I'd rather not add in a whole new set of xxxBlockWitherExplosion or whatever
+                if ((faction.isWilderness() && protection.isWildernessBlockFireballs() && !protection.getWorldsNoWildernessProtection().contains(loc.getWorld().getName())) ||
+                        (faction.isNormal() && (faction.hasPlayersOnline() ? protection.isTerritoryBlockFireballs() : protection.isTerritoryBlockFireballsWhenOffline())) ||
+                        (faction.isWarZone() && protection.isWarZoneBlockFireballs()) ||
+                        faction.isSafeZone()) {
+                    event.setCancelled(true);
+                }
+            }
+            default -> {
             }
         }
     }

@@ -43,7 +43,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected String id = null;
@@ -908,14 +907,14 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
             Factions.getInstance().removeFaction(getId());
         } else { // promote new faction admin
-            Bukkit.getServer().getPluginManager().callEvent(new FactionNewAdminEvent(replacements.get(0), this));
+            Bukkit.getServer().getPluginManager().callEvent(new FactionNewAdminEvent(replacements.getFirst(), this));
 
             if (oldLeader != null) {
                 oldLeader.setRole(Role.COLEADER);
             }
-            replacements.get(0).setRole(Role.ADMIN);
-            this.msg(TL.FACTION_NEWLEADER, oldLeader == null ? "" : oldLeader.getName(), replacements.get(0).getName());
-            FactionsPlugin.getInstance().log("Faction " + this.getTag() + " (" + this.getId() + ") admin was removed. Replacement admin: " + replacements.get(0).getName());
+            replacements.getFirst().setRole(Role.ADMIN);
+            this.msg(TL.FACTION_NEWLEADER, oldLeader == null ? "" : oldLeader.getName(), replacements.getFirst().getName());
+            FactionsPlugin.getInstance().log("Faction " + this.getTag() + " (" + this.getId() + ") admin was removed. Replacement admin: " + replacements.getFirst().getName());
         }
     }
 

@@ -43,6 +43,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
@@ -457,7 +458,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                         @Override
                         public void run() {
                             try {
-                                URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
+                                URL url = new URI("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid).toURL();
                                 NameLookup lookup = FactionsPlugin.getInstance().getGson().fromJson(new InputStreamReader(url.openStream()), NameLookup.class);
                                 String newName = lookup.name;
                                 new BukkitRunnable() {
