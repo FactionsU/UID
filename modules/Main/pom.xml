@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.massivecraft</groupId>
-    <artifactId>Factions</artifactId>
+    <artifactId>Factions-Almost</artifactId>
     <version>1.6.9.5-U0.6.39</version>
     <packaging>jar</packaging>
 
-    <name>Factions Plugin</name>
+    <name>Factions Plugin (minus Adventure shading)</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -16,8 +16,8 @@
 
     <build>
         <defaultGoal>clean package install</defaultGoal>
-        <finalName>Factions</finalName>
-        <directory>${project.basedir}/../../target</directory>
+        <!--<finalName>Factions</finalName>-->
+        <!--<directory>${project.basedir}/../../target</directory>-->
         <sourceDirectory>${project.basedir}/../../src/main/java</sourceDirectory>
         <testSourceDirectory>${project.basedir}/../../src/test/java</testSourceDirectory>
         <resources>
@@ -516,7 +516,7 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
             <version>4.3.3</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
@@ -533,7 +533,7 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
             <version>4.17.0</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
