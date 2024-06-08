@@ -39,19 +39,14 @@ public enum Relation implements Permissible {
         } else if (s.equalsIgnoreCase(ENEMY.nicename)) {
             return ENEMY;
         } else {
-            switch (s.toUpperCase()) {
-                case "MEMBER":
-                    return MEMBER;
-                case "ALLY":
-                    return ALLY;
-                case "TRUCE":
-                    return TRUCE;
-                case "ENEMY":
-                    return ENEMY;
-                case "NEUTRAL":
-                default: // If they somehow mess things up, go back to default behavior.
-                    return NEUTRAL;
-            }
+            return switch (s.toUpperCase()) {
+                case "MEMBER" -> MEMBER;
+                case "ALLY" -> ALLY;
+                case "TRUCE" -> TRUCE;
+                case "ENEMY" -> ENEMY;
+                default -> // If they somehow mess things up, go back to default behavior.
+                        NEUTRAL;
+            };
         }
     }
 
@@ -112,32 +107,22 @@ public enum Relation implements Permissible {
 
     @Override
     public TextColor getTextColor() {
-        switch (this) {
-            case MEMBER:
-                return FactionsPlugin.getInstance().conf().colors().relations().getMember();
-            case ALLY:
-                return FactionsPlugin.getInstance().conf().colors().relations().getAlly();
-            case NEUTRAL:
-                return FactionsPlugin.getInstance().conf().colors().relations().getNeutral();
-            case TRUCE:
-                return FactionsPlugin.getInstance().conf().colors().relations().getTruce();
-            default:
-                return FactionsPlugin.getInstance().conf().colors().relations().getEnemy();
-        }
+        return switch (this) {
+            case MEMBER -> FactionsPlugin.getInstance().conf().colors().relations().getMember();
+            case ALLY -> FactionsPlugin.getInstance().conf().colors().relations().getAlly();
+            case NEUTRAL -> FactionsPlugin.getInstance().conf().colors().relations().getNeutral();
+            case TRUCE -> FactionsPlugin.getInstance().conf().colors().relations().getTruce();
+            default -> FactionsPlugin.getInstance().conf().colors().relations().getEnemy();
+        };
     }
 
     public int getMax() {
-        switch (this) {
-            case ALLY:
-                return FactionsPlugin.getInstance().conf().factions().maxRelations().getAlly();
-            case ENEMY:
-                return FactionsPlugin.getInstance().conf().factions().maxRelations().getEnemy();
-            case TRUCE:
-                return FactionsPlugin.getInstance().conf().factions().maxRelations().getTruce();
-            case NEUTRAL:
-            default:
-                return FactionsPlugin.getInstance().conf().factions().maxRelations().getNeutral();
-        }
+        return switch (this) {
+            case ALLY -> FactionsPlugin.getInstance().conf().factions().maxRelations().getAlly();
+            case ENEMY -> FactionsPlugin.getInstance().conf().factions().maxRelations().getEnemy();
+            case TRUCE -> FactionsPlugin.getInstance().conf().factions().maxRelations().getTruce();
+            default -> FactionsPlugin.getInstance().conf().factions().maxRelations().getNeutral();
+        };
     }
 
     public double getRelationCost() {

@@ -259,7 +259,7 @@ public class FactionsBlockListener implements Listener {
                 .map(Block::getLocation)
                 .map(FLocation::new)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
 
         boolean disableOverall = FactionsPlugin.getInstance().conf().factions().other().isDisablePistonsInTerritory();
         for (FLocation location : locations) {

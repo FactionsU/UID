@@ -13,13 +13,10 @@ import java.util.stream.Stream;
 
 public interface LandRaidControl {
     static LandRaidControl getByName(String name) {
-        switch (name.toLowerCase()) {
-            case "dtr":
-                return new DTRControl();
-            case "power":
-            default:
-                return new PowerControl();
-        }
+        return switch (name.toLowerCase()) {
+            case "dtr" -> new DTRControl();
+            default -> new PowerControl();
+        };
     }
 
     boolean isRaidable(Faction faction);

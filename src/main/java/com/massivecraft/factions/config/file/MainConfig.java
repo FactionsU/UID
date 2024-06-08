@@ -29,10 +29,11 @@ public class MainConfig {
         @Comment("Don't change this value yourself, unless you WANT a broken config!")
         private int version = 6;
 
-        @Comment("Debug\n" +
-                "Turn this on if you are having issues with something and working on resolving them.\n" +
-                "This will spam your console with information that is useful if you know how to read the source.\n" +
-                "It's suggested that you only turn this on at the direction of a developer.")
+        @Comment("""
+                Debug
+                Turn this on if you are having issues with something and working on resolving them.
+                This will spam your console with information that is useful if you know how to read the source.
+                It's suggested that you only turn this on at the direction of a developer.""")
         private boolean debug = false;
 
         public boolean isDebug() {
@@ -184,13 +185,15 @@ public class MainConfig {
             private int delay = 0;
             @Comment("True to enable the fly command, false to disable")
             private boolean enable = true;
-            @Comment("If a player leaves fly (out of territory or took damage)\n" +
-                    "how long (in seconds) should they not take fall damage for?\n" +
-                    "Set to 0 to have them always take fall damage.")
+            @Comment("""
+                    If a player leaves fly (out of territory or took damage)
+                    how long (in seconds) should they not take fall damage for?
+                    Set to 0 to have them always take fall damage.""")
             private int fallDamageCooldown = 3;
-            @Comment("From how far away a player can disable another's flight by being enemy\n" +
-                    "Set to 0 if wanted disable\n" +
-                    "Note: Will produce lag at higher numbers")
+            @Comment("""
+                    From how far away a player can disable another's flight by being enemy
+                    Set to 0 if wanted disable
+                    Note: Will produce lag at higher numbers""")
             private int enemyRadius = 7;
             @Comment("How frequently to check enemy radius, in seconds. Set to 0 to disable checking.")
             private int radiusCheck = 1;
@@ -205,9 +208,10 @@ public class MainConfig {
             @Comment("Should flight be disabled if the player is hurt by mobs?")
             private boolean disableOnHurtByMobs = true;
 
-            @Comment("Trails show below the players foot when flying, faction.fly.trails\n" +
-                    "Players can enable them with /f trail on/off\n" +
-                    "Players can also set which effect to show /f trail effect <particle> only if they have faction.fly.trails.<particle>")
+            @Comment("""
+                    Trails show below the players foot when flying, faction.fly.trails
+                    Players can enable them with /f trail on/off
+                    Players can also set which effect to show /f trail effect <particle> only if they have faction.fly.trails.<particle>""")
             private Particles particles = new Particles();
 
             public int getDelay() {
@@ -258,7 +262,7 @@ public class MainConfig {
         public class Help {
             @Comment("You can change the page name to whatever you like\n" +
                     "We use '1' to preserve default functionality of /f help 1")
-            private Map<String, List<String>> entries = new HashMap<String, List<String>>() {
+            private Map<String, List<String>> entries = new HashMap<>() {
                 {
                     this.put("1", Arrays.asList(
                             "&e&m----------------------------------------------",
@@ -352,11 +356,12 @@ public class MainConfig {
         }
 
         public class MapCmd {
-            @Comment("This will help limit how many times a player can be sent a map of factions.\n" +
-                    "Set this to the cooldown you want, in milliseconds, for a map to be shown to a player.\n" +
-                    "This can prevent some teleportation-based exploits for finding factions.\n" +
-                    "The old default was 2000, which blocks any movement faster than running.\n" +
-                    "The new default is 700, which should also allow boats and horses.")
+            @Comment("""
+                    This will help limit how many times a player can be sent a map of factions.
+                    Set this to the cooldown you want, in milliseconds, for a map to be shown to a player.
+                    This can prevent some teleportation-based exploits for finding factions.
+                    The old default was 2000, which blocks any movement faster than running.
+                    The new default is 700, which should also allow boats and horses.""")
             private int cooldown = 700;
 
             public int getCooldown() {
@@ -365,9 +370,10 @@ public class MainConfig {
         }
 
         public class Near {
-            @Comment("Making this radius larger increases lag, do so at your own risk\n" +
-                    "If on a high radius it is advised to add a cooldown to the command\n" +
-                    "Also using {distance} placeholder in the lang would cause more lag on a bigger radius")
+            @Comment("""
+                    Making this radius larger increases lag, do so at your own risk
+                    If on a high radius it is advised to add a cooldown to the command
+                    Also using {distance} placeholder in the lang would cause more lag on a bigger radius""")
             private int radius = 20;
 
             public int getRadius() {
@@ -403,12 +409,13 @@ public class MainConfig {
         }
 
         public class Show {
-            @Comment("You can use any variable here, including fancy messages. Color codes and or tags work fine.\n" +
-                    "Lines that aren't defined wont be sent (home not set, faction not peaceful / permanent, dtr freeze)\n" +
-                    "Supports placeholders.\n" +
-                    "First line can be {header} for default header, or any string (we recommend &m for smooth lines ;p)\n" +
-                    "The line with 'permanent' in it only appears if the faction is permanent.")
-            private List<String> format = new ArrayList<String>() {
+            @Comment("""
+                    You can use any variable here, including fancy messages. Color codes and or tags work fine.
+                    Lines that aren't defined wont be sent (home not set, faction not peaceful / permanent, dtr freeze)
+                    Supports placeholders.
+                    First line can be {header} for default header, or any string (we recommend &m for smooth lines ;p)
+                    The line with 'permanent' in it only appears if the faction is permanent.""")
+            private List<String> format = new ArrayList<>() {
                 {
                     this.add("{header}");
                     this.add("<a>Description: <i>{description}");
@@ -429,7 +436,7 @@ public class MainConfig {
             private boolean minimal = false;
             @Comment("Factions that should be exempt from /f show, case sensitive, useful for a\n" +
                     "serverteam faction, since the command shows vanished players otherwise")
-            private List<String> exempt = new ArrayList<String>() {
+            private List<String> exempt = new ArrayList<>() {
                 {
                     this.add("put_faction_tag_here");
                 }
@@ -451,9 +458,10 @@ public class MainConfig {
         public class Stuck {
             @Comment("Warmup seconds before command executes. Set to 0 for no warmup.")
             private int delay = 30;
-            @Comment("This radius defines how far from where they ran the command the player\n" +
-                    "may travel while waiting to be unstuck. If they leave this radius, the\n" +
-                    "command will be cancelled.")
+            @Comment("""
+                    This radius defines how far from where they ran the command the player
+                    may travel while waiting to be unstuck. If they leave this radius, the
+                    command will be cancelled.""")
             private int radius = 10;
             @Comment("Search radius allowed for finding safe chunks.")
             private int searchRadius = 30;
@@ -514,7 +522,7 @@ public class MainConfig {
 
         public class ToolTips {
             @Comment("Faction on-hover tooltip information")
-            private List<String> faction = new ArrayList<String>() {
+            private List<String> faction = new ArrayList<>() {
                 {
                     this.add("&6Leader: &f{leader}");
                     this.add("&6Claimed: &f{chunks}");
@@ -525,7 +533,7 @@ public class MainConfig {
                 }
             };
             @Comment("Player on-hover tooltip information")
-            private List<String> player = new ArrayList<String>() {
+            private List<String> player = new ArrayList<>() {
                 {
                     this.add("&6Last Seen: &f{lastSeen}");
                     this.add("&6Power: &f{player-power}");
@@ -644,15 +652,16 @@ public class MainConfig {
                         "Note: A faction of one player has this many PLUS the perPlayer amount.")
                 private int landStarting = 6;
                 private int decimalDigits = 2;
-                private Map<String, Number> worldDeathModifiers = new HashMap<String, Number>() {
+                private Map<String, Number> worldDeathModifiers = new HashMap<>() {
                     {
                         this.put("world_nether", 0.5D);
                         this.put("world_the_end", 0.25D);
                     }
                 };
-                @Comment("DTR stealing. 0 to disable, 1 to give the killing player's faction all of the target player's faction's lost DTR,\n" +
-                        "0.5 to give the killing faction half of what was lost, etc.\n" +
-                        "Negative values will give the incredibly wild option of taking DTR from the killer's faction too.")
+                @Comment("""
+                        DTR stealing. 0 to disable, 1 to give the killing player's faction all of the target player's faction's lost DTR,
+                        0.5 to give the killing faction half of what was lost, etc.
+                        Negative values will give the incredibly wild option of taking DTR from the killer's faction too.""")
                 private double vampirism = 0;
 
                 public int getDecimalDigits() {
@@ -756,7 +765,7 @@ public class MainConfig {
                         "Additional power from players beyond this acts as a \"buffer\" of sorts")
                 private double factionMax = 0.0;
                 private boolean respawnHomeFromNoPowerLossWorlds = true;
-                private Set<String> worldsNoPowerLoss = new HashSet<String>() {
+                private Set<String> worldsNoPowerLoss = new HashSet<>() {
                     {
                         this.add("exampleWorld");
                     }
@@ -766,21 +775,24 @@ public class MainConfig {
                 private boolean wildernessPowerLoss = true;
                 @Comment("Disallow joining/leaving/kicking while power is negative")
                 private boolean canLeaveWithNegativePower = true;
-                @Comment("Allow a faction to be raided if they have more land than power.\n" +
-                        "This will make claimed territory lose all protections\n" +
-                        "  allowing factions to open chests, break blocks, etc. if they\n" +
-                        "  have more claimed chunks (land) than power. (See raidabilityOnEqualLandAndPower)")
+                @Comment("""
+                        Allow a faction to be raided if they have more land than power.
+                        This will make claimed territory lose all protections
+                          allowing factions to open chests, break blocks, etc. if they
+                          have more claimed chunks (land) than power. (See raidabilityOnEqualLandAndPower)""")
                 private boolean raidability = false;
                 @Comment("Determines if the requirement for raidability is land>=power (true) or\n" +
                         "land>power (false)")
                 private boolean raidabilityOnEqualLandAndPower = true;
-                @Comment("After a player dies, how long should the faction not be able to regen power?\n" +
-                        "This resets on each death but does not accumulate.\n" +
-                        "Set to 0 for no freeze. Time is in seconds.")
+                @Comment("""
+                        After a player dies, how long should the faction not be able to regen power?
+                        This resets on each death but does not accumulate.
+                        Set to 0 for no freeze. Time is in seconds.""")
                 private int powerFreeze = 0;
-                @Comment("Power stealing. 0 to disable, 1 to give the killing player all of the target player's lost power,\n" +
-                        "0.5 to give the killing player half of what was lost, etc.\n" +
-                        "Negative values will give the incredibly wild option of taking power from the killer too.")
+                @Comment("""
+                        Power stealing. 0 to disable, 1 to give the killing player all of the target player's lost power,
+                        0.5 to give the killing player half of what was lost, etc.
+                        Negative values will give the incredibly wild option of taking power from the killer too.""")
                 private double vampirism = 0;
 
                 public boolean isRaidability() {
@@ -1138,7 +1150,7 @@ public class MainConfig {
             private boolean enablePVPAgainstFactionlessInAttackersLand = false;
             private boolean disablePeacefulPVPInWarzone = true;
             private int noPVPDamageToOthersForXSecondsAfterLogin = 3;
-            private Set<String> worldsIgnorePvP = new HashSet<String>() {
+            private Set<String> worldsIgnorePvP = new HashSet<>() {
                 {
                     this.add("exampleWorldName");
                 }
@@ -1175,7 +1187,7 @@ public class MainConfig {
             private boolean peacefulTerritoryDisableBoom = false;
             private boolean permanentFactionsDisableLeaderPromotion = false;
             @Comment("Material names of things whose placement is ignored in faction territory")
-            private Set<String> ignoreBuildMaterials = new HashSet<String>() {
+            private Set<String> ignoreBuildMaterials = new HashSet<>() {
                 {
                     this.add("exampleMaterial");
                 }
@@ -1213,11 +1225,12 @@ public class MainConfig {
         public class Portals {
             @Comment("If true, portals will be limited to the minimum relation below")
             private boolean limit = false;
-            @Comment("What should the minimum relation be to create a portal in territory?\n" +
-                    "Goes in the order of: ENEMY, NEUTRAL, ALLY, MEMBER.\n" +
-                    "Minimum relation allows that and all listed to the right to create portals.\n" +
-                    "Example: put ALLY to allow ALLY and MEMBER to be able to create portals.\n" +
-                    "If typed incorrectly, defaults to NEUTRAL.")
+            @Comment("""
+                    What should the minimum relation be to create a portal in territory?
+                    Goes in the order of: ENEMY, NEUTRAL, ALLY, MEMBER.
+                    Minimum relation allows that and all listed to the right to create portals.
+                    Example: put ALLY to allow ALLY and MEMBER to be able to create portals.
+                    If typed incorrectly, defaults to NEUTRAL.""")
             private String minimumRelation = "MEMBER";
 
             public boolean isLimit() {
@@ -1241,20 +1254,21 @@ public class MainConfig {
             private int fillClaimMaxDistance = 5;
             @Comment("If someone is doing a radius claim and the process fails to claim land this many times in a row, it will exit")
             private int radiusClaimFailureLimit = 9;
-            private Set<String> worldsNoClaiming = new HashSet<String>() {
+            private Set<String> worldsNoClaiming = new HashSet<>() {
                 {
                     this.add("exampleWorldName");
                 }
             };
-            @Comment("Buffer Zone is an chunk area required between claims of different Factions.\n" +
-                    "This is default to 0 and has always been that way. Meaning Factions can have\n" +
-                    "  claims that border each other.\n" +
-                    "If this is set to 3, then Factions need to have 3 chunks between their claim\n" +
-                    "  and another Faction's claim.\n" +
-                    "It's recommended to keep this pretty low as the radius check could be a\n" +
-                    "  heavy operation if set to a large number.\n" +
-                    "If this is set to 0, we won't even bother checking which is how Factions has\n" +
-                    "  always been.")
+            @Comment("""
+                    Buffer Zone is an chunk area required between claims of different Factions.
+                    This is default to 0 and has always been that way. Meaning Factions can have
+                      claims that border each other.
+                    If this is set to 3, then Factions need to have 3 chunks between their claim
+                      and another Faction's claim.
+                    It's recommended to keep this pretty low as the radius check could be a
+                      heavy operation if set to a large number.
+                    If this is set to 0, we won't even bother checking which is how Factions has
+                      always been.""")
             private int bufferZone = 0;
             @Comment("Should we allow Factions to over claim if they are raidable?\n" +
                     "This has always been true, allowing factions to over claim others.")
@@ -1325,19 +1339,20 @@ public class MainConfig {
 
                 @Comment("Time, in seconds, since last on the server to trigger this feature.")
                 private long timeSinceLastSignedIn = 300;
-                @Comment("Destination options. Order them, separated by commas, for priority.\n" +
-                        "For example, if a faction home does not exist then the next option is chosen.\n" +
-                        "Absolute fallback is the spawn of the first world loaded\n" +
-                        "Options:\n" +
-                        "  home: Faction home\n" +
-                        "  bed: Bed")
+                @Comment("""
+                        Destination options. Order them, separated by commas, for priority.
+                        For example, if a faction home does not exist then the next option is chosen.
+                        Absolute fallback is the spawn of the first world loaded
+                        Options:
+                          home: Faction home
+                          bed: Bed""")
                 private String destination = "home, bed, spawn";
                 @Comment("The world in which the spawn exists")
                 private String destinationSpawnWorld = "world";
 
                 @Comment("Options: MEMBER, ALLY, TRUCE, NEUTRAL, ENEMY\n" +
                         "Incorrectly spelled entries default to NEUTRAL")
-                private Set<String> relationsToTeleportOut = new HashSet<String>() {
+                private Set<String> relationsToTeleportOut = new HashSet<>() {
                     {
                         this.add("ENEMY");
                         this.add("NEUTRAL");
@@ -1388,20 +1403,20 @@ public class MainConfig {
             private TerritoryTeleport territoryTeleport = new TerritoryTeleport();
 
             @Comment("Commands which will be prevented if the player is a member of a permanent faction")
-            private Set<String> permanentFactionMemberDenyCommands = new HashSet<String>() {
+            private Set<String> permanentFactionMemberDenyCommands = new HashSet<>() {
                 {
                     this.add("exampleCommand");
                 }
             };
 
             @Comment("Commands which will be prevented when in claimed territory of a neutral faction")
-            private Set<String> territoryNeutralDenyCommands = new HashSet<String>() {
+            private Set<String> territoryNeutralDenyCommands = new HashSet<>() {
                 {
                     this.add("exampleCommand");
                 }
             };
             @Comment("Commands which will be prevented when in claimed territory of an enemy faction")
-            private Set<String> territoryEnemyDenyCommands = new HashSet<String>() {
+            private Set<String> territoryEnemyDenyCommands = new HashSet<>() {
                 {
                     this.add("home");
                     this.add("sethome");
@@ -1412,25 +1427,25 @@ public class MainConfig {
                 }
             };
             @Comment("Commands which will be prevented when in claimed territory of an ally faction")
-            private Set<String> territoryAllyDenyCommands = new HashSet<String>() {
+            private Set<String> territoryAllyDenyCommands = new HashSet<>() {
                 {
                     this.add("exampleCommand");
                 }
             };
             @Comment("Commands which will be prevented when in claimed territory of a truced faction")
-            private Set<String> territoryTruceDenyCommands = new HashSet<String>() {
+            private Set<String> territoryTruceDenyCommands = new HashSet<>() {
                 {
                     this.add("exampleCommand");
                 }
             };
             @Comment("Commands which will be prevented when in warzone")
-            private Set<String> warzoneDenyCommands = new HashSet<String>() {
+            private Set<String> warzoneDenyCommands = new HashSet<>() {
                 {
                     this.add("exampleCommand");
                 }
             };
             @Comment("Commands which will be prevented when in wilderness")
-            private Set<String> wildernessDenyCommands = new HashSet<String>() {
+            private Set<String> wildernessDenyCommands = new HashSet<>() {
                 {
                     this.add("exampleCommand");
                 }
@@ -1504,12 +1519,12 @@ public class MainConfig {
             private Set<String> entityInteractExceptions = new HashSet<>();
 
             @Comment("Mainly for other plugins/mods that use a fake player to take actions, which shouldn't be subject to our protections.")
-            private Set<String> playersWhoBypassAllProtection = new HashSet<String>() {
+            private Set<String> playersWhoBypassAllProtection = new HashSet<>() {
                 {
                     this.add("example-player-name");
                 }
             };
-            private Set<String> worldsNoWildernessProtection = new HashSet<String>() {
+            private Set<String> worldsNoWildernessProtection = new HashSet<>() {
                 {
                     this.add("exampleWorld");
                 }
@@ -1791,7 +1806,7 @@ public class MainConfig {
         }
 
         public class Spawning {
-            private Set<String> preventSpawningInSafezone = new HashSet<String>() {
+            private Set<String> preventSpawningInSafezone = new HashSet<>() {
                 {
                     this.add("BREEDING");
                     this.add("BUILD_IRONGOLEM");
@@ -1824,7 +1839,7 @@ public class MainConfig {
             };
             @WipeOnReload
             private transient Set<CreatureSpawnEvent.SpawnReason> preventSpawningInSafezoneReason;
-            private Set<String> preventSpawningInSafezoneExceptions = new HashSet<String>() {
+            private Set<String> preventSpawningInSafezoneExceptions = new HashSet<>() {
                 {
                     this.add("AXOLOTL");
                     this.add("BAT");
@@ -2038,15 +2053,17 @@ public class MainConfig {
                     "if they have homes set in that Faction's territory?")
             private boolean deleteEssentialsHomes = true;
 
-            @Comment("Default Relation allows you to change the default relation for Factions.\n" +
-                    "Example usage would be so people can't leave then make a new Faction while Raiding\n" +
-                    "  in order to be able to execute commands if the default relation is neutral.")
+            @Comment("""
+                    Default Relation allows you to change the default relation for Factions.
+                    Example usage would be so people can't leave then make a new Faction while Raiding
+                      in order to be able to execute commands if the default relation is neutral.""")
             private String defaultRelation = "neutral";
 
-            @Comment("Default role of a player when joining a faction. Can be customized by faction leader\n" +
-                    "with /f defaultrole\n" +
-                    "Options: coleader, moderator, member, recruit\n" +
-                    "Defaults to member if set incorrectly")
+            @Comment("""
+                    Default role of a player when joining a faction. Can be customized by faction leader
+                    with /f defaultrole
+                    Options: coleader, moderator, member, recruit
+                    Defaults to member if set incorrectly""")
             private String defaultRole = "member";
             @WipeOnReload
             private transient Role defaultRoleRole;
@@ -2056,7 +2073,7 @@ public class MainConfig {
             private boolean disablePistonsInTerritory = false;
 
             @Comment("Any faction names CONTAINING any of these items will be disallowed")
-            private List<String> nameBlacklist = new ArrayList<String>() {
+            private List<String> nameBlacklist = new ArrayList<>() {
                 {
                     this.add("blockedwordhere");
                     this.add("anotherblockedthinghere");
@@ -2219,11 +2236,12 @@ public class MainConfig {
 
         private Chat chat = new Chat();
         private Homes homes = new Homes();
-        @Comment("Limits factions to having a max number of each relation.\n" +
-                "Setting to 0 means none allowed. -1 for disabled.\n" +
-                "This will have no effect on default or existing relations, only when relations are changed.\n" +
-                "It is advised that you set the default relation to -1 so they can always go back to that.\n" +
-                "Otherwise Factions could be stuck with not being able to unenemy other Factions.")
+        @Comment("""
+                Limits factions to having a max number of each relation.
+                Setting to 0 means none allowed. -1 for disabled.
+                This will have no effect on default or existing relations, only when relations are changed.
+                It is advised that you set the default relation to -1 so they can always go back to that.
+                Otherwise Factions could be stuck with not being able to unenemy other Factions.""")
         private MaxRelations maxRelations = new MaxRelations();
         private PVP pvp = new PVP();
         private SpecialCase specialCase = new SpecialCase();
@@ -2240,12 +2258,13 @@ public class MainConfig {
         private Other other = new Other();
         @Comment("Should we send titles when players enter Factions? Durations are in ticks (20 ticks every second)")
         private EnterTitles enterTitles = new EnterTitles();
-        @Comment("Spawn control.\n" +
-                "Exception names are entity type names as seen at the below URL.\n" +
-                "Note that any name with an underscore MUST have quotes around it.\n" +
-                "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html\n" +
-                "Spawn types are those at the below URL:\n" +
-                "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html")
+        @Comment("""
+                Spawn control.
+                Exception names are entity type names as seen at the below URL.
+                Note that any name with an underscore MUST have quotes around it.
+                https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
+                Spawn types are those at the below URL:
+                https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html""")
         private Spawning spawning = new Spawning();
 
         public EnterTitles enterTitles() {
@@ -2388,19 +2407,26 @@ public class MainConfig {
     }
 
     public class Economy {
-        @Comment("\n******************\n\n" +
-                "The value \"enabled\" must be true for any economy features\n" +
-                "Make sure that you confirm the \"defaultWorld\" setting is a valid world name\n" +
-                "\n******************\n")
+        @Comment("""
+
+                ******************
+
+                The value "enabled" must be true for any economy features
+                Make sure that you confirm the "defaultWorld" setting is a valid world name
+
+                ******************
+                """)
         private boolean enabled = false;
         private String universeAccount = "";
-        @Comment("This setting matters in particular if you have per-world economy.\n" +
-                "This setting is the world to use for:\n" +
-                " faction banks,\n" +
-                " the universe account (if used),\n" +
-                " transferring money to a player who is presently offline,\n" +
-                " or any other situation where the player's world is unknown.\n\n" +
-                "Note that you should set up your per-world plugin to treat all your Factions worlds as one group/world.")
+        @Comment("""
+                This setting matters in particular if you have per-world economy.
+                This setting is the world to use for:
+                 faction banks,
+                 the universe account (if used),
+                 transferring money to a player who is presently offline,
+                 or any other situation where the player's world is unknown.
+
+                Note that you should set up your per-world plugin to treat all your Factions worlds as one group/world.""")
         private String defaultWorld = "world";
         private double costClaimWilderness = 30.0;
         private double costClaimFromFactionBonus = 30.0;
@@ -2698,7 +2724,7 @@ public class MainConfig {
         @Comment("If restrictWorlds is true, this setting determines if the world list below is a whitelist or blacklist.\n" +
                 "True for whitelist, false for blacklist.")
         private boolean whitelist = true;
-        private Set<String> worldList = new HashSet<String>() {
+        private Set<String> worldList = new HashSet<>() {
             {
                 this.add("exampleWorld");
             }
@@ -2738,7 +2764,7 @@ public class MainConfig {
             @Comment("Takes {relationcolor}, {faction}, player-specific tags, &-prefixed color codes")
             private String suffixTemplate = " {relationcolor}[{faction}]";
 
-            private List<String> content = new ArrayList<String>() {
+            private List<String> content = new ArrayList<>() {
                 {
                     this.add("&6Your Faction");
                     this.add("{faction}");
@@ -2749,7 +2775,7 @@ public class MainConfig {
                 }
             };
             private boolean factionlessEnabled = false;
-            private List<String> factionlessContent = new ArrayList<String>() {
+            private List<String> factionlessContent = new ArrayList<>() {
                 {
                     this.add("Make a new Faction");
                     this.add("Use /f create");
@@ -2813,7 +2839,7 @@ public class MainConfig {
             private int expiration = 7;
             private boolean enabled = false;
             @Comment("Supports placeholders")
-            private List<String> content = new ArrayList<String>() {
+            private List<String> content = new ArrayList<>() {
                 {
                     this.add("&6Power");
                     this.add("{power}");
@@ -2991,11 +3017,12 @@ public class MainConfig {
     }
 
     public class WorldBorder {
-        @Comment("WorldBorder support\n" +
-                "This is for Minecraft's built-in command. To get your current border: /minecraft:worldborder get\n" +
-                "A buffer of 0 means faction claims can go right up to the border of the world.\n" +
-                "The buffer is in chunks, so 1 as a buffer means an entire chunk of buffer between\n" +
-                "the border of the world and what can be claimed to factions")
+        @Comment("""
+                WorldBorder support
+                This is for Minecraft's built-in command. To get your current border: /minecraft:worldborder get
+                A buffer of 0 means faction claims can go right up to the border of the world.
+                The buffer is in chunks, so 1 as a buffer means an entire chunk of buffer between
+                the border of the world and what can be claimed to factions""")
         private int buffer = 0;
 
         public int getBuffer() {
@@ -3004,17 +3031,18 @@ public class MainConfig {
     }
 
     @Comment("The command base (by default f, making the command /f)")
-    private List<String> commandBase = new ArrayList<String>() {
+    private List<String> commandBase = new ArrayList<>() {
         {
             this.add("f");
         }
     };
 
-    @Comment("FactionsUUID by drtshock\n" +
-            "Support and documentation https://factions.support\n" +
-            "Updates https://www.spigotmc.org/resources/factionsuuid.1035/\n" +
-            "\n" +
-            "Made with love <3")
+    @Comment("""
+            FactionsUUID by drtshock
+            Support and documentation https://factions.support
+            Updates https://www.spigotmc.org/resources/factionsuuid.1035/
+
+            Made with love <3""")
     private AVeryFriendlyFactionsConfig aVeryFriendlyFactionsConfig = new AVeryFriendlyFactionsConfig();
 
     @Comment("Colors for relationships and default factions")
@@ -3034,10 +3062,11 @@ public class MainConfig {
     private Data data = new Data();
     private RestrictWorlds restrictWorlds = new RestrictWorlds();
     private Scoreboard scoreboard = new Scoreboard();
-    @Comment("LWC integration\n" +
-            "This support targets the modern fork of LWC, called LWC Extended.\n" +
-            "You can find it here: https://www.spigotmc.org/resources/lwc-extended.69551/\n" +
-            "Note: Modern LWC is no longer supported, and its former maintainer now runs LWC Extended")
+    @Comment("""
+            LWC integration
+            This support targets the modern fork of LWC, called LWC Extended.
+            You can find it here: https://www.spigotmc.org/resources/lwc-extended.69551/
+            Note: Modern LWC is no longer supported, and its former maintainer now runs LWC Extended""")
     private LWC lwc = new LWC();
     @Comment("Integration with the Magic plugin")
     private MagicPlugin magicPlugin = new MagicPlugin();
@@ -3046,9 +3075,10 @@ public class MainConfig {
     @Comment("Lists plugin integrations. Some other plugins (PVX, LWC, Magic, WG, WB) are currently\n" +
             " elsewhere but will migrate here in the future")
     private Plugins plugins = new Plugins();
-    @Comment("PlayerVaults faction vault settings.\n" +
-            "Enable faction-owned vaults!\n" +
-            "https://www.spigotmc.org/resources/playervaultsx.51204/")
+    @Comment("""
+            PlayerVaults faction vault settings.
+            Enable faction-owned vaults!
+            https://www.spigotmc.org/resources/playervaultsx.51204/""")
     private PlayerVaults playerVaults = new PlayerVaults();
     @Comment("WorldGuard settings.\n" +
             "Note that flag stuff only works on WG 7")

@@ -10,7 +10,7 @@ import java.util.Map;
  * example, a FPlayer might match the PlayerSelector and a Role will never
  * match that selector but might match a RoleAtLeastSelector if it's at least
  * that selector's value.
- *
+ * <p>
  * Implementations must be immutable and should extend AbstractSelector (or
  * at least copy its methods to be consistent).
  */

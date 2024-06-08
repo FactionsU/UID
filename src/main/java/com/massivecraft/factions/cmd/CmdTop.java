@@ -72,7 +72,7 @@ public class CmdTop extends FCommand {
                 .filter(Faction::isNormal)
                 .map(f -> new FTopFacValPair(f, ftopGenerator.apply(f)))
                 .sorted()
-                .collect(Collectors.toList());
+                .toList();
 
         int sortedFactionsCount = sortedFactions.size();
 

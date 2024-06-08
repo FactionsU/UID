@@ -409,20 +409,12 @@ public abstract class MemoryBoard extends Board {
             dir = Dir.W;
         }
 
-        FLocation topLeft;
-        switch (dir) {
-            case N:
-                topLeft = flocation.getRelative(-halfWidth, -halfHeight);
-                break;
-            case S:
-                topLeft = flocation.getRelative(halfWidth, halfHeight);
-                break;
-            case E:
-                topLeft = flocation.getRelative(halfHeight, halfWidth);
-                break;
-            default:
-                topLeft = flocation.getRelative(-halfHeight, -halfWidth);
-        }
+        FLocation topLeft = switch (dir) {
+            case N -> flocation.getRelative(-halfWidth, -halfHeight);
+            case S -> flocation.getRelative(halfWidth, halfHeight);
+            case E -> flocation.getRelative(halfHeight, halfWidth);
+            default -> flocation.getRelative(-halfHeight, -halfWidth);
+        };
 
         // For each row
         for (int r = 0; r < height; r++) {
@@ -433,20 +425,12 @@ public abstract class MemoryBoard extends Board {
                 if (c == halfWidth && r == halfHeight) {
                     builder.append(Component.text().content("\u2B1B").color(FactionsPlugin.getInstance().conf().map().getSelfColor()));
                 } else {
-                    FLocation flocationHere;
-                    switch (dir) {
-                        case N:
-                            flocationHere = topLeft.getRelative(c, r);
-                            break;
-                        case S:
-                            flocationHere = topLeft.getRelative(-c, -r);
-                            break;
-                        case E:
-                            flocationHere = topLeft.getRelative(-r, -(width - c - 1));
-                            break;
-                        default:
-                            flocationHere = topLeft.getRelative(r, width - c - 1);
-                    }
+                    FLocation flocationHere = switch (dir) {
+                        case N -> topLeft.getRelative(c, r);
+                        case S -> topLeft.getRelative(-c, -r);
+                        case E -> topLeft.getRelative(-r, -(width - c - 1));
+                        default -> topLeft.getRelative(r, width - c - 1);
+                    };
                     Faction factionHere = getFactionAt(flocationHere);
                     Relation relation = fplayer.getRelationTo(factionHere);
                     if (factionHere.isWilderness()) {

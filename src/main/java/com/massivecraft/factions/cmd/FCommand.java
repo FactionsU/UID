@@ -8,7 +8,6 @@ import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
 import org.bukkit.ChatColor;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

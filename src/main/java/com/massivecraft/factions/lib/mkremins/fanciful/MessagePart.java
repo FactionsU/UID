@@ -20,12 +20,12 @@ import java.util.logging.Level;
 final class MessagePart implements JsonRepresentedObject, ConfigurationSerializable, Cloneable {
 
 	ChatColor color = ChatColor.WHITE;
-	ArrayList<ChatColor> styles = new ArrayList<ChatColor>();
+	ArrayList<ChatColor> styles = new ArrayList<>();
 	String clickActionName = null, clickActionData = null, hoverActionName = null;
 	JsonRepresentedObject hoverActionData = null;
 	TextualComponent text = null;
 	String insertionData = null;
-	ArrayList<JsonRepresentedObject> translationReplacements = new ArrayList<JsonRepresentedObject>();
+	ArrayList<JsonRepresentedObject> translationReplacements = new ArrayList<>();
 
 	MessagePart(final TextualComponent text) {
 		this.text = text;
@@ -63,20 +63,13 @@ final class MessagePart implements JsonRepresentedObject, ConfigurationSerializa
 				continue;
 			}
 
-			String styleName;
-			switch (style) {
-				case MAGIC:
-					styleName = "obfuscated";
-					break;
-				case UNDERLINE:
-					styleName = "underlined";
-					break;
-				default:
-					styleName = style.name().toLowerCase();
-					break;
-			}
+			String styleName = switch (style) {
+                case MAGIC -> "obfuscated";
+                case UNDERLINE -> "underlined";
+                default -> style.name().toLowerCase();
+            };
 
-			builder.put(style, styleName);
+            builder.put(style, styleName);
 		}
 		stylesToNames = builder.build();
 	}
@@ -121,7 +114,7 @@ final class MessagePart implements JsonRepresentedObject, ConfigurationSerializa
 	}
 
 	public Map<String, Object> serialize() {
-		HashMap<String, Object> map = new HashMap<String, Object>();
+		HashMap<String, Object> map = new HashMap<>();
 		map.put("text", text);
 		map.put("styles", styles);
 		map.put("color", color.getChar());

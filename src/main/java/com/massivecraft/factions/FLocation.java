@@ -88,7 +88,7 @@ public class FLocation implements Serializable {
     }
 
     public String getCoordString() {
-        return "" + x + "," + z;
+        return x + "," + z;
     }
 
     public Chunk getChunk() {

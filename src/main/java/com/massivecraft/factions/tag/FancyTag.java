@@ -7,7 +7,6 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.QuadFunction;
-import com.massivecraft.factions.util.TextUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
