@@ -20,7 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-public class Worldguard7 {
+public class Worldguard {
     public static final String FLAG_CLAIM_NAME = "fuuid-claim";
     public static final String FLAG_PVP_NAME = "fuuid-pvp";
     public static final String FLAG_NOLOSS_NAME = "fuuid-noloss";
@@ -29,52 +29,29 @@ public class Worldguard7 {
     private static StateFlag FLAG_NOLOSS;
 
     public static void onLoad() {
-        boolean claimSuccess = false;
-        boolean pvpSuccess = false;
-        boolean noLossSuccess = false;
+        FLAG_CLAIM = registerOrGet(FLAG_CLAIM_NAME);
+        status(FLAG_CLAIM != null, FLAG_CLAIM_NAME);
+
+        FLAG_PVP = registerOrGet(FLAG_PVP_NAME);
+        status(FLAG_PVP != null, FLAG_PVP_NAME);
+
+        FLAG_NOLOSS = registerOrGet(FLAG_NOLOSS_NAME);
+        status(FLAG_NOLOSS != null, FLAG_NOLOSS_NAME);
+    }
+
+    private static StateFlag registerOrGet(String flagName) {
         try {
-            try {
-                StateFlag claimFlag = new StateFlag(FLAG_CLAIM_NAME, true);
-                WorldGuard.getInstance().getFlagRegistry().register(claimFlag);
-                FLAG_CLAIM = claimFlag;
-                claimSuccess = true;
-            } catch (FlagConflictException e) {
-                Flag<?> existing = WorldGuard.getInstance().getFlagRegistry().get(FLAG_CLAIM_NAME);
-                if (existing instanceof StateFlag) {
-                    FLAG_CLAIM = (StateFlag) existing;
-                    claimSuccess = true;
-                }
-            }
-            try {
-                StateFlag pvpFlag = new StateFlag(FLAG_PVP_NAME, false);
-                WorldGuard.getInstance().getFlagRegistry().register(pvpFlag);
-                FLAG_PVP = pvpFlag;
-                pvpSuccess = true;
-            } catch (FlagConflictException e) {
-                Flag<?> existing = WorldGuard.getInstance().getFlagRegistry().get(FLAG_PVP_NAME);
-                if (existing instanceof StateFlag) {
-                    FLAG_PVP = (StateFlag) existing;
-                    pvpSuccess = true;
-                }
-            }
-            try {
-                StateFlag noLossFlag = new StateFlag(FLAG_NOLOSS_NAME, false);
-                WorldGuard.getInstance().getFlagRegistry().register(noLossFlag);
-                FLAG_NOLOSS = noLossFlag;
-                noLossSuccess = true;
-            } catch (FlagConflictException e) {
-                Flag<?> existing = WorldGuard.getInstance().getFlagRegistry().get(FLAG_NOLOSS_NAME);
-                if (existing instanceof StateFlag) {
-                    FLAG_NOLOSS = (StateFlag) existing;
-                    noLossSuccess = true;
-                }
+            StateFlag flag = new StateFlag(flagName, false);
+            WorldGuard.getInstance().getFlagRegistry().register(flag);
+            return flag;
+        } catch (FlagConflictException e) {
+            Flag<?> existing = WorldGuard.getInstance().getFlagRegistry().get(flagName);
+            if (existing instanceof StateFlag flag) {
+                return flag;
             }
         } catch (Exception ignored) {
-            // Nah
         }
-        status(claimSuccess, FLAG_CLAIM_NAME);
-        status(pvpSuccess, FLAG_PVP_NAME);
-        status(noLossSuccess, FLAG_NOLOSS_NAME);
+        return null;
     }
 
     private static void status(boolean success, String name) {
