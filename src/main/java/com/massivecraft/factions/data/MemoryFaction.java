@@ -372,7 +372,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         }
 
         PermissionsConfig permConf = FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig();
-        List<PermSelector> priority = permConf.getOverridePermissionsOrder().stream().filter(s -> s.test(selectable, this)).collect(Collectors.toList());
+        List<PermSelector> priority = permConf.getOverridePermissionsOrder().stream().filter(s -> s.test(selectable, this)).toList();
         for (PermSelector selector : priority) {
             Boolean bool = permConf.getOverridePermissions().get(selector).get(permissibleAction.getName());
             if (bool != null) {

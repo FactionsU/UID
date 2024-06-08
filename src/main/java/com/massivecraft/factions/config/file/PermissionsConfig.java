@@ -24,7 +24,7 @@ public class PermissionsConfig {
     @Comment("This is an auto-updating list of known actions and descriptions.\n" +
             "Editing this list has no effect.")
     @WipeOnReload
-    private List<String> availableActions = new ArrayList<String>() {
+    private List<String> availableActions = new ArrayList<>() {
         {
             for (PermissibleAction action : PermissibleActionRegistry.getActions()) {
                 this.add(action.getName() + " - " + action.getDescription());
@@ -35,7 +35,7 @@ public class PermissionsConfig {
     @Comment("This is an auto-updating list of known selectors.\n" +
             "Editing this list has no effect.")
     @WipeOnReload
-    private List<String> availableSelectors = new ArrayList<String>() {
+    private List<String> availableSelectors = new ArrayList<>() {
         {
             this.addAll(PermSelectorRegistry.getSelectors());
         }

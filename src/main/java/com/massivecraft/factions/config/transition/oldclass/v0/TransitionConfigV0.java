@@ -144,7 +144,7 @@ public class TransitionConfigV0 {
             @Comment("Commands which will be prevented when in claimed territory of a neutral faction")
             private Set<String> territoryNeutralDenyCommands = new HashSet<>();
             @Comment("Commands which will be prevented when in claimed territory of an enemy faction")
-            private Set<String> territoryEnemyDenyCommands = new HashSet<String>() {
+            private Set<String> territoryEnemyDenyCommands = new HashSet<>() {
                 {
                     this.add("home");
                     this.add("sethome");

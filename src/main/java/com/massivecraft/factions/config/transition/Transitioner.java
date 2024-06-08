@@ -26,7 +26,6 @@ import org.bukkit.Material;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -113,7 +112,7 @@ public class Transitioner {
         this.plugin.getLogger().info("Found no 'config' folder. Starting configuration transition...");
         this.buildV0Gson();
         try {
-            OldConfV0 conf = this.gsonV0.fromJson(new String(Files.readAllBytes(oldConf), StandardCharsets.UTF_8), OldConfV0.class);
+            OldConfV0 conf = this.gsonV0.fromJson(Files.readString(oldConf), OldConfV0.class);
             TransitionConfigV0 newConfig = new TransitionConfigV0(conf);
             Loader.loadAndSave("main", newConfig);
             Files.createDirectories(oldConfigFolder);
@@ -123,11 +122,11 @@ public class Transitioner {
             Files.move(pluginFolder.resolve("players.json"), dataFolder.resolve("players.json"));
 
             Path oldFactions = pluginFolder.resolve("factions.json");
-            Map<String, OldMemoryFactionV0> data = this.gsonV0.fromJson(new String(Files.readAllBytes(oldFactions), StandardCharsets.UTF_8), new TypeToken<Map<String, OldMemoryFactionV0>>() {
+            Map<String, OldMemoryFactionV0> data = this.gsonV0.fromJson(Files.readString(oldFactions), new TypeToken<Map<String, OldMemoryFactionV0>>() {
             }.getType());
             Map<String, NewMemoryFaction> newData = new HashMap<>();
             data.forEach((id, fac) -> newData.put(id, new NewMemoryFaction(fac)));
-            Files.write(dataFolder.resolve("factions.json"), this.plugin.getGson().toJson(newData).getBytes(StandardCharsets.UTF_8));
+            Files.writeString(dataFolder.resolve("factions.json"), this.plugin.getGson().toJson(newData));
 
             Files.move(oldFactions, oldConfigFolder.resolve("factions.json"));
             Files.move(oldConf, oldConfigFolder.resolve("conf.json"));

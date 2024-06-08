@@ -34,19 +34,20 @@ public class DynmapConfig {
 
         @Comment("Format for popup")
         private String description =
-                "<div class=\"infowindow\">\n"
-                        + "<span style=\"font-weight: bold; font-size: 150%;\">{faction}</span><br>\n"
-                        + "<span style=\"font-style: italic; font-size: 110%;\">{description}</span><br>"
-                        + "<br>\n"
-                        + "<span style=\"font-weight: bold;\">Leader:</span> %players.leader%<br>\n"
-                        + "<span style=\"font-weight: bold;\">Admins:</span> %players.admins.count%<br>\n"
-                        + "<span style=\"font-weight: bold;\">Moderators:</span> %players.moderators.count%<br>\n"
-                        + "<span style=\"font-weight: bold;\">Members:</span> %players.normals.count%<br>\n"
-                        + "<span style=\"font-weight: bold;\">TOTAL:</span> %players.count%<br>\n"
-                        + "</br>\n"
-                        + "<span style=\"font-weight: bold;\">Bank:</span> %money%<br>\n"
-                        + "<br>\n"
-                        + "</div>";
+                """
+                        <div class="infowindow">
+                        <span style="font-weight: bold; font-size: 150%;">{faction}</span><br>
+                        <span style="font-style: italic; font-size: 110%;">{description}</span><br>\
+                        <br>
+                        <span style="font-weight: bold;">Leader:</span> %players.leader%<br>
+                        <span style="font-weight: bold;">Admins:</span> %players.admins.count%<br>
+                        <span style="font-weight: bold;">Moderators:</span> %players.moderators.count%<br>
+                        <span style="font-weight: bold;">Members:</span> %players.normals.count%<br>
+                        <span style="font-weight: bold;">TOTAL:</span> %players.count%<br>
+                        </br>
+                        <span style="font-weight: bold;">Bank:</span> %money%<br>
+                        <br>
+                        </div>""";
 
         @Comment("Warp popup")
         private String warpDescription = "Warp: %warpname%";
@@ -138,12 +139,12 @@ public class DynmapConfig {
 
         // This is used for config loading
         @SuppressWarnings({"unused", "UnstableApiUsage"})
-        private transient TypeToken<Map<String, Style>> factionStylesToken = new TypeToken<Map<String, Style>>() {
+        private transient TypeToken<Map<String, Style>> factionStylesToken = new TypeToken<>() {
         };
 
         @Comment("Per-faction overrides")
         @DefinedType
-        private Map<String, Style> factionStyles = new HashMap<String, Style>() {
+        private Map<String, Style> factionStyles = new HashMap<>() {
             {
                 this.put("-1", new DynmapConfig.Style("#FF00FF", "#FF00FF"));
                 this.put("-2", new DynmapConfig.Style("#FF0000", "#FF0000"));

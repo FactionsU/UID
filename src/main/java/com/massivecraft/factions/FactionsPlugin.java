@@ -243,7 +243,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             }.getType());
 
             if (data == null || data.isEmpty()) {
-                Files.write(conversionCompleteFile, "Do not delete unless you want to waste time at startup!".getBytes(StandardCharsets.UTF_8));
+                Files.writeString(conversionCompleteFile, "Do not delete unless you want to waste time at startup!");
                 return;
             }
 
@@ -295,7 +295,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                 this.getLogger().info("Migrated " + count + " files!");
             }
 
-            Files.write(conversionCompleteFile, "Do not delete unless you want to waste time at startup!".getBytes(StandardCharsets.UTF_8));
+            Files.writeString(conversionCompleteFile, "Do not delete unless you want to waste time at startup!");
 
             this.getLogger().info("  We did it! Yay!");
         } catch (ClassNotFoundException | NoClassDefFoundError e) {
@@ -415,12 +415,12 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             getLogger().warning("The next feature/bugfix release will support modern MC as old as " + OLDEST_MODERN_SUPPORTED_STRING);
             getLogger().warning("If you insist on staying, there will be one final release without this nag, before moving on.");
         }
-        if (javaVersion < 17) {
+        /*if (javaVersion < 17) { Commenting out for if later wanting to bump to 21
             getLogger().info("");
             getLogger().warning("Detected Java " + javaVersion);
             getLogger().warning("FactionsUUID will soon require Java 17");
             getLogger().warning("You should start testing out Java 17 with your setup now, to prepare.");
-        }
+        }*/
         getLogger().info("");
         this.buildNumber = this.getBuildNumber(this.getDescription().getVersion());
 
