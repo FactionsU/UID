@@ -8,7 +8,7 @@ import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
-import org.apache.commons.lang.time.DurationFormatUtils;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

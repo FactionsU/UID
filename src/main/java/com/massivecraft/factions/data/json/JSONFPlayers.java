@@ -8,19 +8,10 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.data.MemoryFPlayer;
 import com.massivecraft.factions.data.MemoryFPlayers;
 import com.massivecraft.factions.util.DiscUtil;
-import com.massivecraft.factions.util.UUIDFetcher;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Level;
 
 public class JSONFPlayers extends MemoryFPlayers {
     public Gson getGson() {
@@ -87,83 +78,8 @@ public class JSONFPlayers extends MemoryFPlayers {
             return null;
         }
 
-        Map<String, JSONFPlayer> data = FactionsPlugin.getInstance().getGson().fromJson(content, new TypeToken<Map<String, JSONFPlayer>>() {
+        return FactionsPlugin.getInstance().getGson().fromJson(content, new TypeToken<Map<String, JSONFPlayer>>() {
         }.getType());
-        Set<String> list = new HashSet<>();
-        Set<String> invalidList = new HashSet<>();
-        for (Entry<String, JSONFPlayer> entry : data.entrySet()) {
-            String key = entry.getKey();
-            entry.getValue().setId(key);
-            if (doesKeyNeedMigration(key)) {
-                if (!isKeyInvalid(key)) {
-                    list.add(key);
-                } else {
-                    invalidList.add(key);
-                }
-            }
-        }
-
-        if (!list.isEmpty()) {
-            // We've got some converting to do!
-            FactionsPlugin.getInstance().log(Level.INFO, "Factions is now updating players.json");
-
-            // First we'll make a backup, because god forbid anybody heed a
-            // warning
-            File file = new File(this.file.getParentFile(), "players.json.old");
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to create file players.json.old", e);
-            }
-            saveCore(file, data, true);
-            FactionsPlugin.getInstance().log(Level.INFO, "Backed up your old data at " + file.getAbsolutePath());
-
-            // Start fetching those UUIDs
-            FactionsPlugin.getInstance().log(Level.INFO, "Please wait while Factions converts " + list.size() + " old player names to UUID. This may take a while.");
-            UUIDFetcher fetcher = new UUIDFetcher(new ArrayList<>(list));
-            try {
-                Map<String, UUID> response = fetcher.call();
-                for (String s : list) {
-                    // Are we missing any responses?
-                    if (!response.containsKey(s)) {
-                        // They don't have a UUID so they should just be removed
-                        invalidList.add(s);
-                    }
-                }
-                for (String value : response.keySet()) {
-                    // For all the valid responses, let's replace their old
-                    // named entry with a UUID key
-                    String id = response.get(value).toString();
-
-                    JSONFPlayer player = data.get(value);
-
-                    if (player == null) {
-                        // The player never existed here, and shouldn't persist
-                        invalidList.add(value);
-                        continue;
-                    }
-
-                    player.setId(id); // Update the object so it knows
-
-                    data.remove(value); // Out with the old...
-                    data.put(id, player); // And in with the new
-                }
-            } catch (Exception e) {
-                FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed name to UUID conversion", e);
-            }
-            if (!invalidList.isEmpty()) {
-                for (String name : invalidList) {
-                    // Remove all the invalid names we collected
-                    data.remove(name);
-                }
-                FactionsPlugin.getInstance().log(Level.INFO, "While converting we found names that either don't have a UUID or aren't players and removed them from storage.");
-                FactionsPlugin.getInstance().log(Level.INFO, "The following names were detected as being invalid: " + StringUtils.join(invalidList, ", "));
-            }
-            saveCore(this.file, data, true); // Update the
-            // flatfile
-            FactionsPlugin.getInstance().log(Level.INFO, "Done converting players.json to UUID.");
-        }
-        return data;
     }
 
     private boolean doesKeyNeedMigration(String key) {

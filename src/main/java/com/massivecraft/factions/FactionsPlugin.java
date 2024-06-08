@@ -16,12 +16,10 @@ import com.massivecraft.factions.event.FactionsPluginRegistrationTimeEvent;
 import com.massivecraft.factions.integration.ClipPlaceholderAPIManager;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.integration.Essentials;
-import com.massivecraft.factions.integration.IWorldguard;
 import com.massivecraft.factions.integration.IntegrationManager;
 import com.massivecraft.factions.integration.LWC;
 import com.massivecraft.factions.integration.LuckPerms;
 import com.massivecraft.factions.integration.VaultPerms;
-import com.massivecraft.factions.integration.Worldguard6;
 import com.massivecraft.factions.integration.Worldguard7;
 import com.massivecraft.factions.integration.dynmap.EngineDynmap;
 import com.massivecraft.factions.integration.permcontext.ContextManager;
@@ -31,10 +29,6 @@ import com.massivecraft.factions.listeners.FactionsChatListener;
 import com.massivecraft.factions.listeners.FactionsEntityListener;
 import com.massivecraft.factions.listeners.FactionsExploitListener;
 import com.massivecraft.factions.listeners.FactionsPlayerListener;
-import com.massivecraft.factions.listeners.OneEightPlusListener;
-import com.massivecraft.factions.listeners.OneFourteenPlusListener;
-import com.massivecraft.factions.listeners.versionspecific.PortalHandler;
-import com.massivecraft.factions.listeners.versionspecific.PortalListenerLegacy;
 import com.massivecraft.factions.listeners.versionspecific.PortalListener_114;
 import com.massivecraft.factions.perms.PermSelector;
 import com.massivecraft.factions.perms.PermSelectorRegistry;
@@ -180,7 +174,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     private SeeChunkUtil seeChunkUtil;
     private ParticleProvider<?> particleProvider;
-    private IWorldguard worldguard;
+    private Worldguard7 worldguard;
     private LandRaidControl landRaidControl;
     private boolean luckPermsSetup;
     private IntegrationManager integrationManager;
@@ -214,13 +208,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             Class.forName("com.sk89q.worldguard.WorldGuard");
             Worldguard7.onLoad();
         } catch (Exception ignored) {
-            // eh
-        }
-        try {
-            Class.forName("com.sk89q.worldguard.bukkit.WGBukkit");
-            Class.forName("com.sk89q.worldguard.protection.flags.registry.FlagConflictException");
-            Worldguard6.onLoad(this.getLogger(), () -> this.conf().worldGuard().isChecking());
-        } catch (Exception ignoredAgain) {
             // eh
         }
     }
@@ -371,11 +358,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         // Version party
         Pattern versionPattern = Pattern.compile("1\\.(\\d{1,2})(?:\\.(\\d{1,2}))?");
         Matcher versionMatcher = versionPattern.matcher(this.getServer().getVersion());
-        String javaDotVersion = System.getProperty("java.version");
-        if (javaDotVersion.startsWith("1.")) {
-            javaDotVersion = javaDotVersion.substring(2);
-        }
-        int javaVersion = Integer.parseInt(javaDotVersion.split("\\.")[0]);
 
         getLogger().info("");
         getLogger().info("Factions UUID!");
@@ -397,30 +379,17 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
         if (versionInteger == null) {
             getLogger().warning("");
-            getLogger().warning("Could not identify version. Going with least supported version, 1.7.10.");
+            getLogger().warning("Could not identify version. Going with least supported version, " + OLDEST_MODERN_SUPPORTED_STRING + ".");
             getLogger().warning("Please visit our support live chat for help - https://factions.support/help/");
             getLogger().warning("");
-            versionInteger = 710;
+            versionInteger = OLDEST_MODERN_SUPPORTED;
             this.mcVersionString = this.getServer().getVersion();
         }
         mcVersion = versionInteger;
-        if (mcVersion < 808) {
+        if (mcVersion < OLDEST_MODERN_SUPPORTED) {
             getLogger().info("");
-            getLogger().warning("FactionsUUID works better with Minecraft 1.8.8 and MUCH better with at least " + OLDEST_MODERN_SUPPORTED_STRING);
-        } else if (mcVersion > 808 && mcVersion < OLDEST_MODERN_SUPPORTED) {
-            getLogger().info("");
-            getLogger().warning("FactionsUUID will soon no longer support your version.");
-            getLogger().warning("The plugin will soon only support 1.8.8 (minimally) and latest release or two only");
-            getLogger().warning("Upgrade to a newer version.");
-            getLogger().warning("The next feature/bugfix release will support modern MC as old as " + OLDEST_MODERN_SUPPORTED_STRING);
-            getLogger().warning("If you insist on staying, there will be one final release without this nag, before moving on.");
+            getLogger().warning("FactionsUUID expects at least " + OLDEST_MODERN_SUPPORTED_STRING + " and may not work on your version.");
         }
-        /*if (javaVersion < 17) { Commenting out for if later wanting to bump to 21
-            getLogger().info("");
-            getLogger().warning("Detected Java " + javaVersion);
-            getLogger().warning("FactionsUUID will soon require Java 17");
-            getLogger().warning("You should start testing out Java 17 with your setup now, to prepare.");
-        }*/
         getLogger().info("");
         this.buildNumber = this.getBuildNumber(this.getDescription().getVersion());
 
@@ -533,19 +502,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         getServer().getPluginManager().registerEvents(new FactionsEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsExploitListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsBlockListener(this), this);
-        if (mcVersion >= 800) {
-            getServer().getPluginManager().registerEvents(new OneEightPlusListener(this), this);
-        }
-        if (mcVersion >= 1400) {
-            getServer().getPluginManager().registerEvents(new OneFourteenPlusListener(this), this);
-        }
-
-        // Version specific portal listener check.
-        if (mcVersion >= 1400) { // Starting with 1.14
-            getServer().getPluginManager().registerEvents(new PortalListener_114(this), this);
-        } else {
-            getServer().getPluginManager().registerEvents(new PortalListenerLegacy(new PortalHandler()), this);
-        }
+        getServer().getPluginManager().registerEvents(new PortalListener_114(this), this);
 
         // since some other plugins execute commands directly through this command interface, provide it
         this.getCommand(refCommand).setExecutor(cmdBase);
@@ -599,7 +556,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             }
         }.runTask(this);
 
-        getLogger().info("=== Ready to go after " + (System.currentTimeMillis() - timeEnableStart) + "ms! ===");
+        getLogger().info("=== Initial start took " + (System.currentTimeMillis() - timeEnableStart) + "ms! ===");
         this.loadSuccessful = true;
 
         this.updateCheck = new Gson().toJson(update);
@@ -722,7 +679,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         this.metricsSimplePie("luckperms_contexts", () -> "" + this.luckPermsSetup);
 
         // WorldGuard
-        IWorldguard wg = this.getWorldguard();
+        Worldguard7 wg = this.getWorldguard();
         String wgVersion = wg == null ? "nope" : wg.getVersion();
         this.metricsDrillPie("worldguard", () -> this.metricsInfo(wg, () -> wgVersion));
 
@@ -801,7 +758,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return map;
     }
 
-    public void setWorldGuard(IWorldguard wg) {
+    public void setWorldGuard(Worldguard7 wg) {
         this.worldguard = wg;
     }
 
@@ -1004,7 +961,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.landRaidControl;
     }
 
-    public IWorldguard getWorldguard() {
+    public Worldguard7 getWorldguard() {
         return this.worldguard;
     }
 

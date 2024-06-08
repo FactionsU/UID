@@ -12,11 +12,6 @@ public class ConfigTest {
         testConfig(new MainConfig());
     }
 
-    @Test
-    public void testPerms() {
-        testConfig(new PermissionsConfig());
-    }
-
     private void testConfig(Object o) {
         try {
             assertNotNull(o, o.getClass());

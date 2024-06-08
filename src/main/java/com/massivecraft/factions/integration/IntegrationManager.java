@@ -51,11 +51,7 @@ public class IntegrationManager implements Listener {
         WORLDGUARD("WorldGuard", (plugin) -> {
             FactionsPlugin f = FactionsPlugin.getInstance();
             String version = plugin.getDescription().getVersion();
-            if (version.startsWith("6.2")) {
-                f.setWorldGuard(new Worldguard6(plugin));
-                f.getLogger().info("Found support for WorldGuard version " + version);
-                return true;
-            } else if (version.startsWith("7")) {
+            if (version.startsWith("7")) {
                 f.setWorldGuard(new Worldguard7());
                 f.getLogger().info("Found support for WorldGuard version " + version);
                 return true;
