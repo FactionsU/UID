@@ -25,12 +25,12 @@ public class CmdDelhome extends FCommand {
         }
 
         if (!context.faction.hasHome()) {
-            context.msg(TL.COMMAND_HOME_NOHOME.toString() + (context.fPlayer.getRole().value < Role.MODERATOR.value ? TL.GENERIC_ASKYOURLEADER.toString() : TL.GENERIC_YOUSHOULD.toString()));
+            context.msg(TL.COMMAND_HOME_NOHOME + (context.fPlayer.getRole().value < Role.MODERATOR.value ? TL.GENERIC_ASKYOURLEADER.toString() : TL.GENERIC_YOUSHOULD.toString()));
             context.sendMessage(FCmdRoot.getInstance().cmdSethome.getUsageTemplate(context));
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && context.faction.getWarps().size() > 0) {
+        if (FactionsPlugin.getInstance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !context.faction.getWarps().isEmpty()) {
             context.msg(TL.COMMAND_HOME_WARPSREMAIN);
             return;
         }

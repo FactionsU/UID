@@ -201,7 +201,7 @@ public class CommandContext {
 
         if (name != null) {
             List<Player> players = Bukkit.getServer().matchPlayer(name);
-            if (players.size() > 0) {
+            if (!players.isEmpty()) {
                 ret = players.get(0);
             }
         }

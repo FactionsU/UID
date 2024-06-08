@@ -24,10 +24,10 @@ public class CmdChatSpy extends FCommand {
 
         if (context.fPlayer.isSpyingChat()) {
             context.fPlayer.msg(TL.COMMAND_CHATSPY_ENABLE);
-            FactionsPlugin.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_ENABLELOG.toString());
+            FactionsPlugin.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_ENABLELOG);
         } else {
             context.fPlayer.msg(TL.COMMAND_CHATSPY_DISABLE);
-            FactionsPlugin.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_DISABLELOG.toString());
+            FactionsPlugin.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CHATSPY_DISABLELOG);
         }
     }
 

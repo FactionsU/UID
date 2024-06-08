@@ -31,7 +31,7 @@ public class CmdWarpOther extends FCommand {
     @Override
     public void perform(CommandContext context) {
         // TODO: check if in combat.
-        if (context.args.size() < 1) {
+        if (context.args.isEmpty()) {
             context.msg(TL.COMMAND_WARPOTHER_COMMANDFORMAT);
             return;
         }

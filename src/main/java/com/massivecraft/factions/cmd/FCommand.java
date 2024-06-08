@@ -53,7 +53,7 @@ public abstract class FCommand {
 
     public void execute(CommandContext context) {
         // Is there a matching sub command?
-        if (context.args.size() > 0) {
+        if (!context.args.isEmpty()) {
             for (FCommand subCommand : this.subCommands) {
                 if (subCommand.aliases.contains(context.args.get(0).toLowerCase())) {
                     context.args.remove(0);
@@ -192,7 +192,7 @@ public abstract class FCommand {
             args.add("[" + optionalArg.getKey() + val + "]");
         }
 
-        if (args.size() > 0) {
+        if (!args.isEmpty()) {
             ret.append(FactionsPlugin.getInstance().txt().parseTags("<p> "));
             ret.append(TextUtil.implode(args, " "));
         }

@@ -92,7 +92,7 @@ public class Econ {
         if (FactionsPlugin.getInstance().conf().economy().getUniverseAccount() == null) {
             return;
         }
-        if (FactionsPlugin.getInstance().conf().economy().getUniverseAccount().length() == 0) {
+        if (FactionsPlugin.getInstance().conf().economy().getUniverseAccount().isEmpty()) {
             return;
         }
         if (!hasAccount(FactionsPlugin.getInstance().conf().economy().getUniverseAccount())) {
@@ -529,7 +529,6 @@ public class Econ {
         return op;
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Deprecated
     public static boolean isUUID(String uuid) {
         try {

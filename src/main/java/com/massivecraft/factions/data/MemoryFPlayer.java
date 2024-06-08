@@ -486,7 +486,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public String getNameAndSomething(String something) {
         String ret = this.role.getPrefix();
-        if (something != null && something.length() > 0) {
+        if (something != null && !something.isEmpty()) {
             ret += something + " ";
         }
         ret += this.getName();

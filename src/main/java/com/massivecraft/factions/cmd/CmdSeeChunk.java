@@ -25,7 +25,7 @@ public class CmdSeeChunk extends FCommand {
     public void perform(CommandContext context) {
         if (useParticles) {
             boolean toggle = false;
-            if (context.args.size() == 0) {
+            if (context.args.isEmpty()) {
                 toggle = !context.fPlayer.isSeeingChunk();
             } else if (context.args.size() == 1) {
                 toggle = context.argAsBool(0);

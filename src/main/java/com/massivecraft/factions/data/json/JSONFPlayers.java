@@ -103,7 +103,7 @@ public class JSONFPlayers extends MemoryFPlayers {
             }
         }
 
-        if (list.size() > 0) {
+        if (!list.isEmpty()) {
             // We've got some converting to do!
             FactionsPlugin.getInstance().log(Level.INFO, "Factions is now updating players.json");
 
@@ -151,7 +151,7 @@ public class JSONFPlayers extends MemoryFPlayers {
             } catch (Exception e) {
                 FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed name to UUID conversion", e);
             }
-            if (invalidList.size() > 0) {
+            if (!invalidList.isEmpty()) {
                 for (String name : invalidList) {
                     // Remove all the invalid names we collected
                     data.remove(name);

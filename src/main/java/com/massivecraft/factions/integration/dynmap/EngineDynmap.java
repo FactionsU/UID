@@ -773,7 +773,7 @@ public class EngineDynmap {
     public static String getHtmlPlayerString(Collection<FPlayer> playersOfficersList) {
         StringBuilder ret = new StringBuilder();
         for (FPlayer fplayer : playersOfficersList) {
-            if (ret.length() > 0) {
+            if (!ret.isEmpty()) {
                 ret.append(", ");
             }
             ret.append(getHtmlPlayerName(fplayer));
@@ -837,7 +837,7 @@ public class EngineDynmap {
 
     // Thread Safe / Asynchronous: Yes
     static void severe(String msg) {
-        String message = DYNMAP_INTEGRATION + ChatColor.RED.toString() + msg;
+        String message = DYNMAP_INTEGRATION + ChatColor.RED + msg;
         FactionsPlugin.getInstance().getLogger().severe(message);
     }
 
