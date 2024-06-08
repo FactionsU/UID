@@ -45,7 +45,7 @@ public class CmdCreate extends FCommand {
         }
 
         ArrayList<String> tagValidationErrors = MiscUtil.validateTag(tag);
-        if (tagValidationErrors.size() > 0) {
+        if (!tagValidationErrors.isEmpty()) {
             context.sendMessage(tagValidationErrors);
             return;
         }
@@ -97,7 +97,7 @@ public class CmdCreate extends FCommand {
         context.msg(TL.COMMAND_CREATE_YOUSHOULD, FCmdRoot.getInstance().cmdDescription.getUsageTemplate(context));
 
         if (FactionsPlugin.getInstance().conf().logging().isFactionCreate()) {
-            FactionsPlugin.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CREATE_CREATEDLOG.toString() + tag);
+            FactionsPlugin.getInstance().log(context.fPlayer.getName() + TL.COMMAND_CREATE_CREATEDLOG + tag);
         }
     }
 

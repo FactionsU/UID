@@ -323,7 +323,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                     PrintWriter printWriter = new PrintWriter(stringWriter);
                     record.getThrown().printStackTrace(printWriter);
                     startupExceptionBuilder.append('[').append(record.getLevel().getName()).append("] ").append(record.getMessage()).append('\n')
-                            .append(stringWriter.toString()).append('\n');
+                            .append(stringWriter).append('\n');
                 }
             }
 
@@ -1281,6 +1281,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.adventure;
     }
 
+    @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
     private static class UpdateCheck {
         private String pluginName;
         private String pluginVersion;
@@ -1297,6 +1298,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
     }
 
+    @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
     private static class Response {
         private boolean success;
         private String message;

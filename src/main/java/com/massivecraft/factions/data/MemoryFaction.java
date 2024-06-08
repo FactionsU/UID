@@ -1042,7 +1042,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         StringBuilder ownerList = new StringBuilder();
 
         for (String anOwnerData : ownerData) {
-            if (ownerList.length() > 0) {
+            if (!ownerList.isEmpty()) {
                 ownerList.append(", ");
             }
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(anOwnerData));

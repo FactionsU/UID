@@ -85,7 +85,7 @@ public class CmdPerm extends FCommand {
         }
 
         void perform(CommandContext context, Audience audience, LinkedHashMap<PermSelector, Map<String, Boolean>> permissions, TranslationsConfig.Commands.Permissions tl) {
-            if (context.args.size() == 0) {
+            if (context.args.isEmpty()) {
                 List<String> selectors = new ArrayList<>(PermSelectorRegistry.getSelectors());
                 Collections.sort(selectors);
 
@@ -316,7 +316,7 @@ public class CmdPerm extends FCommand {
         }
 
         void perform(CommandContext context, Audience audience, LinkedHashMap<PermSelector, Map<String, Boolean>> permissions, TranslationsConfig.Commands.Permissions tl) {
-            if (context.args.size() == 0) {
+            if (context.args.isEmpty()) {
                 listSelectors(context, audience, permissions, tl);
             } else if (context.args.size() == 1) {
                 PermSelector selector = PermSelectorRegistry.create(context.argAsString(0), false);
@@ -358,7 +358,7 @@ public class CmdPerm extends FCommand {
         }
 
         void perform(CommandContext context, Audience audience, LinkedHashMap<PermSelector, Map<String, Boolean>> permissions, TranslationsConfig.Commands.Permissions tl) {
-            if (context.args.size() == 0) {
+            if (context.args.isEmpty()) {
                 listSelectors(context, audience, permissions, tl);
                 return;
             }
@@ -378,7 +378,7 @@ public class CmdPerm extends FCommand {
         }
 
         void perform(CommandContext context, Audience audience, LinkedHashMap<PermSelector, Map<String, Boolean>> permissions, TranslationsConfig.Commands.Permissions tl) {
-            if (context.args.size() == 0) {
+            if (context.args.isEmpty()) {
                 listOverrideSelectors(context, audience, tl);
                 return;
             }

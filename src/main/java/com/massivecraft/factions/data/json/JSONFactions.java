@@ -139,7 +139,7 @@ public class JSONFactions extends MemoryFactions {
 
                     Set<String> list = whichKeysNeedMigration(set);
 
-                    if (list.size() > 0) {
+                    if (!list.isEmpty()) {
                         UUIDFetcher fetcher = new UUIDFetcher(new ArrayList<>(list));
                         try {
                             Map<String, UUID> response = fetcher.call();
@@ -166,7 +166,7 @@ public class JSONFactions extends MemoryFactions {
                 Set<String> invites = f.getInvites();
                 Set<String> list = whichKeysNeedMigration(invites);
 
-                if (list.size() > 0) {
+                if (!list.isEmpty()) {
                     UUIDFetcher fetcher = new UUIDFetcher(new ArrayList<>(list));
                     try {
                         Map<String, UUID> response = fetcher.call();

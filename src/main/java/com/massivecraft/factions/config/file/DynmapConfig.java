@@ -138,7 +138,7 @@ public class DynmapConfig {
         }
 
         // This is used for config loading
-        @SuppressWarnings({"unused", "UnstableApiUsage"})
+        @SuppressWarnings("unused")
         private transient TypeToken<Map<String, Style>> factionStylesToken = new TypeToken<>() {
         };
 
