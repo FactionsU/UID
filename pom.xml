@@ -2,9 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.massivecraft</groupId>
-    <artifactId>Factions-aggregator</artifactId>
-    <version>1.6.9.5-U0.6.40</version>
+    <groupId>dev.kitteh</groupId>
+    <artifactId>factionsuuid-aggregator</artifactId>
+    <version>0.7.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Factions Aggregator Project</name>
