@@ -45,20 +45,8 @@
                     </artifactSet>
                     <relocations>
                         <relocation>
-                            <pattern>mkremins.fanciful</pattern>
-                            <shadedPattern>moss.factions.shade.mkremins.fanciful</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>com.google</pattern>
                             <shadedPattern>moss.factions.shade.com.google</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.darkblade12</pattern>
-                            <shadedPattern>moss.factions.shade.com.darkblade12</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.amoebaman.util</pattern>
-                            <shadedPattern>moss.factions.shade.net.amoebaman.util</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>me.lucko.commodore</pattern>
@@ -83,10 +71,6 @@
                         <relocation>
                             <pattern>org.apache.commons.logging</pattern>
                             <shadedPattern>moss.factions.shade.org.apache.commons.logging</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.kitteh</pattern>
-                            <shadedPattern>moss.factions.shade.org.kitteh</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
@@ -142,13 +126,6 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.9.1</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.darkblade12</groupId>
-            <artifactId>particleeffect</artifactId>
-            <version>1.8.0-fuuid</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>

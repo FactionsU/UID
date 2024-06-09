@@ -291,6 +291,6 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
     }
 
     private boolean canCommodore() {
-        return (FactionsPlugin.getMCVersion() < 1900 || PaperLib.isPaper()) && CommodoreProvider.isSupported();
+        return CommodoreProvider.isSupported();
     }
 }

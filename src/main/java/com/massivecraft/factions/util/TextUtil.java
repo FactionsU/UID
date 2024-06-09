@@ -1,11 +1,9 @@
 package com.massivecraft.factions.util;
 
-import com.massivecraft.factions.lib.mkremins.fanciful.FancyMessage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -102,18 +100,6 @@ public class TextUtil {
         }
         matcher.appendTail(ret);
         return ret.toString();
-    }
-
-    // -------------------------------------------- //
-    // Fancy parsing
-    // -------------------------------------------- //
-
-    public FancyMessage parseFancy(String prefix) {
-        return toFancy(parse(prefix));
-    }
-
-    public static FancyMessage toFancy(String first) {
-        return FancyMessage.deserialize(GsonComponentSerializer.gson().serialize(LegacyComponentSerializer.legacySection().deserialize(first)));
     }
 
     // -------------------------------------------- //

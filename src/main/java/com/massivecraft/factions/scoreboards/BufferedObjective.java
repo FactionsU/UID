@@ -3,7 +3,6 @@ package com.massivecraft.factions.scoreboards;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,8 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BufferedObjective {
-    private static final Method addEntryMethod;
-    private static final int MAX_LINE_LENGTH;
+    private static final int MAX_LINE_LENGTH = 48;
     private static final Pattern PATTERN = Pattern.compile("(\u00A7[0-9a-fk-r])|(.)");
 
     private final Scoreboard scoreboard;
@@ -31,26 +29,6 @@ public class BufferedObjective {
     private boolean requiresUpdate = false;
 
     private final Map<Integer, String> contents = new HashMap<>();
-
-    static {
-        // Check for long line support.
-        // We require use of Spigot's `addEntry(String)` method on
-        // Teams, as adding OfflinePlayers to a team is far too slow.
-
-        Method addEntryMethodLookup = null;
-        try {
-            addEntryMethodLookup = Team.class.getMethod("addEntry", String.class);
-        } catch (NoSuchMethodException ignored) {
-        }
-
-        addEntryMethod = addEntryMethodLookup;
-
-        if (addEntryMethod != null) {
-            MAX_LINE_LENGTH = 48;
-        } else {
-            MAX_LINE_LENGTH = 16;
-        }
-    }
 
     public BufferedObjective(Scoreboard scoreboard) {
         this.scoreboard = scoreboard;
@@ -194,11 +172,7 @@ public class BufferedObjective {
                     team.setSuffix(suffix);
                 }
 
-
-                try {
-                    addEntryMethod.invoke(team, name);
-                } catch (ReflectiveOperationException ignored) {
-                }
+                team.addEntry(name);
                 buffer.getScore(name).setScore(entry.getKey());
             } else {
                 buffer.getScore(entry.getValue()).setScore(entry.getKey());

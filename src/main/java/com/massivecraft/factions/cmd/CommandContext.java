@@ -10,7 +10,6 @@ import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.WarmUpUtil;
-import com.massivecraft.factions.lib.mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -70,16 +69,6 @@ public class CommandContext {
     public void sendMessage(List<String> msgs) {
         for (String msg : msgs) {
             this.sendMessage(msg);
-        }
-    }
-
-    public void sendFancyMessage(FancyMessage message) {
-        message.send(sender);
-    }
-
-    public void sendFancyMessage(List<FancyMessage> messages) {
-        for (FancyMessage m : messages) {
-            sendFancyMessage(m);
         }
     }
 

@@ -7,11 +7,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.util.material.MaterialDb;
 import com.massivecraft.factions.util.particle.ParticleColor;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -24,7 +20,7 @@ public class SeeChunkUtil extends BukkitRunnable {
 
     private final Set<UUID> playersSeeingChunks = new HashSet<>();
     private final boolean useColor;
-    private final Object effect;
+    private final Particle effect;
 
     public SeeChunkUtil() {
         String effectName = FactionsPlugin.getInstance().conf().commands().seeChunk().getParticleName();
@@ -58,7 +54,7 @@ public class SeeChunkUtil extends BukkitRunnable {
         }
     }
 
-    public static void showPillars(Player me, FPlayer fme, Object effect, boolean useColor) {
+    public static void showPillars(Player me, FPlayer fme, Particle effect, boolean useColor) {
         World world = me.getWorld();
         FLocation flocation = new FLocation(me);
         int chunkX = (int) flocation.getX();
@@ -90,7 +86,7 @@ public class SeeChunkUtil extends BukkitRunnable {
         showPillar(me, world, blockX, blockZ, effect, color);
     }
 
-    public static void showPillar(Player player, World world, int blockX, int blockZ, Object effect, ParticleColor color) {
+    public static void showPillar(Player player, World world, int blockX, int blockZ, Particle effect, ParticleColor color) {
         // Lets start at the player's Y spot -30 to optimize
         for (int blockY = player.getLocation().getBlockY() - 30; blockY < player.getLocation().getBlockY() + 30; blockY++) {
             Location loc = new Location(world, blockX, blockY, blockZ);
