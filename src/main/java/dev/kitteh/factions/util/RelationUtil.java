@@ -95,11 +95,6 @@ public class RelationUtil {
         return null;
     }
 
-    @Deprecated
-    public static ChatColor getColorOfThatToMe(Participator that, Participator me) {
-        return TextUtil.getClosest(getTextColorOfThatToMe(that, me));
-    }
-
     public static String getColorStringOfThatToMe(Participator that, Participator me) {
         return TextUtil.getString(getTextColorOfThatToMe(that, me));
     }

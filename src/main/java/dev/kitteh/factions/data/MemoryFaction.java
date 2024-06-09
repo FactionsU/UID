@@ -520,12 +520,6 @@ public abstract class MemoryFaction implements Faction, Participator {
         return RelationUtil.getRelationTo(this, rp, ignorePeaceful);
     }
 
-    @Deprecated
-    @Override
-    public ChatColor getColorTo(Participator rp) {
-        return RelationUtil.getColorOfThatToMe(this, rp);
-    }
-
     @Override
     public String getColorStringTo(Participator rp) {
         return RelationUtil.getColorStringOfThatToMe(this, rp);

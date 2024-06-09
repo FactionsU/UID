@@ -15,28 +15,6 @@ public class FactionRenameEvent extends FactionPlayerEvent implements Cancellabl
     }
 
     /**
-     * Get the player involved in the event.
-     *
-     * @return Player involved in the event.
-     * @deprecated use getfPlayer().getPlayer() instead.
-     */
-    @Deprecated
-    public Player getPlayer() {
-        return getfPlayer().getPlayer();
-    }
-
-    /**
-     * Get the faction tag before it was renamed.
-     *
-     * @return old faction tag.
-     * @deprecated use getFaction().getTag() instead.
-     */
-    @Deprecated
-    public String getOldFactionTag() {
-        return getFaction().getTag();
-    }
-
-    /**
      * Get the new faction tag.
      *
      * @return new faction tag as String.

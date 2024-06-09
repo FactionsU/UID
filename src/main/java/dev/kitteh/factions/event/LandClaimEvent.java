@@ -29,39 +29,6 @@ public class LandClaimEvent extends FactionPlayerEvent implements Cancellable {
         return this.location;
     }
 
-    /**
-     * Get the id of the faction.
-     *
-     * @return id of faction as String
-     * @deprecated use getFaction().getId() instead.
-     */
-    @Deprecated
-    public String getFactionId() {
-        return getFaction().getId();
-    }
-
-    /**
-     * Get the tag of the faction.
-     *
-     * @return tag of faction as String
-     * @deprecated use getFaction().getTag() instead.
-     */
-    @Deprecated
-    public String getFactionTag() {
-        return getFaction().getTag();
-    }
-
-    /**
-     * Get the Player involved in this event.
-     *
-     * @return player from FPlayer.
-     * @deprecated use getfPlayer().getPlayer() instead.
-     */
-    @Deprecated
-    public Player getPlayer() {
-        return getfPlayer().getPlayer();
-    }
-
     @Override
     public boolean isCancelled() {
         return cancelled;

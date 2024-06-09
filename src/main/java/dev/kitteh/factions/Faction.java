@@ -124,17 +124,6 @@ public interface Faction extends Participator, Selectable {
 
     boolean isNormal();
 
-    /**
-     * Players in the wilderness faction are consdiered not in a faction.
-     *
-     * @return true if wilderness
-     * @deprecated use {@link #isWilderness()} instead
-     */
-    @Deprecated
-    default boolean isNone() {
-        return isWilderness();
-    }
-
     boolean isWilderness();
 
     boolean isSafeZone();

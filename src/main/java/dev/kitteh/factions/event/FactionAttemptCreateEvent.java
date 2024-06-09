@@ -11,7 +11,6 @@ import org.bukkit.event.HandlerList;
  * Event called when a Faction is soon to be created.
  */
 public class FactionAttemptCreateEvent extends Event implements Cancellable {
-
     private static final HandlerList handlers = new HandlerList();
 
     private final String factionTag;
@@ -27,7 +26,6 @@ public class FactionAttemptCreateEvent extends Event implements Cancellable {
         return FPlayers.getInstance().getByPlayer(sender);
     }
 
-    @Deprecated
     public String getFactionTag() {
         return factionTag;
     }

@@ -69,8 +69,6 @@ public enum TL {
 
     COMMAND_AUTOCLAIM_ENABLED("&eNow auto-claiming land for &d%1$s&e."),
     COMMAND_AUTOCLAIM_DISABLED("&eAuto-claiming of land disabled."),
-    @Deprecated
-    COMMAND_AUTOCLAIM_REQUIREDRANK("&cYou must be &d%1$s&c to claim land."),
     COMMAND_AUTOCLAIM_OTHERFACTION("&cYou can't claim land for &d%1$s&c."),
     COMMAND_AUTOCLAIM_DESCRIPTION("Auto-claim land as you walk around"),
 
@@ -849,10 +847,6 @@ public enum TL {
      * In the player and entity listeners
      */
     PLAYER_CANTHURT("&eYou may not harm other players in %s"),
-    @Deprecated
-    PLAYER_SAFEAUTO("&eThis land is now a safe zone."),
-    @Deprecated
-    PLAYER_WARAUTO("&eThis land is now a war zone."),
     PLAYER_OUCH("&cOuch, that is starting to hurt. You should give it a rest."),
     PLAYER_USE_WILDERNESS("&cYou can't use &d%s&c in the wilderness."),
     PLAYER_USE_SAFEZONE("&cYou can't use &d%s&c in a safe zone."),

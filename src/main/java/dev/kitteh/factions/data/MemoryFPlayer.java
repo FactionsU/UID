@@ -206,26 +206,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
     }
 
-    @Deprecated
-    public boolean isAutoSafeClaimEnabled() {
-        return autoClaimFor != null && autoClaimFor.isSafeZone();
-    }
-
-    @Deprecated
-    public void setIsAutoSafeClaimEnabled(boolean enabled) {
-        this.setAutoClaimFor(enabled ? Factions.getInstance().getSafeZone() : null);
-    }
-
-    @Deprecated
-    public boolean isAutoWarClaimEnabled() {
-        return autoClaimFor != null && autoClaimFor.isWarZone();
-    }
-
-    @Deprecated
-    public void setIsAutoWarClaimEnabled(boolean enabled) {
-        this.setAutoClaimFor(enabled ? Factions.getInstance().getWarZone() : null);
-    }
-
     public boolean isAdminBypassing() {
         return this.isAdminBypassing;
     }
@@ -523,12 +503,6 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public Relation getRelationToLocation() {
         return Board.getInstance().getFactionAt(new FLocation(this)).getRelationTo(this);
-    }
-
-    @Deprecated
-    @Override
-    public ChatColor getColorTo(Participator rp) {
-        return RelationUtil.getColorOfThatToMe(this, rp);
     }
 
     @Override

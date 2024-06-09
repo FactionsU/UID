@@ -87,7 +87,7 @@ public class CmdCreate extends FCommand {
         context.fPlayer.setFaction(faction);
 
         // trigger the faction creation event
-        FactionCreateEvent createEvent = new FactionCreateEvent(context.player, tag, faction);
+        FactionCreateEvent createEvent = new FactionCreateEvent(context.player, faction);
         Bukkit.getServer().getPluginManager().callEvent(createEvent);
 
         for (FPlayer follower : FPlayers.getInstance().getOnlinePlayers()) {

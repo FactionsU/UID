@@ -71,18 +71,6 @@ public interface FPlayer extends Participator, Selectable {
 
     void setAutoUnclaimFor(Faction faction);
 
-    @Deprecated
-    boolean isAutoSafeClaimEnabled();
-
-    @Deprecated
-    void setIsAutoSafeClaimEnabled(boolean enabled);
-
-    @Deprecated
-    boolean isAutoWarClaimEnabled();
-
-    @Deprecated
-    void setIsAutoWarClaimEnabled(boolean enabled);
-
     boolean isAdminBypassing();
 
     boolean isVanished();
@@ -254,12 +242,6 @@ public interface FPlayer extends Participator, Selectable {
     boolean canFlyAtLocation();
 
     boolean canFlyAtLocation(FLocation location);
-
-    @SuppressWarnings("SameReturnValue")
-    @Deprecated
-    default boolean canFlyInFactionTerritory(Faction faction) {
-        return false;
-    }
 
     boolean isSeeingChunk();
 

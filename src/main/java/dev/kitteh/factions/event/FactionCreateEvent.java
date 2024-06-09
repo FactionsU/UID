@@ -14,23 +14,16 @@ public class FactionCreateEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private final String factionTag;
     private final Player sender;
     private final Faction faction;
 
-    public FactionCreateEvent(Player sender, String tag, Faction faction) {
-        this.factionTag = tag;
+    public FactionCreateEvent(Player sender, Faction faction) {
         this.sender = sender;
         this.faction = faction;
     }
 
     public FPlayer getFPlayer() {
         return FPlayers.getInstance().getByPlayer(sender);
-    }
-
-    @Deprecated
-    public String getFactionTag() {
-        return factionTag;
     }
 
     public Faction getFaction() {

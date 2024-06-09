@@ -24,9 +24,6 @@ public interface Participator {
 
     Relation getRelationTo(Participator that, boolean ignorePeaceful);
 
-    @Deprecated
-    ChatColor getColorTo(Participator to);
-
     default TextColor getTextColorTo(Participator to) {
         return RelationUtil.getTextColorOfThatToMe(this, to);
     }
