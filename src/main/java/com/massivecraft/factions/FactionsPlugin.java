@@ -47,12 +47,9 @@ import com.massivecraft.factions.util.Persist;
 import com.massivecraft.factions.util.SeeChunkUtil;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
-import com.massivecraft.factions.util.TitleAPI;
 import com.massivecraft.factions.util.WorldUtil;
 import com.massivecraft.factions.util.material.MaterialDb;
 import com.massivecraft.factions.util.particle.BukkitParticleProvider;
-import com.massivecraft.factions.util.particle.PacketParticleProvider;
-import com.massivecraft.factions.util.particle.ParticleProvider;
 import com.mojang.authlib.GameProfile;
 import io.papermc.lib.PaperLib;
 import net.kyori.adventure.audience.Audience;
@@ -174,7 +171,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private final Set<String> pluginsHandlingChat = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private SeeChunkUtil seeChunkUtil;
-    private ParticleProvider<?> particleProvider;
+    private BukkitParticleProvider particleProvider;
     private Worldguard worldguard;
     private LandRaidControl landRaidControl;
     private boolean luckPermsSetup;
@@ -483,12 +480,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         startAutoLeaveTask(false);
 
         // Run before initializing listeners to handle reloads properly.
-        if (mcVersion < 1300) { // Before 1.13
-            particleProvider = new PacketParticleProvider();
-        } else {
-            particleProvider = new BukkitParticleProvider();
-        }
-        getLogger().info(txt.parse("Using %1s as a particle provider", particleProvider.name()));
+        particleProvider = new BukkitParticleProvider();
 
         if (conf().commands().seeChunk().isParticles()) {
             double delay = Math.floor(conf().commands().seeChunk().getParticleUpdateTime() * 20);
@@ -511,8 +503,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         if (conf().commands().fly().isEnable()) {
             FlightUtil.start();
         }
-
-        new TitleAPI();
 
         try {
             this.getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", GameProfile.class);
@@ -861,7 +851,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return seeChunkUtil;
     }
 
-    public ParticleProvider getParticleProvider() {
+    public BukkitParticleProvider getParticleProvider() {
         return particleProvider;
     }
 

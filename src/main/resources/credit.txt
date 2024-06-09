@@ -20,14 +20,6 @@ Configurate
 Apache License, Version 2.0
 https://github.com/SpongePowered/Configurate
 
-DarkBlade12's ParticleEffect
-Legacy particle effects
-https://github.com/DarkBlade12/ParticleEffect
-
-Fanciful
-MIT License
-https://github.com/mkremins/fanciful
-
 Google Gson
 Apache License, Version 2.0
 https://github.com/google/gson
@@ -39,11 +31,6 @@ https://github.com/google/guava
 PaperLib
 MIT License
 https://github.com/PaperMC/PaperLib
-
-PasteGGAPI
-MIT License
-https://github.com/KittehOrg/PasteGGAPI
-
 
 
 Modified versions of code from the following projects are included:

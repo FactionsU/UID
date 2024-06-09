@@ -238,12 +238,7 @@ public class FactionsBlockListener extends AbstractListener {
             return;
         }
 
-        List<Block> blocks;
-        if (FactionsPlugin.getMCVersion() < 800) {
-            blocks = Collections.singletonList(event.getBlock().getRelative(event.getDirection(), 2));
-        } else {
-            blocks = event.getBlocks();
-        }
+        List<Block> blocks = event.getBlocks();
 
         // if the retracted blocks list is empty, no worries
         if (blocks.isEmpty()) {

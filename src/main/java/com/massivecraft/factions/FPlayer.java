@@ -6,7 +6,6 @@ import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.perms.Selectable;
 import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.util.WarmUpUtil;
-import com.massivecraft.factions.lib.mkremins.fanciful.FancyMessage;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -238,10 +237,6 @@ public interface FPlayer extends EconomyParticipator, Selectable {
     void sendMessage(String message);
 
     void sendMessage(List<String> messages);
-
-    void sendFancyMessage(FancyMessage message);
-
-    void sendFancyMessage(List<FancyMessage> message);
 
     int getMapHeight();
 

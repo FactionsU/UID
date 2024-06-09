@@ -44,9 +44,7 @@ public class SimpleItem {
             }
             // Empty list if not specified
             meta.setLore(lore);
-            if (FactionsPlugin.getMCVersion() >= 800) {
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
-            }
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
             if (enchant) {
                 meta.addEnchant(Enchantment.LUCK, 1, true);
             }

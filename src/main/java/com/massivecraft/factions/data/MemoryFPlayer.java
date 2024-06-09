@@ -29,9 +29,7 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.tag.Tag;
 import com.massivecraft.factions.util.RelationUtil;
 import com.massivecraft.factions.util.TL;
-import com.massivecraft.factions.util.TitleAPI;
 import com.massivecraft.factions.util.WarmUpUtil;
-import com.massivecraft.factions.lib.mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -716,7 +714,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
             // We send null instead of empty because Spigot won't touch the title if it's null, but clears if empty.
             // We're just trying to be as unintrusive as possible.
-            TitleAPI.getInstance().sendTitle(player, title, sub, in, stay, out);
+            player.sendTitle(title, sub, in, stay, out);
 
             showChat = FactionsPlugin.getInstance().conf().factions().enterTitles().isAlsoShowChat();
         }
@@ -1305,26 +1303,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     public void sendMessage(List<String> msgs) {
         for (String msg : msgs) {
             this.sendMessage(msg);
-        }
-    }
-
-    public void sendFancyMessage(FancyMessage message) {
-        Player player = getPlayer();
-        if (player == null) {
-            return;
-        }
-
-        message.send(player);
-    }
-
-    public void sendFancyMessage(List<FancyMessage> messages) {
-        Player player = getPlayer();
-        if (player == null) {
-            return;
-        }
-
-        for (FancyMessage msg : messages) {
-            msg.send(player);
         }
     }
 
