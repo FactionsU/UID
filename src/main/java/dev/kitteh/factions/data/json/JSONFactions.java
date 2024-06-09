@@ -3,7 +3,6 @@ package dev.kitteh.factions.data.json;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.data.MemoryFactions;
@@ -56,12 +55,8 @@ public class JSONFactions extends MemoryFactions {
     @Override
     public void forceSave(boolean sync) {
         final List<Faction> entitiesThatShouldBeSaved = new ArrayList<>(this.factions.values());
-        saveCore(file, entitiesThatShouldBeSaved, sync);
+        DiscUtil.writeCatch(file, FactionsPlugin.getInstance().getGson().toJson(entitiesThatShouldBeSaved), sync);
         DiscUtil.writeCatch(this.nextIdFile, FactionsPlugin.getInstance().getGson().toJson(new NextId(this.nextId)) ,sync);
-    }
-
-    private boolean saveCore(File target, List<Faction> entities, boolean sync) {
-        return DiscUtil.writeCatch(target, FactionsPlugin.getInstance().getGson().toJson(entities), sync);
     }
 
     @Override

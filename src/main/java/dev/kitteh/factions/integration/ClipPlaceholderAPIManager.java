@@ -22,7 +22,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.UUID;
 
 public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements Relational {
     private static final String mapChars = "0123456789abcdef";

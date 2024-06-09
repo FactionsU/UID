@@ -1,6 +1,5 @@
 package dev.kitteh.factions;
 
-import dev.kitteh.factions.data.json.JSONBoard;
 import net.kyori.adventure.text.Component;
 import org.bukkit.World;
 
@@ -68,10 +67,4 @@ public interface Board {
      * of decreasing z
      */
     List<Component> getMap(FPlayer fPlayer, FLocation flocation, double inDegrees);
-
-    void forceSave();
-
-    void forceSave(boolean sync);
-
-    int load();
 }

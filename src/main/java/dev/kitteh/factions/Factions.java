@@ -1,6 +1,5 @@
 package dev.kitteh.factions;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface Factions {

@@ -19,10 +19,10 @@ import org.bukkit.event.world.PortalCreateEvent;
   Blocking all portal creation not in wilderness because we can't properly check if the creator has permission
   to create at the target destination.
  */
-public class PortalListener_114 implements Listener {
+public class PortalListener implements Listener {
     public final FactionsPlugin plugin;
 
-    public PortalListener_114(FactionsPlugin plugin) {
+    public PortalListener(FactionsPlugin plugin) {
         this.plugin = plugin;
     }
 

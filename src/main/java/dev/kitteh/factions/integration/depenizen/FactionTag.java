@@ -17,8 +17,6 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.util.LazyLocation;
 
-import java.util.UUID;
-
 /*
 This code is from the Depenizen plugin, modified to work with this plugin.
 Original copyright notice is as follows:

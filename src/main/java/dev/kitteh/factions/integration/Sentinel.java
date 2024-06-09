@@ -14,9 +14,9 @@ import org.mcmonkey.sentinel.SentinelPlugin;
 import java.util.logging.Level;
 
 public class Sentinel extends SentinelIntegration {
-    public static String TARGET_FACTIONS = "factions";
-    public static String TARGET_FACTIONS_ENEMY = "factionsEnemy";
-    public static String TARGET_FACTIONS_ALLY = "factionsAlly";
+    public static final String TARGET_FACTIONS = "factions";
+    public static final String TARGET_FACTIONS_ENEMY = "factionsEnemy";
+    public static final String TARGET_FACTIONS_ALLY = "factionsAlly";
 
     public static boolean init(Plugin plugin) {
         FactionsPlugin.getInstance().getLogger().info("Attempting to integrate with Sentinel!");

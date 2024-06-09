@@ -27,7 +27,7 @@ public class MiscUtil {
     public static final Function<String, Material> MATERIAL_FUNCTION;
     private static final Map<String, CreatureSpawnEvent.SpawnReason> spawnReasonMap;
     public static final Function<String, CreatureSpawnEvent.SpawnReason> SPAWN_REASON_FUNCTION;
-    private String nums = "12%%__USER__%%34";
+    private final String nums = "12%%__USER__%%34";
 
     static {
         entityTypeMap = new HashMap<>();

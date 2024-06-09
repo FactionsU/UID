@@ -29,7 +29,7 @@ import dev.kitteh.factions.listeners.FactionsChatListener;
 import dev.kitteh.factions.listeners.FactionsEntityListener;
 import dev.kitteh.factions.listeners.FactionsExploitListener;
 import dev.kitteh.factions.listeners.FactionsPlayerListener;
-import dev.kitteh.factions.listeners.versionspecific.PortalListener_114;
+import dev.kitteh.factions.listeners.versionspecific.PortalListener;
 import dev.kitteh.factions.perms.PermSelector;
 import dev.kitteh.factions.perms.PermSelectorRegistry;
 import dev.kitteh.factions.perms.PermSelectorTypeAdapter;
@@ -412,7 +412,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         getServer().getPluginManager().registerEvents(new FactionsEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsExploitListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsBlockListener(this), this);
-        getServer().getPluginManager().registerEvents(new PortalListener_114(this), this);
+        getServer().getPluginManager().registerEvents(new PortalListener(this), this);
 
         // since some other plugins execute commands directly through this command interface, provide it
         this.getCommand(refCommand).setExecutor(cmdBase);

@@ -44,24 +44,7 @@ public class Persist {
         return getFile(getName(clazz));
     }
 
-    public File getFile(Object obj) {
-        return getFile(getName(obj));
-    }
-
-    public File getFile(Type type) {
-        return getFile(getName(type));
-    }
-
-
     // NICE WRAPPERS
-
-    public <T> T loadOrSaveDefault(T def, Class<T> clazz) {
-        return loadOrSaveDefault(def, clazz, getFile(clazz));
-    }
-
-    public <T> T loadOrSaveDefault(T def, Class<T> clazz, String name) {
-        return loadOrSaveDefault(def, clazz, getFile(name));
-    }
 
     public <T> T loadOrSaveDefault(T def, Class<T> clazz, File file) {
         if (!file.exists()) {
@@ -91,16 +74,12 @@ public class Persist {
 
     // SAVE
 
-    public boolean save(Object instance) {
-        return save(instance, getFile(instance));
+    public void save(Object instance, String name) {
+        save(instance, getFile(name));
     }
 
-    public boolean save(Object instance, String name) {
-        return save(instance, getFile(name));
-    }
-
-    public boolean save(Object instance, File file) {
-        return DiscUtil.writeCatch(file, plugin.getGson().toJson(instance), true);
+    public void save(Object instance, File file) {
+        DiscUtil.writeCatch(file, plugin.getGson().toJson(instance), true);
     }
 
     // LOAD BY CLASS

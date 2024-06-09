@@ -1,7 +1,6 @@
 package dev.kitteh.factions.data.json;
 
 import com.google.gson.reflect.TypeToken;
-import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryBoard;
@@ -9,6 +8,7 @@ import dev.kitteh.factions.util.DiscUtil;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,7 +17,7 @@ import java.util.logging.Level;
 
 
 public class JSONBoard extends MemoryBoard {
-    private static final transient File file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/board.json");
+    private static final File file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/board.json");
 
     // -------------------------------------------- //
     // Persistance
@@ -72,7 +72,7 @@ public class JSONBoard extends MemoryBoard {
 
     public void forceSave(boolean sync) {
         Map<String, Map<String, String>> map = dumpAsSaveFormat();
-        DiscUtil.write(file, () -> FactionsPlugin.getInstance().getGson().toJson(map), sync);
+        DiscUtil.writeCatch(file, () -> FactionsPlugin.getInstance().getGson().toJson(map), sync);
     }
 
     public int load() {
@@ -85,7 +85,7 @@ public class JSONBoard extends MemoryBoard {
         try {
             Type type = new TypeToken<Map<String, Map<String, String>>>() {
             }.getType();
-            Map<String, Map<String, String>> worldCoordIds = FactionsPlugin.getInstance().getGson().fromJson(DiscUtil.read(file), type);
+            Map<String, Map<String, String>> worldCoordIds = FactionsPlugin.getInstance().getGson().fromJson(Files.newBufferedReader(file.toPath()), type);
             loadFromSaveFormat(worldCoordIds);
         } catch (Exception e) {
             FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load the board from disk.", e);

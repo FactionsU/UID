@@ -18,6 +18,7 @@ import java.util.function.Function;
 import java.util.logging.Level;
 
 public class IntegrationManager implements Listener {
+    @SuppressWarnings("Convert2MethodRef")
     public enum Integration {
         DYNMAP("dynmap", EngineDynmap.getInstance()::init),
         ESS("Essentials", (p) -> Essentials.setup(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE

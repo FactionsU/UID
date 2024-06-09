@@ -12,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 
 public class EssentialsListener implements Listener {

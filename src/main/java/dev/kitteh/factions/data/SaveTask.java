@@ -20,9 +20,9 @@ public class SaveTask implements Runnable {
             return;
         }
         running = true;
-        ((MemoryFPlayers)FPlayers.getInstance()).forceSave(false);
-        ((MemoryFactions)Factions.getInstance()).forceSave(false);
-        ((MemoryBoard)Board.getInstance()).forceSave(false);
+        ((MemoryFPlayers) FPlayers.getInstance()).forceSave(false);
+        ((MemoryFactions) Factions.getInstance()).forceSave(false);
+        ((MemoryBoard) Board.getInstance()).forceSave(false);
         running = false;
     }
 }

@@ -375,7 +375,6 @@ public class Econ {
     // Standard account management methods
     // -------------------------------------------- //
 
-    @Deprecated
     private static OfflinePlayer getOfflinePlayerForName(String name) {
         try {
             Matcher matcher = FACTION_PATTERN.matcher(name);
@@ -388,22 +387,12 @@ public class Econ {
         }
     }
 
-    @Deprecated
-    public static boolean hasAccount(String name) {
-        return hasAccount(getOfflinePlayerForName(name));
-    }
-
     public static boolean hasAccount(EconomyParticipator ep) {
         return hasAccount(ep.getOfflinePlayer());
     }
 
     private static boolean hasAccount(OfflinePlayer op) {
         return econ.hasAccount(op, getWorld(op));
-    }
-
-    @Deprecated
-    public static double getBalance(String account) {
-        return getBalance(getOfflinePlayerForName(account));
     }
 
     public static double getBalance(EconomyParticipator ep) {
@@ -424,26 +413,12 @@ public class Econ {
 
     private static final DecimalFormat format;
 
-    @Deprecated
-    public static String getFriendlyBalance(UUID uuid) {
-        OfflinePlayer offline = Bukkit.getOfflinePlayer(uuid);
-        if (offline.getName() == null) {
-            return "0";
-        }
-        return format.format(getBalance(offline));
-    }
-
     public static String getFriendlyBalance(FPlayer player) {
         OfflinePlayer p;
         if ((p = player.getPlayer()) == null) {
             return "0";
         }
         return format.format(getBalance(p));
-    }
-
-    @Deprecated
-    public static boolean setBalance(String account, double amount) {
-        return setBalance(getOfflinePlayerForName(account), amount);
     }
 
     public static boolean setBalance(EconomyParticipator ep, double amount) {
@@ -459,11 +434,6 @@ public class Econ {
         }
     }
 
-    @Deprecated
-    public static boolean modifyBalance(String account, double amount) {
-        return modifyBalance(getOfflinePlayerForName(account), amount);
-    }
-
     public static boolean modifyBalance(EconomyParticipator ep, double amount) {
         return modifyBalance(ep.getOfflinePlayer(), amount);
     }
@@ -476,11 +446,6 @@ public class Econ {
         }
     }
 
-    @Deprecated
-    public static boolean deposit(String account, double amount) {
-        return deposit(getOfflinePlayerForName(account), amount);
-    }
-
     public static boolean deposit(EconomyParticipator ep, double amount) {
         return deposit(ep.getOfflinePlayer(), amount);
     }
@@ -489,22 +454,12 @@ public class Econ {
         return econ.depositPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
     }
 
-    @Deprecated
-    public static boolean withdraw(String account, double amount) {
-        return withdraw(getOfflinePlayerForName(account), amount);
-    }
-
     public static boolean withdraw(EconomyParticipator ep, double amount) {
         return withdraw(ep.getOfflinePlayer(), amount);
     }
 
     private static boolean withdraw(OfflinePlayer op, double amount) {
         return econ.withdrawPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
-    }
-
-    @Deprecated
-    public static void createAccount(String name) {
-        createAccount(getOfflinePlayerForName(name));
     }
 
     public static void createAccount(EconomyParticipator ep) {
@@ -528,15 +483,5 @@ public class Econ {
             setBalance(op, 0);
         }
         return op;
-    }
-
-    @Deprecated
-    public static boolean isUUID(String uuid) {
-        try {
-            UUID.fromString(uuid);
-            return true;
-        } catch (IllegalArgumentException ex) {
-            return false;
-        }
     }
 }

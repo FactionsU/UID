@@ -839,8 +839,7 @@ public class EngineDynmap {
     }
 
     // Find all contiguous blocks, set in target and clear in source
-    private int floodFillTarget(TileFlags source, TileFlags destination, int x, int y) {
-        int cnt = 0;
+    private void floodFillTarget(TileFlags source, TileFlags destination, int x, int y) {
         ArrayDeque<int[]> stack = new ArrayDeque<>();
         stack.push(new int[]{x, y});
 
@@ -851,7 +850,6 @@ public class EngineDynmap {
             if (source.getFlag(x, y)) { // Set in src
                 source.setFlag(x, y, false); // Clear source
                 destination.setFlag(x, y, true); // Set in destination
-                cnt++;
                 if (source.getFlag(x + 1, y)) {
                     stack.push(new int[]{x + 1, y});
                 }
@@ -866,6 +864,5 @@ public class EngineDynmap {
                 }
             }
         }
-        return cnt;
     }
 }

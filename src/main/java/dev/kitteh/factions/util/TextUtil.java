@@ -92,11 +92,7 @@ public class TextUtil {
         while (matcher.find()) {
             String tag = matcher.group(1);
             String repl = tags.get(tag);
-            if (repl == null) {
-                matcher.appendReplacement(ret, "<" + tag + ">");
-            } else {
-                matcher.appendReplacement(ret, repl);
-            }
+            matcher.appendReplacement(ret, repl != null ? repl : "<" + tag + ">");
         }
         matcher.appendTail(ret);
         return ret.toString();

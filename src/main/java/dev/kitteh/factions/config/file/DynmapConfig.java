@@ -161,15 +161,15 @@ public class DynmapConfig {
                 for (Map.Entry<String, ?> e : mappy.entrySet()) {
                     String faction = e.getKey();
                     Object s = e.getValue();
-                    if (s instanceof Style style) {
+                    if (s instanceof Style styl) {
                         styles.put(faction, new DynmapStyle()
-                                .setLineColor(style.getLineColor())
-                                .setLineOpacity(style.getLineOpacity())
-                                .setLineWeight(style.getLineWeight())
-                                .setFillColor(style.getFillColor())
-                                .setFillOpacity(style.getFillOpacity())
-                                .setHomeMarker(style.getHomeMarker())
-                                .setBoost(style.isStyleBoost()));
+                                .setLineColor(styl.getLineColor())
+                                .setLineOpacity(styl.getLineOpacity())
+                                .setLineWeight(styl.getLineWeight())
+                                .setFillColor(styl.getFillColor())
+                                .setFillOpacity(styl.getFillOpacity())
+                                .setHomeMarker(styl.getHomeMarker())
+                                .setBoost(styl.isStyleBoost()));
                     } else if (s instanceof Map) {
                         DynmapStyle style = new DynmapStyle();
                         @SuppressWarnings("unchecked")

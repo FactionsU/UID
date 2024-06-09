@@ -504,7 +504,7 @@ public abstract class MemoryBoard implements Board {
         N, E, S, W
     }
 
-    private Cache<FPlayer, List<Component>> mapCache = CacheBuilder.newBuilder()
+    private final Cache<FPlayer, List<Component>> mapCache = CacheBuilder.newBuilder()
             .expireAfterWrite(500, TimeUnit.MILLISECONDS).build();
 
     public List<Component> getScoreboardMap(FPlayer fplayer) {
@@ -585,4 +585,10 @@ public abstract class MemoryBoard implements Board {
 
         return ret;
     }
+
+    public abstract void forceSave();
+
+    public abstract void forceSave(boolean sync);
+
+    public abstract int load();
 }
