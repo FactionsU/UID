@@ -176,13 +176,10 @@ public abstract class AbstractListener implements Listener {
                 (faction.isSafeZone() && protection.isSafeZoneBlockTNT()))) {
             // TNT which needs prevention
             return true;
-        } else if (((faction.isWilderness() && protection.isWildernessBlockOtherExplosions() && !protection.getWorldsNoWildernessProtection().contains(location.getWorldName())) ||
+        } else return (faction.isWilderness() && protection.isWildernessBlockOtherExplosions() && !protection.getWorldsNoWildernessProtection().contains(location.getWorldName())) ||
                 (faction.isNormal() && (online ? protection.isTerritoryBlockOtherExplosions() : protection.isTerritoryBlockOtherExplosionsWhenOffline())) ||
                 (faction.isWarZone() && protection.isWarZoneBlockOtherExplosions()) ||
-                (faction.isSafeZone() && protection.isSafeZoneBlockOtherExplosions()))) {
-            return true;
-        }
-        return false;
+                (faction.isSafeZone() && protection.isSafeZoneBlockOtherExplosions());
     }
 
     public boolean canPlayerUseBlock(Player player, Material material, Location location, boolean justCheck) {

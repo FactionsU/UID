@@ -84,7 +84,7 @@ public class TextUtil {
         return replaceTags(str, this.tags);
     }
 
-    public static final transient Pattern patternTag = Pattern.compile("<([a-zA-Z0-9_]*)>");
+    public static final Pattern patternTag = Pattern.compile("<([a-zA-Z0-9_]*)>");
 
     public static String replaceTags(String str, Map<String, String> tags) {
         StringBuilder ret = new StringBuilder();
