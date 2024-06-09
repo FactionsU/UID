@@ -1,7 +1,7 @@
-name: Factions
-version: 1.6.9.5-U${project.version}
-main: com.massivecraft.factions.FactionsPlugin
-authors: [Olof Larsson, Brett Flannigan, drtshock, dariasc, CmdrKittens, mbaxter]
+name: FactionsUUID
+version: ${project.version}-b${build.number}
+main: dev.kitteh.factions.FactionsPlugin
+authors: [mbaxter, drtshock, dariasc, Brett Flannigan, Olof Larsson]
 softdepend: [LuckPerms, WorldGuard]
 api-version: '1.20'
 website: https://www.spigotmc.org/resources/factionsuuid.1035/

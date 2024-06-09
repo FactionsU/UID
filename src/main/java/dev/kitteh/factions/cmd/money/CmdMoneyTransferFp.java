@@ -1,0 +1,48 @@
+package dev.kitteh.factions.cmd.money;
+
+import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.cmd.CommandContext;
+import dev.kitteh.factions.cmd.CommandRequirements;
+import dev.kitteh.factions.iface.EconomyParticipator;
+import dev.kitteh.factions.integration.Econ;
+import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.TL;
+import org.bukkit.ChatColor;
+
+
+public class CmdMoneyTransferFp extends MoneyCommand {
+
+    public CmdMoneyTransferFp() {
+        this.aliases.add("fp");
+
+        this.requiredArgs.add("amount");
+        this.requiredArgs.add("faction");
+        this.requiredArgs.add("player");
+
+        this.requirements = new CommandRequirements.Builder(Permission.MONEY_F2P).build();
+    }
+
+    @Override
+    public void perform(CommandContext context) {
+        double amount = Math.abs(context.argAsDouble(0, 0d));
+        EconomyParticipator from = context.argAsFaction(1);
+        if (from == null) {
+            return;
+        }
+        EconomyParticipator to = context.argAsBestFPlayerMatch(2);
+        if (to == null) {
+            return;
+        }
+
+        boolean success = Econ.transferMoney(context.fPlayer, from, to, amount);
+
+        if (success && FactionsPlugin.getInstance().conf().logging().isMoneyTransactions()) {
+            FactionsPlugin.getInstance().log(ChatColor.stripColor(FactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYTRANSFERFP_TRANSFER.toString(), context.fPlayer.getName(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
+        }
+    }
+
+    @Override
+    public TL getUsageTranslation() {
+        return TL.COMMAND_MONEYTRANSFERFP_DESCRIPTION;
+    }
+}
