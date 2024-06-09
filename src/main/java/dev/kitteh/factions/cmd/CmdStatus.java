@@ -3,7 +3,7 @@ package dev.kitteh.factions.cmd;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.ChatColor;

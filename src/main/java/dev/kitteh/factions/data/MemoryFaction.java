@@ -10,19 +10,18 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.PermissionsConfig;
 import dev.kitteh.factions.event.FactionAutoDisbandEvent;
 import dev.kitteh.factions.event.FactionNewAdminEvent;
-import dev.kitteh.factions.iface.EconomyParticipator;
-import dev.kitteh.factions.iface.RelationParticipator;
+import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.integration.LWC;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.landraidcontrol.LandRaidControl;
-import dev.kitteh.factions.perms.PermSelector;
-import dev.kitteh.factions.perms.PermissibleAction;
-import dev.kitteh.factions.perms.Relation;
-import dev.kitteh.factions.perms.Role;
-import dev.kitteh.factions.perms.Selectable;
-import dev.kitteh.factions.struct.BanInfo;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.permissible.PermSelector;
+import dev.kitteh.factions.permissible.PermissibleAction;
+import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.permissible.Selectable;
+import dev.kitteh.factions.util.BanInfo;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.RelationUtil;
@@ -45,7 +44,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public abstract class MemoryFaction implements Faction, EconomyParticipator {
+public abstract class MemoryFaction implements Faction, Participator {
     protected int id = Integer.MIN_VALUE;
     protected boolean peacefulExplosionsEnabled;
     protected boolean permanent;
@@ -502,33 +501,33 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     // -------------------------------
 
     @Override
-    public String describeTo(RelationParticipator that, boolean ucfirst) {
+    public String describeTo(Participator that, boolean ucfirst) {
         return RelationUtil.describeThatToMe(this, that, ucfirst);
     }
 
     @Override
-    public String describeTo(RelationParticipator that) {
+    public String describeTo(Participator that) {
         return RelationUtil.describeThatToMe(this, that);
     }
 
     @Override
-    public Relation getRelationTo(RelationParticipator rp) {
+    public Relation getRelationTo(Participator rp) {
         return RelationUtil.getRelationTo(this, rp);
     }
 
     @Override
-    public Relation getRelationTo(RelationParticipator rp, boolean ignorePeaceful) {
+    public Relation getRelationTo(Participator rp, boolean ignorePeaceful) {
         return RelationUtil.getRelationTo(this, rp, ignorePeaceful);
     }
 
     @Deprecated
     @Override
-    public ChatColor getColorTo(RelationParticipator rp) {
+    public ChatColor getColorTo(Participator rp) {
         return RelationUtil.getColorOfThatToMe(this, rp);
     }
 
     @Override
-    public String getColorStringTo(RelationParticipator rp) {
+    public String getColorStringTo(Participator rp) {
         return RelationUtil.getColorStringOfThatToMe(this, rp);
     }
 

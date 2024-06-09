@@ -4,7 +4,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.perms.Relation;
+import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.QuadFunction;
 import net.kyori.adventure.text.Component;

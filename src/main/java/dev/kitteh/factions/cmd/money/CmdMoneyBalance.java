@@ -4,7 +4,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.cmd.CommandContext;
 import dev.kitteh.factions.cmd.CommandRequirements;
 import dev.kitteh.factions.integration.Econ;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 
 public class CmdMoneyBalance extends MoneyCommand {

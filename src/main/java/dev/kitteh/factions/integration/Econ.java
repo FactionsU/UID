@@ -4,9 +4,9 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.iface.EconomyParticipator;
-import dev.kitteh.factions.perms.Role;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.Participator;
+import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.RelationUtil;
 import dev.kitteh.factions.util.TL;
 import net.milkbowl.vault.economy.Economy;
@@ -103,7 +103,7 @@ public class Econ {
         modifyBalance(getOfflinePlayerForName(FactionsPlugin.getInstance().conf().economy().getUniverseAccount()), delta);
     }
 
-    public static void sendBalanceInfo(FPlayer to, EconomyParticipator about) {
+    public static void sendBalanceInfo(FPlayer to, Participator about) {
         if (!shouldBeUsed()) {
             FactionsPlugin.getInstance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
@@ -119,7 +119,7 @@ public class Econ {
         to.sendMessage(ChatColor.stripColor(String.format(TL.ECON_BALANCE.toString(), about.getTag(), Econ.moneyString(getBalance(about)))));
     }
 
-    public static boolean canIControlYou(EconomyParticipator i, EconomyParticipator you) {
+    public static boolean canIControlYou(Participator i, Participator you) {
         Faction fI = RelationUtil.getFaction(i);
         Faction fYou = RelationUtil.getFaction(you);
 
@@ -160,11 +160,11 @@ public class Econ {
         return false;
     }
 
-    public static boolean transferMoney(EconomyParticipator invoker, EconomyParticipator from, EconomyParticipator to, double amount) {
+    public static boolean transferMoney(Participator invoker, Participator from, Participator to, double amount) {
         return transferMoney(invoker, from, to, amount, true);
     }
 
-    public static boolean transferMoney(EconomyParticipator invoker, EconomyParticipator from, EconomyParticipator to, double amount, boolean notify) {
+    public static boolean transferMoney(Participator invoker, Participator from, Participator to, double amount, boolean notify) {
         if (!shouldBeUsed()) {
             invoker.msg(TL.ECON_DISABLED);
             return false;
@@ -174,7 +174,7 @@ public class Econ {
         // If the amount is negative we must flip and multiply amount with -1.
         if (amount < 0) {
             amount *= -1;
-            EconomyParticipator temp = from;
+            Participator temp = from;
             from = to;
             to = temp;
         }
@@ -225,7 +225,7 @@ public class Econ {
         return false;
     }
 
-    public static Set<FPlayer> getFplayers(EconomyParticipator ep) {
+    public static Set<FPlayer> getFplayers(Participator ep) {
         Set<FPlayer> fplayers = new HashSet<>();
 
         if (ep != null) {
@@ -239,7 +239,7 @@ public class Econ {
         return fplayers;
     }
 
-    public static void sendTransferInfo(EconomyParticipator invoker, EconomyParticipator from, EconomyParticipator to, double amount) {
+    public static void sendTransferInfo(Participator invoker, Participator from, Participator to, double amount) {
         Set<FPlayer> recipients = new HashSet<>();
         recipients.addAll(getFplayers(invoker));
         recipients.addAll(getFplayers(from));
@@ -264,7 +264,7 @@ public class Econ {
         }
     }
 
-    public static boolean hasAtLeast(EconomyParticipator ep, double delta, String toDoThis) {
+    public static boolean hasAtLeast(Participator ep, double delta, String toDoThis) {
         if (!shouldBeUsed()) {
             return true;
         }
@@ -285,7 +285,7 @@ public class Econ {
         return true;
     }
 
-    public static boolean modifyMoney(EconomyParticipator ep, double delta, String toDoThis, String forDoingThis) {
+    public static boolean modifyMoney(Participator ep, double delta, String toDoThis, String forDoingThis) {
         if (!shouldBeUsed()) {
             return false;
         }
@@ -387,7 +387,7 @@ public class Econ {
         }
     }
 
-    public static boolean hasAccount(EconomyParticipator ep) {
+    public static boolean hasAccount(Participator ep) {
         return hasAccount(ep.getOfflinePlayer());
     }
 
@@ -395,7 +395,7 @@ public class Econ {
         return econ.hasAccount(op, getWorld(op));
     }
 
-    public static double getBalance(EconomyParticipator ep) {
+    public static double getBalance(Participator ep) {
         return getBalance(ep.getOfflinePlayer());
     }
 
@@ -403,7 +403,7 @@ public class Econ {
         return econ.getBalance(checkStatus(op), getWorld(op));
     }
 
-    public static boolean has(EconomyParticipator ep, double amount) {
+    public static boolean has(Participator ep, double amount) {
         return has(ep.getOfflinePlayer(), amount);
     }
 
@@ -421,7 +421,7 @@ public class Econ {
         return format.format(getBalance(p));
     }
 
-    public static boolean setBalance(EconomyParticipator ep, double amount) {
+    public static boolean setBalance(Participator ep, double amount) {
         return setBalance(ep.getOfflinePlayer(), amount);
     }
 
@@ -434,7 +434,7 @@ public class Econ {
         }
     }
 
-    public static boolean modifyBalance(EconomyParticipator ep, double amount) {
+    public static boolean modifyBalance(Participator ep, double amount) {
         return modifyBalance(ep.getOfflinePlayer(), amount);
     }
 
@@ -446,7 +446,7 @@ public class Econ {
         }
     }
 
-    public static boolean deposit(EconomyParticipator ep, double amount) {
+    public static boolean deposit(Participator ep, double amount) {
         return deposit(ep.getOfflinePlayer(), amount);
     }
 
@@ -454,7 +454,7 @@ public class Econ {
         return econ.depositPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
     }
 
-    public static boolean withdraw(EconomyParticipator ep, double amount) {
+    public static boolean withdraw(Participator ep, double amount) {
         return withdraw(ep.getOfflinePlayer(), amount);
     }
 
@@ -462,7 +462,7 @@ public class Econ {
         return econ.withdrawPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
     }
 
-    public static void createAccount(EconomyParticipator ep) {
+    public static void createAccount(Participator ep) {
         createAccount(ep.getOfflinePlayer());
     }
 

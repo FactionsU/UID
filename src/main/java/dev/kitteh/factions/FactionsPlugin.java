@@ -24,17 +24,17 @@ import dev.kitteh.factions.integration.Worldguard;
 import dev.kitteh.factions.integration.dynmap.EngineDynmap;
 import dev.kitteh.factions.integration.permcontext.ContextManager;
 import dev.kitteh.factions.landraidcontrol.LandRaidControl;
-import dev.kitteh.factions.listeners.FactionsBlockListener;
-import dev.kitteh.factions.listeners.FactionsChatListener;
-import dev.kitteh.factions.listeners.FactionsEntityListener;
-import dev.kitteh.factions.listeners.FactionsExploitListener;
-import dev.kitteh.factions.listeners.FactionsPlayerListener;
-import dev.kitteh.factions.listeners.versionspecific.PortalListener;
-import dev.kitteh.factions.perms.PermSelector;
-import dev.kitteh.factions.perms.PermSelectorRegistry;
-import dev.kitteh.factions.perms.PermSelectorTypeAdapter;
-import dev.kitteh.factions.perms.PermissibleActionRegistry;
-import dev.kitteh.factions.struct.ChatMode;
+import dev.kitteh.factions.listener.FactionsBlockListener;
+import dev.kitteh.factions.listener.FactionsChatListener;
+import dev.kitteh.factions.listener.FactionsEntityListener;
+import dev.kitteh.factions.listener.FactionsExploitListener;
+import dev.kitteh.factions.listener.FactionsPlayerListener;
+import dev.kitteh.factions.listener.versionspecific.PortalListener;
+import dev.kitteh.factions.permissible.PermSelector;
+import dev.kitteh.factions.permissible.PermSelectorRegistry;
+import dev.kitteh.factions.permissible.PermSelectorTypeAdapter;
+import dev.kitteh.factions.permissible.PermissibleActionRegistry;
+import dev.kitteh.factions.util.ChatMode;
 import dev.kitteh.factions.util.AutoLeaveTask;
 import dev.kitteh.factions.util.EnumTypeAdapter;
 import dev.kitteh.factions.util.FlightUtil;
@@ -368,7 +368,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             }
             faction.addFPlayer(fPlayer);
         }
-        int loadedClaims = Board.getInstance().load();
+        int loadedClaims = Instances.BOARD.load();
         Board.getInstance().clean();
         FactionsPlugin.getInstance().getLogger().info("Loaded " + loadedPlayers + " players in " + loadedFactions + " factions with " + loadedClaims + " claims");
 

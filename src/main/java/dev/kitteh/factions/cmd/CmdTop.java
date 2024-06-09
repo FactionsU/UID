@@ -10,7 +10,7 @@ import dev.kitteh.factions.cmd.top.FTopGTIntValue;
 import dev.kitteh.factions.cmd.top.FTopValue;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.entity.Player;
 

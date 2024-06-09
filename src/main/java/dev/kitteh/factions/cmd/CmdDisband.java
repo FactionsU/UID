@@ -8,9 +8,9 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.event.FactionDisbandEvent;
 import dev.kitteh.factions.integration.Econ;
-import dev.kitteh.factions.perms.PermissibleActions;
-import dev.kitteh.factions.scoreboards.FTeamWrapper;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.scoreboard.FTeamWrapper;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 

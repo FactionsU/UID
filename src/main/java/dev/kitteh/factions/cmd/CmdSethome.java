@@ -4,8 +4,8 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.event.FactionSetHomeEvent;
-import dev.kitteh.factions.perms.PermissibleActions;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 

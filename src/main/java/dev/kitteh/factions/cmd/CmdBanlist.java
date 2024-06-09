@@ -3,8 +3,8 @@ package dev.kitteh.factions.cmd;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.struct.BanInfo;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.BanInfo;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 
 import java.util.ArrayList;

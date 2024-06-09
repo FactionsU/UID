@@ -5,7 +5,7 @@ import dev.kitteh.factions.cmd.tnt.CmdTNTFill;
 import dev.kitteh.factions.cmd.tnt.CmdTNTInfo;
 import dev.kitteh.factions.cmd.tnt.CmdTNTSiphon;
 import dev.kitteh.factions.cmd.tnt.CmdTNTWithdraw;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 
 public class CmdTNT extends FCommand {

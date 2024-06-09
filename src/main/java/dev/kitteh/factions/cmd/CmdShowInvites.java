@@ -3,7 +3,7 @@ package dev.kitteh.factions.cmd;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;

@@ -3,7 +3,7 @@ package dev.kitteh.factions.cmd;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.FlightUtil;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;

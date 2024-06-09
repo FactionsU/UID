@@ -8,7 +8,7 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
-import dev.kitteh.factions.perms.Relation;
+import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.tag.FactionTag;
 import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.TL;

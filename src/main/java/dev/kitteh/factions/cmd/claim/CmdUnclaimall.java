@@ -7,8 +7,8 @@ import dev.kitteh.factions.cmd.CommandRequirements;
 import dev.kitteh.factions.cmd.FCommand;
 import dev.kitteh.factions.event.LandUnclaimAllEvent;
 import dev.kitteh.factions.integration.Econ;
-import dev.kitteh.factions.perms.PermissibleActions;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 

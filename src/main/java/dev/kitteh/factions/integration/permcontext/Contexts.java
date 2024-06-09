@@ -5,8 +5,8 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
-import dev.kitteh.factions.perms.Relation;
-import dev.kitteh.factions.perms.Role;
+import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.permissible.Role;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;

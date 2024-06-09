@@ -2,7 +2,7 @@ package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
-import dev.kitteh.factions.perms.Selectable;
+import dev.kitteh.factions.permissible.Selectable;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ListIterator;

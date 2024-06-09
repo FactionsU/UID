@@ -2,7 +2,6 @@ package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.struct.Permission;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

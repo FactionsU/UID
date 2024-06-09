@@ -5,8 +5,8 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.event.FPlayerJoinEvent;
 import dev.kitteh.factions.event.FactionNewAdminEvent;
-import dev.kitteh.factions.perms.Role;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 

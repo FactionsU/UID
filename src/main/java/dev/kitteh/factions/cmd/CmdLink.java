@@ -1,8 +1,8 @@
 package dev.kitteh.factions.cmd;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.perms.Role;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import com.mojang.brigadier.arguments.StringArgumentType;

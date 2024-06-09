@@ -6,7 +6,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
-import dev.kitteh.factions.perms.Relation;
+import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.TL;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 

@@ -1,9 +1,9 @@
 package dev.kitteh.factions.cmd;
 
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.perms.Role;
-import dev.kitteh.factions.struct.ChatMode;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.util.ChatMode;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;

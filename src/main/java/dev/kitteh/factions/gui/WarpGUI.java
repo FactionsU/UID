@@ -4,7 +4,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.Econ;
-import dev.kitteh.factions.perms.PermissibleActions;
+import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
 import dev.kitteh.factions.util.material.MaterialDb;

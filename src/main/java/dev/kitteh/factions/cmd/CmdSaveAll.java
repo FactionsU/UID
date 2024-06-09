@@ -6,7 +6,7 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.data.MemoryFPlayers;
 import dev.kitteh.factions.data.MemoryFactions;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 
 public class CmdSaveAll extends FCommand {

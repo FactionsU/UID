@@ -1,11 +1,10 @@
 package dev.kitteh.factions;
 
-import dev.kitteh.factions.iface.EconomyParticipator;
-import dev.kitteh.factions.perms.PermissibleAction;
-import dev.kitteh.factions.perms.Relation;
-import dev.kitteh.factions.perms.Role;
-import dev.kitteh.factions.perms.Selectable;
-import dev.kitteh.factions.struct.BanInfo;
+import dev.kitteh.factions.permissible.PermissibleAction;
+import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.permissible.Selectable;
+import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.LazyLocation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -15,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public interface Faction extends EconomyParticipator, Selectable {
+public interface Faction extends Participator, Selectable {
     Map<UUID, List<String>> getAnnouncements();
 
     Map<String, LazyLocation> getWarps();

@@ -11,21 +11,20 @@ import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.event.FactionAutoDisbandEvent;
 import dev.kitteh.factions.event.LandClaimEvent;
 import dev.kitteh.factions.event.LandUnclaimEvent;
-import dev.kitteh.factions.iface.EconomyParticipator;
-import dev.kitteh.factions.iface.RelationParticipator;
+import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.integration.Essentials;
 import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.integration.LWC;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
-import dev.kitteh.factions.perms.PermissibleActions;
-import dev.kitteh.factions.perms.Relation;
-import dev.kitteh.factions.perms.Role;
-import dev.kitteh.factions.scoreboards.FScoreboard;
-import dev.kitteh.factions.scoreboards.sidebar.FInfoSidebar;
-import dev.kitteh.factions.struct.ChatMode;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.scoreboard.FScoreboard;
+import dev.kitteh.factions.scoreboard.sidebar.FInfoSidebar;
+import dev.kitteh.factions.util.ChatMode;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.RelationUtil;
 import dev.kitteh.factions.util.TL;
@@ -503,22 +502,22 @@ public abstract class MemoryFPlayer implements FPlayer {
     // -------------------------------
 
     @Override
-    public String describeTo(RelationParticipator that, boolean ucfirst) {
+    public String describeTo(Participator that, boolean ucfirst) {
         return RelationUtil.describeThatToMe(this, that, ucfirst);
     }
 
     @Override
-    public String describeTo(RelationParticipator that) {
+    public String describeTo(Participator that) {
         return RelationUtil.describeThatToMe(this, that);
     }
 
     @Override
-    public Relation getRelationTo(RelationParticipator rp) {
+    public Relation getRelationTo(Participator rp) {
         return RelationUtil.getRelationTo(this, rp);
     }
 
     @Override
-    public Relation getRelationTo(RelationParticipator rp, boolean ignorePeaceful) {
+    public Relation getRelationTo(Participator rp, boolean ignorePeaceful) {
         return RelationUtil.getRelationTo(this, rp, ignorePeaceful);
     }
 
@@ -528,13 +527,13 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Deprecated
     @Override
-    public ChatColor getColorTo(RelationParticipator rp) {
+    public ChatColor getColorTo(Participator rp) {
         return RelationUtil.getColorOfThatToMe(this, rp);
     }
 
     @Override
-    public String getColorStringTo(RelationParticipator rp) {
-        return RelationUtil.getColorStringOfThatToMe(this, rp);
+    public String getColorStringTo(Participator rp) {
+        return RelationUtil.getColorStringOfThatToMe(this,rp);
     }
 
 
@@ -904,7 +903,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         // if economy is enabled and they're not on the bypass list, make sure they can pay
         boolean mustPay = Econ.shouldBeUsed() && !this.isAdminBypassing() && !forFaction.isSafeZone() && !forFaction.isWarZone();
         double cost = 0.0;
-        EconomyParticipator payee = null;
+        Participator payee = null;
         if (mustPay) {
             cost = Econ.calculateClaimCost(ownedLand, currentFaction.isNormal());
 

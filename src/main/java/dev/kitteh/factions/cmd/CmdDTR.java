@@ -3,7 +3,7 @@ package dev.kitteh.factions.cmd;
 import dev.kitteh.factions.cmd.dtr.CmdDTRGet;
 import dev.kitteh.factions.cmd.dtr.CmdDTRModify;
 import dev.kitteh.factions.cmd.dtr.CmdDTRResetAll;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 
 public class CmdDTR extends FCommand {

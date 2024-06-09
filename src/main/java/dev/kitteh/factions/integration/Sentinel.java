@@ -4,7 +4,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.perms.Relation;
+import dev.kitteh.factions.permissible.Relation;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

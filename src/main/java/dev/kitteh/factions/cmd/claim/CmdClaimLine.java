@@ -5,7 +5,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.cmd.CommandContext;
 import dev.kitteh.factions.cmd.CommandRequirements;
 import dev.kitteh.factions.cmd.FCommand;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;

@@ -4,7 +4,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.event.FPlayerTeleportEvent;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

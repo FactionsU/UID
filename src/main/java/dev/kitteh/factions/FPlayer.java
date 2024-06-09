@@ -1,10 +1,9 @@
 package dev.kitteh.factions;
 
-import dev.kitteh.factions.iface.EconomyParticipator;
-import dev.kitteh.factions.perms.Relation;
-import dev.kitteh.factions.perms.Role;
-import dev.kitteh.factions.perms.Selectable;
-import dev.kitteh.factions.struct.ChatMode;
+import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.permissible.Selectable;
+import dev.kitteh.factions.util.ChatMode;
 import dev.kitteh.factions.util.WarmUpUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -24,7 +23,7 @@ import java.util.UUID;
  * The same instance is always returned for the same player. This means you can use the == operator. No .equals method
  * necessary.
  */
-public interface FPlayer extends EconomyParticipator, Selectable {
+public interface FPlayer extends Participator, Selectable {
     void login();
 
     void logout();

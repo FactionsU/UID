@@ -3,9 +3,9 @@ package dev.kitteh.factions.cmd.money;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.cmd.CommandContext;
 import dev.kitteh.factions.cmd.CommandRequirements;
-import dev.kitteh.factions.iface.EconomyParticipator;
+import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.integration.Econ;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.ChatColor;
 
@@ -25,11 +25,11 @@ public class CmdMoneyTransferPf extends MoneyCommand {
     @Override
     public void perform(CommandContext context) {
         double amount = Math.abs(context.argAsDouble(0, 0d));
-        EconomyParticipator from = context.argAsBestFPlayerMatch(1);
+        Participator from = context.argAsBestFPlayerMatch(1);
         if (from == null) {
             return;
         }
-        EconomyParticipator to = context.argAsFaction(2);
+        Participator to = context.argAsFaction(2);
         if (to == null) {
             return;
         }

@@ -5,7 +5,7 @@ import com.drtshock.playervaults.vaultmanagement.VaultManager;
 import com.drtshock.playervaults.vaultmanagement.VaultOperations;
 import com.drtshock.playervaults.vaultmanagement.VaultViewInfo;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;

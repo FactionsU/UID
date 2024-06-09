@@ -4,7 +4,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.struct.Permission;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 
 

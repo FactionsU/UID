@@ -11,7 +11,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.DynmapConfig;
 import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.integration.Econ;
-import dev.kitteh.factions.perms.Role;
+import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.tag.FactionTag;
 import dev.kitteh.factions.tag.GeneralTag;
 import dev.kitteh.factions.util.LazyLocation;

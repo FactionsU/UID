@@ -3,14 +3,14 @@ package dev.kitteh.factions.util;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.iface.RelationParticipator;
-import dev.kitteh.factions.perms.Relation;
+import dev.kitteh.factions.Participator;
+import dev.kitteh.factions.permissible.Relation;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
 
 public class RelationUtil {
 
-    public static String describeThatToMe(RelationParticipator that, RelationParticipator me, boolean ucfirst) {
+    public static String describeThatToMe(Participator that, Participator me, boolean ucfirst) {
         String ret = "";
 
         Faction thatFaction = getFaction(that);
@@ -44,15 +44,15 @@ public class RelationUtil {
         return getColorStringOfThatToMe(that, me) + ret;
     }
 
-    public static String describeThatToMe(RelationParticipator that, RelationParticipator me) {
+    public static String describeThatToMe(Participator that, Participator me) {
         return describeThatToMe(that, me, false);
     }
 
-    public static Relation getRelationTo(RelationParticipator me, RelationParticipator that) {
+    public static Relation getRelationTo(Participator me, Participator that) {
         return getRelationTo(that, me, false);
     }
 
-    public static Relation getRelationTo(RelationParticipator me, RelationParticipator that, boolean ignorePeaceful) {
+    public static Relation getRelationTo(Participator me, Participator that, boolean ignorePeaceful) {
         Faction fthat = getFaction(that);
         if (fthat == null) {
             return Relation.NEUTRAL; // ERROR
@@ -82,7 +82,7 @@ public class RelationUtil {
         return fme.getRelationWish(fthat);
     }
 
-    public static Faction getFaction(RelationParticipator rp) {
+    public static Faction getFaction(Participator rp) {
         if (rp instanceof Faction) {
             return (Faction) rp;
         }
@@ -96,15 +96,15 @@ public class RelationUtil {
     }
 
     @Deprecated
-    public static ChatColor getColorOfThatToMe(RelationParticipator that, RelationParticipator me) {
+    public static ChatColor getColorOfThatToMe(Participator that, Participator me) {
         return TextUtil.getClosest(getTextColorOfThatToMe(that, me));
     }
 
-    public static String getColorStringOfThatToMe(RelationParticipator that, RelationParticipator me) {
+    public static String getColorStringOfThatToMe(Participator that, Participator me) {
         return TextUtil.getString(getTextColorOfThatToMe(that, me));
     }
 
-    public static TextColor getTextColorOfThatToMe(RelationParticipator that, RelationParticipator me) {
+    public static TextColor getTextColorOfThatToMe(Participator that, Participator me) {
         Faction thatFaction = getFaction(that);
         if (thatFaction != null) {
             if (thatFaction.isPeaceful() && thatFaction != getFaction(me)) {

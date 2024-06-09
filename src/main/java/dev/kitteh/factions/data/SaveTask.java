@@ -6,7 +6,6 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 
 public class SaveTask implements Runnable {
-
     private static boolean running = false;
 
     private final FactionsPlugin plugin;

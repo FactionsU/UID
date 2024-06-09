@@ -5,7 +5,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
-import dev.kitteh.factions.perms.Role;
+import dev.kitteh.factions.permissible.Role;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
