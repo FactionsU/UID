@@ -29,6 +29,7 @@ import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.RelationUtil;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
+import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -1065,13 +1066,13 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public boolean isOnline() {
         Player player = this.getPlayer();
-        return player != null && FactionsPlugin.getInstance().worldUtil().isEnabled(player.getWorld());
+        return player != null && WorldUtil.isEnabled(player.getWorld());
     }
 
     // make sure target player should be able to detect that this player is online
     public boolean isOnlineAndVisibleTo(Player player) {
         Player target = this.getPlayer();
-        return target != null && player.canSee(target) && FactionsPlugin.getInstance().worldUtil().isEnabled(player.getWorld());
+        return target != null && player.canSee(target) && WorldUtil.isEnabled(player.getWorld());
     }
 
     public boolean isOffline() {

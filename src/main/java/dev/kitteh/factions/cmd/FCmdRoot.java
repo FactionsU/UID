@@ -22,6 +22,7 @@ import dev.kitteh.factions.cmd.role.CmdPromote;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.WorldUtil;
 import me.lucko.commodore.CommodoreProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -267,7 +268,7 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!plugin.worldUtil().isEnabled(sender)) {
+        if (!WorldUtil.isEnabled(sender)) {
             sender.sendMessage(TL.GENERIC_DISABLEDWORLD.toString());
             return false;
         }

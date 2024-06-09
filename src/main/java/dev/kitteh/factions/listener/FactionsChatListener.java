@@ -10,6 +10,7 @@ import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.ChatMode;
+import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,7 +32,7 @@ public class FactionsChatListener implements Listener {
     // this is for handling slashless command usage and faction/alliance chat, set at lowest priority so Factions gets to them first
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerEarlyChat(AsyncPlayerChatEvent event) {
-        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 
@@ -119,7 +120,7 @@ public class FactionsChatListener implements Listener {
     // this is for handling insertion of the player's faction tag, set at highest priority to give other plugins a chance to modify chat first
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if (!plugin.worldUtil().isEnabled(event.getPlayer().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 

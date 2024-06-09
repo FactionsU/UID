@@ -128,14 +128,9 @@ public class FactionsPlugin extends JavaPlugin {
     // Some utils
     private Persist persist;
     private TextUtil txt;
-    private WorldUtil worldUtil;
 
     public TextUtil txt() {
         return txt;
-    }
-
-    public WorldUtil worldUtil() {
-        return worldUtil;
     }
 
     public void grumpException(RuntimeException e) {
@@ -328,7 +323,7 @@ public class FactionsPlugin extends JavaPlugin {
         // Create Utility Instances
         this.permUtil = new PermUtil(this);
         this.persist = new Persist(this);
-        this.worldUtil = new WorldUtil(this);
+        WorldUtil.init(this.conf().restrictWorlds());
 
         this.txt = new TextUtil(mcVersion < 1600);
         initTXT();

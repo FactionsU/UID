@@ -6,6 +6,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
 import com.ranull.graves.event.GraveCreateEvent;
+import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,7 +60,7 @@ public class Graves {
                 return;
             }
 
-            if (!FactionsPlugin.getInstance().worldUtil().isEnabled(event.getGrave().getLocationDeath().getWorld())) {
+            if (!WorldUtil.isEnabled(event.getGrave().getLocationDeath().getWorld())) {
                 return;
             }
             Faction faction = Board.getInstance().getFactionAt(new FLocation(event.getGrave().getLocationDeath()));

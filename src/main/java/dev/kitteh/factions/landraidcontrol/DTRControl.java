@@ -11,6 +11,7 @@ import dev.kitteh.factions.event.DTRLossEvent;
 import dev.kitteh.factions.integration.Essentials;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -166,7 +167,7 @@ public class DTRControl implements LandRaidControl {
             return;
         }
         long millisPassed = now - Math.max(faction.getLastDTRUpdateTime(), faction.getFrozenDTRUntilTime());
-        Stream<Player> stream = faction.getOnlinePlayers().stream().filter(p -> plugin.worldUtil().isEnabled(p.getWorld()));
+        Stream<Player> stream = faction.getOnlinePlayers().stream().filter(p -> WorldUtil.isEnabled(p.getWorld()));
         if (FactionsPlugin.getInstance().conf().plugins().essentialsX().isPreventRegenWhileAfk()) {
             stream = stream.filter(Essentials::isAfk);
         }

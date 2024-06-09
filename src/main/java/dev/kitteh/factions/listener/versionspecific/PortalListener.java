@@ -8,6 +8,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -34,7 +35,7 @@ public class PortalListener implements Listener {
             return; // Don't do anything if they don't want us to.
         }
 
-        if (!(entity instanceof Player player) || !plugin.worldUtil().isEnabled(event.getEntity().getWorld())) {
+        if (!(entity instanceof Player player) || !WorldUtil.isEnabled(event.getEntity().getWorld())) {
             return;
         }
 

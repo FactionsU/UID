@@ -37,7 +37,7 @@ public class SeeChunkUtil extends BukkitRunnable {
                 playersSeeingChunks.remove(playerId);
                 continue;
             }
-            if (!FactionsPlugin.getInstance().worldUtil().isEnabled(player)) {
+            if (!WorldUtil.isEnabled(player)) {
                 continue;
             }
             FPlayer fme = FPlayers.getInstance().getByPlayer(player);

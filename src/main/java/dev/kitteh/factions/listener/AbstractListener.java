@@ -13,6 +13,7 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
+import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -96,7 +97,7 @@ public abstract class AbstractListener implements Listener {
     }
 
     protected void handleExplosion(Location loc, Entity boomer, Cancellable event, List<Block> blockList) {
-        if (!FactionsPlugin.getInstance().worldUtil().isEnabled(loc.getWorld())) {
+        if (!WorldUtil.isEnabled(loc.getWorld())) {
             return;
         }
 

@@ -25,12 +25,12 @@ public class BrigadierManager {
 
     public BrigadierManager() {
         Map<String, Map<String, Object>> commands = FactionsPlugin.getInstance().getDescription().getCommands();
-        String main = commands.keySet().stream().findFirst().get();
+        String main = commands.keySet().iterator().next();
         Map<String, Object> cmd = commands.get(main);
         if (cmd.containsKey("aliases")) {
             Object ali = cmd.get("aliases");
-            if (ali instanceof Collection) {
-                aliases.addAll((Collection<String>) ali);
+            if (ali instanceof Collection<?> a) {
+                a.forEach(aa->aliases.add(aa.toString()));
             }
         }
 

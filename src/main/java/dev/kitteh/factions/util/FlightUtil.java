@@ -71,7 +71,7 @@ public class FlightUtil {
         }
 
         public boolean enemiesNearby(FPlayer target, int radius, Collection<FPlayer> players) {
-            if (!FactionsPlugin.getInstance().worldUtil().isEnabled(target.getPlayer().getWorld())) {
+            if (!WorldUtil.isEnabled(target.getPlayer().getWorld())) {
                 return false;
             }
             int radiusSquared = radius * radius;
