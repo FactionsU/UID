@@ -109,21 +109,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
+public class FactionsPlugin extends JavaPlugin {
 
     // Our single plugin instance.
     // Single 4 life.
     private static FactionsPlugin instance;
-    private static int mcVersion;
     private static final int OLDEST_MODERN_SUPPORTED = 2004; // 1.20.4
     private static final String OLDEST_MODERN_SUPPORTED_STRING = "1.20.4";
 
     public static FactionsPlugin getInstance() {
         return instance;
-    }
-
-    public static int getMCVersion() {
-        return mcVersion;
     }
 
     private ConfigManager configManager;
@@ -300,7 +295,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             versionInteger = OLDEST_MODERN_SUPPORTED;
             this.mcVersionString = this.getServer().getVersion();
         }
-        mcVersion = versionInteger;
+        int mcVersion = versionInteger;
         if (mcVersion < OLDEST_MODERN_SUPPORTED) {
             getLogger().info("");
             getLogger().warning("FactionsUUID expects at least " + OLDEST_MODERN_SUPPORTED_STRING + " and may not work on your version.");
@@ -909,140 +904,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     public boolean logPlayerCommands() {
         return this.conf().logging().isPlayerCommands();
-    }
-
-    // -------------------------------------------- //
-    // Functions for other plugins to hook into
-    // -------------------------------------------- //
-
-    // This value will be updated whenever new hooks are added
-    @Override
-    public int getAPIVersion() {
-        // Updated from 4 to 5 for version 0.5.0
-        return 4;
-    }
-
-    // If another plugin is handling insertion of chat tags, this should be used to notify Factions
-    @Override
-    public void setHandlingChat(Plugin plugin, boolean handling) {
-        if (plugin == null) {
-            throw new IllegalArgumentException("Null plugin!");
-        }
-        if (plugin == this) {
-            throw new IllegalArgumentException("Nice try, but this plugin isn't going to register itself!");
-        }
-        if (handling) {
-            this.pluginsHandlingChat.add(plugin.getName());
-        } else {
-            this.pluginsHandlingChat.remove(plugin.getName());
-        }
-    }
-
-    @Override
-    public boolean isAnotherPluginHandlingChat() {
-        return this.conf().factions().chat().isTagHandledByAnotherPlugin() || !this.pluginsHandlingChat.isEmpty();
-    }
-
-    // Simply put, should this chat event be left for Factions to handle? For now, that means players with Faction Chat
-    // enabled or use of the Factions f command without a slash; combination of isPlayerFactionChatting() and isFactionsCommand()
-
-    @Override
-    public boolean shouldLetFactionsHandleThisChat(AsyncPlayerChatEvent event) {
-        return event != null && isPlayerFactionChatting(event.getPlayer());
-    }
-
-    // Does player have Faction Chat enabled? If so, chat plugins should preferably not do channels,
-    // local chat, or anything else which targets individual recipients, so Faction Chat can be done
-    @Override
-    public boolean isPlayerFactionChatting(Player player) {
-        if (player == null) {
-            return false;
-        }
-        FPlayer me = FPlayers.getInstance().getByPlayer(player);
-
-        return me != null && me.getChatMode().isAtLeast(ChatMode.ALLIANCE);
-    }
-
-    // Is this chat message actually a Factions command, and thus should be left alone by other plugins?
-
-    // Get a player's faction tag (faction name), mainly for usage by chat plugins for local/channel chat
-    @Override
-    public String getPlayerFactionTag(Player player) {
-        return getPlayerFactionTagRelation(player, null);
-    }
-
-    // Same as above, but with relation (enemy/neutral/ally) coloring potentially added to the tag
-    @Override
-    public String getPlayerFactionTagRelation(Player speaker, Player listener) {
-        String tag = "~";
-
-        if (speaker == null) {
-            return tag;
-        }
-
-        FPlayer me = FPlayers.getInstance().getByPlayer(speaker);
-        if (me == null) {
-            return tag;
-        }
-
-        // if listener isn't set, or config option is disabled, give back uncolored tag
-        if (listener == null || !this.conf().factions().chat().isTagRelationColored()) {
-            tag = me.getChatTag().trim();
-        } else {
-            FPlayer you = FPlayers.getInstance().getByPlayer(listener);
-            if (you == null) {
-                tag = me.getChatTag().trim();
-            } else  // everything checks out, give the colored tag
-            {
-                tag = me.getChatTag(you).trim();
-            }
-        }
-        if (tag.isEmpty()) {
-            tag = "~";
-        }
-
-        return tag;
-    }
-
-    // Get a player's title within their faction, mainly for usage by chat plugins for local/channel chat
-    @Override
-    public String getPlayerTitle(Player player) {
-        if (player == null) {
-            return "";
-        }
-
-        FPlayer me = FPlayers.getInstance().getByPlayer(player);
-        if (me == null) {
-            return "";
-        }
-
-        return me.getTitle().trim();
-    }
-
-    // Get a list of all players in the specified faction
-    @Override
-    public Set<String> getPlayersInFaction(String factionTag) {
-        Set<String> players = new HashSet<>();
-        Faction faction = Factions.getInstance().getByTag(factionTag);
-        if (faction != null) {
-            for (FPlayer fplayer : faction.getFPlayers()) {
-                players.add(fplayer.getName());
-            }
-        }
-        return players;
-    }
-
-    // Get a list of all online players in the specified faction
-    @Override
-    public Set<String> getOnlinePlayersInFaction(String factionTag) {
-        Set<String> players = new HashSet<>();
-        Faction faction = Factions.getInstance().getByTag(factionTag);
-        if (faction != null) {
-            for (FPlayer fplayer : faction.getFPlayersWhereOnline(true)) {
-                players.add(fplayer.getName());
-            }
-        }
-        return players;
     }
 
     public String getPrimaryGroup(OfflinePlayer player) {

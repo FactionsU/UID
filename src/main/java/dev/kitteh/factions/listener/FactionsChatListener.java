@@ -125,7 +125,7 @@ public class FactionsChatListener implements Listener {
 
         // Are we to insert the Faction tag into the format?
         // If we are not to insert it - we are done.
-        if (FactionsPlugin.getInstance().isAnotherPluginHandlingChat()) {
+        if (FactionsPlugin.getInstance().conf().factions().chat().isTagHandledByAnotherPlugin()) {
             return;
         }
 
