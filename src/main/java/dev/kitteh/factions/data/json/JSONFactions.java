@@ -48,10 +48,12 @@ public class JSONFactions extends MemoryFactions {
         this.nextId = 1;
     }
 
+    @Override
     public void forceSave() {
         forceSave(true);
     }
 
+    @Override
     public void forceSave(boolean sync) {
         final List<Faction> entitiesThatShouldBeSaved = new ArrayList<>(this.factions.values());
         saveCore(file, entitiesThatShouldBeSaved, sync);
@@ -62,6 +64,7 @@ public class JSONFactions extends MemoryFactions {
         return DiscUtil.writeCatch(target, FactionsPlugin.getInstance().getGson().toJson(entities), sync);
     }
 
+    @Override
     public int load() {
         List<JSONFaction> factions = this.loadCore();
         if (factions != null) {
@@ -160,14 +163,5 @@ public class JSONFactions extends MemoryFactions {
     @Override
     public Faction generateFactionObject(int id) {
         return new JSONFaction(id);
-    }
-
-    @Deprecated
-    @Override
-    public void convertFrom(MemoryFactions old) {
-        old.factions.forEach((tag, faction) -> this.factions.put(tag, new JSONFaction((MemoryFaction) faction)));
-        this.nextId = old.nextId;
-        forceSave();
-        Factions.instance = this;
     }
 }

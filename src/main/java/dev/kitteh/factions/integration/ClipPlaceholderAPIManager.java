@@ -114,7 +114,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                 yield fPlayer.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fPlayer.getLastLoginTime() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
             }
             case "player_group" ->
-                    FactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(UUID.fromString(fPlayer.getId())));
+                    FactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(fPlayer.getUniqueId()));
             case "player_balance" -> Econ.isSetup() ? Econ.getFriendlyBalance(fPlayer) : TL.ECON_OFF.format("balance");
             case "player_power" -> String.valueOf(fPlayer.getPowerRounded());
             case "player_maxpower" -> String.valueOf(fPlayer.getPowerMaxRounded());

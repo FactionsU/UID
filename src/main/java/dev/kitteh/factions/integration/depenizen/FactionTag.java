@@ -210,7 +210,7 @@ public class FactionTag implements ObjectTag {
         // -->
         else if (attribute.startsWith("leader")) {
             if (faction.getFPlayerAdmin() != null) {
-                return new PlayerTag(UUID.fromString(faction.getFPlayerAdmin().getId()))
+                return new PlayerTag(faction.getFPlayerAdmin().getUniqueId())
                         .getObjectAttribute(attribute.fulfill(1));
             }
         }
@@ -303,7 +303,7 @@ public class FactionTag implements ObjectTag {
         if (attribute.startsWith("list_players")) {
             ListTag players = new ListTag();
             for (FPlayer ps : faction.getFPlayers()) {
-                players.addObject(new PlayerTag(UUID.fromString(ps.getId())));
+                players.addObject(new PlayerTag(ps.getUniqueId()));
             }
             return players.getObjectAttribute(attribute.fulfill(1));
         }

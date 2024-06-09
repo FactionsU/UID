@@ -3,7 +3,6 @@ package dev.kitteh.factions.data.json;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.data.MemoryFPlayers;
@@ -14,17 +13,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class JSONFPlayers extends MemoryFPlayers {
-    public Gson getGson() {
-        return FactionsPlugin.getInstance().getGson();
-    }
-
-    @Deprecated
-    public void setGson(Gson gson) {
-        // NOOP
-    }
-
     private final File file;
 
     public JSONFPlayers() {
@@ -32,13 +23,6 @@ public class JSONFPlayers extends MemoryFPlayers {
             FactionsPlugin.getInstance().grumpException(new RuntimeException());
         }
         file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/players.json");
-    }
-
-    @Deprecated
-    public void convertFrom(MemoryFPlayers old) {
-        old.fPlayers.forEach((id, faction) -> this.fPlayers.put(id, new JSONFPlayer((MemoryFPlayer) faction)));
-        forceSave();
-        FPlayers.instance = this;
     }
 
     public void forceSave() {
@@ -54,12 +38,9 @@ public class JSONFPlayers extends MemoryFPlayers {
             }
         }
 
-        saveCore(file, entitiesThatShouldBeSaved, sync);
+        DiscUtil.writeCatch(file, FactionsPlugin.getInstance().getGson().toJson(entitiesThatShouldBeSaved), sync);
     }
 
-    private boolean saveCore(File target, List<JSONFPlayer> data, boolean sync) {
-        return DiscUtil.writeCatch(target, FactionsPlugin.getInstance().getGson().toJson(data), sync);
-    }
 
     public int load() {
         List<JSONFPlayer> fplayers = this.loadCore();
@@ -95,24 +76,8 @@ public class JSONFPlayers extends MemoryFPlayers {
         }
     }
 
-    private boolean doesKeyNeedMigration(String key) {
-        if (!key.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")) {
-            // Not a valid UUID..
-            // Valid playername, we'll mark this as one for conversion
-            // to UUID
-            return key.matches("[a-zA-Z0-9_]{2,16}");
-        }
-        return false;
-    }
-
-    private boolean isKeyInvalid(String key) {
-        return !key.matches("[a-zA-Z0-9_]{2,16}");
-    }
-
     @Override
-    public FPlayer generateFPlayer(String id) {
-        FPlayer player = new JSONFPlayer(id);
-        this.fPlayers.put(player.getId(), player);
-        return player;
+    public FPlayer constructNewFPlayer(UUID id) {
+        return new JSONFPlayer(id);
     }
 }

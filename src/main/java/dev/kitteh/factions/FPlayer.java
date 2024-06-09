@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -23,7 +24,6 @@ import java.util.List;
  * The same instance is always returned for the same player. This means you can use the == operator. No .equals method
  * necessary.
  */
-
 public interface FPlayer extends EconomyParticipator, Selectable {
     void login();
 
@@ -106,8 +106,6 @@ public interface FPlayer extends EconomyParticipator, Selectable {
 
     void setShowScoreboard(boolean show);
 
-    void resetFactionData(boolean doSpoutUpdate);
-
     void resetFactionData();
 
     long getLastLoginTime();
@@ -169,12 +167,6 @@ public interface FPlayer extends EconomyParticipator, Selectable {
     Relation getRelationToLocation();
 
     //----------------------------------------------//
-    // Health
-    //----------------------------------------------//
-    void heal(int amnt);
-
-
-    //----------------------------------------------//
     // Power
     //----------------------------------------------//
     double getPower();
@@ -220,9 +212,6 @@ public interface FPlayer extends EconomyParticipator, Selectable {
 
     boolean canClaimForFaction(Faction forFaction);
 
-    @Deprecated
-    boolean canClaimForFactionAtLocation(Faction forFaction, Location location, boolean notifyFailure);
-
     boolean canClaimForFactionAtLocation(Faction forFaction, FLocation location, boolean notifyFailure);
 
     boolean attemptClaim(Faction forFaction, Location location, boolean notifyFailure);
@@ -231,7 +220,7 @@ public interface FPlayer extends EconomyParticipator, Selectable {
 
     boolean attemptUnclaim(Faction forFaction, FLocation flocation, boolean notifyFailure);
 
-    String getId();
+    UUID getUniqueId();
 
     Player getPlayer();
 
@@ -250,8 +239,6 @@ public interface FPlayer extends EconomyParticipator, Selectable {
     void remove();
 
     boolean isOffline();
-
-    void setId(String id);
 
     void flightCheck();
 

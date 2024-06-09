@@ -1,11 +1,13 @@
 package dev.kitteh.factions;
 
-import dev.kitteh.factions.data.json.JSONFactions;
-
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.Collection;
+import java.util.List;
 
 public interface Factions {
+    static Factions getInstance() {
+        return Instances.FACTIONS;
+    }
+
     Faction getFactionById(String id);
 
     Faction getByTag(String str);
@@ -18,25 +20,13 @@ public interface Factions {
 
     Faction createFaction();
 
-    void removeFaction(String id);
+    void removeFaction(Faction faction);
 
-    Set<String> getFactionTags();
-
-    ArrayList<Faction> getAllFactions();
+    List<Faction> getAllFactions();
 
     Faction getWilderness();
 
     Faction getSafeZone();
 
     Faction getWarZone();
-
-    void forceSave();
-
-    void forceSave(boolean sync);
-
-    static Factions getInstance() {
-        return Instances.FACTIONS;
-    }
-
-    int load();
 }

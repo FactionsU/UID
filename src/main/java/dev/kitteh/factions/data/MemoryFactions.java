@@ -7,12 +7,10 @@ import dev.kitteh.factions.util.TL;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class MemoryFactions extends Factions {
+public abstract class MemoryFactions implements Factions {
     public final Map<Integer, Faction> factions = new ConcurrentHashMap<>();
     public int nextId = 1;
     private final static int ID_WILDERNESS = 0;
@@ -78,7 +76,10 @@ public abstract class MemoryFactions extends Factions {
         return 0;
     }
 
-    @Deprecated
+    public abstract void forceSave();
+
+    public abstract void forceSave(boolean sync);
+
     public Faction getFactionById(String id) {
         return factions.get(Integer.parseInt(id));
     }
@@ -146,19 +147,7 @@ public abstract class MemoryFactions extends Factions {
         return faction;
     }
 
-    public Set<String> getFactionTags() {
-        Set<String> tags = new HashSet<>();
-        for (Faction faction : factions.values()) {
-            tags.add(faction.getTag());
-        }
-        return tags;
-    }
-
     public abstract Faction generateFactionObject();
-
-    public void removeFaction(String id) {
-        factions.remove(Integer.parseInt(id)).remove();
-    }
 
     public void removeFaction(Faction faction) {
         factions.remove(faction.getIntId()).remove();
@@ -183,6 +172,4 @@ public abstract class MemoryFactions extends Factions {
     public Faction getWarZone() {
         return factions.get(ID_WARZONE);
     }
-
-    public abstract void convertFrom(MemoryFactions old);
 }

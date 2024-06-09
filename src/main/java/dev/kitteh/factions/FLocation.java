@@ -9,6 +9,7 @@ import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -16,20 +17,8 @@ import java.util.Objects;
 import java.util.Set;
 
 public record FLocation(String worldName, int x, int z) implements Serializable {
+    @Serial
     private static final long serialVersionUID = -8292915234027387983L;
-    private static final boolean worldBorderSupport;
-
-    static {
-        boolean worldBorderClassPresent = false;
-        try {
-            Class.forName("org.bukkit.WorldBorder");
-            worldBorderClassPresent = true;
-        } catch (ClassNotFoundException ignored) {
-        }
-
-        worldBorderSupport = worldBorderClassPresent;
-    }
-
     //----------------------------------------------//
     // Constructors
     //----------------------------------------------//
@@ -166,10 +155,6 @@ public record FLocation(String worldName, int x, int z) implements Serializable 
      * @return whether this location is outside of the border
      */
     public boolean isOutsideWorldBorder(int buffer) {
-        if (!worldBorderSupport) {
-            return false;
-        }
-
         WorldBorder border = getWorld().getWorldBorder();
 
         Location center = border.getCenter();

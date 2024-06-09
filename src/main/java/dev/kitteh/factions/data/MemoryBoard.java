@@ -46,7 +46,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public abstract class MemoryBoard extends Board {
+public abstract class MemoryBoard implements Board {
 
     protected static class WorldTracker {
         public static final int NO_FACTION = Integer.MIN_VALUE;
@@ -585,6 +585,4 @@ public abstract class MemoryBoard extends Board {
 
         return ret;
     }
-
-    public abstract void convertFrom(MemoryBoard old);
 }

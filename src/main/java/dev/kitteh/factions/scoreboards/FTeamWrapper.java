@@ -92,7 +92,7 @@ public class FTeamWrapper {
 
         for (String player : wrapper.getPlayers()) {
             Player plr = Bukkit.getPlayerExact(player);
-            if (plr == null || !plr.isOnline() || !factionMembers.contains(FPlayers.getInstance().getByOfflinePlayer(plr))) {
+            if (plr == null || !plr.isOnline() || !factionMembers.contains(FPlayers.getInstance().getByPlayer(plr))) {
                 // Player is offline or no longer in faction
                 wrapper.removePlayer(player);
             }

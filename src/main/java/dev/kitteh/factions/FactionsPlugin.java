@@ -357,13 +357,13 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             saveTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new SaveTask(this), saveTicks, saveTicks);
         }
 
-        int loadedPlayers = FPlayers.getInstance().load();
-        int loadedFactions = Factions.getInstance().load();
+        int loadedPlayers = Instances.PLAYERS.load();
+        int loadedFactions = Instances.FACTIONS.load();
         for (FPlayer fPlayer : FPlayers.getInstance().getAllFPlayers()) {
-            Faction faction = Factions.getInstance().getFactionById(fPlayer.getFactionIntId());
+            Faction faction = Factions.getInstance().getFactionById(fPlayer.getFactionId());
             if (faction == null) {
-                log("Invalid faction id on " + fPlayer.getName() + ":" + fPlayer.getFactionIntId());
-                fPlayer.resetFactionData(false);
+                log("Invalid faction id on " + fPlayer.getName() + ":" + fPlayer.getFactionId());
+                fPlayer.resetFactionData();
                 continue;
             }
             faction.addFPlayer(fPlayer);
@@ -881,9 +881,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
         // only save data if plugin actually loaded successfully
         if (loadSuccessful) {
-            Factions.getInstance().forceSave();
-            FPlayers.getInstance().forceSave();
-            Board.getInstance().forceSave();
+            Instances.FACTIONS.forceSave();
+            Instances.PLAYERS.forceSave();
+            Instances.BOARD.forceSave();
         }
         if (this.luckPermsSetup) {
             LuckPerms.shutdown(this);
@@ -1017,12 +1017,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
 
         return me.getTitle().trim();
-    }
-
-    // Get a list of all faction tags (names)
-    @Override
-    public Set<String> getFactionTags() {
-        return Factions.getInstance().getFactionTags();
     }
 
     // Get a list of all players in the specified faction

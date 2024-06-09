@@ -11,6 +11,8 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
+import java.util.UUID;
+
 public class CmdDeinvite extends FCommand {
 
     public CmdDeinvite() {
@@ -33,9 +35,9 @@ public class CmdDeinvite extends FCommand {
         if (you == null) {
             LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
             Component component = legacy.deserialize(TL.COMMAND_DEINVITE_CANDEINVITE.toString()).color(NamedTextColor.GOLD);
-            for (String id : context.faction.getInvites()) {
+            for (UUID id : context.faction.getInvites()) {
                 FPlayer fp = FPlayers.getInstance().getById(id);
-                String name = fp != null ? fp.getName() : id;
+                String name = fp != null ? fp.getName() : id.toString();
                 component = component.append(Component.text().color(NamedTextColor.GRAY).content(name + " ")
                         .hoverEvent(legacy.deserialize(TL.COMMAND_DEINVITE_CLICKTODEINVITE.format(name)).asHoverEvent())
                         .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " deinvite " + name))

@@ -71,7 +71,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected long lastLoginTime;
     protected ChatMode chatMode;
     protected boolean ignoreAllianceChat = false;
-    protected String id;
+    protected UUID id;
     protected String name;
     protected boolean monitorJoins;
     protected boolean spyingChat = false;
@@ -279,15 +279,14 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     // FIELD: account
     public String getAccountId() {
-        return this.getId();
+        return this.getUniqueId().toString();
     }
 
     public OfflinePlayer getOfflinePlayer() {
         if (this.offlinePlayer == null) {
-            UUID uuid = UUID.fromString(getId());
-            this.offlinePlayer = Bukkit.getPlayer(uuid);
+            this.offlinePlayer = Bukkit.getPlayer(this.id);
             if (this.offlinePlayer == null) {
-                this.offlinePlayer = FactionsPlugin.getInstance().getOfflinePlayer(this.name, uuid);
+                this.offlinePlayer = FactionsPlugin.getInstance().getOfflinePlayer(this.name, this.id);
             }
         }
         return this.offlinePlayer;
@@ -297,12 +296,9 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.offlinePlayer = player;
     }
 
-    public MemoryFPlayer() {
-    }
-
-    public MemoryFPlayer(String id) {
+    public MemoryFPlayer(UUID id) {
         this.id = id;
-        this.resetFactionData(false);
+        this.resetFactionData();
         this.power = FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getPlayerStarting();
         this.lastPowerUpdateTime = System.currentTimeMillis();
         this.lastLoginTime = System.currentTimeMillis();
@@ -319,28 +315,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
     }
 
-    @Deprecated
-    public MemoryFPlayer(MemoryFPlayer other) {
-        this.factionId = other.factionId;
-        this.id = other.id;
-        this.power = other.power;
-        this.lastLoginTime = other.lastLoginTime;
-        this.mapAutoUpdating = other.mapAutoUpdating;
-        this.autoClaimFor = other.autoClaimFor;
-        this.loginPvpDisabled = other.loginPvpDisabled;
-        this.powerBoost = other.powerBoost;
-        this.role = other.role;
-        this.title = other.title;
-        this.chatMode = other.chatMode;
-        this.spyingChat = other.spyingChat;
-        this.lastStoodAt = other.lastStoodAt;
-        this.isAdminBypassing = other.isAdminBypassing;
-        this.kills = other.kills;
-        this.deaths = other.deaths;
-        this.mapHeight = other.mapHeight;
-    }
-
-    public void resetFactionData(boolean doSpoutUpdate) {
+    public void resetFactionData() {
         // clean up any territory ownership in old faction, if there is one
         if (Factions.getInstance().isValidFactionId(this.getFactionIntId())) {
             Faction currentFaction = this.getFaction();
@@ -355,10 +330,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.role = Role.NORMAL;
         this.title = "";
         this.autoClaimFor = null;
-    }
-
-    public void resetFactionData() {
-        this.resetFactionData(true);
     }
 
     // -------------------------------------------- //
@@ -424,13 +395,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public String getName() {
-        if (this.name == null) {
-            // Older versions of FactionsUUID don't save the name,
-            // so `name` will be null the first time it's retrieved
-            // after updating
-            OfflinePlayer offline = Bukkit.getOfflinePlayer(UUID.fromString(getId()));
-            this.name = offline.getName() != null ? offline.getName() : getId();
-        }
         return name;
     }
 
@@ -442,14 +406,9 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (!name.equalsIgnoreCase(this.name)) {
             for (FPlayer fplayer : FPlayers.getInstance().getAllFPlayers()) {
                 if (fplayer.getName().equalsIgnoreCase(name)) {
-                    String uuidName = fplayer.getId();
-                    ((MemoryFPlayer) fplayer).name = uuidName;
-                    UUID u;
-                    try {
-                        u = UUID.fromString(uuidName);
-                    } catch (IllegalArgumentException e) {
-                        continue;
-                    }
+                    UUID u = fplayer.getUniqueId();
+                    String uuidName = u.toString();
+                    ((MemoryFPlayer) fplayer).name = uuidName; // Done this way to avoid loop
                     if (u.version() != 4) {
                         continue;
                     }
@@ -576,17 +535,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public String getColorStringTo(RelationParticipator rp) {
         return RelationUtil.getColorStringOfThatToMe(this, rp);
-    }
-
-    //----------------------------------------------//
-    // Health
-    //----------------------------------------------//
-    public void heal(int amnt) {
-        Player player = this.getPlayer();
-        if (player == null) {
-            return;
-        }
-        player.setHealth(player.getHealth() + amnt);
     }
 
 
@@ -841,11 +789,6 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public boolean canClaimForFaction(Faction forFaction) {
         return this.isAdminBypassing() || !forFaction.isWilderness() && (forFaction == this.getFaction() && this.getFaction().hasAccess(this, PermissibleActions.TERRITORY, null)) || (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(getPlayer())) || (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(getPlayer()));
-    }
-
-    // Not used
-    public boolean canClaimForFactionAtLocation(Faction forFaction, Location location, boolean notifyFailure) {
-        return canClaimForFactionAtLocation(forFaction, new FLocation(location), notifyFailure);
     }
 
     public boolean canClaimForFactionAtLocation(Faction forFaction, FLocation flocation, boolean notifyFailure) {
@@ -1144,7 +1087,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public Player getPlayer() {
-        return Bukkit.getPlayer(UUID.fromString(this.getId()));
+        return Bukkit.getPlayer(this.id);
     }
 
     public boolean isOnline() {
@@ -1260,7 +1203,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public void setSeeingChunk(boolean seeingChunk) {
         this.seeingChunk = seeingChunk;
-        FactionsPlugin.getInstance().getSeeChunkUtil().updatePlayerInfo(UUID.fromString(getId()), seeingChunk);
+        FactionsPlugin.getInstance().getSeeChunkUtil().updatePlayerInfo(this.id, seeingChunk);
     }
 
     public boolean getFlyTrailsState() {
@@ -1325,13 +1268,8 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public String getId() {
+    public UUID getUniqueId() {
         return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
     }
 
     @Override

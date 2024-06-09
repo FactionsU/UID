@@ -13,9 +13,10 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public interface Faction extends EconomyParticipator, Selectable {
-    Map<String, List<String>> getAnnouncements();
+    Map<UUID, List<String>> getAnnouncements();
 
     Map<String, LazyLocation> getWarps();
 
@@ -45,7 +46,7 @@ public interface Faction extends EconomyParticipator, Selectable {
 
     void removeAnnouncements(FPlayer fPlayer);
 
-    Set<String> getInvites();
+    Set<UUID> getInvites();
 
     @Deprecated
     String getId();
@@ -267,7 +268,7 @@ public interface Faction extends EconomyParticipator, Selectable {
     // Ownership of specific claims
     // ----------------------------------------------//
 
-    Map<FLocation, Set<String>> getClaimOwnership();
+    Map<FLocation, Set<UUID>> getClaimOwnership();
 
     void clearAllClaimOwnership();
 
@@ -285,16 +286,11 @@ public interface Faction extends EconomyParticipator, Selectable {
 
     void removePlayerAsOwner(FPlayer player, FLocation loc);
 
-    Set<String> getOwnerList(FLocation loc);
+    Set<UUID> getOwnerList(FLocation loc);
 
     String getOwnerListString(FLocation loc);
 
     boolean playerHasOwnershipRights(FPlayer fplayer, FLocation loc);
-
-    // ----------------------------------------------//
-    // Persistance and entity management
-    // ----------------------------------------------//
-    void remove();
 
     Set<FLocation> getAllClaims();
 }

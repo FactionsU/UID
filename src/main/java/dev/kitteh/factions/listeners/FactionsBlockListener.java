@@ -317,7 +317,7 @@ public class FactionsBlockListener extends AbstractListener {
             return true;
         }
 
-        FPlayer me = FPlayers.getInstance().getById(player.getUniqueId().toString());
+        FPlayer me = FPlayers.getInstance().getByPlayer(player);
         if (me.isAdminBypassing()) {
             return true;
         }

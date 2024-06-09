@@ -3,6 +3,9 @@ package dev.kitteh.factions.cmd;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Factions;
+import dev.kitteh.factions.data.MemoryBoard;
+import dev.kitteh.factions.data.MemoryFPlayers;
+import dev.kitteh.factions.data.MemoryFactions;
 import dev.kitteh.factions.struct.Permission;
 import dev.kitteh.factions.util.TL;
 
@@ -18,9 +21,9 @@ public class CmdSaveAll extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        FPlayers.getInstance().forceSave(false);
-        Factions.getInstance().forceSave(false);
-        Board.getInstance().forceSave(false);
+        ((MemoryFPlayers)FPlayers.getInstance()).forceSave(false);
+        ((MemoryFactions)Factions.getInstance()).forceSave(false);
+        ((MemoryBoard)Board.getInstance()).forceSave(false);
         context.msg(TL.COMMAND_SAVEALL_SUCCESS);
     }
 

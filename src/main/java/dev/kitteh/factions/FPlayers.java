@@ -1,30 +1,25 @@
 package dev.kitteh.factions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.UUID;
 
 public interface FPlayers {
-    void clean();
-
     static FPlayers getInstance() {
         return Instances.PLAYERS;
     }
 
-    Collection<FPlayer> getOnlinePlayers();
-
-    FPlayer getByPlayer(Player player);
+    default Collection<FPlayer> getOnlinePlayers() {
+        return Bukkit.getServer().getOnlinePlayers().stream().map(this::getByPlayer).toList();
+    }
 
     Collection<FPlayer> getAllFPlayers();
 
-    void forceSave();
+    default FPlayer getByPlayer(OfflinePlayer player) {
+        return this.getById(player.getUniqueId());
+    }
 
-    void forceSave(boolean sync);
-
-    FPlayer getByOfflinePlayer(OfflinePlayer player);
-
-    FPlayer getById(String string);
-
-    int load();
+    FPlayer getById(UUID uuid);
 }

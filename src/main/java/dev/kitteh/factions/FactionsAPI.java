@@ -31,8 +31,6 @@ public interface FactionsAPI {
 
     String getPlayerTitle(Player player);
 
-    Set<String> getFactionTags();
-
     Set<String> getPlayersInFaction(String factionTag);
 
     Set<String> getOnlinePlayersInFaction(String factionTag);

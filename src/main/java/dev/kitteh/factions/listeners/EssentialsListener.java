@@ -27,7 +27,7 @@ public class EssentialsListener implements Listener {
     public void onLeave(FPlayerLeaveEvent event) throws Exception {
         // Get the USER from their UUID.
         Faction faction = event.getFaction();
-        User user = ess.getUser(UUID.fromString(event.getfPlayer().getId()));
+        User user = ess.getUser(event.getfPlayer().getUniqueId());
         if (user == null) {
             FactionsPlugin.getInstance().log(Level.WARNING, "Attempted to remove Essentials homes for " + event.getfPlayer().getName() + " " +
                     "but no Essentials data at all was found for this user. " +

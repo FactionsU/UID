@@ -1,24 +1,19 @@
 package dev.kitteh.factions.struct;
 
-public class BanInfo {
+import java.util.UUID;
 
-    // FPlayer IDs
-    private final String banner;
-    private final String banned;
-    private final long time;
-
-    public BanInfo(String banner, String banned, long time) {
-        this.banner = banner;
-        this.banned = banned;
-        this.time = time;
-    }
+/**
+ * @param banner FPlayer IDs
+ */
+public record BanInfo(UUID banner, UUID banned, long time) {
 
     /**
      * Get the FPlayer ID of the player who issued the ban.
      *
      * @return FPlayer ID.
      */
-    public String getBanner() {
+    @Override
+    public UUID banner() {
         return this.banner;
     }
 
@@ -27,7 +22,8 @@ public class BanInfo {
      *
      * @return FPlayer ID.
      */
-    public String getBanned() {
+    @Override
+    public UUID banned() {
         return banned;
     }
 
@@ -36,7 +32,8 @@ public class BanInfo {
      *
      * @return system timestamp.
      */
-    public long getTime() {
+    @Override
+    public long time() {
         return time;
     }
 }

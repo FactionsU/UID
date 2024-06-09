@@ -33,7 +33,7 @@ public class CmdList extends FCommand {
             return;
         }
 
-        ArrayList<Faction> factionList = Factions.getInstance().getAllFactions();
+        List<Faction> factionList = Factions.getInstance().getAllFactions();
         factionList.remove(Factions.getInstance().getWilderness());
         factionList.remove(Factions.getInstance().getSafeZone());
         factionList.remove(Factions.getInstance().getWarZone());

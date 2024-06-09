@@ -94,9 +94,4 @@ public class JSONBoard extends MemoryBoard {
 
         return this.getTotalCount();
     }
-
-    @Override
-    public void convertFrom(MemoryBoard old) {
-        throw new UnsupportedOperationException();
-    }
 }

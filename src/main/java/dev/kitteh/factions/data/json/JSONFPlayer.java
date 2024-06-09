@@ -3,18 +3,15 @@ package dev.kitteh.factions.data.json;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.data.MemoryFPlayer;
 
-public class JSONFPlayer extends MemoryFPlayer {
-    @Deprecated
-    public JSONFPlayer(MemoryFPlayer arg0) {
-        super(arg0);
-    }
+import java.util.UUID;
 
-    public JSONFPlayer(String id) {
+public class JSONFPlayer extends MemoryFPlayer {
+    public JSONFPlayer(UUID id) {
         super(id);
     }
 
     @Override
     public void remove() {
-        ((JSONFPlayers) FPlayers.getInstance()).fPlayers.remove(getId());
+        ((JSONFPlayers) FPlayers.getInstance()).fPlayers.remove(getUniqueId());
     }
 }

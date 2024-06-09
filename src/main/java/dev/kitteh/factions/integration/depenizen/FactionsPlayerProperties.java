@@ -74,7 +74,7 @@ public class FactionsPlayerProperties implements Property {
     }
 
     public FPlayer getFPlayer() {
-        return FPlayers.getInstance().getById(player.getUUID().toString());
+        return FPlayers.getInstance().getById(player.getUUID());
     }
 
     PlayerTag player;

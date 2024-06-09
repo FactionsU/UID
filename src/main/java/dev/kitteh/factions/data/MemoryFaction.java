@@ -43,6 +43,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected int id = Integer.MIN_VALUE;
@@ -59,10 +60,10 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected transient long lastPlayerLoggedOffTime;
     protected double powerBoost;
     protected Map<String, Relation> relationWish = new HashMap<>();
-    protected Map<FLocation, Set<String>> claimOwnership = new ConcurrentHashMap<>();
+    protected Map<FLocation, Set<UUID>> claimOwnership = new ConcurrentHashMap<>();
     protected transient Set<FPlayer> fplayers = new HashSet<>();
-    protected Set<String> invites = new HashSet<>();
-    protected HashMap<String, List<String>> announcements = new HashMap<>();
+    protected Set<UUID> invites = new HashSet<>();
+    protected HashMap<UUID, List<String>> announcements = new HashMap<>();
     protected ConcurrentHashMap<String, LazyLocation> warps = new ConcurrentHashMap<>();
     protected ConcurrentHashMap<String, String> warpPasswords = new ConcurrentHashMap<>();
     private long lastDeath;
@@ -76,30 +77,28 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected int tntBank;
     protected transient OfflinePlayer offlinePlayer;
 
-    public HashMap<String, List<String>> getAnnouncements() {
+    public HashMap<UUID, List<String>> getAnnouncements() {
         return this.announcements;
     }
 
     public void addAnnouncement(FPlayer fPlayer, String msg) {
-        List<String> list = announcements.containsKey(fPlayer.getId()) ? announcements.get(fPlayer.getId()) : new ArrayList<>();
-        list.add(msg);
-        announcements.put(fPlayer.getId(), list);
+        announcements.computeIfAbsent(fPlayer.getUniqueId(), k -> new ArrayList<>()).add(msg);
     }
 
     public void sendUnreadAnnouncements(FPlayer fPlayer) {
-        if (!announcements.containsKey(fPlayer.getId())) {
+        List<String> ann = announcements.remove(fPlayer.getUniqueId());
+        if (ann == null) {
             return;
         }
         fPlayer.msg(TL.FACTIONS_ANNOUNCEMENT_TOP);
-        for (String s : announcements.get(fPlayer.getPlayer().getUniqueId().toString())) {
+        for (String s : ann) {
             fPlayer.sendMessage(s);
         }
         fPlayer.msg(TL.FACTIONS_ANNOUNCEMENT_BOTTOM);
-        announcements.remove(fPlayer.getId());
     }
 
     public void removeAnnouncements(FPlayer fPlayer) {
-        announcements.remove(fPlayer.getId());
+        announcements.remove(fPlayer.getUniqueId());
     }
 
     public ConcurrentHashMap<String, LazyLocation> getWarps() {
@@ -147,7 +146,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         this.maxVaults = value;
     }
 
-    public Set<String> getInvites() {
+    public Set<UUID> getInvites() {
         return invites;
     }
 
@@ -169,29 +168,29 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public void invite(FPlayer fplayer) {
-        this.invites.add(fplayer.getId());
+        this.invites.add(fplayer.getUniqueId());
     }
 
     public void deinvite(FPlayer fplayer) {
-        this.invites.remove(fplayer.getId());
+        this.invites.remove(fplayer.getUniqueId());
     }
 
     public boolean isInvited(FPlayer fplayer) {
-        return this.invites.contains(fplayer.getId());
+        return this.invites.contains(fplayer.getUniqueId());
     }
 
     public void ban(FPlayer target, FPlayer banner) {
-        BanInfo info = new BanInfo(banner.getId(), target.getId(), System.currentTimeMillis());
+        BanInfo info = new BanInfo(banner.getUniqueId(), target.getUniqueId(), System.currentTimeMillis());
         this.bans.add(info);
     }
 
     public void unban(FPlayer player) {
-        bans.removeIf(banInfo -> banInfo.getBanned().equalsIgnoreCase(player.getId()));
+        bans.removeIf(banInfo -> banInfo.banned().equals(player.getUniqueId()));
     }
 
     public boolean isBanned(FPlayer player) {
         for (BanInfo info : bans) {
-            if (info.getBanned().equalsIgnoreCase(player.getId())) {
+            if (info.banned().equals(player.getUniqueId())) {
                 return true;
             }
         }
@@ -444,9 +443,6 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     // -------------------------------------------- //
     // Construct
     // -------------------------------------------- //
-    protected MemoryFaction() {
-    }
-
     public MemoryFaction(int id) {
         this.id = id;
         this.open = FactionsPlugin.getInstance().conf().factions().other().isNewFactionsDefaultOpen();
@@ -461,31 +457,6 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         this.maxVaults = FactionsPlugin.getInstance().conf().playerVaults().getDefaultMaxVaults();
         this.defaultRole = FactionsPlugin.getInstance().conf().factions().other().getDefaultRole();
         this.dtr = FactionsPlugin.getInstance().conf().factions().landRaidControl().dtr().getStartingDTR();
-
-        resetPerms(); // Reset on new Faction so it has default values.
-    }
-
-    @Deprecated
-    public MemoryFaction(MemoryFaction old) {
-        id = old.id;
-        peacefulExplosionsEnabled = old.peacefulExplosionsEnabled;
-        permanent = old.permanent;
-        tag = old.tag;
-        description = old.description;
-        open = old.open;
-        foundedDate = old.foundedDate;
-        peaceful = old.peaceful;
-        permanentPower = old.permanentPower;
-        home = old.home;
-        lastPlayerLoggedOffTime = old.lastPlayerLoggedOffTime;
-        powerBoost = old.powerBoost;
-        relationWish = old.relationWish;
-        claimOwnership = old.claimOwnership;
-        fplayers = new HashSet<>();
-        invites = old.invites;
-        announcements = old.announcements;
-        this.defaultRole = old.defaultRole;
-        this.dtr = old.dtr;
 
         resetPerms(); // Reset on new Faction so it has default values.
     }
@@ -610,7 +581,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         this.dtr = dtr;
         this.lastDTRUpdateTime = System.currentTimeMillis();
         if (start != this.dtr && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
-            ((DTRControl)FactionsPlugin.getInstance().getLandRaidControl()).onDTRChange(this, start, this.dtr);
+            ((DTRControl) FactionsPlugin.getInstance().getLandRaidControl()).onDTRChange(this, start, this.dtr);
         }
     }
 
@@ -958,7 +929,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     // Ownership of specific claims
     // ----------------------------------------------//
 
-    public Map<FLocation, Set<String>> getClaimOwnership() {
+    public Map<FLocation, Set<UUID>> getClaimOwnership() {
         return claimOwnership;
     }
 
@@ -974,16 +945,16 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public void clearClaimOwnership(FPlayer player) {
-        Set<String> ownerData;
+        Set<UUID> ownerData;
 
-        for (Entry<FLocation, Set<String>> entry : claimOwnership.entrySet()) {
+        for (Entry<FLocation, Set<UUID>> entry : claimOwnership.entrySet()) {
             ownerData = entry.getValue();
 
             if (ownerData == null) {
                 continue;
             }
 
-            ownerData.removeIf(s -> s.equals(player.getId()));
+            ownerData.remove(player.getUniqueId());
 
             if (ownerData.isEmpty()) {
                 if (LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim()) {
@@ -999,61 +970,35 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public boolean doesLocationHaveOwnersSet(FLocation loc) {
-        if (claimOwnership.isEmpty() || !claimOwnership.containsKey(loc)) {
-            return false;
-        }
-
-        Set<String> ownerData = claimOwnership.get(loc);
-        return ownerData != null && !ownerData.isEmpty();
+        return !claimOwnership.getOrDefault(loc, Set.of()).isEmpty();
     }
 
     public boolean isPlayerInOwnerList(FPlayer player, FLocation loc) {
-        if (claimOwnership.isEmpty()) {
-            return false;
-        }
-        Set<String> ownerData = claimOwnership.get(loc);
-        return ownerData != null && ownerData.contains(player.getId());
+        return claimOwnership.getOrDefault(loc, Set.of()).contains(player.getUniqueId());
     }
 
     public void setPlayerAsOwner(FPlayer player, FLocation loc) {
-        Set<String> ownerData = claimOwnership.get(loc);
-        if (ownerData == null) {
-            ownerData = new HashSet<>();
-        }
-        ownerData.add(player.getId());
-        claimOwnership.put(loc, ownerData);
+        claimOwnership.computeIfAbsent(loc, k->new HashSet<>()).add(player.getUniqueId());
     }
 
     public void removePlayerAsOwner(FPlayer player, FLocation loc) {
-        Set<String> ownerData = claimOwnership.get(loc);
+        Set<UUID> ownerData = claimOwnership.get(loc);
         if (ownerData == null) {
             return;
         }
-        ownerData.remove(player.getId());
-        claimOwnership.put(loc, ownerData);
+        ownerData.remove(player.getUniqueId());
     }
 
-    public Set<String> getOwnerList(FLocation loc) {
-        return claimOwnership.get(loc);
+    public Set<UUID> getOwnerList(FLocation loc) {
+        return new HashSet<>(claimOwnership.get(loc));
     }
 
     public String getOwnerListString(FLocation loc) {
-        Set<String> ownerData = claimOwnership.get(loc);
+        Set<UUID> ownerData = claimOwnership.get(loc);
         if (ownerData == null || ownerData.isEmpty()) {
             return "";
         }
-
-        StringBuilder ownerList = new StringBuilder();
-
-        for (String anOwnerData : ownerData) {
-            if (!ownerList.isEmpty()) {
-                ownerList.append(", ");
-            }
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(anOwnerData));
-            //TODO:TL
-            ownerList.append(offlinePlayer != null ? offlinePlayer.getName() : "null player");
-        }
-        return ownerList.toString();
+        return ownerData.stream().map(FPlayers.getInstance()::getById).map(FPlayer::getName).collect(Collectors.joining(", "));
     }
 
     public boolean playerHasOwnershipRights(FPlayer fplayer, FLocation loc) {
@@ -1069,11 +1014,11 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         }
 
         // need to check the ownership list, then
-        Set<String> ownerData = claimOwnership.get(loc);
+        Set<UUID> ownerData = claimOwnership.get(loc);
 
         // if no owner list, owner list is empty, or player is in owner list,
         // they're allowed
-        return ownerData == null || ownerData.isEmpty() || ownerData.contains(fplayer.getId());
+        return ownerData == null || ownerData.isEmpty() || ownerData.contains(fplayer.getUniqueId());
     }
 
     // ----------------------------------------------//
@@ -1088,7 +1033,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         ((MemoryBoard) Board.getInstance()).clean(id);
 
         for (FPlayer fPlayer : fplayers) {
-            fPlayer.resetFactionData(false);
+            fPlayer.resetFactionData();
         }
     }
 

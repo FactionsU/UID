@@ -1,4 +1,4 @@
-package com.massivecraft.factions.config.file;
+package dev.kitteh.factions.config.file;
 
 import org.junit.Assert;
 import org.junit.Test;
