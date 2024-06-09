@@ -27,7 +27,7 @@ public class CmdTop extends FCommand {
     static {
         topValueGenerators.put("members", f -> new FTopGTIntValue(f.getFPlayers().size()));
         topValueGenerators.put("start", f -> new FTopFoundedValue(f.getFoundedDate()));
-        topValueGenerators.put("power", f -> new FTopGTIntValue(f.getPowerRounded()));
+        topValueGenerators.put("power", f -> new FTopGTIntValue(f.getPower()));
         topValueGenerators.put("land", f -> new FTopGTIntValue(f.getLandRounded()));
         topValueGenerators.put("online", f -> new FTopGTIntValue(f.getFPlayersWhereOnline(true).size()));
         Function<Faction, FTopValue<?>> money = f -> {

@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 public class PowerControl implements LandRaidControl {
     @Override
     public boolean isRaidable(Faction faction) {
-        return this.isRaidable(faction, faction.getPowerRounded());
+        return this.isRaidable(faction, faction.getPower());
     }
 
     public boolean isRaidable(Faction faction, int power) {
@@ -30,12 +30,12 @@ public class PowerControl implements LandRaidControl {
 
     @Override
     public boolean hasLandInflation(Faction faction) {
-        return !faction.isPeaceful() && faction.getLandRounded() > faction.getPowerRounded();
+        return !faction.isPeaceful() && faction.getLandRounded() > faction.getPower();
     }
 
     @Override
     public int getLandLimit(Faction faction) {
-        return faction.getPowerRounded();
+        return faction.getPower();
     }
 
     @Override

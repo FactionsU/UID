@@ -27,7 +27,6 @@ import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.RelationUtil;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -601,8 +600,7 @@ public abstract class MemoryFaction implements Faction, Participator {
     // ----------------------------------------------//
     // Power
     // ----------------------------------------------//
-    @Deprecated
-    public double getPower() {
+    public double getPowerExact() {
         if (this.hasPermanentPower()) {
             return this.getPermanentPower();
         }
@@ -617,8 +615,7 @@ public abstract class MemoryFaction implements Faction, Participator {
         return ret + this.powerBoost;
     }
 
-    @Deprecated
-    public double getPowerMax() {
+    public double getPowerMaxExact() {
         if (this.hasPermanentPower()) {
             return this.getPermanentPower();
         }
@@ -633,12 +630,12 @@ public abstract class MemoryFaction implements Faction, Participator {
         return ret + this.powerBoost;
     }
 
-    public int getPowerRounded() {
-        return (int) Math.round(this.getPower());
+    public int getPower() {
+        return (int) Math.round(this.getPowerExact());
     }
 
-    public int getPowerMaxRounded() {
-        return (int) Math.round(this.getPowerMax());
+    public int getPowerMax() {
+        return (int) Math.round(this.getPowerMaxExact());
     }
 
     public boolean hasLandInflation() {

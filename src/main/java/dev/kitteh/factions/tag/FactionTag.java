@@ -21,8 +21,8 @@ public enum FactionTag implements Tag {
     CHUNKS("chunks", (fac) -> String.valueOf(fac.getLandRounded())),
     WARPS("warps", (fac) -> String.valueOf(fac.getWarps().size())),
     HEADER("header", (fac, fp) -> FactionsPlugin.getInstance().txt().titleize(fac.getTag(fp))),
-    POWER("power", (fac) -> String.valueOf(fac.getPowerRounded())),
-    MAX_POWER("maxPower", (fac) -> String.valueOf(fac.getPowerMaxRounded())),
+    POWER("power", (fac) -> String.valueOf(fac.getPower())),
+    MAX_POWER("maxPower", (fac) -> String.valueOf(fac.getPowerMax())),
     POWER_BOOST("power-boost", (fac) -> {
         double powerBoost = fac.getPowerBoost();
         return (powerBoost == 0.0) ? "" : (powerBoost > 0.0 ? TL.COMMAND_SHOW_BONUS.toString() : TL.COMMAND_SHOW_PENALTY.toString() + powerBoost + ")");
@@ -41,7 +41,7 @@ public enum FactionTag implements Tag {
     }),
     DTR("dtr", (fac) -> {
         if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
-            int dtr = fac.getLandRounded() >= fac.getPowerRounded() ? 0 : (int) Math.ceil(((double) (fac.getPowerRounded() - fac.getLandRounded())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
+            int dtr = fac.getLandRounded() >= fac.getPower() ? 0 : (int) Math.ceil(((double) (fac.getPower() - fac.getLandRounded())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
             return TL.COMMAND_SHOW_DEATHS_TIL_RAIDABLE.format(dtr);
         } else {
             return DTRControl.round(fac.getDTR());

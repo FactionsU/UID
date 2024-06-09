@@ -187,13 +187,28 @@ public interface Faction extends Participator, Selectable {
     // ----------------------------------------------//
     // Power
     // ----------------------------------------------//
-    double getPower();
 
-    double getPowerMax();
+    /**
+     * Gets the exact faction power, which is not used for claim/raidability calculations
+     *
+     * @return exact power
+     */
+    double getPowerExact();
 
-    int getPowerRounded();
+    /**
+     * Gets the exact faction max power
+     *
+     * @return exactmax power
+     */
+    double getPowerMaxExact();
 
-    int getPowerMaxRounded();
+    /**
+     * Gets the faction power, as used for claims/raidability calculations
+     * @return
+     */
+    int getPower();
+
+    int getPowerMax();
 
     Integer getPermanentPower();
 

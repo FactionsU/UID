@@ -803,7 +803,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (currentFaction.isWarZone()) {
             // Cannot claim warzone
             denyReason = plugin.txt().parse(TL.CLAIM_WARZONE.toString());
-        } else if (plugin.getLandRaidControl() instanceof PowerControl && ownedLand >= forFaction.getPowerRounded()) {
+        } else if (plugin.getLandRaidControl() instanceof PowerControl && ownedLand >= forFaction.getPower()) {
             // Already own at least as much land as power
             denyReason = plugin.txt().parse(TL.CLAIM_POWER.toString());
         } else if (plugin.getLandRaidControl() instanceof DTRControl && ownedLand >= plugin.getLandRaidControl().getLandLimit(forFaction)) {
