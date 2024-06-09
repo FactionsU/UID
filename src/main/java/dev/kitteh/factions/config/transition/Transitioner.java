@@ -1,47 +1,24 @@
 package dev.kitteh.factions.config.transition;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.Loader;
-import dev.kitteh.factions.config.transition.oldclass.v0.MaterialAdapter;
-import dev.kitteh.factions.config.transition.oldclass.v0.NewMemoryFaction;
-import dev.kitteh.factions.config.transition.oldclass.v0.OldConfV0;
-import dev.kitteh.factions.config.transition.oldclass.v0.OldMemoryFactionV0;
-import dev.kitteh.factions.config.transition.oldclass.v0.TransitionConfigV0;
-import dev.kitteh.factions.config.transition.oldclass.v1.OldMainConfigV1;
-import dev.kitteh.factions.config.transition.oldclass.v1.TransitionConfigV1;
 import dev.kitteh.factions.perms.PermSelectorTypeAdapter;
-import dev.kitteh.factions.util.EnumTypeAdapter;
-import dev.kitteh.factions.util.LazyLocation;
-import dev.kitteh.factions.util.MapFLocToStringSetTypeAdapter;
-import dev.kitteh.factions.util.MyLocationTypeAdapter;
 import dev.kitteh.factions.util.TL;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-import org.bukkit.Material;
 
 import java.io.IOException;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 
 public class Transitioner {
     private final FactionsPlugin plugin;
-    private Gson gsonV0;
 
     public static void transition(FactionsPlugin plugin) {
         Transitioner transitioner = new Transitioner(plugin);
-        transitioner.migrateV0();
         transitioner.migrateV5A();
 
         Path confPath = plugin.getDataFolder().toPath().resolve("config").resolve("main.conf");
@@ -55,7 +32,6 @@ public class Transitioner {
             CommentedConfigurationNode versionNode = rootNode.getNode("aVeryFriendlyFactionsConfig").getNode("version");
 
             if (versionNode.isVirtual()) {
-                transitioner.migrateV1(loader);
                 rootNode = loader.load();
                 versionNode = rootNode.getNode("aVeryFriendlyFactionsConfig").getNode("version");
                 if (versionNode.isVirtual()) {
@@ -94,97 +70,14 @@ public class Transitioner {
         }
     }
 
-    private final Path pluginFolder;
     private final Path configFolder;
     private final Path oldConfigFolder;
 
     private Transitioner(FactionsPlugin plugin) {
         this.plugin = plugin;
-        this.pluginFolder = this.plugin.getDataFolder().toPath();
+        Path pluginFolder = this.plugin.getDataFolder().toPath();
         configFolder = pluginFolder.resolve("config");
         oldConfigFolder = pluginFolder.resolve("oldConfig");
-    }
-
-    private void migrateV0() {
-        if (Files.exists(configFolder)) {
-            // Found existing config, so nothing to do here.
-            return;
-        }
-        Path oldConf = pluginFolder.resolve("conf.json");
-        if (!Files.exists(oldConf)) {
-            // No config, no conversion!
-            return;
-        }
-        if (Files.exists(oldConfigFolder)) {
-            // Found existing oldConfig, implying it was already upgraded once
-            this.plugin.getLogger().warning("Found no 'config' folder, but an 'oldConfig' exists. Not attempting conversion.");
-            return;
-        }
-        this.plugin.getLogger().info("Found no 'config' folder. Starting configuration transition...");
-        this.buildV0Gson();
-        try {
-            OldConfV0 conf = this.gsonV0.fromJson(Files.readString(oldConf), OldConfV0.class);
-            TransitionConfigV0 newConfig = new TransitionConfigV0(conf);
-            Loader.loadAndSave("main", newConfig);
-            Files.createDirectories(oldConfigFolder);
-            Path dataFolder = pluginFolder.resolve("data");
-            Files.createDirectories(dataFolder);
-            Files.move(pluginFolder.resolve("board.json"), dataFolder.resolve("board.json"));
-            Files.move(pluginFolder.resolve("players.json"), dataFolder.resolve("players.json"));
-
-            Path oldFactions = pluginFolder.resolve("factions.json");
-            Map<String, OldMemoryFactionV0> data = this.gsonV0.fromJson(Files.readString(oldFactions), new TypeToken<Map<String, OldMemoryFactionV0>>() {
-            }.getType());
-            Map<String, NewMemoryFaction> newData = new HashMap<>();
-            data.forEach((id, fac) -> newData.put(id, new NewMemoryFaction(fac)));
-            Files.writeString(dataFolder.resolve("factions.json"), this.plugin.getGson().toJson(newData));
-
-            Files.move(oldFactions, oldConfigFolder.resolve("factions.json"));
-            Files.move(oldConf, oldConfigFolder.resolve("conf.json"));
-            this.plugin.getLogger().info("Transition complete!");
-        } catch (Exception e) {
-            this.plugin.getLogger().log(Level.SEVERE, "Could not convert old conf.json", e);
-        }
-    }
-
-    private void buildV0Gson() {
-        Type mapFLocToStringSetType = new TypeToken<Map<FLocation, Set<String>>>() {
-        }.getType();
-
-        Type materialType = new TypeToken<Material>() {
-        }.getType();
-
-        this.gsonV0 = new GsonBuilder()
-                .setPrettyPrinting()
-                .disableHtmlEscaping()
-                .enableComplexMapKeySerialization()
-                .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
-                .registerTypeAdapter(materialType, new MaterialAdapter())
-                .registerTypeAdapter(LazyLocation.class, new MyLocationTypeAdapter())
-                .registerTypeAdapter(mapFLocToStringSetType, new MapFLocToStringSetTypeAdapter())
-                .registerTypeAdapterFactory(EnumTypeAdapter.ENUM_FACTORY).create();
-    }
-
-    private void migrateV1(HoconConfigurationLoader loader) {
-        Path pluginFolder = this.plugin.getDataFolder().toPath();
-        Path configPath = pluginFolder.resolve("config.yml");
-        Path oldConfigFolder = pluginFolder.resolve("oldConfig");
-        if (!Files.exists(configPath)) {
-            this.plugin.getLogger().warning("Found a main.conf from before 0.5.4 but no config.yml was found! Might lose some config information!");
-            return;
-        }
-        try {
-            OldMainConfigV1 oldConf = new OldMainConfigV1();
-            Loader.load(loader, oldConf);
-            TransitionConfigV1 newConf = new TransitionConfigV1();
-            Loader.load(loader, newConf);
-            newConf.update(oldConf, this.plugin.getConfig());
-            Loader.loadAndSave(loader, newConf);
-            Files.createDirectories(oldConfigFolder);
-            Files.move(configPath, oldConfigFolder.resolve("config.yml"));
-        } catch (Exception e) {
-            this.plugin.getLogger().log(Level.SEVERE, "Could not migrate configuration", e);
-        }
     }
 
     private void migrateV2(CommentedConfigurationNode node) {
@@ -247,7 +140,7 @@ public class Transitioner {
                 try {
                     Files.createDirectories(oldConfigFolder);
                 } catch (IOException e) {
-                    this.plugin.getLogger().log(Level.WARNING, "Failed to create oldConfig folder!", e);
+                    this.plugin.getLogger().log(Level.WARNING, "  Failed to create oldConfig folder!", e);
                     return;
                 }
             }
@@ -257,7 +150,7 @@ public class Transitioner {
                 Files.move(defPermPath, oldConfigFolder.resolve("default_permissions.conf"));
                 this.plugin.getLogger().info("  Moved default_permissions.conf to oldConfig");
             } catch (IOException e) {
-                this.plugin.getLogger().log(Level.WARNING, "Failed to move old default_permissions.conf to oldConfig folder!", e);
+                this.plugin.getLogger().log(Level.WARNING, "  Failed to move old default_permissions.conf to oldConfig folder!", e);
             }
         }
         if (defOffExists) {
@@ -265,7 +158,7 @@ public class Transitioner {
                 Files.move(defPermOffPath, oldConfigFolder.resolve("default_permissions_offline.conf"));
                 this.plugin.getLogger().info("  Moved default_permissions_offline.conf to oldConfig");
             } catch (IOException e) {
-                this.plugin.getLogger().log(Level.WARNING, "Failed to move old default_permissions_offline.conf to oldConfig folder!", e);
+                this.plugin.getLogger().log(Level.WARNING, "  Failed to move old default_permissions_offline.conf to oldConfig folder!", e);
             }
         }
     }
