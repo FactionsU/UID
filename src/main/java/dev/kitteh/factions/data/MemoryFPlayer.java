@@ -257,11 +257,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         return spyingChat;
     }
 
-    // FIELD: account
-    public String getAccountId() {
-        return this.getUniqueId().toString();
-    }
-
     public OfflinePlayer getOfflinePlayer() {
         if (this.offlinePlayer == null) {
             this.offlinePlayer = Bukkit.getPlayer(this.id);

@@ -209,6 +209,11 @@ public interface FPlayer extends Participator, Selectable {
 
     UUID getUniqueId();
 
+    @Override
+    default String getAccountId() {
+        return this.getUniqueId().toString();
+    }
+
     Player getPlayer();
 
     boolean isOnline();
