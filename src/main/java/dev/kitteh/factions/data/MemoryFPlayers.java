@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 public abstract class MemoryFPlayers implements FPlayers {
-    public Map<UUID, FPlayer> fPlayers = new ConcurrentSkipListMap<>();
+    protected Map<UUID, FPlayer> fPlayers = new ConcurrentSkipListMap<>();
 
     @Override
     public List<FPlayer> getAllFPlayers() {
@@ -26,7 +26,7 @@ public abstract class MemoryFPlayers implements FPlayers {
 
     public abstract int load();
 
-    public abstract void forceSave();
-
     public abstract void forceSave(boolean sync);
+
+    public abstract void removePlayer(FPlayer fPlayer);
 }

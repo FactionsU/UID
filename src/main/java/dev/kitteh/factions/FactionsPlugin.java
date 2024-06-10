@@ -325,7 +325,7 @@ public class FactionsPlugin extends JavaPlugin {
         this.persist = new Persist(this);
         WorldUtil.init(this.conf().restrictWorlds());
 
-        this.txt = new TextUtil(mcVersion < 1600);
+        this.txt = new TextUtil();
         initTXT();
 
         // attempt to get first command defined in plugin.yml as reference command, if any commands are defined in there
@@ -869,9 +869,9 @@ public class FactionsPlugin extends JavaPlugin {
         }
         // only save data if plugin actually loaded successfully
         if (loadSuccessful) {
-            Instances.FACTIONS.forceSave();
-            Instances.PLAYERS.forceSave();
-            Instances.BOARD.forceSave();
+            Instances.FACTIONS.forceSave(true);
+            Instances.PLAYERS.forceSave(true);
+            Instances.BOARD.forceSave(true);
         }
         if (this.luckPermsSetup) {
             LuckPerms.shutdown(this);

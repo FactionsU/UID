@@ -48,11 +48,6 @@ public class JSONFactions extends MemoryFactions {
     }
 
     @Override
-    public void forceSave() {
-        forceSave(true);
-    }
-
-    @Override
     public void forceSave(boolean sync) {
         final List<Faction> entitiesThatShouldBeSaved = new ArrayList<>(this.factions.values());
         DiscUtil.writeCatch(file, FactionsPlugin.getInstance().getGson().toJson(entitiesThatShouldBeSaved), sync);

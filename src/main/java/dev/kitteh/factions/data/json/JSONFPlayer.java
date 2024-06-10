@@ -2,6 +2,7 @@ package dev.kitteh.factions.data.json;
 
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.data.MemoryFPlayer;
+import dev.kitteh.factions.data.MemoryFPlayers;
 
 import java.util.UUID;
 
@@ -12,6 +13,6 @@ public class JSONFPlayer extends MemoryFPlayer {
 
     @Override
     public void remove() {
-        ((JSONFPlayers) FPlayers.getInstance()).fPlayers.remove(getUniqueId());
+        ((MemoryFPlayers) FPlayers.getInstance()).removePlayer(this);
     }
 }

@@ -76,8 +76,6 @@ public abstract class MemoryFactions implements Factions {
         return 0;
     }
 
-    public abstract void forceSave();
-
     public abstract void forceSave(boolean sync);
 
     public Faction getFactionById(String id) {

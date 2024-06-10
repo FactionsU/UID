@@ -25,10 +25,6 @@ public class JSONFPlayers extends MemoryFPlayers {
         file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/players.json");
     }
 
-    public void forceSave() {
-        forceSave(true);
-    }
-
     public void forceSave(boolean sync) {
         final List<JSONFPlayer> entitiesThatShouldBeSaved = new ArrayList<>();
         boolean saveAll = FactionsPlugin.getInstance().conf().data().json().isSaveAllPlayers();
@@ -79,5 +75,10 @@ public class JSONFPlayers extends MemoryFPlayers {
     @Override
     public FPlayer constructNewFPlayer(UUID id) {
         return new JSONFPlayer(id);
+    }
+
+    @Override
+    public void removePlayer(FPlayer fPlayer) {
+        this.fPlayers.remove(fPlayer.getUniqueId());
     }
 }

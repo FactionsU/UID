@@ -66,10 +66,6 @@ public class JSONBoard extends MemoryBoard {
         }
     }
 
-    public void forceSave() {
-        forceSave(true);
-    }
-
     public void forceSave(boolean sync) {
         Map<String, Map<String, String>> map = dumpAsSaveFormat();
         DiscUtil.writeCatch(file, () -> FactionsPlugin.getInstance().getGson().toJson(map), sync);
@@ -78,7 +74,7 @@ public class JSONBoard extends MemoryBoard {
     public int load() {
         if (!file.exists()) {
             FactionsPlugin.getInstance().getLogger().info("No board to load from disk. Creating new file.");
-            forceSave();
+            forceSave(true);
             return 0;
         }
 

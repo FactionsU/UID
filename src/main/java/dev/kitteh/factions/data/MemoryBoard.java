@@ -586,8 +586,6 @@ public abstract class MemoryBoard implements Board {
         return ret;
     }
 
-    public abstract void forceSave();
-
     public abstract void forceSave(boolean sync);
 
     public abstract int load();
