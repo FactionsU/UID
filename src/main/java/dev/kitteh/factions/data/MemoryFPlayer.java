@@ -478,8 +478,8 @@ public abstract class MemoryFPlayer implements FPlayer {
     // -------------------------------
 
     @Override
-    public String describeTo(Participator that, boolean ucfirst) {
-        return RelationUtil.describeThatToMe(this, that, ucfirst);
+    public String describeTo(Participator that, boolean uppercaseFirst) {
+        return RelationUtil.describeThatToMe(this, that, uppercaseFirst);
     }
 
     @Override

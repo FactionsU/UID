@@ -500,8 +500,8 @@ public abstract class MemoryFaction implements Faction, Participator {
     // -------------------------------
 
     @Override
-    public String describeTo(Participator that, boolean ucfirst) {
-        return RelationUtil.describeThatToMe(this, that, ucfirst);
+    public String describeTo(Participator that, boolean uppercaseFirst) {
+        return RelationUtil.describeThatToMe(this, that, uppercaseFirst);
     }
 
     @Override

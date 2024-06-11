@@ -183,7 +183,6 @@ public class FactionsPlugin extends JavaPlugin {
         instance = this;
     }
 
-    // Everything is pain.
     @Override
     public void onLoad() {
         IntegrationManager.onLoad(this);

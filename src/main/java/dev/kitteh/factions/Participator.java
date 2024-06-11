@@ -18,7 +18,7 @@ public interface Participator {
 
     String describeTo(Participator that);
 
-    String describeTo(Participator that, boolean ucfirst);
+    String describeTo(Participator that, boolean uppercaseFirst);
 
     Relation getRelationTo(Participator that);
 
