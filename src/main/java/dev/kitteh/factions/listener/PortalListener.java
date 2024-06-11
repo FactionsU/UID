@@ -1,4 +1,4 @@
-package dev.kitteh.factions.listener.versionspecific;
+package dev.kitteh.factions.listener;
 
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
