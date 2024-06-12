@@ -45,10 +45,6 @@
                     </artifactSet>
                     <relocations>
                         <relocation>
-                            <pattern>com.google</pattern>
-                            <shadedPattern>moss.factions.shade.com.google</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>me.lucko.commodore</pattern>
                             <shadedPattern>moss.factions.shade.me.lucko.commodore</shadedPattern>
                         </relocation>
@@ -59,18 +55,6 @@
                         <relocation>
                             <pattern>ninja.leaping</pattern>
                             <shadedPattern>moss.factions.shade.ninja.leaping</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.apache.http</pattern>
-                            <shadedPattern>moss.factions.shade.org.apache.http</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.apache.commons.codec</pattern>
-                            <shadedPattern>moss.factions.shade.org.apache.commons.codec</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.apache.commons.logging</pattern>
-                            <shadedPattern>moss.factions.shade.org.apache.commons.logging</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
@@ -101,31 +85,7 @@
         <dependency>
             <groupId>io.papermc</groupId>
             <artifactId>paperlib</artifactId>
-            <version>1.0.4</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>33.2.1-jre</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jsr305</artifactId>
-                    <groupId>com.google.code.findbugs</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>checker-qual</artifactId>
-                    <groupId>org.checkerframework</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.9.1</version>
+            <version>1.0.8</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
@@ -149,6 +109,10 @@
                 <exclusion>
                     <groupId>com.google.inject</groupId>
                     <artifactId>guice</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -209,14 +173,6 @@
                 <exclusion>
                     <artifactId>junit</artifactId>
                     <groupId>junit</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>guava</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>gson</artifactId>
-                    <groupId>com.google.code.gson</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
