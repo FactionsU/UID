@@ -1,7 +1,7 @@
 package dev.kitteh.factions.config.file;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -32,7 +32,7 @@ public class ConfigTest {
     private void assertNotNull(Object o, Field field) throws IllegalAccessException {
         field.setAccessible(true);
         Object oo = field.get(o);
-        Assert.assertNotNull(field.getName() + " was null", oo);
+        Assertions.assertNotNull(oo, field.getName() + " was null");
         if (oo.getClass().getPackage().getName().startsWith("com.massivecraft.factions.config")) {
             assertNotNull(oo, oo.getClass());
         }

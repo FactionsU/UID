@@ -1,5 +1,5 @@
 name: FactionsUUID
-version: ${project.version}-b${build.number}
+version: ${version}
 main: dev.kitteh.factions.FactionsPlugin
 authors: [mbaxter, drtshock, dariasc, Brett Flannigan, Olof Larsson]
 softdepend: [LuckPerms, WorldGuard]
