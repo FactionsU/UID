@@ -1,6 +1,7 @@
 package dev.kitteh.factions.cmd.claim;
 
 import dev.kitteh.factions.Board;
+import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.cmd.CommandContext;

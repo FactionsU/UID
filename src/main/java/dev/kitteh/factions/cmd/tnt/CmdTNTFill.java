@@ -6,6 +6,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.cmd.CommandContext;
 import dev.kitteh.factions.cmd.CommandRequirements;
 import dev.kitteh.factions.cmd.FCommand;
+import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.Pair;

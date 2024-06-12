@@ -23,6 +23,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.data.json.JSONBoard;
 import dev.kitteh.factions.integration.LWC;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.AsciiCompass;
@@ -36,6 +37,9 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +50,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public abstract class MemoryBoard implements Board {
+@NullMarked
+public abstract sealed class MemoryBoard implements Board permits JSONBoard {
 
     protected static class WorldTracker {
         public static final int NO_FACTION = Integer.MIN_VALUE;
@@ -226,6 +231,7 @@ public abstract class MemoryBoard implements Board {
     }
 
     public void removeAt(FLocation flocation) {
+        Objects.requireNonNull(flocation);
         Faction faction = getFactionAt(flocation);
         faction.getWarps().values().removeIf(lazyLocation -> flocation.isInChunk(lazyLocation.getLocation()));
         for (Entity entity : flocation.getChunk().getEntities()) {
@@ -266,9 +272,9 @@ public abstract class MemoryBoard implements Board {
     }
 
     // not to be confused with claims, ownership referring to further member-specific ownership of a claim
-    public void clearOwnershipAt(FLocation flocation) {
+    private void clearOwnershipAt(FLocation flocation) {
         Faction faction = getFactionAt(flocation);
-        if (faction != null && faction.isNormal()) {
+        if (faction.isNormal()) {
             faction.clearClaimOwnership(flocation);
         }
     }
@@ -287,7 +293,7 @@ public abstract class MemoryBoard implements Board {
             faction.clearAllClaimOwnership();
             faction.clearWarps();
         }
-        clean(factionId);
+        clean(faction);
     }
 
     public void unclaimAllInWorld(Faction faction, World world) {
@@ -323,54 +329,6 @@ public abstract class MemoryBoard implements Board {
         }
         this.worldTrackers.values().forEach(wt -> wt.removeAllClaims(factionId));
     }
-
-    // Is this coord NOT completely surrounded by coords claimed by the same faction?
-    // Simpler: Is there any nearby coord with a faction other than the faction here?
-    public boolean isBorderLocation(FLocation flocation) {
-        Faction faction = getFactionAt(flocation);
-        FLocation a = flocation.getRelative(1, 0);
-        FLocation b = flocation.getRelative(-1, 0);
-        FLocation c = flocation.getRelative(0, 1);
-        FLocation d = flocation.getRelative(0, -1);
-        return faction != getFactionAt(a) || faction != getFactionAt(b) || faction != getFactionAt(c) || faction != getFactionAt(d);
-    }
-
-    // Is this coord connected to any coord claimed by the specified faction?
-    public boolean isConnectedLocation(FLocation flocation, Faction faction) {
-        FLocation a = flocation.getRelative(1, 0);
-        FLocation b = flocation.getRelative(-1, 0);
-        FLocation c = flocation.getRelative(0, 1);
-        FLocation d = flocation.getRelative(0, -1);
-        return faction == getFactionAt(a) || faction == getFactionAt(b) || faction == getFactionAt(c) || faction == getFactionAt(d);
-    }
-
-    /**
-     * Checks if there is another faction within a given radius other than Wilderness. Used for HCF feature that
-     * requires a 'buffer' between factions.
-     *
-     * @param flocation - center location.
-     * @param faction   - faction checking for.
-     * @param radius    - chunk radius to check.
-     * @return true if another Faction is within the radius, otherwise false.
-     */
-    public boolean hasFactionWithin(FLocation flocation, Faction faction, int radius) {
-        for (int x = -radius; x <= radius; x++) {
-            for (int z = -radius; z <= radius; z++) {
-                if (x == 0 && z == 0) {
-                    continue;
-                }
-
-                FLocation relative = flocation.getRelative(x, z);
-                Faction other = getFactionAt(relative);
-
-                if (other.isNormal() && other != faction) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 
     //----------------------------------------------//
     // Cleaner. Remove orphaned foreign keys

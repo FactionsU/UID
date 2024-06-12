@@ -8,6 +8,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.PermissionsConfig;
+import dev.kitteh.factions.data.json.JSONFaction;
 import dev.kitteh.factions.event.FactionAutoDisbandEvent;
 import dev.kitteh.factions.event.FactionNewAdminEvent;
 import dev.kitteh.factions.Participator;
@@ -30,6 +31,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +46,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public abstract class MemoryFaction implements Faction, Participator {
+public abstract sealed class MemoryFaction implements Faction permits JSONFaction {
     protected int id = Integer.MIN_VALUE;
     protected boolean peacefulExplosionsEnabled;
     protected boolean permanent;
@@ -325,11 +328,11 @@ public abstract class MemoryFaction implements Faction, Participator {
         this.home = null;
     }
 
-    public String getAccountId() {
-        return "faction-" + this.getIntId();
+    public @NonNull String getAccountId() {
+        return "faction-" + this.getId();
     }
 
-    public OfflinePlayer getOfflinePlayer() {
+    public @NotNull OfflinePlayer getOfflinePlayer() {
         if (this.offlinePlayer == null) {
             this.offlinePlayer = FactionsPlugin.getInstance().getFactionOfflinePlayer(this.getAccountId());
         }
@@ -498,31 +501,6 @@ public abstract class MemoryFaction implements Faction, Participator {
     // -------------------------------
     // Relation and relation colors
     // -------------------------------
-
-    @Override
-    public String describeTo(Participator that, boolean uppercaseFirst) {
-        return RelationUtil.describeThatToMe(this, that, uppercaseFirst);
-    }
-
-    @Override
-    public String describeTo(Participator that) {
-        return RelationUtil.describeThatToMe(this, that);
-    }
-
-    @Override
-    public Relation getRelationTo(Participator rp) {
-        return RelationUtil.getRelationTo(this, rp);
-    }
-
-    @Override
-    public Relation getRelationTo(Participator rp, boolean ignorePeaceful) {
-        return RelationUtil.getRelationTo(this, rp, ignorePeaceful);
-    }
-
-    @Override
-    public String getColorStringTo(Participator rp) {
-        return RelationUtil.getColorStringOfThatToMe(this, rp);
-    }
 
     public Relation getRelationWish(Faction otherFaction) {
         if (this.relationWish.containsKey(otherFaction.getId())) {
@@ -891,16 +869,13 @@ public abstract class MemoryFaction implements Faction, Participator {
     // ----------------------------------------------//
     // Messages
     // ----------------------------------------------//
-    public void msg(String message, Object... args) {
+    @Override
+    public void msg(@NonNull String message, @NonNull Object @NonNull ... args) {
         message = FactionsPlugin.getInstance().txt().parse(message, args);
 
         for (FPlayer fplayer : this.getFPlayersWhereOnline(true)) {
             fplayer.sendMessage(message);
         }
-    }
-
-    public void msg(TL translation, Object... args) {
-        msg(translation.toString(), args);
     }
 
     public void sendMessage(String message) {
@@ -1020,7 +995,7 @@ public abstract class MemoryFaction implements Faction, Participator {
         }
 
         // Clean the board
-        ((MemoryBoard) Board.getInstance()).clean(id);
+        ((MemoryBoard) Board.getInstance()).clean(this);
 
         for (FPlayer fPlayer : fplayers) {
             fPlayer.resetFactionData();

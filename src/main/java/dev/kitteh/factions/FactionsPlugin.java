@@ -356,7 +356,7 @@ public class FactionsPlugin extends JavaPlugin {
             faction.addFPlayer(fPlayer);
         }
         int loadedClaims = Instances.BOARD.load();
-        Board.getInstance().clean();
+        Instances.BOARD.clean();
         FactionsPlugin.getInstance().getLogger().info("Loaded " + loadedPlayers + " players in " + loadedFactions + " factions with " + loadedClaims + " claims");
 
         // Add Base Commands

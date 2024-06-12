@@ -1,21 +1,28 @@
 package dev.kitteh.factions;
 
+import dev.kitteh.factions.data.MemoryFactions;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 import java.util.List;
 
-public interface Factions {
+@NullMarked
+public sealed interface Factions permits MemoryFactions {
     static Factions getInstance() {
         return Instances.FACTIONS;
     }
 
-    Faction getFactionById(String id);
+    @Nullable Faction getFactionById(String id);
 
+    @Nullable
     Faction getByTag(String str);
 
+    @Nullable
     Faction getBestTagMatch(String start);
 
-    boolean isTagTaken(String str);
-
-    boolean isValidFactionId(String id);
+    default boolean isTagTaken(String str) {
+        return this.getByTag(str) != null;
+    }
 
     Faction createFaction();
 
@@ -23,9 +30,18 @@ public interface Factions {
 
     List<Faction> getAllFactions();
 
-    Faction getWilderness();
+    @SuppressWarnings("DataFlowIssue")
+    default Faction getWilderness() {
+        return this.getFactionById("0");
+    }
 
-    Faction getSafeZone();
+    @SuppressWarnings("DataFlowIssue")
+    default Faction getSafeZone() {
+        return this.getFactionById("-1");
+    }
 
-    Faction getWarZone();
+    @SuppressWarnings("DataFlowIssue")
+    default Faction getWarZone() {
+        return this.getFactionById("-2");
+    }
 }

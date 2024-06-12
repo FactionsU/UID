@@ -4,29 +4,44 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.RelationUtil;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-public interface Participator {
+@NullMarked
+public sealed interface Participator permits Faction, FPlayer {
     String getAccountId();
 
     OfflinePlayer getOfflinePlayer();
 
-    void msg(String str, Object... args);
+    void msg( String str,  Object... args);
 
-    void msg(TL translation, Object... args);
-
-    String describeTo(Participator that);
-
-    String describeTo(Participator that, boolean uppercaseFirst);
-
-    Relation getRelationTo(Participator that);
-
-    Relation getRelationTo(Participator that, boolean ignorePeaceful);
-
-    default TextColor getTextColorTo(Participator to) {
-        return RelationUtil.getTextColorOfThatToMe(this, to);
+    default void msg( TL translation,  Object... args) {
+        this.msg(translation.toString(), args);
     }
 
-    String getColorStringTo(Participator to);
+    default  String describeTo(@Nullable Participator that) {
+        return RelationUtil.describeThatToMe(this, that);
+    }
+
+    default  String describeTo(@Nullable Participator that, boolean uppercaseFirst) {
+        return RelationUtil.describeThatToMe(this, that, uppercaseFirst);
+    }
+
+    default  Relation getRelationTo(@Nullable Participator that) {
+        return RelationUtil.getRelationTo(this, that);
+    }
+
+    default  Relation getRelationTo(@Nullable Participator that, boolean ignorePeaceful) {
+        return RelationUtil.getRelationTo(this, that, ignorePeaceful);
+    }
+
+    default  TextColor getTextColorTo(@Nullable Participator that) {
+        return RelationUtil.getTextColorOfThatToMe(this, that);
+    }
+
+    default  String getColorStringTo(@Nullable Participator that) {
+        return RelationUtil.getColorStringOfThatToMe(this, that);
+    }
 }

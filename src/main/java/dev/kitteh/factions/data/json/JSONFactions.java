@@ -8,6 +8,8 @@ import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.data.MemoryFactions;
 import dev.kitteh.factions.util.DiscUtil;
 import dev.kitteh.factions.util.OldJSONFactionDeserializer;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,13 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class JSONFactions extends MemoryFactions {
+@NullMarked
+public final class JSONFactions extends MemoryFactions {
     private record NextId(int next, String BIG_WARNING) {
         NextId(int next) {
             this(next, "DO NOT DELETE OR EDIT THIS FILE UNLESS DELETING ALL FACTIONS AS WELL.");
         }
     }
-
 
     public Gson getGson() {
         return FactionsPlugin.getInstance().getGson();
@@ -68,7 +70,7 @@ public class JSONFactions extends MemoryFactions {
         return this.factions.size();
     }
 
-    private List<JSONFaction> loadCore() {
+    private @Nullable List<JSONFaction> loadCore() {
         if (!this.file.exists()) {
             return null;
         }
@@ -128,13 +130,13 @@ public class JSONFactions extends MemoryFactions {
         return this.isIdFree(Integer.toString(id));
     }
 
-    protected synchronized void updateNextIdForId(int id) {
+    private synchronized void updateNextIdForId(int id) {
         if (this.nextId < id) {
             this.nextId = id + 1;
         }
     }
 
-    protected void updateNextIdForId(String id) {
+    private void updateNextIdForId(String id) {
         try {
             int idAsInt = Integer.parseInt(id);
             this.updateNextIdForId(idAsInt);

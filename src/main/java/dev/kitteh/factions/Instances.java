@@ -6,9 +6,10 @@ import dev.kitteh.factions.data.MemoryFactions;
 import dev.kitteh.factions.data.json.JSONBoard;
 import dev.kitteh.factions.data.json.JSONFPlayers;
 import dev.kitteh.factions.data.json.JSONFactions;
+import org.jspecify.annotations.NonNull;
 
-class Instances {
-    static final MemoryBoard BOARD = new JSONBoard();
-    static final MemoryFactions FACTIONS = new JSONFactions();
-    static final MemoryFPlayers PLAYERS = new JSONFPlayers();
+final class Instances {
+    static final @NonNull MemoryBoard BOARD = new JSONBoard();
+    static final @NonNull MemoryFactions FACTIONS = new JSONFactions();
+    static final @NonNull MemoryFPlayers PLAYERS = new JSONFPlayers();
 }

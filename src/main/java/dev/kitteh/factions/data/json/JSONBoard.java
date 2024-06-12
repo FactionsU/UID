@@ -5,6 +5,7 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.util.DiscUtil;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -15,15 +16,15 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
-
-public class JSONBoard extends MemoryBoard {
+@NullMarked
+public final class JSONBoard extends MemoryBoard {
     private static final File file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/board.json");
 
     // -------------------------------------------- //
     // Persistance
     // -------------------------------------------- //
 
-    public Map<String, Map<String, String>> dumpAsSaveFormat() {
+    private Map<String, Map<String, String>> dumpAsSaveFormat() {
         Map<String, Map<String, String>> worldCoordIds = new HashMap<>();
 
         this.worldTrackers.forEach((world, tracker) -> {
@@ -39,7 +40,7 @@ public class JSONBoard extends MemoryBoard {
         return worldCoordIds;
     }
 
-    public void loadFromSaveFormat(Map<String, Map<String, String>> worldCoordIds) {
+    private void loadFromSaveFormat(Map<String, Map<String, String>> worldCoordIds) {
         this.worldTrackers.clear();
 
         String worldName;

@@ -6,7 +6,7 @@ import dev.kitteh.factions.data.MemoryFPlayers;
 
 import java.util.UUID;
 
-public class JSONFPlayer extends MemoryFPlayer {
+public final class JSONFPlayer extends MemoryFPlayer {
     public JSONFPlayer(UUID id) {
         super(id);
     }

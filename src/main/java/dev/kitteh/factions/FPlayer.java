@@ -1,5 +1,6 @@
 package dev.kitteh.factions;
 
+import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
@@ -8,6 +9,7 @@ import dev.kitteh.factions.util.WarmUpUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +25,7 @@ import java.util.UUID;
  * The same instance is always returned for the same player. This means you can use the == operator. No .equals method
  * necessary.
  */
-public interface FPlayer extends Participator, Selectable {
+public sealed interface FPlayer extends Participator, Selectable permits MemoryFPlayer {
     void login();
 
     void logout();
@@ -210,7 +212,7 @@ public interface FPlayer extends Participator, Selectable {
     UUID getUniqueId();
 
     @Override
-    default String getAccountId() {
+    default @NonNull String getAccountId() {
         return this.getUniqueId().toString();
     }
 

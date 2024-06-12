@@ -3,6 +3,7 @@ package dev.kitteh.factions.cmd;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.audience.Audience;
@@ -56,7 +57,7 @@ public class CmdMap extends FCommand {
 
     public void showMap(CommandContext context) {
         Audience audience = FactionsPlugin.getInstance().getAdventure().player(context.player);
-        for (Component component : Board.getInstance().getMap(context.fPlayer, new FLocation(context.fPlayer), context.fPlayer.getPlayer().getLocation().getYaw())) {
+        for (Component component : ((MemoryBoard)Board.getInstance()).getMap(context.fPlayer, new FLocation(context.fPlayer), context.fPlayer.getPlayer().getLocation().getYaw())) {
             audience.sendMessage(component);
         }
     }

@@ -7,6 +7,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
+import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.event.FPlayerJoinEvent;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
@@ -335,7 +336,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (me.isMapAutoUpdating()) {
             if (!showTimes.containsKey(player.getUniqueId()) || (showTimes.get(player.getUniqueId()) < System.currentTimeMillis())) {
                 Audience audience = FactionsPlugin.getInstance().getAdventure().player(player);
-                for (Component component : Board.getInstance().getMap(me, to, player.getLocation().getYaw())) {
+                for (Component component : ((MemoryBoard)Board.getInstance()).getMap(me, to, player.getLocation().getYaw())) {
                     audience.sendMessage(component);
                 }
                 showTimes.put(player.getUniqueId(), System.currentTimeMillis() + FactionsPlugin.getInstance().conf().commands().map().getCooldown());

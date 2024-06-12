@@ -2,6 +2,10 @@ package dev.kitteh.factions.data;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
+import dev.kitteh.factions.data.json.JSONFPlayers;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +13,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-public abstract class MemoryFPlayers implements FPlayers {
+@NullMarked
+public abstract sealed class MemoryFPlayers implements FPlayers permits JSONFPlayers {
     protected Map<UUID, FPlayer> fPlayers = new ConcurrentSkipListMap<>();
 
     @Override
-    public List<FPlayer> getAllFPlayers() {
+    public @NotNull List<FPlayer> getAllFPlayers() {
         return new ArrayList<>(fPlayers.values());
     }
 

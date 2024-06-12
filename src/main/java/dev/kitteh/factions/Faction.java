@@ -1,5 +1,6 @@
 package dev.kitteh.factions;
 
+import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
@@ -14,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public interface Faction extends Participator, Selectable {
+public sealed interface Faction extends Participator, Selectable permits MemoryFaction {
     Map<UUID, List<String>> getAnnouncements();
 
     Map<String, LazyLocation> getWarps();

@@ -8,14 +8,19 @@ import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.data.MemoryFPlayers;
 import dev.kitteh.factions.util.DiscUtil;
 import dev.kitteh.factions.util.OldJSONFPlayerDeserializer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
-public class JSONFPlayers extends MemoryFPlayers {
+@NullMarked
+public final class JSONFPlayers extends MemoryFPlayers {
     private final File file;
 
     public JSONFPlayers() {
@@ -25,6 +30,7 @@ public class JSONFPlayers extends MemoryFPlayers {
         file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/players.json");
     }
 
+    @Override
     public void forceSave(boolean sync) {
         final List<JSONFPlayer> entitiesThatShouldBeSaved = new ArrayList<>();
         boolean saveAll = FactionsPlugin.getInstance().conf().data().json().isSaveAllPlayers();
@@ -37,7 +43,7 @@ public class JSONFPlayers extends MemoryFPlayers {
         DiscUtil.writeCatch(file, FactionsPlugin.getInstance().getGson().toJson(entitiesThatShouldBeSaved), sync);
     }
 
-
+    @Override
     public int load() {
         List<JSONFPlayer> fplayers = this.loadCore();
         if (fplayers == null) {
@@ -48,7 +54,7 @@ public class JSONFPlayers extends MemoryFPlayers {
         return fPlayers.size();
     }
 
-    private List<JSONFPlayer> loadCore() {
+    private @Nullable List<JSONFPlayer> loadCore() {
         if (!this.file.exists()) {
             return null;
         }
@@ -74,7 +80,7 @@ public class JSONFPlayers extends MemoryFPlayers {
 
     @Override
     public FPlayer constructNewFPlayer(UUID id) {
-        return new JSONFPlayer(id);
+        return new JSONFPlayer(Objects.requireNonNull(id));
     }
 
     @Override

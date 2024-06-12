@@ -2,15 +2,20 @@ package dev.kitteh.factions.data;
 
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
+import dev.kitteh.factions.data.json.JSONFactions;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.ChatColor;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class MemoryFactions implements Factions {
+@NullMarked
+public abstract sealed class MemoryFactions implements Factions permits JSONFactions {
     public final Map<Integer, Faction> factions = new ConcurrentHashMap<>();
     public int nextId = 1;
     private final static int ID_WILDERNESS = 0;
@@ -82,14 +87,14 @@ public abstract class MemoryFactions implements Factions {
         return factions.get(Integer.parseInt(id));
     }
 
-    public Faction getFactionById(int id) {
+    public @Nullable Faction getFactionById(int id) {
         return factions.get(id);
     }
 
     public abstract Faction generateFactionObject(int id);
 
-    public Faction getByTag(String str) {
-        String compStr = MiscUtil.getComparisonString(str);
+    public @Nullable Faction getByTag(String str) {
+        String compStr = MiscUtil.getComparisonString(Objects.requireNonNull(str));
         for (Faction faction : factions.values()) {
             if (faction.getComparisonTag().equals(compStr)) {
                 return faction;
@@ -98,7 +103,8 @@ public abstract class MemoryFactions implements Factions {
         return null;
     }
 
-    public Faction getBestTagMatch(String start) {
+    public @Nullable Faction getBestTagMatch(String start) {
+        Objects.requireNonNull(start);
         int best = 0;
         start = start.toLowerCase();
         int minlength = start.length();
@@ -125,18 +131,6 @@ public abstract class MemoryFactions implements Factions {
         }
 
         return bestMatch;
-    }
-
-    public boolean isTagTaken(String str) {
-        return this.getByTag(str) != null;
-    }
-
-    public boolean isValidFactionId(String id) {
-        return this.isValidFactionId(Integer.parseInt(id));
-    }
-
-    public boolean isValidFactionId(int id) {
-        return factions.containsKey(id);
     }
 
     public Faction createFaction() {
