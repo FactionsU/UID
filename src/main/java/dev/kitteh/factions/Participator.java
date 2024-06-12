@@ -15,33 +15,33 @@ public sealed interface Participator permits Faction, FPlayer {
 
     OfflinePlayer getOfflinePlayer();
 
-    void msg( String str,  Object... args);
+    void msg(String str, Object... args);
 
-    default void msg( TL translation,  Object... args) {
+    default void msg(TL translation, Object... args) {
         this.msg(translation.toString(), args);
     }
 
-    default  String describeTo(@Nullable Participator that) {
+    default String describeTo(@Nullable Participator that) {
         return RelationUtil.describeThatToMe(this, that);
     }
 
-    default  String describeTo(@Nullable Participator that, boolean uppercaseFirst) {
+    default String describeTo(@Nullable Participator that, boolean uppercaseFirst) {
         return RelationUtil.describeThatToMe(this, that, uppercaseFirst);
     }
 
-    default  Relation getRelationTo(@Nullable Participator that) {
+    default Relation getRelationTo(@Nullable Participator that) {
         return RelationUtil.getRelationTo(this, that);
     }
 
-    default  Relation getRelationTo(@Nullable Participator that, boolean ignorePeaceful) {
+    default Relation getRelationTo(@Nullable Participator that, boolean ignorePeaceful) {
         return RelationUtil.getRelationTo(this, that, ignorePeaceful);
     }
 
-    default  TextColor getTextColorTo(@Nullable Participator that) {
+    default TextColor getTextColorTo(@Nullable Participator that) {
         return RelationUtil.getTextColorOfThatToMe(this, that);
     }
 
-    default  String getColorStringTo(@Nullable Participator that) {
+    default String getColorStringTo(@Nullable Participator that) {
         return RelationUtil.getColorStringOfThatToMe(this, that);
     }
 }
