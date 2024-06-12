@@ -88,7 +88,7 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
                 return false;
             }
 
-            Faction locFaction = Board.getInstance().getFactionAt(new FLocation(attacker));
+            Faction locFaction = Board.getInstance().getFactionAt(new FLocation(player));
             if (locFaction.noPvPInTerritory() || locFaction.isSafeZone()) {
                 return false;
             }

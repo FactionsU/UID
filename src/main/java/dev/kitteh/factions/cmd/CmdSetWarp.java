@@ -1,5 +1,7 @@
 package dev.kitteh.factions.cmd;
 
+import dev.kitteh.factions.Board;
+import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.PermissibleActions;
@@ -27,7 +29,7 @@ public class CmdSetWarp extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        if (!(context.fPlayer.getRelationToLocation() == Relation.MEMBER)) {
+        if (!(Board.getInstance().getFactionAt(new FLocation(context.player)).getRelationTo(context.fPlayer) == Relation.MEMBER)) {
             context.fPlayer.msg(TL.COMMAND_SETFWARP_NOTCLAIMED);
             return;
         }

@@ -148,13 +148,6 @@ public sealed interface FPlayer extends Participator, Selectable permits MemoryF
 
     int getDeaths();
 
-
-    // -------------------------------
-    // Relation and relation colors
-    // -------------------------------
-
-    Relation getRelationToLocation();
-
     //----------------------------------------------//
     // Power
     //----------------------------------------------//

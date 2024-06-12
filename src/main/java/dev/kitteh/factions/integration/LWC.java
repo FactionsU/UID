@@ -63,9 +63,8 @@ public class LWC {
         if (world == null) {
             return Collections.emptyList();  // world not loaded or something? cancel out to prevent error
         }
-        Location location = new Location(world, flocation.getX() * 16, 5, flocation.getZ() * 16);
 
-        BlockState[] blocks = location.getChunk().getTileEntities();
+        BlockState[] blocks = flocation.getChunk().getTileEntities();
         List<Block> lwcBlocks = new LinkedList<>();
 
         for (BlockState block : blocks) {

@@ -44,7 +44,7 @@ public class CmdOwner extends FCommand {
             return;
         }
 
-        FLocation flocation = new FLocation(context.fPlayer);
+        FLocation flocation = new FLocation(context.player);
 
         Faction factionHere = Board.getInstance().getFactionAt(flocation);
         if (factionHere != context.faction) {

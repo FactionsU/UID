@@ -75,8 +75,8 @@ public class CmdClaimFill extends FCommand {
         }
 
         final double distance = FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxDistance();
-        long startX = loc.getX();
-        long startZ = loc.getZ();
+        int startX = loc.x();
+        int startZ = loc.z();
 
         Set<FLocation> toClaim = new LinkedHashSet<>();
         Queue<FLocation> queue = new LinkedList<>();
@@ -86,7 +86,7 @@ public class CmdClaimFill extends FCommand {
         while (!queue.isEmpty() && toClaim.size() <= limit) {
             currentHead = queue.poll();
 
-            if (Math.abs(currentHead.getX() - startX) > distance || Math.abs(currentHead.getZ() - startZ) > distance) {
+            if (Math.abs(currentHead.x() - startX) > distance || Math.abs(currentHead.z() - startZ) > distance) {
                 context.msg(TL.COMMAND_CLAIMFILL_TOOFAR, distance);
                 return;
             }

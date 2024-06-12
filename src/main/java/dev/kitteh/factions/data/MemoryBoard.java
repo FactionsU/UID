@@ -233,16 +233,18 @@ public abstract sealed class MemoryBoard implements Board permits JSONBoard {
     public void removeAt(FLocation flocation) {
         Objects.requireNonNull(flocation);
         Faction faction = getFactionAt(flocation);
-        faction.getWarps().values().removeIf(lazyLocation -> flocation.isInChunk(lazyLocation.getLocation()));
-        for (Entity entity : flocation.getChunk().getEntities()) {
-            if (entity instanceof Player) {
-                FPlayer fPlayer = FPlayers.getInstance().getByPlayer((Player) entity);
-                if (!fPlayer.isAdminBypassing() && fPlayer.isFlying()) {
-                    fPlayer.setFlying(false);
-                }
-                if (fPlayer.isWarmingUp()) {
-                    fPlayer.clearWarmup();
-                    fPlayer.msg(TL.WARMUPS_CANCELLED);
+        faction.getWarps().values().removeIf(lazyLocation -> lazyLocation.getLocation() != null && flocation.isInChunk(lazyLocation.getLocation()));
+        if (flocation.getWorld().isChunkLoaded(flocation.x(), flocation.z())) {
+            for (Entity entity : flocation.getChunk().getEntities()) {
+                if (entity instanceof Player) {
+                    FPlayer fPlayer = FPlayers.getInstance().getByPlayer((Player) entity);
+                    if (!fPlayer.isAdminBypassing() && fPlayer.isFlying()) {
+                        fPlayer.setFlying(false);
+                    }
+                    if (fPlayer.isWarmingUp()) {
+                        fPlayer.clearWarmup();
+                        fPlayer.msg(TL.WARMUPS_CANCELLED);
+                    }
                 }
             }
         }

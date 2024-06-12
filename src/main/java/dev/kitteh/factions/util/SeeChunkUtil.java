@@ -56,8 +56,8 @@ public class SeeChunkUtil extends BukkitRunnable {
     public static void showPillars(Player me, FPlayer fme, Particle effect, boolean useColor) {
         World world = me.getWorld();
         FLocation flocation = new FLocation(me);
-        int chunkX = (int) flocation.getX();
-        int chunkZ = (int) flocation.getZ();
+        int chunkX = flocation.x();
+        int chunkZ = flocation.z();
 
         ParticleColor color = null;
         if (useColor) {

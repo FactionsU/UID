@@ -73,8 +73,8 @@ public class CmdUnclaimfill extends FCommand {
         }
 
         final double distance = FactionsPlugin.getInstance().conf().factions().claims().getFillUnClaimMaxDistance();
-        long startX = loc.getX();
-        long startZ = loc.getZ();
+        int startX = loc.x();
+        int startZ = loc.z();
 
         Set<FLocation> toClaim = new LinkedHashSet<>();
         Queue<FLocation> queue = new LinkedList<>();
@@ -84,7 +84,7 @@ public class CmdUnclaimfill extends FCommand {
         while (!queue.isEmpty() && toClaim.size() <= limit) {
             currentHead = queue.poll();
 
-            if (Math.abs(currentHead.getX() - startX) > distance || Math.abs(currentHead.getZ() - startZ) > distance) {
+            if (Math.abs(currentHead.x() - startX) > distance || Math.abs(currentHead.z() - startZ) > distance) {
                 context.msg(TL.COMMAND_UNCLAIMFILL_TOOFAR, distance);
                 return;
             }
@@ -107,8 +107,8 @@ public class CmdUnclaimfill extends FCommand {
         for (FLocation currentLocation : toClaim) {
             if (this.attemptUnclaim(context, currentLocation, currentFaction, tracker)) {
                 tracker.successes++;
-                x += currentLocation.getX();
-                z += currentLocation.getZ();
+                x += currentLocation.x();
+                z += currentLocation.z();
             } else {
                 tracker.fails++;
             }

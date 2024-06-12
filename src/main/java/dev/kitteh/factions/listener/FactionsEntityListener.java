@@ -338,11 +338,11 @@ public class FactionsEntityListener extends AbstractListener {
             return !defLocFaction.noMonstersInTerritory();
         }
 
-        if (!(damager instanceof Player)) {
+        if (!(damager instanceof Player damagerPlayer)) {
             return true;
         }
 
-        FPlayer attacker = FPlayers.getInstance().getByPlayer((Player) damager);
+        FPlayer attacker = FPlayers.getInstance().getByPlayer(damagerPlayer);
         notify = notify && ((Player) damager).canSee((Player) damagee);
 
         if (attacker == null || attacker.getPlayer() == null) {
@@ -361,7 +361,7 @@ public class FactionsEntityListener extends AbstractListener {
             return false;
         }
 
-        Faction locFaction = Board.getInstance().getFactionAt(new FLocation(attacker));
+        Faction locFaction = Board.getInstance().getFactionAt(new FLocation(damagerPlayer));
 
         // so we know from above that the defender isn't in a safezone... what about the attacker, sneaky dog that he might be?
         if (locFaction.noPvPInTerritory()) {

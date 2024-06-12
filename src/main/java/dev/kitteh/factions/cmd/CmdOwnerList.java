@@ -33,7 +33,7 @@ public class CmdOwnerList extends FCommand {
             return;
         }
 
-        FLocation flocation = new FLocation(context.fPlayer);
+        FLocation flocation = new FLocation(context.player);
 
         Faction faction = context.faction;
 

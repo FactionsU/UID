@@ -60,7 +60,7 @@ public class CmdListClaims extends FCommand {
         Map<Long, FLoc> worldClaims = new HashMap<>();
         for (FLocation loc : Board.getInstance().getAllClaims(faction)) {
             if (loc.getWorld().equals(world)) {
-                worldClaims.put(getLong(loc.getX(), (int) loc.getZ()), new FLoc(loc.getX(), loc.getZ()));
+                worldClaims.put(getLong(loc.x(), loc.z()), new FLoc(loc.x(), loc.z()));
             }
         }
         if (worldClaims.isEmpty()) {

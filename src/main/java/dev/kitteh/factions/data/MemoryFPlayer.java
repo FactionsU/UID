@@ -476,15 +476,6 @@ public abstract sealed class MemoryFPlayer implements FPlayer permits JSONFPlaye
 
     }
 
-    // -------------------------------
-    // Relation and relation colors
-    // -------------------------------
-
-    @Override
-    public Relation getRelationToLocation() {
-        return Board.getInstance().getFactionAt(new FLocation(this)).getRelationTo(this);
-    }
-
     //----------------------------------------------//
     // Power
     //----------------------------------------------//
@@ -575,24 +566,29 @@ public abstract sealed class MemoryFPlayer implements FPlayer permits JSONFPlaye
     // Territory
     //----------------------------------------------//
     public boolean isInOwnTerritory() {
-        return Board.getInstance().getFactionAt(new FLocation(this)) == this.getFaction();
+        return getStandingInFaction() == this.getFaction();
     }
 
     public boolean isInOthersTerritory() {
-        Faction factionHere = Board.getInstance().getFactionAt(new FLocation(this));
-        return factionHere != null && factionHere.isNormal() && factionHere != this.getFaction();
+        Faction factionHere = getStandingInFaction();
+        return factionHere.isNormal() && factionHere != this.getFaction();
     }
 
     public boolean isInAllyTerritory() {
-        return Board.getInstance().getFactionAt(new FLocation(this)).getRelationTo(this).isAlly();
+        return getStandingInFaction().getRelationTo(this).isAlly();
     }
 
     public boolean isInNeutralTerritory() {
-        return Board.getInstance().getFactionAt(new FLocation(this)).getRelationTo(this).isNeutral();
+        return getStandingInFaction().getRelationTo(this).isNeutral();
     }
 
     public boolean isInEnemyTerritory() {
-        return Board.getInstance().getFactionAt(new FLocation(this)).getRelationTo(this).isEnemy();
+        return getStandingInFaction().getRelationTo(this).isEnemy();
+    }
+
+    private Faction getStandingInFaction() {
+        Player player = this.getPlayer();
+        return Board.getInstance().getFactionAt(player == null ? this.lastStoodAt : new FLocation(player));
     }
 
     public void sendFactionHereMessage(Faction from) {
