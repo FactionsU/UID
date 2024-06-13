@@ -11,7 +11,6 @@ import dev.kitteh.factions.config.file.PermissionsConfig;
 import dev.kitteh.factions.data.json.JSONFaction;
 import dev.kitteh.factions.event.FactionAutoDisbandEvent;
 import dev.kitteh.factions.event.FactionNewAdminEvent;
-import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.integration.LWC;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
@@ -25,14 +24,13 @@ import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.MiscUtil;
-import dev.kitteh.factions.util.RelationUtil;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,17 +44,18 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+@NullMarked
 public abstract sealed class MemoryFaction implements Faction permits JSONFaction {
     protected int id = Integer.MIN_VALUE;
     protected boolean peacefulExplosionsEnabled;
     protected boolean permanent;
     protected String tag;
     protected String description;
-    protected String link;
+    protected @Nullable String link;
     protected boolean open;
     protected boolean peaceful;
-    protected Integer permanentPower;
-    protected LazyLocation home;
+    protected @Nullable Integer permanentPower;
+    protected @Nullable LazyLocation home;
     protected long foundedDate;
     protected transient long lastPlayerLoggedOffTime;
     protected double powerBoost;
@@ -76,7 +75,7 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
     protected long lastDTRUpdateTime;
     protected long frozenDTRUntilTime;
     protected int tntBank;
-    protected transient OfflinePlayer offlinePlayer;
+    protected transient @Nullable OfflinePlayer offlinePlayer;
 
     public HashMap<UUID, List<String>> getAnnouncements() {
         return this.announcements;
@@ -157,10 +156,6 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
 
     public int getIntId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.setId(Integer.parseInt(id));
     }
 
     public void setId(int id) {
@@ -247,14 +242,14 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
         return prefix + this.tag;
     }
 
-    public String getTag(Faction otherFaction) {
+    public String getTag(@Nullable Faction otherFaction) {
         if (otherFaction == null) {
             return getTag();
         }
         return this.getTag(this.getColorStringTo(otherFaction));
     }
 
-    public String getTag(FPlayer otherFplayer) {
+    public String getTag(@Nullable FPlayer otherFplayer) {
         if (otherFplayer == null) {
             return getTag();
         }
@@ -303,7 +298,7 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
         return this.getHome() != null;
     }
 
-    public Location getHome() {
+    public @Nullable Location getHome() {
         confirmValidHome();
         return (this.home != null) ? this.home.getLocation() : null;
     }
@@ -320,7 +315,7 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
     }
 
     public void confirmValidHome() {
-        if (!FactionsPlugin.getInstance().conf().factions().homes().isMustBeInClaimedTerritory() || this.home == null || (this.home.getLocation() != null && Board.getInstance().getFactionAt(new FLocation(this.home.getLocation())) == this)) {
+        if ((!FactionsPlugin.getInstance().conf().factions().homes().isMustBeInClaimedTerritory()) || (this.home == null) || (Board.getInstance().getFactionAt(new FLocation(this.home)) == this)) {
             return;
         }
 
@@ -328,11 +323,11 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
         this.home = null;
     }
 
-    public @NonNull String getAccountId() {
+    public String getAccountId() {
         return "faction-" + this.getId();
     }
 
-    public @NotNull OfflinePlayer getOfflinePlayer() {
+    public OfflinePlayer getOfflinePlayer() {
         if (this.offlinePlayer == null) {
             this.offlinePlayer = FactionsPlugin.getInstance().getFactionOfflinePlayer(this.getAccountId());
         }
@@ -369,7 +364,8 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
     // F Permissions stuff
     // -------------------------------------------- //
 
-    public boolean hasAccess(Selectable selectable, PermissibleAction permissibleAction, FLocation location) {
+    public boolean hasAccess(Selectable selectable, PermissibleAction permissibleAction, @Nullable FLocation location) {
+        //noinspection ConstantValue
         if (selectable == null || permissibleAction == null) {
             return false; // Fail in a safe way
         }
@@ -414,12 +410,14 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
     }
 
     public void checkPerms() {
+        //noinspection ConstantValue
         if (this.permissions == null || this.permissions.isEmpty()) {
             this.resetPerms();
         }
     }
 
     public void resetPerms() {
+        //noinspection ConstantValue
         if (permissions == null) {
             permissions = new LinkedHashMap<>();
         } else {
@@ -579,8 +577,8 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
     // Power
     // ----------------------------------------------//
     public double getPowerExact() {
-        if (this.hasPermanentPower()) {
-            return this.getPermanentPower();
+        if (this.permanentPower != null) {
+            return this.permanentPower;
         }
 
         double ret = 0;
@@ -594,8 +592,8 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
     }
 
     public double getPowerMaxExact() {
-        if (this.hasPermanentPower()) {
-            return this.getPermanentPower();
+        if (this.permanentPower != null) {
+            return this.permanentPower;
         }
 
         double ret = 0;
@@ -620,11 +618,11 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
         return FactionsPlugin.getInstance().getLandRaidControl().hasLandInflation(this);
     }
 
-    public Integer getPermanentPower() {
+    public @Nullable Integer getPermanentPower() {
         return this.permanentPower;
     }
 
-    public void setPermanentPower(Integer permanentPower) {
+    public void setPermanentPower(@Nullable Integer permanentPower) {
         this.permanentPower = permanentPower;
     }
 
@@ -712,7 +710,7 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
         return ret;
     }
 
-    public Set<FPlayer> getFPlayersWhereOnline(boolean online, FPlayer viewer) {
+    public Set<FPlayer> getFPlayersWhereOnline(boolean online, @Nullable FPlayer viewer) {
         if (viewer == null) {
             return getFPlayersWhereOnline(online);
         }
@@ -742,7 +740,7 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
         return ret;
     }
 
-    public FPlayer getFPlayerAdmin() {
+    public @Nullable FPlayer getFPlayerAdmin() {
         if (!this.isNormal()) {
             return null;
         }
@@ -826,15 +824,15 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
 
         // get list of coleaders, or mods, or list of normal members if there are no moderators
         ArrayList<FPlayer> replacements = this.getFPlayersWhereRole(Role.COLEADER);
-        if (replacements == null || replacements.isEmpty()) {
+        if (replacements.isEmpty()) {
             replacements = this.getFPlayersWhereRole(Role.MODERATOR);
         }
 
-        if (replacements == null || replacements.isEmpty()) {
+        if (replacements.isEmpty()) {
             replacements = this.getFPlayersWhereRole(Role.NORMAL);
         }
 
-        if (replacements == null || replacements.isEmpty()) { // faction admin  is the only  member; one-man  faction
+        if (replacements.isEmpty()) { // faction admin  is the only  member; one-man  faction
             if (this.isPermanent()) {
                 if (oldLeader != null) {
                     oldLeader.setRole(Role.NORMAL);
@@ -870,7 +868,7 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
     // Messages
     // ----------------------------------------------//
     @Override
-    public void msg(@NonNull String message, @NonNull Object @NonNull ... args) {
+    public void msg(String message, Object... args) {
         message = FactionsPlugin.getInstance().txt().parse(message, args);
 
         for (FPlayer fplayer : this.getFPlayersWhereOnline(true)) {
@@ -943,7 +941,7 @@ public abstract sealed class MemoryFaction implements Faction permits JSONFactio
     }
 
     public void setPlayerAsOwner(FPlayer player, FLocation loc) {
-        claimOwnership.computeIfAbsent(loc, k->new HashSet<>()).add(player.getUniqueId());
+        claimOwnership.computeIfAbsent(loc, k -> new HashSet<>()).add(player.getUniqueId());
     }
 
     public void removePlayerAsOwner(FPlayer player, FLocation loc) {

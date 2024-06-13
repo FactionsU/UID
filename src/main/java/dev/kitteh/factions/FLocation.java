@@ -1,5 +1,6 @@
 package dev.kitteh.factions;
 
+import dev.kitteh.factions.util.LazyLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -22,6 +23,10 @@ public record FLocation(String worldName, int x, int z) {
 
     public FLocation(@NonNull Location location) {
         this(location.getWorld().getName(), blockToChunk(location.getBlockX()), blockToChunk(location.getBlockZ()));
+    }
+
+    public FLocation(@NonNull LazyLocation location) {
+        this(location.worldName(), blockToChunk((int) location.x()), blockToChunk((int) location.z()));
     }
 
     public FLocation(@NonNull Chunk chunk) {

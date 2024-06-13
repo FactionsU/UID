@@ -34,7 +34,7 @@ public class MyLocationTypeAdapter implements JsonDeserializer<LazyLocation>, Js
             float yaw = obj.get(YAW).getAsFloat();
             float pitch = obj.get(PITCH).getAsFloat();
 
-            return new LazyLocation(worldName, x, y, z, yaw, pitch);
+            return new LazyLocation(worldName, x, y, z, pitch, yaw);
 
         } catch (Exception ex) {
             FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while deserializing a LazyLocation.", ex);
@@ -47,12 +47,12 @@ public class MyLocationTypeAdapter implements JsonDeserializer<LazyLocation>, Js
         JsonObject obj = new JsonObject();
 
         try {
-            obj.addProperty(WORLD, src.getWorldName());
-            obj.addProperty(X, src.getX());
-            obj.addProperty(Y, src.getY());
-            obj.addProperty(Z, src.getZ());
-            obj.addProperty(YAW, src.getYaw());
-            obj.addProperty(PITCH, src.getPitch());
+            obj.addProperty(WORLD, src.worldName());
+            obj.addProperty(X, src.x());
+            obj.addProperty(Y, src.y());
+            obj.addProperty(Z, src.z());
+            obj.addProperty(YAW, src.yaw());
+            obj.addProperty(PITCH, src.pitch());
 
             return obj;
         } catch (Exception ex) {

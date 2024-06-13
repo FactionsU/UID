@@ -155,7 +155,6 @@ public class FactionsPlugin extends JavaPlugin {
 
     private ClipPlaceholderAPIManager clipPlaceholderAPIManager;
     private boolean mvdwPlaceholderAPIManager = false;
-    private final Set<String> pluginsHandlingChat = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private SeeChunkUtil seeChunkUtil;
     private BukkitParticleProvider particleProvider;

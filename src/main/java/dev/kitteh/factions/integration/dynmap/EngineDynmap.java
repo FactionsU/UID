@@ -308,10 +308,10 @@ public class EngineDynmap {
 
                 TempMarker temp = new TempMarker();
                 temp.label = ChatColor.stripColor(faction.getTag());
-                temp.world = lazyLocation.getWorldName();
-                temp.x = lazyLocation.getX();
-                temp.y = lazyLocation.getY();
-                temp.z = lazyLocation.getZ();
+                temp.world = lazyLocation.worldName();
+                temp.x = lazyLocation.x();
+                temp.y = lazyLocation.y();
+                temp.z = lazyLocation.z();
                 temp.iconName = style.getWarpMarker();
                 temp.description = dynmapConf.dynmap().getWarpDescription().replace("%warpname%", key);
 

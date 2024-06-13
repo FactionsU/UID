@@ -9,17 +9,29 @@ import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.LazyLocation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+@NullMarked
 public sealed interface Faction extends Participator, Selectable permits MemoryFaction {
+    int getId();
+
     Map<UUID, List<String>> getAnnouncements();
+
+    void addAnnouncement(FPlayer fPlayer, String msg);
+
+    void sendUnreadAnnouncements(FPlayer fPlayer);
+
+    void removeAnnouncements(FPlayer fPlayer);
 
     Map<String, LazyLocation> getWarps();
 
+    @Nullable
     LazyLocation getWarp(String name);
 
     void setWarp(String name, LazyLocation loc);
@@ -40,18 +52,7 @@ public sealed interface Faction extends Participator, Selectable permits MemoryF
 
     void setMaxVaults(int value);
 
-    void addAnnouncement(FPlayer fPlayer, String msg);
-
-    void sendUnreadAnnouncements(FPlayer fPlayer);
-
-    void removeAnnouncements(FPlayer fPlayer);
-
     Set<UUID> getInvites();
-
-    @Deprecated
-    String getId();
-
-    int getIntId();
 
     void invite(FPlayer fplayer);
 
@@ -89,9 +90,9 @@ public sealed interface Faction extends Participator, Selectable permits MemoryF
 
     String getTag(String prefix);
 
-    String getTag(Faction otherFaction);
+    String getTag(@Nullable Faction otherFaction);
 
-    String getTag(FPlayer otherFplayer);
+    String getTag(@Nullable FPlayer otherFplayer);
 
     void setTag(String str);
 
@@ -111,6 +112,7 @@ public sealed interface Faction extends Participator, Selectable permits MemoryF
 
     boolean hasHome();
 
+    @Nullable
     Location getHome();
 
     long getFoundedDate();
@@ -147,7 +149,7 @@ public sealed interface Faction extends Participator, Selectable permits MemoryF
      * @param location          location
      * @return player's access
      */
-    boolean hasAccess(Selectable selectable, PermissibleAction permissibleAction, FLocation location);
+    boolean hasAccess(Selectable selectable, PermissibleAction permissibleAction, @Nullable FLocation location);
 
     int getLandRounded();
 
@@ -205,15 +207,17 @@ public sealed interface Faction extends Participator, Selectable permits MemoryF
 
     /**
      * Gets the faction power, as used for claims/raidability calculations
+     *
      * @return
      */
     int getPower();
 
     int getPowerMax();
 
+    @Nullable
     Integer getPermanentPower();
 
-    void setPermanentPower(Integer permanentPower);
+    void setPermanentPower(@Nullable Integer permanentPower);
 
     boolean hasPermanentPower();
 
@@ -242,8 +246,9 @@ public sealed interface Faction extends Participator, Selectable permits MemoryF
 
     Set<FPlayer> getFPlayersWhereOnline(boolean online);
 
-    Set<FPlayer> getFPlayersWhereOnline(boolean online, FPlayer viewer);
+    Set<FPlayer> getFPlayersWhereOnline(boolean online, @Nullable FPlayer viewer);
 
+    @Nullable
     FPlayer getFPlayerAdmin();
 
     List<FPlayer> getFPlayersWhereRole(Role role);
