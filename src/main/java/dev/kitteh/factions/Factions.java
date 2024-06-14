@@ -8,6 +8,10 @@ import java.util.List;
 
 @NullMarked
 public interface Factions {
+    int ID_WILDERNESS = 0;
+    int ID_SAFEZONE = -1;
+    int ID_WARZONE = -2;
+
     static Factions getInstance() {
         return Instances.FACTIONS;
     }
@@ -32,16 +36,16 @@ public interface Factions {
 
     @SuppressWarnings("DataFlowIssue")
     default Faction getWilderness() {
-        return this.getFactionById("0");
+        return this.getFactionById(ID_WILDERNESS);
     }
 
     @SuppressWarnings("DataFlowIssue")
     default Faction getSafeZone() {
-        return this.getFactionById("-1");
+        return this.getFactionById(ID_SAFEZONE);
     }
 
     @SuppressWarnings("DataFlowIssue")
     default Faction getWarZone() {
-        return this.getFactionById("-2");
+        return this.getFactionById(ID_WARZONE);
     }
 }

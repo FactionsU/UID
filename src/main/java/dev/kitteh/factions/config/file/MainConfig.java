@@ -2065,7 +2065,7 @@ public class MainConfig {
             private int factionMemberLimit = 0;
 
             @Comment("What faction ID to start new players in when they first join the server; default is 0, \"no faction\"")
-            private int newPlayerStartingFactionID = 0;
+            private int newPlayerStartingFactionID = dev.kitteh.factions.Factions.ID_WILDERNESS;
 
             private double saveToFileEveryXMinutes = 30.0;
 

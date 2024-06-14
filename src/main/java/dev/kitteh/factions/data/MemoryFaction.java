@@ -150,8 +150,8 @@ public abstract class MemoryFaction implements Faction {
         return invites;
     }
 
-    public String getId() {
-        return String.valueOf(id);
+    public int getId() {
+        return id;
     }
 
     public int getIntId() {
@@ -481,15 +481,15 @@ public abstract class MemoryFaction implements Faction {
     }
 
     public boolean isWilderness() {
-        return this.id == 0;
+        return this.id == Factions.ID_WILDERNESS;
     }
 
     public boolean isSafeZone() {
-        return this.id == -1;
+        return this.id == Factions.ID_SAFEZONE;
     }
 
     public boolean isWarZone() {
-        return this.id == -2;
+        return this.id == Factions.ID_WARZONE;
     }
 
     public boolean isPlayerFreeType() {

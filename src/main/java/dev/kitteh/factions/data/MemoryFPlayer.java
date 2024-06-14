@@ -128,7 +128,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public boolean hasFaction() {
-        return factionId != 0;
+        return factionId != Factions.ID_WILDERNESS;
     }
 
     public void setFaction(Faction faction) {
@@ -236,7 +236,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public ChatMode getChatMode() {
-        if (this.chatMode == null || this.factionId == 0 || !FactionsPlugin.getInstance().conf().factions().chat().isFactionOnlyChat()) {
+        if (this.chatMode == null || this.factionId == Factions.ID_WILDERNESS || !FactionsPlugin.getInstance().conf().factions().chat().isFactionOnlyChat()) {
             this.chatMode = ChatMode.PUBLIC;
         }
         return chatMode;
@@ -302,7 +302,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             }
         }
 
-        this.factionId = 0; // The default neutral faction
+        this.factionId = Factions.ID_WILDERNESS; // The default neutral faction
         this.chatMode = ChatMode.PUBLIC;
         this.role = Role.NORMAL;
         this.title = "";

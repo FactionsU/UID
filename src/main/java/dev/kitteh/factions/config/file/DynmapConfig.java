@@ -1,6 +1,7 @@
 package dev.kitteh.factions.config.file;
 
 import com.google.common.reflect.TypeToken;
+import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.DefinedType;
@@ -146,8 +147,8 @@ public class DynmapConfig {
         @DefinedType
         private Map<String, Style> factionStyles = new HashMap<>() {
             {
-                this.put("-1", new DynmapConfig.Style("#FF00FF", "#FF00FF"));
-                this.put("-2", new DynmapConfig.Style("#FF0000", "#FF0000"));
+                this.put(Factions.ID_SAFE_ZONE, new DynmapConfig.Style("#FF00FF", "#FF00FF"));
+                this.put(Factions.ID_WAR_ZONE, new DynmapConfig.Style("#FF0000", "#FF0000"));
             }
         };
 

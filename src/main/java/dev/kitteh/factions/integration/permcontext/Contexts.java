@@ -5,6 +5,7 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
+import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import org.bukkit.entity.Player;
@@ -21,8 +22,8 @@ import java.util.stream.Collectors;
 public enum Contexts implements Context {
     FACTION_ID((player) -> {
         FPlayer p = FPlayers.getInstance().getByPlayer(player);
-        return ImmutableSet.of(p.hasFaction() ? String.valueOf(p.getFactionIntId()) : "0");
-    }, ImmutableSet.of("0")),
+        return ImmutableSet.of(String.valueOf(p.hasFaction() ? p.getFactionIntId() : Factions.ID_WILDERNESS));
+    }, ImmutableSet.of(String.valueOf(Factions.ID_WILDERNESS))),
     IS_PEACEFUL((player) -> {
         FPlayer p = FPlayers.getInstance().getByPlayer(player);
         return ImmutableSet.of(p.hasFaction() && p.getFaction().isPeaceful() ? "true" : "false");

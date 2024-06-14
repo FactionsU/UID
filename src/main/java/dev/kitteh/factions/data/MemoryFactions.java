@@ -18,9 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class MemoryFactions implements Factions {
     public final Map<Integer, Faction> factions = new ConcurrentHashMap<>();
     public int nextId = 1;
-    private final static int ID_WILDERNESS = 0;
-    private final static int ID_SAFEZONE = -1;
-    private final static int ID_WARZONE = -2;
+
 
     public int load() {
         // Make sure the default neutral faction exists
