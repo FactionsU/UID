@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @NullMarked
-public abstract sealed class MemoryFactions implements Factions permits JSONFactions {
+public abstract class MemoryFactions implements Factions {
     public final Map<Integer, Faction> factions = new ConcurrentHashMap<>();
     public int nextId = 1;
     private final static int ID_WILDERNESS = 0;

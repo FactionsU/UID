@@ -10,7 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public sealed interface Participator permits Faction, FPlayer {
+public interface Participator {
     String getAccountId();
 
     OfflinePlayer getOfflinePlayer();

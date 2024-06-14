@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @NullMarked
-public abstract sealed class MemoryBoard implements Board permits JSONBoard {
+public abstract class MemoryBoard implements Board {
 
     protected static class WorldTracker {
         public static final int NO_FACTION = Integer.MIN_VALUE;

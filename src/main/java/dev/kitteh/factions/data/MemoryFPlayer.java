@@ -62,7 +62,7 @@ import java.util.UUID;
  * necessary.
  */
 
-public abstract sealed class MemoryFPlayer implements FPlayer permits JSONFPlayer {
+public abstract class MemoryFPlayer implements FPlayer {
 
     protected int factionId;
     protected Role role;

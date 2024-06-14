@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @NullMarked
-public sealed interface Board permits MemoryBoard {
+public interface Board {
     static Board getInstance() {
         return Instances.BOARD;
     }

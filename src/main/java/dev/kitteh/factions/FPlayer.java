@@ -25,7 +25,7 @@ import java.util.UUID;
  * The same instance is always returned for the same player. This means you can use the == operator. No .equals method
  * necessary.
  */
-public sealed interface FPlayer extends Participator, Selectable permits MemoryFPlayer {
+public interface FPlayer extends Participator, Selectable {
     void login();
 
     void logout();

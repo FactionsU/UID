@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @NullMarked
-public sealed interface Faction extends Participator, Selectable permits MemoryFaction {
+public interface Faction extends Participator, Selectable {
     int getId();
 
     Map<UUID, List<String>> getAnnouncements();

@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 @NullMarked
-public abstract sealed class MemoryFPlayers implements FPlayers permits JSONFPlayers {
+public abstract class MemoryFPlayers implements FPlayers {
     protected Map<UUID, FPlayer> fPlayers = new ConcurrentSkipListMap<>();
 
     @Override

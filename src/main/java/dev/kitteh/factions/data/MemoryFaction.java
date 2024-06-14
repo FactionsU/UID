@@ -45,7 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @NullMarked
-public abstract sealed class MemoryFaction implements Faction permits JSONFaction {
+public abstract class MemoryFaction implements Faction {
     protected int id = Integer.MIN_VALUE;
     protected boolean peacefulExplosionsEnabled;
     protected boolean permanent;

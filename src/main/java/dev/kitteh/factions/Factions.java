@@ -7,7 +7,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 @NullMarked
-public sealed interface Factions permits MemoryFactions {
+public interface Factions {
     static Factions getInstance() {
         return Instances.FACTIONS;
     }

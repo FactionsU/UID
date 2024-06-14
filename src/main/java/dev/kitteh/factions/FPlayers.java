@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @NullMarked
-public sealed interface FPlayers permits MemoryFPlayers {
+public interface FPlayers {
     static FPlayers getInstance() {
         return Instances.PLAYERS;
     }
