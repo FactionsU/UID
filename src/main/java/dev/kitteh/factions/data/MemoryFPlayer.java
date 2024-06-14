@@ -39,7 +39,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 import java.io.InputStreamReader;
@@ -259,7 +258,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         return spyingChat;
     }
 
-    public @NotNull OfflinePlayer getOfflinePlayer() {
+    public OfflinePlayer getOfflinePlayer() {
         if (this.offlinePlayer == null) {
             this.offlinePlayer = Bukkit.getPlayer(this.id);
             if (this.offlinePlayer == null) {
