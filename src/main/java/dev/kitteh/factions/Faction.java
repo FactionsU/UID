@@ -233,9 +233,6 @@ public interface Faction extends Participator, Selectable {
     // FPlayers
     // -------------------------------
 
-    // maintain the reference list of FPlayers in this faction
-    void refreshFPlayers();
-
     boolean addFPlayer(FPlayer fplayer);
 
     boolean removeFPlayer(FPlayer fplayer);

@@ -1,5 +1,6 @@
 package dev.kitteh.factions.data;
 
+import com.google.gson.annotations.Expose;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
@@ -61,7 +62,7 @@ public abstract class MemoryFaction implements Faction {
     protected double powerBoost;
     protected Map<String, Relation> relationWish = new HashMap<>();
     protected Map<FLocation, Set<UUID>> claimOwnership = new ConcurrentHashMap<>();
-    protected transient Set<FPlayer> fplayers = new HashSet<>();
+    @Expose(deserialize = false) transient Set<FPlayer> fplayers = new HashSet<>();
     protected Set<UUID> invites = new HashSet<>();
     protected HashMap<UUID, List<String>> announcements = new HashMap<>();
     protected ConcurrentHashMap<String, LazyLocation> warps = new ConcurrentHashMap<>();
@@ -76,6 +77,12 @@ public abstract class MemoryFaction implements Faction {
     protected long frozenDTRUntilTime;
     protected int tntBank;
     protected transient @Nullable OfflinePlayer offlinePlayer;
+
+    public void cleanupDeserialization() {
+        this.fplayers = new HashSet<>();
+        this.offlinePlayer = null;
+        this.getOfflinePlayer();
+    }
 
     public HashMap<UUID, List<String>> getAnnouncements() {
         return this.announcements;
@@ -662,20 +669,6 @@ public abstract class MemoryFaction implements Faction {
     // -------------------------------
     // FPlayers
     // -------------------------------
-
-    // maintain the reference list of FPlayers in this faction
-    public void refreshFPlayers() {
-        fplayers.clear();
-        if (this.isPlayerFreeType()) {
-            return;
-        }
-
-        for (FPlayer fplayer : FPlayers.getInstance().getAllFPlayers()) {
-            if (fplayer.getFactionIntId() == id) {
-                fplayers.add(fplayer);
-            }
-        }
-    }
 
     public boolean addFPlayer(FPlayer fplayer) {
         return !this.isPlayerFreeType() && fplayers.add(fplayer);

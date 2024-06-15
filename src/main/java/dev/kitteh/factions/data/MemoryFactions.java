@@ -16,15 +16,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @NullMarked
 public abstract class MemoryFactions implements Factions {
-    public final Map<Integer, Faction> factions = new ConcurrentHashMap<>();
+    public final Map<Integer, MemoryFaction> factions = new ConcurrentHashMap<>();
     public int nextId = 1;
 
 
     public int load() {
+        for(MemoryFaction faction : factions.values()) {
+            faction.cleanupDeserialization();
+        }
+
         // Make sure the default neutral faction exists
-        if (!factions.containsKey(ID_WILDERNESS)) {
-            Faction faction = generateFactionObject(ID_WILDERNESS);
-            factions.put(ID_WILDERNESS, faction);
+        if (!factions.containsKey(Factions.ID_WILDERNESS)) {
+            MemoryFaction faction = generateFactionObject(Factions.ID_WILDERNESS);
+            factions.put(Factions.ID_WILDERNESS, faction);
             faction.setTag(TL.WILDERNESS.toString());
             faction.setDescription(TL.WILDERNESS_DESCRIPTION.toString());
         } else {
@@ -38,9 +42,9 @@ public abstract class MemoryFactions implements Factions {
         }
 
         // Make sure the safe zone faction exists
-        if (!factions.containsKey(ID_SAFEZONE)) {
-            Faction faction = generateFactionObject(ID_SAFEZONE);
-            factions.put(ID_SAFEZONE, faction);
+        if (!factions.containsKey(Factions.ID_SAFEZONE)) {
+            MemoryFaction faction = generateFactionObject(Factions.ID_SAFEZONE);
+            factions.put(Factions.ID_SAFEZONE, faction);
             faction.setTag(TL.SAFEZONE.toString());
             faction.setDescription(TL.SAFEZONE_DESCRIPTION.toString());
         } else {
@@ -58,9 +62,9 @@ public abstract class MemoryFactions implements Factions {
         }
 
         // Make sure the war zone faction exists
-        if (!factions.containsKey(ID_WARZONE)) {
-            Faction faction = generateFactionObject(ID_WARZONE);
-            factions.put(ID_WARZONE, faction);
+        if (!factions.containsKey(Factions.ID_WARZONE)) {
+            MemoryFaction faction = generateFactionObject(Factions.ID_WARZONE);
+            factions.put(Factions.ID_WARZONE, faction);
             faction.setTag(TL.WARZONE.toString());
             faction.setDescription(TL.WARZONE_DESCRIPTION.toString());
         } else {
@@ -89,7 +93,7 @@ public abstract class MemoryFactions implements Factions {
         return factions.get(id);
     }
 
-    public abstract Faction generateFactionObject(int id);
+    public abstract MemoryFaction generateFactionObject(int id);
 
     public @Nullable Faction getByTag(String str) {
         String compStr = MiscUtil.getComparisonString(Objects.requireNonNull(str));
@@ -132,12 +136,12 @@ public abstract class MemoryFactions implements Factions {
     }
 
     public Faction createFaction() {
-        Faction faction = generateFactionObject();
-        factions.put(faction.getIntId(), faction);
+        MemoryFaction faction = generateFactionObject();
+        factions.put(faction.getId(), faction);
         return faction;
     }
 
-    public abstract Faction generateFactionObject();
+    public abstract MemoryFaction generateFactionObject();
 
     public void removeFaction(Faction faction) {
         factions.remove(faction.getIntId()).remove();

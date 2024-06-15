@@ -90,7 +90,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     protected boolean seeingChunk = false;
 
-    protected transient FLocation lastStoodAt = new FLocation(); // Where did this player stand the last time we checked?
+    protected FLocation lastStoodAt = new FLocation(); // Where did this player stand the last time we checked?
     protected transient boolean mapAutoUpdating;
     protected transient Faction autoClaimFor;
     protected transient Faction autoUnclaimFor;
@@ -98,6 +98,10 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected transient long lastFrostwalkerMessage;
     protected transient boolean shouldTakeFallDamage = true;
     protected transient OfflinePlayer offlinePlayer;
+
+    public void cleanupDeserialization() {
+        this.shouldTakeFallDamage = true;
+    }
 
     public void login() {
         this.kills = getPlayer().getStatistic(Statistic.PLAYER_KILLS);

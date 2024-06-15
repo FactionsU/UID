@@ -9,6 +9,7 @@ import dev.kitteh.factions.cmd.FCmdRoot;
 import dev.kitteh.factions.config.ConfigManager;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.config.file.TranslationsConfig;
+import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.data.SaveTask;
 import dev.kitteh.factions.event.FactionCreateEvent;
 import dev.kitteh.factions.event.FactionEvent;
@@ -346,6 +347,7 @@ public class FactionsPlugin extends JavaPlugin {
         int loadedPlayers = Instances.PLAYERS.load();
         int loadedFactions = Instances.FACTIONS.load();
         for (FPlayer fPlayer : FPlayers.getInstance().getAllFPlayers()) {
+            ((MemoryFPlayer) fPlayer).cleanupDeserialization();
             Faction faction = Factions.getInstance().getFactionById(fPlayer.getFactionId());
             if (faction == null) {
                 log("Invalid faction id on " + fPlayer.getName() + ":" + fPlayer.getFactionId());
