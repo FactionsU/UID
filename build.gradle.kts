@@ -215,8 +215,10 @@ tasks.processResources {
 
 tasks.shadowJar {
   dependencies {
+    include(dependency("com.typesafe:config"))
     include(dependency("io.papermc:paperlib"))
     include(dependency("me.lucko:commodore"))
+    include(dependency("org.spongepowered:configurate-core"))
     include(dependency("org.spongepowered:configurate-hocon"))
   }
 
