@@ -7,6 +7,7 @@ worldguard = "7.0.9"
 
 [plugins]
 indra = { id = "net.kyori.indra", version.ref = "indra" }
+runPaper = { id = "xyz.jpenilla.run-paper", version = "2.3.0" }
 shadow = { id = "io.github.goooler.shadow", version = "8.1.7" }
 
 [libraries]

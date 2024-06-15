@@ -1,5 +1,6 @@
 plugins {
   alias(libs.plugins.indra)
+  alias(libs.plugins.runPaper)
   alias(libs.plugins.shadow)
 }
 
@@ -211,6 +212,10 @@ tasks.processResources {
       "version" to project.version
     ))
   }
+}
+
+tasks.runServer {
+  minecraftVersion("1.20.6")
 }
 
 tasks.shadowJar {

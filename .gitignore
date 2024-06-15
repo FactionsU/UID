@@ -40,3 +40,6 @@
 
 # mkdocs
 site/
+
+# run-paper
+/run/
