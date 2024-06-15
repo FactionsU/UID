@@ -382,6 +382,9 @@ public abstract class MemoryFPlayer implements FPlayer {
     public void setName(String name) {
         if (!name.equalsIgnoreCase(this.name)) {
             for (FPlayer fplayer : FPlayers.getInstance().getAllFPlayers()) {
+                if (fplayer.getName() == null) {
+                    continue;
+                }
                 if (fplayer.getName().equalsIgnoreCase(name)) {
                     UUID u = fplayer.getUniqueId();
                     String uuidName = u.toString();
