@@ -2405,17 +2405,11 @@ public class MainConfig {
     }
 
     public class Exploits {
-        private boolean obsidianGenerators = true;
         private boolean enderPearlClipping = true;
         private boolean interactionSpam = true;
         private boolean tntWaterlog = false;
         @Comment("If true, prevents water flow into claimed territory")
         private boolean liquidFlow = false;
-        private boolean preventDuping = true;
-
-        public boolean isObsidianGenerators() {
-            return obsidianGenerators;
-        }
 
         public boolean isEnderPearlClipping() {
             return enderPearlClipping;
@@ -2431,10 +2425,6 @@ public class MainConfig {
 
         public boolean isLiquidFlow() {
             return liquidFlow;
-        }
-
-        public boolean doPreventDuping() {
-            return preventDuping;
         }
     }
 

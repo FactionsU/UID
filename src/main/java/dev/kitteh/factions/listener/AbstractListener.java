@@ -288,19 +288,6 @@ public abstract class AbstractListener implements Listener {
             return false;
         }
 
-        // Dupe fix.
-        Faction myFaction = me.getFaction();
-        Relation rel = myFaction.getRelationTo(otherFaction);
-        if (FactionsPlugin.getInstance().conf().exploits().doPreventDuping() &&
-                (!rel.isMember() || !otherFaction.playerHasOwnershipRights(me, loc))) {
-            Material mainHand = player.getInventory().getItemInMainHand().getType();
-
-            // Check if material is at risk for dupe in either hand.
-            if (isDupeMaterial(mainHand)) {
-                return false;
-            }
-        }
-
         // Also cancel if player doesn't have ownership rights for this claim
         if (FactionsPlugin.getInstance().conf().factions().ownedArea().isEnabled() && FactionsPlugin.getInstance().conf().factions().ownedArea().isProtectMaterials() && !otherFaction.playerHasOwnershipRights(me, loc)) {
             if (!justCheck) {
