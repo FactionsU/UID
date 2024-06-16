@@ -10,7 +10,7 @@ public class DynmapStyle {
     public static final String DEFAULT_FILL_COLOR = "#00FF00";
     public static final double DEFAULT_FILL_OPACITY = 0.35D;
     public static final String DEFAULT_HOME_MARKER = "greenflag";
-    public static final String DEFAULT_WARP_MARKER ="blueflag";
+    public static final String DEFAULT_WARP_MARKER = "blueflag";
     public static final boolean DEFAULT_BOOST = false;
 
     private static final DynmapStyle defaultStyle = new DynmapStyle()

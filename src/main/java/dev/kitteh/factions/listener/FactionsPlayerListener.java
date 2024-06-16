@@ -24,7 +24,6 @@ import dev.kitteh.factions.util.ChatMode;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
-import dev.kitteh.factions.util.VisualizeUtil;
 import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -276,7 +275,6 @@ public class FactionsPlayerListener extends AbstractListener {
 
         // clear visualization
         if (fromLoc.getBlockX() != toLoc.getBlockX() || fromLoc.getBlockY() != toLoc.getBlockY() || fromLoc.getBlockZ() != toLoc.getBlockZ() || fromLoc.getWorld() != toLoc.getWorld()) {
-            VisualizeUtil.clear(player);
             if (me.isWarmingUp()) {
                 me.clearWarmup();
                 me.msg(TL.WARMUPS_CANCELLED);
@@ -336,7 +334,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (me.isMapAutoUpdating()) {
             if (!showTimes.containsKey(player.getUniqueId()) || (showTimes.get(player.getUniqueId()) < System.currentTimeMillis())) {
                 Audience audience = FactionsPlugin.getInstance().getAdventure().player(player);
-                for (Component component : ((MemoryBoard)Board.getInstance()).getMap(me, to, player.getLocation().getYaw())) {
+                for (Component component : ((MemoryBoard) Board.getInstance()).getMap(me, to, player.getLocation().getYaw())) {
                     audience.sendMessage(component);
                 }
                 showTimes.put(player.getUniqueId(), System.currentTimeMillis() + FactionsPlugin.getInstance().conf().commands().map().getCooldown());

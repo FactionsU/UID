@@ -3,13 +3,13 @@ package dev.kitteh.factions.util;
 import dev.kitteh.factions.FactionsPlugin;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
+@NullMarked
 public class PermUtil {
-
     public final Map<String, String> permissionDescriptions = new HashMap<>();
 
     protected final FactionsPlugin plugin;
@@ -28,7 +28,6 @@ public class PermUtil {
      */
     public final void setup() {
         for (Permission permission : plugin.getDescription().getPermissions()) {
-            //p.log("\""+permission.getName()+"\" = \""+permission.getDescription()+"\"");
             this.permissionDescriptions.put(permission.getName(), permission.getDescription());
         }
     }
@@ -42,9 +41,6 @@ public class PermUtil {
     }
 
     public boolean has(CommandSender me, String perm, boolean informSenderIfNot) {
-        if (me == null) {
-            return false; // What? How?
-        }
         if (me.hasPermission(perm)) {
             return true;
         } else if (informSenderIfNot) {

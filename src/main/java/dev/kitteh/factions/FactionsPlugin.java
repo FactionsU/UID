@@ -37,12 +37,12 @@ import dev.kitteh.factions.permissible.PermSelectorRegistry;
 import dev.kitteh.factions.permissible.PermSelectorTypeAdapter;
 import dev.kitteh.factions.permissible.PermissibleActionRegistry;
 import dev.kitteh.factions.util.AutoLeaveTask;
-import dev.kitteh.factions.util.EnumTypeAdapter;
+import dev.kitteh.factions.util.adapter.EnumTypeAdapter;
 import dev.kitteh.factions.util.FlightUtil;
 import dev.kitteh.factions.util.LazyLocation;
-import dev.kitteh.factions.util.MapFLocToStringSetTypeAdapter;
+import dev.kitteh.factions.util.adapter.MapFLocToStringSetTypeAdapter;
 import dev.kitteh.factions.util.Metrics;
-import dev.kitteh.factions.util.MyLocationTypeAdapter;
+import dev.kitteh.factions.util.adapter.MyLocationTypeAdapter;
 import dev.kitteh.factions.util.PermUtil;
 import dev.kitteh.factions.util.Persist;
 import dev.kitteh.factions.util.SeeChunkUtil;
@@ -89,7 +89,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -99,7 +98,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -386,12 +384,9 @@ public class FactionsPlugin extends JavaPlugin {
 
         // Run before initializing listeners to handle reloads properly.
         particleProvider = new BukkitParticleProvider();
-
-        if (conf().commands().seeChunk().isParticles()) {
-            double delay = Math.floor(conf().commands().seeChunk().getParticleUpdateTime() * 20);
-            seeChunkUtil = new SeeChunkUtil();
-            seeChunkUtil.runTaskTimer(this, 0, (long) delay);
-        }
+        double delay = Math.floor(conf().commands().seeChunk().getParticleUpdateTime() * 20);
+        seeChunkUtil = new SeeChunkUtil();
+        seeChunkUtil.runTaskTimer(this, 0, (long) delay);
         // End run before registering event handlers.
 
         // Register Event Handlers

@@ -21,7 +21,7 @@ public abstract class MemoryFactions implements Factions {
 
 
     public int load() {
-        for(MemoryFaction faction : factions.values()) {
+        for (MemoryFaction faction : factions.values()) {
             faction.cleanupDeserialization();
         }
 
@@ -144,7 +144,7 @@ public abstract class MemoryFactions implements Factions {
     public abstract MemoryFaction generateFactionObject();
 
     public void removeFaction(Faction faction) {
-        factions.remove(faction.getIntId()).remove();
+        factions.remove(faction.getId()).remove();
     }
 
     @Override

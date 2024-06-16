@@ -1,16 +1,18 @@
 package dev.kitteh.factions.util;
 
+import java.util.function.Supplier;
+
 public enum ChatMode {
-    MOD(4, TL.CHAT_MOD),
-    FACTION(3, TL.CHAT_FACTION),
-    ALLIANCE(2, TL.CHAT_ALLIANCE),
-    TRUCE(1, TL.CHAT_TRUCE),
-    PUBLIC(0, TL.CHAT_PUBLIC);
+    MOD(4, TL.CHAT_MOD::toString),
+    FACTION(3, TL.CHAT_FACTION::toString),
+    ALLIANCE(2, TL.CHAT_ALLIANCE::toString),
+    TRUCE(1, TL.CHAT_TRUCE::toString),
+    PUBLIC(0, TL.CHAT_PUBLIC::toString);
 
-    public final int value;
-    public final TL nicename;
+    private final int value;
+    private final Supplier<String> nicename;
 
-    ChatMode(final int value, final TL nicename) {
+    ChatMode(final int value, final Supplier<String> nicename) {
         this.value = value;
         this.nicename = nicename;
     }
@@ -25,7 +27,7 @@ public enum ChatMode {
 
     @Override
     public String toString() {
-        return this.nicename.toString();
+        return this.nicename.get();
     }
 
     public ChatMode getNext() {

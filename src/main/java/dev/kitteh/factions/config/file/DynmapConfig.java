@@ -134,6 +134,7 @@ public class DynmapConfig {
         public boolean isShowMarkers() {
             return showMarkers;
         }
+
         public boolean isShowWarpMarkers() {
             return showWarpMarkers;
         }

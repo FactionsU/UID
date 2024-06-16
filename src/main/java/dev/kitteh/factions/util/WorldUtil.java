@@ -4,11 +4,13 @@ import dev.kitteh.factions.config.file.MainConfig;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashSet;
 
+@NullMarked
 public class WorldUtil {
-    private static HashSet<String> worlds;
+    private static HashSet<String> worlds = new HashSet<>();
     private static boolean check;
     private static boolean whitelist;
 

@@ -93,17 +93,11 @@ public class SeeChunkUtil extends BukkitRunnable {
                 continue;
             }
 
-            if (effect != null) {
-                if (color == null) {
-                    FactionsPlugin.getInstance().getParticleProvider().playerSpawn(player, effect, loc, 1);
-                } else {
-                    FactionsPlugin.getInstance().getParticleProvider().playerSpawn(player, effect, loc, color);
-                }
+            if (color == null) {
+                FactionsPlugin.getInstance().getParticleProvider().playerSpawn(player, effect, loc, 1);
             } else {
-                Material mat = blockY % 5 == 0 ? MaterialDb.get("REDSTONE_LAMP") : MaterialDb.get("GLASS_PANE");
-                VisualizeUtil.addLocation(player, loc, mat);
+                FactionsPlugin.getInstance().getParticleProvider().playerSpawn(player, effect, loc, color);
             }
         }
     }
-
 }

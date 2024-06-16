@@ -57,7 +57,7 @@ public class CmdMap extends FCommand {
 
     public void showMap(CommandContext context) {
         Audience audience = FactionsPlugin.getInstance().getAdventure().player(context.player);
-        for (Component component : ((MemoryBoard)Board.getInstance()).getMap(context.fPlayer, new FLocation(context.player), context.fPlayer.getPlayer().getLocation().getYaw())) {
+        for (Component component : ((MemoryBoard) Board.getInstance()).getMap(context.fPlayer, new FLocation(context.player), context.fPlayer.getPlayer().getLocation().getYaw())) {
             audience.sendMessage(component);
         }
     }

@@ -38,10 +38,6 @@ public class SmokeUtil {
         location.getWorld().playEffect(location.clone(), Effect.SMOKE, direction);
     }
 
-    public static void spawnSingle(Location location) {
-        spawnSingle(location, 4);
-    }
-
     public static void spawnSingleRandom(Location location) {
         spawnSingle(location, random.nextInt(9));
     }
@@ -72,11 +68,4 @@ public class SmokeUtil {
             spawnCloudRandom(location, thickness);
         }
     }
-
-    // -------------------------------------------- //
-    // Attach continuous effects to or locations
-    // -------------------------------------------- //
-
-    // TODO
-
 }

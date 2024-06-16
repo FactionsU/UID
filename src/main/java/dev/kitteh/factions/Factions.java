@@ -16,7 +16,8 @@ public interface Factions {
         return Instances.FACTIONS;
     }
 
-    @Nullable Faction getFactionById(String id);
+    @Nullable
+    Faction getFactionById(String id);
 
     @Nullable
     Faction getByTag(String str);

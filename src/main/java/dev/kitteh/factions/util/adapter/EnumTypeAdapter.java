@@ -1,4 +1,4 @@
-package dev.kitteh.factions.util;
+package dev.kitteh.factions.util.adapter;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -48,7 +48,7 @@ public final class EnumTypeAdapter<T extends Enum<T>> extends TypeAdapter<T> {
 
     public static final TypeAdapterFactory ENUM_FACTORY = newEnumTypeHierarchyFactory();
 
-    public static <TT> TypeAdapterFactory newEnumTypeHierarchyFactory() {
+    public static TypeAdapterFactory newEnumTypeHierarchyFactory() {
         return new TypeAdapterFactory() {
             @SuppressWarnings({"unchecked"})
             public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
@@ -63,5 +63,4 @@ public final class EnumTypeAdapter<T extends Enum<T>> extends TypeAdapter<T> {
             }
         };
     }
-
 }

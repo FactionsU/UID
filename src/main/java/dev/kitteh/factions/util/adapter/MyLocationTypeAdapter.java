@@ -1,4 +1,4 @@
-package dev.kitteh.factions.util;
+package dev.kitteh.factions.util.adapter;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -8,6 +8,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.util.LazyLocation;
 
 import java.lang.reflect.Type;
 import java.util.logging.Level;

@@ -383,7 +383,6 @@ public class MainConfig {
         }
 
         public class SeeChunk {
-            private boolean particles = true;
             @Comment("Get a list of particle names here: https://factions.support/particles/")
             private String particleName = "REDSTONE";
             @Comment("If the chosen particle is compatible with coloring we will color\n" +
@@ -391,10 +390,6 @@ public class MainConfig {
             private boolean relationalColor = true;
             @Comment("How often should we update the particles to the current player's location?")
             private double particleUpdateTime = 0.75;
-
-            public boolean isParticles() {
-                return particles;
-            }
 
             public String getParticleName() {
                 return particleName;

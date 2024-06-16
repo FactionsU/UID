@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 
 public class ParticleColor {
-
     private final Color color;
 
     private final float red;

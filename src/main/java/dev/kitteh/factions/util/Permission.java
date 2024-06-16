@@ -2,7 +2,9 @@ package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.FactionsPlugin;
 import org.bukkit.command.CommandSender;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public enum Permission {
     MANAGE_SAFE_ZONE("managesafezone"),
     MANAGE_WAR_ZONE("managewarzone"),

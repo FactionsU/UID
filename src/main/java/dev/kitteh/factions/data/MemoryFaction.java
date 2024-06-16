@@ -62,7 +62,8 @@ public abstract class MemoryFaction implements Faction {
     protected double powerBoost;
     protected Map<String, Relation> relationWish = new HashMap<>();
     protected Map<FLocation, Set<UUID>> claimOwnership = new ConcurrentHashMap<>();
-    @Expose(deserialize = false) transient Set<FPlayer> fplayers = new HashSet<>();
+    @Expose(deserialize = false)
+    transient Set<FPlayer> fplayers = new HashSet<>();
     protected Set<UUID> invites = new HashSet<>();
     protected HashMap<UUID, List<String>> announcements = new HashMap<>();
     protected ConcurrentHashMap<String, LazyLocation> warps = new ConcurrentHashMap<>();

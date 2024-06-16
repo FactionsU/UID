@@ -122,9 +122,9 @@ public class Metrics {
             // Inform the server owners about bStats
             config.options().setHeader(List.of(
                     "bStats collects some data for plugin authors like how many servers are using their plugins.",
-                            "To honor their work, you should not disable it.",
-                            "This has nearly no effect on the server performance!",
-                            "Check out https://bStats.org/ to learn more :)")
+                    "To honor their work, you should not disable it.",
+                    "This has nearly no effect on the server performance!",
+                    "Check out https://bStats.org/ to learn more :)")
             ).copyDefaults(true);
             try {
                 config.save(configFile);
@@ -316,7 +316,8 @@ public class Metrics {
                                 }
                             }
                         }
-                    } catch (NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+                    } catch (NullPointerException | NoSuchMethodException | IllegalAccessException |
+                             InvocationTargetException ignored) {
                     }
                 }
             } catch (NoSuchFieldException ignored) {

@@ -30,7 +30,7 @@ public class BrigadierManager {
         if (cmd.containsKey("aliases")) {
             Object ali = cmd.get("aliases");
             if (ali instanceof Collection<?> a) {
-                a.forEach(aa->aliases.add(aa.toString()));
+                a.forEach(aa -> aliases.add(aa.toString()));
             }
         }
 

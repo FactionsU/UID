@@ -26,7 +26,7 @@ public class BukkitParticleProvider {
     public void spawn(Particle particle, Location location, ParticleColor color) {
         if (particle.getDataType().equals(Particle.DustOptions.class)) {
             location.getWorld().spawnParticle(particle, location, 1, new Particle.DustOptions(color.getColor(), 1));
-        } else if (particle.getDataType()==Void.class){
+        } else if (particle.getDataType() == Void.class) {
             location.getWorld().spawnParticle(particle, location, 1, null);
         }
     }
@@ -34,7 +34,7 @@ public class BukkitParticleProvider {
     public void playerSpawn(Player player, Particle particle, Location location, ParticleColor color) {
         if (particle.getDataType().equals(Particle.DustOptions.class)) {
             player.spawnParticle(particle, location, 1, new Particle.DustOptions(color.getColor(), 1.5f));
-        } else if (particle.getDataType()==Void.class){
+        } else if (particle.getDataType() == Void.class) {
             player.spawnParticle(particle, location, 1, null);
         }
     }

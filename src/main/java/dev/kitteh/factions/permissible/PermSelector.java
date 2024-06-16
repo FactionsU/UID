@@ -83,7 +83,7 @@ public interface PermSelector {
      * Tests if the given selectable matches this selector.
      *
      * @param selectable selectable
-     * @param faction faction context
+     * @param faction    faction context
      * @return true if matches
      */
     boolean test(Selectable selectable, Faction faction);

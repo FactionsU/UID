@@ -1,14 +1,9 @@
 package dev.kitteh.factions.cmd;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.SeeChunkUtil;
 import dev.kitteh.factions.util.TL;
 
 public class CmdSeeChunk extends FCommand {
-
-    private final boolean useParticles;
-
     public CmdSeeChunk() {
         super();
         this.aliases.add("seechunk");
@@ -17,29 +12,17 @@ public class CmdSeeChunk extends FCommand {
         this.requirements = new CommandRequirements.Builder(Permission.SEECHUNK)
                 .playerOnly()
                 .build();
-
-        useParticles = FactionsPlugin.getInstance().conf().commands().seeChunk().isParticles();
     }
 
     @Override
     public void perform(CommandContext context) {
-        if (useParticles) {
-            boolean toggle = false;
-            if (context.args.isEmpty()) {
-                toggle = !context.fPlayer.isSeeingChunk();
-            } else if (context.args.size() == 1) {
-                toggle = context.argAsBool(0);
-            }
-            context.fPlayer.setSeeingChunk(toggle);
-            context.msg(TL.COMMAND_SEECHUNK_TOGGLE, toggle ? "enabled" : "disabled");
-        } else {
-            SeeChunkUtil.showPillars(context.player, context.fPlayer, null, false);
-        }
+        boolean toggle = context.args.isEmpty() ? !context.fPlayer.isSeeingChunk() : context.argAsBool(0);
+        context.fPlayer.setSeeingChunk(toggle);
+        context.msg(TL.COMMAND_SEECHUNK_TOGGLE, toggle ? "enabled" : "disabled");
     }
 
     @Override
     public TL getUsageTranslation() {
         return TL.COMMAND_SEECHUNK_DESCRIPTION;
     }
-
 }

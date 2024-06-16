@@ -86,19 +86,19 @@ public class AsciiCompass {
         row += Point.NW.toString(Point.NW == point, colorActive, colorDefault);
         row += Point.N.toString(Point.N == point, colorActive, colorDefault);
         row += Point.NE.toString(Point.NE == point, colorActive, colorDefault);
-        ret.add(Mini.parse(row.replace("\\","\\\\")));
+        ret.add(Mini.parse(row.replace("\\", "\\\\")));
 
         row = "";
         row += Point.W.toString(Point.W == point, colorActive, colorDefault);
         row += colorDefault + "+";
         row += Point.E.toString(Point.E == point, colorActive, colorDefault);
-        ret.add(Mini.parse(row.replace("\\","\\\\")));
+        ret.add(Mini.parse(row.replace("\\", "\\\\")));
 
         row = "";
         row += Point.SW.toString(Point.SW == point, colorActive, colorDefault);
         row += Point.S.toString(Point.S == point, colorActive, colorDefault);
         row += Point.SE.toString(Point.SE == point, colorActive, colorDefault);
-        ret.add(Mini.parse(row.replace("\\","\\\\")));
+        ret.add(Mini.parse(row.replace("\\", "\\\\")));
 
         return ret;
     }

@@ -4,9 +4,10 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class WarmUpUtil {
-
     /**
      * @param player         The player to notify.
      * @param translationKey The translation key used for notifying.
@@ -43,5 +44,4 @@ public class WarmUpUtil {
     public enum Warmup {
         HOME, WARP, FLIGHT
     }
-
 }
