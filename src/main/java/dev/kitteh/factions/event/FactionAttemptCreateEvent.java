@@ -6,28 +6,30 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Event called when a Faction is soon to be created.
  */
+@NullMarked
 public class FactionAttemptCreateEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final String factionTag;
-    private final Player sender;
+    private final FPlayer sender;
     private boolean cancelled;
 
-    public FactionAttemptCreateEvent(Player sender, String tag) {
+    public FactionAttemptCreateEvent(FPlayer sender, String tag) {
         this.factionTag = tag;
         this.sender = sender;
     }
 
-    public FPlayer getFPlayer() {
-        return FPlayers.getInstance().getByPlayer(sender);
+    public FPlayer getPlayer() {
+        return this.sender;
     }
 
     public String getFactionTag() {
-        return factionTag;
+        return this.factionTag;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class FactionAttemptCreateEvent extends Event implements Cancellable {
 
     @Override
     public boolean isCancelled() {
-        return cancelled;
+        return this.cancelled;
     }
 
     @Override

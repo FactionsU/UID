@@ -4,10 +4,12 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Event called when a player loses power.
  */
+@NullMarked
 public class PowerLossEvent extends FactionPlayerEvent implements Cancellable {
     private boolean cancelled = false;
     private String message;

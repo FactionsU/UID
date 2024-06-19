@@ -3,9 +3,10 @@ package dev.kitteh.factions.event;
 import dev.kitteh.factions.FPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class FactionRenameEvent extends FactionPlayerEvent implements Cancellable {
-
     private boolean cancelled = false;
     private final String tag;
 

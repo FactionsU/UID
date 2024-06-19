@@ -3,12 +3,13 @@ package dev.kitteh.factions.event;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import org.bukkit.event.Cancellable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Event called when an FPlayer joins a Faction.
  */
+@NullMarked
 public class FPlayerJoinEvent extends FactionPlayerEvent implements Cancellable {
-
     private final PlayerJoinReason reason;
     private boolean cancelled = false;
 

@@ -4,7 +4,9 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.permissible.Relation;
 import org.bukkit.event.Cancellable;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class FactionRelationWishEvent extends FactionPlayerEvent implements Cancellable {
     private final Faction targetFaction;
     private final Relation currentRelation;

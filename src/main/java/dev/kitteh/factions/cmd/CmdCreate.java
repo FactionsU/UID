@@ -55,7 +55,7 @@ public class CmdCreate extends FCommand {
             return;
         }
 
-        FactionAttemptCreateEvent attemptEvent = new FactionAttemptCreateEvent(context.player, tag);
+        FactionAttemptCreateEvent attemptEvent = new FactionAttemptCreateEvent(context.fPlayer, tag);
         Bukkit.getServer().getPluginManager().callEvent(attemptEvent);
         if (attemptEvent.isCancelled()) {
             return;
@@ -87,7 +87,7 @@ public class CmdCreate extends FCommand {
         context.fPlayer.setFaction(faction);
 
         // trigger the faction creation event
-        FactionCreateEvent createEvent = new FactionCreateEvent(context.player, faction);
+        FactionCreateEvent createEvent = new FactionCreateEvent(context.fPlayer, faction);
         Bukkit.getServer().getPluginManager().callEvent(createEvent);
 
         for (FPlayer follower : FPlayers.getInstance().getOnlinePlayers()) {

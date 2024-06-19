@@ -6,24 +6,25 @@ import dev.kitteh.factions.Faction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Event called when a Faction is created.
  */
+@NullMarked
 public class FactionCreateEvent extends Event {
-
     private static final HandlerList handlers = new HandlerList();
 
-    private final Player sender;
+    private final FPlayer sender;
     private final Faction faction;
 
-    public FactionCreateEvent(Player sender, Faction faction) {
+    public FactionCreateEvent(FPlayer sender, Faction faction) {
         this.sender = sender;
         this.faction = faction;
     }
 
     public FPlayer getFPlayer() {
-        return FPlayers.getInstance().getByPlayer(sender);
+        return this.sender;
     }
 
     public Faction getFaction() {

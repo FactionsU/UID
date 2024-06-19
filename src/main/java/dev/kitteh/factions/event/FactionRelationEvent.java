@@ -2,23 +2,22 @@ package dev.kitteh.factions.event;
 
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.permissible.Relation;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Event called when a Faction relation is called.
  */
-public class FactionRelationEvent extends Event {
-
+@NullMarked
+public class FactionRelationEvent extends FactionEvent {
     private static final HandlerList handlers = new HandlerList();
 
-    private final Faction fsender;
     private final Faction ftarget;
     private final Relation foldrel;
     private final Relation frel;
 
     public FactionRelationEvent(Faction sender, Faction target, Relation oldrel, Relation rel) {
-        fsender = sender;
+        super(sender);
         ftarget = target;
         foldrel = oldrel;
         frel = rel;
@@ -36,12 +35,8 @@ public class FactionRelationEvent extends Event {
         return foldrel;
     }
 
-    public Relation getRelation() {
+    public Relation getNewRelation() {
         return frel;
-    }
-
-    public Faction getFaction() {
-        return fsender;
     }
 
     public Faction getTargetFaction() {
