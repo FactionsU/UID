@@ -1,9 +1,9 @@
 package dev.kitteh.factions.cmd.money;
 
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.cmd.CommandContext;
 import dev.kitteh.factions.cmd.CommandRequirements;
-import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.Permission;

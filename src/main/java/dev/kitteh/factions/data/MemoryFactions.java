@@ -2,7 +2,6 @@ package dev.kitteh.factions.data;
 
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.data.json.JSONFactions;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.ChatColor;

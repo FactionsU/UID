@@ -1,9 +1,7 @@
 package dev.kitteh.factions.event;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jspecify.annotations.NullMarked;

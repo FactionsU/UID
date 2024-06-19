@@ -1,6 +1,5 @@
 package dev.kitteh.factions.data.json;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;

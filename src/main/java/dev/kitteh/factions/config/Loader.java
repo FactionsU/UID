@@ -1,12 +1,12 @@
 package dev.kitteh.factions.config;
 
 import com.google.common.reflect.TypeToken;
+import com.typesafe.config.ConfigRenderOptions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.ConfigName;
 import dev.kitteh.factions.config.annotation.DefinedType;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
-import com.typesafe.config.ConfigRenderOptions;
 import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;

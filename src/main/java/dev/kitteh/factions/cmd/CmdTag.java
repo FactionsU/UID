@@ -8,8 +8,8 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.event.FactionRenameEvent;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
-import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.MiscUtil;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 

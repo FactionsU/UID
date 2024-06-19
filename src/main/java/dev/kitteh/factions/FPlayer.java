@@ -1,7 +1,5 @@
 package dev.kitteh.factions;
 
-import dev.kitteh.factions.data.MemoryFPlayer;
-import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.util.ChatMode;

@@ -1,6 +1,5 @@
 package dev.kitteh.factions.integration;
 
-import dev.kitteh.factions.FactionsPlugin;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.LocalPlayer;
@@ -15,6 +14,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
+import dev.kitteh.factions.FactionsPlugin;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;

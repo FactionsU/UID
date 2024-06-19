@@ -1,8 +1,6 @@
 package dev.kitteh.factions.event;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FPlayers;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

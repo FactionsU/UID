@@ -1,12 +1,12 @@
 package dev.kitteh.factions.cmd;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

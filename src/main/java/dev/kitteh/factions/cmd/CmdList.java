@@ -3,8 +3,8 @@ package dev.kitteh.factions.cmd;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.tag.Tag;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 
 import java.util.ArrayList;

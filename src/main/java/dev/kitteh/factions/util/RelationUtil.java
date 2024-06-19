@@ -6,7 +6,6 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.permissible.Relation;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.ChatColor;
 
 public class RelationUtil {
 

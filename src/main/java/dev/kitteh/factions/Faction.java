@@ -1,6 +1,5 @@
 package dev.kitteh.factions;
 
-import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;

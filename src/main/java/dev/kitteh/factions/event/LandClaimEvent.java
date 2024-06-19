@@ -3,7 +3,6 @@ package dev.kitteh.factions.event;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.jspecify.annotations.NullMarked;
 

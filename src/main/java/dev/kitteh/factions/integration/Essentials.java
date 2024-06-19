@@ -1,10 +1,10 @@
 package dev.kitteh.factions.integration;
 
 import com.earth2me.essentials.AsyncTeleport;
-import net.ess3.api.IEssentials;
 import com.earth2me.essentials.Trade;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.listener.EssentialsListener;
+import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

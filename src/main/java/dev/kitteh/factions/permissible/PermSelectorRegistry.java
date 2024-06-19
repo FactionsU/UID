@@ -4,13 +4,13 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.selector.AllSelector;
 import dev.kitteh.factions.permissible.selector.FactionSelector;
 import dev.kitteh.factions.permissible.selector.PlayerSelector;
+import dev.kitteh.factions.permissible.selector.RelationAtLeastSelector;
 import dev.kitteh.factions.permissible.selector.RelationAtMostSelector;
 import dev.kitteh.factions.permissible.selector.RelationSingleSelector;
 import dev.kitteh.factions.permissible.selector.RoleAtLeastSelector;
 import dev.kitteh.factions.permissible.selector.RoleAtMostSelector;
 import dev.kitteh.factions.permissible.selector.RoleSingleSelector;
 import dev.kitteh.factions.permissible.selector.UnknownSelector;
-import dev.kitteh.factions.permissible.selector.RelationAtLeastSelector;
 
 import java.util.Map;
 import java.util.Set;

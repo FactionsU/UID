@@ -1,8 +1,8 @@
 package dev.kitteh.factions.permissible.selector;
 
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.Participator;
+import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.permissible.PermSelector;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Selectable;

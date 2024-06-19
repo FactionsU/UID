@@ -1,12 +1,8 @@
 package dev.kitteh.factions;
 
-import dev.kitteh.factions.data.MemoryBoard;
-import net.kyori.adventure.text.Component;
 import org.bukkit.World;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.List;
 import java.util.Set;
 
 @NullMarked

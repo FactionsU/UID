@@ -9,7 +9,6 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActions;
-import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;

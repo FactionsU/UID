@@ -1,8 +1,6 @@
 package dev.kitteh.factions.permissible;
 
 import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.material.MaterialDb;
-import org.bukkit.Material;
 
 public enum PermissibleActions implements PermissibleAction {
     BUILD(TL.PERM_BUILD, TL.PERM_SHORT_BUILD),

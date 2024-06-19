@@ -1,16 +1,16 @@
 package dev.kitteh.factions.cmd;
 
-import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
+import dev.kitteh.factions.FPlayer;
+import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TL;
 
 public class CmdPowerBoost extends FCommand {
 

@@ -5,7 +5,6 @@ import dev.kitteh.factions.util.RelationUtil;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.OfflinePlayer;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 

@@ -1,11 +1,11 @@
 package dev.kitteh.factions.integration;
 
+import com.ranull.graves.event.GraveCreateEvent;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
-import com.ranull.graves.event.GraveCreateEvent;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;

@@ -6,8 +6,8 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
-import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.LazyLocation;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 
 public class CmdSetWarp extends FCommand {
