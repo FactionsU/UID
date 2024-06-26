@@ -139,7 +139,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
             case "faction_only_space":
                 return (fPlayer.hasFaction() || territory) ? " " : "";
             case "faction_internal_id":
-                return fPlayer.getFaction().getId();
+                return faction.getId();
             case "faction_power":
                 return String.valueOf(faction.getPowerRounded());
             case "faction_powermax":
