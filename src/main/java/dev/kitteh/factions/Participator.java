@@ -8,6 +8,9 @@ import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * Describes an entity participating in Factions, i.e. a player or faction.
+ */
 @NullMarked
 public interface Participator {
     String getAccountId();

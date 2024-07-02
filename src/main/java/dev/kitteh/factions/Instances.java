@@ -8,6 +8,9 @@ import dev.kitteh.factions.data.json.JSONFPlayers;
 import dev.kitteh.factions.data.json.JSONFactions;
 import org.jspecify.annotations.NonNull;
 
+/**
+ * Instances for internal access.
+ */
 final class Instances {
     static final @NonNull MemoryBoard BOARD = new JSONBoard();
     static final @NonNull MemoryFactions FACTIONS = new JSONFactions();
