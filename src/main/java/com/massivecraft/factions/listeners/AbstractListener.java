@@ -205,9 +205,9 @@ public abstract class AbstractListener implements Listener {
 
         // no door/chest/whatever protection in wilderness, war zones, or safe zones
         if (!otherFaction.isNormal()) {
-            if (materialName.equals("ITEM_FRAME") ||
-                    materialName.equals("GLOW_ITEM_FRAME") ||
-                    materialName.equals("ARMOR_STAND")) {
+            if (material == Material.ITEM_FRAME ||
+                    material == Material.GLOW_ITEM_FRAME ||
+                    material == Material.ARMOR_STAND) {
                 return canInteractHere(player, location);
             }
             return true;
@@ -232,30 +232,30 @@ public abstract class AbstractListener implements Listener {
         } else if (material == Material.CHEST ||
                 material == Material.ENDER_CHEST ||
                 material == Material.TRAPPED_CHEST ||
-                materialName.equals("BARREL") ||
-                materialName.equals("DROPPER") ||
-                materialName.equals("DISPENSER") ||
-                materialName.equals("HOPPER") ||
+                material == Material.BARREL ||
+                material == Material.DROPPER ||
+                material == Material.DISPENSER ||
+                material == Material.HOPPER ||
                 materialName.contains("CAULDRON") ||
-                materialName.equals("CAMPFIRE") ||
-                materialName.equals("BREWING_STAND") ||
-                materialName.equals("CARTOGRAPHY_TABLE") ||
-                materialName.equals("GRINDSTONE") ||
-                materialName.equals("SMOKER") ||
-                materialName.equals("STONECUTTER") ||
-                materialName.equals("LECTERN") ||
-                materialName.equals("ITEM_FRAME") ||
-                materialName.equals("GLOW_ITEM_FRAME") ||
-                materialName.equals("JUKEBOX") ||
-                materialName.equals("ARMOR_STAND") ||
-                materialName.equals("REPEATER") ||
-                materialName.equals("ENCHANTING_TABLE") ||
-                materialName.equals("BEACON") ||
-                materialName.equals("CHIPPED_ANVIL") ||
-                materialName.equals("DAMAGED_ANVIL") ||
-                materialName.equals("FLOWER_POT") ||
+                material == Material.CAMPFIRE ||
+                material == Material.BREWING_STAND ||
+                material == Material.CARTOGRAPHY_TABLE ||
+                material == Material.GRINDSTONE ||
+                material == Material.SMOKER ||
+                material == Material.STONECUTTER ||
+                material == Material.LECTERN ||
+                material == Material.ITEM_FRAME ||
+                material == Material.GLOW_ITEM_FRAME ||
+                material == Material.JUKEBOX ||
+                material == Material.ARMOR_STAND ||
+                material == Material.REPEATER ||
+                material == Material.ENCHANTING_TABLE ||
+                material == Material.BEACON ||
+                material == Material.CHIPPED_ANVIL ||
+                material == Material.DAMAGED_ANVIL ||
+                material == Material.FLOWER_POT ||
                 materialName.contains("POTTED") ||
-                materialName.equals("BEE_NEST") ||
+                material == Material.BEE_NEST ||
                 materialName.contains("SHULKER") ||
                 materialName.contains("ANVIL") ||
                 materialName.startsWith("POTTED") ||
@@ -275,7 +275,7 @@ public abstract class AbstractListener implements Listener {
                         FactionsPlugin.getInstance().conf().factions().protection().getContainerExceptions().contains(material) ||
                                 (
                                         otherFaction.isNormal() &&
-                                                material.name().equals("LECTERN") &&
+                                                material == Material.LECTERN &&
                                                 FactionsPlugin.getInstance().conf().factions().protection().isTerritoryAllowLecternReading()
                                 )
                 )) {

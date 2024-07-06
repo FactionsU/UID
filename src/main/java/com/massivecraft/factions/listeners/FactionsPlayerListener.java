@@ -66,7 +66,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 
-
 public class FactionsPlayerListener extends AbstractListener {
 
     private final FactionsPlugin plugin;
@@ -369,22 +368,23 @@ public class FactionsPlayerListener extends AbstractListener {
 
         boolean check = false;
         EntityType type = event.getRightClicked().getType();
-        String entityName = type.name();
-        if (entityName.contains("ITEM_FRAME")) {
+        if (type == EntityType.ITEM_FRAME ||  type == EntityType.GLOW_ITEM_FRAME) {
             if (!canPlayerUseBlock(event.getPlayer(), Material.ITEM_FRAME, event.getRightClicked().getLocation(), false)) {
                 event.setCancelled(true);
             }
-        } else if (entityName.contains("HORSE") ||
-                entityName.equals("DONKEY") ||
-                entityName.equals("MULE") ||
-                entityName.equals("LLAMA") ||
-                entityName.equals("TRADER_LLAMA") ||
-                entityName.equals("PIG") ||
-                entityName.equals("LEASH_HITCH") ||
-                entityName.equals("MINECART_CHEST") ||
-                entityName.equals("MINECART_FURNACE") ||
-                entityName.equals("MINECART_HOPPER") ||
-                entityName.equals("CHEST_BOAT")
+        } else if (type == EntityType.HORSE ||
+                type == EntityType.SKELETON_HORSE ||
+                type == EntityType.ZOMBIE_HORSE ||
+                type == EntityType.DONKEY ||
+                type == EntityType.MULE ||
+                type == EntityType.LLAMA ||
+                type == EntityType.TRADER_LLAMA ||
+                type == EntityType.PIG ||
+                type == EntityType.LEASH_HITCH ||
+                type == EntityType.MINECART_CHEST ||
+                type == EntityType.MINECART_FURNACE ||
+                type == EntityType.MINECART_HOPPER ||
+                type == EntityType.CHEST_BOAT
         ) {
             check = true;
         }
@@ -417,7 +417,7 @@ public class FactionsPlayerListener extends AbstractListener {
             return;
         }
 
-        if (event.getAction() == Action.PHYSICAL && (block.getType().name().contains("SOIL") || block.getType().name().contains("FARMLAND"))) {
+        if (event.getAction() == Action.PHYSICAL && block.getType() == Material.FARMLAND) {
             if (!FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleActions.DESTROY, false)) {
                 event.setCancelled(true);
             }
@@ -451,8 +451,9 @@ public class FactionsPlayerListener extends AbstractListener {
 
         ItemStack item;
         if ((item = event.getItem()) != null) {
+            Material material = item.getType();
             String materialName = item.getType().name();
-            if (materialName.equals("ARMOR_STAND") || materialName.equals("END_CRYSTAL") || materialName.contains("MINECART")) {
+            if (material == Material.ARMOR_STAND || material == Material.END_CRYSTAL || materialName.contains("MINECART")) {
                 if (!FactionsPlugin.getInstance().conf().factions().specialCase().getIgnoreBuildMaterials().contains(item.getType()) &&
                         !FactionsBlockListener.playerCanBuildDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation(), PermissibleActions.BUILD, false)) {
                     event.setCancelled(true);
