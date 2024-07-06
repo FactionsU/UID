@@ -414,7 +414,7 @@ public class FactionsPlayerListener extends AbstractListener {
             return;
         }
 
-        if (event.getAction() == Action.PHYSICAL && block.getType().name().contains("SOIL")) {
+        if (event.getAction() == Action.PHYSICAL && (block.getType().name().contains("SOIL") || block.getType().name().contains("FARMLAND"))) {
             if (!FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleActions.DESTROY, false)) {
                 event.setCancelled(true);
             }
