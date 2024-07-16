@@ -979,7 +979,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.mvdwPlaceholderAPIManager;
     }
 
-    private GsonBuilder getGsonBuilder(boolean confNotLoaded) {
+    public GsonBuilder getGsonBuilder(boolean confNotLoaded) {
         Type mapFLocToStringSetType = new TypeToken<Map<FLocation, Set<String>>>() {
         }.getType();
 

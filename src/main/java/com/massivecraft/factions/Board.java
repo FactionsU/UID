@@ -16,6 +16,8 @@ public abstract class Board {
     //----------------------------------------------//
     public abstract String getIdAt(FLocation flocation);
 
+    public abstract int getIntIdAt(FLocation flocation);
+
     private static Board getBoardImpl() {
         return new JSONBoard(); // TODO switch on configuration backend
     }
@@ -26,12 +28,14 @@ public abstract class Board {
 
     public abstract Faction getFactionAt(FLocation flocation);
 
+    @Deprecated
     public abstract void setIdAt(String id, FLocation flocation);
 
     public abstract void setFactionAt(Faction faction, FLocation flocation);
 
     public abstract void removeAt(FLocation flocation);
 
+    @Deprecated
     public abstract Set<FLocation> getAllClaims(String factionId);
 
     public abstract Set<FLocation> getAllClaims(Faction faction);
@@ -39,9 +43,15 @@ public abstract class Board {
     // not to be confused with claims, ownership referring to further member-specific ownership of a claim
     public abstract void clearOwnershipAt(FLocation flocation);
 
+    @Deprecated
     public abstract void unclaimAll(String factionId);
 
+    public abstract void unclaimAll(Faction faction);
+
+    @Deprecated
     public abstract void unclaimAllInWorld(String factionId, World world);
+
+    public abstract void unclaimAllInWorld(Faction faction, World world);
 
     // Is this coord NOT completely surrounded by coords claimed by the same faction?
     // Simpler: Is there any nearby coord with a faction other than the faction here?
@@ -62,6 +72,7 @@ public abstract class Board {
     // Coord count
     //----------------------------------------------//
 
+    @Deprecated
     public abstract int getFactionCoordCount(String factionId);
 
     public abstract int getFactionCoordCount(Faction faction);

@@ -33,6 +33,8 @@ public interface FPlayer extends EconomyParticipator, Selectable {
 
     String getFactionId();
 
+    int getFactionIntId();
+
     boolean hasFaction();
 
     void setFaction(Faction faction);

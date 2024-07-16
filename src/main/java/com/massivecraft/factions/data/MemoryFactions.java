@@ -13,18 +13,21 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class MemoryFactions extends Factions {
-    public final Map<String, Faction> factions = new ConcurrentHashMap<>();
+    public final Map<Integer, Faction> factions = new ConcurrentHashMap<>();
     public int nextId = 1;
+    private final static int ID_WILDERNESS = 0;
+    private final static int ID_SAFEZONE = -1;
+    private final static int ID_WARZONE = -2;
 
     public int load() {
         // Make sure the default neutral faction exists
-        if (!factions.containsKey("0")) {
-            Faction faction = generateFactionObject("0");
-            factions.put("0", faction);
+        if (!factions.containsKey(ID_WILDERNESS)) {
+            Faction faction = generateFactionObject(ID_WILDERNESS);
+            factions.put(ID_WILDERNESS, faction);
             faction.setTag(TL.WILDERNESS.toString());
             faction.setDescription(TL.WILDERNESS_DESCRIPTION.toString());
         } else {
-            Faction faction = factions.get("0");
+            Faction faction = factions.get(ID_WILDERNESS);
             if (!faction.getTag().equalsIgnoreCase(TL.WILDERNESS.toString())) {
                 faction.setTag(TL.WILDERNESS.toString());
             }
@@ -34,13 +37,13 @@ public abstract class MemoryFactions extends Factions {
         }
 
         // Make sure the safe zone faction exists
-        if (!factions.containsKey("-1")) {
-            Faction faction = generateFactionObject("-1");
-            factions.put("-1", faction);
+        if (!factions.containsKey(ID_SAFEZONE)) {
+            Faction faction = generateFactionObject(ID_SAFEZONE);
+            factions.put(ID_SAFEZONE, faction);
             faction.setTag(TL.SAFEZONE.toString());
             faction.setDescription(TL.SAFEZONE_DESCRIPTION.toString());
         } else {
-            Faction faction = factions.get("-1");
+            Faction faction = factions.get(ID_SAFEZONE);
             if (!faction.getTag().equalsIgnoreCase(TL.SAFEZONE.toString())) {
                 faction.setTag(TL.SAFEZONE.toString());
             }
@@ -54,13 +57,13 @@ public abstract class MemoryFactions extends Factions {
         }
 
         // Make sure the war zone faction exists
-        if (!factions.containsKey("-2")) {
-            Faction faction = generateFactionObject("-2");
-            factions.put("-2", faction);
+        if (!factions.containsKey(ID_WARZONE)) {
+            Faction faction = generateFactionObject(ID_WARZONE);
+            factions.put(ID_WARZONE, faction);
             faction.setTag(TL.WARZONE.toString());
             faction.setDescription(TL.WARZONE_DESCRIPTION.toString());
         } else {
-            Faction faction = factions.get("-2");
+            Faction faction = factions.get(ID_WARZONE);
             if (!faction.getTag().equalsIgnoreCase(TL.WARZONE.toString())) {
                 faction.setTag(TL.WARZONE.toString());
             }
@@ -79,7 +82,11 @@ public abstract class MemoryFactions extends Factions {
         return factions.get(id);
     }
 
-    public abstract Faction generateFactionObject(String string);
+    public Faction getFactionById(int id) {
+        return factions.get(id);
+    }
+
+    public abstract Faction generateFactionObject(int id);
 
     public Faction getByTag(String str) {
         String compStr = MiscUtil.getComparisonString(str);
@@ -125,12 +132,16 @@ public abstract class MemoryFactions extends Factions {
     }
 
     public boolean isValidFactionId(String id) {
+        return this.isValidFactionId(Integer.parseInt(id));
+    }
+
+    public boolean isValidFactionId(int id) {
         return factions.containsKey(id);
     }
 
     public Faction createFaction() {
         Faction faction = generateFactionObject();
-        factions.put(faction.getId(), faction);
+        factions.put(faction.getIntId(), faction);
         return faction;
     }
 
@@ -155,17 +166,17 @@ public abstract class MemoryFactions extends Factions {
 
     @Override
     public Faction getWilderness() {
-        return factions.get("0");
+        return factions.get(ID_WILDERNESS);
     }
 
     @Override
     public Faction getSafeZone() {
-        return factions.get("-1");
+        return factions.get(ID_SAFEZONE);
     }
 
     @Override
     public Faction getWarZone() {
-        return factions.get("-2");
+        return factions.get(ID_WARZONE);
     }
 
     public abstract void convertFrom(MemoryFactions old);

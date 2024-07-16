@@ -8,18 +8,29 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.data.MemoryFaction;
 import com.massivecraft.factions.data.MemoryFactions;
 import com.massivecraft.factions.util.DiscUtil;
+import com.massivecraft.factions.util.OldJSONFactionDeserializer;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class JSONFactions extends MemoryFactions {
+    private record NextId(int next, String BIG_WARNING) {
+        NextId(int next) {
+            this(next, "DO NOT DELETE OR EDIT THIS FILE UNLESS DELETING ALL FACTIONS AS WELL.");
+        }
+    }
+
+
     public Gson getGson() {
         return FactionsPlugin.getInstance().getGson();
     }
 
     private final File file;
+    private final File nextIdFile;
 
     public File getFile() {
         return file;
@@ -34,6 +45,7 @@ public class JSONFactions extends MemoryFactions {
             FactionsPlugin.getInstance().grumpException(new RuntimeException());
         }
         this.file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/factions.json");
+        this.nextIdFile = new File(FactionsPlugin.getInstance().getDataFolder(), "data/nextFactionId.json");
         this.nextId = 1;
     }
 
@@ -46,15 +58,8 @@ public class JSONFactions extends MemoryFactions {
         for (Faction entity : this.factions.values()) {
             entitiesThatShouldBeSaved.put(entity.getId(), (JSONFaction) entity);
         }
-
-        JSONFaction f = new JSONFaction("```storage``");
-        f.setMaxVaults(this.nextId);
-        f.setDescription("Storage-only faction, not present in game. Do not touch.");
-        f.setFoundedDate(0);
-        f.getPermissions().clear();
-        f.setTag("MissingNo.");
-        entitiesThatShouldBeSaved.put("```storage``", f);
         saveCore(file, entitiesThatShouldBeSaved, sync);
+        DiscUtil.writeCatch(this.nextIdFile, FactionsPlugin.getInstance().getGson().toJson(new NextId(this.nextId)) ,sync);
     }
 
     private boolean saveCore(File target, Map<String, JSONFaction> entities, boolean sync) {
@@ -62,22 +67,21 @@ public class JSONFactions extends MemoryFactions {
     }
 
     public int load() {
-        Map<String, JSONFaction> factions = this.loadCore();
+        List<JSONFaction> factions = this.loadCore();
         if (factions != null) {
-            Faction storage = factions.remove("```storage``");
-            if (storage != null) {
-                this.nextId = Math.max(this.nextId, storage.getMaxVaults());
-            }
-            this.factions.putAll(factions);
+            factions.forEach(f -> {
+                this.factions.put(f.getIntId(), f);
+                this.updateNextIdForId(f.getIntId());
+            });
         }
 
         super.load();
         return this.factions.size();
     }
 
-    private Map<String, JSONFaction> loadCore() {
+    private List<JSONFaction> loadCore() {
         if (!this.file.exists()) {
-            return new HashMap<>();
+            return null;
         }
 
         String content = DiscUtil.readCatch(this.file);
@@ -85,20 +89,35 @@ public class JSONFactions extends MemoryFactions {
             return null;
         }
 
-        Map<String, JSONFaction> data = FactionsPlugin.getInstance().getGson().fromJson(content, new TypeToken<Map<String, JSONFaction>>() {
-        }.getType());
-
         this.nextId = 1;
 
-        for (Entry<String, JSONFaction> entry : data.entrySet()) {
-            String id = entry.getKey();
-            MemoryFaction f = entry.getValue();
-            f.checkPerms();
-            f.setId(id);
-            this.updateNextIdForId(id);
+        if (content.startsWith("{")) {
+            Gson gson = FactionsPlugin.getInstance().getGsonBuilder(false)
+                    .registerTypeAdapter(JSONFaction.class, new OldJSONFactionDeserializer())
+                    .create();
+            Map<String, JSONFaction> data = gson.fromJson(content, new TypeToken<Map<String, JSONFaction>>() {
+            }.getType());
+            for (Entry<String, JSONFaction> entry : data.entrySet()) {
+                String id = entry.getKey();
+                MemoryFaction f = entry.getValue();
+                f.checkPerms();
+                f.setId(id);
+                this.updateNextIdForId(id);
+            }
+            Faction storage = data.remove("```storage``");
+            if (storage != null) {
+                this.nextId = Math.max(this.nextId, storage.getMaxVaults());
+            }
+            return new ArrayList<>(data.values());
+        } else {
+            String nextIdData = DiscUtil.readCatch(this.nextIdFile);
+            NextId next = FactionsPlugin.getInstance().getGson().fromJson(nextIdData, NextId.class);
+            if (next!=null) {
+                this.nextId = next.next();
+            }
+            return FactionsPlugin.getInstance().getGson().fromJson(content, new TypeToken<List<JSONFaction>>() {
+            }.getType());
         }
-
-        return data;
     }
 
     // -------------------------------------------- //
@@ -143,7 +162,7 @@ public class JSONFactions extends MemoryFactions {
     }
 
     @Override
-    public Faction generateFactionObject(String id) {
+    public Faction generateFactionObject(int id) {
         return new JSONFaction(id);
     }
 

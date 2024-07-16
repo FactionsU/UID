@@ -62,7 +62,7 @@ import java.util.UUID;
 
 public abstract class MemoryFPlayer implements FPlayer {
 
-    protected String factionId;
+    protected int factionId;
     protected Role role;
     protected String title;
     protected double power;
@@ -109,24 +109,25 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public Faction getFaction() {
-        if (this.factionId == null) {
-            this.factionId = "0";
-        }
         Faction faction = Factions.getInstance().getFactionById(this.factionId);
         if (faction == null) {
             FactionsPlugin.getInstance().getLogger().warning("Found null faction (id " + this.factionId + ") for player " + this.getName());
-            this.factionId = "0";
+            this.factionId = 0;
             faction = Factions.getInstance().getFactionById(this.factionId);
         }
         return faction;
     }
 
     public String getFactionId() {
+        return String.valueOf(this.factionId);
+    }
+
+    public int getFactionIntId() {
         return this.factionId;
     }
 
     public boolean hasFaction() {
-        return !factionId.equals("0");
+        return factionId != 0;
     }
 
     public void setFaction(Faction faction) {
@@ -135,7 +136,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             oldFaction.removeFPlayer(this);
         }
         faction.addFPlayer(this);
-        this.factionId = faction.getId();
+        this.factionId = faction.getIntId();
     }
 
     public void setMonitorJoins(boolean monitor) {
@@ -254,7 +255,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public ChatMode getChatMode() {
-        if (this.chatMode == null || this.factionId.equals("0") || !FactionsPlugin.getInstance().conf().factions().chat().isFactionOnlyChat()) {
+        if (this.chatMode == null || this.factionId == 0 || !FactionsPlugin.getInstance().conf().factions().chat().isFactionOnlyChat()) {
             this.chatMode = ChatMode.PUBLIC;
         }
         return chatMode;
@@ -313,7 +314,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.deaths = 0;
         this.mapHeight = FactionsPlugin.getInstance().conf().map().getHeight();
 
-        if (!FactionsPlugin.getInstance().conf().factions().other().getNewPlayerStartingFactionID().equals("0") && Factions.getInstance().isValidFactionId(FactionsPlugin.getInstance().conf().factions().other().getNewPlayerStartingFactionID())) {
+        if (FactionsPlugin.getInstance().conf().factions().other().getNewPlayerStartingFactionID() > 0 && Factions.getInstance().isValidFactionId(FactionsPlugin.getInstance().conf().factions().other().getNewPlayerStartingFactionID())) {
             this.factionId = FactionsPlugin.getInstance().conf().factions().other().getNewPlayerStartingFactionID();
         }
     }
@@ -340,7 +341,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public void resetFactionData(boolean doSpoutUpdate) {
         // clean up any territory ownership in old faction, if there is one
-        if (factionId != null && Factions.getInstance().isValidFactionId(this.getFactionId())) {
+        if (Factions.getInstance().isValidFactionId(this.getFactionIntId())) {
             Faction currentFaction = this.getFaction();
             currentFaction.removeFPlayer(this);
             if (currentFaction.isNormal()) {
@@ -348,7 +349,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             }
         }
 
-        this.factionId = "0"; // The default neutral faction
+        this.factionId = 0; // The default neutral faction
         this.chatMode = ChatMode.PUBLIC;
         this.role = Role.NORMAL;
         this.title = "";

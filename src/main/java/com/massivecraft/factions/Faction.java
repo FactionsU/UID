@@ -49,6 +49,8 @@ public interface Faction extends EconomyParticipator, Selectable {
 
     String getId();
 
+    int getIntId();
+
     void invite(FPlayer fplayer);
 
     void deinvite(FPlayer fplayer);
@@ -294,6 +296,4 @@ public interface Faction extends EconomyParticipator, Selectable {
     void remove();
 
     Set<FLocation> getAllClaims();
-
-    void setId(String id);
 }

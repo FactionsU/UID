@@ -31,12 +31,10 @@ public class CmdSafeunclaimall extends FCommand {
             world = Bukkit.getWorld(worldName);
         }
 
-        String id = Factions.getInstance().getSafeZone().getId();
-
         if (world == null) {
-            Board.getInstance().unclaimAll(id);
+            Board.getInstance().unclaimAll(Factions.getInstance().getSafeZone());
         } else {
-            Board.getInstance().unclaimAllInWorld(id, world);
+            Board.getInstance().unclaimAllInWorld(Factions.getInstance().getSafeZone(), world);
         }
 
         context.msg(TL.COMMAND_SAFEUNCLAIMALL_UNCLAIMED);

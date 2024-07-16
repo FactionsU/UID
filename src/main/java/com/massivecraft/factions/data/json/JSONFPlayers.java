@@ -8,9 +8,12 @@ import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.data.MemoryFPlayer;
 import com.massivecraft.factions.data.MemoryFPlayers;
 import com.massivecraft.factions.util.DiscUtil;
+import com.massivecraft.factions.util.OldJSONFPlayerDeserializer;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JSONFPlayers extends MemoryFPlayers {
@@ -43,34 +46,34 @@ public class JSONFPlayers extends MemoryFPlayers {
     }
 
     public void forceSave(boolean sync) {
-        final Map<String, JSONFPlayer> entitiesThatShouldBeSaved = new HashMap<>();
+        final List<JSONFPlayer> entitiesThatShouldBeSaved = new ArrayList<>();
         boolean saveAll = FactionsPlugin.getInstance().conf().data().json().isSaveAllPlayers();
         for (FPlayer entity : this.fPlayers.values()) {
             if (saveAll || ((MemoryFPlayer) entity).shouldBeSaved()) {
-                entitiesThatShouldBeSaved.put(entity.getId(), (JSONFPlayer) entity);
+                entitiesThatShouldBeSaved.add((JSONFPlayer) entity);
             }
         }
 
         saveCore(file, entitiesThatShouldBeSaved, sync);
     }
 
-    private boolean saveCore(File target, Map<String, JSONFPlayer> data, boolean sync) {
+    private boolean saveCore(File target, List<JSONFPlayer> data, boolean sync) {
         return DiscUtil.writeCatch(target, FactionsPlugin.getInstance().getGson().toJson(data), sync);
     }
 
     public int load() {
-        Map<String, JSONFPlayer> fplayers = this.loadCore();
+        List<JSONFPlayer> fplayers = this.loadCore();
         if (fplayers == null) {
             return 0;
         }
         this.fPlayers.clear();
-        this.fPlayers.putAll(fplayers);
+        fplayers.forEach(fp -> this.fPlayers.put(fp.getId(), fp));
         return fPlayers.size();
     }
 
-    private Map<String, JSONFPlayer> loadCore() {
+    private List<JSONFPlayer> loadCore() {
         if (!this.file.exists()) {
-            return new HashMap<>();
+            return null;
         }
 
         String content = DiscUtil.readCatch(this.file);
@@ -78,8 +81,18 @@ public class JSONFPlayers extends MemoryFPlayers {
             return null;
         }
 
-        return FactionsPlugin.getInstance().getGson().fromJson(content, new TypeToken<Map<String, JSONFPlayer>>() {
-        }.getType());
+        if (content.startsWith("{")) {
+            Gson gson = FactionsPlugin.getInstance().getGsonBuilder(false)
+                    .registerTypeAdapter(JSONFaction.class, new OldJSONFPlayerDeserializer())
+                    .create();
+
+            Map<String, JSONFPlayer> map = gson.fromJson(content, new TypeToken<Map<String, JSONFPlayer>>() {
+            }.getType());
+            return new ArrayList<>(map.values());
+        } else {
+            return FactionsPlugin.getInstance().getGson().fromJson(content, new TypeToken<List<JSONFPlayer>>() {
+            }.getType());
+        }
     }
 
     private boolean doesKeyNeedMigration(String key) {
