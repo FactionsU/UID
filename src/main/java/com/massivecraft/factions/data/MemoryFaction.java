@@ -43,9 +43,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 public abstract class MemoryFaction implements Faction, EconomyParticipator {
-    protected String id = null;
+    protected int id = Integer.MIN_VALUE;
     protected boolean peacefulExplosionsEnabled;
     protected boolean permanent;
     protected String tag;
@@ -152,10 +153,18 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public String getId() {
+        return String.valueOf(id);
+    }
+
+    public int getIntId() {
         return id;
     }
 
     public void setId(String id) {
+        this.setId(Integer.parseInt(id));
+    }
+
+    public void setId(int id) {
         this.id = id;
         this.offlinePlayer = null;
     }
@@ -439,7 +448,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected MemoryFaction() {
     }
 
-    public MemoryFaction(String id) {
+    public MemoryFaction(int id) {
         this.id = id;
         this.open = FactionsPlugin.getInstance().conf().factions().other().isNewFactionsDefaultOpen();
         this.tag = "???";
@@ -725,7 +734,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         }
 
         for (FPlayer fplayer : FPlayers.getInstance().getAllFPlayers()) {
-            if (fplayer.getFactionId().equalsIgnoreCase(id)) {
+            if (fplayer.getFactionIntId() == id) {
                 fplayers.add(fplayer);
             }
         }
@@ -965,10 +974,6 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public void clearClaimOwnership(FPlayer player) {
-        if (id == null || id.isEmpty()) {
-            return;
-        }
-
         Set<String> ownerData;
 
         for (Entry<FLocation, Set<String>> entry : claimOwnership.entrySet()) {

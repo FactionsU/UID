@@ -1,8 +1,6 @@
 package com.massivecraft.factions.data.json;
 
 import com.google.gson.reflect.TypeToken;
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.data.MemoryBoard;
 import com.massivecraft.factions.util.DiscUtil;
@@ -26,39 +24,42 @@ public class JSONBoard extends MemoryBoard {
     public Map<String, Map<String, String>> dumpAsSaveFormat() {
         Map<String, Map<String, String>> worldCoordIds = new HashMap<>();
 
-        String worldName, coords;
-        String id;
-
-        for (Entry<FLocation, String> entry : flocationIds.entrySet()) {
-            worldName = entry.getKey().getWorldName();
-            coords = entry.getKey().getCoordString();
-            id = entry.getValue();
-            if (!worldCoordIds.containsKey(worldName)) {
-                worldCoordIds.put(worldName, new TreeMap<>());
-            }
-
-            worldCoordIds.get(worldName).put(coords, id);
-        }
+        this.worldTrackers.forEach((world, tracker) -> {
+            Map<String, String> worldMap = new TreeMap<>();
+            worldCoordIds.put(world, worldMap);
+            tracker.getChunkToFactionForSave().forEach((chunk, faction) -> {
+                int x = Morton.getX(chunk);
+                int z = Morton.getZ(chunk);
+                worldMap.put(x + "," + z, String.valueOf(faction));
+            });
+        });
 
         return worldCoordIds;
     }
 
     public void loadFromSaveFormat(Map<String, Map<String, String>> worldCoordIds) {
-        flocationIds.clear();
+        this.worldTrackers.clear();
 
         String worldName;
         String[] coords;
         int x, z;
-        String factionId;
+        int factionId;
 
         for (Entry<String, Map<String, String>> entry : worldCoordIds.entrySet()) {
             worldName = entry.getKey();
+            WorldTracker tracker = this.getAndCreate(worldName);
             for (Entry<String, String> entry2 : entry.getValue().entrySet()) {
                 coords = entry2.getKey().trim().split("[,\\s]+");
                 x = Integer.parseInt(coords[0]);
                 z = Integer.parseInt(coords[1]);
-                factionId = entry2.getValue();
-                flocationIds.put(new FLocation(worldName, x, z), factionId);
+                try {
+                    factionId = Integer.parseInt(entry2.getValue().trim());
+                } catch (NumberFormatException ex) {
+                    FactionsPlugin.getInstance().getLogger().warning("Found invalid faction ID '" + entry2.getValue() + "' in " + worldName + " at " + entry2.getKey());
+                    continue; // NOPE
+                }
+
+                tracker.addClaimOnLoad(factionId, x, z);
             }
         }
     }
@@ -89,13 +90,11 @@ public class JSONBoard extends MemoryBoard {
             return 0;
         }
 
-        return flocationIds.size();
+        return this.getTotalCount();
     }
 
     @Override
     public void convertFrom(MemoryBoard old) {
-        this.flocationIds = old.flocationIds;
-        forceSave();
-        Board.instance = this;
+        throw new UnsupportedOperationException();
     }
 }

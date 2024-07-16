@@ -2,8 +2,6 @@ package com.massivecraft.factions.data;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
@@ -16,6 +14,18 @@ import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.AsciiCompass;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.longs.Long2IntMap;
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongList;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -26,106 +36,199 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public abstract class MemoryBoard extends Board {
 
-    public static class MemoryBoardMap extends HashMap<FLocation, String> {
-        private static final long serialVersionUID = -6689617828610585368L;
+    protected static class WorldTracker {
+        public static final int NO_FACTION = Integer.MIN_VALUE;
+        private final String worldName;
+        private final Long2IntMap chunkToFaction = new Long2IntOpenHashMap();
+        private final Int2ObjectMap<LongSet> factionToChunk = new Int2ObjectOpenHashMap<>();
 
-        final Multimap<String, FLocation> factionToLandMap = HashMultimap.create();
+        private WorldTracker(String worldName) {
+            chunkToFaction.defaultReturnValue(NO_FACTION);
+            this.worldName = worldName;
+        }
 
-        @Override
-        public String put(FLocation floc, String factionId) {
-            String previousValue = super.put(floc, factionId);
-            if (previousValue != null) {
-                factionToLandMap.remove(previousValue, floc);
+        private LongSet getOrCreate(int faction) {
+            return factionToChunk.computeIfAbsent(faction, k -> new LongOpenHashSet());
+        }
+
+        public void addClaim(int faction, FLocation location) {
+            long mort = Morton.get(location);
+            removeClaim(location);
+            if (faction != 0) {
+                chunkToFaction.put(mort, faction);
+                getOrCreate(faction).add(mort);
             }
-
-            factionToLandMap.put(factionId, floc);
-            return previousValue;
         }
 
-        @Override
-        public String remove(Object key) {
-            String result = super.remove(key);
-            if (result != null) {
-                FLocation floc = (FLocation) key;
-                factionToLandMap.remove(result, floc);
-            }
-
-            return result;
+        public void addClaimOnLoad(int faction, int x, int z) {
+            long mort = Morton.get(x, z);
+            chunkToFaction.put(mort, faction);
+            getOrCreate(faction).add(mort);
         }
 
-        @Override
-        public void clear() {
-            super.clear();
-            factionToLandMap.clear();
-        }
-
-        public int getOwnedLandCount(String factionId) {
-            return factionToLandMap.get(factionId).size();
-        }
-
-        public void removeFaction(String factionId) {
-            Collection<FLocation> fLocations = factionToLandMap.removeAll(factionId);
-            for (FPlayer fPlayer : FPlayers.getInstance().getOnlinePlayers()) {
-                if (fLocations.contains(fPlayer.getLastStoodAt())) {
-                    if (FactionsPlugin.getInstance().conf().commands().fly().isEnable() && !fPlayer.isAdminBypassing() && fPlayer.isFlying()) {
-                        fPlayer.setFlying(false);
-                    }
-                    if (fPlayer.isWarmingUp()) {
-                        fPlayer.clearWarmup();
-                        fPlayer.msg(TL.WARMUPS_CANCELLED);
-                    }
+        public void removeClaim(FLocation location) {
+            long mort = Morton.get(location);
+            int formerOwner = chunkToFaction.remove(mort);
+            if (formerOwner != NO_FACTION) {
+                LongSet set = factionToChunk.get(formerOwner);
+                if (set != null) {
+                    set.remove(mort);
                 }
             }
-            for (FLocation floc : fLocations) {
-                super.remove(floc);
+        }
+
+        public void removeAllClaims(int faction) {
+            LongSet claims = factionToChunk.get(faction);
+            if (claims != null) {
+                claims.forEach(chunkToFaction::remove);
             }
+        }
+
+        public List<FLocation> getAllClaims(int faction) {
+            LongSet longs = this.factionToChunk.get(faction);
+            if (longs == null) {
+                return List.of();
+            }
+            return longs.longStream().mapToObj(mort -> new FLocation(this.worldName, Morton.getX(mort), Morton.getZ(mort))).toList();
+        }
+
+        public Long2IntMap getChunkToFactionForSave() {
+            return chunkToFaction;
+        }
+
+        public Int2ObjectMap<LongList> getAllClaimsForDynmap() {
+            Int2ObjectMap<LongList> newMap = new Int2ObjectOpenHashMap<>();
+            this.factionToChunk.int2ObjectEntrySet().forEach(entry -> newMap.put(entry.getIntKey(), new LongArrayList(entry.getValue())));
+            return newMap;
+        }
+
+        public int getFactionIdAt(FLocation location) {
+            return chunkToFaction.get(Morton.get(location));
+        }
+
+        public int countFactionClaims(int faction) {
+            return this.factionToChunk.get(faction).size();
+        }
+
+        public int countFactionClaims() {
+            return this.chunkToFaction.size();
+        }
+
+        public IntList getFactionIds() {
+            return new IntArrayList(this.factionToChunk.keySet());
+        }
+    }
+
+    /**
+     * Simple two-ints-in-a-long Morton code.
+     */
+    public static final class Morton {
+        public static long get(FLocation location) {
+            return Morton.get((int) location.getX(), (int) location.getZ());
+        }
+
+        /**
+         * Gets a Morton code for the given coordinates.
+         *
+         * @param x x coordinate
+         * @param z z coordinate
+         * @return Morton code for the coordinates
+         */
+        public static long get(int x, int z) {
+            return (Morton.spreadOut(z) << 1) + Morton.spreadOut(x);
+        }
+
+        /**
+         * Gets the X value from a given Morton code.
+         *
+         * @param mortonCode Morton code
+         * @return x coordinate
+         */
+        public static int getX(long mortonCode) {
+            return Morton.comeTogether(mortonCode);
+        }
+
+        /**
+         * Gets the Z value from a given Morton code.
+         *
+         * @param mortonCode Morton code
+         * @return z coordinate
+         */
+        public static int getZ(long mortonCode) {
+            return Morton.comeTogether(mortonCode >> 1);
+        }
+
+        private static long spreadOut(long l) {
+            l &= 0x00000000FFFFFFFFL;
+            l = (l | (l << 16)) & 0x0000FFFF0000FFFFL;
+            l = (l | (l << 8)) & 0x00FF00FF00FF00FFL;
+            l = (l | (l << 4)) & 0x0F0F0F0F0F0F0F0FL;
+            l = (l | (l << 2)) & 0x3333333333333333L;
+            l = (l | (l << 1)) & 0x5555555555555555L;
+            return l;
+        }
+
+        private static int comeTogether(long l) {
+            l = l & 0x5555555555555555L;
+            l = (l | (l >> 1)) & 0x3333333333333333L;
+            l = (l | (l >> 2)) & 0x0F0F0F0F0F0F0F0FL;
+            l = (l | (l >> 4)) & 0x00FF00FF00FF00FFL;
+            l = (l | (l >> 8)) & 0x0000FFFF0000FFFFL;
+            l = (l | (l >> 16)) & 0x00000000FFFFFFFFL;
+            return (int) l;
         }
     }
 
     private final char[] mapKeyChrs = "\\/#$%=&^ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890abcdeghjmnopqrsuvwxyz?".toCharArray();
 
-    public MemoryBoardMap flocationIds = new MemoryBoardMap();
+    protected Object2ObjectMap<String, WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
+
+    protected WorldTracker getAndCreate(String world) {
+        return this.worldTrackers.computeIfAbsent(world, k -> new WorldTracker(world));
+    }
 
     //----------------------------------------------//
     // Get and Set
     //----------------------------------------------//
-    public String getIdAt(FLocation flocation) {
-        if (!flocationIds.containsKey(flocation)) {
-            return "0";
+    public int getIntIdAt(FLocation flocation) {
+        WorldTracker tracker = worldTrackers.get(flocation.getWorldName());
+        if (tracker != null) {
+            int result = tracker.getFactionIdAt(flocation);
+            return result == WorldTracker.NO_FACTION ? 0 : result;
         }
+        return 0;
+    }
 
-        return flocationIds.get(flocation);
+    public String getIdAt(FLocation flocation) {
+        return String.valueOf(this.getIntIdAt(flocation));
     }
 
     public Faction getFactionAt(FLocation flocation) {
-        return Factions.getInstance().getFactionById(getIdAt(flocation));
+        return Factions.getInstance().getFactionById(getIntIdAt(flocation));
     }
 
     public void setIdAt(String id, FLocation flocation) {
-        clearOwnershipAt(flocation);
+        this.setIdAt(Integer.parseInt(id), flocation);
+    }
 
-        if (id.equals("0")) {
-            removeAt(flocation);
-        }
+    public void setIdAt(int id, FLocation flocation) {
+        removeAt(flocation);
 
-        flocationIds.put(flocation, id);
+        this.getAndCreate(flocation.getWorldName()).addClaim(id, flocation);
     }
 
     public void setFactionAt(Faction faction, FLocation flocation) {
-        setIdAt(faction.getId(), flocation);
+        setIdAt(faction.getIntId(), flocation);
     }
 
     public void removeAt(FLocation flocation) {
@@ -144,21 +247,28 @@ public abstract class MemoryBoard extends Board {
             }
         }
         clearOwnershipAt(flocation);
-        flocationIds.remove(flocation);
+
+        WorldTracker tracker = worldTrackers.get(flocation.getWorldName());
+        if (tracker != null) {
+            tracker.removeClaim(flocation);
+        }
     }
 
     public Set<FLocation> getAllClaims(String factionId) {
-        Set<FLocation> locs = new HashSet<>();
-        for (Entry<FLocation, String> entry : flocationIds.entrySet()) {
-            if (entry.getValue().equals(factionId)) {
-                locs.add(entry.getKey());
-            }
-        }
-        return locs;
+        return this.getAllClaims(Integer.parseInt(factionId));
+    }
+
+    public Set<FLocation> getAllClaims(int factionId) {
+        return worldTrackers.values().stream().flatMap(tracker -> tracker.getAllClaims(factionId).stream()).collect(Collectors.toSet());
     }
 
     public Set<FLocation> getAllClaims(Faction faction) {
-        return getAllClaims(faction.getId());
+        return getAllClaims(faction.getIntId());
+    }
+
+    public Int2ObjectMap<LongList> getAllClaimsForDynmap(World world) {
+        WorldTracker tracker = worldTrackers.get(world.getName());
+        return tracker == null ? new Int2ObjectOpenHashMap<>() : tracker.getAllClaimsForDynmap();
     }
 
     // not to be confused with claims, ownership referring to further member-specific ownership of a claim
@@ -169,7 +279,15 @@ public abstract class MemoryBoard extends Board {
         }
     }
 
+    public void unclaimAll(Faction faction) {
+        this.unclaimAll(faction.getIntId());
+    }
+
     public void unclaimAll(String factionId) {
+        this.unclaimAll(Integer.parseInt(factionId));
+    }
+
+    public void unclaimAll(int factionId) {
         Faction faction = Factions.getInstance().getFactionById(factionId);
         if (faction != null && faction.isNormal()) {
             faction.clearAllClaimOwnership();
@@ -178,24 +296,38 @@ public abstract class MemoryBoard extends Board {
         clean(factionId);
     }
 
+    public void unclaimAllInWorld(Faction faction, World world) {
+        this.unclaimAllInWorld(faction.getIntId(), world);
+    }
+
     public void unclaimAllInWorld(String factionId, World world) {
-        for (FLocation loc : getAllClaims(factionId)) {
-            if (loc.getWorldName().equals(world.getName())) {
-                removeAt(loc);
-            }
+        this.unclaimAllInWorld(Integer.parseInt(factionId), world);
+    }
+
+    public void unclaimAllInWorld(int factionId, World world) {
+        WorldTracker tracker = worldTrackers.get(world.getName());
+        if (tracker != null) {
+            tracker.getAllClaims(factionId).forEach(this::removeAt);
         }
     }
 
-    public void clean(String factionId) {
+    public void clean(int factionId) {
+        List<FLocation> locations = this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(factionId).stream()).toList();
         if (LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim()) {
-            for (Entry<FLocation, String> entry : flocationIds.entrySet()) {
-                if (entry.getValue().equals(factionId)) {
-                    LWC.clearAllLocks(entry.getKey());
+            locations.forEach(LWC::clearAllLocks);
+        }
+        for (FPlayer fPlayer : FPlayers.getInstance().getOnlinePlayers()) {
+            if (locations.contains(fPlayer.getLastStoodAt())) {
+                if (FactionsPlugin.getInstance().conf().commands().fly().isEnable() && !fPlayer.isAdminBypassing() && fPlayer.isFlying()) {
+                    fPlayer.setFlying(false);
+                }
+                if (fPlayer.isWarmingUp()) {
+                    fPlayer.clearWarmup();
+                    fPlayer.msg(TL.WARMUPS_CANCELLED);
                 }
             }
         }
-
-        flocationIds.removeFaction(factionId);
+        this.worldTrackers.values().forEach(wt -> wt.removeAllClaims(factionId));
     }
 
     // Is this coord NOT completely surrounded by coords claimed by the same faction?
@@ -251,15 +383,18 @@ public abstract class MemoryBoard extends Board {
     //----------------------------------------------//
 
     public void clean() {
-        Iterator<Entry<FLocation, String>> iter = flocationIds.entrySet().iterator();
-        while (iter.hasNext()) {
-            Entry<FLocation, String> entry = iter.next();
-            if (!Factions.getInstance().isValidFactionId(entry.getValue())) {
-                if (LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim()) {
-                    LWC.clearAllLocks(entry.getKey());
+        boolean lwc = LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim();
+        for (WorldTracker tracker : worldTrackers.values()) {
+            for (int factionId : tracker.getFactionIds()) {
+                if (!Factions.getInstance().isValidFactionId(factionId)) {
+                    this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(factionId).stream()).forEach(loc -> {
+                        if (lwc) {
+                            LWC.clearAllLocks(loc);
+                        }
+                        FactionsPlugin.getInstance().log("Board cleaner removed id " + factionId + " from " + loc);
+                    });
+                    this.worldTrackers.values().forEach(wt -> wt.removeAllClaims(factionId));
                 }
-                FactionsPlugin.getInstance().log("Board cleaner removed " + entry.getValue() + " from " + entry.getKey());
-                iter.remove();
             }
         }
     }
@@ -269,22 +404,24 @@ public abstract class MemoryBoard extends Board {
     //----------------------------------------------//
 
     public int getFactionCoordCount(String factionId) {
-        return flocationIds.getOwnedLandCount(factionId);
+        return this.getFactionCoordCount(Integer.parseInt(factionId));
+    }
+
+    public int getFactionCoordCount(int factionId) {
+        return this.worldTrackers.values().stream().mapToInt(wt -> wt.countFactionClaims(factionId)).sum();
     }
 
     public int getFactionCoordCount(Faction faction) {
-        return getFactionCoordCount(faction.getId());
+        return getFactionCoordCount(faction.getIntId());
     }
 
     public int getFactionCoordCountInWorld(Faction faction, String worldName) {
-        String factionId = faction.getId();
-        int ret = 0;
-        for (Entry<FLocation, String> entry : flocationIds.entrySet()) {
-            if (entry.getValue().equals(factionId) && entry.getKey().getWorldName().equals(worldName)) {
-                ret += 1;
-            }
-        }
-        return ret;
+        WorldTracker tracker = worldTrackers.get(worldName);
+        return tracker == null ? 0 : tracker.countFactionClaims(faction.getIntId());
+    }
+
+    public int getTotalCount() {
+        return this.worldTrackers.values().stream().mapToInt(WorldTracker::countFactionClaims).sum();
     }
 
     //----------------------------------------------//
