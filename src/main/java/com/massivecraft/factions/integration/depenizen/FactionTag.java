@@ -162,7 +162,7 @@ public class FactionTag implements ObjectTag {
         // Returns the unique ID for this faction.
         // -->
         else if (attribute.startsWith("id")) {
-            return new ElementTag(faction.getId()).getObjectAttribute(attribute.fulfill(1));
+            return new ElementTag(String.valueOf(faction.getIntId())).getObjectAttribute(attribute.fulfill(1));
         }
 
         // <--[tag]

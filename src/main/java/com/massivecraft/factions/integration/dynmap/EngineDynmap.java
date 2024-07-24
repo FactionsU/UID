@@ -233,7 +233,7 @@ public class EngineDynmap {
 
             DynmapStyle style = getStyle(faction);
 
-            String markerId = FACTIONS_HOME_ + faction.getId();
+            String markerId = FACTIONS_HOME_ + faction.getIntId();
 
             TempMarker temp = new TempMarker();
             temp.label = ChatColor.stripColor(faction.getTag());
@@ -305,7 +305,7 @@ public class EngineDynmap {
 
                 DynmapStyle style = getStyle(faction);
 
-                String markerId = FACTIONS_WARP_ + faction.getId() + "_" + key;
+                String markerId = FACTIONS_WARP_ + faction.getIntId() + "_" + key;
 
                 TempMarker temp = new TempMarker();
                 temp.label = ChatColor.stripColor(faction.getTag());
@@ -585,11 +585,7 @@ public class EngineDynmap {
         if (faction.isWilderness()) {
             return null;
         }
-        String factionId = faction.getId();
-        if (factionId == null) {
-            return null;
-        }
-        return FACTIONS_PLAYERSET_ + factionId;
+        return FACTIONS_PLAYERSET_ + faction.getIntId();
     }
 
     // Thread Safe / Asynchronous: Yes
@@ -820,7 +816,7 @@ public class EngineDynmap {
     public DynmapStyle getStyle(Faction faction) {
         DynmapStyle ret;
 
-        ret = dynmapConf.dynmap().getFactionStyles().get(faction.getId());
+        ret = dynmapConf.dynmap().getFactionStyles().get(String.valueOf(faction.getIntId()));
         if (ret != null) {
             return ret;
         }

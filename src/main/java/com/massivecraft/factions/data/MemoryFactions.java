@@ -78,8 +78,9 @@ public abstract class MemoryFactions extends Factions {
         return 0;
     }
 
+    @Deprecated
     public Faction getFactionById(String id) {
-        return factions.get(id);
+        return factions.get(Integer.parseInt(id));
     }
 
     public Faction getFactionById(int id) {
@@ -156,7 +157,11 @@ public abstract class MemoryFactions extends Factions {
     public abstract Faction generateFactionObject();
 
     public void removeFaction(String id) {
-        factions.remove(id).remove();
+        factions.remove(Integer.parseInt(id)).remove();
+    }
+
+    public void removeFaction(Faction faction) {
+        factions.remove(faction.getIntId());
     }
 
     @Override

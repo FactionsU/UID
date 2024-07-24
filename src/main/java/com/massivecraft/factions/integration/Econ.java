@@ -2,6 +2,7 @@ package com.massivecraft.factions.integration;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.iface.EconomyParticipator;
 import com.massivecraft.factions.perms.Role;
@@ -379,7 +380,7 @@ public class Econ {
         try {
             Matcher matcher = FACTION_PATTERN.matcher(name);
             if (matcher.find()) {
-                return com.massivecraft.factions.Factions.getInstance().getFactionById(matcher.group(1)).getOfflinePlayer();
+                return Factions.getInstance().getFactionById(Integer.parseInt(matcher.group(1))).getOfflinePlayer();
             }
             return Bukkit.getOfflinePlayer(UUID.fromString(name));
         } catch (Exception ex) {

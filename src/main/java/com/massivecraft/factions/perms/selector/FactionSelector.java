@@ -23,7 +23,7 @@ public class FactionSelector extends AbstractSelector {
         super(DESCRIPTOR);
         String[] split = str.split(" "); // Old mistake
         if (split.length == 2) {
-            Faction faction = Factions.getInstance().getFactionById(split[0]);
+            Faction faction = Factions.getInstance().getFactionById(Integer.parseInt(split[0]));
             this.id = Integer.parseInt(split[0]);
             this.lastKnown = faction == null ? split[1] : faction.getTag();
             return;
@@ -31,10 +31,10 @@ public class FactionSelector extends AbstractSelector {
         split = str.split(delimiter);
         if (split.length == 1) {
             Faction faction = Factions.getInstance().getByTag(str);
-            this.id = Integer.parseInt(faction.getId());
+            this.id = faction.getIntId();
             this.lastKnown = faction.getTag();
         } else {
-            Faction faction = Factions.getInstance().getFactionById(split[0]);
+            Faction faction = Factions.getInstance().getFactionById(Integer.parseInt(split[0]));
             this.id = Integer.parseInt(split[0]);
             this.lastKnown = faction == null ? split[1] : faction.getTag();
         }
@@ -48,18 +48,18 @@ public class FactionSelector extends AbstractSelector {
         } else if (selectable instanceof FPlayer) {
             fac = ((FPlayer) selectable).getFaction();
         }
-        return fac != null && fac.getId().equals(Integer.toString(this.id));
+        return fac != null && fac.getIntId() == this.id;
     }
 
     @Override
     public String serializeValue() {
-        Faction faction = Factions.getInstance().getFactionById(Integer.toString(this.id));
+        Faction faction = Factions.getInstance().getFactionById(this.id);
         return this.id + delimiter + (faction == null ? this.lastKnown : faction.getTag());
     }
 
     @Override
     public Component displayValue(Faction context) {
-        Faction faction = Factions.getInstance().getFactionById(Integer.toString(this.id));
+        Faction faction = Factions.getInstance().getFactionById(this.id);
         return faction == null ?
                 MiniMessage.miniMessage().deserialize(FactionsPlugin.getInstance().tl().permissions().selectors().faction().getDisbandedValue(), Placeholder.unparsed("lastknown", this.lastKnown)) :
                 LegacyComponentSerializer.legacySection().deserialize(faction.getTag(context));

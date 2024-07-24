@@ -130,7 +130,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
             case "faction_name_custom" ->
                     (fPlayer.hasFaction() || territory) ? Tag.parsePlain(fPlayer, TL.PLACEHOLDER_CUSTOM_FACTION.toString()) : "";
             case "faction_only_space" -> (fPlayer.hasFaction() || territory) ? " " : "";
-            case "faction_internal_id" -> faction.getId();
+            case "faction_internal_id" -> faction.getIntId() + "";
             case "faction_power" -> String.valueOf(faction.getPowerRounded());
             case "faction_powermax" -> String.valueOf(faction.getPowerMaxRounded());
             case "faction_dtr" -> (fPlayer.hasFaction() || territory) ? DTRControl.round(faction.getDTR()) : "";

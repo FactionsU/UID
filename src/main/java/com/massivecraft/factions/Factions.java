@@ -26,7 +26,10 @@ public abstract class Factions {
 
     public abstract Faction createFaction();
 
+    @Deprecated
     public abstract void removeFaction(String id);
+
+    public abstract void removeFaction(Faction faction);
 
     public abstract Set<String> getFactionTags();
 

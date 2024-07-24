@@ -48,7 +48,7 @@ public class CmdVault extends FCommand {
         }
 
         // Something like faction-id
-        String vaultName = String.format(FactionsPlugin.getInstance().conf().playerVaults().getVaultPrefix(), context.faction.getId());
+        String vaultName = String.format(FactionsPlugin.getInstance().conf().playerVaults().getVaultPrefix(), "" + context.faction.getIntId());
 
         if (number < 1) {
             // Message about which vaults that Faction has.
