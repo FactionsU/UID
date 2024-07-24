@@ -2,6 +2,16 @@
   <a href="https://www.spigotmc.org/resources/factionsuuid.1035/"><img src="https://i.imgur.com/3PCF7tz.png"></a>
 </center>
 
+# WARNING
+
+## This branch is for a legacy version of the plugin for MC 1.8.8
+
+## It receives less frequent updates, primarily bug fixes.
+
+## Visit the [main branch](https://github.com/FactionsU/UID) for current code
+
+# WARNING
+
 [![Discord](https://imgur.com/MFRRBn4.png)](https://discord.gg/FfAz3eE)
 
 &lt;rant&gt;  
