@@ -5,7 +5,7 @@
 [![Discord](https://imgur.com/MFRRBn4.png)](https://discord.gg/FfAz3eE)
 
 &lt;rant&gt;  
-I'd appreciate it if you could pay for the plugin (http://www.spigotmc.org/resources/factionsuuid.1035/) if your 
+I'd appreciate it if you could [pay for the plugin](http://www.spigotmc.org/resources/factionsuuid.1035/) if your 
 server makes money. If you only run your server for your kids or some friends and don't make any money, 
 then I don't want to stop you from doing so by forcing you to buy a plugin. If that's the case, 
 then just open a ticket on Discord, and we can work something out.
@@ -28,7 +28,7 @@ Versioning
 All versions are prefixed with `1.6.9.5` as that is the legacy version.
 Followed by -U noting that it's the FactionsUUID fork.
 
-FactionsUUID versioning: `1.6.9.5-U<major>.<minor>.<patch>-b<buildnumber>`
+FactionsUUID versioning: `1.6.9.5-U<major>.<minor>.<patch>
 
 Note: This will change on 1.0 release.
 
@@ -52,6 +52,4 @@ Upgrading
 
 License
 ----------
-This project is licensed under the GPL just like the Bukkit project.<br>
-This project uses [GSON](http://code.google.com/p/google-gson/) which has a [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0 ).
-
+This project is licensed under the GPL just like the Bukkit project.
