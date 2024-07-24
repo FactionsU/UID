@@ -59,7 +59,7 @@ public class CmdTNTFill extends FCommand {
             return;
         }
 
-        List<Dispenser> list = getDispensers(context.player.getLocation(), radius, context.faction.getId());
+        List<Dispenser> list = getDispensers(context.player.getLocation(), radius, context.faction.getIntId());
         Collections.reverse(list);
 
         int remaining = amount;
@@ -100,13 +100,13 @@ public class CmdTNTFill extends FCommand {
         }
     }
 
-    static List<Dispenser> getDispensers(Location location, int radius, String id) {
+    static List<Dispenser> getDispensers(Location location, int radius, int id) {
         List<Pair<Dispenser, Double>> list = new ArrayList<>();
         for (int x = location.getBlockX() - radius; x <= location.getBlockX() + radius; x++) {
             for (int y = location.getBlockY() - radius; y <= location.getBlockY() + radius; y++) {
                 for (int z = location.getBlockZ() - radius; z <= location.getBlockZ() + radius; z++) {
                     Block block = location.getWorld().getBlockAt(x, y, z);
-                    if (!Board.getInstance().getIdAt(new FLocation(block)).equals(id)) {
+                    if (Board.getInstance().getIntIdAt(new FLocation(block)) != id) {
                         continue;
                     }
                     if (block.getType() == Material.DISPENSER) {

@@ -330,7 +330,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public String getAccountId() {
-        return "faction-" + this.getId();
+        return "faction-" + this.getIntId();
     }
 
     public OfflinePlayer getOfflinePlayer() {
@@ -511,15 +511,15 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     public boolean isWilderness() {
-        return this.getId().equals("0");
+        return this.id == 0;
     }
 
     public boolean isSafeZone() {
-        return this.getId().equals("-1");
+        return this.id == -1;
     }
 
     public boolean isWarZone() {
-        return this.getId().equals("-2");
+        return this.id == -2;
     }
 
     public boolean isPlayerFreeType() {
@@ -905,7 +905,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
             // no members left and faction isn't permanent, so disband it
             if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
-                FactionsPlugin.getInstance().log("The faction " + this.getTag() + " (" + this.getId() + ") has been disbanded since it has no members left.");
+                FactionsPlugin.getInstance().log("The faction " + this.getTag() + " (" + this.getIntId() + ") has been disbanded since it has no members left.");
             }
 
             for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
@@ -914,7 +914,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
 
             FactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(this));
 
-            Factions.getInstance().removeFaction(getId());
+            Factions.getInstance().removeFaction(this);
         } else { // promote new faction admin
             Bukkit.getServer().getPluginManager().callEvent(new FactionNewAdminEvent(replacements.getFirst(), this));
 
@@ -923,7 +923,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
             }
             replacements.getFirst().setRole(Role.ADMIN);
             this.msg(TL.FACTION_NEWLEADER, oldLeader == null ? "" : oldLeader.getName(), replacements.getFirst().getName());
-            FactionsPlugin.getInstance().log("Faction " + this.getTag() + " (" + this.getId() + ") admin was removed. Replacement admin: " + replacements.getFirst().getName());
+            FactionsPlugin.getInstance().log("Faction " + this.getTag() + " (" + this.getIntId() + ") admin was removed. Replacement admin: " + replacements.getFirst().getName());
         }
     }
 

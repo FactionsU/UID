@@ -54,15 +54,12 @@ public class JSONFactions extends MemoryFactions {
     }
 
     public void forceSave(boolean sync) {
-        final Map<String, JSONFaction> entitiesThatShouldBeSaved = new HashMap<>();
-        for (Faction entity : this.factions.values()) {
-            entitiesThatShouldBeSaved.put(entity.getId(), (JSONFaction) entity);
-        }
+        final List<Faction> entitiesThatShouldBeSaved = new ArrayList<>(this.factions.values());
         saveCore(file, entitiesThatShouldBeSaved, sync);
         DiscUtil.writeCatch(this.nextIdFile, FactionsPlugin.getInstance().getGson().toJson(new NextId(this.nextId)) ,sync);
     }
 
-    private boolean saveCore(File target, Map<String, JSONFaction> entities, boolean sync) {
+    private boolean saveCore(File target, List<Faction> entities, boolean sync) {
         return DiscUtil.writeCatch(target, FactionsPlugin.getInstance().getGson().toJson(entities), sync);
     }
 
@@ -97,16 +94,16 @@ public class JSONFactions extends MemoryFactions {
                     .create();
             Map<String, JSONFaction> data = gson.fromJson(content, new TypeToken<Map<String, JSONFaction>>() {
             }.getType());
+            Faction storage = data.remove("```storage``");
+            if (storage != null) {
+                this.nextId = Math.max(this.nextId, storage.getMaxVaults());
+            }
             for (Entry<String, JSONFaction> entry : data.entrySet()) {
                 String id = entry.getKey();
                 MemoryFaction f = entry.getValue();
                 f.checkPerms();
                 f.setId(id);
                 this.updateNextIdForId(id);
-            }
-            Faction storage = data.remove("```storage``");
-            if (storage != null) {
-                this.nextId = Math.max(this.nextId, storage.getMaxVaults());
             }
             return new ArrayList<>(data.values());
         } else {

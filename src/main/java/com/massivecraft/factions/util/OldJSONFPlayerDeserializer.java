@@ -4,6 +4,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.data.json.JSONFPlayer;
 import com.massivecraft.factions.data.json.JSONFaction;
 
@@ -21,6 +22,6 @@ public class OldJSONFPlayerDeserializer implements JsonDeserializer<JSONFPlayer>
             factionId = 0;
         }
         jsonElement.getAsJsonObject().addProperty("factionId", factionId);
-        return jsonDeserializationContext.deserialize(jsonElement, JSONFPlayer.class);
+        return FactionsPlugin.getInstance().getGson().fromJson(jsonElement, JSONFPlayer.class);
     }
 }

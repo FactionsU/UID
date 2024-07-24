@@ -96,7 +96,10 @@ public class Depenizen extends Bridge {
 
         Faction f = Factions.getInstance().getByTag(nameOrId);
         if (f == null) {
-            f = Factions.getInstance().getFactionById(nameOrId);
+            try {
+                f = Factions.getInstance().getFactionById(Integer.parseInt(nameOrId));
+            } catch (NumberFormatException ex) {
+            }
         }
         if (f != null) {
             event.setReplacedObject(new FactionTag(f).getObjectAttribute(attribute.fulfill(1)));

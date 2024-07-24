@@ -443,9 +443,9 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         int loadedPlayers = FPlayers.getInstance().load();
         int loadedFactions = Factions.getInstance().load();
         for (FPlayer fPlayer : FPlayers.getInstance().getAllFPlayers()) {
-            Faction faction = Factions.getInstance().getFactionById(fPlayer.getFactionId());
+            Faction faction = Factions.getInstance().getFactionById(fPlayer.getFactionIntId());
             if (faction == null) {
-                log("Invalid faction id on " + fPlayer.getName() + ":" + fPlayer.getFactionId());
+                log("Invalid faction id on " + fPlayer.getName() + ":" + fPlayer.getFactionIntId());
                 fPlayer.resetFactionData(false);
                 continue;
             }

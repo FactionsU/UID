@@ -574,7 +574,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public String getColorStringTo(RelationParticipator rp) {
-        return RelationUtil.getColorStringOfThatToMe(this,rp);
+        return RelationUtil.getColorStringOfThatToMe(this, rp);
     }
 
     //----------------------------------------------//
@@ -831,9 +831,9 @@ public abstract class MemoryFPlayer implements FPlayer {
             }
 
             FactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(myFaction));
-            Factions.getInstance().removeFaction(myFaction.getId());
+            Factions.getInstance().removeFaction(myFaction);
             if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
-                FactionsPlugin.getInstance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.getTag(), myFaction.getId(), this.getName()));
+                FactionsPlugin.getInstance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.getTag(), "" + myFaction.getIntId(), this.getName()));
             }
         }
     }
@@ -1131,7 +1131,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         return this.hasFaction() ||
                 (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl &&
                         (this.getPowerRounded() != FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getPlayerStarting() ||
-                        this.getPowerBoost() != 0));
+                                this.getPowerBoost() != 0));
     }
 
     public void msg(String str, Object... args) {

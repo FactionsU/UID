@@ -31,6 +31,7 @@ public interface FPlayer extends EconomyParticipator, Selectable {
 
     Faction getFaction();
 
+    @Deprecated
     String getFactionId();
 
     int getFactionIntId();

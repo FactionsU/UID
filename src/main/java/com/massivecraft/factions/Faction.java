@@ -47,6 +47,7 @@ public interface Faction extends EconomyParticipator, Selectable {
 
     Set<String> getInvites();
 
+    @Deprecated
     String getId();
 
     int getIntId();
