@@ -20,14 +20,6 @@ Configurate
 Apache License, Version 2.0
 https://github.com/SpongePowered/Configurate
 
-Google Gson
-Apache License, Version 2.0
-https://github.com/google/gson
-
-Google Guava
-Apache License, Version 2.0
-https://github.com/google/guava
-
 PaperLib
 MIT License
 https://github.com/PaperMC/PaperLib
