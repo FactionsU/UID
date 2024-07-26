@@ -2,6 +2,7 @@ package dev.kitteh.factions.cmd.tnt;
 
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
+import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.cmd.CommandContext;
 import dev.kitteh.factions.cmd.CommandRequirements;
@@ -60,7 +61,7 @@ public class CmdTNTFill extends FCommand {
             return;
         }
 
-        List<Dispenser> list = getDispensers(context.player.getLocation(), radius, context.faction.getIntId());
+        List<Dispenser> list = getDispensers(context.player.getLocation(), radius, context.faction);
         Collections.reverse(list);
 
         int remaining = amount;
@@ -101,13 +102,13 @@ public class CmdTNTFill extends FCommand {
         }
     }
 
-    static List<Dispenser> getDispensers(Location location, int radius, int id) {
+    static List<Dispenser> getDispensers(Location location, int radius, Faction faction) {
         List<Pair<Dispenser, Double>> list = new ArrayList<>();
         for (int x = location.getBlockX() - radius; x <= location.getBlockX() + radius; x++) {
             for (int y = location.getBlockY() - radius; y <= location.getBlockY() + radius; y++) {
                 for (int z = location.getBlockZ() - radius; z <= location.getBlockZ() + radius; z++) {
                     Block block = location.getWorld().getBlockAt(x, y, z);
-                    if (Board.getInstance().getIntIdAt(new FLocation(block)) != id) {
+                    if (Board.getInstance().getFactionAt(new FLocation(block)) != faction) {
                         continue;
                     }
                     if (block.getType() == Material.DISPENSER) {

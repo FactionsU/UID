@@ -148,8 +148,8 @@ public class DynmapConfig {
         @DefinedType
         private Map<String, Style> factionStyles = new HashMap<>() {
             {
-                this.put(Factions.ID_SAFE_ZONE, new DynmapConfig.Style("#FF00FF", "#FF00FF"));
-                this.put(Factions.ID_WAR_ZONE, new DynmapConfig.Style("#FF0000", "#FF0000"));
+                this.put(Factions.ID_SAFEZONE + "", new DynmapConfig.Style("#FF00FF", "#FF00FF"));
+                this.put(Factions.ID_WARZONE + "", new DynmapConfig.Style("#FF0000", "#FF0000"));
             }
         };
 

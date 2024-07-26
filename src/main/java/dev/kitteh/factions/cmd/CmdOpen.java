@@ -35,7 +35,7 @@ public class CmdOpen extends FCommand {
 
         // Inform
         for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
-            if (fplayer.getFactionIntId() == context.faction.getIntId()) {
+            if (fplayer.getFaction() == context.faction) {
                 fplayer.msg(TL.COMMAND_OPEN_CHANGES, context.fPlayer.getName(), open);
                 continue;
             }

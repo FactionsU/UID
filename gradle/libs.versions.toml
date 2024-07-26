@@ -23,6 +23,7 @@ depenizen = { module = "com.denizenscript:depenizen", version = "2.0.0" }
 dynmap = { module = "org.dynmap:dynmap", version = "2.0" }
 essentialsx = { module = "net.essentialsx:EssentialsX", version.ref = "essentialsx" }
 essentialsx-chat = { module = "net.essentialsx:EssentialsXChat", version.ref = "essentialsx" }
+fastutil = { module = "it.unimi.dsi:fastutil", version = "8.5.6"}
 graves = { module = "com.ranull:graves", version = "4.9" }
 jspecify = { module = "org.jspecify:jspecify", version = "0.3.0" }
 luckperms-api = { module = "net.luckperms:api", version = "5.0" }

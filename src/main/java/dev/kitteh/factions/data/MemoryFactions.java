@@ -84,10 +84,6 @@ public abstract class MemoryFactions implements Factions {
 
     public abstract void forceSave(boolean sync);
 
-    public Faction getFactionById(String id) {
-        return factions.get(Integer.parseInt(id));
-    }
-
     public @Nullable Faction getFactionById(int id) {
         return factions.get(id);
     }

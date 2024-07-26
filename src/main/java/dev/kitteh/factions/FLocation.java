@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.util.NumberConversions;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
@@ -94,6 +95,10 @@ public record FLocation(String worldName, int x, int z) {
 
     public boolean isInChunk(@NonNull Location loc) {
         return loc.getWorld().getName().equalsIgnoreCase(getWorldName()) && blockToChunk(loc.getBlockX()) == x && blockToChunk(loc.getBlockZ()) == z;
+    }
+
+    public boolean isInChunk(@NonNull LazyLocation loc) {
+        return loc.worldName().equalsIgnoreCase(getWorldName()) && blockToChunk(NumberConversions.floor(loc.x())) == x && blockToChunk(NumberConversions.floor(loc.z())) == z;
     }
 
     /**

@@ -346,9 +346,10 @@ public class FactionsPlugin extends JavaPlugin {
         int loadedFactions = Instances.FACTIONS.load();
         for (FPlayer fPlayer : FPlayers.getInstance().getAllFPlayers()) {
             ((MemoryFPlayer) fPlayer).cleanupDeserialization();
-            Faction faction = Factions.getInstance().getFactionById(fPlayer.getFactionId());
+            int factionId = ((MemoryFPlayer) fPlayer).getFactionId();
+            Faction faction = Factions.getInstance().getFactionById(factionId);
             if (faction == null) {
-                log("Invalid faction id on " + fPlayer.getName() + ":" + fPlayer.getFactionId());
+                log("Invalid faction id on " + fPlayer.getName() + ":" + factionId);
                 fPlayer.resetFactionData();
                 continue;
             }

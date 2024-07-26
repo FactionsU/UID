@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public enum Contexts implements Context {
     FACTION_ID((player) -> {
         FPlayer p = FPlayers.getInstance().getByPlayer(player);
-        return ImmutableSet.of(String.valueOf(p.hasFaction() ? p.getFactionIntId() : Factions.ID_WILDERNESS));
+        return ImmutableSet.of(String.valueOf(p.hasFaction() ? p.getFaction().getId() : Factions.ID_WILDERNESS));
     }, ImmutableSet.of(String.valueOf(Factions.ID_WILDERNESS))),
     IS_PEACEFUL((player) -> {
         FPlayer p = FPlayers.getInstance().getByPlayer(player);

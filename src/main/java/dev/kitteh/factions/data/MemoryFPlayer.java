@@ -122,11 +122,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         return faction;
     }
 
-    public String getFactionId() {
-        return String.valueOf(this.factionId);
-    }
-
-    public int getFactionIntId() {
+    public int getFactionId() {
         return this.factionId;
     }
 
@@ -140,7 +136,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             oldFaction.removeFPlayer(this);
         }
         faction.addFPlayer(this);
-        this.factionId = faction.getIntId();
+        this.factionId = faction.getId();
     }
 
     public void setMonitorJoins(boolean monitor) {
@@ -297,8 +293,8 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public void resetFactionData() {
         // clean up any territory ownership in old faction, if there is one
-        if (Factions.getInstance().isValidFactionId(this.getFactionIntId())) {
-            Faction currentFaction = this.getFaction();
+        Faction currentFaction = Factions.getInstance().getFactionById(this.factionId);
+        if (currentFaction != null) {
             currentFaction.removeFPlayer(this);
             if (currentFaction.isNormal()) {
                 currentFaction.clearClaimOwnership(this);
@@ -730,7 +726,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             FactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(myFaction));
             Factions.getInstance().removeFaction(myFaction);
             if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
-                FactionsPlugin.getInstance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.getTag(), "" + myFaction.getIntId(), this.getName()));
+                FactionsPlugin.getInstance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.getTag(), "" + myFaction.getId(), this.getName()));
             }
         }
     }

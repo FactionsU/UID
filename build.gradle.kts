@@ -183,6 +183,7 @@ dependencies {
     libs.worldguard.bukkit,
     libs.essentialsx.asProvider(),
     libs.essentialsx.chat,
+    libs.fastutil,
     libs.dynmap,
     libs.playervaultsx,
     libs.placeholderapi,

@@ -30,11 +30,6 @@ public interface FPlayer extends Participator, Selectable {
 
     Faction getFaction();
 
-    @Deprecated
-    String getFactionId();
-
-    int getFactionIntId();
-
     boolean hasFaction();
 
     void setFaction(Faction faction);

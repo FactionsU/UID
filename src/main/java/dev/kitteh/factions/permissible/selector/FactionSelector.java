@@ -31,7 +31,7 @@ public class FactionSelector extends AbstractSelector {
         split = str.split(delimiter);
         if (split.length == 1) {
             Faction faction = Factions.getInstance().getByTag(str);
-            this.id = faction.getIntId();
+            this.id = faction.getId();
             this.lastKnown = faction.getTag();
         } else {
             Faction faction = Factions.getInstance().getFactionById(Integer.parseInt(split[0]));
@@ -48,7 +48,7 @@ public class FactionSelector extends AbstractSelector {
         } else if (selectable instanceof FPlayer) {
             fac = ((FPlayer) selectable).getFaction();
         }
-        return fac != null && fac.getIntId() == this.id;
+        return fac != null && fac.getId() == this.id;
     }
 
     @Override

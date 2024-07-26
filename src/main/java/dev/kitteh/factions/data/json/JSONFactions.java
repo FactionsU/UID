@@ -1,12 +1,13 @@
 package dev.kitteh.factions.data.json;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.data.MemoryFactions;
 import dev.kitteh.factions.util.DiscUtil;
-import dev.kitteh.factions.util.OldJSONFactionDeserializer;
+import dev.kitteh.factions.util.adapter.OldJSONFactionDeserializer;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -52,16 +53,25 @@ public final class JSONFactions extends MemoryFactions {
     public void forceSave(boolean sync) {
         final List<Faction> entitiesThatShouldBeSaved = new ArrayList<>(this.factions.values());
         DiscUtil.writeCatch(file, FactionsPlugin.getInstance().getGson().toJson(entitiesThatShouldBeSaved), sync);
-        DiscUtil.writeCatch(this.nextIdFile, FactionsPlugin.getInstance().getGson().toJson(new NextId(this.nextId)) ,sync);
+        DiscUtil.writeCatch(this.nextIdFile, FactionsPlugin.getInstance().getGson().toJson(new NextId(this.nextId)), sync);
     }
 
     @Override
     public int load() {
         List<JSONFaction> factions = this.loadCore();
         if (factions != null) {
+            List<JSONFaction> reRun = new ArrayList<>();
             factions.forEach(f -> {
-                this.factions.put(f.getIntId(), f);
-                this.updateNextIdForId(f.getIntId());
+                if (f.getId() == Integer.MIN_VALUE) {
+                    reRun.add(f);
+                } else {
+                    this.factions.put(f.getId(), f);
+                    this.updateNextIdForId(f.getId());
+                }
+            });
+            reRun.forEach(f -> {
+                f.setId(this.nextId++);
+                this.factions.put(f.getId(), f);
             });
         }
 
@@ -95,14 +105,19 @@ public final class JSONFactions extends MemoryFactions {
                 String id = entry.getKey();
                 MemoryFaction f = entry.getValue();
                 f.checkPerms();
-                f.setId(id);
+                try {
+                    f.setId(Integer.parseInt(id));
+                } catch (NumberFormatException e) {
+                    f.setId(Integer.MIN_VALUE);
+                }
+
                 this.updateNextIdForId(id);
             }
             return new ArrayList<>(data.values());
         } else {
             String nextIdData = DiscUtil.readCatch(this.nextIdFile);
             NextId next = FactionsPlugin.getInstance().getGson().fromJson(nextIdData, NextId.class);
-            if (next!=null) {
+            if (next != null) {
                 this.nextId = next.next();
             }
             return FactionsPlugin.getInstance().getGson().fromJson(content, new TypeToken<List<JSONFaction>>() {

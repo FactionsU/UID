@@ -7,8 +7,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.data.MemoryFPlayers;
 import dev.kitteh.factions.util.DiscUtil;
-import dev.kitteh.factions.util.OldJSONFPlayerDeserializer;
-import org.jspecify.annotations.NonNull;
+import dev.kitteh.factions.util.adapter.OldJSONFPlayerDeserializer;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -50,7 +49,7 @@ public final class JSONFPlayers extends MemoryFPlayers {
             return 0;
         }
         this.fPlayers.clear();
-        fplayers.forEach(fp -> this.fPlayers.put(fp.getId(), fp));
+        fplayers.forEach(fp -> this.fPlayers.put(fp.getUniqueId(), fp));
         return fPlayers.size();
     }
 

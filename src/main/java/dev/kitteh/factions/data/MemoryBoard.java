@@ -2,20 +2,6 @@ package dev.kitteh.factions.data;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.longs.Long2IntMap;
-import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongList;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import it.unimi.dsi.fastutil.longs.LongSet;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
@@ -28,6 +14,18 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.AsciiCompass;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.longs.Long2IntMap;
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongList;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -37,19 +35,11 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -147,7 +137,7 @@ public abstract class MemoryBoard implements Board {
      */
     public static final class Morton {
         public static long get(FLocation location) {
-            return Morton.get((int) location.getX(), (int) location.getZ());
+            return Morton.get(location.x(), location.z());
         }
 
         /**
@@ -233,13 +223,13 @@ public abstract class MemoryBoard implements Board {
     }
 
     public void setFactionAt(Faction faction, FLocation flocation) {
-        setIdAt(faction.getIntId(), flocation);
+        setIdAt(faction.getId(), flocation);
     }
 
     public void removeAt(FLocation flocation) {
         Objects.requireNonNull(flocation);
         Faction faction = getFactionAt(flocation);
-        faction.getWarps().values().removeIf(lazyLocation -> lazyLocation.getLocation() != null && flocation.isInChunk(lazyLocation.getLocation()));
+        faction.getWarps().values().removeIf(flocation::isInChunk);
         if (flocation.getWorld().isChunkLoaded(flocation.x(), flocation.z())) {
             for (Entity entity : flocation.getChunk().getEntities()) {
                 if (entity instanceof Player) {
@@ -262,16 +252,8 @@ public abstract class MemoryBoard implements Board {
         }
     }
 
-    public Set<FLocation> getAllClaims(String factionId) {
-        return this.getAllClaims(Integer.parseInt(factionId));
-    }
-
-    public Set<FLocation> getAllClaims(int factionId) {
-        return worldTrackers.values().stream().flatMap(tracker -> tracker.getAllClaims(factionId).stream()).collect(Collectors.toSet());
-    }
-
     public Set<FLocation> getAllClaims(Faction faction) {
-        return getAllClaims(faction.getIntId());
+        return worldTrackers.values().stream().flatMap(tracker -> tracker.getAllClaims(faction.getId()).stream()).collect(Collectors.toSet());
     }
 
     public Int2ObjectMap<LongList> getAllClaimsForDynmap(World world) {
@@ -288,16 +270,7 @@ public abstract class MemoryBoard implements Board {
     }
 
     public void unclaimAll(Faction faction) {
-        this.unclaimAll(faction.getIntId());
-    }
-
-    public void unclaimAll(String factionId) {
-        this.unclaimAll(Integer.parseInt(factionId));
-    }
-
-    public void unclaimAll(int factionId) {
-        Faction faction = Factions.getInstance().getFactionById(factionId);
-        if (faction != null && faction.isNormal()) {
+        if (faction.isNormal()) {
             faction.clearAllClaimOwnership();
             faction.clearWarps();
         }
@@ -305,22 +278,14 @@ public abstract class MemoryBoard implements Board {
     }
 
     public void unclaimAllInWorld(Faction faction, World world) {
-        this.unclaimAllInWorld(faction.getIntId(), world);
-    }
-
-    public void unclaimAllInWorld(String factionId, World world) {
-        this.unclaimAllInWorld(Integer.parseInt(factionId), world);
-    }
-
-    public void unclaimAllInWorld(int factionId, World world) {
         WorldTracker tracker = worldTrackers.get(world.getName());
         if (tracker != null) {
-            tracker.getAllClaims(factionId).forEach(this::removeAt);
+            tracker.getAllClaims(faction.getId()).forEach(this::removeAt);
         }
     }
 
-    public void clean(int factionId) {
-        List<FLocation> locations = this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(factionId).stream()).toList();
+    public void clean(Faction faction) {
+        List<FLocation> locations = this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(faction.getId()).stream()).toList();
         if (LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim()) {
             locations.forEach(LWC::clearAllLocks);
         }
@@ -335,7 +300,7 @@ public abstract class MemoryBoard implements Board {
                 }
             }
         }
-        this.worldTrackers.values().forEach(wt -> wt.removeAllClaims(factionId));
+        this.worldTrackers.values().forEach(wt -> wt.removeAllClaims(faction.getId()));
     }
 
     //----------------------------------------------//
@@ -346,7 +311,7 @@ public abstract class MemoryBoard implements Board {
         boolean lwc = LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim();
         for (WorldTracker tracker : worldTrackers.values()) {
             for (int factionId : tracker.getFactionIds()) {
-                if (!Factions.getInstance().isValidFactionId(factionId)) {
+                if (Factions.getInstance().getFactionById(factionId) == null) {
                     this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(factionId).stream()).forEach(loc -> {
                         if (lwc) {
                             LWC.clearAllLocks(loc);
@@ -363,21 +328,17 @@ public abstract class MemoryBoard implements Board {
     // Coord count
     //----------------------------------------------//
 
-    public int getFactionCoordCount(String factionId) {
-        return this.getFactionCoordCount(Integer.parseInt(factionId));
-    }
-
     public int getFactionCoordCount(int factionId) {
         return this.worldTrackers.values().stream().mapToInt(wt -> wt.countFactionClaims(factionId)).sum();
     }
 
     public int getFactionCoordCount(Faction faction) {
-        return getFactionCoordCount(faction.getIntId());
+        return getFactionCoordCount(faction.getId());
     }
 
     public int getFactionCoordCountInWorld(Faction faction, String worldName) {
         WorldTracker tracker = worldTrackers.get(worldName);
-        return tracker == null ? 0 : tracker.countFactionClaims(faction.getIntId());
+        return tracker == null ? 0 : tracker.countFactionClaims(faction.getId());
     }
 
     public int getTotalCount() {

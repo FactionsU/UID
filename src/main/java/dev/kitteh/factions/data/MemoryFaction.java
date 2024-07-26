@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 
 @NullMarked
 public abstract class MemoryFaction implements Faction {
-    protected int id = Integer.MIN_VALUE;
+    protected int id;
     protected boolean peacefulExplosionsEnabled;
     protected boolean permanent;
     protected String tag;
@@ -59,7 +59,7 @@ public abstract class MemoryFaction implements Faction {
     protected long foundedDate;
     protected transient long lastPlayerLoggedOffTime;
     protected double powerBoost;
-    protected Map<String, Relation> relationWish = new HashMap<>();
+    protected Map<Integer, Relation> relationWish = new HashMap<>();
     protected Map<FLocation, Set<UUID>> claimOwnership = new ConcurrentHashMap<>();
     @Expose(deserialize = false)
     transient Set<FPlayer> fplayers = new HashSet<>();
@@ -158,10 +158,6 @@ public abstract class MemoryFaction implements Faction {
     }
 
     public int getId() {
-        return id;
-    }
-
-    public int getIntId() {
         return id;
     }
 
@@ -835,7 +831,7 @@ public abstract class MemoryFaction implements Faction {
 
             // no members left and faction isn't permanent, so disband it
             if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
-                FactionsPlugin.getInstance().log("The faction " + this.getTag() + " (" + this.getIntId() + ") has been disbanded since it has no members left.");
+                FactionsPlugin.getInstance().log("The faction " + this.getTag() + " (" + this.getId() + ") has been disbanded since it has no members left.");
             }
 
             for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
@@ -853,7 +849,7 @@ public abstract class MemoryFaction implements Faction {
             }
             replacements.getFirst().setRole(Role.ADMIN);
             this.msg(TL.FACTION_NEWLEADER, oldLeader == null ? "" : oldLeader.getName(), replacements.getFirst().getName());
-            FactionsPlugin.getInstance().log("Faction " + this.getTag() + " (" + this.getIntId() + ") admin was removed. Replacement admin: " + replacements.getFirst().getName());
+            FactionsPlugin.getInstance().log("Faction " + this.getTag() + " (" + this.getId() + ") admin was removed. Replacement admin: " + replacements.getFirst().getName());
         }
     }
 
