@@ -129,7 +129,7 @@ public class JSONFactions extends MemoryFactions {
     }
 
     public boolean isIdFree(String id) {
-        return !this.factions.containsKey(id);
+        return !this.factions.containsKey(Integer.parseInt(id));
     }
 
     public boolean isIdFree(int id) {

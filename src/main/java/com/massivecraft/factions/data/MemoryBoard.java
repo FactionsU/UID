@@ -117,7 +117,7 @@ public abstract class MemoryBoard extends Board {
         }
 
         public int countFactionClaims(int faction) {
-            return this.factionToChunk.get(faction).size();
+            return this.factionToChunk.getOrDefault(faction, LongSet.of()).size();
         }
 
         public int countFactionClaims() {
