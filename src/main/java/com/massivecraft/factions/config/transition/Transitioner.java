@@ -76,6 +76,17 @@ public class Transitioner {
             if (version < 6) {
                 transitioner.migrateV5B(rootNode);
             }
+            // Why do a version bump for this?
+            CommentedConfigurationNode factId = rootNode.getNode("factions").getNode("other").getNode("newPlayerStartingFactionID");
+            if (!factId.isVirtual()) {
+                if (factId.getValue() instanceof String facIdS) {
+                    try {
+                        factId.setValue(Integer.parseInt(facIdS));
+                    } catch (NumberFormatException e) {
+                        plugin.getLogger().warning("Failed to migrate new player starting faction ID to numeric ID. Found: " + facIdS);
+                    }
+                }
+            }
 
             loader.save(rootNode);
         } catch (IOException e) {

@@ -161,7 +161,7 @@ public abstract class MemoryFactions extends Factions {
     }
 
     public void removeFaction(Faction faction) {
-        factions.remove(faction.getIntId());
+        factions.remove(faction.getIntId()).remove();
     }
 
     @Override
