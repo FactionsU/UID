@@ -87,8 +87,6 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -186,7 +184,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private final List<RuntimeException> grumpyExceptions = new ArrayList<>();
     private VaultPerms vaultPerms;
     public final boolean likesCats = Arrays.stream(FactionsPlugin.class.getDeclaredMethods()).anyMatch(m -> m.isSynthetic() && m.getName().startsWith("loadCon") && m.getName().endsWith("0"));
-    private boolean gottaSlapEssentials;
     private Method getOffline;
     private BukkitAudiences adventure;
     private String mcVersionString;
@@ -201,92 +198,11 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     @Override
     public void onLoad() {
         IntegrationManager.onLoad(this);
-        this.tryEssXMigrationOnLoad();
         try {
             Class.forName("com.sk89q.worldguard.WorldGuard");
             Worldguard.onLoad();
         } catch (Exception ignored) {
             // eh
-        }
-    }
-
-    private void tryEssXMigrationOnLoad() {
-        try {
-            Class.forName("com.earth2me.essentials.economy.vault.VaultEconomyProvider");
-            Path dataFolder = this.getDataFolder().toPath().resolve("data");
-            Path essDataFolder = this.getDataFolder().toPath().getParent().resolve("Essentials").resolve("userdata");
-            Path essUserMap = this.getDataFolder().toPath().getParent().resolve("Essentials").resolve("usermap.csv");
-            if (!Files.exists(dataFolder) || !Files.isDirectory(dataFolder) || !Files.exists(essDataFolder) || !Files.isDirectory(essDataFolder)) {
-                return;
-            }
-            Path conversionCompleteFile = dataFolder.resolve("modernEssXAccountsComplete.txt");
-            if (Files.exists(conversionCompleteFile)) {
-                return; // My work here is done.
-            }
-
-            Map<String, Object> data = new Gson().fromJson(new String(Files.readAllBytes(dataFolder.resolve("factions.json"))), new TypeToken<Map<String, Object>>() {
-            }.getType());
-
-            if (data == null || data.isEmpty()) {
-                Files.writeString(conversionCompleteFile, "Do not delete unless you want to waste time at startup!");
-                return;
-            }
-
-            this.getLogger().info("");
-            this.getLogger().info("     We interrupt this server startup for an important message");
-            this.getLogger().info("");
-            this.getLogger().info("  FactionsUUID has identified a version of EssentialsX that has");
-            this.getLogger().info("  fixed Vault integration. However, there may be older pre-EssX-fix");
-            this.getLogger().info("  bank data present, so this plugin will attempt to move any such");
-            this.getLogger().info("  accounts in a one-time event");
-            this.getLogger().info("");
-
-            int count = 0;
-            for (String faction : data.keySet()) {
-                String name = UUID.nameUUIDFromBytes(("NPC:" + "faction_" + faction).getBytes(Charsets.UTF_8)) + ".yml";
-                String newName = UUID.nameUUIDFromBytes(("OfflinePlayer:" + "faction-" + faction).getBytes(Charsets.UTF_8)) + ".yml";
-                Path oldFile = essDataFolder.resolve(name);
-                Path newFile = essDataFolder.resolve(newName);
-                Path oldNewFile = essDataFolder.resolve(newName + ".bak");
-                this.getLogger().info("Testing for " + "faction-" + faction + " (" + name + ")");
-                if (Files.exists(oldFile)) {
-                    try {
-                        if (Files.exists(newFile)) {
-                            Files.move(newFile, oldNewFile);
-                        }
-                        Files.move(oldFile, newFile);
-                        this.getLogger().info("Moved faction " + faction + " from " + name + " to " + newName);
-                    } catch (IOException e) {
-                        this.getLogger().warning("Failed to migrate faction " + faction + " file " + oldFile + ": " + e.getMessage());
-                    }
-                    count++;
-                }
-            }
-
-            if (count > 0) {
-                this.gottaSlapEssentials = true;
-                try {
-                    Files.delete(essUserMap);
-                } catch (IOException e) {
-                    this.getLogger().warning("Failed to migrate delete usermap.csv, which may cause issues: " + e.getMessage());
-                }
-            }
-
-            this.getLogger().info("Done!");
-            this.getLogger().info("");
-            if (count == 0) {
-                this.getLogger().info("Found no data to migrate!");
-            } else {
-                this.getLogger().info("Migrated " + count + " files!");
-            }
-
-            Files.writeString(conversionCompleteFile, "Do not delete unless you want to waste time at startup!");
-
-            this.getLogger().info("  We did it! Yay!");
-        } catch (ClassNotFoundException | NoClassDefFoundError e) {
-            // Good.
-        } catch (Exception e) {
-            this.getLogger().log(Level.SEVERE, "Failed to migrate EssX accounts", e);
         }
     }
 
@@ -532,9 +448,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
                 } catch (Exception e) {
                     getLogger().log(Level.SEVERE, "Failed to close registries", e);
                 }
-                if (FactionsPlugin.this.gottaSlapEssentials) {
-                    FactionsPlugin.this.getServer().dispatchCommand(FactionsPlugin.this.getServer().getConsoleSender(), "baltop force");
-                }
 
                 Econ.setup();
                 vaultPerms = new VaultPerms();
@@ -602,14 +515,14 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         this.metrics = new Metrics(this);
 
         // Version
-        String verString = this.getDescription().getVersion().replace("${build.number}", "selfbuilt");
-        Pattern verPattern = Pattern.compile("U([\\d.]+)-b(.*)");
+        String verString = this.getDescription().getVersion();
+        Pattern verPattern = Pattern.compile("1\\.6\\.9\\.5-U(?<version>\\d{1,2}\\.\\d{1,2}\\.\\d{1,2})(?<snap>-SNAPSHOT)?");
         Matcher matcher = verPattern.matcher(verString);
         final String fuuidVersion;
         final String fuuidBuild;
         if (matcher.find()) {
             fuuidVersion = matcher.group(1);
-            fuuidBuild = matcher.group(2) + ((likesCats || matcher.group(2).equals("selfbuilt")) ? "" : "p");
+            fuuidBuild = matcher.group("snap") == null ? (likesCats ? "release" : "yarr") : "snapshot";
         } else {
             fuuidVersion = "Unknown";
             fuuidBuild = verString;
