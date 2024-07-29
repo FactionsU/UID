@@ -1,12 +1,8 @@
 This project overall is licensed under the GNU GENERAL PUBLIC LICENSE version 3
-and can be found at https://github.com/drtshock/Factions
+and can be found at https://github.com/FactionsU/UID
 
 
 Shaded libraries into the jar include:
-
-Typesafe Config
-Apache License, Version 2.0
-https://github.com/lightbend/config
 
 Adventure, Adventure Bukkit Platform, and MiniMessage
 MIT License
@@ -23,6 +19,10 @@ https://github.com/SpongePowered/Configurate
 PaperLib
 MIT License
 https://github.com/PaperMC/PaperLib
+
+Typesafe Config
+Apache License, Version 2.0
+https://github.com/lightbend/config
 
 
 Modified versions of code from the following projects are included:
