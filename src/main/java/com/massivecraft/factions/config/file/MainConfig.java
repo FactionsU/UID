@@ -1,6 +1,5 @@
 package com.massivecraft.factions.config.file;
 
-import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.config.annotation.WipeOnReload;
 import com.massivecraft.factions.perms.Relation;
@@ -26,7 +25,7 @@ import java.util.Set;
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "InnerClassMayBeStatic", "BooleanMethodIsAlwaysInverted", "MismatchedQueryAndUpdateOfCollection"})
 public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
-        @Comment("Don't change this value yourself, unless you WANT a broken config!")
+        @Comment("This is the config version, used for migrating on plugin updates. Don't change this value yourself, unless you WANT a broken config!")
         private int version = 6;
 
         @Comment("""
@@ -3038,7 +3037,6 @@ public class MainConfig {
     };
 
     @Comment("""
-            FactionsUUID by drtshock
             Support and documentation https://factions.support
             Updates https://www.spigotmc.org/resources/factionsuuid.1035/
 

@@ -319,6 +319,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
     }
 
+    @Deprecated
     public MemoryFPlayer(MemoryFPlayer other) {
         this.factionId = other.factionId;
         this.id = other.id;

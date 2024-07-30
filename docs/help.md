@@ -10,7 +10,7 @@ Click on the **FactionsUUID** category to see our channels.
 ## Issues and Feature Requests
 
 To directly report a bug to developers, or to suggest a feature, you can submit an issue on
-[GitHub](https://github.com/drtshock/Factions/issues/new/choose)
+[GitHub](https://github.com/FactionsU/UID/issues/new/choose)
 
 ## Frequently Asked Questions
 

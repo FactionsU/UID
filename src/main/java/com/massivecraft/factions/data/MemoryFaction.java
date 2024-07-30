@@ -43,7 +43,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
 public abstract class MemoryFaction implements Faction, EconomyParticipator {
     protected int id = Integer.MIN_VALUE;
@@ -466,6 +465,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
         resetPerms(); // Reset on new Faction so it has default values.
     }
 
+    @Deprecated
     public MemoryFaction(MemoryFaction old) {
         id = old.id;
         peacefulExplosionsEnabled = old.peacefulExplosionsEnabled;

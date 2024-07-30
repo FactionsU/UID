@@ -33,7 +33,6 @@ import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Directional;
 
-import java.util.Collections;
 import java.util.List;
 
 public class FactionsBlockListener extends AbstractListener {

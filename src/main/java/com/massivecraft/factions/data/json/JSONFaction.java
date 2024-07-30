@@ -3,7 +3,7 @@ package com.massivecraft.factions.data.json;
 import com.massivecraft.factions.data.MemoryFaction;
 
 public class JSONFaction extends MemoryFaction {
-
+    @Deprecated
     public JSONFaction(MemoryFaction arg0) {
         super(arg0);
     }

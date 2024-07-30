@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@SuppressWarnings("unchecked")
 public class SeeChunkUtil extends BukkitRunnable {
 
     private final Set<UUID> playersSeeingChunks = new HashSet<>();
