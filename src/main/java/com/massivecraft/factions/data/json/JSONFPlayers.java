@@ -12,7 +12,6 @@ import com.massivecraft.factions.util.OldJSONFPlayerDeserializer;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +34,7 @@ public class JSONFPlayers extends MemoryFPlayers {
         file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/players.json");
     }
 
+    @Deprecated
     public void convertFrom(MemoryFPlayers old) {
         old.fPlayers.forEach((id, faction) -> this.fPlayers.put(id, new JSONFPlayer((MemoryFPlayer) faction)));
         forceSave();

@@ -12,7 +12,6 @@ import com.massivecraft.factions.util.OldJSONFactionDeserializer;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -163,6 +162,7 @@ public class JSONFactions extends MemoryFactions {
         return new JSONFaction(id);
     }
 
+    @Deprecated
     @Override
     public void convertFrom(MemoryFactions old) {
         old.factions.forEach((tag, faction) -> this.factions.put(tag, new JSONFaction((MemoryFaction) faction)));

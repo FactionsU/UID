@@ -87,6 +87,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -668,44 +669,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     public void loadLang() {
         File lang = new File(getDataFolder(), "lang.yml");
-        OutputStream out = null;
-        InputStream defLangStream = this.getResource("lang.yml");
-        if (!lang.exists()) {
-            try {
-                getDataFolder().mkdir();
-                lang.createNewFile();
-                if (defLangStream != null) {
-                    out = new FileOutputStream(lang);
-                    int read;
-                    byte[] bytes = new byte[1024];
-
-                    while ((read = defLangStream.read(bytes)) != -1) {
-                        out.write(bytes, 0, read);
-                    }
-                    YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new BufferedReader(new InputStreamReader(defLangStream)));
-                    TL.setFile(defConfig);
-                }
-            } catch (IOException e) {
-                getLogger().log(Level.SEVERE, "[Factions] Couldn't create language file.", e);
-                getLogger().severe("[Factions] This is a fatal error. Now disabling");
-                this.setEnabled(false); // Without it loaded, we can't send them messages
-            } finally {
-                if (defLangStream != null) {
-                    try {
-                        defLangStream.close();
-                    } catch (IOException e) {
-                        FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to close resource", e);
-                    }
-                }
-                if (out != null) {
-                    try {
-                        out.close();
-                    } catch (IOException e) {
-                        FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to close output", e);
-                    }
-                }
-            }
-        }
 
         YamlConfiguration conf = YamlConfiguration.loadConfiguration(lang);
         for (TL item : TL.values()) {
@@ -714,17 +677,10 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             }
         }
 
-        // Remove this here because I'm sick of dealing with bug reports due to bad decisions on my part.
-        if (conf.getString(TL.COMMAND_SHOW_POWER.getPath(), "").contains("%5$s")) {
-            conf.set(TL.COMMAND_SHOW_POWER.getPath(), TL.COMMAND_SHOW_POWER.getDefault());
-            log(Level.INFO, "Removed errant format specifier from f show power.");
-        }
-
         TL.setFile(conf);
         try {
             conf.save(lang);
         } catch (IOException e) {
-            getLogger().log(Level.WARNING, "Factions: Report this stack trace to drtshock.");
             FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to save lang.yml", e);
         }
     }
@@ -1159,7 +1115,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
     }
 
-    @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
+    @SuppressWarnings({"unused"})
     private static class Response {
         private boolean success;
         private String message;

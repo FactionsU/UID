@@ -4,7 +4,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.data.MemoryFPlayer;
 
 public class JSONFPlayer extends MemoryFPlayer {
-
+    @Deprecated
     public JSONFPlayer(MemoryFPlayer arg0) {
         super(arg0);
     }
