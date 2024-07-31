@@ -1,6 +1,7 @@
 package com.massivecraft.factions.config.file;
 
 import com.massivecraft.factions.FactionsPlugin;
+import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.config.annotation.Comment;
 import com.massivecraft.factions.config.annotation.WipeOnReload;
 import com.massivecraft.factions.perms.Relation;
@@ -1360,6 +1361,15 @@ public class MainConfig {
                     }
                 };
 
+                @Comment("Should wilderness count if NEUTRAL is listed as a relation?")
+                private boolean includeWildernessInNeutral = false;
+
+                @Comment("Should safezone count if NEUTRAL is listed as a relation?")
+                private boolean includeSafezoneInNeutral = false;
+
+                @Comment("Should warzone count if NEUTRAL is listed as a relation?")
+                private boolean includeWarzoneInNeutral = false;
+
                 @WipeOnReload
                 private transient Set<Relation> relations = null;
 
@@ -1384,6 +1394,28 @@ public class MainConfig {
                     return relationsToTeleportOut;
                 }
 
+                public boolean isRelationToTeleportOut(Relation relation, Faction faction) {
+                    if (!faction.isNormal()) {
+                        if ((relation != Relation.NEUTRAL) ||
+                                (faction.isWilderness() && !includeWildernessInNeutral) ||
+                                (faction.isSafeZone() && !includeSafezoneInNeutral) ||
+                                (faction.isWarZone() && !includeWarzoneInNeutral)) {
+                            return false;
+                        }
+                    }
+                    if (relations == null) {
+                        relations = new HashSet<>();
+                        for (String rel : relationsToTeleportOut) {
+                            Relation r = Relation.fromString(rel);
+                            if (r != null) {
+                                relations.add(r);
+                            }
+                        }
+                    }
+                    return relations.contains(relation);
+                }
+
+                @Deprecated
                 public boolean isRelationToTeleportOut(Relation relation) {
                     if (relations == null) {
                         relations = new HashSet<>();
