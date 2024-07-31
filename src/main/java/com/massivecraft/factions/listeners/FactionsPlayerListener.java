@@ -98,8 +98,9 @@ public class FactionsPlayerListener extends AbstractListener {
             long diff = System.currentTimeMillis() - me.getLastLoginTime();
             MainConfig.Factions.Protection.TerritoryTeleport terry = this.plugin.conf().factions().protection().territoryTeleport();
             if (diff > (1000L * terry.getTimeSinceLastSignedIn())) {
-                Relation relation = me.getRelationTo(Board.getInstance().getFactionAt(standing));
-                if (terry.isRelationToTeleportOut(relation)) {
+                Faction standingFaction = Board.getInstance().getFactionAt(standing);
+                Relation relation = me.getRelationTo(standingFaction);
+                if (terry.isRelationToTeleportOut(relation, standingFaction)) {
                     Location target = null;
                     for (String destination : terry.getDestination().split(",")) {
                         switch (destination.trim().toLowerCase()) {
