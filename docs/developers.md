@@ -3,7 +3,7 @@
 !!! warning "This page contains information only useful to plugin developers"
 
 ### Maven details:  
-Repository: `https://ci.ender.zone/plugin/repository/everything/`  
+Repository: `https://dependency.download/releases`  
 groupId: `dev.kitteh`  
 artifactId: `factionsuuid`  
 version: `0.7.0`
