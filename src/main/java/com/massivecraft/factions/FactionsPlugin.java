@@ -118,8 +118,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     // Single 4 life.
     private static FactionsPlugin instance;
     private static int mcVersion;
-    private static final int OLDEST_MODERN_SUPPORTED = 2004; // 1.20.4
-    private static final String OLDEST_MODERN_SUPPORTED_STRING = "1.20.4";
 
     public static FactionsPlugin getInstance() {
         return instance;
@@ -622,14 +620,14 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         this.metrics = new Metrics(this);
 
         // Version
-        String verString = this.getDescription().getVersion().replace("${build.number}", "selfbuilt");
-        Pattern verPattern = Pattern.compile("U([\\d.]+)-b(.*)");
+        String verString = this.getDescription().getVersion();
+        Pattern verPattern = Pattern.compile("1\\.6\\.9\\.5-U(?<version>\\d{1,2}\\.\\d{1,2}\\.\\d{1,2})(?<snap>-SNAPSHOT)?");
         Matcher matcher = verPattern.matcher(verString);
         final String fuuidVersion;
         final String fuuidBuild;
         if (matcher.find()) {
             fuuidVersion = matcher.group(1);
-            fuuidBuild = matcher.group(2) + ((likesCats || matcher.group(2).equals("selfbuilt")) ? "" : "p");
+            fuuidBuild = matcher.group("snap") == null ? (likesCats ? "release" : "yarr") : "snapshot";
         } else {
             fuuidVersion = "Unknown";
             fuuidBuild = verString;

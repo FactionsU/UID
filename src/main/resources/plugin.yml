@@ -1,9 +1,8 @@
 name: Factions
-version: ${project.version}-b${build.number}
+version: ${project.version}
 main: com.massivecraft.factions.FactionsPlugin
 authors: [Olof Larsson, Brett Flannigan, drtshock, dariasc, CmdrKittens, mbaxter]
 softdepend: [LuckPerms, WorldGuard]
-api-version: 1.13
 website: https://www.spigotmc.org/resources/factionsuuid.1035/
 commands:
   factions:
