@@ -289,7 +289,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         // Did we change coord?
-        FLocation from = me.getLastStoodAt();
+        FLocation from = new FLocation(fromLoc);
         FLocation to = new FLocation(toLoc);
 
         if (from.equals(to)) {
