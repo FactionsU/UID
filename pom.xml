@@ -4,7 +4,7 @@
 
     <groupId>com.massivecraft</groupId>
     <artifactId>Factions</artifactId>
-    <version>1.6.9.5-U0.6.41-SNAPSHOT</version>
+    <version>1.6.9.5-U0.6.41</version>
     <packaging>jar</packaging>
 
     <name>FactionsUUID</name>
