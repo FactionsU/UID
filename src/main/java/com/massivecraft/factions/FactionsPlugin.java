@@ -178,8 +178,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private IntegrationManager integrationManager;
 
     private Metrics metrics;
-    private final Pattern factionsVersionPattern = Pattern.compile("b(\\d{1,4})");
-    private int buildNumber = -1;
     private UUID serverUUID;
     private String startupLog = "NOTFINISHED";
     private String startupExceptionLog = "NOTFINISHED";
@@ -404,7 +402,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             getLogger().warning("You should start testing out Java 17 with your setup now, to prepare.");
         }*/
         getLogger().info("");
-        this.buildNumber = this.getBuildNumber(this.getDescription().getVersion());
 
         this.getLogger().info("Server UUID " + this.serverUUID);
 
@@ -832,17 +829,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             getLogger().log(Level.WARNING, "Factions: Report this stack trace to drtshock.");
             FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to save lang.yml", e);
         }
-    }
-
-    private int getBuildNumber(String version) {
-        Matcher factionsVersionMatcher = factionsVersionPattern.matcher(version);
-        if (factionsVersionMatcher.find()) {
-            try {
-                return Integer.parseInt(factionsVersionMatcher.group(1));
-            } catch (NumberFormatException ignored) { // HOW
-            }
-        }
-        return -1;
     }
 
     public UUID getServerUUID() {
