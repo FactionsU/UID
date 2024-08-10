@@ -105,6 +105,38 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.6.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <options>
+                        <option>-dontoptimize</option>
+                        <option>-dontobfuscate</option>
+                        <option>-dontnote</option>
+                        <option>-dontwarn</option>
+                        <option>-keepattributes *Annotation*,Exceptions,Signature,Deprecated,SourceFile,SourceDir,LineNumberTable,LocalVariableTable,LocalVariableTypeTable,Synthetic,EnclosingMethod,RuntimeVisibleAnnotations,RuntimeInvisibleAnnotations,RuntimeVisibleParameterAnnotations,RuntimeInvisibleParameterAnnotations,AnnotationDefault,InnerClasses</option>
+                        <option>-keep class com.massivecraft.**</option>
+                        <option>-keepclassmembers class ** {
+                            *;
+                            }</option>
+                        <option>-keep class moss.factions.shade.org.apache.commons.logging.impl.** {
+                            *;
+                            }</option>
+                    </options>
+                    <libs>
+                        <lib>${java.home}/jmods/</lib>
+                    </libs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
