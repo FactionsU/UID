@@ -18,6 +18,17 @@ import java.util.UUID;
 
 @NullMarked
 public interface Faction extends Participator, Selectable {
+    interface Zone {
+        public int getId();
+        String getName();
+        boolean inheritsPermissions();
+        public void setInheritsPermissions(boolean inheritsPermissions);
+    }
+
+    interface ZoneManager {
+
+    }
+
     int getId();
 
     Map<UUID, List<String>> getAnnouncements();

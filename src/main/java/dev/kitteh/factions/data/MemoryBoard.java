@@ -14,16 +14,10 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.AsciiCompass;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
+import dev.kitteh.factions.util.WorldTracker;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.longs.Long2IntMap;
-import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
@@ -49,149 +43,6 @@ import java.util.stream.Collectors;
 @NullMarked
 public abstract class MemoryBoard implements Board {
 
-    protected static class WorldTracker {
-        public static final int NO_FACTION = Integer.MIN_VALUE;
-        private final String worldName;
-        private final Long2IntMap chunkToFaction = new Long2IntOpenHashMap();
-        private final Int2ObjectMap<LongSet> factionToChunk = new Int2ObjectOpenHashMap<>();
-
-        private WorldTracker(String worldName) {
-            chunkToFaction.defaultReturnValue(NO_FACTION);
-            this.worldName = worldName;
-        }
-
-        private LongSet getOrCreate(int faction) {
-            return factionToChunk.computeIfAbsent(faction, k -> new LongOpenHashSet());
-        }
-
-        public void addClaim(int faction, FLocation location) {
-            long mort = Morton.get(location);
-            removeClaim(location);
-            if (faction != 0) {
-                chunkToFaction.put(mort, faction);
-                getOrCreate(faction).add(mort);
-            }
-        }
-
-        public void addClaimOnLoad(int faction, int x, int z) {
-            long mort = Morton.get(x, z);
-            chunkToFaction.put(mort, faction);
-            getOrCreate(faction).add(mort);
-        }
-
-        public void removeClaim(FLocation location) {
-            long mort = Morton.get(location);
-            int formerOwner = chunkToFaction.remove(mort);
-            if (formerOwner != NO_FACTION) {
-                LongSet set = factionToChunk.get(formerOwner);
-                if (set != null) {
-                    set.remove(mort);
-                }
-            }
-        }
-
-        public void removeAllClaims(int faction) {
-            LongSet claims = factionToChunk.get(faction);
-            if (claims != null) {
-                claims.forEach(chunkToFaction::remove);
-            }
-        }
-
-        public List<FLocation> getAllClaims(int faction) {
-            LongSet longs = this.factionToChunk.get(faction);
-            if (longs == null) {
-                return List.of();
-            }
-            return longs.longStream().mapToObj(mort -> new FLocation(this.worldName, Morton.getX(mort), Morton.getZ(mort))).toList();
-        }
-
-        public Long2IntMap getChunkToFactionForSave() {
-            return chunkToFaction;
-        }
-
-        public Int2ObjectMap<LongList> getAllClaimsForDynmap() {
-            Int2ObjectMap<LongList> newMap = new Int2ObjectOpenHashMap<>();
-            this.factionToChunk.int2ObjectEntrySet().forEach(entry -> newMap.put(entry.getIntKey(), new LongArrayList(entry.getValue())));
-            return newMap;
-        }
-
-        public int getFactionIdAt(FLocation location) {
-            return chunkToFaction.get(Morton.get(location));
-        }
-
-        public int countFactionClaims(int faction) {
-            return this.factionToChunk.getOrDefault(faction, LongSet.of()).size();
-        }
-
-        public int countFactionClaims() {
-            return this.chunkToFaction.size();
-        }
-
-        public IntList getFactionIds() {
-            return new IntArrayList(this.factionToChunk.keySet());
-        }
-    }
-
-    /**
-     * Simple two-ints-in-a-long Morton code.
-     */
-    public static final class Morton {
-        public static long get(FLocation location) {
-            return Morton.get(location.x(), location.z());
-        }
-
-        /**
-         * Gets a Morton code for the given coordinates.
-         *
-         * @param x x coordinate
-         * @param z z coordinate
-         * @return Morton code for the coordinates
-         */
-        public static long get(int x, int z) {
-            return (Morton.spreadOut(z) << 1) + Morton.spreadOut(x);
-        }
-
-        /**
-         * Gets the X value from a given Morton code.
-         *
-         * @param mortonCode Morton code
-         * @return x coordinate
-         */
-        public static int getX(long mortonCode) {
-            return Morton.comeTogether(mortonCode);
-        }
-
-        /**
-         * Gets the Z value from a given Morton code.
-         *
-         * @param mortonCode Morton code
-         * @return z coordinate
-         */
-        public static int getZ(long mortonCode) {
-            return Morton.comeTogether(mortonCode >> 1);
-        }
-
-        private static long spreadOut(long l) {
-            l &= 0x00000000FFFFFFFFL;
-            l = (l | (l << 16)) & 0x0000FFFF0000FFFFL;
-            l = (l | (l << 8)) & 0x00FF00FF00FF00FFL;
-            l = (l | (l << 4)) & 0x0F0F0F0F0F0F0F0FL;
-            l = (l | (l << 2)) & 0x3333333333333333L;
-            l = (l | (l << 1)) & 0x5555555555555555L;
-            return l;
-        }
-
-        private static int comeTogether(long l) {
-            l = l & 0x5555555555555555L;
-            l = (l | (l >> 1)) & 0x3333333333333333L;
-            l = (l | (l >> 2)) & 0x0F0F0F0F0F0F0F0FL;
-            l = (l | (l >> 4)) & 0x00FF00FF00FF00FFL;
-            l = (l | (l >> 8)) & 0x0000FFFF0000FFFFL;
-            l = (l | (l >> 16)) & 0x00000000FFFFFFFFL;
-            return (int) l;
-        }
-    }
-
     private final char[] mapKeyChrs = "\\/#$%=&^ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890abcdeghjmnopqrsuvwxyz?".toCharArray();
 
     protected Object2ObjectMap<String, WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
@@ -206,8 +57,8 @@ public abstract class MemoryBoard implements Board {
     public int getIdAt(FLocation flocation) {
         WorldTracker tracker = worldTrackers.get(flocation.getWorldName());
         if (tracker != null) {
-            int result = tracker.getFactionIdAt(flocation);
-            return result == WorldTracker.NO_FACTION ? 0 : result;
+            int result = tracker.getIdAt(flocation);
+            return result == WorldTracker.NO_MATCH ? 0 : result;
         }
         return 0;
     }
@@ -310,7 +161,7 @@ public abstract class MemoryBoard implements Board {
     public void clean() {
         boolean lwc = LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim();
         for (WorldTracker tracker : worldTrackers.values()) {
-            for (int factionId : tracker.getFactionIds()) {
+            for (int factionId : tracker.getIDs()) {
                 if (Factions.getInstance().getFactionById(factionId) == null) {
                     this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(factionId).stream()).forEach(loc -> {
                         if (lwc) {
@@ -329,7 +180,7 @@ public abstract class MemoryBoard implements Board {
     //----------------------------------------------//
 
     public int getFactionCoordCount(int factionId) {
-        return this.worldTrackers.values().stream().mapToInt(wt -> wt.countFactionClaims(factionId)).sum();
+        return this.worldTrackers.values().stream().mapToInt(wt -> wt.countClaims(factionId)).sum();
     }
 
     public int getFactionCoordCount(Faction faction) {
@@ -338,11 +189,11 @@ public abstract class MemoryBoard implements Board {
 
     public int getFactionCoordCountInWorld(Faction faction, String worldName) {
         WorldTracker tracker = worldTrackers.get(worldName);
-        return tracker == null ? 0 : tracker.countFactionClaims(faction.getId());
+        return tracker == null ? 0 : tracker.countClaims(faction.getId());
     }
 
     public int getTotalCount() {
-        return this.worldTrackers.values().stream().mapToInt(WorldTracker::countFactionClaims).sum();
+        return this.worldTrackers.values().stream().mapToInt(WorldTracker::countClaims).sum();
     }
 
     //----------------------------------------------//

@@ -1,5 +1,6 @@
 package dev.kitteh.factions.integration.dynmap;
 
+import dev.kitteh.factions.util.Morton;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
@@ -391,7 +392,7 @@ public class EngineDynmap {
         TileFlags allChunkFlags = new TileFlags();
         LongList allChunks = new LongArrayList(chunks.size());
         for (long chunk : chunks) {
-            allChunkFlags.setFlag(MemoryBoard.Morton.getX(chunk), MemoryBoard.Morton.getZ(chunk), true); // Set flag for chunk
+            allChunkFlags.setFlag(Morton.getX(chunk), Morton.getZ(chunk), true); // Set flag for chunk
             allChunks.add(chunk);
         }
 
@@ -403,8 +404,8 @@ public class EngineDynmap {
             int minimumX = Integer.MAX_VALUE;
             int minimumZ = Integer.MAX_VALUE;
             for (long chunk : allChunks) {
-                int chunkX = MemoryBoard.Morton.getX(chunk);
-                int chunkZ = MemoryBoard.Morton.getZ(chunk);
+                int chunkX = Morton.getX(chunk);
+                int chunkZ = Morton.getZ(chunk);
 
                 // If we need to start shape, and this block is not part of one yet
                 if (ourChunkFlags == null && allChunkFlags.getFlag(chunkX, chunkZ)) {

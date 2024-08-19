@@ -1,10 +1,11 @@
 package dev.kitteh.factions.data.json;
 
 import com.google.gson.reflect.TypeToken;
-import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.util.DiscUtil;
+import dev.kitteh.factions.util.Morton;
+import dev.kitteh.factions.util.WorldTracker;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
@@ -30,7 +31,7 @@ public final class JSONBoard extends MemoryBoard {
         this.worldTrackers.forEach((world, tracker) -> {
             Map<String, String> worldMap = new TreeMap<>();
             worldCoordIds.put(world, worldMap);
-            tracker.getChunkToFactionForSave().forEach((chunk, faction) -> {
+            tracker.getChunkToIDForSave().forEach((chunk, faction) -> {
                 int x = Morton.getX(chunk);
                 int z = Morton.getZ(chunk);
                 worldMap.put(x + "," + z, String.valueOf(faction));
