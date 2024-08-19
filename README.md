@@ -25,12 +25,7 @@ The goals of this plugin:
 
 Versioning
 ----------
-All versions are prefixed with `1.6.9.5` as that is the legacy version.
-Followed by -U noting that it's the FactionsUUID fork.
-
-FactionsUUID versioning: `1.6.9.5-U<major>.<minor>.<patch>
-
-Note: This will change on 1.0 release.
+As of version 1.0.0, FactionsUUID uses [Semantic Versioning 2.0.0](https://semver.org/)
 
 Usage
 ---------
