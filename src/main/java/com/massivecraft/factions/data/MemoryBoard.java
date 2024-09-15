@@ -88,7 +88,7 @@ public abstract class MemoryBoard extends Board {
         }
 
         public void removeAllClaims(int faction) {
-            LongSet claims = factionToChunk.get(faction);
+            LongSet claims = factionToChunk.remove(faction);
             if (claims != null) {
                 claims.forEach(chunkToFaction::remove);
             }
