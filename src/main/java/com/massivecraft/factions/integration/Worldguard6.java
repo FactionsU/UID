@@ -5,6 +5,7 @@ import com.sk89q.worldedit.Vector;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.BukkitUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
@@ -142,19 +143,16 @@ public class Worldguard6 implements IWorldguard {
         BlockVector maxChunk = new BlockVector(maxChunkX, worldHeight, maxChunkZ);
 
         RegionManager regionManager = wg.getRegionManager(world);
-        ProtectedCuboidRegion region = new ProtectedCuboidRegion("wgfactionoverlapcheck", minChunk, maxChunk);
-        Map<String, ProtectedRegion> allregions = regionManager.getRegions();
-        Collection<ProtectedRegion> allregionslist = new ArrayList<>(allregions.values());
-        List<ProtectedRegion> overlaps = region.getIntersectingRegions(allregionslist);
-        boolean foundregions = overlaps != null && !overlaps.isEmpty();
+        ProtectedRegion region = new ProtectedCuboidRegion("wgregionflagcheckforfactions", minChunk, maxChunk);
+        ApplicableRegionSet set = regionManager.getApplicableRegions(region);
 
         if (isChecking.get()) {
-            return foundregions;
+            return set.size() > 0;
         }
-        if (FLAG_CLAIM == null || !foundregions) {
+        if (FLAG_CLAIM == null) {
             return false;
         }
-        for (ProtectedRegion reg : overlaps) {
+        for (ProtectedRegion reg : set.getRegions()) {
             StateFlag.State s = reg.getFlag(FLAG_CLAIM);
             if (s == StateFlag.State.DENY) {
                 return true;
