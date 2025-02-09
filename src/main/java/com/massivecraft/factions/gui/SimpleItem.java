@@ -45,7 +45,7 @@ public class SimpleItem {
             meta.setLore(lore);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
             if (enchant) {
-                meta.addEnchant(Enchantment.LUCK, 1, true);
+                meta.addEnchant(Enchantment.LUCK_OF_THE_SEA, 1, true);
             }
 
             itemStack.setItemMeta(meta);

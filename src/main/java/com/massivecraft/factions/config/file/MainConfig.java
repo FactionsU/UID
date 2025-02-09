@@ -384,7 +384,7 @@ public class MainConfig {
         public class SeeChunk {
             private boolean particles = true;
             @Comment("Get a list of particle names here: https://factions.support/particles/")
-            private String particleName = "REDSTONE";
+            private String particleName = "DUST";
             @Comment("If the chosen particle is compatible with coloring we will color\n" +
                     "it based on the current chunk's faction")
             private boolean relationalColor = true;

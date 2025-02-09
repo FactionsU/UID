@@ -382,11 +382,10 @@ public class FactionsPlayerListener extends AbstractListener {
                 type == EntityType.LLAMA ||
                 type == EntityType.TRADER_LLAMA ||
                 type == EntityType.PIG ||
-                type == EntityType.LEASH_HITCH ||
-                type == EntityType.MINECART_CHEST ||
-                type == EntityType.MINECART_FURNACE ||
-                type == EntityType.MINECART_HOPPER ||
-                type == EntityType.CHEST_BOAT
+                type == EntityType.LEASH_KNOT ||
+                type.name().contains("_MINECART") ||
+                type.name().contains("_CHEST_BOAT")
+
         ) {
             check = true;
         }
