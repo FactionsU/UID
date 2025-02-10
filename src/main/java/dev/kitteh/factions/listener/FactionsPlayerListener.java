@@ -37,6 +37,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
@@ -369,7 +370,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         boolean check = false;
         EntityType type = event.getRightClicked().getType();
-        if (type == EntityType.ITEM_FRAME ||  type == EntityType.GLOW_ITEM_FRAME) {
+        if (type == EntityType.ITEM_FRAME || type == EntityType.GLOW_ITEM_FRAME) {
             if (!canPlayerUseBlock(event.getPlayer(), Material.ITEM_FRAME, event.getRightClicked().getLocation(), false)) {
                 event.setCancelled(true);
             }
@@ -489,7 +490,22 @@ public class FactionsPlayerListener extends AbstractListener {
         }
     }
 
+    @EventHandler
+    public void onSignChange(SignChangeEvent event) {
+        if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
+            return;
+        }
+
+        if (!this.playerCanUseItemHere(event.getPlayer(), event.getBlock().getLocation(), event.getBlock().getType(), false, false)) {
+            event.setCancelled(true);
+        }
+    }
+
     public boolean playerCanUseItemHere(Player player, Location location, Material material, boolean justCheck) {
+        return this.playerCanUseItemHere(player, location, material, true, justCheck);
+    }
+
+    public boolean playerCanUseItemHere(Player player, Location location, Material material, boolean checkDenyList, boolean justCheck) {
         String name = player.getName();
         MainConfig.Factions facConf = FactionsPlugin.getInstance().conf().factions();
         if (facConf.protection().getPlayersWhoBypassAllProtection().contains(name)) {
@@ -508,13 +524,15 @@ public class FactionsPlayerListener extends AbstractListener {
             return true;
         }
 
-        if (otherFaction.hasPlayersOnline()) {
-            if (!facConf.protection().getTerritoryDenyUsageMaterials().contains(material)) {
-                return true; // Item isn't one we're preventing for online factions.
-            }
-        } else {
-            if (!facConf.protection().getTerritoryDenyUsageMaterialsWhenOffline().contains(material)) {
-                return true; // Item isn't one we're preventing for offline factions.
+        if (checkDenyList) {
+            if (otherFaction.hasPlayersOnline()) {
+                if (!facConf.protection().getTerritoryDenyUsageMaterials().contains(material)) {
+                    return true; // Item isn't one we're preventing for online factions.
+                }
+            } else {
+                if (!facConf.protection().getTerritoryDenyUsageMaterialsWhenOffline().contains(material)) {
+                    return true; // Item isn't one we're preventing for offline factions.
+                }
             }
         }
 
