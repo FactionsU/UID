@@ -98,7 +98,7 @@ public class Depenizen extends Bridge {
         if (f == null) {
             try {
                 f = Factions.getInstance().getFactionById(Integer.parseInt(nameOrId));
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException ignored) {
             }
         }
         if (f != null) {

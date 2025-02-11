@@ -73,9 +73,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -87,7 +85,6 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -178,7 +175,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     private Metrics metrics;
     private final Pattern factionsVersionPattern = Pattern.compile("b(\\d{1,4})");
-    private int buildNumber = -1;
     private UUID serverUUID;
     private String startupLog = "NOTFINISHED";
     private String startupExceptionLog = "NOTFINISHED";
@@ -306,7 +302,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             getLogger().warning("FactionsUUID expects at least " + OLDEST_MODERN_SUPPORTED_STRING + " and may not work on your version.");
         }
         getLogger().info("");
-        this.buildNumber = this.getBuildNumber(this.getDescription().getVersion());
 
         this.getLogger().info("Server UUID " + this.serverUUID);
 
@@ -685,17 +680,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         }
     }
 
-    private int getBuildNumber(String version) {
-        Matcher factionsVersionMatcher = factionsVersionPattern.matcher(version);
-        if (factionsVersionMatcher.find()) {
-            try {
-                return Integer.parseInt(factionsVersionMatcher.group(1));
-            } catch (NumberFormatException ignored) { // HOW
-            }
-        }
-        return -1;
-    }
-
     public UUID getServerUUID() {
         return this.serverUUID;
     }
@@ -739,7 +723,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         this.rawTags.put("i", "<yellow>"); // info
         this.rawTags.put("g", "<lime>"); // good
         this.rawTags.put("b", "<rose>"); // bad
-        this.rawTags.put("h", "<pink>"); // highligh
+        this.rawTags.put("h", "<pink>"); // highlight
         this.rawTags.put("c", "<aqua>"); // command
         this.rawTags.put("p", "<teal>"); // parameter
     }
@@ -1100,10 +1084,10 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
 
     @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
     private static class UpdateCheck {
-        private String pluginName;
-        private String pluginVersion;
-        private String serverName;
-        private String serverVersion;
+        private final String pluginName;
+        private final String pluginVersion;
+        private final String serverName;
+        private final String serverVersion;
         private int meow;
         private String spigotId;
 

@@ -20,7 +20,9 @@ import java.util.logging.Level;
 public class IntegrationManager implements Listener {
     public enum Integration {
         DYNMAP("dynmap", EngineDynmap.getInstance()::init),
+        @SuppressWarnings("Convert2MethodRef")
         ESS("Essentials", (p) -> Essentials.setup(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
+        @SuppressWarnings("Convert2MethodRef")
         DEPENIZEN("Depenizen", (p) -> Depenizen.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         GRAVES("Graves", Graves::init),
         LUCKPERMS("LuckPerms", (plugin) -> {
@@ -44,9 +46,11 @@ public class IntegrationManager implements Listener {
             return true;
         }),
         LWC("LWC", com.massivecraft.factions.integration.LWC::setup),
+        @SuppressWarnings("Convert2MethodRef")
         MAGIC("Magic", (p) -> Magic.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         PLACEHOLDERAPI("PlaceholderAPI", (p) -> FactionsPlugin.getInstance().setupPlaceholderAPI()),
         PLACEHOLDERAPI_OTHER("MVdWPlaceholderAPI", (p) -> FactionsPlugin.getInstance().setupOtherPlaceholderAPI()),
+        @SuppressWarnings("Convert2MethodRef")
         SENTINEL("Sentinel", (p) -> Sentinel.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         WORLDGUARD("WorldGuard", (plugin) -> {
             FactionsPlugin f = FactionsPlugin.getInstance();

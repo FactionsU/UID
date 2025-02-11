@@ -71,8 +71,8 @@ public class CmdTicketInfo extends FCommand {
 
         private static class PlayerInfo {
             private static class PermInfo {
-                private String node;
-                private boolean has;
+                private final String node;
+                private final boolean has;
 
                 public PermInfo(String node, boolean has) {
                     this.node = node;
@@ -80,9 +80,9 @@ public class CmdTicketInfo extends FCommand {
                 }
             }
 
-            private String name;
-            private UUID uuid;
-            private List<PermInfo> permissions;
+            private final String name;
+            private final UUID uuid;
+            private final List<PermInfo> permissions;
 
             public PlayerInfo(Player player) {
                 this.name = player.getName();
@@ -95,13 +95,13 @@ public class CmdTicketInfo extends FCommand {
         }
 
         private static class PluginInfo {
-            private String name;
-            private String version;
-            private List<String> authors;
-            private List<String> depend;
-            private List<String> softdepend;
-            private List<String> loadBefore;
-            private boolean enabled;
+            private final String name;
+            private final String version;
+            private final List<String> authors;
+            private final List<String> depend;
+            private final List<String> softdepend;
+            private final List<String> loadBefore;
+            private final boolean enabled;
 
             PluginInfo(Plugin plugin) {
                 this.name = plugin.getName();

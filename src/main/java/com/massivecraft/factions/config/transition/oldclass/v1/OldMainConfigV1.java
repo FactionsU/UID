@@ -104,12 +104,12 @@ public class OldMainConfigV1 {
             public int tagInsertIndex = 0;
             public boolean tagPadBefore = false;
             public boolean tagPadAfter = true;
-            public String tagFormat = "%s\u00A7f";
+            public String tagFormat = "%s§f";
             public boolean alwaysShowChatTag = true;
-            public String factionChatFormat = "%s:\u00A7f %s";
-            public String allianceChatFormat = "\u00A7d%s:\u00A7f %s";
-            public String truceChatFormat = "\u00A75%s:\u00A7f %s";
-            public String modChatFormat = "\u00A7c%s:\u00A7f %s";
+            public String factionChatFormat = "%s:§f %s";
+            public String allianceChatFormat = "§d%s:§f %s";
+            public String truceChatFormat = "§5%s:§f %s";
+            public String modChatFormat = "§c%s:§f %s";
             public boolean broadcastDescriptionChanges = false;
             public boolean broadcastTagChanges = false;
         }

@@ -28,7 +28,7 @@ public class CmdStatus extends FCommand {
         for (FPlayer fp : context.faction.getFPlayers()) {
             String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fp.getLastLoginTime(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
             String last = fp.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fp.getLastLoginTime() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
-            String power = "";
+            String power;
             if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
                 power = ChatColor.YELLOW + String.valueOf(fp.getPowerRounded()) + " / " + fp.getPowerMaxRounded() + ChatColor.RESET;
             } else {

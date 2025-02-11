@@ -46,7 +46,6 @@ public class Graves {
             }
         } catch (Exception oops) {
             FactionsPlugin.getInstance().getLogger().log(Level.WARNING, "A Grave(s) error occurred!", oops);
-            oops.printStackTrace(); // OBNOXIOUS!
         }
         return false;
     }

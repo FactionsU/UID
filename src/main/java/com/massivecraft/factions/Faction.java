@@ -125,7 +125,7 @@ public interface Faction extends EconomyParticipator, Selectable {
     boolean isNormal();
 
     /**
-     * Players in the wilderness faction are consdiered not in a faction.
+     * Players in the wilderness faction are considered not in a faction.
      *
      * @return true if wilderness
      * @deprecated use {@link #isWilderness()} instead
@@ -167,19 +167,11 @@ public interface Faction extends EconomyParticipator, Selectable {
 
     void setTNTBank(int amount);
 
-    // -------------------------------
-    // Relation and relation colors
-    // -------------------------------
-
     Relation getRelationWish(Faction otherFaction);
 
     void setRelationWish(Faction otherFaction, Relation relation);
 
     int getRelationCount(Relation relation);
-
-    // ----------------------------------------------//
-    // DTR
-    // ----------------------------------------------//
 
     double getDTR();
 
@@ -195,9 +187,6 @@ public interface Faction extends EconomyParticipator, Selectable {
 
     boolean isFrozenDTR();
 
-    // ----------------------------------------------//
-    // Power
-    // ----------------------------------------------//
     double getPower();
 
     double getPowerMax();
@@ -219,10 +208,6 @@ public interface Faction extends EconomyParticipator, Selectable {
     boolean hasLandInflation();
 
     boolean isPowerFrozen();
-
-    // -------------------------------
-    // FPlayers
-    // -------------------------------
 
     // maintain the reference list of FPlayers in this faction
     void refreshFPlayers();
@@ -263,10 +248,6 @@ public interface Faction extends EconomyParticipator, Selectable {
 
     void sendMessage(List<String> messages);
 
-    // ----------------------------------------------//
-    // Ownership of specific claims
-    // ----------------------------------------------//
-
     Map<FLocation, Set<String>> getClaimOwnership();
 
     void clearAllClaimOwnership();
@@ -291,9 +272,6 @@ public interface Faction extends EconomyParticipator, Selectable {
 
     boolean playerHasOwnershipRights(FPlayer fplayer, FLocation loc);
 
-    // ----------------------------------------------//
-    // Persistance and entity management
-    // ----------------------------------------------//
     void remove();
 
     Set<FLocation> getAllClaims();

@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class BufferedObjective {
     private static final int MAX_LINE_LENGTH = 48;
-    private static final Pattern PATTERN = Pattern.compile("(\u00A7[0-9a-fk-r])|(.)");
+    private static final Pattern PATTERN = Pattern.compile("(§[0-9a-fk-r])|(.)");
 
     private final Scoreboard scoreboard;
     private final String baseName;
@@ -143,10 +143,10 @@ public class BufferedObjective {
                             arrImAPirate[sCURvy++] = builderrr.toString();
                             builderrr = new StringBuilder();
                             if (currrentColorrr != 'r') {
-                                builderrr.append('\u00A7').append(currrentColorrr);
+                                builderrr.append('§').append(currrentColorrr);
                             }
                             if (currrentFormat != 'r') {
-                                builderrr.append('\u00A7').append(currrentFormat);
+                                builderrr.append('§').append(currrentFormat);
                             }
                         }
                     }

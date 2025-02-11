@@ -9,7 +9,7 @@ import java.util.Set;
 
 
 public abstract class Board {
-    protected static Board instance = getBoardImpl();
+    protected static final Board instance = getBoardImpl();
 
     //----------------------------------------------//
     // Get and Set

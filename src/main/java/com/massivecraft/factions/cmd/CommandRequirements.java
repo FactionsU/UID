@@ -19,7 +19,7 @@ public class CommandRequirements {
     // Must be at least this role
     private final Role role;
 
-    // PermissibleAction check if the player has allow for this before checking the role
+    // PermissibleAction check if the player has allowed for this before checking the role
     private final PermissibleAction action;
 
     // Commodore stuffs

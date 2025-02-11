@@ -47,7 +47,7 @@ public class CmdWarp extends FCommand {
             final String passwordAttempt = context.argAsString(1);
 
             if (context.faction.isWarp(context.argAsString(0))) {
-                // Check if requires password and if so, check if valid. CASE SENSITIVE
+                // Check if warp requires password and if so, check if valid. CASE SENSITIVE
                 if (!context.fPlayer.isAdminBypassing() && context.faction.hasWarpPassword(warpName) && !context.faction.isWarpPassword(warpName, passwordAttempt)) {
                     context.fPlayer.msg(TL.COMMAND_FWARP_INVALID_PASSWORD);
                     return;

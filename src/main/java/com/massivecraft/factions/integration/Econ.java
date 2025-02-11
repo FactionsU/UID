@@ -143,7 +143,7 @@ public class Econ {
             return true;
         }
 
-        // A faction can always transfer away the money of it's members and its own money...
+        // A faction can always transfer away the money of its members and its own money...
         // This will however probably never happen as a faction does not have free will.
         // Ohh by the way... Yes it could. For daily rent to the faction.
         if (i == fI && fI == fYou) {
@@ -317,7 +317,7 @@ public class Econ {
                 return false;
             }
         } else {
-            // The player should loose money
+            // The player should lose money
             // The player might not have enough.
 
             if (has(acc, -delta) && withdraw(acc, -delta)) {

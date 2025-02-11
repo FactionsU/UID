@@ -28,7 +28,7 @@ public class CmdDisband extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        // The faction, default to your own.. but null if console sender.
+        // The faction, default to your own. but null if console sender.
         Faction faction = context.argAsFaction(0, context.fPlayer == null ? null : context.faction);
         if (faction == null) {
             return;

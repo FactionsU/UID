@@ -148,7 +148,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public Role getRole() {
-        // Hack to fix null roles..
+        // Hack to fix null roles.
         if (role == null) {
             this.role = Role.NORMAL;
         }
@@ -581,12 +581,12 @@ public abstract class MemoryFPlayer implements FPlayer {
     //----------------------------------------------//
     // Health
     //----------------------------------------------//
-    public void heal(int amnt) {
+    public void heal(int amount) {
         Player player = this.getPlayer();
         if (player == null) {
             return;
         }
-        player.setHealth(player.getHealth() + amnt);
+        player.setHealth(player.getHealth() + amount);
     }
 
 
@@ -774,7 +774,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             return;
         }
 
-        // if economy is enabled and they're not on the bypass list, make sure they can pay
+        // if economy is enabled, and they're not on the bypass list, make sure they can pay
         if (econMakePay && !Econ.hasAtLeast(this, FactionsPlugin.getInstance().conf().economy().getCostLeave(), TL.LEAVE_TOLEAVE.toString())) {
             return;
         }
@@ -958,7 +958,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             return false;
         }
 
-        // if economy is enabled and they're not on the bypass list, make sure they can pay
+        // if economy is enabled, and they're not on the bypass list, make sure they can pay
         boolean mustPay = Econ.shouldBeUsed() && !this.isAdminBypassing() && !forFaction.isSafeZone() && !forFaction.isWarZone();
         double cost = 0.0;
         EconomyParticipator payee = null;

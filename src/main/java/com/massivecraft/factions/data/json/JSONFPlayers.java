@@ -57,8 +57,8 @@ public class JSONFPlayers extends MemoryFPlayers {
         saveCore(file, entitiesThatShouldBeSaved, sync);
     }
 
-    private boolean saveCore(File target, List<JSONFPlayer> data, boolean sync) {
-        return DiscUtil.writeCatch(target, FactionsPlugin.getInstance().getGson().toJson(data), sync);
+    private void saveCore(File target, List<JSONFPlayer> data, boolean sync) {
+        DiscUtil.writeCatch(target, FactionsPlugin.getInstance().getGson().toJson(data), sync);
     }
 
     public int load() {
@@ -97,7 +97,7 @@ public class JSONFPlayers extends MemoryFPlayers {
 
     private boolean doesKeyNeedMigration(String key) {
         if (!key.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")) {
-            // Not a valid UUID..
+            // Not a valid UUID.
             // Valid playername, we'll mark this as one for conversion
             // to UUID
             return key.matches("[a-zA-Z0-9_]{2,16}");

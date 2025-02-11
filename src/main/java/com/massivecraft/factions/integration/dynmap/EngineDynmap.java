@@ -48,7 +48,7 @@ public class EngineDynmap {
 
     public final static int BLOCKS_PER_CHUNK = 16;
 
-    public final static String DYNMAP_INTEGRATION = "\u00A7dDynmap Integration: \u00A7e";
+    public final static String DYNMAP_INTEGRATION = "§dDynmap Integration: §e";
 
     public final static String FACTIONS = "factions";
     public final static String FACTIONS_ = FACTIONS + "_";

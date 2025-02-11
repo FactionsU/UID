@@ -1077,7 +1077,7 @@ public abstract class MemoryFaction implements Faction, EconomyParticipator {
     }
 
     // ----------------------------------------------//
-    // Persistance and entity management
+    // Persistence and entity management
     // ----------------------------------------------//
     public void remove() {
         if (Econ.shouldBeUsed() && FactionsPlugin.getInstance().conf().economy().isBankEnabled()) {

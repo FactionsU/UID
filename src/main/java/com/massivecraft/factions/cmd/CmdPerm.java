@@ -65,11 +65,6 @@ public class CmdPerm extends FCommand {
         }
 
         @Override
-        public TL getUsageTranslation() {
-            return null;
-        }
-
-        @Override
         public void perform(CommandContext context) {
             Audience audience = FactionsPlugin.getInstance().getAdventure().player(context.player);
             LinkedHashMap<PermSelector, Map<String, Boolean>> permissions = ((MemoryFaction) context.faction).getPermissions();

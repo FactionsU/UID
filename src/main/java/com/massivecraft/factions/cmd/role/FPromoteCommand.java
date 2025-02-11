@@ -46,7 +46,7 @@ public class FPromoteCommand extends FCommand {
             return;
         }
 
-        // Don't allow people to promote people to their same or higher rnak.
+        // Don't allow people to promote people to their same or higher rank.
         if (context.fPlayer.getRole().value <= promotion.value) {
             context.msg(TL.COMMAND_PROMOTE_NOT_ALLOWED);
             return;

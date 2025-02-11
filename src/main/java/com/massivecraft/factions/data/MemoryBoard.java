@@ -191,7 +191,7 @@ public abstract class MemoryBoard extends Board {
 
     private final char[] mapKeyChrs = "\\/#$%=&^ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890abcdeghjmnopqrsuvwxyz?".toCharArray();
 
-    protected Object2ObjectMap<String, WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
+    protected final Object2ObjectMap<String, WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
 
     protected WorldTracker getAndCreate(String world) {
         return this.worldTrackers.computeIfAbsent(world, k -> new WorldTracker(world));
@@ -510,7 +510,7 @@ public abstract class MemoryBoard extends Board {
         N, E, S, W
     }
 
-    private Cache<FPlayer, List<Component>> mapCache = CacheBuilder.newBuilder()
+    private final Cache<FPlayer, List<Component>> mapCache = CacheBuilder.newBuilder()
             .expireAfterWrite(500, TimeUnit.MILLISECONDS).build();
 
     public List<Component> getScoreboardMap(FPlayer fplayer) {
@@ -560,7 +560,7 @@ public abstract class MemoryBoard extends Board {
 
             for (int c = 0; c < width; c++) {
                 if (c == halfWidth && r == halfHeight) {
-                    builder.append(Component.text().content("\u2B1B").color(FactionsPlugin.getInstance().conf().map().getSelfColor()));
+                    builder.append(Component.text().content("⬛").color(FactionsPlugin.getInstance().conf().map().getSelfColor()));
                 } else {
                     FLocation flocationHere = switch (dir) {
                         case N -> topLeft.getRelative(c, r);
@@ -571,18 +571,18 @@ public abstract class MemoryBoard extends Board {
                     Faction factionHere = getFactionAt(flocationHere);
                     Relation relation = fplayer.getRelationTo(factionHere);
                     if (factionHere.isWilderness()) {
-                        builder.append(Component.text().content("\u2B1B").color(FactionsPlugin.getInstance().conf().colors().factions().getWilderness()));
+                        builder.append(Component.text().content("⬛").color(FactionsPlugin.getInstance().conf().colors().factions().getWilderness()));
                     } else if (factionHere.isSafeZone()) {
-                        builder.append(Component.text().content("\u2B1B").color(FactionsPlugin.getInstance().conf().colors().factions().getSafezone()));
+                        builder.append(Component.text().content("⬛").color(FactionsPlugin.getInstance().conf().colors().factions().getSafezone()));
                     } else if (factionHere.isWarZone()) {
-                        builder.append(Component.text().content("\u2B1B").color(FactionsPlugin.getInstance().conf().colors().factions().getWarzone()));
+                        builder.append(Component.text().content("⬛").color(FactionsPlugin.getInstance().conf().colors().factions().getWarzone()));
                     } else if (factionHere == faction || factionHere == factionLoc || relation.isAtLeast(Relation.ALLY) ||
                             (FactionsPlugin.getInstance().conf().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
                             (FactionsPlugin.getInstance().conf().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
                             FactionsPlugin.getInstance().conf().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
-                        builder.append(Component.text().content("\u2B1B").color(factionHere.getTextColorTo(faction)));
+                        builder.append(Component.text().content("⬛").color(factionHere.getTextColorTo(faction)));
                     } else {
-                        builder.append(Component.text().content("\u2B1B").color(NamedTextColor.GRAY));
+                        builder.append(Component.text().content("⬛").color(NamedTextColor.GRAY));
                     }
                 }
             }

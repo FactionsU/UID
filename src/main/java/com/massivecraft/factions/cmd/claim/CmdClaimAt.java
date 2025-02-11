@@ -29,9 +29,4 @@ public class CmdClaimAt extends FCommand {
         FLocation location = new FLocation(context.argAsString(0), x, z);
         context.fPlayer.attemptClaim(context.faction, location, true);
     }
-
-    @Override
-    public TL getUsageTranslation() {
-        return null;
-    }
 }

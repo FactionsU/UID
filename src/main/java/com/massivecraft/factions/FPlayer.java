@@ -171,7 +171,7 @@ public interface FPlayer extends EconomyParticipator, Selectable {
     //----------------------------------------------//
     // Health
     //----------------------------------------------//
-    void heal(int amnt);
+    void heal(int amount);
 
 
     //----------------------------------------------//

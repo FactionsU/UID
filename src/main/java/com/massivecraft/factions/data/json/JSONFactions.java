@@ -23,7 +23,6 @@ public class JSONFactions extends MemoryFactions {
         }
     }
 
-
     public Gson getGson() {
         return FactionsPlugin.getInstance().getGson();
     }

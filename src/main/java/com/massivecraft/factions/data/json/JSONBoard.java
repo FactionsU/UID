@@ -18,7 +18,7 @@ public class JSONBoard extends MemoryBoard {
     private static final transient File file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/board.json");
 
     // -------------------------------------------- //
-    // Persistance
+    // Persistence
     // -------------------------------------------- //
 
     public Map<String, Map<String, String>> dumpAsSaveFormat() {

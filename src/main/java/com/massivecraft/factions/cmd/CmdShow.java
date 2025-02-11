@@ -36,7 +36,7 @@ public class CmdShow extends FCommand {
         this.aliases.add("show");
         this.aliases.add("who");
 
-        // add defaults to /f show in case config doesnt have it
+        // add defaults to /f show in case config doesn't have it
         defaults.add("{header}");
         defaults.add("<a>Description: <i>{description}");
         defaults.add("<a>Joining: <i>{joining}    {peaceful}");
