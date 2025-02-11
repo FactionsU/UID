@@ -5,9 +5,6 @@ import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 
 public class CmdLink extends FCommand {
 
@@ -20,7 +17,6 @@ public class CmdLink extends FCommand {
         this.requirements = new CommandRequirements.Builder(Permission.LINK)
                 .memberOnly()
                 .noErrorOnManyArgs()
-                .brigadier(CmdLink.Brigadier.class)
                 .build();
     }
 
@@ -56,10 +52,4 @@ public class CmdLink extends FCommand {
         return TL.COMMAND_LINK_DESCRIPTION;
     }
 
-    protected class Brigadier implements BrigadierProvider {
-        @Override
-        public ArgumentBuilder<Object, ?> get(ArgumentBuilder<Object, ?> parent) {
-            return parent.then(RequiredArgumentBuilder.argument("URL", StringArgumentType.greedyString()));
-        }
-    }
 }

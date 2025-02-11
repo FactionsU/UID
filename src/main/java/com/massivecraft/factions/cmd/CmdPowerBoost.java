@@ -5,12 +5,6 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.tree.ArgumentCommandNode;
 
 public class CmdPowerBoost extends FCommand {
 
@@ -24,7 +18,6 @@ public class CmdPowerBoost extends FCommand {
         this.optionalArgs.put("#/reset", "");
 
         this.requirements = new CommandRequirements.Builder(Permission.POWERBOOST)
-                .brigadier(CmdPowerBoost.Brigadier.class)
                 .build();
     }
 
@@ -99,18 +92,5 @@ public class CmdPowerBoost extends FCommand {
     @Override
     public TL getUsageTranslation() {
         return TL.COMMAND_POWERBOOST_DESCRIPTION;
-    }
-
-    protected class Brigadier implements BrigadierProvider {
-        @Override
-        public ArgumentBuilder<Object, ?> get(ArgumentBuilder<Object, ?> parent) {
-            ArgumentCommandNode<Object, ?> generic = RequiredArgumentBuilder.argument("p/f/player/faction", StringArgumentType.word())
-                    .then(RequiredArgumentBuilder.argument("name", StringArgumentType.word())
-                            .then(RequiredArgumentBuilder.argument("amount", IntegerArgumentType.integer()))).build();
-
-            return parent.then(generic)
-                    .then(LiteralArgumentBuilder.literal("set").then(generic))
-                    .then(LiteralArgumentBuilder.literal("add").then(generic));
-        }
     }
 }

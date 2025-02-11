@@ -22,8 +22,6 @@ import com.massivecraft.factions.cmd.role.CmdPromote;
 import com.massivecraft.factions.landraidcontrol.DTRControl;
 import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.util.TL;
-import io.papermc.lib.PaperLib;
-import me.lucko.commodore.CommodoreProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -42,8 +40,6 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
     }
 
     public final CmdAutoHelp cmdAutoHelp = new CmdAutoHelp();
-
-    public BrigadierManager brigadierManager;
 
     public final CmdAdmin cmdAdmin = new CmdAdmin();
     public final CmdAutoClaim cmdAutoClaim = new CmdAutoClaim();
@@ -134,10 +130,6 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
         super();
 
         cmdBase = this;
-
-        if (canCommodore()) {
-            brigadierManager = new BrigadierManager();
-        }
 
         this.aliases.addAll(FactionsPlugin.getInstance().conf().getCommandBase());
         this.aliases.removeAll(Collections.<String>singletonList(null));  // remove any nulls from extra commas
@@ -255,9 +247,6 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
             this.addSubCommand(new CmdSetMaxVaults());
             this.addSubCommand(new CmdVault());
         }
-        if (canCommodore()) {
-            brigadierManager.build();
-        }
     }
 
     @Override
@@ -280,17 +269,10 @@ public class FCmdRoot extends FCommand implements CommandExecutor {
     @Override
     public void addSubCommand(FCommand subCommand) {
         super.addSubCommand(subCommand);
-        if (canCommodore()) {
-            brigadierManager.addSubCommand(subCommand);
-        }
     }
 
     @Override
     public TL getUsageTranslation() {
         return TL.GENERIC_PLACEHOLDER;
-    }
-
-    private boolean canCommodore() {
-        return (FactionsPlugin.getMCVersion() < 1900 || PaperLib.isPaper()) && CommodoreProvider.isSupported();
     }
 }

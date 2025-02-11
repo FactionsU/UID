@@ -59,10 +59,6 @@
                             <shadedPattern>moss.factions.shade.net.amoebaman.util</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>me.lucko.commodore</pattern>
-                            <shadedPattern>moss.factions.shade.me.lucko.commodore</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>com.typesafe</pattern>
                             <shadedPattern>moss.factions.shade.com.typesafe</shadedPattern>
                         </relocation>
@@ -179,13 +175,6 @@
             <groupId>com.darkblade12</groupId>
             <artifactId>particleeffect</artifactId>
             <version>1.8.0-fuuid</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>me.lucko</groupId>
-            <artifactId>commodore</artifactId>
-            <version>2.2</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>

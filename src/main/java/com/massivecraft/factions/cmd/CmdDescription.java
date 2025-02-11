@@ -7,9 +7,6 @@ import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 
 public class CmdDescription extends FCommand {
 
@@ -24,7 +21,6 @@ public class CmdDescription extends FCommand {
                 .memberOnly()
                 .withRole(Role.MODERATOR)
                 .noErrorOnManyArgs()
-                .brigadier(GreedyMessageBrigadier.class)
                 .build();
     }
 
@@ -63,10 +59,4 @@ public class CmdDescription extends FCommand {
         return TL.COMMAND_DESCRIPTION_DESCRIPTION;
     }
 
-    protected class GreedyMessageBrigadier implements BrigadierProvider {
-        @Override
-        public ArgumentBuilder<Object, ?> get(ArgumentBuilder<Object, ?> parent) {
-            return parent.then(RequiredArgumentBuilder.argument("message", StringArgumentType.greedyString()));
-        }
-    }
 }
