@@ -54,7 +54,6 @@ import com.massivecraft.factions.util.material.MaterialDb;
 import com.massivecraft.factions.util.particle.PacketParticleProvider;
 import com.massivecraft.factions.util.particle.ParticleProvider;
 import com.mojang.authlib.GameProfile;
-import io.papermc.lib.PaperLib;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -1205,11 +1204,7 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     }
 
     public CompletableFuture<Boolean> teleport(Player player, Location location) {
-        if (this.conf().paper().isAsyncTeleport()) {
-            return PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN);
-        } else {
-            return CompletableFuture.completedFuture(player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN));
-        }
+        return CompletableFuture.completedFuture(player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN));
     }
 
     public OfflinePlayer getFactionOfflinePlayer(String name) {

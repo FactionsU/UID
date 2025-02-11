@@ -2950,12 +2950,6 @@ public class MainConfig {
     }
 
     public class Paper {
-        @Comment("Utilize Paper's async teleportation if available (Paper 1.9+).")
-        private boolean asyncTeleport = true;
-
-        public boolean isAsyncTeleport() {
-            return asyncTeleport;
-        }
     }
 
     public class Plugins {
@@ -3102,7 +3096,7 @@ public class MainConfig {
     private LWC lwc = new LWC();
     @Comment("Integration with the Magic plugin")
     private MagicPlugin magicPlugin = new MagicPlugin();
-    @Comment("Paper features, when accessible.")
+    @Comment("Paper features, when accessible. Currently empty, as no toggleable features work on 1.8.8")
     private Paper paper = new Paper();
     @Comment("Lists plugin integrations. Some other plugins (PVX, LWC, Magic, WG, WB) are currently\n" +
             " elsewhere but will migrate here in the future")

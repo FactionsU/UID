@@ -83,10 +83,6 @@
                             <shadedPattern>moss.factions.shade.org.kitteh</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>io.papermc.lib</pattern>
-                            <shadedPattern>moss.factions.shade.io.paperlib</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>net.kyori</pattern>
                             <shadedPattern>moss.factions.shade.net.kyori</shadedPattern>
                         </relocation>
@@ -140,13 +136,6 @@
 
         <!-- SHADED -->
 
-        <dependency>
-            <groupId>io.papermc</groupId>
-            <artifactId>paperlib</artifactId>
-            <version>1.0.4</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
