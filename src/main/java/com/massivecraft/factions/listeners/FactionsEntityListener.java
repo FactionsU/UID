@@ -80,16 +80,14 @@ public class FactionsEntityListener extends AbstractListener {
             return;
         }
 
-        if (event instanceof EntityDamageByEntityEvent) {
-            EntityDamageByEntityEvent sub = (EntityDamageByEntityEvent) event;
+        if (event instanceof EntityDamageByEntityEvent sub) {
             if (!this.canDamagerHurtDamagee(sub, true)) {
                 event.setCancelled(true);
             }
         } else if (FactionsPlugin.getInstance().conf().factions().protection().isSafeZonePreventAllDamageToPlayers() && isPlayerInSafeZone(event.getEntity())) {
             // Players can not take any damage in a Safe Zone
             event.setCancelled(true);
-        } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
+        } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && event.getEntity() instanceof Player player) {
             FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
             if (fPlayer != null && !fPlayer.shouldTakeFallDamage()) {
                 event.setCancelled(true); // Falling after /f fly
@@ -109,8 +107,7 @@ public class FactionsEntityListener extends AbstractListener {
         if (event instanceof EntityDamageByEntityEvent) {
             Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 
-            if (damager instanceof Projectile) {
-                Projectile projectile = (Projectile) damager;
+            if (damager instanceof Projectile projectile) {
 
                 if (projectile.getShooter() instanceof Entity) {
                     damager = (Entity) projectile.getShooter();
@@ -214,8 +211,7 @@ public class FactionsEntityListener extends AbstractListener {
             return;
         }
 
-        if (thrower instanceof Player) {
-            Player player = (Player) thrower;
+        if (thrower instanceof Player player) {
             FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
             if (fPlayer.getFaction().isPeaceful()) {
                 if (event.getPotion().getEffects().stream().allMatch(e -> e.getType().equals(PotionEffectType.WEAKNESS))) {
@@ -259,8 +255,7 @@ public class FactionsEntityListener extends AbstractListener {
         Faction defLocFaction = Board.getInstance().getFactionAt(defLoc);
 
         // for damage caused by projectiles, getDamager() returns the projectile... what we need to know is the source
-        if (damager instanceof Projectile) {
-            Projectile projectile = (Projectile) damager;
+        if (damager instanceof Projectile projectile) {
 
             if (!(projectile.getShooter() instanceof Entity)) {
                 return true;
@@ -278,8 +273,7 @@ public class FactionsEntityListener extends AbstractListener {
             }
         }
 
-        if (damager instanceof Player) {
-            Player player = (Player) damager;
+        if (damager instanceof Player player) {
             Material material = null;
             EntityType type = damagee.getType();
             if (type.name().contains("ITEM_FRAME")) {

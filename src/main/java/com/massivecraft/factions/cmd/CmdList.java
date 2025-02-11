@@ -52,7 +52,7 @@ public class CmdList extends FCommand {
 
         ArrayList<String> lines = new ArrayList<>();
 
-        factionList.add(0, Factions.getInstance().getWilderness());
+        factionList.addFirst(Factions.getInstance().getWilderness());
 
         final int pageheight = 9;
         int pagenumber = context.argAsInt(0, 1);

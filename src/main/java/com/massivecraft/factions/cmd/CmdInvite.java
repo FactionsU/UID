@@ -56,7 +56,7 @@ public class CmdInvite extends FCommand {
                     .append(legacy.deserialize(TL.COMMAND_INVITE_INVITEDYOU.toString()).color(NamedTextColor.YELLOW))
                     .append(legacy.deserialize(context.faction.describeTo(target)));
             component = component.hoverEvent(legacy.deserialize(TL.COMMAND_INVITE_CLICKTOJOIN.toString()).asHoverEvent())
-                    .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " join " + ChatColor.stripColor(context.faction.getTag())));
+                    .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " join " + ChatColor.stripColor(context.faction.getTag())));
             FactionsPlugin.getInstance().getAdventure().player(target.getPlayer()).sendMessage(component);
         }
 

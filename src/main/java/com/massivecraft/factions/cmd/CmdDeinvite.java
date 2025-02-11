@@ -38,7 +38,7 @@ public class CmdDeinvite extends FCommand {
                 String name = fp != null ? fp.getName() : id;
                 component = component.append(Component.text().color(NamedTextColor.GRAY).content(name + " ")
                         .hoverEvent(legacy.deserialize(TL.COMMAND_DEINVITE_CLICKTODEINVITE.format(name)).asHoverEvent())
-                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " deinvite " + name))
+                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " deinvite " + name))
                 );
             }
             FactionsPlugin.getInstance().getAdventure().player(context.player).sendMessage(component);

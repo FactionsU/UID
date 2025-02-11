@@ -39,7 +39,7 @@ public class CmdKick extends FCommand {
                 String s = player.getName();
                 component = component.append(Component.text().color(NamedTextColor.WHITE).content(s + " ")
                         .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
-                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " kick " + s))
+                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " kick " + s))
                 );
             }
             if (context.fPlayer.getRole().isAtLeast(Role.COLEADER)) {
@@ -48,7 +48,7 @@ public class CmdKick extends FCommand {
                     String s = player.getName();
                     component = component.append(Component.text().color(NamedTextColor.GRAY).content(s + " ")
                             .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
-                            .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " kick " + s))
+                            .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " kick " + s))
                     );
                 }
                 if (context.fPlayer.getRole() == Role.ADMIN) {
@@ -57,7 +57,7 @@ public class CmdKick extends FCommand {
                         String s = player.getName();
                         component = component.append(Component.text().color(NamedTextColor.RED).content(s + " ")
                                 .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
-                                .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " kick " + s))
+                                .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " kick " + s))
                         );
                     }
                 }

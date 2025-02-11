@@ -253,7 +253,7 @@ public class FactionsBlockListener extends AbstractListener {
     }
 
     private boolean canPistonMoveBlock(Faction pistonFaction, List<Block> blocks, BlockFace direction) {
-        String world = blocks.get(0).getWorld().getName();
+        String world = blocks.getFirst().getWorld().getName();
         List<FLocation> locations = (direction == null ? blocks.stream() : blocks.stream().map(b -> b.getRelative(direction)))
                 .map(Block::getLocation)
                 .map(FLocation::new)

@@ -39,7 +39,7 @@ public class CmdMod extends FCommand {
                 component = component.append(Component.text().color(NamedTextColor.WHITE)
                         .content(s + " ")
                         .hoverEvent(legacy.deserialize(TL.COMMAND_MOD_CLICKTOPROMOTE + s))
-                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().get(0) + " mod " + s))
+                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " mod " + s))
                 );
             }
 

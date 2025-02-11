@@ -464,12 +464,11 @@ public class FancyMessage implements JsonRepresentedObject, Cloneable, Iterable<
 	}
 
 	private void send(CommandSender sender, String jsonString) {
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			sender.sendMessage(toOldMessageFormat());
 			return;
 		}
-		Player player = (Player) sender;
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " " + jsonString);
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " " + jsonString);
 	}
 
 	/**
@@ -527,7 +526,7 @@ public class FancyMessage implements JsonRepresentedObject, Cloneable, Iterable<
 	}
 
 	private MessagePart latest() {
-		return messageParts.get(messageParts.size() - 1);
+		return messageParts.getLast();
 	}
 
 	private void onClick(final String name, final String data) {
