@@ -7,7 +7,6 @@ import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
-import dev.kitteh.factions.util.material.MaterialDb;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.conversations.ConversationAbandonedEvent;
@@ -166,10 +165,10 @@ public class WarpGUI extends GUI<Integer> {
     @Override
     protected SimpleItem getItem(Integer index) {
         if (index == -1) {
-            return SimpleItem.builder().setName(TL.GUI_BUTTON_NEXT.toString()).setMaterial(MaterialDb.get("ARROW")).build();
+            return SimpleItem.builder().setName(TL.GUI_BUTTON_NEXT.toString()).setMaterial(Material.ARROW).build();
         }
         if (index == -2) {
-            return SimpleItem.builder().setName(TL.GUI_BUTTON_PREV.toString()).setMaterial(MaterialDb.get("ARROW")).build();
+            return SimpleItem.builder().setName(TL.GUI_BUTTON_PREV.toString()).setMaterial(Material.ARROW).build();
         }
         SimpleItem item = new SimpleItem(warpItem);
         if (faction.hasWarpPassword(warps.get(index))) {
