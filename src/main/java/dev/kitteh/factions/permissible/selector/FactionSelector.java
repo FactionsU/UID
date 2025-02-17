@@ -10,6 +10,8 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
+import java.util.Objects;
+
 public class FactionSelector extends AbstractSelector {
     public static final String NAME = "faction";
     public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, FactionsPlugin.getInstance().tl().permissions().selectors().faction()::getDisplayName, FactionSelector::new)
@@ -63,5 +65,15 @@ public class FactionSelector extends AbstractSelector {
         return faction == null ?
                 MiniMessage.miniMessage().deserialize(FactionsPlugin.getInstance().tl().permissions().selectors().faction().getDisbandedValue(), Placeholder.unparsed("lastknown", this.lastKnown)) :
                 LegacyComponentSerializer.legacySection().deserialize(faction.getTag(context));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("factionselector", this.id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof FactionSelector fs && fs.id == this.id;
     }
 }
