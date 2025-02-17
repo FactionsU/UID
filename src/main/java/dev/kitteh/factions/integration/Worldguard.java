@@ -105,8 +105,9 @@ public class Worldguard {
         int maxChunkZ = minChunkZ + 15;
 
         int worldHeight = world.getMaxHeight(); // Allow for heights other than default
+        int worldDepth = world.getMinHeight();
 
-        BlockVector3 min = BlockVector3.at(minChunkX, 0, minChunkZ);
+        BlockVector3 min = BlockVector3.at(minChunkX, worldDepth, minChunkZ);
         BlockVector3 max = BlockVector3.at(maxChunkX, worldHeight, maxChunkZ);
         ProtectedRegion region = new ProtectedCuboidRegion("wgregionflagcheckforfactions", min, max);
         ApplicableRegionSet set = regions.getApplicableRegions(region);
