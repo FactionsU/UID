@@ -58,7 +58,7 @@ public class WorldTracker {
     }
 
     public void removeAllClaims(int id) {
-        LongSet claims = IDToChunk.get(id);
+        LongSet claims = IDToChunk.remove(id);
         if (claims != null) {
             claims.forEach(chunkToID::remove);
         }

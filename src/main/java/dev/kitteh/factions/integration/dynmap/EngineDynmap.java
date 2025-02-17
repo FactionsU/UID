@@ -138,12 +138,25 @@ public class EngineDynmap {
                 Map<Integer, String> factionTag = new HashMap<>();
                 Map<Integer, String> factionDesc = new HashMap<>();
                 Map<Integer, DynmapStyle> factionStyle = new HashMap<>();
+                Set<Integer> invalidFactionsWat = new HashSet<>();
                 worldFactionChunks.values().stream().flatMapToInt(m -> m.keySet().intStream()).distinct().forEach(factionId -> {
                     Faction faction = Factions.getInstance().getFactionById(factionId);
+                    if (faction == null) { // why :(
+                        FactionsPlugin.getInstance().getLogger().warning("Found invalid faction ID " + factionId);
+                        invalidFactionsWat.add(factionId);
+                        return;
+                    }
                     factionTag.put(factionId, faction.getTag());
                     factionDesc.put(factionId, getDescription(faction));
                     factionStyle.put(factionId, getStyle(faction));
                 });
+                if (!invalidFactionsWat.isEmpty()) {
+                    worldFactionChunks.values().forEach(m -> {
+                        for (int id : invalidFactionsWat) {
+                            m.remove(id);
+                        }
+                    });
+                }
 
                 new BukkitRunnable() {
                     @Override
@@ -352,7 +365,7 @@ public class EngineDynmap {
             Int2ObjectMap<LongList> factionChunks = entry.getValue();
 
             // For each faction and its chunks in that world
-            factionChunks.int2ObjectEntrySet().forEach(e-> {
+            factionChunks.int2ObjectEntrySet().forEach(e -> {
                 int factionId = e.getIntKey();
                 LongList chunks = e.getValue();
                 Map<String, TempAreaMarker> worldFactionMarkers = createAreas(world, factionId, chunks, factionTag, factionDesc, factionStyle);
