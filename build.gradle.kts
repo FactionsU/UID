@@ -130,7 +130,6 @@ repositories {
 
     filter {
       includeModule("be.maximvdw", "MVdWPlaceholderAPI")
-      includeModule("org.kitteh", "paste-gg-api")
     }
   }
 
