@@ -33,10 +33,6 @@ public class FTeamWrapper {
     private final Set<String> members = new HashSet<>();
 
     public static void applyUpdatesLater(final Faction faction) {
-        if (!FScoreboard.isSupportedByServer()) {
-            return;
-        }
-
         if (faction.isWilderness()) {
             return;
         }
@@ -58,10 +54,6 @@ public class FTeamWrapper {
     }
 
     public static void applyUpdates(Faction faction) {
-        if (!FScoreboard.isSupportedByServer()) {
-            return;
-        }
-
         if (faction.isWilderness()) {
             return;
         }
@@ -111,10 +103,6 @@ public class FTeamWrapper {
     }
 
     public static void updatePrefixes(Faction faction) {
-        if (!FScoreboard.isSupportedByServer()) {
-            return;
-        }
-
         if (!wrappers.containsKey(faction)) {
             applyUpdates(faction);
         } else {
@@ -123,9 +111,6 @@ public class FTeamWrapper {
     }
 
     protected static void track(FScoreboard fboard) {
-        if (!FScoreboard.isSupportedByServer()) {
-            return;
-        }
         tracking.add(fboard);
         for (FTeamWrapper wrapper : wrappers.values()) {
             wrapper.add(fboard);
@@ -133,9 +118,6 @@ public class FTeamWrapper {
     }
 
     protected static void untrack(FScoreboard fboard) {
-        if (!FScoreboard.isSupportedByServer()) {
-            return;
-        }
         tracking.remove(fboard);
         for (FTeamWrapper wrapper : wrappers.values()) {
             wrapper.remove(fboard);
