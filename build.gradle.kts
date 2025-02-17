@@ -142,6 +142,16 @@ repositories {
       includeModule("com.github.MilkBowl", "VaultAPI")
     }
   }
+
+  exclusiveContent {
+    forRepository {
+      maven("https://dependency.download/releases")
+    }
+
+    filter {
+      includeModule("dev.kitteh.forkedproject", "IF-ChestOnly")
+    }
+  }
 }
 
 configurations.implementation {
@@ -194,7 +204,8 @@ dependencies {
     libs.depenizen,
     libs.luckperms.api,
     libs.magic.api,
-    libs.graves
+    libs.graves,
+    libs.ifchestonly
   ).forEach {
     compileOnly(it) {
       isTransitive = false
@@ -244,12 +255,14 @@ tasks.shadowJar {
     include(dependency("net.kyori:examination-api"))
     include(dependency("net.kyori:examination-string"))
     include(dependency("net.kyori:option"))
+    include(dependency("dev.kitteh.forkedproject:IF-ChestOnly"))
   }
 
   relocate("com.typesafe", "moss.factions.shade.com.typesafe")
   relocate("io.papermc.lib", "moss.factions.shade.io.papermc.lib")
   relocate("me.lucko.commodore", "moss.factions.shade.me.lucko.commodore")
   relocate("ninja.leaping", "moss.factions.shade.ninja.leaping")
+  relocate("com.github.stefvanschie.inventoryframework", "moss.factions.shade.stefvanschie.if")
 
   relocate("net.kyori", "moss.factions.shade.net.kyori")
   relocate("org.apache.commons.codec", "moss.factions.shade.org.apache.commons.codec")
