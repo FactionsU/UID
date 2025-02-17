@@ -5,7 +5,7 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 public class BukkitParticleProvider {
-    private final Particle fallback = Particle.REDSTONE;
+    private final Particle fallback = Particle.DUST;
 
     public void spawn(Particle effect, Location location, int count) {
         location.getWorld().spawnParticle(effect, location, count);

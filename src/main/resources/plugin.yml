@@ -3,7 +3,7 @@ version: ${version}
 main: dev.kitteh.factions.FactionsPlugin
 authors: [mbaxter, drtshock, dariasc, Brett Flannigan, Olof Larsson]
 softdepend: [LuckPerms, WorldGuard]
-api-version: '1.20'
+api-version: '1.21.4'
 website: https://www.spigotmc.org/resources/factionsuuid.1035/
 commands:
   factions:
