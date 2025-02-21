@@ -1,0 +1,47 @@
+package dev.kitteh.factions.command.defaults;
+
+import dev.kitteh.factions.FPlayer;
+import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.command.Cloudy;
+import dev.kitteh.factions.command.Cmd;
+import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TL;
+import org.bukkit.ChatColor;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.parser.standard.StringParser;
+
+import java.util.function.BiConsumer;
+
+public class CmdAnnounce implements Cmd {
+    @Override
+    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
+        return (manager, builder) -> {
+            manager.command(
+                    builder.literal("announce")
+                            .commandDescription(Cloudy.desc(TL.COMMAND_ANNOUNCE_DESCRIPTION))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.ANNOUNCE).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
+                            .required("message", StringParser.greedyStringParser())
+                            .handler(this::handle)
+            );
+        };
+    }
+
+    private void handle(CommandContext<Sender> context) {
+        FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
+        Faction faction = sender.getFaction();
+
+        String prefix = ChatColor.GREEN + faction.getTag() + ChatColor.YELLOW + " [" + ChatColor.GRAY + sender.getName() + ChatColor.YELLOW + "] " + ChatColor.RESET;
+        String message = context.get("message");
+
+        faction.sendMessage(prefix + message);
+
+        // Add for offline players.
+        for (FPlayer fp : faction.getFPlayersWhereOnline(false)) {
+            faction.addAnnouncement(fp, prefix + message);
+        }
+    }
+}

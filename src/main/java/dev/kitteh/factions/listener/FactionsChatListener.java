@@ -4,14 +4,16 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.integration.Essentials;
 import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
-import dev.kitteh.factions.util.ChatMode;
 import dev.kitteh.factions.util.WorldUtil;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,80 +41,57 @@ public class FactionsChatListener implements Listener {
         Player talkingPlayer = event.getPlayer();
         String msg = event.getMessage();
         FPlayer me = FPlayers.getInstance().getByPlayer(talkingPlayer);
-        ChatMode chat = me.getChatMode();
-        MainConfig.Factions.Chat chatConf = FactionsPlugin.getInstance().conf().factions().chat();
-        //Is it a MOD chat
-        if (chat == ChatMode.MOD) {
-            Faction myFaction = me.getFaction();
+        Faction faction = me.getFaction();
+        MainConfig.Factions.Chat.InternalChat chatConf = FactionsPlugin.getInstance().conf().factions().chat().internalChat();
 
-            String message = String.format(chatConf.getModChatFormat(), ChatColor.stripColor(me.getNameAndTag()), msg);
+        ChatTarget chatTarget = me.getChatTarget();
 
-            //Send to all mods
-            for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
-                if (myFaction == fplayer.getFaction() && fplayer.getRole().isAtLeast(Role.MODERATOR)) {
-                    fplayer.sendMessage(message);
-                } else if (fplayer.isSpyingChat() && me != fplayer) {
-                    fplayer.sendMessage("[MCspy]: " + message);
+        LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
+
+        if (chatTarget instanceof ChatTarget.Role(Role role)) {
+            String format = role == Role.RECRUIT ? chatConf.getFactionMemberAllChatFormat() : chatConf.getFactionMemberChatFormat();
+            for (FPlayer fPlayer : faction.getFPlayersWhereOnline(true)) {
+                if (fPlayer.getRole().isAtLeast(role)) {
+                    fPlayer.sendMessage(MiniMessage.miniMessage().deserialize(format,
+                            Placeholder.unparsed("message", msg),
+                            Placeholder.component("faction", legacy.deserialize(faction.getTag(fPlayer))),
+                            Placeholder.unparsed("role", role.nicename),
+                            Placeholder.component("sender", legacy.deserialize(me.getChatTag(fPlayer)))
+                    ));
+                } else if (fPlayer.isSpyingChat()) {
+                    fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("[MCspy] " + format,
+                            Placeholder.unparsed("message", msg),
+                            Placeholder.component("faction", legacy.deserialize(faction.getTag(fPlayer))),
+                            Placeholder.unparsed("role", role.nicename),
+                            Placeholder.component("sender", legacy.deserialize(me.getChatTag(fPlayer)))
+                    ));
                 }
             }
-
-            FactionsPlugin.getInstance().log(Level.INFO, ChatColor.stripColor("ModChat " + myFaction.getTag() + ": " + message));
-
             event.setCancelled(true);
-        } else if (chat == ChatMode.FACTION) {
-            Faction myFaction = me.getFaction();
+        } else if (chatTarget instanceof ChatTarget.Relation(Relation relation)) {
+            String format = chatConf.getRelationChatFormat();
 
-            String message = String.format(chatConf.getFactionChatFormat(), me.describeTo(myFaction), msg);
-            myFaction.sendMessage(message);
-
-            FactionsPlugin.getInstance().log(Level.INFO, ChatColor.stripColor("FactionChat " + myFaction.getTag() + ": " + message));
-
-            //Send to any players who are spying chat
-            for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
-                if (fplayer.isSpyingChat() && fplayer.getFaction() != myFaction && me != fplayer) {
-                    fplayer.sendMessage("[FCspy] " + myFaction.getTag() + ": " + message);
+            for (FPlayer fPlayer : FPlayers.getInstance().getOnlinePlayers()) {
+                if (fPlayer.getFaction() == faction || (faction.getRelationTo(fPlayer) == relation &&
+                        (
+                                (relation == Relation.ALLY && !fPlayer.isIgnoreAllianceChat()) ||
+                                        (relation == Relation.TRUCE && !fPlayer.isIgnoreTruceChat())
+                        ))) {
+                    fPlayer.sendMessage(MiniMessage.miniMessage().deserialize(format,
+                            Placeholder.unparsed("message", msg),
+                            Placeholder.component("faction", legacy.deserialize(faction.getTag(fPlayer))),
+                            Placeholder.unparsed("relation", relation.nicename),
+                            Placeholder.component("sender", legacy.deserialize(me.getChatTag(fPlayer)))
+                    ));
+                } else if (fPlayer.isSpyingChat()) {
+                    fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("[MCspy] " + format,
+                            Placeholder.unparsed("message", msg),
+                            Placeholder.component("faction", legacy.deserialize(faction.getTag(fPlayer))),
+                            Placeholder.unparsed("relation", relation.nicename),
+                            Placeholder.component("sender", legacy.deserialize(me.getChatTag(fPlayer)))
+                    ));
                 }
             }
-
-            event.setCancelled(true);
-        } else if (chat == ChatMode.ALLIANCE) {
-            Faction myFaction = me.getFaction();
-
-            String message = String.format(chatConf.getAllianceChatFormat(), ChatColor.stripColor(me.getNameAndTag()), msg);
-
-            //Send message to our own faction
-            myFaction.sendMessage(message);
-
-            //Send to all our allies
-            for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
-                if (myFaction.getRelationTo(fplayer) == Relation.ALLY && !fplayer.isIgnoreAllianceChat()) {
-                    fplayer.sendMessage(message);
-                } else if (fplayer.isSpyingChat() && me != fplayer) {
-                    fplayer.sendMessage("[ACspy]: " + message);
-                }
-            }
-
-            FactionsPlugin.getInstance().log(Level.INFO, ChatColor.stripColor("AllianceChat: " + message));
-
-            event.setCancelled(true);
-        } else if (chat == ChatMode.TRUCE) {
-            Faction myFaction = me.getFaction();
-
-            String message = String.format(chatConf.getTruceChatFormat(), ChatColor.stripColor(me.getNameAndTag()), msg);
-
-            //Send message to our own faction
-            myFaction.sendMessage(message);
-
-            //Send to all our truces
-            for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
-                if (myFaction.getRelationTo(fplayer) == Relation.TRUCE) {
-                    fplayer.sendMessage(message);
-                } else if (fplayer.isSpyingChat() && fplayer != me) {
-                    fplayer.sendMessage("[TCspy]: " + message);
-                }
-            }
-
-            FactionsPlugin.getInstance().log(Level.INFO, ChatColor.stripColor("TruceChat: " + message));
             event.setCancelled(true);
         }
     }

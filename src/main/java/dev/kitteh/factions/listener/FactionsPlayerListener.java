@@ -6,6 +6,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.data.MemoryFPlayer;
@@ -20,12 +21,11 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.scoreboard.sidebar.FDefaultSidebar;
-import dev.kitteh.factions.util.ChatMode;
+import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldUtil;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -155,6 +155,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (WorldUtil.isEnabled(player.getWorld())) {
             this.initFactionWorld(me);
         }
+        player.updateCommands();
     }
 
     private void initFactionWorld(FPlayer me) {
@@ -334,9 +335,8 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (me.isMapAutoUpdating()) {
             if (!showTimes.containsKey(player.getUniqueId()) || (showTimes.get(player.getUniqueId()) < System.currentTimeMillis())) {
-                Audience audience = FactionsPlugin.getInstance().getAdventure().player(player);
                 for (Component component : ((MemoryBoard) Board.getInstance()).getMap(me, to, player.getLocation().getYaw())) {
-                    audience.sendMessage(component);
+                    ComponentDispatcher.send(player, component);
                 }
                 showTimes.put(player.getUniqueId(), System.currentTimeMillis() + FactionsPlugin.getInstance().conf().commands().map().getCooldown());
             }
@@ -827,6 +827,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         // if player was banned (not just kicked), get rid of their stored info
+        // TODO fix this nonsense
         if (FactionsPlugin.getInstance().conf().factions().other().isRemovePlayerDataWhenBanned() && event.getReason().equals("Banned by admin.")) {
             if (badGuy.getRole() == Role.ADMIN) {
                 badGuy.getFaction().promoteNewLeader();
@@ -857,7 +858,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (FactionsPlugin.getInstance().conf().factions().chat().isTriggerPublicChat(cmd.startsWith("/") ? cmd.substring(1) : cmd)) {
             FPlayer p = FPlayers.getInstance().getByPlayer(event.getPlayer());
-            p.setChatMode(ChatMode.PUBLIC);
+            p.setChatTarget(ChatTarget.PUBLIC);
             p.msg(TL.COMMAND_CHAT_MODE_PUBLIC);
         }
 

@@ -23,6 +23,12 @@ public class TranslationsConfig {
     }
 
     public static class Commands {
+        public static class Set extends AbsCommand {
+            public Set() {
+                super("set");
+            }
+        }
+
         public static class Permissions extends AbsCommand {
             public static class SubCmdAdd extends AbsCommand {
                 public SubCmdAdd() {
@@ -336,7 +342,12 @@ public class TranslationsConfig {
             }
         }
 
+        private Set set = new Set();
         private Permissions permissions = new Permissions();
+
+        public Set set() {
+            return set;
+        }
 
         public Permissions permissions() {
             return permissions;

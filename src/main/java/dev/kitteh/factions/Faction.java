@@ -6,8 +6,10 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.LazyLocation;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -19,10 +21,10 @@ import java.util.UUID;
 @NullMarked
 public interface Faction extends Participator, Selectable {
     interface Zone {
-        public int getId();
+        int getId();
         String getName();
         boolean inheritsPermissions();
-        public void setInheritsPermissions(boolean inheritsPermissions);
+        void setInheritsPermissions(boolean inheritsPermissions);
     }
 
     interface ZoneManager {
@@ -53,6 +55,8 @@ public interface Faction extends Participator, Selectable {
     boolean isWarpPassword(String warp, String password);
 
     void setWarpPassword(String warp, String password);
+
+    void removeWarpPassword(String warp);
 
     boolean removeWarp(String name);
 
@@ -275,6 +279,13 @@ public interface Faction extends Participator, Selectable {
     Role getDefaultRole();
 
     void setDefaultRole(Role role);
+
+    @Override
+    default void sendMessage(@NonNull Component component) {
+        for (FPlayer fplayer : this.getFPlayersWhereOnline(true)) {
+            fplayer.sendMessage(component);
+        }
+    }
 
     void sendMessage(String message);
 

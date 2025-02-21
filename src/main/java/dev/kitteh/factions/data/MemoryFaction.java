@@ -141,6 +141,10 @@ public abstract class MemoryFaction implements Faction {
         warpPasswords.put(warp.toLowerCase(), password);
     }
 
+    public void removeWarpPassword(String warp) {
+        warpPasswords.remove(warp.toLowerCase());
+    }
+
     public void clearWarps() {
         warps.clear();
     }
@@ -985,7 +989,7 @@ public abstract class MemoryFaction implements Faction {
         ((MemoryBoard) Board.getInstance()).clean(this);
 
         for (FPlayer fPlayer : fplayers) {
-            fPlayer.resetFactionData();
+            fPlayer.resetFactionData(true);
         }
     }
 

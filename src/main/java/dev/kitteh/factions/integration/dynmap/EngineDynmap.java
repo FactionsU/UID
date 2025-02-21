@@ -1,9 +1,5 @@
 package dev.kitteh.factions.integration.dynmap;
 
-import dev.kitteh.factions.util.Morton;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongList;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
@@ -16,6 +12,10 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.tag.FactionTag;
 import dev.kitteh.factions.tag.GeneralTag;
 import dev.kitteh.factions.util.LazyLocation;
+import dev.kitteh.factions.util.Morton;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

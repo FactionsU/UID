@@ -52,10 +52,7 @@ public enum TL {
      */
     COMMAND_ADMIN_NOTMEMBER("%1$s&e is not a member in your faction."),
     COMMAND_ADMIN_NOTADMIN("&cYou are not the faction admin."),
-    COMMAND_ADMIN_TARGETSELF("&cThe target player musn't be yourself."),
-    COMMAND_ADMIN_DEMOTES("&eYou have demoted %1$s&e from the position of faction admin."),
-    COMMAND_ADMIN_DEMOTED("&eYou have been demoted from the position of faction admin by %1$s&e."),
-    COMMAND_ADMIN_PROMOTES("&eYou have promoted %1$s&e to the position of faction admin."),
+    COMMAND_ADMIN_TARGETSELF("&cThe target player mustn't be yourself."),
     COMMAND_ADMIN_PROMOTED("%1$s&e gave %2$s&e the leadership of %3$s&e."),
     COMMAND_ADMIN_DESCRIPTION("Hand over your admin rights"),
 
@@ -113,7 +110,9 @@ public enum TL {
     COMMAND_CHAT_MODE_ALLIANCE("&eAlliance only chat mode."),
     COMMAND_CHAT_MODE_TRUCE("&eTruce only chat mode."),
     COMMAND_CHAT_MODE_FACTION("&eFaction only chat mode."),
+    COMMAND_CHAT_MODE_COLEADER("&Coleader only chat mode."),
     COMMAND_CHAT_MODE_MOD("&eMod only chat mode."),
+    COMMAND_CHAT_MODE_NORMAL("&Normal member only chat mode."),
 
     COMMAND_CHATSPY_ENABLE("&eYou have enabled chat spying mode."),
     COMMAND_CHATSPY_ENABLELOG(" has ENABLED chat spying mode."),
@@ -351,9 +350,9 @@ public enum TL {
     COMMAND_LISTCLAIMS_NOCLAIMS("&cNo claims by %s&e in world %s"),
     COMMAND_LISTCLAIMS_DESCRIPTION("List your faction's claims"),
 
-    COMMAND_LOCK_LOCKED("&eFactions is now locked"),
-    COMMAND_LOCK_UNLOCKED("&eFactions in now unlocked"),
-    COMMAND_LOCK_DESCRIPTION("Lock all write stuff. Apparently."),
+    COMMAND_SETAUTOSAVE_DISABLED("&eFactions autosave disabled"),
+    COMMAND_SETAUTOSAVE_ENABLED("&eFactions autosave enabled"),
+    COMMAND_SETAUTOSAVE_DESCRIPTION("Control autosaving."),
 
     COMMAND_LOGINS_TOGGLE("&eSet login / logout notifications for Faction members to: &6%s"),
     COMMAND_LOGINS_DESCRIPTION("Toggle(?) login / logout notifications for Faction members"),
@@ -381,6 +380,7 @@ public enum TL {
     COMMAND_MOD_DESCRIPTION("Give or revoke moderator rights"),
 
     COMMAND_MODIFYPOWER_ADDED("&eAdded &6%1$f &epower to &6%2$s. &eNew total rounded power: &6%3$d"),
+    COMMAND_MODIFYPOWER_SET("&eSet &6%1$f &epower to &6%2$s."),
     COMMAND_MODIFYPOWER_DESCRIPTION("Modify the power of a faction/player"),
 
     COMMAND_MONEY_LONG("&eThe faction money commands."),
@@ -454,10 +454,6 @@ public enum TL {
     COMMAND_PERMANENT_REVOKE("removed permanent status from"),
     COMMAND_PERMANENT_YOURS("%1$s has %2$s your faction"),
     COMMAND_PERMANENT_OTHER("%s&e has %s the faction '%s&e'."),
-    COMMAND_PROMOTE_TARGET("You've been %1$s to %2$s"),
-    COMMAND_PROMOTE_SUCCESS("You successfully %1$s %2$s to %3$s"),
-    COMMAND_PROMOTE_PROMOTED("promoted"),
-    COMMAND_PROMOTE_DEMOTED("demoted"),
 
     COMMAND_PERMANENTPOWER_DESCRIPTION("Toggle faction power permanence"),
     COMMAND_PERMANENTPOWER_GRANT("added permanentpower status to"),
@@ -466,10 +462,12 @@ public enum TL {
     COMMAND_PERMANENTPOWER_FACTION("%s&e %s your faction"),
 
     COMMAND_PROMOTE_DESCRIPTION("/f promote <name>"),
-    COMMAND_PROMOTE_WRONGFACTION("%1$s is not part of your faction."),
     COMMAND_NOACCESS("You don't have access to that."),
-    COMMAND_PROMOTE_NOTTHATPLAYER("That player cannot be promoted."),
-    COMMAND_PROMOTE_NOT_ALLOWED("You can't promote or demote that player."),
+
+    COMMAND_ROLE_DESCRIPTION("Modify a faction member's role."),
+    COMMAND_ROLE_NOT_ALLOWED("&cYou can't change that player's role."),
+    COMMAND_ROLE_WRONGFACTION("&cThat player is not part of your faction."),
+    COMMAND_ROLE_UPDATED("&aMember %s&a role updated to %s."),
 
     COMMAND_POWER_TOSHOW("to show player power info"),
     COMMAND_POWER_FORSHOW("for showing player power info"),
@@ -528,6 +526,11 @@ public enum TL {
     COMMAND_SETFWARP_FORSET("for setting warp"),
     COMMAND_SETFWARP_HOMEREQUIRED("&cCannot create warps until a home is set!"),
     COMMAND_SETFWARP_DESCRIPTION("Set a faction warp"),
+
+    COMMAND_SETFWARPPROPERTY_DESCRIPTION("Set a faction warp property"),
+    COMMAND_SETFWARPPROPERTY_NOWARP("&cNo warp found with name %s"),
+    COMMAND_SETFWARPPROPERTY_REMOVEPASSWORD("&aPassword removed for warp %s"),
+    COMMAND_SETFWARPPROPERTY_SETPASSWORD("&aPassword set for warp %s"),
 
     COMMAND_SETHOME_DISABLED("&cSorry, Faction homes are disabled on this server."),
     COMMAND_SETHOME_NOTCLAIMED("&cSorry, your faction home can only be set inside your own claimed territory."),
@@ -610,8 +613,8 @@ public enum TL {
     COMMAND_STUCK_START("&6Teleport will commence in &e%s&6. Don't take or deal damage. "),
     COMMAND_STUCK_TELEPORT("&6Teleported safely to %1$d, %2$d, %3$d."),
     COMMAND_STUCK_FAILED("&cFailed to find a safe place to get you out."),
-    COMMAND_STUCK_TOSTUCK("to safely teleport %1$s out"),
-    COMMAND_STUCK_FORSTUCK("for %1$s initiating a safe teleport out"),
+    COMMAND_STUCK_TOSTUCK2("to safely teleport out"),
+    COMMAND_STUCK_FORSTUCK2("for initiating a safe teleport out"),
     COMMAND_STUCK_DESCRIPTION("Safely teleports you out of enemy faction"),
 
     COMMAND_TAG_TAKEN("&cThat tag is already taken"),
@@ -623,6 +626,7 @@ public enum TL {
 
     COMMAND_TICKETINFO_DESCRIPTION("Create requested ticket info"),
 
+    COMMAND_TITLE_CANNOTPLAYER("&cCannot change this player's title"),
     COMMAND_TITLE_TOCHANGE("to change a players title"),
     COMMAND_TITLE_FORCHANGE("for changing a players title"),
     COMMAND_TITLE_CHANGED("%1$s&e changed a title: %2$s"),
@@ -631,6 +635,9 @@ public enum TL {
     COMMAND_TOGGLEALLIANCECHAT_DESCRIPTION("Toggles whether or not you will see alliance chat"),
     COMMAND_TOGGLEALLIANCECHAT_IGNORE("Alliance chat is now ignored"),
     COMMAND_TOGGLEALLIANCECHAT_UNIGNORE("Alliance chat is no longer ignored"),
+    COMMAND_TOGGLETRUCECHAT_DESCRIPTION("Toggles whether or not you will see truce chat"),
+    COMMAND_TOGGLETRUCECHAT_IGNORE("Truce chat is now ignored"),
+    COMMAND_TOGGLETRUCECHAT_UNIGNORE("Truce chat is no longer ignored"),
 
     COMMAND_TOGGLESB_DISABLED("You can't toggle scoreboards while they are disabled."),
 

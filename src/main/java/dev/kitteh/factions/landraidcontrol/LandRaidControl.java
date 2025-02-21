@@ -4,7 +4,6 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.cmd.CommandContext;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.entity.Player;
@@ -29,13 +28,13 @@ public interface LandRaidControl {
         return this.getLandLimit(faction) - faction.getLandRounded();
     }
 
-    boolean canJoinFaction(Faction faction, FPlayer player, CommandContext context);
+    boolean canJoinFaction(Faction faction, FPlayer player);
 
     boolean canLeaveFaction(FPlayer player);
 
-    boolean canDisbandFaction(Faction faction, CommandContext context);
+    boolean canDisbandFaction(Faction faction, FPlayer playerAttempting);
 
-    boolean canKick(FPlayer toKick, CommandContext context);
+    boolean canKick(FPlayer toKick, FPlayer playerAttempting);
 
     void onRespawn(FPlayer player);
 

@@ -50,19 +50,14 @@ public class Transitioner {
                 transitioner.migrateV4(rootNode);
             }
             if (version < 6) {
-                transitioner.migrateV5B(rootNode);
+                transitioner.migrateV5B();
             }
-            // Why do a version bump for this?
-            CommentedConfigurationNode factId = rootNode.getNode("factions").getNode("other").getNode("newPlayerStartingFactionID");
-            if (!factId.isVirtual()) {
-                if (factId.getValue() instanceof String facIdS) {
-                    try {
-                        factId.setValue(Integer.parseInt(facIdS));
-                    } catch (NumberFormatException e) {
-                        plugin.getLogger().warning("Failed to migrate new player starting faction ID to numeric ID. Found: " + facIdS);
-                    }
-                }
+            if (version < 7) {
+                transitioner.migrateV6(rootNode);
             }
+
+            // Update the below when bumping version!
+            rootNode.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(7);
 
             loader.save(rootNode);
         } catch (IOException e) {
@@ -83,7 +78,6 @@ public class Transitioner {
     private void migrateV2(CommentedConfigurationNode node) {
         node.getNode("factions").getNode("enterTitles").getNode("title").setValue("");
         node.getNode("factions").getNode("enterTitles").getNode("subtitle").setValue("{faction-relation-color}{faction}");
-        node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(3);
         node.getNode("scoreboard").getNode("constant").getNode("factionlessTitle").setValue(node.getNode("scoreboard").getNode("constant").getNode("title").getString());
 
         this.plugin.getLogger().info("Detected a config from before 0.5.7");
@@ -93,7 +87,6 @@ public class Transitioner {
 
     private void migrateV3(CommentedConfigurationNode node) {
         node.getNode("scoreboard").getNode("constant").getNode("prefixTemplate").setValue(TL.DEFAULT_PREFIX.toString());
-        node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(4);
 
         this.plugin.getLogger().info("Detected a config from before 0.5.14");
         this.plugin.getLogger().info("  1. Setting default scoreboard prefixTemplate based on lang.yml default-prefix setting.");
@@ -104,8 +97,6 @@ public class Transitioner {
     }
 
     private void migrateV4(CommentedConfigurationNode node) {
-        node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(5);
-
         boolean update = node.getNode("factions").getNode("spawning").getNode("updateAutomatically").getBoolean(true);
 
         out:
@@ -163,9 +154,7 @@ public class Transitioner {
         }
     }
 
-    private void migrateV5B(CommentedConfigurationNode node) {
-        node.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(6);
-
+    private void migrateV5B() {
         this.plugin.getLogger().info("");
         this.plugin.getLogger().info("              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         this.plugin.getLogger().info("");
@@ -184,5 +173,23 @@ public class Transitioner {
         this.plugin.getLogger().info("");
 
         PermSelectorTypeAdapter.setLegacy();
+    }
+
+    private void migrateV6(CommentedConfigurationNode node) {
+        CommentedConfigurationNode factId = node.getNode("factions").getNode("other").getNode("newPlayerStartingFactionID");
+        if (!factId.isVirtual()) {
+            if (factId.getValue() instanceof String facIdS) {
+                try {
+                    factId.setValue(Integer.parseInt(facIdS));
+                } catch (NumberFormatException e) {
+                    plugin.getLogger().warning("Failed to migrate new player starting faction ID to numeric ID. Found: " + facIdS);
+                }
+            }
+        }
+
+        boolean startingChat = node.getNode("factions").getNode("chat").getNode("factionOnlyChat").getBoolean(true);
+        CommentedConfigurationNode internalChat = node.getNode("factions").getNode("chat").getNode("internalChat");
+        internalChat.getNode("factionMemberChatEnabled").setValue(startingChat);
+        internalChat.getNode("relationChatEnabled").setValue(startingChat);
     }
 }

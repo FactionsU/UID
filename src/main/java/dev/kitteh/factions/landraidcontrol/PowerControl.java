@@ -6,7 +6,6 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.cmd.CommandContext;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.event.PowerLossEvent;
 import dev.kitteh.factions.permissible.Relation;
@@ -39,11 +38,9 @@ public class PowerControl implements LandRaidControl {
     }
 
     @Override
-    public boolean canJoinFaction(Faction faction, FPlayer player, CommandContext context) {
+    public boolean canJoinFaction(Faction faction, FPlayer player) {
         if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.getPower() < 0) {
-            if (context != null) {
-                context.msg(TL.COMMAND_JOIN_NEGATIVEPOWER, player.describeTo(context.fPlayer, true));
-            }
+            player.msg(TL.COMMAND_JOIN_NEGATIVEPOWER, player.describeTo(player, true));
             return false;
         }
         return true;
@@ -59,19 +56,19 @@ public class PowerControl implements LandRaidControl {
     }
 
     @Override
-    public boolean canDisbandFaction(Faction faction, CommandContext context) {
+    public boolean canDisbandFaction(Faction faction, FPlayer playerAttempting) {
         return true;
     }
 
     @Override
-    public boolean canKick(FPlayer toKick, CommandContext context) {
+    public boolean canKick(FPlayer toKick, FPlayer playerAttempting) {
         if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.getPower() < 0) {
-            context.msg(TL.COMMAND_KICK_NEGATIVEPOWER);
+            playerAttempting.msg(TL.COMMAND_KICK_NEGATIVEPOWER);
             return false;
         }
         if (toKick.isOnline() && !FactionsPlugin.getInstance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
                 Board.getInstance().getFactionAt(toKick.getLastStoodAt()).getRelationTo(toKick.getFaction()) == Relation.ENEMY) {
-            context.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
+            playerAttempting.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
             return false;
         }
         return true;

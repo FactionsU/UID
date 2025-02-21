@@ -1,0 +1,48 @@
+package dev.kitteh.factions.command.defaults;
+
+import dev.kitteh.factions.FPlayer;
+import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.command.Cloudy;
+import dev.kitteh.factions.command.Cmd;
+import dev.kitteh.factions.command.FPlayerParser;
+import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TL;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.context.CommandContext;
+
+import java.util.function.BiConsumer;
+
+public class CmdUnban implements Cmd {
+    @Override
+    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
+        return (manager, builder) -> {
+            manager.command(
+                    builder.literal("unban")
+                            .commandDescription(Cloudy.desc(TL.COMMAND_UNBAN_DESCRIPTION))
+                            .required("player", FPlayerParser.of(FPlayerParser.Include.OTHER_FACTION)) // TODO can I make this the list
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BAN).and(Cloudy.hasSelfFactionPerms(PermissibleActions.BAN))))
+                            .handler(this::handle)
+            );
+        };
+    }
+
+    private void handle(CommandContext<Sender> context) {
+        FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
+        Faction faction = sender.getFaction();
+
+        FPlayer target = context.get("player");
+
+        if (!faction.isBanned(target)) {
+            sender.msg(TL.COMMAND_UNBAN_NOTBANNED, target.getName());
+            return;
+        }
+
+        faction.unban(target);
+
+        faction.msg(TL.COMMAND_UNBAN_UNBANNED, sender.getName(), target.getName());
+        target.msg(TL.COMMAND_UNBAN_TARGET, faction.getTag(target));
+    }
+}

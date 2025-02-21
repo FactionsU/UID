@@ -1,0 +1,93 @@
+package dev.kitteh.factions.command.defaults.set;
+
+import dev.kitteh.factions.FPlayer;
+import dev.kitteh.factions.FPlayers;
+import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.Factions;
+import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.command.Cloudy;
+import dev.kitteh.factions.command.Cmd;
+import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.event.FactionRenameEvent;
+import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.scoreboard.FTeamWrapper;
+import dev.kitteh.factions.util.MiscUtil;
+import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TL;
+import org.bukkit.Bukkit;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.parser.standard.StringParser;
+
+import java.util.ArrayList;
+import java.util.function.BiConsumer;
+
+public class CmdSetTag implements Cmd {
+    @Override
+    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
+        return (manager, builder) -> {
+            manager.command(
+                    builder.literal("tag")
+                            .commandDescription(Cloudy.desc(TL.COMMAND_TAG_DESCRIPTION))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TAG).and(Cloudy.isAtLeastRole(Role.ADMIN))))
+                            .required("tag", StringParser.stringParser())
+                            .handler(this::handle)
+            );
+        };
+    }
+
+    private void handle(CommandContext<Sender> context) {
+        FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
+        Faction faction = sender.getFaction();
+        String tag = context.get("tag");
+
+        // TODO does not first shouldCancel cover selfcase?
+        if (Factions.getInstance().isTagTaken(tag) && !MiscUtil.getComparisonString(tag).equals(faction.getComparisonTag())) {
+            sender.msg(TL.COMMAND_TAG_TAKEN);
+            return;
+        }
+
+        ArrayList<String> errors = MiscUtil.validateTag(tag);
+        if (!errors.isEmpty()) {
+            sender.sendMessage(errors);
+            return;
+        }
+
+        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make sure they can pay
+        if (!context.sender().canAffordCommand(FactionsPlugin.getInstance().conf().economy().getCostTag(), TL.COMMAND_TAG_TOCHANGE)) {
+            return;
+        }
+
+        // trigger the faction rename event (cancellable)
+        FactionRenameEvent renameEvent = new FactionRenameEvent(sender, tag);
+        Bukkit.getServer().getPluginManager().callEvent(renameEvent);
+        if (renameEvent.isCancelled()) {
+            return;
+        }
+
+        // then make 'em pay (if applicable)
+        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostTag(), TL.COMMAND_TAG_TOCHANGE, TL.COMMAND_TAG_FORCHANGE)) {
+            return;
+        }
+
+        String oldTag = faction.getTag();
+        faction.setTag(tag);
+
+        // Inform
+        for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
+            if (fplayer.getFaction() == faction) {
+                fplayer.msg(TL.COMMAND_TAG_FACTION, sender.describeTo(faction, true), faction.getTag(faction));
+                continue;
+            }
+
+            // Broadcast the tag change (if applicable)
+            if (FactionsPlugin.getInstance().conf().factions().chat().isBroadcastTagChanges()) {
+                Faction fac = fplayer.getFaction();
+                fplayer.msg(TL.COMMAND_TAG_CHANGED, sender.getColorStringTo(fac) + oldTag, faction.getTag(fac));
+            }
+        }
+
+        FTeamWrapper.updatePrefixes(faction);
+    }
+}

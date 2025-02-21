@@ -5,7 +5,6 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.cmd.CommandContext;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.event.DTRLossEvent;
 import dev.kitteh.factions.integration.Essentials;
@@ -54,9 +53,9 @@ public class DTRControl implements LandRaidControl {
     }
 
     @Override
-    public boolean canJoinFaction(Faction faction, FPlayer player, CommandContext context) {
+    public boolean canJoinFaction(Faction faction, FPlayer player) {
         if (faction.isFrozenDTR() && conf().isFreezePreventsJoin()) {
-            context.msg(TL.DTR_CANNOT_FROZEN);
+            player.msg(TL.DTR_CANNOT_FROZEN);
             return false;
         }
         return true;
@@ -72,26 +71,26 @@ public class DTRControl implements LandRaidControl {
     }
 
     @Override
-    public boolean canDisbandFaction(Faction faction, CommandContext context) {
+    public boolean canDisbandFaction(Faction faction, FPlayer playerAttempting) {
         if (faction.isFrozenDTR() && conf().isFreezePreventsDisband()) {
-            context.msg(TL.DTR_CANNOT_FROZEN);
+            playerAttempting.msg(TL.DTR_CANNOT_FROZEN);
             return false;
         }
         return true;
     }
 
     @Override
-    public boolean canKick(FPlayer toKick, CommandContext context) {
+    public boolean canKick(FPlayer toKick, FPlayer playerAttempting) {
         if (toKick.getFaction().isNormal()) {
             Faction faction = toKick.getFaction();
             if (!FactionsPlugin.getInstance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
                     Board.getInstance().getFactionAt(toKick.getLastStoodAt()).getRelationTo(faction) == Relation.ENEMY) {
-                context.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
+                playerAttempting.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
                 return false;
             }
             if (faction.isFrozenDTR() && conf().getFreezeKickPenalty() > 0) {
                 faction.setDTR(Math.max(conf().getMinDTR(), faction.getDTR() - conf().getFreezeKickPenalty()));
-                context.msg(TL.DTR_KICK_PENALTY);
+                playerAttempting.msg(TL.DTR_KICK_PENALTY);
             }
         }
         return true;

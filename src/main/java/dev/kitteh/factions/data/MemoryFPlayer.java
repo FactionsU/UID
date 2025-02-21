@@ -8,6 +8,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
+import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.event.FactionAutoDisbandEvent;
 import dev.kitteh.factions.event.LandClaimEvent;
@@ -24,11 +25,12 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.scoreboard.sidebar.FInfoSidebar;
 import dev.kitteh.factions.tag.Tag;
-import dev.kitteh.factions.util.ChatMode;
+import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
 import dev.kitteh.factions.util.WorldUtil;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -69,8 +71,9 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected double powerBoost;
     protected long lastPowerUpdateTime;
     protected long lastLoginTime;
-    protected ChatMode chatMode;
+    protected ChatTarget chatTarget;
     protected boolean ignoreAllianceChat = false;
+    protected boolean ignoreTruceChat = false;
     protected UUID id;
     protected String name;
     protected boolean monitorJoins;
@@ -116,7 +119,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         Faction faction = Factions.getInstance().getFactionById(this.factionId);
         if (faction == null) {
             FactionsPlugin.getInstance().getLogger().warning("Found null faction (id " + this.factionId + ") for player " + this.getName());
-            this.resetFactionData();
+            this.resetFactionData(true);
             faction = Factions.getInstance().getWilderness();
         }
         return faction;
@@ -228,17 +231,22 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public void setIsAdminBypassing(boolean val) {
         this.isAdminBypassing = val;
-    }
-
-    public void setChatMode(ChatMode chatMode) {
-        this.chatMode = chatMode;
-    }
-
-    public ChatMode getChatMode() {
-        if (this.chatMode == null || this.factionId == Factions.ID_WILDERNESS || !FactionsPlugin.getInstance().conf().factions().chat().isFactionOnlyChat()) {
-            this.chatMode = ChatMode.PUBLIC;
+        if (this.getPlayer() instanceof Player player) {
+            player.updateCommands();
         }
-        return chatMode;
+    }
+
+    public void setChatTarget(ChatTarget chatTarget) {
+        this.chatTarget = chatTarget == null ? ChatTarget.PUBLIC : chatTarget;
+    }
+
+    public ChatTarget getChatTarget() {
+        if (this.chatTarget == null || this.factionId == Factions.ID_WILDERNESS ||
+                (this.chatTarget instanceof ChatTarget.Relation && !FactionsPlugin.getInstance().conf().factions().chat().internalChat().isRelationChatEnabled()) ||
+                (this.chatTarget instanceof ChatTarget.Role && !FactionsPlugin.getInstance().conf().factions().chat().internalChat().isFactionMemberChatEnabled())) {
+            this.chatTarget = ChatTarget.PUBLIC;
+        }
+        return this.chatTarget;
     }
 
     public void setIgnoreAllianceChat(boolean ignore) {
@@ -247,6 +255,14 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public boolean isIgnoreAllianceChat() {
         return ignoreAllianceChat;
+    }
+
+    public void setIgnoreTruceChat(boolean ignore) {
+        this.ignoreTruceChat = ignore;
+    }
+
+    public boolean isIgnoreTruceChat() {
+        return ignoreTruceChat;
     }
 
     public void setSpyingChat(boolean chatSpying) {
@@ -292,6 +308,10 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public void resetFactionData() {
+        this.resetFactionData(false);
+    }
+
+    public void resetFactionData(boolean updateCommands) {
         // clean up any territory ownership in old faction, if there is one
         Faction currentFaction = Factions.getInstance().getFactionById(this.factionId);
         if (currentFaction != null) {
@@ -302,10 +322,13 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         this.factionId = Factions.ID_WILDERNESS; // The default neutral faction
-        this.chatMode = ChatMode.PUBLIC;
         this.role = Role.NORMAL;
         this.title = "";
         this.autoClaimFor = null;
+
+        if (updateCommands && this.getPlayer() instanceof Player player) {
+            player.updateCommands();
+        }
     }
 
     // -------------------------------------------- //
@@ -485,6 +508,10 @@ public abstract class MemoryFPlayer implements FPlayer {
         return this.power;
     }
 
+    public void setPower(double power) {
+        this.power = Math.min(Math.max(this.getPowerMin(), power), this.getPowerMax());
+    }
+
     public void alterPower(double delta) {
         int start = (int) Math.round(this.power);
         this.power += delta;
@@ -651,7 +678,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         boolean econMakePay = makePay && Econ.shouldBeUsed() && !this.isAdminBypassing();
 
         if (myFaction == null) {
-            resetFactionData();
+            resetFactionData(true);
             return;
         }
 
@@ -712,7 +739,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         myFaction.removeAnnouncements(this);
-        this.resetFactionData();
+        this.resetFactionData(true);
         if (FactionsPlugin.getInstance().conf().commands().fly().isEnable()) {
             setFlying(false, false);
         }
@@ -1168,21 +1195,28 @@ public abstract class MemoryFPlayer implements FPlayer {
     // -------------------------------------------- //
     // Message Sending Helpers
     // -------------------------------------------- //
+    @Override
+    public void sendMessage(@NonNull Component component) {
+        if (this.getPlayer() instanceof Player player) {
+            ComponentDispatcher.send(player, component);
+        }
+    }
 
     public void sendMessage(String msg) {
         if (msg.contains("{null}")) {
             return; // user wants this message to not send
         }
-        if (msg.contains("/n/")) {
-            for (String s : msg.split("/n/")) {
-                sendMessage(s);
-            }
-            return;
-        }
         Player player = this.getPlayer();
         if (player == null) {
             return;
         }
+        if (msg.contains("/n/")) {
+            for (String s : msg.split("/n/")) {
+                player.sendMessage(s);
+            }
+            return;
+        }
+
         player.sendMessage(msg);
     }
 

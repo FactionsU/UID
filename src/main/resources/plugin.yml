@@ -5,17 +5,13 @@ authors: [mbaxter, drtshock, dariasc, Brett Flannigan, Olof Larsson]
 softdepend: [LuckPerms, WorldGuard]
 api-version: '1.21.4'
 website: https://www.spigotmc.org/resources/factionsuuid.1035/
-commands:
-  factions:
-    description: Reference command for Factions.
-    aliases: [f]
 permissions:
   factions.kit.admin:
     description: All faction permissions.
     children:
       factions.kit.mod: true
       factions.config: true
-      factions.lock: true
+      factions.autosave: true
       factions.reload: true
       factions.save: true
       factions.modifypower: true
@@ -106,7 +102,6 @@ permissions:
       factions.seechunk: true
       factions.monitorlogins: true
       factions.top: true
-      factions.togglealliancechat: true
       factions.vault: true
       factions.mapheight: true
       factions.ban: true
@@ -166,8 +161,8 @@ permissions:
     description: see a list of the factions
   factions.link:
     description: see or set the faction's link
-  factions.lock:
-    description: lock all write stuff
+  factions.autosave:
+    description: control autosaving
   factions.managesafezone:
     description: claim land as a safe zone and build/destroy within safe zones
   factions.managewarzone:
@@ -287,8 +282,6 @@ permissions:
     description: claim in a line
   factions.top:
     description: sort factions
-  factions.togglealliancechat:
-    description: toggle alliance chat on and off
   factions.dontlosepoweroffline:
     description: Don't lose power for being offline.
   factions.ahome:

@@ -3,6 +3,7 @@ package dev.kitteh.factions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.RelationUtil;
 import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NullMarked;
@@ -22,6 +23,8 @@ public interface Participator {
     default void msg(TL translation, Object... args) {
         this.msg(translation.toString(), args);
     }
+
+    void sendMessage(Component component);
 
     default String describeTo(@Nullable Participator that) {
         return RelationUtil.describeThatToMe(this, that);

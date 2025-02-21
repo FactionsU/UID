@@ -3,7 +3,6 @@ package dev.kitteh.factions.util;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
-import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.material.MaterialDb;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.logging.Level;
 
 public class MiscUtil {
     private static final Map<String, EntityType> entityTypeMap;
@@ -138,13 +136,6 @@ public class MiscUtil {
         List<FPlayer> recruit = new ArrayList<>();
 
         for (FPlayer player : players) {
-
-            // Fix for some data being broken when we added the recruit rank.
-            if (player.getRole() == null) {
-                player.setRole(Role.NORMAL);
-                FactionsPlugin.getInstance().log(Level.WARNING, String.format("Player %s had null role. Setting them to normal. This isn't good D:", player.getName()));
-            }
-
             switch (player.getRole()) {
                 case ADMIN:
                     admins.add(player);

@@ -5,7 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.authlib.GameProfile;
-import dev.kitteh.factions.cmd.FCmdRoot;
+import dev.kitteh.factions.chat.ChatTarget;
+import dev.kitteh.factions.command.CommandsRoot;
 import dev.kitteh.factions.config.ConfigManager;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.config.file.TranslationsConfig;
@@ -37,6 +38,7 @@ import dev.kitteh.factions.permissible.PermSelectorRegistry;
 import dev.kitteh.factions.permissible.PermSelectorTypeAdapter;
 import dev.kitteh.factions.permissible.PermissibleActionRegistry;
 import dev.kitteh.factions.util.AutoLeaveTask;
+import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.FlightUtil;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Metrics;
@@ -46,14 +48,13 @@ import dev.kitteh.factions.util.SeeChunkUtil;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldUtil;
+import dev.kitteh.factions.util.adapter.ChatTargetTypeAdapter;
 import dev.kitteh.factions.util.adapter.EnumTypeAdapter;
 import dev.kitteh.factions.util.adapter.MapFLocToStringSetTypeAdapter;
 import dev.kitteh.factions.util.adapter.MyLocationTypeAdapter;
 import dev.kitteh.factions.util.material.MaterialDb;
 import dev.kitteh.factions.util.particle.BukkitParticleProvider;
 import io.papermc.lib.PaperLib;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -72,9 +73,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -86,7 +85,6 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -111,8 +109,8 @@ public class FactionsPlugin extends JavaPlugin {
     // Our single plugin instance.
     // Single 4 life.
     private static FactionsPlugin instance;
-    private static final int OLDEST_MODERN_SUPPORTED = 2004; // 1.20.4
-    private static final String OLDEST_MODERN_SUPPORTED_STRING = "1.20.4";
+    private static final int OLDEST_MODERN_SUPPORTED = 2104;
+    private static final String OLDEST_MODERN_SUPPORTED_STRING = "1.21.4";
 
     public static FactionsPlugin getInstance() {
         return instance;
@@ -170,7 +168,6 @@ public class FactionsPlugin extends JavaPlugin {
     private VaultPerms vaultPerms;
     public final boolean likesCats = Arrays.stream(FactionsPlugin.class.getDeclaredMethods()).anyMatch(m -> m.isSynthetic() && m.getName().startsWith("loadCon") && m.getName().endsWith("0"));
     private Method getOffline;
-    private BukkitAudiences adventure;
     private String mcVersionString;
     private String updateCheck;
     private Response updateResponse;
@@ -193,7 +190,6 @@ public class FactionsPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         this.loadSuccessful = false;
-        this.adventure = BukkitAudiences.create(this);
         StringBuilder startupBuilder = new StringBuilder();
         StringBuilder startupExceptionBuilder = new StringBuilder();
         Handler handler = new Handler() {
@@ -283,8 +279,7 @@ public class FactionsPlugin extends JavaPlugin {
             versionInteger = OLDEST_MODERN_SUPPORTED;
             this.mcVersionString = this.getServer().getVersion();
         }
-        int mcVersion = versionInteger;
-        if (mcVersion < OLDEST_MODERN_SUPPORTED) {
+        if (versionInteger < OLDEST_MODERN_SUPPORTED) {
             getLogger().info("");
             getLogger().warning("FactionsUUID expects at least " + OLDEST_MODERN_SUPPORTED_STRING + " and may not work on your version.");
         }
@@ -322,17 +317,6 @@ public class FactionsPlugin extends JavaPlugin {
         this.txt = new TextUtil();
         initTXT();
 
-        // attempt to get first command defined in plugin.yml as reference command, if any commands are defined in there
-        // reference command will be used to prevent "unknown command" console messages
-        String refCommand = "";
-        try {
-            Map<String, Map<String, Object>> refCmd = this.getDescription().getCommands();
-            if (refCmd != null && !refCmd.isEmpty()) {
-                refCommand = (String) (refCmd.keySet().toArray()[0]);
-            }
-        } catch (ClassCastException ignored) {
-        }
-
         // Register recurring tasks
         if (saveTask == null && this.conf().factions().other().getSaveToFileEveryXMinutes() > 0.0) {
             long saveTicks = (long) (20 * 60 * this.conf().factions().other().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
@@ -356,13 +340,10 @@ public class FactionsPlugin extends JavaPlugin {
         Instances.BOARD.clean();
         FactionsPlugin.getInstance().getLogger().info("Loaded " + loadedPlayers + " players in " + loadedFactions + " factions with " + loadedClaims + " claims");
 
-        // Add Base Commands
-        FCmdRoot cmdBase = new FCmdRoot();
-
         ContextManager.init(this);
         if (getServer().getPluginManager().getPlugin("PermissionsEx") != null) {
             getLogger().info(" ");
-            getLogger().warning("Notice: PermissionsEx dead. We suggest using LuckPerms. https://luckperms.net/");
+            getLogger().warning("Notice: PermissionsEx is dead. We suggest using LuckPerms. https://luckperms.net/");
             getLogger().info(" ");
         }
         if (getServer().getPluginManager().getPlugin("GroupManager") != null) {
@@ -395,9 +376,6 @@ public class FactionsPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new FactionsBlockListener(this), this);
         getServer().getPluginManager().registerEvents(new PortalListener(this), this);
 
-        // since some other plugins execute commands directly through this command interface, provide it
-        this.getCommand(refCommand).setExecutor(cmdBase);
-
         if (conf().commands().fly().isEnable()) {
             FlightUtil.start();
         }
@@ -411,6 +389,8 @@ public class FactionsPlugin extends JavaPlugin {
         if (ChatColor.stripColor(TL.NOFACTION_PREFIX.toString()).equals("[4-]")) {
             getLogger().warning("Looks like you have an old, mistaken 'nofactions-prefix' in your lang.yml. It currently displays [4-] which is... strange.");
         }
+
+        new CommandsRoot(this);
 
         // Integration time
         getServer().getPluginManager().registerEvents(integrationManager = new IntegrationManager(this), this);
@@ -433,7 +413,6 @@ public class FactionsPlugin extends JavaPlugin {
 
                 Econ.setup();
                 vaultPerms = new VaultPerms();
-                cmdBase.done();
                 // Grand metrics adventure!
                 setupMetrics();
                 getLogger().removeHandler(handler);
@@ -835,6 +814,7 @@ public class FactionsPlugin extends JavaPlugin {
                 .registerTypeAdapter(PermSelector.class, new PermSelectorTypeAdapter())
                 .registerTypeAdapter(LazyLocation.class, new MyLocationTypeAdapter())
                 .registerTypeAdapter(mapFLocToStringSetType, new MapFLocToStringSetTypeAdapter())
+                .registerTypeAdapter(ChatTarget.class, new ChatTargetTypeAdapter())
                 .registerTypeAdapterFactory(EnumTypeAdapter.ENUM_FACTORY);
     }
 
@@ -859,7 +839,6 @@ public class FactionsPlugin extends JavaPlugin {
             LuckPerms.shutdown(this);
         }
         ContextManager.shutdown();
-        this.adventure.close();
         log("Disabled");
     }
 
@@ -922,10 +901,6 @@ public class FactionsPlugin extends JavaPlugin {
             }
         }
         return this.getServer().getOfflinePlayer(name);
-    }
-
-    public BukkitAudiences getAdventure() {
-        return this.adventure;
     }
 
     @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
@@ -993,15 +968,14 @@ public class FactionsPlugin extends JavaPlugin {
             return;
         }
         this.told.add(player.getUniqueId());
-        Audience audience = this.adventure.player(player);
-        audience.sendMessage(Component.text().color(TextColor.fromHexString("#e35959"))
+        ComponentDispatcher.send(player, Component.text().color(TextColor.fromHexString("#e35959"))
                 .content("FactionsUUID Update Available: " + updateResponse.getLatestVersion()));
         if (updateResponse.isUrgent()) {
-            audience.sendMessage(Component.text().color(TextColor.fromHexString("#5E0B15"))
+            ComponentDispatcher.send(player, Component.text().color(TextColor.fromHexString("#5E0B15"))
                     .content("This is an important update. Download and restart ASAP."));
         }
         if (updateResponse.getComponent() != null) {
-            audience.sendMessage(updateResponse.getComponent());
+            ComponentDispatcher.send(player, updateResponse.getComponent());
         }
         player.sendMessage(ChatColor.GREEN + "Get it at " + ChatColor.DARK_AQUA + "https://www.spigotmc.org/resources/factionsuuid.1035/");
     }

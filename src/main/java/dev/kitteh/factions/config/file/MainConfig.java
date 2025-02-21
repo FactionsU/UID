@@ -1,7 +1,6 @@
 package dev.kitteh.factions.config.file;
 
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.permissible.Relation;
@@ -28,7 +27,7 @@ import java.util.Set;
 public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @Comment("This is the config version, used for migrating on plugin updates. Don't change this value yourself, unless you WANT a broken config!")
-        private int version = 6;
+        private int version = 7;
 
         @Comment("""
                 Debug
@@ -940,9 +939,42 @@ public class MainConfig {
         }
 
         public class Chat {
-            @Comment("Allow for players to chat only within their faction, with allies, etc.\n" +
-                    "Set to false to only allow public chats through this plugin.")
-            private boolean factionOnlyChat = true;
+            public class InternalChat {
+                @Comment("Chatting with faction members")
+                private boolean factionMemberChatEnabled = true;
+                @Comment("Chatting with all members at or above a role")
+                private String factionMemberChatFormat = "[<role>+] <sender>: <message>";
+                @Comment("Chatting with all faction members")
+                private String factionMemberAllChatFormat = "[faction-only] <sender>: <message>";
+
+                @Comment("Chatting with faction members")
+                private boolean relationChatEnabled = true;
+                private String relationChatFormat = "[<relation>-only] <sender>: <message>";
+
+                public boolean isFactionMemberChatEnabled() {
+                    return factionMemberChatEnabled;
+                }
+
+                public String getFactionMemberChatFormat() {
+                    return factionMemberChatFormat;
+                }
+
+                public String getFactionMemberAllChatFormat() {
+                    return factionMemberAllChatFormat;
+                }
+
+                public boolean isRelationChatEnabled() {
+                    return relationChatEnabled;
+                }
+
+                public String getRelationChatFormat() {
+                    return relationChatFormat;
+                }
+            }
+
+            @Comment("Allow for players to chat only within their faction, with allies, etc.")
+            private InternalChat internalChat = new InternalChat();
+
             // Configuration on the Faction tag in chat messages.
             @Comment("If true, disables adding of faction tag so another plugin can manage this")
             private boolean tagHandledByAnotherPlugin = false;
@@ -966,8 +998,8 @@ public class MainConfig {
             @WipeOnReload
             private transient List<String> triggerPublicChatLowerCased;
 
-            public boolean isFactionOnlyChat() {
-                return factionOnlyChat;
+            public InternalChat internalChat() {
+                return internalChat;
             }
 
             public boolean isTagHandledByAnotherPlugin() {
@@ -2425,12 +2457,12 @@ public class MainConfig {
 
     public class Economy {
         @Comment("""
-
+                
                 ******************
-
+                
                 The value "enabled" must be true for any economy features
                 Make sure that you confirm the "defaultWorld" setting is a valid world name
-
+                
                 ******************
                 """)
         private boolean enabled = false;
@@ -2442,7 +2474,7 @@ public class MainConfig {
                  the universe account (if used),
                  transferring money to a player who is presently offline,
                  or any other situation where the player's world is unknown.
-
+                
                 Note that you should set up your per-world plugin to treat all your Factions worlds as one group/world.""")
         private String defaultWorld = "world";
         private double costClaimWilderness = 30.0;
@@ -3057,7 +3089,7 @@ public class MainConfig {
     @Comment("""
             Support and documentation https://factions.support
             Updates https://www.spigotmc.org/resources/factionsuuid.1035/
-
+            
             Made with love <3""")
     private AVeryFriendlyFactionsConfig aVeryFriendlyFactionsConfig = new AVeryFriendlyFactionsConfig();
 

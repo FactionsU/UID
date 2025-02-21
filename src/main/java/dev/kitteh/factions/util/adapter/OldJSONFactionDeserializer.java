@@ -4,15 +4,11 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.google.gson.reflect.TypeToken;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.json.JSONFaction;
-import dev.kitteh.factions.permissible.Relation;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 public class OldJSONFactionDeserializer implements JsonDeserializer<JSONFaction> {
     @Override

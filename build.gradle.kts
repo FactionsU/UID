@@ -162,21 +162,24 @@ dependencies {
   compileOnlyApi(libs.jspecify)
 
   implementation(libs.paper.lib)
+  implementation(libs.cloud.paper)
+  implementation(libs.cloud.extras)
   implementation(libs.commons.lang3)
   implementation(libs.commodore)
   implementation(libs.configurate.hocon) {
     exclude("com.google.inject", "guice")
     exclude("org.checkerframework", "checker-qual")
   }
-  implementation(libs.adventure.platform.bukkit) {
-    exclude("org.jetbrains", "annotations")
-  }
   implementation(libs.adventure.text.minimessage) {
     exclude("org.jetbrains", "annotations")
   }
-  implementation(libs.spigot) {
-    exclude("net.md-5", "bungeecord-chat")
+  implementation(libs.adventure.text.serializer.gson) {
+    exclude("org.jetbrains", "annotations")
   }
+  implementation(libs.adventure.text.serializer.legacy) {
+    exclude("org.jetbrains", "annotations")
+  }
+  implementation(libs.spigot)
   implementation(libs.authlib) {
     exclude("com.google.code.findbugs", "jsr305")
     exclude("com.google.code.gson", "gson")
@@ -190,8 +193,7 @@ dependencies {
     libs.worldedit.bukkit,
     libs.worldguard.core,
     libs.worldguard.bukkit,
-    libs.essentialsx.asProvider(),
-    libs.essentialsx.chat,
+    libs.essentialsx,
     libs.fastutil,
     libs.dynmap,
     libs.playervaultsx,
@@ -255,6 +257,13 @@ tasks.shadowJar {
     include(dependency("net.kyori:examination-api"))
     include(dependency("net.kyori:examination-string"))
     include(dependency("net.kyori:option"))
+    include(dependency("org.incendo:cloud-paper"))
+    include(dependency("org.incendo:cloud-minecraft-extras"))
+    include(dependency("org.incendo:cloud-bukkit"))
+    include(dependency("org.incendo:cloud-brigadier"))
+    include(dependency("org.incendo:cloud-core"))
+    include(dependency("org.incendo:cloud-services"))
+    include(dependency("io.leangen.geantyref:geantyref"))
     include(dependency("dev.kitteh.forkedproject:IF-ChestOnly"))
   }
 
@@ -262,6 +271,8 @@ tasks.shadowJar {
   relocate("io.papermc.lib", "moss.factions.shade.io.papermc.lib")
   relocate("me.lucko.commodore", "moss.factions.shade.me.lucko.commodore")
   relocate("ninja.leaping", "moss.factions.shade.ninja.leaping")
+  relocate("org.incendo", "moss.factions.shade.org.incendo")
+  relocate("io.leangen", "moss.factions.shade.io.leangen")
   relocate("com.github.stefvanschie.inventoryframework", "moss.factions.shade.stefvanschie.if")
 
   relocate("net.kyori", "moss.factions.shade.net.kyori")

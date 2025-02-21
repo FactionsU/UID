@@ -1,0 +1,57 @@
+package dev.kitteh.factions.command.defaults;
+
+import dev.kitteh.factions.FPlayer;
+import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.command.Cloudy;
+import dev.kitteh.factions.command.Cmd;
+import dev.kitteh.factions.command.FactionParser;
+import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.landraidcontrol.DTRControl;
+import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TL;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.context.CommandContext;
+
+import java.util.function.BiConsumer;
+
+public class CmdDTR implements Cmd {
+    @Override
+    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
+        return (manager, builder) -> {
+            manager.command(
+                    builder.literal("dtr")
+                            .commandDescription(Cloudy.desc(TL.COMMAND_DTR_DESCRIPTION))
+                            .permission(builder.commandPermission().and(
+                                    Cloudy.predicate(s -> FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl)
+                                            .and(Cloudy.hasPermission(Permission.DTR))
+                            ))
+                            .optional("faction", FactionParser.of(FactionParser.Include.PLAYERS))
+                            .handler(this::handle)
+            );
+        };
+    }
+
+    private void handle(CommandContext<Sender> context) {
+        FPlayer fPlayer = context.sender().fPlayerOrNull();
+        Faction faction = fPlayer != null && fPlayer.hasFaction() ? fPlayer.getFaction() : null;
+
+        Faction target = context.getOrDefault("faction", faction);
+        if (target == null) {
+            return;
+        }
+
+        if (target != faction && !Permission.DTR_ANY.has(context.sender().sender(), true)) {
+            return;
+        }
+
+        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
+        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostDTR(), TL.COMMAND_DTR_TOSHOW, TL.COMMAND_DTR_FORSHOW)) {
+            return;
+        }
+
+        DTRControl dtr = (DTRControl) FactionsPlugin.getInstance().getLandRaidControl();
+        context.sender().msg(TL.COMMAND_DTR_DTR, target.describeTo(fPlayer, false), DTRControl.round(target.getDTR()), DTRControl.round(dtr.getMaxDTR(target)));
+    }
+}

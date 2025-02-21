@@ -1,8 +1,8 @@
 package dev.kitteh.factions;
 
+import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
-import dev.kitteh.factions.util.ChatMode;
 import dev.kitteh.factions.util.WarmUpUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -11,7 +11,6 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.UUID;
-
 
 /**
  * Logged in players always have exactly one FPlayer instance. Logged out players may or may not have an FPlayer
@@ -72,13 +71,17 @@ public interface FPlayer extends Participator, Selectable {
 
     void setIsAdminBypassing(boolean val);
 
-    void setChatMode(ChatMode chatMode);
+    ChatTarget getChatTarget();
 
-    ChatMode getChatMode();
+    void setChatTarget(ChatTarget chatTarget);
 
     void setIgnoreAllianceChat(boolean ignore);
 
     boolean isIgnoreAllianceChat();
+
+    void setIgnoreTruceChat(boolean ignore);
+
+    boolean isIgnoreTruceChat();
 
     void setSpyingChat(boolean chatSpying);
 
@@ -89,6 +92,8 @@ public interface FPlayer extends Participator, Selectable {
     void setShowScoreboard(boolean show);
 
     void resetFactionData();
+
+    void resetFactionData(boolean updateCommands);
 
     long getLastLoginTime();
 
@@ -145,6 +150,8 @@ public interface FPlayer extends Participator, Selectable {
     // Power
     //----------------------------------------------//
     double getPower();
+
+    void setPower(double power);
 
     void alterPower(double delta);
 
