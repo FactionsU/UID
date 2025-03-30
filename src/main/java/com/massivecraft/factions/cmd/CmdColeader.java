@@ -5,6 +5,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.util.ComponentDispatcher;
 import com.massivecraft.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -42,7 +43,7 @@ public class CmdColeader extends FCommand {
                         .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " coleader " + s))
                 );
             }
-            FactionsPlugin.getInstance().getAdventure().player(context.player).sendMessage(component);
+            ComponentDispatcher.send(context.player, component);
             return;
         }
 

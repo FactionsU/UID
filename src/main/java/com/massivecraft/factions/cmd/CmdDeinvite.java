@@ -5,6 +5,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.util.ComponentDispatcher;
 import com.massivecraft.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -41,7 +42,7 @@ public class CmdDeinvite extends FCommand {
                         .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " deinvite " + name))
                 );
             }
-            FactionsPlugin.getInstance().getAdventure().player(context.player).sendMessage(component);
+            ComponentDispatcher.send(context.player, component);
             return;
         }
 

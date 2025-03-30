@@ -299,22 +299,6 @@ public class Metrics {
                         Object plugin = provider.getService().getMethod("getPluginData").invoke(provider.getProvider());
                         if (plugin instanceof JsonObject) {
                             pluginData.add((JsonObject) plugin);
-                        } else { // old bstats version compatibility
-                            try {
-                                Class<?> jsonObjectJsonSimple = Class.forName("org.json.simple.JSONObject");
-                                if (plugin.getClass().isAssignableFrom(jsonObjectJsonSimple)) {
-                                    Method jsonStringGetter = jsonObjectJsonSimple.getDeclaredMethod("toJSONString");
-                                    jsonStringGetter.setAccessible(true);
-                                    String jsonString = (String) jsonStringGetter.invoke(plugin);
-                                    JsonObject object = JsonParser.parseString(jsonString).getAsJsonObject();
-                                    pluginData.add(object);
-                                }
-                            } catch (ClassNotFoundException e) {
-                                // minecraft version 1.14+
-                                if (logFailedRequests) {
-                                    this.plugin.getLogger().log(Level.SEVERE, "Encountered unexpected exception", e);
-                                }
-                            }
                         }
                     } catch (NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
                     }

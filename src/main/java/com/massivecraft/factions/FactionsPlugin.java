@@ -36,6 +36,7 @@ import com.massivecraft.factions.perms.PermSelectorTypeAdapter;
 import com.massivecraft.factions.perms.PermissibleActionRegistry;
 import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.util.AutoLeaveTask;
+import com.massivecraft.factions.util.ComponentDispatcher;
 import com.massivecraft.factions.util.EnumTypeAdapter;
 import com.massivecraft.factions.util.FlightUtil;
 import com.massivecraft.factions.util.LazyLocation;
@@ -52,8 +53,6 @@ import com.massivecraft.factions.util.material.MaterialDb;
 import com.massivecraft.factions.util.particle.BukkitParticleProvider;
 import com.mojang.authlib.GameProfile;
 import io.papermc.lib.PaperLib;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -182,7 +181,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     private VaultPerms vaultPerms;
     public final boolean likesCats = Arrays.stream(FactionsPlugin.class.getDeclaredMethods()).anyMatch(m -> m.isSynthetic() && m.getName().startsWith("loadCon") && m.getName().endsWith("0"));
     private Method getOffline;
-    private BukkitAudiences adventure;
     private String mcVersionString;
     private String updateCheck;
     private Response updateResponse;
@@ -206,7 +204,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     @Override
     public void onEnable() {
         this.loadSuccessful = false;
-        this.adventure = BukkitAudiences.create(this);
         StringBuilder startupBuilder = new StringBuilder();
         StringBuilder startupExceptionBuilder = new StringBuilder();
         Handler handler = new Handler() {
@@ -873,7 +870,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             LuckPerms.shutdown(this);
         }
         ContextManager.shutdown();
-        this.adventure.close();
         log("Disabled");
     }
 
@@ -1078,10 +1074,6 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
         return this.getServer().getOfflinePlayer(name);
     }
 
-    public BukkitAudiences getAdventure() {
-        return this.adventure;
-    }
-
     @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
     private static class UpdateCheck {
         private final String pluginName;
@@ -1147,15 +1139,14 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
             return;
         }
         this.told.add(player.getUniqueId());
-        Audience audience = this.adventure.player(player);
-        audience.sendMessage(Component.text().color(TextColor.fromHexString("#e35959"))
+        ComponentDispatcher.send(player, Component.text().color(TextColor.fromHexString("#e35959"))
                 .content("FactionsUUID Update Available: " + updateResponse.getLatestVersion()));
         if (updateResponse.isUrgent()) {
-            audience.sendMessage(Component.text().color(TextColor.fromHexString("#5E0B15"))
+            ComponentDispatcher.send(player, Component.text().color(TextColor.fromHexString("#5E0B15"))
                     .content("This is an important update. Download and restart ASAP."));
         }
         if (updateResponse.getComponent() != null) {
-            audience.sendMessage(updateResponse.getComponent());
+            ComponentDispatcher.send(player, updateResponse.getComponent());
         }
         player.sendMessage(ChatColor.GREEN + "Get it at " + ChatColor.DARK_AQUA + "https://www.spigotmc.org/resources/factionsuuid.1035/");
     }

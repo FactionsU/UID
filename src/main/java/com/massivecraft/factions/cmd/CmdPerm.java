@@ -11,15 +11,17 @@ import com.massivecraft.factions.perms.PermissibleActionRegistry;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.perms.selector.UnknownSelector;
 import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.util.ComponentDispatcher;
 import com.massivecraft.factions.util.TL;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentBuilder;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +33,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CmdPerm extends FCommand {
+    private record Audience(Player player) {
+        void sendMessage(ComponentLike component) {
+            ComponentDispatcher.send(player, component);
+        }
+    }
 
     public CmdPerm() {
         super();
@@ -66,9 +73,8 @@ public class CmdPerm extends FCommand {
 
         @Override
         public void perform(CommandContext context) {
-            Audience audience = FactionsPlugin.getInstance().getAdventure().player(context.player);
             LinkedHashMap<PermSelector, Map<String, Boolean>> permissions = ((MemoryFaction) context.faction).getPermissions();
-            this.perform(context, audience, permissions, FactionsPlugin.getInstance().tl().commands().permissions());
+            this.perform(context, new Audience(context.player), permissions, FactionsPlugin.getInstance().tl().commands().permissions());
         }
 
         abstract void perform(CommandContext context, Audience audience, LinkedHashMap<PermSelector, Map<String, Boolean>> permissions, TranslationsConfig.Commands.Permissions tl);
@@ -388,7 +394,7 @@ public class CmdPerm extends FCommand {
 
     @Override
     public void perform(CommandContext context) {
-        listSelectors(context, FactionsPlugin.getInstance().getAdventure().player(context.player), ((MemoryFaction) context.faction).getPermissions(), FactionsPlugin.getInstance().tl().commands().permissions());
+        listSelectors(context, new Audience(context.player), ((MemoryFaction) context.faction).getPermissions(), FactionsPlugin.getInstance().tl().commands().permissions());
     }
 
     private void listSelectors(CommandContext context, Audience audience, LinkedHashMap<PermSelector, Map<String, Boolean>> permissions, TranslationsConfig.Commands.Permissions tl) {

@@ -3,8 +3,8 @@ package com.massivecraft.factions.cmd;
 import com.google.gson.Gson;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.util.ComponentDispatcher;
 import com.massivecraft.factions.util.TL;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -133,8 +133,6 @@ public class CmdTicketInfo extends FCommand {
         } catch (Throwable ignored) {
         }
 
-        Audience audience = plugin.getAdventure().sender(context.sender);
-
         boolean full = context.argAsString(0, "").equalsIgnoreCase("full");
 
         if (full) {
@@ -220,12 +218,12 @@ public class CmdTicketInfo extends FCommand {
                         public void run() {
                             if (response.success) {
                                 String url = response.message;
-                                audience.sendMessage(Component.text().color(NamedTextColor.YELLOW).content("Share this URL: " + url).clickEvent(ClickEvent.openUrl(url)));
+                                ComponentDispatcher.send(context.sender, Component.text().color(NamedTextColor.YELLOW).content("Share this URL: " + url).clickEvent(ClickEvent.openUrl(url)));
                                 if (context.sender instanceof Player) {
                                     FactionsPlugin.getInstance().getLogger().info("Share this URL: " + url);
                                 }
                             } else {
-                                audience.sendMessage(Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
+                                ComponentDispatcher.send(context.sender, Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
                                 FactionsPlugin.getInstance().getLogger().warning("Received: " + response.message);
                             }
                         }
@@ -235,13 +233,13 @@ public class CmdTicketInfo extends FCommand {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            audience.sendMessage(Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
+                            ComponentDispatcher.send(context.sender, Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
                         }
                     }.runTask(FactionsPlugin.getInstance());
                 }
             }
         }.runTaskAsynchronously(FactionsPlugin.getInstance());
-        audience.sendMessage(Component.text().color(NamedTextColor.YELLOW).content("Now running..."));
+        ComponentDispatcher.send(context.sender, Component.text().color(NamedTextColor.YELLOW).content("Now running..."));
     }
 
     @Override

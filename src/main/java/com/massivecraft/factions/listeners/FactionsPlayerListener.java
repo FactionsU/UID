@@ -21,10 +21,10 @@ import com.massivecraft.factions.scoreboards.FTeamWrapper;
 import com.massivecraft.factions.scoreboards.sidebar.FDefaultSidebar;
 import com.massivecraft.factions.struct.ChatMode;
 import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.util.ComponentDispatcher;
 import com.massivecraft.factions.util.TL;
 import com.massivecraft.factions.util.TextUtil;
 import com.massivecraft.factions.util.VisualizeUtil;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -334,9 +334,8 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (me.isMapAutoUpdating()) {
             if (!showTimes.containsKey(player.getUniqueId()) || (showTimes.get(player.getUniqueId()) < System.currentTimeMillis())) {
-                Audience audience = FactionsPlugin.getInstance().getAdventure().player(player);
                 for (Component component : Board.getInstance().getMap(me, to, player.getLocation().getYaw())) {
-                    audience.sendMessage(component);
+                    ComponentDispatcher.send(player, component);
                 }
                 showTimes.put(player.getUniqueId(), System.currentTimeMillis() + FactionsPlugin.getInstance().conf().commands().map().getCooldown());
             }

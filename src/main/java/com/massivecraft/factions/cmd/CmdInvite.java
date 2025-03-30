@@ -4,6 +4,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.util.ComponentDispatcher;
 import com.massivecraft.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -57,7 +58,7 @@ public class CmdInvite extends FCommand {
                     .append(legacy.deserialize(context.faction.describeTo(target)));
             component = component.hoverEvent(legacy.deserialize(TL.COMMAND_INVITE_CLICKTOJOIN.toString()).asHoverEvent())
                     .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " join " + ChatColor.stripColor(context.faction.getTag())));
-            FactionsPlugin.getInstance().getAdventure().player(target.getPlayer()).sendMessage(component);
+            ComponentDispatcher.send(target.getPlayer(), component);
         }
 
         //you.msg("%s<i> invited you to %s",context.fPlayer.describeTo(you, true), context.faction.describeTo(you));

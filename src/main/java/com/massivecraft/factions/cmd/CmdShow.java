@@ -9,9 +9,9 @@ import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.tag.FactionTag;
 import com.massivecraft.factions.tag.FancyTag;
 import com.massivecraft.factions.tag.Tag;
+import com.massivecraft.factions.util.ComponentDispatcher;
 import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.factions.util.TL;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
@@ -128,7 +128,6 @@ public class CmdShow extends FCommand {
     }
 
     private void sendMessages(List<String> messageList, CommandSender recipient, Faction faction, FPlayer player, Map<UUID, String> groupMap) {
-        Audience audience = this.plugin.getAdventure().sender(recipient);
         FancyTag tag;
         for (String parsed : messageList) {
             if ((tag = FancyTag.getMatch(parsed)) != null) {
@@ -136,7 +135,7 @@ public class CmdShow extends FCommand {
                     List<Component> fancy = FancyTag.parse(parsed, faction, player, groupMap);
                     if (fancy != null) {
                         for (Component component : fancy) {
-                            audience.sendMessage(component);
+                            ComponentDispatcher.send(recipient, component);
                         }
                     }
                 } else {
@@ -163,7 +162,7 @@ public class CmdShow extends FCommand {
                     }
                 }
             } else {
-                audience.sendMessage(LegacyComponentSerializer.legacySection().deserialize(FactionsPlugin.getInstance().txt().parse(parsed)));
+                ComponentDispatcher.send(recipient, LegacyComponentSerializer.legacySection().deserialize(FactionsPlugin.getInstance().txt().parse(parsed)));
             }
         }
     }

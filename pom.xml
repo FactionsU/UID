@@ -115,8 +115,25 @@
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
-            <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.3.3</version>
+            <artifactId>adventure-text-serializer-gson</artifactId>
+            <version>4.19.0</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <artifactId>checker-qual</artifactId>
+                    <groupId>org.checkerframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jetbrains</groupId>
+                    <artifactId>annotations</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-legacy</artifactId>
+            <version>4.19.0</version>
             <scope>compile</scope>
             <optional>true</optional>
             <exclusions>
@@ -133,7 +150,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.17.0</version>
+            <version>4.19.0</version>
             <scope>compile</scope>
             <optional>true</optional>
             <exclusions>
@@ -156,10 +173,6 @@
             <version>1.21.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
-                <exclusion>
-                    <artifactId>bungeecord-chat</artifactId>
-                    <groupId>net.md-5</groupId>
-                </exclusion>
                 <exclusion>
                     <artifactId>persistence-api</artifactId>
                     <groupId>javax.persistence</groupId>
@@ -303,30 +316,16 @@
         <dependency>
             <groupId>net.essentialsx</groupId>
             <artifactId>EssentialsX</artifactId>
-            <version>2.20.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.essentialsx</groupId>
-            <artifactId>EssentialsXChat</artifactId>
-            <version>2.20.1</version>
+            <version>2.21.0</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <artifactId>bukkit</artifactId>
-                    <groupId>org.bukkit</groupId>
+                    <groupId>net.kyori</groupId>
+                    <artifactId>adventure-platform-bukkit</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>lombok</artifactId>
-                    <groupId>org.projectlombok</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>Essentials</artifactId>
-                    <groupId>net.ess3</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>bstats-bukkit</artifactId>
-                    <groupId>org.bstats</groupId>
+                    <groupId>org.checkerframework</groupId>
+                    <artifactId>checker-qual</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -383,6 +382,16 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.11.6</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.kyori</groupId>
+                    <artifactId>adventure-platform-bukkit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jetbrains</groupId>
+                    <artifactId>annotations</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>be.maximvdw</groupId>
