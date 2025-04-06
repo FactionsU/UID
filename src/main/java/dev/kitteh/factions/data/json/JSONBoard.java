@@ -68,11 +68,13 @@ public final class JSONBoard extends MemoryBoard {
         }
     }
 
+    @Override
     public void forceSave(boolean sync) {
         Map<String, Map<String, String>> map = dumpAsSaveFormat();
         DiscUtil.writeCatch(file, () -> FactionsPlugin.getInstance().getGson().toJson(map), sync);
     }
 
+    @Override
     public int load() {
         if (!file.exists()) {
             FactionsPlugin.getInstance().getLogger().info("No board to load from disk. Creating new file.");

@@ -11,12 +11,15 @@ import dev.kitteh.factions.permissible.selector.RoleAtLeastSelector;
 import dev.kitteh.factions.permissible.selector.RoleAtMostSelector;
 import dev.kitteh.factions.permissible.selector.RoleSingleSelector;
 import dev.kitteh.factions.permissible.selector.UnknownSelector;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
+@NullMarked
 public class PermSelectorRegistry {
     private static boolean closed = false;
     private static final Map<String, PermSelector.Descriptor> registry = new ConcurrentHashMap<>();
@@ -37,6 +40,7 @@ public class PermSelectorRegistry {
         register(RelationAtMostSelector.DESCRIPTOR);
     }
 
+    @SuppressWarnings("unused")
     private static void close() {
         closed = true;
     }
@@ -65,8 +69,8 @@ public class PermSelectorRegistry {
         return registry.keySet();
     }
 
-    public static PermSelector.Descriptor getDescriptor(String name) {
-        return name == null ? null : registry.get(name.toLowerCase());
+    public static PermSelector.@Nullable Descriptor getDescriptor(String name) {
+        return registry.get(name.toLowerCase());
     }
 
     public static void register(PermSelector.Descriptor descriptor) {

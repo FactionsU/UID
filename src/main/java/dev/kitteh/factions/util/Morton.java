@@ -1,10 +1,12 @@
 package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.FLocation;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Simple two-ints-in-a-long Morton code.
  */
+@NullMarked
 public final class Morton {
     public static long get(FLocation location) {
         return Morton.get(location.x(), location.z());

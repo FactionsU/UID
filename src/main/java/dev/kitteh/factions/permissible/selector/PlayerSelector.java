@@ -9,10 +9,13 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.jspecify.annotations.NullMarked;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+@NullMarked
 public class PlayerSelector extends AbstractSelector {
     public static final String NAME = "player";
     public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, FactionsPlugin.getInstance().tl().permissions().selectors().player()::getDisplayName, PlayerSelector::new)
@@ -39,10 +42,7 @@ public class PlayerSelector extends AbstractSelector {
 
     public PlayerSelector(UUID uuid) {
         super(DESCRIPTOR);
-        if (uuid == null) {
-            throw new IllegalArgumentException("Null UUID");
-        }
-        this.uuid = uuid;
+        this.uuid = Objects.requireNonNull(uuid);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class PlayerSelector extends AbstractSelector {
     @Override
     public Component displayValue(Faction context) {
         FPlayer player = FPlayers.getInstance().getById(this.uuid);
-        return player == null ?
+        return player.getName().equals(player.getUniqueId().toString()) ?
                 MiniMessage.miniMessage().deserialize(FactionsPlugin.getInstance().tl().permissions().selectors().player().getUuidValue(), Placeholder.unparsed("uuid", this.uuid.toString()))
                 : LegacyComponentSerializer.legacySection().deserialize(player.getRelationTo(context).getColor() + player.getName());
     }

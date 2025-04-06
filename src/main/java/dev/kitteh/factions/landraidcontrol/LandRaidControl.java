@@ -7,9 +7,11 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.stream.Stream;
 
+@NullMarked
 public interface LandRaidControl {
     static LandRaidControl getByName(String name) {
         return switch (name.toLowerCase()) {

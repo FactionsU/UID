@@ -9,10 +9,11 @@ import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.NumberConversions;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
 public record FLocation(String worldName, int x, int z) {
     //----------------------------------------------//
     // Constructors
@@ -22,23 +23,23 @@ public record FLocation(String worldName, int x, int z) {
         this("world", 0, 0);
     }
 
-    public FLocation(@NonNull Location location) {
+    public FLocation(Location location) {
         this(location.getWorld().getName(), blockToChunk(location.getBlockX()), blockToChunk(location.getBlockZ()));
     }
 
-    public FLocation(@NonNull LazyLocation location) {
+    public FLocation(LazyLocation location) {
         this(location.worldName(), blockToChunk((int) location.x()), blockToChunk((int) location.z()));
     }
 
-    public FLocation(@NonNull Chunk chunk) {
+    public FLocation(Chunk chunk) {
         this(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
 
-    public FLocation(@NonNull Player player) {
+    public FLocation(Player player) {
         this(player.getLocation());
     }
 
-    public FLocation(@NonNull Block block) {
+    public FLocation(Block block) {
         this(block.getChunk());
     }
 
@@ -46,11 +47,11 @@ public record FLocation(String worldName, int x, int z) {
     // Getters and Setters
     //----------------------------------------------//
 
-    public @NonNull String getWorldName() {
+    public String getWorldName() {
         return worldName;
     }
 
-    public @NonNull World getWorld() {
+    public World getWorld() {
         return Bukkit.getWorld(worldName);
     }
 
@@ -59,11 +60,11 @@ public record FLocation(String worldName, int x, int z) {
      *
      * @return
      */
-    public @NonNull String getCoordString() {
+    public String getCoordString() {
         return x + "," + z; // Do not change without fixing usages, because it is used for serialization.
     }
 
-    public @NonNull Chunk getChunk() {
+    public Chunk getChunk() {
         return getWorld().getChunkAt(x, z);
     }
 
@@ -89,15 +90,15 @@ public record FLocation(String worldName, int x, int z) {
     // Misc Geometry
     //----------------------------------------------//
 
-    public @NonNull FLocation getRelative(int dx, int dz) {
+    public FLocation getRelative(int dx, int dz) {
         return new FLocation(this.worldName, this.x + dx, this.z + dz);
     }
 
-    public boolean isInChunk(@NonNull Location loc) {
+    public boolean isInChunk(Location loc) {
         return loc.getWorld().getName().equalsIgnoreCase(getWorldName()) && blockToChunk(loc.getBlockX()) == x && blockToChunk(loc.getBlockZ()) == z;
     }
 
-    public boolean isInChunk(@NonNull LazyLocation loc) {
+    public boolean isInChunk(LazyLocation loc) {
         return loc.worldName().equalsIgnoreCase(getWorldName()) && blockToChunk(NumberConversions.floor(loc.x())) == x && blockToChunk(NumberConversions.floor(loc.z())) == z;
     }
 
@@ -143,10 +144,10 @@ public record FLocation(String worldName, int x, int z) {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof FLocation that)) {
+        if (!(obj instanceof FLocation(String world, int xx, int zz))) {
             return false;
         }
 
-        return this.x == that.x && this.z == that.z && (Objects.equals(this.worldName, that.worldName));
+        return this.x == xx && this.z == zz && (Objects.equals(this.worldName, world));
     }
 }

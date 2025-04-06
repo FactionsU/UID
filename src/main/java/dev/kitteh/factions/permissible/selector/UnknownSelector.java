@@ -4,7 +4,9 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Selectable;
 import net.kyori.adventure.text.Component;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class UnknownSelector extends AbstractSelector {
     private final String text;
 

@@ -34,6 +34,7 @@ public final class EnumTypeAdapter<T extends Enum<T>> extends TypeAdapter<T> {
         }
     }
 
+    @Override
     public T read(JsonReader in) throws IOException {
         if (in.peek() == JsonToken.NULL) {
             in.nextNull();
@@ -42,6 +43,7 @@ public final class EnumTypeAdapter<T extends Enum<T>> extends TypeAdapter<T> {
         return nameToConstant.get(in.nextString());
     }
 
+    @Override
     public void write(JsonWriter out, T value) throws IOException {
         out.value(value == null ? null : constantToName.get(value));
     }
@@ -50,6 +52,7 @@ public final class EnumTypeAdapter<T extends Enum<T>> extends TypeAdapter<T> {
 
     public static TypeAdapterFactory newEnumTypeHierarchyFactory() {
         return new TypeAdapterFactory() {
+            @Override
             @SuppressWarnings({"unchecked"})
             public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
                 Class<? super T> rawType = typeToken.getRawType();

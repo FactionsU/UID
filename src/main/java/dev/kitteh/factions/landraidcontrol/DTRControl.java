@@ -13,13 +13,15 @@ import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.stream.Stream;
 
+@NullMarked
 public class DTRControl implements LandRaidControl {
-    private static FactionsPlugin plugin;
+    private static FactionsPlugin plugin = FactionsPlugin.getInstance();
 
     public static String round(double dtr) {
         return BigDecimal.valueOf(dtr).setScale(conf().getDecimalDigits(), RoundingMode.UP).toPlainString();

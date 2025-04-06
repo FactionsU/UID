@@ -8,6 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +24,7 @@ import java.util.UUID;
  * The same instance is always returned for the same player. This means you can use the == operator. No .equals method
  * necessary.
  */
+@NullMarked
 public interface FPlayer extends Participator, Selectable {
     void login();
 
@@ -57,13 +60,15 @@ public interface FPlayer extends Participator, Selectable {
 
     void setPowerBoost(double powerBoost);
 
+    @Nullable
     Faction getAutoClaimFor();
 
-    void setAutoClaimFor(Faction faction);
+    void setAutoClaimFor(@Nullable Faction faction);
 
+    @Nullable
     Faction getAutoUnclaimFor();
 
-    void setAutoUnclaimFor(Faction faction);
+    void setAutoUnclaimFor(@Nullable Faction faction);
 
     boolean isAdminBypassing();
 
@@ -128,9 +133,9 @@ public interface FPlayer extends Participator, Selectable {
     // Colored concatenations:
     // These are used in information messages
 
-    String getNameAndTitle(Faction faction);
+    String getNameAndTitle(@Nullable Faction faction);
 
-    String getNameAndTitle(FPlayer fplayer);
+    String getNameAndTitle(@Nullable FPlayer fplayer);
 
     // Chat Tag:
     // These are injected into the format of global chat messages.
@@ -138,9 +143,9 @@ public interface FPlayer extends Participator, Selectable {
     String getChatTag();
 
     // Colored Chat Tag
-    String getChatTag(Faction faction);
+    String getChatTag(@Nullable Faction faction);
 
-    String getChatTag(FPlayer fplayer);
+    String getChatTag(@Nullable FPlayer fplayer);
 
     int getKills();
 
@@ -209,6 +214,7 @@ public interface FPlayer extends Participator, Selectable {
         return this.getUniqueId().toString();
     }
 
+    @Nullable
     Player getPlayer();
 
     boolean isOnline();
@@ -251,6 +257,7 @@ public interface FPlayer extends Participator, Selectable {
 
     void setFlyTrailsState(boolean state);
 
+    @Nullable
     String getFlyTrailsEffect();
 
     void setFlyTrailsEffect(String effect);
@@ -261,7 +268,7 @@ public interface FPlayer extends Participator, Selectable {
 
     boolean isWarmingUp();
 
-    WarmUpUtil.Warmup getWarmupType();
+    WarmUpUtil.@Nullable Warmup getWarmupType();
 
     void addWarmup(WarmUpUtil.Warmup warmup, int taskId);
 
@@ -269,5 +276,5 @@ public interface FPlayer extends Participator, Selectable {
 
     void clearWarmup();
 
-    void setOfflinePlayer(Player player);
+    void setOfflinePlayer(@Nullable Player player);
 }

@@ -5,12 +5,15 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+@NullMarked
 public enum Role implements Permissible {
     @SerializedName(value = "ADMIN", alternate = {"LEADER"}) // Import
     ADMIN(4, TL.ROLE_ADMIN),
@@ -55,7 +58,7 @@ public enum Role implements Permissible {
 
     }
 
-    public static Role fromString(String check) {
+    public static @Nullable Role fromString(String check) {
         return switch (check.toLowerCase(Locale.ROOT)) {
             case "admin" -> ADMIN;
             case "coleader", "coowner" -> COLEADER;
@@ -64,7 +67,6 @@ public enum Role implements Permissible {
             case "recruit", "rec" -> RECRUIT;
             default -> null;
         };
-
     }
 
     @Override

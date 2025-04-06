@@ -8,6 +8,8 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Selectable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,9 +20,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@NullMarked
 public abstract class AbstractRelationSelector extends AbstractSelector {
     public static class RelationDescriptor extends BasicDescriptor {
-        private List<PermSelector> relationSelectors;
+        private @Nullable List<PermSelector> relationSelectors;
         private final Function<Relation, PermSelector> function;
 
         public RelationDescriptor(String name, Supplier<String> displayName, Function<Relation, PermSelector> function) {
@@ -75,5 +78,5 @@ public abstract class AbstractRelationSelector extends AbstractSelector {
         return test(relation);
     }
 
-    public abstract boolean test(Relation relation);
+    public abstract boolean test(@Nullable Relation relation);
 }

@@ -12,7 +12,9 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class PowerControl implements LandRaidControl {
     @Override
     public boolean isRaidable(Faction faction) {

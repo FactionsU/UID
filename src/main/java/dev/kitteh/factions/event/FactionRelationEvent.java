@@ -23,6 +23,7 @@ public class FactionRelationEvent extends FactionEvent {
         frel = rel;
     }
 
+    @Override
     public HandlerList getHandlers() {
         return handlers;
     }

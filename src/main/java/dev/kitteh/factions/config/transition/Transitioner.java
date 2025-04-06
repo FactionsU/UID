@@ -2,7 +2,7 @@ package dev.kitteh.factions.config.transition;
 
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.Loader;
-import dev.kitteh.factions.permissible.PermSelectorTypeAdapter;
+import dev.kitteh.factions.util.adapter.PermSelectorTypeAdapter;
 import dev.kitteh.factions.util.TL;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;

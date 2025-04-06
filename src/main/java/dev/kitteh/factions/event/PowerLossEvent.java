@@ -4,6 +4,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import org.bukkit.event.Cancellable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Event called when a player loses power.
@@ -11,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class PowerLossEvent extends FactionPlayerEvent implements Cancellable {
     private boolean cancelled = false;
-    private String message;
+    private @Nullable String message;
 
     public PowerLossEvent(Faction f, FPlayer p) {
         super(f, p);
@@ -22,7 +23,7 @@ public class PowerLossEvent extends FactionPlayerEvent implements Cancellable {
      *
      * @return power loss message as String.
      */
-    public String getMessage() {
+    public @Nullable String getMessage() {
         return message;
     }
 
@@ -31,7 +32,7 @@ public class PowerLossEvent extends FactionPlayerEvent implements Cancellable {
      *
      * @param message message
      */
-    public void setMessage(String message) {
+    public void setMessage(@Nullable String message) {
         this.message = message;
     }
 

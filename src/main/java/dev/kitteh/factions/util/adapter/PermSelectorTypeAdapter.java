@@ -1,10 +1,14 @@
-package dev.kitteh.factions.permissible;
+package dev.kitteh.factions.util.adapter;
 
 import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import dev.kitteh.factions.permissible.PermSelector;
+import dev.kitteh.factions.permissible.PermSelectorRegistry;
+import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.selector.PlayerSelector;
 import dev.kitteh.factions.permissible.selector.RelationSingleSelector;
 import dev.kitteh.factions.permissible.selector.RoleSingleSelector;

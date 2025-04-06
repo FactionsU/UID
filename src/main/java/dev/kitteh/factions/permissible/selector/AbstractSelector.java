@@ -3,6 +3,8 @@ package dev.kitteh.factions.permissible.selector;
 import dev.kitteh.factions.permissible.PermSelector;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -12,12 +14,13 @@ import java.util.function.Supplier;
  * Default, abstract implementations of basics that all built-in
  * PermSelectors utilize.
  */
+@NullMarked
 public abstract class AbstractSelector implements PermSelector {
     public static class BasicDescriptor implements Descriptor {
         private final Function<String, PermSelector> function;
         private final String name;
         private boolean acceptsEmpty;
-        private Supplier<String> instructions;
+        private @Nullable Supplier<String> instructions;
         private final Supplier<String> displayName;
 
         public BasicDescriptor(String name, Supplier<String> displayName, Function<String, PermSelector> function) {
@@ -57,7 +60,7 @@ public abstract class AbstractSelector implements PermSelector {
         }
 
         @Override
-        public String getInstructions() {
+        public @Nullable String getInstructions() {
             return this.instructions == null ? null : this.instructions.get();
         }
     }
@@ -68,6 +71,7 @@ public abstract class AbstractSelector implements PermSelector {
         this.descriptor = descriptor;
     }
 
+    @Override
     public Descriptor descriptor() {
         return this.descriptor;
     }

@@ -15,6 +15,7 @@ public class AutoLeaveProcessTask extends AutoLeaveTask.AutoLeaveProcessor<FPlay
         this.iterator = ((ArrayList<FPlayer>) FPlayers.getInstance().getAllFPlayers()).listIterator();
     }
 
+    @Override
     public void go(MainConfig conf) {
         FPlayer fplayer = iterator.next();
 

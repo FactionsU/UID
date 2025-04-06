@@ -2,7 +2,10 @@ package dev.kitteh.factions.permissible.selector;
 
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class RelationAtLeastSelector extends AbstractRelationSelector {
     public static final String NAME = "relation-atleast";
     public static final Descriptor DESCRIPTOR = new RelationDescriptor(NAME, FactionsPlugin.getInstance().tl().permissions().selectors().relationAtLeast()::getDisplayName, RelationAtLeastSelector::new);
@@ -12,7 +15,7 @@ public class RelationAtLeastSelector extends AbstractRelationSelector {
     }
 
     @Override
-    public boolean test(Relation relation) {
+    public boolean test(@Nullable Relation relation) {
         return relation != null && relation != Relation.MEMBER && relation.isAtLeast(this.relation);
     }
 }

@@ -35,7 +35,7 @@ import dev.kitteh.factions.listener.FactionsPlayerListener;
 import dev.kitteh.factions.listener.PortalListener;
 import dev.kitteh.factions.permissible.PermSelector;
 import dev.kitteh.factions.permissible.PermSelectorRegistry;
-import dev.kitteh.factions.permissible.PermSelectorTypeAdapter;
+import dev.kitteh.factions.util.adapter.PermSelectorTypeAdapter;
 import dev.kitteh.factions.permissible.PermissibleActionRegistry;
 import dev.kitteh.factions.util.AutoLeaveTask;
 import dev.kitteh.factions.util.ComponentDispatcher;

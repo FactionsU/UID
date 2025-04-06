@@ -5,10 +5,12 @@ import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;
 import java.util.Set;
 
+@NullMarked
 public enum Relation implements Permissible {
     MEMBER(4, TL.RELATION_MEMBER_SINGULAR.toString()),
     ALLY(3, TL.RELATION_ALLY_SINGULAR.toString()),
@@ -101,6 +103,7 @@ public enum Relation implements Permissible {
         return this.value <= relation.value;
     }
 
+    @Override
     public ChatColor getColor() {
         return TextUtil.getClosest(this.getTextColor());
     }

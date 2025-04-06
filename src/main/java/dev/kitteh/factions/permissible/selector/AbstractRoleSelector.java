@@ -8,6 +8,8 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,13 +21,14 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@NullMarked
 public abstract class AbstractRoleSelector extends AbstractSelector {
     public static class RoleDescriptor extends BasicDescriptor {
-        private List<PermSelector> roleSelectors;
+        private @Nullable List<PermSelector> roleSelectors;
         private final Function<Role, PermSelector> function;
 
         public RoleDescriptor(String name, Supplier<String> displayName, Function<Role, PermSelector> function) {
-            super(name, displayName, input -> function.apply(Role.fromString(input)));
+            super(name, displayName, input -> function.apply(Objects.requireNonNull(Role.fromString(input))));
             this.function = function;
         }
 
@@ -77,5 +80,5 @@ public abstract class AbstractRoleSelector extends AbstractSelector {
         return false;
     }
 
-    public abstract boolean test(Role role);
+    public abstract boolean test(@Nullable Role role);
 }

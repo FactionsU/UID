@@ -17,6 +17,7 @@ public class AutoLeaveTask implements Runnable {
         this.factions = FactionsPlugin.getInstance().conf().factions().other().isAutoLeaveOnlyEntireFactionInactive();
     }
 
+    @Override
     public synchronized void run() {
         if (task != null && !task.isFinished()) {
             return;

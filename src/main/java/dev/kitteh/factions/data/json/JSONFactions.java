@@ -107,11 +107,10 @@ public final class JSONFactions extends MemoryFactions {
                 f.checkPerms();
                 try {
                     f.setId(Integer.parseInt(id));
+                    this.updateNextIdForId(Integer.parseInt(id));
                 } catch (NumberFormatException e) {
                     f.setId(Integer.MIN_VALUE);
                 }
-
-                this.updateNextIdForId(id);
             }
             return new ArrayList<>(data.values());
         } else {
@@ -129,19 +128,15 @@ public final class JSONFactions extends MemoryFactions {
     // ID MANAGEMENT
     // -------------------------------------------- //
 
-    public String getNextId() {
+    public int getNextId() {
         while (!isIdFree(this.nextId)) {
             this.nextId += 1;
         }
-        return Integer.toString(this.nextId++);
-    }
-
-    public boolean isIdFree(String id) {
-        return !this.factions.containsKey(Integer.parseInt(id));
+        return this.nextId++;
     }
 
     public boolean isIdFree(int id) {
-        return this.isIdFree(Integer.toString(id));
+        return !this.factions.containsKey(id);
     }
 
     private synchronized void updateNextIdForId(int id) {
@@ -150,17 +145,9 @@ public final class JSONFactions extends MemoryFactions {
         }
     }
 
-    private void updateNextIdForId(String id) {
-        try {
-            int idAsInt = Integer.parseInt(id);
-            this.updateNextIdForId(idAsInt);
-        } catch (Exception ignored) {
-        }
-    }
-
     @Override
     public MemoryFaction generateFactionObject() {
-        String id = getNextId();
+        int id = getNextId();
         MemoryFaction faction = new JSONFaction(id);
         updateNextIdForId(id);
         return faction;

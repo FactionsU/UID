@@ -2,6 +2,8 @@ package dev.kitteh.factions.permissible;
 
 import dev.kitteh.factions.Faction;
 import net.kyori.adventure.text.Component;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -14,6 +16,7 @@ import java.util.Map;
  * Implementations must be immutable and should extend AbstractSelector (or
  * at least copy its methods to be consistent).
  */
+@NullMarked
 public interface PermSelector {
     /**
      * Describes a type of PermSelector, and can create them.
@@ -49,7 +52,7 @@ public interface PermSelector {
          * @param faction faction for context
          * @return map as described
          */
-        default Map<String, String> getOptions(Faction faction) {
+        default @Nullable Map<String, String> getOptions(Faction faction) {
             return null;
         }
 
@@ -67,7 +70,7 @@ public interface PermSelector {
          *
          * @return instructions
          */
-        default String getInstructions() {
+        default @Nullable String getInstructions() {
             return null;
         }
     }

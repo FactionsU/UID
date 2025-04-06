@@ -1,6 +1,5 @@
 package dev.kitteh.factions.command.defaults;
 
-import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.defaults.list.CmdListBans;

@@ -5,7 +5,9 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Selectable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class AllSelector extends AbstractSelector {
     public static final String NAME = "all";
     public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, FactionsPlugin.getInstance().tl().permissions().selectors().all()::getDisplayName, s -> new AllSelector()).acceptEmpty();

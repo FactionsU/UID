@@ -1,7 +1,9 @@
 package dev.kitteh.factions.permissible;
 
 import dev.kitteh.factions.util.TL;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public enum PermissibleActions implements PermissibleAction {
     BUILD(TL.PERM_BUILD, TL.PERM_SHORT_BUILD),
     DESTROY(TL.PERM_DESTROY, TL.PERM_SHORT_DESTROY),

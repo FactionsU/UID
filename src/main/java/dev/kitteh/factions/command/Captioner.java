@@ -6,8 +6,8 @@ import org.incendo.cloud.caption.CaptionProvider;
 import org.incendo.cloud.caption.DelegatingCaptionProvider;
 
 public final class Captioner<C> extends DelegatingCaptionProvider<C> {
-    public static Caption NO_FACTION_FOUND = Caption.of("argument.parse.failure.faction");
-    public static Caption NO_PLAYER_FOUND = Caption.of("argument.parse.failure.fplayer");
+    public static final Caption NO_FACTION_FOUND = Caption.of("argument.parse.failure.faction");
+    public static final Caption NO_PLAYER_FOUND = Caption.of("argument.parse.failure.fplayer");
 
     private static final CaptionProvider<?> PROVIDER = CaptionProvider.constantProvider()
             .putCaption(NO_FACTION_FOUND, "No faction found for input '<input>'") // TODO TL.GENERIC_NOFACTIONFOUND

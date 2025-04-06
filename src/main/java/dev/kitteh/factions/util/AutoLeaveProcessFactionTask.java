@@ -14,6 +14,7 @@ public class AutoLeaveProcessFactionTask extends AutoLeaveTask.AutoLeaveProcesso
         this.iterator = Factions.getInstance().getAllFactions().listIterator();
     }
 
+    @Override
     public void go(MainConfig conf) {
         Faction faction = iterator.next();
 
