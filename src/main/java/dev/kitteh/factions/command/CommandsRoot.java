@@ -61,58 +61,71 @@ import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+@NullMarked
 public class CommandsRoot {
     private record Register(BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer,
                             Plugin providingPlugin, String command) {
     }
 
-    private static Map<String, Register> registry = new ConcurrentHashMap<>();
-    private static Map<String, Register> adminRegistry = new ConcurrentHashMap<>();
+    private static @Nullable Map<String, Register> registry = new ConcurrentHashMap<>();
+    private static @Nullable Map<String, Register> adminRegistry = new ConcurrentHashMap<>();
 
-    public static void register(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
-        if (registry == null) {
-            throw new IllegalStateException("Registration closed");
-        }
-        if (providingPlugin == FactionsPlugin.getInstance()) {
-            throw new IllegalStateException("Use your own plugin!");
-        }
-        registry.put(command, new Register(consumer, providingPlugin, command));
+    static void register(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
+        reg(providingPlugin, command, consumer, registry);
     }
 
-    public static void registerAdmin(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
+    static void registerAdmin(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
+        reg(providingPlugin, command, consumer, adminRegistry);
+    }
+
+    private static void reg(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer, @Nullable Map<String, Register> adminRegistry) {
         if (adminRegistry == null) {
             throw new IllegalStateException("Registration closed");
         }
-        if (providingPlugin == FactionsPlugin.getInstance()) {
-            throw new IllegalStateException("Use your own plugin!");
+        if (Objects.requireNonNull(providingPlugin) == FactionsPlugin.getInstance()) {
+            throw new IllegalArgumentException("Use your own plugin!");
         }
-        adminRegistry.put(command, new Register(consumer, providingPlugin, command));
+        adminRegistry.put(Objects.requireNonNull(command), new Register(Objects.requireNonNull(consumer), providingPlugin, command));
     }
 
-    private static void registerInternal(String command, Cmd cmd) {
+    private void registerInternal(String command, Cmd cmd) {
+        if (registry == null) {
+            return;
+        }
         if (registry.containsKey(command)) {
-            return; // Silent death? TODO
+            FactionsPlugin.getInstance().getLogger().info("Skipping internal '" + command + "' command because it is already registered.");
+            return;
         }
         registry.put(command, new Register(cmd.consumer(), FactionsPlugin.getInstance(), command));
     }
 
-    private static void registerAdminInternal(String command, Cmd cmd) {
+    private void registerAdminInternal(String command, Cmd cmd) {
+        if (adminRegistry == null) {
+            return;
+        }
         if (adminRegistry.containsKey(command)) {
-            return; // Silent death? TODO
+            FactionsPlugin.getInstance().getLogger().info("Skipping internal admin '" + command + "' command because it is already registered.");
+            return;
         }
         adminRegistry.put(command, new Register(cmd.consumer(), FactionsPlugin.getInstance(), command));
     }
 
     public CommandsRoot(FactionsPlugin plugin) {
+        if (registry == null || adminRegistry == null) {
+            throw new IllegalStateException("Second attempt at creating this class!");
+        }
         this.register();
 
         LegacyPaperCommandManager<Sender> manager = new LegacyPaperCommandManager<>(plugin, ExecutionCoordinator.simpleCoordinator(), SenderMapper.create(Sender::of, Sender::sender));
