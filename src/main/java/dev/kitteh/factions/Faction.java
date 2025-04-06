@@ -295,28 +295,40 @@ public interface Faction extends Participator, Selectable {
     // Ownership of specific claims
     // ----------------------------------------------//
 
+    @Deprecated
     Map<FLocation, Set<UUID>> getClaimOwnership();
 
+    @Deprecated
     void clearAllClaimOwnership();
 
+    @Deprecated
     void clearClaimOwnership(FLocation loc);
 
+    @Deprecated
     void clearClaimOwnership(FPlayer player);
 
+    @Deprecated
     int getCountOfClaimsWithOwners();
 
+    @Deprecated
     boolean doesLocationHaveOwnersSet(FLocation loc);
 
+    @Deprecated
     boolean isPlayerInOwnerList(FPlayer player, FLocation loc);
 
+    @Deprecated
     void setPlayerAsOwner(FPlayer player, FLocation loc);
 
+    @Deprecated
     void removePlayerAsOwner(FPlayer player, FLocation loc);
 
+    @Deprecated
     Set<UUID> getOwnerList(FLocation loc);
 
+    @Deprecated
     String getOwnerListString(FLocation loc);
 
+    @Deprecated
     boolean playerHasOwnershipRights(FPlayer fplayer, FLocation loc);
 
     Set<FLocation> getAllClaims();
