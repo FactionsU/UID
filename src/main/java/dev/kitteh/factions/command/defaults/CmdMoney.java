@@ -8,6 +8,7 @@ import dev.kitteh.factions.command.defaults.money.CmdMoneyBalance;
 import dev.kitteh.factions.command.defaults.money.CmdMoneyDeposit;
 import dev.kitteh.factions.command.defaults.money.CmdMoneySend;
 import dev.kitteh.factions.command.defaults.money.CmdMoneyWithdraw;
+import dev.kitteh.factions.integration.Econ;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 
@@ -18,7 +19,7 @@ public class CmdMoney implements Cmd {
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
         return (manager, builder) -> {
             Command.Builder<Sender> moneyBuilder = builder.literal("money")
-                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> FactionsPlugin.getInstance().conf().economy().isBankEnabled())));
+                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> Econ.shouldBeUsed() && FactionsPlugin.getInstance().conf().economy().isBankEnabled())));
 
             new CmdMoneyBalance().consumer().accept(manager, moneyBuilder);
             new CmdMoneyDeposit().consumer().accept(manager, moneyBuilder);

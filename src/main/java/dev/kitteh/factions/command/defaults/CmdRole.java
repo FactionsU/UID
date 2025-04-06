@@ -123,7 +123,7 @@ public class CmdRole implements Cmd {
 
     private void handleAdmin(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        FPlayer target = context.get("player");
+        FPlayer target = context.get("member");
 
         if (!sender.hasFaction() || sender.getRole() != Role.ADMIN) {
             sender.msg(TL.COMMAND_ADMIN_NOTADMIN);

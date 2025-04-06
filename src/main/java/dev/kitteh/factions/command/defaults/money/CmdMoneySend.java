@@ -53,7 +53,8 @@ public class CmdMoneySend implements Cmd {
     }
 
     private void handleToFaction(CommandContext<Sender> context) {
-        double amount = Math.abs(context.get("amount"));
+        double amount = context.get("amount");
+        amount = Math.abs(amount);
         if (amount == 0D) {
             return;
         }

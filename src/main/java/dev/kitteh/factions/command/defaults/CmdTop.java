@@ -20,6 +20,7 @@ import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.parser.standard.IntegerParser;
 import org.incendo.cloud.parser.standard.StringParser;
+import org.incendo.cloud.suggestion.SuggestionProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class CmdTop implements Cmd {
                     builder.literal("top")
                             .commandDescription(Cloudy.desc(TL.COMMAND_TOP_DESCRIPTION))
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TOP)))
-                            .required("criteria", StringParser.stringParser())
+                            .required("criteria", StringParser.stringParser(), SuggestionProvider.suggestingStrings(topValueGenerators.keySet()))
                             .optional("page", IntegerParser.integerParser(1))
                             .handler(this::handle)
             );
@@ -69,6 +70,7 @@ public class CmdTop implements Cmd {
         // Get all Factions and remove non player ones.
 
         String criteria = context.get("criteria");
+        criteria = criteria.toLowerCase();
 
         Function<Faction, FTopValue<?>> ftopGenerator = topValueGenerators.get(criteria);
         if (ftopGenerator == null || (!(FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) && criteria.equalsIgnoreCase("power"))) {

@@ -38,7 +38,15 @@ public class CmdUnclaim implements Cmd {
             manager.command(
                     builder.literal("unclaim")
                             .commandDescription(Cloudy.desc(TL.COMMAND_UNCLAIM_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.UNCLAIM).and(Cloudy.isPlayer())))
+                            .permission(
+                                    builder.commandPermission()
+                                            .and(Cloudy.hasPermission(Permission.UNCLAIM)
+                                                    .and(
+                                                            Cloudy.hasFaction()
+                                                                    .or(Cloudy.hasPermission(Permission.MANAGE_SAFE_ZONE).or(Cloudy.hasPermission(Permission.MANAGE_WAR_ZONE)))
+                                                    )
+                                            )
+                            )
                             .flag(manager.flagBuilder("faction").withComponent(FactionParser.of()))
                             .flag(
                                     manager.flagBuilder("radius")

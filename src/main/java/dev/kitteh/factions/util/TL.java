@@ -110,9 +110,9 @@ public enum TL {
     COMMAND_CHAT_MODE_ALLIANCE("&eAlliance only chat mode."),
     COMMAND_CHAT_MODE_TRUCE("&eTruce only chat mode."),
     COMMAND_CHAT_MODE_FACTION("&eFaction only chat mode."),
-    COMMAND_CHAT_MODE_COLEADER("&Coleader only chat mode."),
+    COMMAND_CHAT_MODE_COLEADER("&eColeader only chat mode."),
     COMMAND_CHAT_MODE_MOD("&eMod only chat mode."),
-    COMMAND_CHAT_MODE_NORMAL("&Normal member only chat mode."),
+    COMMAND_CHAT_MODE_NORMAL("&eNormal member only chat mode."),
 
     COMMAND_CHATSPY_ENABLE("&eYou have enabled chat spying mode."),
     COMMAND_CHATSPY_ENABLELOG(" has ENABLED chat spying mode."),

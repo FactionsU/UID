@@ -32,7 +32,15 @@ public class CmdClaim implements Cmd {
             manager.command(
                     builder.literal("claim")
                             .commandDescription(Cloudy.desc(TL.COMMAND_CLAIM_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.CLAIM).and(Cloudy.isPlayer())))
+                            .permission(
+                                    builder.commandPermission()
+                                            .and(Cloudy.hasPermission(Permission.CLAIM)
+                                                    .and(
+                                                            Cloudy.hasFaction()
+                                                                    .or(Cloudy.hasPermission(Permission.MANAGE_SAFE_ZONE).or(Cloudy.hasPermission(Permission.MANAGE_WAR_ZONE)))
+                                                    )
+                                            )
+                            )
                             .flag(manager.flagBuilder("faction").withComponent(FactionParser.of()))
                             .flag(
                                     manager.flagBuilder("radius")

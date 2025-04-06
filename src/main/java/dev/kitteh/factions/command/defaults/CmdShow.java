@@ -74,6 +74,7 @@ public class CmdShow implements Cmd {
 
         Faction faction = context.getOrDefault("faction", fPlayer == null ? Factions.getInstance().getWilderness() : fPlayer.getFaction());
         if (faction.isWilderness()) {
+            context.sender().msg(TL.COMMAND_SHOW_NOFACTION_OTHER);
             return;
         }
 
