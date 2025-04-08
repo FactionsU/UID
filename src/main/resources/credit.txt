@@ -4,9 +4,14 @@ and can be found at https://github.com/FactionsU/UID
 
 Shaded libraries into the jar include:
 
-Adventure, Adventure Bukkit Platform, and MiniMessage
+Adventure API, Adventure Text (Gson/Legacy) Serializers, and MiniMessage
 MIT License
-https://github.com/KyoriPowered
+https://github.com/KyoriPowered/adventure
+
+cloud command framework
+MIT License
+https://github.com/incendo/cloud
+https://github.com/Incendo/cloud-minecraft
 
 commodore
 MIT License
@@ -15,6 +20,10 @@ https://github.com/lucko/commodore
 Configurate
 Apache License, Version 2.0
 https://github.com/SpongePowered/Configurate
+
+GeantyRef
+Apache License, Version 2.0
+https://github.com/leangen/geantyref
 
 PaperLib
 MIT License
