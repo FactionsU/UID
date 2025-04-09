@@ -578,7 +578,7 @@ public abstract class MemoryFaction implements Faction {
         if (this.relationWish.containsKey(otherFaction.getId())) {
             return this.relationWish.get(otherFaction.getId());
         }
-        return Relation.fromString(FactionsPlugin.getInstance().conf().factions().other().getDefaultRelation()); // Always default to old behavior.
+        return FactionsPlugin.getInstance().conf().factions().other().getDefaultRelation();
     }
 
     @Override

@@ -26,7 +26,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Econ {
-
     private static Economy econ = null;
     private static final Pattern FACTION_PATTERN = Pattern.compile("^faction-(\\d+)$");
 
@@ -65,8 +64,6 @@ public class Econ {
         if (!FactionsPlugin.getInstance().conf().economy().isEnabled()) {
             FactionsPlugin.getInstance().getLogger().info("NOTE: Economy is disabled. You can enable it in config/main.conf");
         }
-
-        //P.getInstance().cmdBase.cmdHelp.updateHelp();
     }
 
     public static boolean shouldBeUsed() {
@@ -129,12 +126,12 @@ public class Econ {
         }
 
         // Bypassing players can do any kind of transaction
-        if (i instanceof FPlayer && ((FPlayer) i).isAdminBypassing()) {
+        if (i instanceof FPlayer fPlayer && fPlayer.isAdminBypassing()) {
             return true;
         }
 
         // Players with the any withdraw can do.
-        if (i instanceof FPlayer && Permission.MONEY_WITHDRAW_ANY.has(((FPlayer) i).getPlayer())) {
+        if (i instanceof FPlayer fPlayer && Permission.MONEY_WITHDRAW_ANY.has(fPlayer.getPlayer())) {
             return true;
         }
 
@@ -225,25 +222,19 @@ public class Econ {
         return false;
     }
 
-    public static Set<FPlayer> getFplayers(Participator ep) {
-        Set<FPlayer> fplayers = new HashSet<>();
-
-        if (ep != null) {
-            if (ep instanceof FPlayer) {
-                fplayers.add((FPlayer) ep);
-            } else if (ep instanceof Faction) {
-                fplayers.addAll(((Faction) ep).getFPlayers());
-            }
+    private static void addFPlayers(Set<FPlayer> fPlayers, Participator participator) {
+        if (participator instanceof FPlayer fPlayer) {
+            fPlayers.add(fPlayer);
+        } else if (participator instanceof Faction faction) {
+            fPlayers.addAll(faction.getFPlayers());
         }
-
-        return fplayers;
     }
 
     public static void sendTransferInfo(Participator invoker, Participator from, Participator to, double amount) {
         Set<FPlayer> recipients = new HashSet<>();
-        recipients.addAll(getFplayers(invoker));
-        recipients.addAll(getFplayers(from));
-        recipients.addAll(getFplayers(to));
+        addFPlayers(recipients, invoker);
+        addFPlayers(recipients, from);
+        addFPlayers(recipients, to);
 
         if (invoker == null) {
             for (FPlayer recipient : recipients) {
@@ -291,8 +282,6 @@ public class Econ {
         }
 
         if (delta == 0) {
-            // no money actually transferred?
-//			ep.msg("<h>%s<i> didn't have to pay anything %s.", You, forDoingThis);  // might be for gains, might be for losses
             return true;
         }
 
@@ -317,7 +306,7 @@ public class Econ {
                 return false;
             }
         } else {
-            // The player should loose money
+            // The player should lose money
             // The player might not have enough.
 
             if (has(acc, -delta) && withdraw(acc, -delta)) {

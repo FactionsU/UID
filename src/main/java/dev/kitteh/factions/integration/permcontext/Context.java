@@ -1,6 +1,7 @@
 package dev.kitteh.factions.integration.permcontext;
 
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
 
@@ -9,6 +10,7 @@ import java.util.Set;
  *
  * @see ContextManager#registerContext(Context)
  */
+@NullMarked
 public interface Context {
     /**
      * Gets the context name, without any namespacing. Format should be

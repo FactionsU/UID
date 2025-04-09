@@ -163,7 +163,7 @@ public abstract class AbstractListener implements Listener {
             // creeper which needs prevention
             return true;
         } else if (
-                (boomer instanceof Fireball || boomer instanceof WitherSkull || boomer instanceof Wither) && ((faction.isWilderness() && protection.isWildernessBlockFireballs() && !protection.getWorldsNoWildernessProtection().contains(location.getWorldName())) ||
+                (boomer instanceof Fireball || boomer instanceof Wither) && ((faction.isWilderness() && protection.isWildernessBlockFireballs() && !protection.getWorldsNoWildernessProtection().contains(location.getWorldName())) ||
                         (faction.isNormal() && (online ? protection.isTerritoryBlockFireballs() : protection.isTerritoryBlockFireballsWhenOffline())) ||
                         (faction.isWarZone() && protection.isWarZoneBlockFireballs()) ||
                         faction.isSafeZone())) {

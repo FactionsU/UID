@@ -8,6 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,8 +19,9 @@ import java.util.Set;
 /**
  * Plugin-agnostic registration of contexts. Other plugins can hook into this.
  */
+@NullMarked
 public class ContextManager implements Listener {
-    private static Multimap<String, Context> registeredContexts;
+    private static @Nullable Multimap<String, Context> registeredContexts;
 
     /**
      * Should be called by FactionsUUID only.

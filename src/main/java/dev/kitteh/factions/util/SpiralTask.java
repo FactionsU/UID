@@ -184,7 +184,6 @@ public abstract class SpiralTask implements Runnable {
 
     // for successful completion
     public void finish() {
-//		P.getInstance().log("SpiralTask successfully completed!");
         this.stop();
     }
 

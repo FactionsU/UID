@@ -19,10 +19,15 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
 public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements Relational {
     private static final String mapChars = "0123456789abcdef";
 
@@ -34,7 +39,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
 
     @Override
     public String getAuthor() {
-        return "drtshock";
+        return "mbaxter";
     }
 
     // Return the plugin version since this expansion is bundled with the dependency
@@ -50,31 +55,25 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
 
     // Relational placeholders
     @Override
-    public String onPlaceholderRequest(Player p1, Player p2, String placeholder) {
-        if (p1 == null || p2 == null || placeholder == null) {
-            return "";
-        }
-
+    public @Nullable String onPlaceholderRequest(Player p1, Player p2, String placeholder) {
         FPlayer fp1 = FPlayers.getInstance().getByPlayer(p1);
         FPlayer fp2 = FPlayers.getInstance().getByPlayer(p2);
-        if (fp1 == null || fp2 == null) {
-            return "";
-        }
 
         return switch (placeholder) {
-            case "relation" -> {
-                String relationName = fp1.getRelationTo(fp2).nicename;
-                yield relationName != null ? relationName : "";
-            }
+            case "relation" -> fp1.getRelationTo(fp2).nicename;
             case "relation_color" -> fp1.getColorStringTo(fp2);
             default -> null;
         };
-
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String placeholder) {
-        if (player == null || placeholder == null) {
+    public @Nullable String onPlaceholderRequest(@Nullable Player player, String placeholder) {
+        return this.onRequest(player, placeholder);
+    }
+
+    @Override
+    public @Nullable String onRequest(@Nullable OfflinePlayer player, String placeholder) {
+        if (player == null) {
             return "";
         }
 
@@ -112,22 +111,18 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                 String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fPlayer.getLastLoginTime(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
                 yield fPlayer.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fPlayer.getLastLoginTime() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
             }
-            case "player_group" ->
-                    FactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(fPlayer.getUniqueId()));
+            case "player_group" -> FactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(fPlayer.getUniqueId()));
             case "player_balance" -> Econ.isSetup() ? Econ.getFriendlyBalance(fPlayer) : TL.ECON_OFF.format("balance");
             case "player_power" -> String.valueOf(fPlayer.getPowerRounded());
             case "player_maxpower" -> String.valueOf(fPlayer.getPowerMaxRounded());
             case "player_kills" -> String.valueOf(fPlayer.getKills());
             case "player_deaths" -> String.valueOf(fPlayer.getDeaths());
             case "player_role" -> fPlayer.hasFaction() ? fPlayer.getRole().getPrefix() : "";
-            case "player_role_name" ->
-                    fPlayer.hasFaction() ? fPlayer.getRole().getTranslation() : TL.PLACEHOLDER_ROLE_NAME.toString();
+            case "player_role_name" -> fPlayer.hasFaction() ? fPlayer.getRole().getTranslation() : TL.PLACEHOLDER_ROLE_NAME.toString();
             case "player_factionless" -> fPlayer.hasFaction() ? "" : TL.GENERIC_FACTIONLESS.toString();
             // Then Faction stuff
-            case "faction_name" ->
-                    (fPlayer.hasFaction() || territory) ? faction.getTag() : TL.NOFACTION_PREFIX.toString();
-            case "faction_name_custom" ->
-                    (fPlayer.hasFaction() || territory) ? Tag.parsePlain(fPlayer, TL.PLACEHOLDER_CUSTOM_FACTION.toString()) : "";
+            case "faction_name" -> (fPlayer.hasFaction() || territory) ? faction.getTag() : TL.NOFACTION_PREFIX.toString();
+            case "faction_name_custom" -> (fPlayer.hasFaction() || territory) ? Tag.parsePlain(fPlayer, TL.PLACEHOLDER_CUSTOM_FACTION.toString()) : "";
             case "faction_only_space" -> (fPlayer.hasFaction() || territory) ? " " : "";
             case "faction_internal_id" -> faction.getId() + "";
             case "faction_power" -> String.valueOf(faction.getPower());
@@ -151,15 +146,12 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                 }
                 yield "";
             }
-            case "faction_maxclaims" ->
-                    (fPlayer.hasFaction() || territory) ? String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(faction)) : "";
+            case "faction_maxclaims" -> (fPlayer.hasFaction() || territory) ? String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(faction)) : "";
             case "faction_description" -> faction.getDescription();
             case "faction_claims" -> String.valueOf(faction.getAllClaims().size());
             case "faction_founded" -> TL.sdf.format(faction.getFoundedDate());
-            case "faction_joining" ->
-                    (faction.getOpen() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString());
-            case "faction_peaceful" ->
-                    faction.isPeaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getNeutral() + TL.COMMAND_SHOW_PEACEFUL.toString() : "";
+            case "faction_joining" -> (faction.getOpen() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString());
+            case "faction_peaceful" -> faction.isPeaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getNeutral() + TL.COMMAND_SHOW_PEACEFUL.toString() : "";
             case "faction_powerboost" -> {
                 double powerBoost = faction.getPowerBoost();
                 yield (powerBoost == 0.0) ? "" : (powerBoost > 0.0 ? TL.COMMAND_SHOW_BONUS.toString() : TL.COMMAND_SHOW_PENALTY.toString()) + powerBoost + ")";
@@ -173,35 +165,27 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                 boolean raid = FactionsPlugin.getInstance().getLandRaidControl().isRaidable(faction);
                 yield raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
             }
-            case "faction_home_world" -> faction.hasHome() ? faction.getHome().getWorld().getName() : "";
+            case "faction_home_world" -> faction.getHome() instanceof Location home ? home.getWorld().getName() : "";
             case "faction_home_x" -> faction.hasHome() ? String.valueOf(faction.getHome().getBlockX()) : "";
             case "faction_home_y" -> faction.hasHome() ? String.valueOf(faction.getHome().getBlockY()) : "";
             case "faction_home_z" -> faction.hasHome() ? String.valueOf(faction.getHome().getBlockZ()) : "";
-            case "faction_land_value" ->
-                    Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(faction.getLandRounded())) : TL.ECON_OFF.format("value");
-            case "faction_land_refund" ->
-                    Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.getLandRounded())) : TL.ECON_OFF.format("refund");
-            case "faction_bank_balance" ->
-                    Econ.shouldBeUsed() ? Econ.moneyString(Econ.getBalance(faction)) : TL.ECON_OFF.format("balance");
+            case "faction_land_value" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(faction.getLandRounded())) : TL.ECON_OFF.format("value");
+            case "faction_land_refund" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.getLandRounded())) : TL.ECON_OFF.format("refund");
+            case "faction_bank_balance" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.getBalance(faction)) : TL.ECON_OFF.format("balance");
             case "faction_tnt_balance" -> FactionTag.TNT_BALANCE.replace(FactionTag.TNT_BALANCE.getTag(), faction);
             case "faction_tnt_max_balance" -> FactionTag.TNT_MAX.replace(FactionTag.TNT_MAX.getTag(), faction);
             case "faction_allies" -> String.valueOf(faction.getRelationCount(Relation.ALLY));
             case "faction_allies_players" -> String.valueOf(this.countOn(faction, Relation.ALLY, null, fPlayer));
             case "faction_allies_players_online" -> String.valueOf(this.countOn(faction, Relation.ALLY, true, fPlayer));
-            case "faction_allies_players_offline" ->
-                    String.valueOf(this.countOn(faction, Relation.ALLY, false, fPlayer));
+            case "faction_allies_players_offline" -> String.valueOf(this.countOn(faction, Relation.ALLY, false, fPlayer));
             case "faction_enemies" -> String.valueOf(faction.getRelationCount(Relation.ENEMY));
             case "faction_enemies_players" -> String.valueOf(this.countOn(faction, Relation.ENEMY, null, fPlayer));
-            case "faction_enemies_players_online" ->
-                    String.valueOf(this.countOn(faction, Relation.ENEMY, true, fPlayer));
-            case "faction_enemies_players_offline" ->
-                    String.valueOf(this.countOn(faction, Relation.ENEMY, false, fPlayer));
+            case "faction_enemies_players_online" -> String.valueOf(this.countOn(faction, Relation.ENEMY, true, fPlayer));
+            case "faction_enemies_players_offline" -> String.valueOf(this.countOn(faction, Relation.ENEMY, false, fPlayer));
             case "faction_truces" -> String.valueOf(faction.getRelationCount(Relation.TRUCE));
             case "faction_truces_players" -> String.valueOf(this.countOn(faction, Relation.TRUCE, null, fPlayer));
-            case "faction_truces_players_online" ->
-                    String.valueOf(this.countOn(faction, Relation.TRUCE, true, fPlayer));
-            case "faction_truces_players_offline" ->
-                    String.valueOf(this.countOn(faction, Relation.TRUCE, false, fPlayer));
+            case "faction_truces_players_online" -> String.valueOf(this.countOn(faction, Relation.TRUCE, true, fPlayer));
+            case "faction_truces_players_offline" -> String.valueOf(this.countOn(faction, Relation.TRUCE, false, fPlayer));
             case "faction_online" -> String.valueOf(faction.getOnlinePlayers().size());
             case "faction_offline" -> String.valueOf(faction.getFPlayers().size() - faction.getOnlinePlayers().size());
             case "faction_size" -> String.valueOf(faction.getFPlayers().size());
@@ -211,10 +195,9 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
             case "faction_relation_color" -> fPlayer.getColorStringTo(faction);
             default -> null;
         };
-
     }
 
-    private int countOn(Faction f, Relation relation, Boolean status, FPlayer player) {
+    private int countOn(Faction f, Relation relation, @Nullable Boolean status, FPlayer player) {
         int count = 0;
         for (Faction faction : Factions.getInstance().getAllFactions()) {
             if (faction.getRelationTo(f) == relation) {

@@ -54,7 +54,7 @@ public abstract class MemoryBoard implements Board {
     //----------------------------------------------//
     // Get and Set
     //----------------------------------------------//
-    public int getIdAt(FLocation flocation) {
+    private int getIdAt(FLocation flocation) {
         WorldTracker tracker = worldTrackers.get(flocation.getWorldName());
         if (tracker != null) {
             int result = tracker.getIdAt(flocation);
@@ -65,10 +65,10 @@ public abstract class MemoryBoard implements Board {
     
     @Override
     public Faction getFactionAt(FLocation flocation) {
-        return Factions.getInstance().getFactionById(getIdAt(flocation));
+        return Factions.getInstance().getFactionById(getIdAt(flocation)) instanceof Faction faction ? faction : Factions.getInstance().getWilderness();
     }
 
-    public void setIdAt(int id, FLocation flocation) {
+    private void setIdAt(int id, FLocation flocation) {
         removeAt(flocation);
 
         this.getAndCreate(flocation.getWorldName()).addClaim(id, flocation);

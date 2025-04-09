@@ -2117,6 +2117,8 @@ public class MainConfig {
                     Example usage would be so people can't leave then make a new Faction while Raiding
                       in order to be able to execute commands if the default relation is neutral.""")
             private String defaultRelation = "neutral";
+            @WipeOnReload
+            private transient Relation defaultRelationRelation;
 
             @Comment("""
                     Default role of a player when joining a faction. Can be customized by faction leader
@@ -2173,8 +2175,15 @@ public class MainConfig {
                 return deleteEssentialsHomes;
             }
 
-            public String getDefaultRelation() {
-                return defaultRelation;
+            public Relation getDefaultRelation() {
+                if (defaultRelationRelation == null) {
+                    if (defaultRelation == null) {
+                        defaultRelationRelation = Relation.NEUTRAL;
+                    } else {
+                        defaultRelationRelation = Relation.fromString(defaultRelation);
+                    }
+                }
+                return defaultRelationRelation;
             }
 
             public Role getDefaultRole() {

@@ -49,17 +49,14 @@ SOFTWARE.
 public class Depenizen extends Bridge {
     public static boolean init(Plugin plugin) {
         try {
-            if (plugin instanceof com.denizenscript.depenizen.bukkit.Depenizen) {
-                ((com.denizenscript.depenizen.bukkit.Depenizen) plugin).registerBridge("Factions", Depenizen::new);
+            if (plugin instanceof com.denizenscript.depenizen.bukkit.Depenizen depenizen) {
+                depenizen.registerBridge("Factions", Depenizen::new);
             }
         } catch (Exception e) {
             FactionsPlugin.getInstance().getLogger().log(Level.WARNING, "Could not load Depenizen integration", e);
             return false;
         }
         FactionsPlugin.getInstance().getLogger().info("Loaded Depenizen integration!");
-        FactionsPlugin.getInstance().getLogger().info("");
-        FactionsPlugin.getInstance().getLogger().info("You may safely ignore the Depenizen message warning you about compatibility, as we run our own integration.");
-        FactionsPlugin.getInstance().getLogger().info("");
         return true;
     }
 

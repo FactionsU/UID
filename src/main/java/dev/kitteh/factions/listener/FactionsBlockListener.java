@@ -75,11 +75,7 @@ public class FactionsBlockListener extends AbstractListener {
             return;
         }
 
-        ItemStack item = event.getItem();
-        if (item == null) {
-            return;
-        }
-        Material material = item.getType();
+        Material material = event.getItem().getType();
         FLocation start = new FLocation(event.getBlock());
         FLocation end = new FLocation(event.getBlock().getRelative(((Directional) event.getBlock().getState().getData()).getFacing())); // ((Dispenser) event.getBlock().getBlockData()).getFacing()
         if (start.equals(end)) {
@@ -108,7 +104,7 @@ public class FactionsBlockListener extends AbstractListener {
         }
 
         if (endFaction.isWilderness()) {
-            if (!protConf.isWildernessDenyUsage() || protConf.getWorldsNoWildernessProtection().contains(event.getBlock().getLocation().getWorld().getName())) {
+            if (!protConf.isWildernessDenyUsage() || protConf.getWorldsNoWildernessProtection().contains(event.getBlock().getWorld().getName())) {
                 return; // This is not faction territory. Use whatever you like here.
             }
         } else if (endFaction.isSafeZone()) {

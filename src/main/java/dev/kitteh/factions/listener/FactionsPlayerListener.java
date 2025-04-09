@@ -153,12 +153,12 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         if (WorldUtil.isEnabled(player.getWorld())) {
-            this.initFactionWorld(me);
+            this.initFactionWorld(player, me);
         }
         player.updateCommands();
     }
 
-    private void initFactionWorld(FPlayer me) {
+    private void initFactionWorld(Player player, FPlayer me) {
         // Check for Faction announcements. Let's delay this so they actually see it.
         new BukkitRunnable() {
             @Override
@@ -185,11 +185,11 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         // If they have the permission, don't let them autoleave. Bad inverted setter :\
-        me.setAutoLeave(!me.getPlayer().hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
+        me.setAutoLeave(!player.hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
         me.setTakeFallDamage(true);
         if (me.isFlying()) {
-            me.getPlayer().setAllowFlight(true);
-            me.getPlayer().setFlying(true);
+            player.setAllowFlight(true);
+            player.setFlying(true);
         }
         me.flightCheck();
 
@@ -200,7 +200,8 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        FPlayer me = FPlayers.getInstance().getByPlayer(event.getPlayer());
+        Player player = event.getPlayer();
+        FPlayer me = FPlayers.getInstance().getByPlayer(player);
 
         FactionsPlugin.getInstance().getLandRaidControl().onQuit(me);
         // and update their last login time to point to when the logged off, for auto-remove routine
@@ -209,10 +210,10 @@ public class FactionsPlayerListener extends AbstractListener {
         me.logout(); // cache kills / deaths
 
         // if player is waiting for fstuck teleport but leaves, remove
-        if (FactionsPlugin.getInstance().getStuckMap().containsKey(me.getPlayer().getUniqueId())) {
-            FPlayers.getInstance().getByPlayer(me.getPlayer()).msg(TL.COMMAND_STUCK_CANCELLED);
-            FactionsPlugin.getInstance().getStuckMap().remove(me.getPlayer().getUniqueId());
-            FactionsPlugin.getInstance().getTimers().remove(me.getPlayer().getUniqueId());
+        if (FactionsPlugin.getInstance().getStuckMap().containsKey(player.getUniqueId())) {
+            FPlayers.getInstance().getByPlayer(player).msg(TL.COMMAND_STUCK_CANCELLED);
+            FactionsPlugin.getInstance().getStuckMap().remove(player.getUniqueId());
+            FactionsPlugin.getInstance().getTimers().remove(player.getUniqueId());
         }
 
         Faction myFaction = me.getFaction();
@@ -221,9 +222,9 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         if (!myFaction.isWilderness()) {
-            for (FPlayer player : myFaction.getFPlayersWhereOnline(true)) {
-                if (player != me && player.isMonitoringJoins()) {
-                    player.msg(TL.FACTION_LOGOUT, me.getName());
+            for (FPlayer fPlayer : myFaction.getFPlayersWhereOnline(true)) {
+                if (fPlayer != me && fPlayer.isMonitoringJoins()) {
+                    fPlayer.msg(TL.FACTION_LOGOUT, me.getName());
                 }
             }
         }
@@ -627,7 +628,7 @@ public class FactionsPlayerListener extends AbstractListener {
         me.flightCheck();
         if (!event.getFrom().equals(event.getPlayer().getWorld()) && !WorldUtil.isEnabled(event.getFrom())) {
             FactionsPlugin.getInstance().getLandRaidControl().update(me);
-            this.initFactionWorld(me);
+            this.initFactionWorld(event.getPlayer(), me);
         }
     }
 
@@ -822,9 +823,6 @@ public class FactionsPlayerListener extends AbstractListener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerKick(PlayerKickEvent event) {
         FPlayer badGuy = FPlayers.getInstance().getByPlayer(event.getPlayer());
-        if (badGuy == null) {
-            return;
-        }
 
         // if player was banned (not just kicked), get rid of their stored info
         // TODO fix this nonsense

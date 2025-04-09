@@ -35,7 +35,7 @@ public class PortalListener implements Listener {
             return; // Don't do anything if they don't want us to.
         }
 
-        if (!(entity instanceof Player player) || !WorldUtil.isEnabled(event.getEntity().getWorld())) {
+        if (!(entity instanceof Player player) || !WorldUtil.isEnabled(player.getWorld())) {
             return;
         }
 
@@ -54,10 +54,10 @@ public class PortalListener implements Listener {
                 return;
             }
 
-            String mininumRelation = FactionsPlugin.getInstance().conf().factions().portals().getMinimumRelation();
+            String minimumRelation = FactionsPlugin.getInstance().conf().factions().portals().getMinimumRelation();
 
             // Don't let people portal into nether bases if server owners don't want that.
-            if (!fPlayer.getFaction().getRelationTo(faction).isAtLeast(Relation.fromString(mininumRelation))) {
+            if (!fPlayer.getFaction().getRelationTo(faction).isAtLeast(Relation.fromString(minimumRelation))) {
                 event.setCancelled(true);
                 player.sendMessage(TL.PLAYER_PORTAL_NOTALLOWED.toString());
                 return;

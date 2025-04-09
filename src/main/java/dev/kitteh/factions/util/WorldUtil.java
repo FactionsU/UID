@@ -35,8 +35,8 @@ public class WorldUtil {
     }
 
     public static boolean isEnabled(CommandSender sender) {
-        if (sender instanceof Player) {
-            return isEnabled(((Player) sender).getWorld().getName());
+        if (sender instanceof Player player) {
+            return isEnabled(player.getWorld().getName());
         }
         return true;
     }
