@@ -14,12 +14,28 @@ public class FPlayerJoinEvent extends FactionPlayerEvent implements Cancellable 
     private boolean cancelled = false;
 
     public enum PlayerJoinReason {
-        CREATE, LEADER, COMMAND
+        CREATE(false),
+        COMMAND(true),
+        ;
+
+        final boolean cancellable;
+
+        PlayerJoinReason(boolean cancellable) {
+            this.cancellable = cancellable;
+        }
+
+        public boolean isCancellable() {
+            return cancellable;
+        }
     }
 
     public FPlayerJoinEvent(FPlayer fp, Faction f, PlayerJoinReason r) {
         super(f, fp);
         reason = r;
+    }
+
+    public boolean isCancellable() {
+        return this.reason.cancellable;
     }
 
     /**
@@ -38,6 +54,10 @@ public class FPlayerJoinEvent extends FactionPlayerEvent implements Cancellable 
 
     @Override
     public void setCancelled(boolean c) {
-        cancelled = c;
+        if (this.isCancellable()) {
+            cancelled = c;
+        } else {
+            throw new IllegalStateException("Cannot cancel join reason '" + reason + "'");
+        }
     }
 }

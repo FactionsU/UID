@@ -11,12 +11,27 @@ public class FPlayerLeaveEvent extends FactionPlayerEvent implements Cancellable
     boolean cancelled = false;
 
     public enum PlayerLeaveReason {
-        ADMIN_KICKED, KICKED, DISBAND, RESET, JOINOTHER, LEAVE, BANNED
+        ADMIN_KICKED(true),
+        KICKED(true),
+        DISBAND(false),
+        LEAVE(true),
+        BANNED(true),
+        ;
+
+        final boolean cancellable;
+
+        PlayerLeaveReason(boolean cancellable) {
+            this.cancellable = cancellable;
+        }
     }
 
     public FPlayerLeaveEvent(FPlayer p, Faction f, PlayerLeaveReason r) {
         super(f, p);
         reason = r;
+    }
+
+    public boolean isCancellable() {
+        return this.reason.cancellable;
     }
 
     /**
@@ -35,7 +50,10 @@ public class FPlayerLeaveEvent extends FactionPlayerEvent implements Cancellable
 
     @Override
     public void setCancelled(boolean c) {
-        // Don't let them cancel factions disbanding.
-        cancelled = reason != PlayerLeaveReason.DISBAND && reason != PlayerLeaveReason.RESET && c;
+        if (this.isCancellable()) {
+            cancelled = c;
+        } else {
+            throw new IllegalStateException("Cannot cancel leave reason '" + reason + "'");
+        }
     }
 }
