@@ -140,6 +140,7 @@ repositories {
 
     filter {
       includeModule("com.github.MilkBowl", "VaultAPI")
+      includeModule("com.github.dumbo-the-developer.Duels", "duels-api")
     }
   }
 
@@ -207,7 +208,8 @@ dependencies {
     libs.luckperms.api,
     libs.magic.api,
     libs.graves,
-    libs.ifchestonly
+    libs.ifchestonly,
+    libs.duels
   ).forEach {
     compileOnly(it) {
       isTransitive = false

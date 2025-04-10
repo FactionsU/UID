@@ -21,8 +21,9 @@ public class IntegrationManager implements Listener {
     @SuppressWarnings("Convert2MethodRef")
     public enum Integration {
         DYNMAP("dynmap", EngineDynmap.getInstance()::init),
-        ESS("Essentials", (p) -> Essentials.setup(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
-        DEPENIZEN("Depenizen", (p) -> Depenizen.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
+        ESS("Essentials", p -> Essentials.setup(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
+        DEPENIZEN("Depenizen", p -> Depenizen.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
+        DUELS("Duels", p -> Duels.init(p)),
         GRAVES("Graves", Graves::init),
         LUCKPERMS("LuckPerms", (plugin) -> {
             String[] version = plugin.getDescription().getVersion().split("\\.");
@@ -45,11 +46,11 @@ public class IntegrationManager implements Listener {
             return true;
         }),
         LWC("LWC", dev.kitteh.factions.integration.LWC::setup),
-        MAGIC("Magic", (p) -> Magic.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
-        PLACEHOLDERAPI("PlaceholderAPI", (p) -> FactionsPlugin.getInstance().setupPlaceholderAPI()),
-        PLACEHOLDERAPI_OTHER("MVdWPlaceholderAPI", (p) -> FactionsPlugin.getInstance().setupOtherPlaceholderAPI()),
-        SENTINEL("Sentinel", (p) -> Sentinel.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
-        WORLDGUARD("WorldGuard", (plugin) -> {
+        MAGIC("Magic", p -> Magic.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
+        PLACEHOLDERAPI("PlaceholderAPI", p -> FactionsPlugin.getInstance().setupPlaceholderAPI()),
+        PLACEHOLDERAPI_OTHER("MVdWPlaceholderAPI", p -> FactionsPlugin.getInstance().setupOtherPlaceholderAPI()),
+        SENTINEL("Sentinel", p -> Sentinel.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
+        WORLDGUARD("WorldGuard", plugin -> {
             FactionsPlugin f = FactionsPlugin.getInstance();
             String version = plugin.getDescription().getVersion();
             if (version.startsWith("7")) {
