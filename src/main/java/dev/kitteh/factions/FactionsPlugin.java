@@ -151,7 +151,6 @@ public class FactionsPlugin extends JavaPlugin {
     private Integer autoLeaveTask = null;
 
     private ClipPlaceholderAPIManager clipPlaceholderAPIManager;
-    private boolean mvdwPlaceholderAPIManager = false;
 
     private SeeChunkUtil seeChunkUtil;
     private BukkitParticleProvider particleProvider;
@@ -563,10 +562,6 @@ public class FactionsPlugin extends JavaPlugin {
         Plugin clipPlugin = getServer().getPluginManager().getPlugin("PlaceholderAPI");
         this.metricsDrillPie("clipplaceholder", () -> this.metricsPluginInfo(clipPlugin));
 
-        // MVdW Placeholder
-        Plugin mvdw = getServer().getPluginManager().getPlugin("MVdWPlaceholderAPI");
-        this.metricsDrillPie("mvdwplaceholder", () -> this.metricsPluginInfo(mvdw));
-
         // Overall stats
         this.metricsLine("factions", () -> Factions.getInstance().getAllFactions().size() - 3);
         this.metricsSimplePie("scoreboard", () -> "" + conf().scoreboard().constant().isEnabled());
@@ -783,18 +778,8 @@ public class FactionsPlugin extends JavaPlugin {
         return false;
     }
 
-    public boolean setupOtherPlaceholderAPI() {
-        this.mvdwPlaceholderAPIManager = true;
-        getLogger().info("Found MVdWPlaceholderAPI.");
-        return true;
-    }
-
     public boolean isClipPlaceholderAPIHooked() {
         return this.clipPlaceholderAPIManager != null;
-    }
-
-    public boolean isMVdWPlaceholderAPIHooked() {
-        return this.mvdwPlaceholderAPIManager;
     }
 
     public GsonBuilder getGsonBuilder(boolean confNotLoaded) {

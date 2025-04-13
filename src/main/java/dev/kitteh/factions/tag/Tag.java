@@ -52,15 +52,6 @@ public interface Tag {
             line = PlaceholderAPI.setPlaceholders(player, line);
         }
 
-        if (FactionsPlugin.getInstance().isMVdWPlaceholderAPIHooked() && player.isOnline()) {
-            String maybe = be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, line);
-            if (maybe != null) {
-                line = maybe;
-                // Amazing feature where, if the user makes a mistake and does not install any other MVdW plugins,
-                //   it will simply return null to break everything down the line.
-            }
-        }
-
         return line;
     }
 
