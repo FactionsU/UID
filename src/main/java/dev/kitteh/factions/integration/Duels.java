@@ -29,7 +29,7 @@ public class Duels implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPowerLoss(PowerLossEvent event) {
         if (duels.getConfig().getBoolean("supported-plugins.FactionsUUID.no-power-loss-in-duel", false) &&
-                event.getPlayer().getPlayer() instanceof Player player &&
+                event.getFPlayer().getPlayer() instanceof Player player &&
                 this.duels.getArenaManager().isInMatch(player)) {
             event.setCancelled(true);
             event.setMessage(null);

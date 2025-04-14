@@ -778,7 +778,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             return;
         }
 
-        FPlayerLeaveEvent leaveEvent = new FPlayerLeaveEvent(this, myFaction, FPlayerLeaveEvent.PlayerLeaveReason.LEAVE);
+        FPlayerLeaveEvent leaveEvent = new FPlayerLeaveEvent(this, myFaction, FPlayerLeaveEvent.Reason.LEAVE);
         Bukkit.getServer().getPluginManager().callEvent(leaveEvent);
         if (leaveEvent.isCancelled()) {
             return;

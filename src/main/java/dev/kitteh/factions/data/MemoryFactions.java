@@ -1,9 +1,12 @@
 package dev.kitteh.factions.data;
 
+import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
+import dev.kitteh.factions.event.FactionCreateEvent;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.TL;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -134,9 +137,10 @@ public abstract class MemoryFactions implements Factions {
     }
 
     @Override
-    public Faction createFaction() {
+    public Faction createFaction(@Nullable FPlayer sender, String tag) {
         MemoryFaction faction = generateFactionObject();
         factions.put(faction.getId(), faction);
+        Bukkit.getServer().getPluginManager().callEvent(new FactionCreateEvent(sender, faction, sender == null ? FactionCreateEvent.Reason.PLUGIN : FactionCreateEvent.Reason.COMMAND));
         return faction;
     }
 

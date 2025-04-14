@@ -10,17 +10,14 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 public class FPlayerJoinEvent extends FactionPlayerEvent implements Cancellable {
-    private final PlayerJoinReason reason;
-    private boolean cancelled = false;
-
-    public enum PlayerJoinReason {
+    public enum Reason {
         CREATE(false),
         COMMAND(true),
         ;
 
         final boolean cancellable;
 
-        PlayerJoinReason(boolean cancellable) {
+        Reason(boolean cancellable) {
             this.cancellable = cancellable;
         }
 
@@ -29,7 +26,10 @@ public class FPlayerJoinEvent extends FactionPlayerEvent implements Cancellable 
         }
     }
 
-    public FPlayerJoinEvent(FPlayer fp, Faction f, PlayerJoinReason r) {
+    private final Reason reason;
+    private boolean cancelled = false;
+
+    public FPlayerJoinEvent(FPlayer fp, Faction f, Reason r) {
         super(f, fp);
         reason = r;
     }
@@ -43,7 +43,7 @@ public class FPlayerJoinEvent extends FactionPlayerEvent implements Cancellable 
      *
      * @return reason player joined the faction.
      */
-    public PlayerJoinReason getReason() {
+    public Reason getReason() {
         return reason;
     }
 

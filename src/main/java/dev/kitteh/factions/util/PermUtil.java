@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @NullMarked
+@Deprecated
 public class PermUtil {
     public final Map<String, String> permissionDescriptions = new HashMap<>();
 

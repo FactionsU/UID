@@ -22,7 +22,7 @@ public class FactionAttemptCreateEvent extends Event implements Cancellable {
         this.sender = sender;
     }
 
-    public FPlayer getPlayer() {
+    public FPlayer getFPlayer() {
         return this.sender;
     }
 

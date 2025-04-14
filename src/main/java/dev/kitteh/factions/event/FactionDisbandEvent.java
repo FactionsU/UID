@@ -18,7 +18,7 @@ public class FactionDisbandEvent extends FactionEvent implements Cancellable {
         this.sender = sender;
     }
 
-    public FPlayer getPlayer() {
+    public FPlayer getFPlayer() {
         return this.sender;
     }
 

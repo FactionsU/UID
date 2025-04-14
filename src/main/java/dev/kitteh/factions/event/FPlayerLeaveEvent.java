@@ -7,10 +7,10 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class FPlayerLeaveEvent extends FactionPlayerEvent implements Cancellable {
-    private final PlayerLeaveReason reason;
+    private final Reason reason;
     boolean cancelled = false;
 
-    public enum PlayerLeaveReason {
+    public enum Reason {
         ADMIN_KICKED(true),
         KICKED(true),
         DISBAND(false),
@@ -20,12 +20,12 @@ public class FPlayerLeaveEvent extends FactionPlayerEvent implements Cancellable
 
         final boolean cancellable;
 
-        PlayerLeaveReason(boolean cancellable) {
+        Reason(boolean cancellable) {
             this.cancellable = cancellable;
         }
     }
 
-    public FPlayerLeaveEvent(FPlayer p, Faction f, PlayerLeaveReason r) {
+    public FPlayerLeaveEvent(FPlayer p, Faction f, Reason r) {
         super(f, p);
         reason = r;
     }
@@ -39,7 +39,7 @@ public class FPlayerLeaveEvent extends FactionPlayerEvent implements Cancellable
      *
      * @return reason player left the faction.
      */
-    public PlayerLeaveReason getReason() {
+    public Reason getReason() {
         return reason;
     }
 

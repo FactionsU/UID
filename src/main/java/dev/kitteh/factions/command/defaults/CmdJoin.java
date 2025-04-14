@@ -82,7 +82,7 @@ public class CmdJoin implements Cmd {
         }
 
         // trigger the join event (cancellable)
-        FPlayerJoinEvent joinEvent = new FPlayerJoinEvent(sender, faction, FPlayerJoinEvent.PlayerJoinReason.COMMAND);
+        FPlayerJoinEvent joinEvent = new FPlayerJoinEvent(sender, faction, FPlayerJoinEvent.Reason.COMMAND);
         Bukkit.getServer().getPluginManager().callEvent(joinEvent);
         if (joinEvent.isCancelled()) {
             return;

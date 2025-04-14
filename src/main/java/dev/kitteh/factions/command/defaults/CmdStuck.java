@@ -56,7 +56,7 @@ public class CmdStuck implements Cmd {
             sender.msg(TL.COMMAND_STUCK_EXISTS, time);
         } else {
 
-            FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, null, FPlayerTeleportEvent.PlayerTeleportReason.STUCK);
+            FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, null, FPlayerTeleportEvent.Reason.STUCK);
             Bukkit.getServer().getPluginManager().callEvent(tpEvent);
             if (tpEvent.isCancelled()) {
                 return;

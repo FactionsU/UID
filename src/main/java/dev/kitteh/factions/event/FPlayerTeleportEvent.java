@@ -6,19 +6,21 @@ import org.bukkit.event.Cancellable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
+
 @NullMarked
 public class FPlayerTeleportEvent extends FactionPlayerEvent implements Cancellable {
-    private final PlayerTeleportReason reason;
-    private boolean cancelled = false;
-    private final @Nullable Location location;
-
-    public enum PlayerTeleportReason {
+    public enum Reason {
         HOME, AHOME, WARP, STUCK
     }
 
-    public FPlayerTeleportEvent(FPlayer p, @Nullable Location location, FPlayerTeleportEvent.PlayerTeleportReason r) {
+    private final Reason reason;
+    private boolean cancelled = false;
+    private final @Nullable Location location;
+
+    public FPlayerTeleportEvent(FPlayer p, @Nullable Location location, Reason r) {
         super(p.getFaction(), p);
-        reason = r;
+        reason = Objects.requireNonNull(r);
         this.location = location;
     }
 
@@ -27,7 +29,7 @@ public class FPlayerTeleportEvent extends FactionPlayerEvent implements Cancella
      *
      * @return reason player is teleporting.
      */
-    public FPlayerTeleportEvent.PlayerTeleportReason getReason() {
+    public Reason getReason() {
         return reason;
     }
 

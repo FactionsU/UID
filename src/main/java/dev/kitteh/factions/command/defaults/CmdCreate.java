@@ -75,13 +75,10 @@ public class CmdCreate implements Cmd {
             return;
         }
 
-        Faction faction = Factions.getInstance().createFaction();
-
-        // finish setting up the Faction
-        faction.setTag(tag);
+        Faction faction = Factions.getInstance().createFaction(sender, tag);
 
         // trigger the faction join event for the creator
-        FPlayerJoinEvent joinEvent = new FPlayerJoinEvent(sender, faction, FPlayerJoinEvent.PlayerJoinReason.CREATE);
+        FPlayerJoinEvent joinEvent = new FPlayerJoinEvent(sender, faction, FPlayerJoinEvent.Reason.CREATE);
         Bukkit.getServer().getPluginManager().callEvent(joinEvent);
         // join event cannot be cancelled or you'll have an empty faction
 
@@ -89,10 +86,6 @@ public class CmdCreate implements Cmd {
         sender.setRole(Role.ADMIN);
         sender.setFaction(faction);
         sender.getPlayer().updateCommands();
-
-        // trigger the faction creation event
-        FactionCreateEvent createEvent = new FactionCreateEvent(sender, faction);
-        Bukkit.getServer().getPluginManager().callEvent(createEvent);
 
         for (FPlayer follower : FPlayers.getInstance().getOnlinePlayers()) {
             follower.msg(TL.COMMAND_CREATE_CREATED, sender.describeTo(follower, true), faction.getTag(follower));

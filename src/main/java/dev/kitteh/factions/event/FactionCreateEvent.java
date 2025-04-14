@@ -2,39 +2,34 @@ package dev.kitteh.factions.event;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
- * Event called when a Faction is created.
+ * Event called when a Faction is created via command.
  */
 @NullMarked
-public class FactionCreateEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
-
-    private final FPlayer sender;
-    private final Faction faction;
-
-    public FactionCreateEvent(FPlayer sender, Faction faction) {
-        this.sender = sender;
-        this.faction = faction;
+public class FactionCreateEvent extends FactionEvent {
+    public enum Reason {
+        COMMAND,
+        PLUGIN
     }
 
-    public FPlayer getFPlayer() {
+    private @Nullable
+    final FPlayer sender;
+    private Reason reason;
+
+    public FactionCreateEvent(@Nullable FPlayer sender, Faction faction, Reason reason) {
+        super(faction);
+        this.sender = sender;
+        this.reason = reason;
+    }
+
+    public @Nullable FPlayer getFPlayer() {
         return this.sender;
     }
 
-    public Faction getFaction() {
-        return this.faction;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
+    public Reason getReason() {
+        return this.reason;
     }
 }

@@ -57,7 +57,7 @@ public class CmdBan implements Cmd {
 
         // If in same Faction, lets make sure to kick them and throw an event.
         if (target.getFaction() == faction) {
-            FPlayerLeaveEvent event = new FPlayerLeaveEvent(target, faction, FPlayerLeaveEvent.PlayerLeaveReason.BANNED);
+            FPlayerLeaveEvent event = new FPlayerLeaveEvent(target, faction, FPlayerLeaveEvent.Reason.BANNED);
             Bukkit.getServer().getPluginManager().callEvent(event);
 
             if (event.isCancelled()) {

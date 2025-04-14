@@ -15,7 +15,6 @@ import dev.kitteh.factions.data.SaveTask;
 import dev.kitteh.factions.event.FactionCreateEvent;
 import dev.kitteh.factions.event.FactionEvent;
 import dev.kitteh.factions.event.FactionRelationEvent;
-import dev.kitteh.factions.event.FactionsPluginRegistrationTimeEvent;
 import dev.kitteh.factions.integration.ClipPlaceholderAPIManager;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.integration.Essentials;
@@ -144,9 +143,6 @@ public class FactionsPlugin extends JavaPlugin {
 
     //holds f stuck taskids
     private final Map<UUID, Integer> stuckMap = new HashMap<>();
-
-    // Persistence related
-    private boolean locked = false;
 
     private Integer autoLeaveTask = null;
 
@@ -397,8 +393,6 @@ public class FactionsPlugin extends JavaPlugin {
         new BukkitRunnable() {
             @Override
             public void run() {
-                getServer().getPluginManager().callEvent(new FactionsPluginRegistrationTimeEvent());
-
                 try {
                     Method close = PermissibleActionRegistry.class.getDeclaredMethod("close");
                     close.setAccessible(true);
@@ -652,6 +646,7 @@ public class FactionsPlugin extends JavaPlugin {
         return this.startupExceptionLog;
     }
 
+    @Deprecated
     public PermUtil getPermUtil() {
         return permUtil;
     }
@@ -730,15 +725,6 @@ public class FactionsPlugin extends JavaPlugin {
 
     public void log(Level level, String msg) {
         this.getLogger().log(level, msg);
-    }
-
-    public boolean getLocked() {
-        return this.locked;
-    }
-
-    public void setLocked(boolean val) {
-        this.locked = val;
-        this.setAutoSave(val);
     }
 
     public boolean getAutoSave() {

@@ -45,7 +45,7 @@ public class CmdForceKick implements Cmd {
         }
 
         // trigger the leave event (cancellable) [reason:kicked]
-        FPlayerLeaveEvent event = new FPlayerLeaveEvent(toKick, toKick.getFaction(), FPlayerLeaveEvent.PlayerLeaveReason.ADMIN_KICKED);
+        FPlayerLeaveEvent event = new FPlayerLeaveEvent(toKick, toKick.getFaction(), FPlayerLeaveEvent.Reason.ADMIN_KICKED);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;

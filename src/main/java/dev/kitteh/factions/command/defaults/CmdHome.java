@@ -128,7 +128,7 @@ public class CmdHome implements Cmd {
         }
 
         Location destination = targetFaction.getHome();
-        FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, destination, FPlayerTeleportEvent.PlayerTeleportReason.HOME);
+        FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, destination, FPlayerTeleportEvent.Reason.HOME);
         Bukkit.getServer().getPluginManager().callEvent(tpEvent);
         if (tpEvent.isCancelled()) {
             return;

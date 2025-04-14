@@ -16,7 +16,7 @@ public class FactionPlayerEvent extends FactionEvent {
         this.fPlayer = fPlayer;
     }
 
-    public FPlayer getPlayer() {
+    public FPlayer getFPlayer() {
         return this.fPlayer;
     }
 }

@@ -66,7 +66,7 @@ public class CmdWarp implements Cmd {
                     return;
                 }
 
-                FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, destination.getLocation(), FPlayerTeleportEvent.PlayerTeleportReason.WARP);
+                FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, destination.getLocation(), FPlayerTeleportEvent.Reason.WARP);
                 Bukkit.getServer().getPluginManager().callEvent(tpEvent);
                 if (tpEvent.isCancelled()) {
                     return;

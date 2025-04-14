@@ -41,7 +41,7 @@ public class CmdForceHome implements Cmd {
             Faction faction = target.getFaction();
             if (faction.hasHome()) {
                 Location destination = faction.getHome();
-                FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(target, destination, FPlayerTeleportEvent.PlayerTeleportReason.AHOME);
+                FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(target, destination, FPlayerTeleportEvent.Reason.AHOME);
                 Bukkit.getServer().getPluginManager().callEvent(tpEvent);
                 if (tpEvent.isCancelled()) {
                     return;

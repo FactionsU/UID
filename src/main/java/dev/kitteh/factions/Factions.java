@@ -28,7 +28,11 @@ public interface Factions {
         return this.getByTag(str) != null;
     }
 
-    Faction createFaction();
+    default Faction createFaction(String tag) {
+        return this.createFaction(null, tag);
+    }
+
+    Faction createFaction(@Nullable FPlayer sender, String tag);
 
     void removeFaction(Faction faction);
 
