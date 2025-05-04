@@ -18,7 +18,7 @@ public class TranslationsConfig {
         }
 
         public List<String> getAliases() {
-            return aliases;
+            return this.aliases;
         }
     }
 
@@ -184,6 +184,7 @@ public class TranslationsConfig {
                 private String errorOptions = "<red>Unrecognized choice. What about </red><up> <red>or</red> <down><red>?</red>";
                 private String errorHighest = "<red>Cannot move highest selector any higher!</red>";
                 private String errorLowest = "<red>Cannot move lowest selector any lower!</red>";
+                private String errorInvalidPositon = "<red>Cannot move invalid position!</red>";
 
                 public SubCmdMove() {
                     super("move");
@@ -207,6 +208,10 @@ public class TranslationsConfig {
 
                 public String getErrorLowest() {
                     return errorLowest;
+                }
+
+                public String getErrorInvalidPosition() {
+                    return errorInvalidPositon;
                 }
             }
 
@@ -518,16 +523,77 @@ public class TranslationsConfig {
         }
     }
 
+    public static class Upgrades {
+        public static class UpgradeDetail {
+            private UpgradeDetail(String name, String description, String detail) {
+                this.name = name;
+                this.description = description;
+                this.detail = detail;
+            }
+
+            private String name;
+            private String description;
+            private String detail;
+
+            public String getName() {
+                return name;
+            }
+
+            public String getDescription() {
+                return description;
+            }
+
+            public String getDetail() {
+                return detail;
+            }
+        }
+
+        private UpgradeDetail dtrClaimLimit = new UpgradeDetail("<green>Claim Limit Increase", "<green>Increases maximum faction territory", "<green>+<increase> claims");
+
+        private UpgradeDetail growth = new UpgradeDetail("<green>Growth", "<green>Boosts plant growth in faction land", "<green><chance>% chance to grow <boost> extra step");
+
+        private UpgradeDetail maxMembers = new UpgradeDetail("<green>Member Limit Increase", "<green>Increases maximum number of faction members", "<green>+<increase> members");
+
+        private UpgradeDetail zones = new UpgradeDetail("<green>Zones", "<green>Assign your faction claims to zones to label or grant different permissions", "<green>Grants <increase> zones");
+
+        public UpgradeDetail dtrClaimLimit() {
+            return this.dtrClaimLimit;
+        }
+
+        public UpgradeDetail growth() {
+            return this.growth;
+        }
+
+        public UpgradeDetail maxMembers() {
+            return this.maxMembers;
+        }
+
+        public UpgradeDetail zones() {
+            return this.zones;
+        }
+
+        private String unlimited = "unlimited";
+
+        public String getUnlimited() {
+            return this.unlimited;
+        }
+    }
+
     @Comment("This config file will slowly become the location for all text content\n" +
             "All information here uses MiniMessage. https://docs.adventure.kyori.net/minimessage.html")
     private Commands commands = new Commands();
     private Permissions permissions = new Permissions();
+    private Upgrades upgrades = new Upgrades();
 
     public Commands commands() {
-        return commands;
+        return this.commands;
     }
 
     public Permissions permissions() {
-        return permissions;
+        return this.permissions;
+    }
+
+    public Upgrades upgrades() {
+        return this.upgrades;
     }
 }

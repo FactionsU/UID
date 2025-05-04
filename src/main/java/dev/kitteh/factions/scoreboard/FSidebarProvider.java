@@ -2,7 +2,7 @@ package dev.kitteh.factions.scoreboard;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.TL;
 
@@ -36,6 +36,6 @@ public abstract class FSidebarProvider {
             // we assume it's broken up into two lines, so returning our tl will suffice.
             return TL.COMMAND_SHOW_NOHOME.toString();
         }
-        return FactionsPlugin.getInstance().txt().parse(line); // finally add color :)
+        return AbstractFactionsPlugin.getInstance().txt().parse(line); // finally add color :)
     }
 }

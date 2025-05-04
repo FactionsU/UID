@@ -1,6 +1,6 @@
 package dev.kitteh.factions.util;
 
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -8,9 +8,9 @@ import java.util.logging.Level;
 
 public class Persist {
 
-    private final FactionsPlugin plugin;
+    private final AbstractFactionsPlugin plugin;
 
-    public Persist(FactionsPlugin plugin) {
+    public Persist(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
 

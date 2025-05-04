@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -28,7 +29,7 @@ public class ContextManager implements Listener {
      *
      * @param plugin the plugin
      */
-    public static void init(FactionsPlugin plugin) {
+    public static void init(AbstractFactionsPlugin plugin) {
         registeredContexts = Multimaps.synchronizedMultimap(ArrayListMultimap.create());
         registeredContexts.putAll(plugin.getName(), Arrays.asList(Contexts.values()));
         plugin.getServer().getPluginManager().registerEvents(new ContextManager(), plugin);

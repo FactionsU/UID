@@ -7,6 +7,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
@@ -79,7 +80,7 @@ public class CmdListFactions implements Cmd {
             end = factionList.size();
         }
 
-        FactionsPlugin plugin = FactionsPlugin.getInstance();
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
 
         String header = plugin.conf().commands().list().getHeader();
         String footer = plugin.conf().commands().list().getFooter();

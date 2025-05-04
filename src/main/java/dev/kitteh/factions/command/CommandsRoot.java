@@ -1,41 +1,7 @@
 package dev.kitteh.factions.command;
 
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.command.defaults.CmdAnnounce;
-import dev.kitteh.factions.command.defaults.CmdBan;
-import dev.kitteh.factions.command.defaults.CmdChat;
-import dev.kitteh.factions.command.defaults.CmdClaim;
-import dev.kitteh.factions.command.defaults.CmdConfirm;
-import dev.kitteh.factions.command.defaults.CmdCoords;
-import dev.kitteh.factions.command.defaults.CmdCreate;
-import dev.kitteh.factions.command.defaults.CmdDTR;
-import dev.kitteh.factions.command.defaults.CmdDisband;
-import dev.kitteh.factions.command.defaults.CmdFly;
-import dev.kitteh.factions.command.defaults.CmdHome;
-import dev.kitteh.factions.command.defaults.CmdInvite;
-import dev.kitteh.factions.command.defaults.CmdJoin;
-import dev.kitteh.factions.command.defaults.CmdKick;
-import dev.kitteh.factions.command.defaults.CmdLeave;
-import dev.kitteh.factions.command.defaults.CmdLink;
-import dev.kitteh.factions.command.defaults.CmdList;
-import dev.kitteh.factions.command.defaults.CmdMap;
-import dev.kitteh.factions.command.defaults.CmdMoney;
-import dev.kitteh.factions.command.defaults.CmdNear;
-import dev.kitteh.factions.command.defaults.CmdPower;
-import dev.kitteh.factions.command.defaults.CmdRelation;
-import dev.kitteh.factions.command.defaults.CmdRole;
-import dev.kitteh.factions.command.defaults.CmdSet;
-import dev.kitteh.factions.command.defaults.CmdShow;
-import dev.kitteh.factions.command.defaults.CmdStatus;
-import dev.kitteh.factions.command.defaults.CmdStuck;
-import dev.kitteh.factions.command.defaults.CmdTNT;
-import dev.kitteh.factions.command.defaults.CmdToggle;
-import dev.kitteh.factions.command.defaults.CmdTop;
-import dev.kitteh.factions.command.defaults.CmdUnban;
-import dev.kitteh.factions.command.defaults.CmdUnclaim;
-import dev.kitteh.factions.command.defaults.CmdVault;
-import dev.kitteh.factions.command.defaults.CmdVersion;
-import dev.kitteh.factions.command.defaults.CmdWarp;
+import dev.kitteh.factions.command.defaults.*;
 import dev.kitteh.factions.command.defaults.admin.CmdAdminDTR;
 import dev.kitteh.factions.command.defaults.admin.CmdAdminForce;
 import dev.kitteh.factions.command.defaults.admin.CmdAdminPower;
@@ -46,6 +12,7 @@ import dev.kitteh.factions.command.defaults.admin.CmdMoneyModify;
 import dev.kitteh.factions.command.defaults.admin.CmdReload;
 import dev.kitteh.factions.command.defaults.admin.CmdSaveAll;
 import dev.kitteh.factions.command.defaults.admin.CmdTicketInfo;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -105,10 +72,10 @@ public class CommandsRoot {
             return;
         }
         if (registry.containsKey(command)) {
-            FactionsPlugin.getInstance().getLogger().info("Skipping internal '" + command + "' command because it is already registered.");
+            AbstractFactionsPlugin.getInstance().getLogger().info("Skipping internal '" + command + "' command because it is already registered.");
             return;
         }
-        registry.put(command, new Register(cmd.consumer(), FactionsPlugin.getInstance(), command));
+        registry.put(command, new Register(cmd.consumer(), AbstractFactionsPlugin.getInstance(), command));
     }
 
     private void registerAdminInternal(String command, Cmd cmd) {
@@ -116,13 +83,13 @@ public class CommandsRoot {
             return;
         }
         if (adminRegistry.containsKey(command)) {
-            FactionsPlugin.getInstance().getLogger().info("Skipping internal admin '" + command + "' command because it is already registered.");
+            AbstractFactionsPlugin.getInstance().getLogger().info("Skipping internal admin '" + command + "' command because it is already registered.");
             return;
         }
-        adminRegistry.put(command, new Register(cmd.consumer(), FactionsPlugin.getInstance(), command));
+        adminRegistry.put(command, new Register(cmd.consumer(), AbstractFactionsPlugin.getInstance(), command));
     }
 
-    public CommandsRoot(FactionsPlugin plugin) {
+    public CommandsRoot(AbstractFactionsPlugin plugin) {
         if (registry == null || adminRegistry == null) {
             throw new IllegalStateException("Second attempt at creating this class!");
         }
@@ -198,6 +165,7 @@ public class CommandsRoot {
         registerInternal("disband", new CmdDisband());
         registerInternal("dtr", new CmdDTR());
         registerInternal("fly", new CmdFly());
+        registerInternal("grace", new CmdGrace());
         registerInternal("home", new CmdHome());
         registerInternal("invite", new CmdInvite());
         registerInternal("join", new CmdJoin());
@@ -212,6 +180,7 @@ public class CommandsRoot {
         registerInternal("relation", new CmdRelation());
         registerInternal("role", new CmdRole());
         registerInternal("set", new CmdSet());
+        registerInternal("shield", new CmdShield());
         registerInternal("show", new CmdShow());
         registerInternal("status", new CmdStatus());
         registerInternal("stuck", new CmdStuck());
@@ -220,6 +189,7 @@ public class CommandsRoot {
         registerInternal("top", new CmdTop());
         registerInternal("unban", new CmdUnban());
         registerInternal("unclaim", new CmdUnclaim());
+        registerInternal("upgrades", new CmdUpgrades());
         registerInternal("version", new CmdVersion());
         registerInternal("warp", new CmdWarp());
 

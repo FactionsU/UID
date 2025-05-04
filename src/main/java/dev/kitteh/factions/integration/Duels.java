@@ -1,7 +1,7 @@
 package dev.kitteh.factions.integration;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.event.PowerLossEvent;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 public class Duels implements Listener {
     public static boolean init(Plugin plugin) {
         if (plugin instanceof com.meteordevelopments.duels.api.Duels duels) {
-            FactionsPlugin fuuid = FactionsPlugin.getInstance();
+            AbstractFactionsPlugin fuuid = AbstractFactionsPlugin.getInstance();
             fuuid.getServer().getPluginManager().registerEvents(new Duels(duels), fuuid);
             boolean noPowerLoss = duels.getConfig().getBoolean("supported-plugins.FactionsUUID.no-power-loss-in-duel", false);
             fuuid.getLogger().info("Found Duels plugin. Currently configured to " + (noPowerLoss ? "not " : "") + "lose power in a duel.");

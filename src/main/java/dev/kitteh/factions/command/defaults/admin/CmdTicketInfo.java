@@ -6,6 +6,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
@@ -129,7 +130,7 @@ public class CmdTicketInfo implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        FactionsPlugin plugin = FactionsPlugin.getInstance();
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
         TicketInfo info = new TicketInfo();
         info.uuid = plugin.getServerUUID();
         info.pluginVersion = plugin.getDescription().getVersion();
@@ -175,7 +176,7 @@ public class CmdTicketInfo implements Cmd {
             @Override
             public void run() {
                 try {
-                    Path dataPath = FactionsPlugin.getInstance().getDataFolder().toPath();
+                    Path dataPath = AbstractFactionsPlugin.getInstance().getDataFolder().toPath();
                     String spigotConf = getFile(Paths.get("spigot.yml"));
                     info.online = Boolean.toString(Bukkit.getOnlineMode());
                     if (!Bukkit.getOnlineMode()) {
@@ -231,25 +232,25 @@ public class CmdTicketInfo implements Cmd {
                                 String url = response.message;
                                 context.sender().sendMessage(Component.text().color(NamedTextColor.YELLOW).content("Share this URL: " + url).clickEvent(ClickEvent.openUrl(url)));
                                 if (context.sender().isPlayer()) {
-                                    FactionsPlugin.getInstance().getLogger().info("Share this URL: " + url);
+                                    AbstractFactionsPlugin.getInstance().getLogger().info("Share this URL: " + url);
                                 }
                             } else {
                                 context.sender().sendMessage(Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
-                                FactionsPlugin.getInstance().getLogger().warning("Received: " + response.message);
+                                AbstractFactionsPlugin.getInstance().getLogger().warning("Received: " + response.message);
                             }
                         }
-                    }.runTask(FactionsPlugin.getInstance());
+                    }.runTask(AbstractFactionsPlugin.getInstance());
                 } catch (Exception e) {
-                    FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to execute ticketinfo command", e);
+                    AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to execute ticketinfo command", e);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             context.sender().sendMessage(Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
                         }
-                    }.runTask(FactionsPlugin.getInstance());
+                    }.runTask(AbstractFactionsPlugin.getInstance());
                 }
             }
-        }.runTaskAsynchronously(FactionsPlugin.getInstance());
+        }.runTaskAsynchronously(AbstractFactionsPlugin.getInstance());
         context.sender().sendMessage(Component.text().color(NamedTextColor.YELLOW).content("Now running..."));
     }
 }

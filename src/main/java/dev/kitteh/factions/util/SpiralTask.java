@@ -2,6 +2,7 @@ package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -43,7 +44,7 @@ public abstract class SpiralTask implements Runnable {
         // limit is determined based on spiral leg length for given radius; see insideRadius()
         this.limit = (radius - 1) * 2;
 
-        this.world = Bukkit.getWorld(fLocation.getWorldName());
+        this.world = Bukkit.getWorld(fLocation.worldName());
         if (this.world == null) {
             FactionsPlugin.getInstance().log(Level.WARNING, "[SpiralTask] A valid world must be specified!");
             this.stop();
@@ -56,7 +57,7 @@ public abstract class SpiralTask implements Runnable {
         this.readyToGo = true;
 
         // get this party started
-        this.setTaskID(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(FactionsPlugin.getInstance(), this, 2, 2));
+        this.setTaskID(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(AbstractFactionsPlugin.getInstance(), this, 2, 2));
     }
 
     /*

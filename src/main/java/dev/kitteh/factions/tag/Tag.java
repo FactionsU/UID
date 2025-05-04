@@ -3,6 +3,7 @@ package dev.kitteh.factions.tag;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
@@ -48,7 +49,7 @@ public interface Tag {
             return line;
         }
 
-        if (FactionsPlugin.getInstance().isClipPlaceholderAPIHooked() && player.isOnline()) {
+        if (AbstractFactionsPlugin.getInstance().isClipPlaceholderAPIHooked() && player.isOnline()) {
             line = PlaceholderAPI.setPlaceholders(player, line);
         }
 

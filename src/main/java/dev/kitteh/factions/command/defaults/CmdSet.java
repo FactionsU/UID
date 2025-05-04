@@ -10,7 +10,6 @@ import dev.kitteh.factions.command.defaults.set.CmdSetDescription;
 import dev.kitteh.factions.command.defaults.set.CmdSetHome;
 import dev.kitteh.factions.command.defaults.set.CmdSetLink;
 import dev.kitteh.factions.command.defaults.set.CmdSetOpen;
-import dev.kitteh.factions.command.defaults.set.CmdSetOwner;
 import dev.kitteh.factions.command.defaults.set.CmdSetPerm;
 import dev.kitteh.factions.command.defaults.set.CmdSetTag;
 import dev.kitteh.factions.command.defaults.set.CmdSetTitle;
@@ -36,7 +35,6 @@ public class CmdSet implements Cmd {
             new CmdSetHome().consumer().accept(manager, setBuilder);
             new CmdSetLink().consumer().accept(manager, setBuilder);
             new CmdSetOpen().consumer().accept(manager, setBuilder);
-            new CmdSetOwner().consumer().accept(manager, setBuilder);
             new CmdSetPerm().consumer().accept(manager, setBuilder);
             new CmdSetTag().consumer().accept(manager, setBuilder);
             new CmdSetTitle().consumer().accept(manager, setBuilder);

@@ -1,6 +1,5 @@
 package dev.kitteh.factions.util;
 
-import dev.kitteh.factions.FactionsPlugin;
 import org.bukkit.command.CommandSender;
 import org.jspecify.annotations.NullMarked;
 
@@ -43,6 +42,8 @@ public enum Permission {
     FLY_SAFEZONE("fly.safezone"),
     FLY_WARZONE("fly.warzone"),
     FLY_TRAILS("fly.trails"),
+    GRACE_VIEW("grace.view"),
+    GRACE_SET("grace.set"),
     HELP("help"),
     HOME("home"),
     INVITE("invite"),
@@ -109,6 +110,7 @@ public enum Permission {
     SCOREBOARD("scoreboard"),
     SEECHUNK("seechunk"),
     SETWARP("setwarp"),
+    SHIELD("shield"),
     TOP("top"),
     VAULT("vault"),
     SETMAXVAULTS("setmaxvaults"),
@@ -116,6 +118,7 @@ public enum Permission {
     WARP("warp"),
     UPDATES("updates"),
     DEBUG("debug"),
+    UPGRADES("upgrades"),
     WARMUP_EXEMPT("warmups.exempt");
 
     public final String node;
@@ -129,11 +132,7 @@ public enum Permission {
         return this.node;
     }
 
-    public boolean has(CommandSender sender, boolean informSenderIfNot) {
-        return FactionsPlugin.getInstance().getPermUtil().has(sender, this.node, informSenderIfNot);
-    }
-
     public boolean has(CommandSender sender) {
-        return has(sender, false);
+        return sender.hasPermission(node);
     }
 }

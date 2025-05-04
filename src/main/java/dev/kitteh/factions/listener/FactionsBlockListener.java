@@ -10,6 +10,7 @@ import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
@@ -31,7 +32,6 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Directional;
 
 import java.util.List;
@@ -323,7 +323,7 @@ public class FactionsBlockListener extends AbstractListener {
         Faction otherFaction = Board.getInstance().getFactionAt(loc);
 
         if (otherFaction.isWilderness()) {
-            if (conf.worldGuard().isBuildPriority() && FactionsPlugin.getInstance().getWorldguard() != null && FactionsPlugin.getInstance().getWorldguard().playerCanBuild(player, location)) {
+            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().playerCanBuild(player, location)) {
                 return true;
             }
 
@@ -337,7 +337,7 @@ public class FactionsBlockListener extends AbstractListener {
 
             return false;
         } else if (otherFaction.isSafeZone()) {
-            if (conf.worldGuard().isBuildPriority() && FactionsPlugin.getInstance().getWorldguard() != null && FactionsPlugin.getInstance().getWorldguard().playerCanBuild(player, location)) {
+            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().playerCanBuild(player, location)) {
                 return true;
             }
 
@@ -351,7 +351,7 @@ public class FactionsBlockListener extends AbstractListener {
 
             return false;
         } else if (otherFaction.isWarZone()) {
-            if (conf.worldGuard().isBuildPriority() && FactionsPlugin.getInstance().getWorldguard() != null && FactionsPlugin.getInstance().getWorldguard().playerCanBuild(player, location)) {
+            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().playerCanBuild(player, location)) {
                 return true;
             }
 
@@ -382,24 +382,6 @@ public class FactionsBlockListener extends AbstractListener {
                 me.msg(TL.PERM_DENIED_TERRITORY, permissibleAction.getShortDescription(), otherFaction.getTag(myFaction));
             }
             return false;
-        }
-
-        // Also cancel and/or cause pain if player doesn't have ownership rights for this claim
-        if (conf.factions().ownedArea().isEnabled() && (conf.factions().ownedArea().isDenyBuild() || conf.factions().ownedArea().isPainBuild()) && !otherFaction.playerHasOwnershipRights(me, loc)) {
-            if (pain && conf.factions().ownedArea().isPainBuild()) {
-                player.damage(conf.factions().other().getActionDeniedPainAmount());
-
-                if (!conf.factions().ownedArea().isDenyBuild()) {
-                    me.msg(TL.PERM_DENIED_PAINOWNED, permissibleAction.getShortDescription(), otherFaction.getOwnerListString(loc));
-                }
-            }
-            if (conf.factions().ownedArea().isDenyBuild()) {
-                if (!justCheck) {
-                    me.msg(TL.PERM_DENIED_OWNED, permissibleAction.getShortDescription(), otherFaction.getOwnerListString(loc));
-                }
-
-                return false;
-            }
         }
 
         return true;

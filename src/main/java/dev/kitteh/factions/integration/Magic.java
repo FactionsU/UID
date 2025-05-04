@@ -17,6 +17,7 @@ import dev.kitteh.factions.listener.FactionsBlockListener;
 import dev.kitteh.factions.listener.FactionsEntityListener;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -30,14 +31,14 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
             try {
                 int v = Integer.parseInt(plugin.getDescription().getVersion().split("\\.")[0]);
                 if (v < 8) {
-                    FactionsPlugin.getInstance().getLogger().info("Found Magic, but only supporting version 8+");
+                    AbstractFactionsPlugin.getInstance().getLogger().info("Found Magic, but only supporting version 8+");
                     return false;
                 }
             } catch (NumberFormatException ignored) {
-                FactionsPlugin.getInstance().getLogger().info("Found Magic, but could not determine version");
+                AbstractFactionsPlugin.getInstance().getLogger().info("Found Magic, but could not determine version");
                 return false;
             }
-            FactionsPlugin.getInstance().getLogger().info("Integrating with Magic!");
+            AbstractFactionsPlugin.getInstance().getLogger().info("Integrating with Magic!");
             ((MagicAPI) plugin).getController().register(new Magic());
             return true;
         }

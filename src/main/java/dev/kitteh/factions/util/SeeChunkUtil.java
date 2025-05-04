@@ -5,6 +5,7 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.particle.ParticleColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,7 +31,7 @@ public class SeeChunkUtil extends BukkitRunnable {
         this.effect = FactionsPlugin.getInstance().getParticleProvider().effectFromString(effectName);
         this.useColor = FactionsPlugin.getInstance().conf().commands().seeChunk().isRelationalColor();
 
-        FactionsPlugin.getInstance().getLogger().info(FactionsPlugin.getInstance().txt().parse("Using %s as the ParticleEffect for /f sc", FactionsPlugin.getInstance().getParticleProvider().effectName(effect)));
+        AbstractFactionsPlugin.getInstance().getLogger().info(AbstractFactionsPlugin.getInstance().txt().parse("Using %s as the ParticleEffect for /f sc", FactionsPlugin.getInstance().getParticleProvider().effectName(effect)));
     }
 
     @Override

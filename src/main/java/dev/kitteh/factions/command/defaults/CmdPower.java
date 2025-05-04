@@ -40,7 +40,7 @@ public class CmdPower implements Cmd {
             return;
         }
 
-        if (target != sender && !Permission.POWER_ANY.has(context.sender().sender(), true)) {
+        if (target != sender && !Permission.POWER_ANY.has(context.sender().sender())) {
             return;
         }
 

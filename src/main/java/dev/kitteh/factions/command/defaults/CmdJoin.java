@@ -47,8 +47,9 @@ public class CmdJoin implements Cmd {
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().factions().other().getFactionMemberLimit() > 0 && faction.getFPlayers().size() >= FactionsPlugin.getInstance().conf().factions().other().getFactionMemberLimit()) {
-            sender.msg(TL.COMMAND_JOIN_ATLIMIT, faction.getTag(sender), FactionsPlugin.getInstance().conf().factions().other().getFactionMemberLimit(), sender.describeTo(sender, false));
+        int max = faction.getMaxMembers();
+        if (faction.getSize() > max) {
+            sender.msg(TL.COMMAND_JOIN_ATLIMIT, faction.getTag(sender), max, sender.describeTo(sender, false));
             return;
         }
 

@@ -42,7 +42,7 @@ public class CmdDTR implements Cmd {
             return;
         }
 
-        if (target != faction && !Permission.DTR_ANY.has(context.sender().sender(), true)) {
+        if (target != faction && !Permission.DTR_ANY.has(context.sender().sender())) {
             return;
         }
 

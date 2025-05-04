@@ -6,6 +6,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.data.MemoryFactions;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.DiscUtil;
 import dev.kitteh.factions.util.adapter.OldJSONFactionDeserializer;
 import org.jspecify.annotations.NullMarked;
@@ -41,17 +42,18 @@ public final class JSONFactions extends MemoryFactions {
     // -------------------------------------------- //
 
     public JSONFactions() {
-        if (FactionsPlugin.getInstance().getServerUUID() == null) {
-            FactionsPlugin.getInstance().grumpException(new RuntimeException());
+        if (AbstractFactionsPlugin.getInstance().getServerUUID() == null) {
+            AbstractFactionsPlugin.getInstance().grumpException(new RuntimeException());
         }
-        this.file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/factions.json");
-        this.nextIdFile = new File(FactionsPlugin.getInstance().getDataFolder(), "data/nextFactionId.json");
+        this.file = new File(AbstractFactionsPlugin.getInstance().getDataFolder(), "data/factions.json");
+        this.nextIdFile = new File(AbstractFactionsPlugin.getInstance().getDataFolder(), "data/nextFactionId.json");
         this.nextId = 1;
     }
 
     @Override
     public void forceSave(boolean sync) {
         final List<Faction> entitiesThatShouldBeSaved = new ArrayList<>(this.factions.values());
+        // Serialize sync, write (a)sync
         DiscUtil.writeCatch(file, FactionsPlugin.getInstance().getGson().toJson(entitiesThatShouldBeSaved), sync);
         DiscUtil.writeCatch(this.nextIdFile, FactionsPlugin.getInstance().getGson().toJson(new NextId(this.nextId)), sync);
     }
@@ -92,7 +94,7 @@ public final class JSONFactions extends MemoryFactions {
         this.nextId = 1;
 
         if (content.startsWith("{")) {
-            Gson gson = FactionsPlugin.getInstance().getGsonBuilder(false)
+            Gson gson = AbstractFactionsPlugin.getInstance().getGsonBuilder(false)
                     .registerTypeAdapter(JSONFaction.class, new OldJSONFactionDeserializer())
                     .create();
             Map<String, JSONFaction> data = gson.fromJson(content, new TypeToken<Map<String, JSONFaction>>() {
@@ -104,7 +106,6 @@ public final class JSONFactions extends MemoryFactions {
             for (Entry<String, JSONFaction> entry : data.entrySet()) {
                 String id = entry.getKey();
                 MemoryFaction f = entry.getValue();
-                f.checkPerms();
                 try {
                     f.setId(Integer.parseInt(id));
                     this.updateNextIdForId(Integer.parseInt(id));

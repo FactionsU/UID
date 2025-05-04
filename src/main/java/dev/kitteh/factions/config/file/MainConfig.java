@@ -418,7 +418,7 @@ public class MainConfig {
                     this.add("<a>Land / Power / Maxpower: <i> {chunks}/{power}/{maxPower}");
                     this.add("<a>Raidable: {raidable}");
                     this.add("<a>Founded: <i>{create-date}");
-                    this.add("<a>This faction is permanent, remaining even with no members.'");
+                    this.add("<a>This faction is permanent, remaining even with no members.");
                     this.add("<a>Land value: <i>{land-value} {land-refund}");
                     this.add("<a>Balance: <i>{faction-balance}");
                     this.add("<a>Bans: <i>{faction-bancount}");
@@ -1510,6 +1510,9 @@ public class MainConfig {
                 }
             };
 
+            @Comment("Enables the 'grace' system, preventing explosions for a period of time, across the server, as defined by the admin setting it.")
+            private boolean graceSystem = true;
+
             private boolean territoryBlockCreepers = false;
             private boolean territoryBlockCreepersWhenOffline = false;
             private boolean territoryBlockFireballs = false;
@@ -1615,6 +1618,10 @@ public class MainConfig {
 
             public TerritoryTeleport territoryTeleport() {
                 return territoryTeleport;
+            }
+
+            public boolean isGraceSystem() {
+                return graceSystem;
             }
 
             public Set<String> getPermanentFactionMemberDenyCommands() {
@@ -2020,60 +2027,6 @@ public class MainConfig {
             }
         }
 
-        public class OwnedArea {
-            private boolean enabled = true;
-            private int limitPerFaction = 0;
-            private boolean moderatorsBypass = true;
-            private boolean denyBuild = true;
-            private boolean painBuild = false;
-            private boolean protectMaterials = true;
-            private boolean denyUsage = true;
-
-            private boolean messageOnBorder = true;
-            private boolean messageInsideTerritory = true;
-            private boolean messageByChunk = false;
-
-            public boolean isEnabled() {
-                return enabled;
-            }
-
-            public int getLimitPerFaction() {
-                return limitPerFaction;
-            }
-
-            public boolean isModeratorsBypass() {
-                return moderatorsBypass;
-            }
-
-            public boolean isDenyBuild() {
-                return denyBuild;
-            }
-
-            public boolean isPainBuild() {
-                return painBuild;
-            }
-
-            public boolean isProtectMaterials() {
-                return protectMaterials;
-            }
-
-            public boolean isDenyUsage() {
-                return denyUsage;
-            }
-
-            public boolean isMessageOnBorder() {
-                return messageOnBorder;
-            }
-
-            public boolean isMessageInsideTerritory() {
-                return messageInsideTerritory;
-            }
-
-            public boolean isMessageByChunk() {
-                return messageByChunk;
-            }
-        }
-
         public class Other {
             private boolean allowMultipleColeaders = false;
 
@@ -2317,8 +2270,6 @@ public class MainConfig {
         @Comment("Do you want to limit portal creation?")
         private Portals portals = new Portals();
         private Protection protection = new Protection();
-        @Comment("For claimed areas where further faction-member ownership can be defined")
-        private OwnedArea ownedArea = new OwnedArea();
         @Comment("Displayed prefixes for different roles within a faction")
         private Prefix prefixes = new Prefix();
         private LandRaidControl landRaidControl = new LandRaidControl();
@@ -2373,10 +2324,6 @@ public class MainConfig {
 
         public Other other() {
             return other;
-        }
-
-        public OwnedArea ownedArea() {
-            return ownedArea;
         }
 
         public Prefix prefixes() {

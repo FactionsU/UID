@@ -1,6 +1,6 @@
 package dev.kitteh.factions.integration;
 
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -19,7 +19,7 @@ public class VaultPerms {
             return;
         }
         if (perms != null) {
-            FactionsPlugin.getInstance().getLogger().info("Using Vault with permissions plugin " + perms.getName());
+            AbstractFactionsPlugin.getInstance().getLogger().info("Using Vault with permissions plugin " + perms.getName());
         }
     }
 

@@ -1,9 +1,9 @@
 package dev.kitteh.factions.command.defaults;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
@@ -25,6 +25,6 @@ public class CmdVersion implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        context.sender().sender().sendMessage(ChatColor.GREEN + FactionsPlugin.getInstance().getDescription().getFullName());
+        context.sender().sender().sendMessage(ChatColor.GREEN + AbstractFactionsPlugin.getInstance().getDescription().getFullName());
     }
 }

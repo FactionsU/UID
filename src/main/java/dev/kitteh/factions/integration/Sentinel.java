@@ -3,8 +3,8 @@ package dev.kitteh.factions.integration;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -19,17 +19,17 @@ public class Sentinel extends SentinelIntegration {
     public static final String TARGET_FACTIONS_ALLY = "factionsAlly";
 
     public static boolean init(Plugin plugin) {
-        FactionsPlugin.getInstance().getLogger().info("Attempting to integrate with Sentinel!");
+        AbstractFactionsPlugin.getInstance().getLogger().info("Attempting to integrate with Sentinel!");
         try {
             ((SentinelPlugin) plugin).registerIntegration(new Sentinel());
         } catch (Exception e) {
-            FactionsPlugin.getInstance().getLogger().log(Level.WARNING, "Could not load Sentinel integration", e);
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.WARNING, "Could not load Sentinel integration", e);
             return false;
         }
-        FactionsPlugin.getInstance().getLogger().info("Loaded Sentinel integration!");
-        FactionsPlugin.getInstance().getLogger().info("");
-        FactionsPlugin.getInstance().getLogger().info("You may safely ignore the Sentinel message warning you about compatibility, as we run our own integration.");
-        FactionsPlugin.getInstance().getLogger().info("");
+        AbstractFactionsPlugin.getInstance().getLogger().info("Loaded Sentinel integration!");
+        AbstractFactionsPlugin.getInstance().getLogger().info("");
+        AbstractFactionsPlugin.getInstance().getLogger().info("You may safely ignore the Sentinel message warning you about compatibility, as we run our own integration.");
+        AbstractFactionsPlugin.getInstance().getLogger().info("");
         return true;
     }
 

@@ -4,7 +4,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.caption.CaptionVariable;
 import org.incendo.cloud.context.CommandContext;
@@ -94,7 +94,7 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
         List<String> secondary = Factions.getInstance().getAllFactions().stream().map(Faction::getTag).collect(Collectors.toCollection(ArrayList::new));
 
         Player sendingPlayer = context.sender() instanceof Sender.Player player ? player.player() : null;
-        for (Player player : FactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
+        for (Player player : AbstractFactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
             if (sendingPlayer != null && !player.canSee(player)) {
                 continue;
             }

@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.json.JSONFaction;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 
 import java.lang.reflect.Type;
 import java.util.Iterator;
@@ -18,7 +19,7 @@ public class OldJSONFactionDeserializer implements JsonDeserializer<JSONFaction>
         try {
             Integer.parseInt(id);
         } catch (NumberFormatException e) {
-            FactionsPlugin.getInstance().getLogger().warning("Invalid faction id found: " + id);
+            AbstractFactionsPlugin.getInstance().getLogger().warning("Invalid faction id found: " + id);
         }
         JsonElement relationWish = jsonElement.getAsJsonObject().get("relationWish").getAsJsonObject();
 

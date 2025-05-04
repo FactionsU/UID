@@ -6,6 +6,7 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.RelationUtil;
 import dev.kitteh.factions.util.TL;
@@ -34,7 +35,7 @@ public class Econ {
         try {
             f = new DecimalFormat(TL.ECON_FORMAT.toString());
         } catch (Exception e) {
-            FactionsPlugin.getInstance().getLogger().warning("Fell over on invalid default econ format '" + TL.ECON_FORMAT + "'");
+            AbstractFactionsPlugin.getInstance().getLogger().warning("Fell over on invalid default econ format '" + TL.ECON_FORMAT + "'");
             f = new DecimalFormat("###,###.###"); // TODO better defaulting
         }
         format = f;
@@ -48,21 +49,21 @@ public class Econ {
         String integrationFail = "Economy integration is " + (FactionsPlugin.getInstance().conf().economy().isEnabled() ? "enabled, but" : "disabled, and") + " the plugin \"Vault\" ";
 
         if (Bukkit.getServer().getPluginManager().getPlugin("Vault") == null) {
-            FactionsPlugin.getInstance().getLogger().info(integrationFail + "is not installed.");
+            AbstractFactionsPlugin.getInstance().getLogger().info(integrationFail + "is not installed.");
             return;
         }
 
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-            FactionsPlugin.getInstance().getLogger().info(integrationFail + "is not hooked into an economy plugin.");
+            AbstractFactionsPlugin.getInstance().getLogger().info(integrationFail + "is not hooked into an economy plugin.");
             return;
         }
         econ = rsp.getProvider();
 
-        FactionsPlugin.getInstance().getLogger().info("Found economy plugin through Vault: " + econ.getName());
+        AbstractFactionsPlugin.getInstance().getLogger().info("Found economy plugin through Vault: " + econ.getName());
 
         if (!FactionsPlugin.getInstance().conf().economy().isEnabled()) {
-            FactionsPlugin.getInstance().getLogger().info("NOTE: Economy is disabled. You can enable it in config/main.conf");
+            AbstractFactionsPlugin.getInstance().getLogger().info("NOTE: Economy is disabled. You can enable it in config/main.conf");
         }
     }
 
@@ -457,7 +458,7 @@ public class Econ {
 
     private static void createAccount(OfflinePlayer op) {
         if (!econ.createPlayerAccount(op, getWorld(op))) {
-            FactionsPlugin.getInstance().getLogger().warning("FAILED TO CREATE ECONOMY ACCOUNT " + op.getName() + '/' + op.getUniqueId());
+            AbstractFactionsPlugin.getInstance().getLogger().warning("FAILED TO CREATE ECONOMY ACCOUNT " + op.getName() + '/' + op.getUniqueId());
         }
     }
 

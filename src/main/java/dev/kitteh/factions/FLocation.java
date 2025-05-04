@@ -47,12 +47,12 @@ public record FLocation(String worldName, int x, int z) {
     // Getters and Setters
     //----------------------------------------------//
 
-    public String getWorldName() {
-        return worldName;
-    }
-
     public World getWorld() {
         return Bukkit.getWorld(worldName);
+    }
+
+    public Faction getFaction() {
+        return Board.getInstance().getFactionAt(this);
     }
 
     /**
@@ -70,7 +70,7 @@ public record FLocation(String worldName, int x, int z) {
 
     @Override
     public String toString() {
-        return "[" + this.getWorldName() + "," + this.getCoordString() + "]";
+        return "[" + this.worldName() + "," + this.getCoordString() + "]";
     }
 
     //----------------------------------------------//
@@ -95,11 +95,11 @@ public record FLocation(String worldName, int x, int z) {
     }
 
     public boolean isInChunk(Location loc) {
-        return loc.getWorld().getName().equalsIgnoreCase(getWorldName()) && blockToChunk(loc.getBlockX()) == x && blockToChunk(loc.getBlockZ()) == z;
+        return loc.getWorld().getName().equalsIgnoreCase(worldName()) && blockToChunk(loc.getBlockX()) == x && blockToChunk(loc.getBlockZ()) == z;
     }
 
     public boolean isInChunk(LazyLocation loc) {
-        return loc.worldName().equalsIgnoreCase(getWorldName()) && blockToChunk(NumberConversions.floor(loc.x())) == x && blockToChunk(NumberConversions.floor(loc.z())) == z;
+        return loc.worldName().equalsIgnoreCase(worldName()) && blockToChunk(NumberConversions.floor(loc.x())) == x && blockToChunk(NumberConversions.floor(loc.z())) == z;
     }
 
     /**

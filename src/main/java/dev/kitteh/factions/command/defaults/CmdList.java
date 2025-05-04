@@ -6,7 +6,6 @@ import dev.kitteh.factions.command.defaults.list.CmdListBans;
 import dev.kitteh.factions.command.defaults.list.CmdListClaims;
 import dev.kitteh.factions.command.defaults.list.CmdListFactions;
 import dev.kitteh.factions.command.defaults.list.CmdListInvites;
-import dev.kitteh.factions.command.defaults.list.CmdListOwners;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 
@@ -22,7 +21,6 @@ public class CmdList implements Cmd {
             new CmdListClaims().consumer().accept(manager, listBuilder);
             new CmdListFactions().consumer().accept(manager, listBuilder);
             new CmdListInvites().consumer().accept(manager, listBuilder);
-            new CmdListOwners().consumer().accept(manager, listBuilder);
         };
     }
 }

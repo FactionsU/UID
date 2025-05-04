@@ -2,7 +2,6 @@ package dev.kitteh.factions.permissible.selector;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.permissible.PermSelector;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
@@ -35,7 +34,7 @@ public abstract class AbstractRoleSelector extends AbstractSelector {
         @Override
         public Map<String, String> getOptions(Faction faction) {
             List<PermSelector> available = new ArrayList<>(roleSelectors == null ? (roleSelectors = Arrays.stream(Role.values()).map(function).collect(Collectors.toList())) : roleSelectors);
-            available.removeAll(((MemoryFaction) faction).getPermissions().keySet());
+            available.removeAll(faction.permissions().selectors());
 
             Map<String, String> map = new LinkedHashMap<>();
 

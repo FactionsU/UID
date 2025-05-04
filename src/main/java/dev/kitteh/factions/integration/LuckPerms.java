@@ -1,7 +1,7 @@
 package dev.kitteh.factions.integration;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.permcontext.LuckpermsContextCalculator;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.luckperms.api.LuckPermsProvider;
 
 import java.util.logging.Level;
@@ -9,7 +9,7 @@ import java.util.logging.Level;
 public class LuckPerms {
     private static LuckpermsContextCalculator calculator;
 
-    public static boolean init(FactionsPlugin plugin) {
+    public static boolean init(AbstractFactionsPlugin plugin) {
         calculator = new LuckpermsContextCalculator();
         try {
             net.luckperms.api.LuckPerms api = LuckPermsProvider.get();
@@ -22,7 +22,7 @@ public class LuckPerms {
         return true;
     }
 
-    public static void shutdown(FactionsPlugin plugin) {
+    public static void shutdown(AbstractFactionsPlugin plugin) {
         if (calculator != null) {
             try {
                 net.luckperms.api.LuckPerms api = LuckPermsProvider.get();

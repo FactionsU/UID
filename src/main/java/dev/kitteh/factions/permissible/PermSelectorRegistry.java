@@ -1,6 +1,5 @@
 package dev.kitteh.factions.permissible;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.selector.AllSelector;
 import dev.kitteh.factions.permissible.selector.FactionSelector;
 import dev.kitteh.factions.permissible.selector.PlayerSelector;
@@ -11,6 +10,7 @@ import dev.kitteh.factions.permissible.selector.RoleAtLeastSelector;
 import dev.kitteh.factions.permissible.selector.RoleAtMostSelector;
 import dev.kitteh.factions.permissible.selector.RoleSingleSelector;
 import dev.kitteh.factions.permissible.selector.UnknownSelector;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -50,7 +50,7 @@ public class PermSelectorRegistry {
             return createOrThrow(input);
         } catch (Exception e) {
             if (log) {
-                FactionsPlugin.getInstance().getLogger().log(Level.WARNING, "Could not parse perm selector: " + input, e);
+                AbstractFactionsPlugin.getInstance().getLogger().log(Level.WARNING, "Could not parse perm selector: " + input, e);
             }
             return new UnknownSelector(input);
         }

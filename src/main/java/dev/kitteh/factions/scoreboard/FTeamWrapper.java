@@ -6,6 +6,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tag.Tag;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -49,7 +50,7 @@ public class FTeamWrapper {
                     updating.remove(faction);
                     applyUpdates(faction);
                 }
-            }.runTask(FactionsPlugin.getInstance());
+            }.runTask(AbstractFactionsPlugin.getInstance());
         }
     }
 

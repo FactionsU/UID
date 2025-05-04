@@ -2,7 +2,6 @@ package dev.kitteh.factions.permissible.selector;
 
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Participator;
-import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.permissible.PermSelector;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Selectable;
@@ -34,7 +33,7 @@ public abstract class AbstractRelationSelector extends AbstractSelector {
         @Override
         public Map<String, String> getOptions(Faction faction) {
             List<PermSelector> available = new ArrayList<>(relationSelectors == null ? (relationSelectors = Arrays.stream(Relation.values()).map(function).collect(Collectors.toList())) : relationSelectors);
-            available.removeAll(((MemoryFaction) faction).getPermissions().keySet());
+            available.removeAll(faction.permissions().selectors());
 
             Map<String, String> map = new LinkedHashMap<>();
 

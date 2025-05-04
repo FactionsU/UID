@@ -1,6 +1,5 @@
 package dev.kitteh.factions.data;
 
-import com.google.gson.annotations.Expose;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
@@ -8,23 +7,33 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.config.file.PermissionsConfig;
 import dev.kitteh.factions.event.FactionAutoDisbandEvent;
 import dev.kitteh.factions.event.FactionNewAdminEvent;
 import dev.kitteh.factions.integration.Econ;
-import dev.kitteh.factions.integration.LWC;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.landraidcontrol.LandRaidControl;
 import dev.kitteh.factions.permissible.PermSelector;
+import dev.kitteh.factions.permissible.PermState;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.upgrade.Upgrade;
+import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.MiscUtil;
-import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.WorldTracker;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -33,19 +42,267 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 @NullMarked
 public abstract class MemoryFaction implements Faction {
+    public static class Permissions implements Faction.Permissions {
+        public static class SelectorPerms implements Faction.Permissions.SelectorPerms {
+            private Map<String, Boolean> perms;
+
+            public SelectorPerms() {
+                this.perms = new HashMap<>();
+            }
+
+            public SelectorPerms(Map<String, Boolean> perms) {
+                this.perms = new HashMap<>(perms);
+            }
+
+            public Map<String, Boolean> getPerms() {
+                return this.perms;
+            }
+
+            @Override
+            public PermState get(String action) {
+                return PermState.of(this.perms.get(action.toUpperCase()));
+            }
+
+            @Override
+            public void set(String action, PermState state) {
+                action = action.toUpperCase();
+                if (Objects.requireNonNull(state) == PermState.UNSET) {
+                    this.perms.remove(action);
+                } else {
+                    this.perms.put(action, state == PermState.ALLOW);
+                }
+            }
+
+            @Override
+            public Collection<String> actions() {
+                return this.perms.keySet().stream().sorted().toList();
+            }
+        }
+
+        private List<PermSelector> selectorOrder = new ArrayList<>();
+        private Map<PermSelector, SelectorPerms> perms = new HashMap<>();
+
+        @Override
+        public List<PermSelector> selectors() {
+            return Collections.unmodifiableList(this.selectorOrder);
+        }
+
+        @Override
+        public SelectorPerms get(PermSelector selector) {
+            SelectorPerms perm = this.perms.get(selector);
+            if (perm == null) {
+                throw new IllegalArgumentException("Selector " + selector + " is not present");
+            }
+            return perm;
+        }
+
+        @Override
+        public boolean has(PermSelector selector) {
+            return this.selectorOrder.contains(selector);
+        }
+
+        @Override
+        public SelectorPerms add(PermSelector selector) {
+            return this.perms.computeIfAbsent(selector, k -> new SelectorPerms());
+        }
+
+        @Override
+        public void remove(PermSelector selector) {
+            this.selectorOrder.remove(selector);
+            this.perms.remove(selector);
+        }
+
+        @Override
+        public void moveSelectorUp(PermSelector selector) {
+            int index = this.selectorOrder.indexOf(selector);
+            if (index <= 0) { // Not present or already top
+                return;
+            }
+            index--;
+            this.selectorOrder.remove(index);
+            this.selectorOrder.add(index, selector);
+        }
+
+        @Override
+        public void moveSelectorDown(PermSelector selector) {
+            int index = this.selectorOrder.indexOf(selector);
+            if (index == -1 || index == this.selectorOrder.size() - 1) { // Not present or already bottom
+                return;
+            }
+            index++;
+            this.selectorOrder.remove(index);
+            this.selectorOrder.add(index, selector);
+        }
+
+        public void clear() {
+            this.perms.clear();
+            this.selectorOrder.clear();
+        }
+    }
+
+    protected class Zone implements Faction.Zone {
+        private int id;
+        private String name;
+        @Nullable
+        private String greeting;
+        @Nullable
+        private transient Component greetingComponent;
+        private Permissions perms = new Permissions();
+
+        private Zone(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        @Override
+        public int id() {
+            return this.id;
+        }
+
+        @Override
+        public String name() {
+            return this.name;
+        }
+
+        @Override
+        public void name(String name) {
+            this.name = Objects.requireNonNull(name);
+        }
+
+        @Override
+        public Component greeting() {
+            if (this.greetingComponent == null) {
+                if (this.greeting == null) {
+                    this.greetingComponent = MemoryFaction.this.zones.main.greetingComponent;
+                    if (this.greetingComponent == null) {
+                        this.greetingComponent = Component.text("");
+                    }
+                } else {
+                    this.greetingComponent = MiniMessage.miniMessage().deserialize(this.greeting,
+                            Placeholder.unparsed("tag", MemoryFaction.this.tag));
+                }
+            }
+            return this.greetingComponent;
+        }
+
+        @Override
+        public @Nullable String greetingString() {
+            return this.greeting;
+        }
+
+        @Override
+        public void greeting(@Nullable String greeting) {
+            if (this.id == 0) {
+                this.greeting = Objects.requireNonNull(greeting);
+            } else {
+                this.greeting = greeting;
+            }
+        }
+
+        @Override
+        public Faction.Permissions permissions() {
+            return this.perms;
+        }
+    }
+
+    protected class Zones implements Faction.Zones {
+
+
+        private Object2ObjectOpenHashMap<String, WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
+        private Int2ObjectOpenHashMap<Zone> zones = new Int2ObjectOpenHashMap<>();
+        private int nextId = 1;
+        private transient Zone main;
+
+        private Zones() {
+            this.cleanupDeserialization();
+        }
+
+        @SuppressWarnings("ConstantValue")
+        private void cleanupDeserialization() {
+            if (this.main == null) {
+                this.main = this.zones.get(0);
+                if (this.main == null) {
+                    this.main = new Zone(0, "main");
+                    main.greeting = "<tag>";
+                    this.zones.put(0, this.main);
+                }
+                this.zones.defaultReturnValue(this.main);
+            }
+        }
+
+        @Override
+        public Zone main() {
+            return this.main;
+        }
+
+        @Override
+        public Zone create(String name) {
+            if (this.get(name) != null) {
+                throw new IllegalArgumentException("The name '" + name + "' already exists");
+            }
+            Zone zone = new Zone(this.nextId++, name);
+            this.zones.put(zone.id(), zone);
+            return zone;
+        }
+
+        @Override
+        public Zone get(FLocation fLocation) {
+            WorldTracker tracker = this.worldTrackers.get(fLocation.worldName());
+            int id;
+            //noinspection ConstantValue
+            if (tracker == null || (id = tracker.getIdAt(fLocation)) == WorldTracker.NO_MATCH) {
+                return this.main();
+            }
+
+            return this.zones.get(id);
+        }
+
+        @Override
+        public Faction.@Nullable Zone get(String name) {
+            return this.zones.values().stream().filter(zone -> zone.name().equals(name)).findFirst().orElse(null);
+        }
+
+        @Override
+        public void set(Faction.Zone zone, FLocation fLocation) {
+            if (fLocation.getFaction() != MemoryFaction.this) {
+                throw new IllegalArgumentException("Cannot assign non-owned territory");
+            }
+            if (this.zones.get(zone.id()) != zone) {
+                throw new IllegalArgumentException("Invalid zone for this faction");
+            }
+            if (zone == this.main) {
+                WorldTracker tracker = this.worldTrackers.get(fLocation.worldName());
+                //noinspection ConstantValue
+                if (tracker != null) {
+                    tracker.removeClaim(fLocation);
+                    if (tracker.countClaims() == 0) {
+                        this.worldTrackers.remove(fLocation.worldName());
+                    }
+                }
+                return;
+            }
+            this.getAndCreate(fLocation.worldName()).addClaim(zone.id(), fLocation);
+        }
+
+        protected WorldTracker getAndCreate(String world) {
+            return this.worldTrackers.computeIfAbsent(world, k -> new WorldTracker(world));
+        }
+    }
+
     protected int id;
     protected boolean peacefulExplosionsEnabled;
     protected boolean permanent;
@@ -60,28 +317,46 @@ public abstract class MemoryFaction implements Faction {
     protected transient long lastPlayerLoggedOffTime;
     protected double powerBoost;
     protected Map<Integer, Relation> relationWish = new HashMap<>();
-    protected Map<FLocation, Set<UUID>> claimOwnership = new ConcurrentHashMap<>();
-    @Expose(deserialize = false)
-    transient Set<FPlayer> fplayers = new HashSet<>();
+    protected @Nullable Map<FLocation, Set<UUID>> claimOwnership = new ConcurrentHashMap<>();
+    protected transient Set<FPlayer> fplayers = new HashSet<>();
     protected Set<UUID> invites = new HashSet<>();
     protected HashMap<UUID, List<String>> announcements = new HashMap<>();
     protected ConcurrentHashMap<String, LazyLocation> warps = new ConcurrentHashMap<>();
     protected ConcurrentHashMap<String, String> warpPasswords = new ConcurrentHashMap<>();
-    private long lastDeath;
+    protected long lastDeath;
     protected int maxVaults;
     protected Role defaultRole;
-    protected LinkedHashMap<PermSelector, Map<String, Boolean>> permissions = new LinkedHashMap<>();
+    protected @Nullable LinkedHashMap<PermSelector, Map<String, Boolean>> permissions; // legacy importing, lazier this way
     protected Set<BanInfo> bans = new HashSet<>();
     protected double dtr;
     protected long lastDTRUpdateTime;
     protected long frozenDTRUntilTime;
     protected int tntBank;
+    protected Object2IntOpenHashMap<String> upgrades = new Object2IntOpenHashMap<>();
     protected transient @Nullable OfflinePlayer offlinePlayer;
+    protected MemoryFaction.Permissions perms;
+    protected Zones zones = new Zones();
 
+    @SuppressWarnings("ConstantValue")
     public void cleanupDeserialization() {
         this.fplayers = new HashSet<>();
         this.offlinePlayer = null;
         this.getOfflinePlayer();
+        if (this.upgrades == null) {
+            this.upgrades = new Object2IntOpenHashMap<>();
+        }
+        if (this.permissions != null) {
+            this.perms = new MemoryFaction.Permissions();
+            for (Map.Entry<PermSelector, Map<String, Boolean>> entry : this.permissions.entrySet()) {
+                this.perms.selectorOrder.add(entry.getKey());
+                this.perms.perms.put(entry.getKey(), new Permissions.SelectorPerms(entry.getValue()));
+            }
+            this.permissions = null;
+        }
+        if (this.perms == null || !this.isNormal()) {
+            this.resetPerms();
+        }
+        this.zones.cleanupDeserialization(); // Sets the transient helper main value.
     }
 
     @Override
@@ -256,13 +531,8 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public boolean getPeacefulExplosionsEnabled() {
+    public boolean isPeacefulExplosionsEnabled() {
         return this.peacefulExplosionsEnabled;
-    }
-
-    @Override
-    public boolean noExplosionsInTerritory() {
-        return this.peaceful && !peacefulExplosionsEnabled;
     }
 
     @Override
@@ -306,6 +576,11 @@ public abstract class MemoryFaction implements Faction {
         if (FactionsPlugin.getInstance().conf().factions().other().isTagForceUpperCase()) {
             str = str.toUpperCase();
         }
+
+        // Wipe processed greetings for tag placeholder
+        this.zones.zones.values().forEach(zone -> {
+            zone.greetingComponent = null;
+        });
         this.tag = str;
     }
 
@@ -431,7 +706,7 @@ public abstract class MemoryFaction implements Faction {
     public boolean hasAccess(Selectable selectable, PermissibleAction permissibleAction, @Nullable FLocation location) {
         //noinspection ConstantValue
         if (selectable == null || permissibleAction == null) {
-            return false; // Fail in a safe way
+            return false; // Fail in a safe way because people are foolish
         }
 
         if (selectable == Role.ADMIN || (selectable instanceof FPlayer && ((FPlayer) selectable).getFaction() == this && ((FPlayer) selectable).getRole() == Role.ADMIN)) {
@@ -443,55 +718,52 @@ public abstract class MemoryFaction implements Faction {
         for (PermSelector selector : priority) {
             Boolean bool = permConf.getOverridePermissions().get(selector).get(permissibleAction.getName());
             if (bool != null) {
-                //FactionsPlugin.getInstance().debug("Permissions for " + selectable.getClass().getSimpleName() + ' ' + (selectable instanceof FPlayer ? ((FPlayer) selectable).getName() : (selectable instanceof Faction) ? ((Faction) selectable).getTag() : "") + " override " + selector.serialize() + ": " + bool);
                 return bool;
             }
         }
 
         if (location != null) {
-            // TODO migrate ownership stuffs
+            Zone zone = this.zones.get(location);
+            if (zone.id != 0 && this.hasAccess(selectable, permissibleAction, zone.perms) instanceof Boolean bool) {
+                return bool;
+            }
         }
 
-        for (Map.Entry<PermSelector, Map<String, Boolean>> entry : permissions.entrySet()) {
-            if (entry.getKey().test(selectable, this)) {
-                Boolean bool = entry.getValue().get(permissibleAction.getName());
-                if (bool != null) {
-                    //FactionsPlugin.getInstance().debug("Permissions for " + selectable.getClass().getSimpleName() + ' ' + (selectable instanceof FPlayer ? ((FPlayer) selectable).getName() : (selectable instanceof Faction) ? ((Faction) selectable).getTag() : "") + " override " + entry.getKey().serialize() + ": " + bool);
-                    return bool;
-                }
-            }
+        if (this.hasAccess(selectable, permissibleAction, this.perms) instanceof Boolean bool) {
+            return bool;
         }
 
         return false;
     }
 
-    public LinkedHashMap<PermSelector, Map<String, Boolean>> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(LinkedHashMap<PermSelector, Map<String, Boolean>> permissions) {
-        this.permissions = permissions;
-    }
-
-    public void checkPerms() {
-        //noinspection ConstantValue
-        if (this.permissions == null || this.permissions.isEmpty()) {
-            this.resetPerms();
+    private @Nullable Boolean hasAccess(Selectable selectable, PermissibleAction permissibleAction, Permissions permissions) {
+        for (PermSelector selector : permissions.selectorOrder) {
+            if (selector.test(selectable, this)) {
+                Permissions.SelectorPerms perm = permissions.perms.get(selector);
+                if (perm.perms.get(permissibleAction.getName()) instanceof Boolean bool) {
+                    return bool;
+                }
+            }
         }
+        return null;
+    }
+
+    @Override
+    public Permissions permissions() {
+        return this.perms;
     }
 
     public void resetPerms() {
-        //noinspection ConstantValue
-        if (permissions == null) {
-            permissions = new LinkedHashMap<>();
-        } else {
-            permissions.clear();
+        this.perms.clear();
+
+        if (!this.isNormal()) {
+            return;
         }
 
         PermissionsConfig permConf = FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig();
         for (PermSelector selector : permConf.getDefaultPermissionsOrder()) {
-            Map<String, Boolean> map = new LinkedHashMap<>(permConf.getDefaultPermissions().get(selector));
-            permissions.put(selector, map);
+            this.perms.selectorOrder.add(selector);
+            this.perms.perms.put(selector, new Permissions.SelectorPerms(new HashMap<>(permConf.getDefaultPermissions().get(selector))));
         }
     }
 
@@ -750,6 +1022,29 @@ public abstract class MemoryFaction implements Faction {
         this.tntBank = amount;
     }
 
+    @Override
+    public boolean isShielded() {
+        return false;
+    }
+
+    @Override
+    public int getUpgradeLevel(Upgrade upgrade) {
+        if (!Universe.getInstance().isUpgradeEnabled(upgrade)) {
+            return 0;
+        }
+        UpgradeSettings settings = Universe.getInstance().getUpgradeSettings(upgrade);
+        return Math.min(settings.maxLevel(), this.upgrades.getOrDefault(upgrade.name(), 0));
+    }
+
+    @Override
+    public void setUpgradeLevel(Upgrade upgrade, int level) {
+        int newLevel = Math.min(upgrade.maxLevel(), level);
+        int oldLevel = this.getUpgradeLevel(upgrade);
+        this.upgrades.put(upgrade.name(), newLevel);
+        this.sendMessage(MiniMessage.miniMessage().deserialize("<green>Upgraded <upgrade> to level " + newLevel + "!", Placeholder.component("upgrade", upgrade.nameComponent())));
+        upgrade.onChange(this, oldLevel, newLevel);
+    }
+
     // -------------------------------
     // FPlayers
     // -------------------------------
@@ -860,7 +1155,7 @@ public abstract class MemoryFaction implements Faction {
             return ret;
         }
 
-        for (Player player : FactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
+        for (Player player : AbstractFactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
             FPlayer fplayer = FPlayers.getInstance().getByPlayer(player);
             if (fplayer.getFaction() == this) {
                 ret.add(player);
@@ -879,7 +1174,7 @@ public abstract class MemoryFaction implements Faction {
             return false;
         }
 
-        for (Player player : FactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
+        for (Player player : AbstractFactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
             FPlayer fplayer = FPlayers.getInstance().getByPlayer(player);
             if (fplayer.getFaction() == this) {
                 return true;
@@ -938,7 +1233,7 @@ public abstract class MemoryFaction implements Faction {
                 fplayer.msg(TL.LEAVE_DISBANDED, this.getTag(fplayer));
             }
 
-            FactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(this));
+            AbstractFactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(this));
 
             Factions.getInstance().removeFaction(this);
         } else { // promote new faction admin
@@ -958,7 +1253,7 @@ public abstract class MemoryFaction implements Faction {
     // ----------------------------------------------//
     @Override
     public void msg(String message, Object... args) {
-        message = FactionsPlugin.getInstance().txt().parse(message, args);
+        message = AbstractFactionsPlugin.getInstance().txt().parse(message, args);
 
         for (FPlayer fplayer : this.getFPlayersWhereOnline(true)) {
             fplayer.sendMessage(message);
@@ -980,114 +1275,6 @@ public abstract class MemoryFaction implements Faction {
     }
 
     // ----------------------------------------------//
-    // Ownership of specific claims
-    // ----------------------------------------------//
-
-    @Override
-    public Map<FLocation, Set<UUID>> getClaimOwnership() {
-        return claimOwnership;
-    }
-
-    @Override
-    public void clearAllClaimOwnership() {
-        claimOwnership.clear();
-    }
-
-    @Override
-    public void clearClaimOwnership(FLocation loc) {
-        if (LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim()) {
-            LWC.clearAllLocks(loc);
-        }
-        claimOwnership.remove(loc);
-    }
-
-    @Override
-    public void clearClaimOwnership(FPlayer player) {
-        Set<UUID> ownerData;
-
-        for (Entry<FLocation, Set<UUID>> entry : claimOwnership.entrySet()) {
-            ownerData = entry.getValue();
-
-            if (ownerData == null) {
-                continue;
-            }
-
-            ownerData.remove(player.getUniqueId());
-
-            if (ownerData.isEmpty()) {
-                if (LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim()) {
-                    LWC.clearAllLocks(entry.getKey());
-                }
-                claimOwnership.remove(entry.getKey());
-            }
-        }
-    }
-
-    @Override
-    public int getCountOfClaimsWithOwners() {
-        return claimOwnership.isEmpty() ? 0 : claimOwnership.size();
-    }
-
-    @Override
-    public boolean doesLocationHaveOwnersSet(FLocation loc) {
-        return !claimOwnership.getOrDefault(loc, Set.of()).isEmpty();
-    }
-
-    @Override
-    public boolean isPlayerInOwnerList(FPlayer player, FLocation loc) {
-        return claimOwnership.getOrDefault(loc, Set.of()).contains(player.getUniqueId());
-    }
-
-    @Override
-    public void setPlayerAsOwner(FPlayer player, FLocation loc) {
-        claimOwnership.computeIfAbsent(loc, k -> new HashSet<>()).add(player.getUniqueId());
-    }
-
-    @Override
-    public void removePlayerAsOwner(FPlayer player, FLocation loc) {
-        Set<UUID> ownerData = claimOwnership.get(loc);
-        if (ownerData == null) {
-            return;
-        }
-        ownerData.remove(player.getUniqueId());
-    }
-
-    @Override
-    public Set<UUID> getOwnerList(FLocation loc) {
-        return new HashSet<>(claimOwnership.get(loc));
-    }
-
-    @Override
-    public String getOwnerListString(FLocation loc) {
-        Set<UUID> ownerData = claimOwnership.get(loc);
-        if (ownerData == null || ownerData.isEmpty()) {
-            return "";
-        }
-        return ownerData.stream().map(FPlayers.getInstance()::getById).map(FPlayer::getName).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public boolean playerHasOwnershipRights(FPlayer fplayer, FLocation loc) {
-        // in own faction, with sufficient role or permission to bypass
-        // ownership?
-        if (fplayer.getFaction() == this && (fplayer.getRole().isAtLeast(FactionsPlugin.getInstance().conf().factions().ownedArea().isModeratorsBypass() ? Role.MODERATOR : Role.ADMIN) || Permission.OWNERSHIP_BYPASS.has(fplayer.getPlayer()))) {
-            return true;
-        }
-
-        // make sure claimOwnership is initialized
-        if (claimOwnership.isEmpty()) {
-            return true;
-        }
-
-        // need to check the ownership list, then
-        Set<UUID> ownerData = claimOwnership.get(loc);
-
-        // if no owner list, owner list is empty, or player is in owner list,
-        // they're allowed
-        return ownerData == null || ownerData.isEmpty() || ownerData.contains(fplayer.getUniqueId());
-    }
-
-    // ----------------------------------------------//
     // Persistance and entity management
     // ----------------------------------------------//
     public void remove() {
@@ -1106,5 +1293,10 @@ public abstract class MemoryFaction implements Faction {
     @Override
     public Set<FLocation> getAllClaims() {
         return Board.getInstance().getAllClaims(this);
+    }
+
+    @Override
+    public Faction.Zones zones() {
+        return this.zones;
     }
 }

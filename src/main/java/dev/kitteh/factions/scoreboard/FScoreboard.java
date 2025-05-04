@@ -3,6 +3,7 @@ package dev.kitteh.factions.scoreboard;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -92,7 +93,7 @@ public class FScoreboard {
                     updateObjective();
                 }
             }
-        }.runTaskTimer(FactionsPlugin.getInstance(), 20, 20);
+        }.runTaskTimer(AbstractFactionsPlugin.getInstance(), 20, 20);
     }
 
     public void setTemporarySidebar(final FSidebarProvider provider) {
@@ -111,7 +112,7 @@ public class FScoreboard {
                     updateObjective();
                 }
             }
-        }.runTaskLater(FactionsPlugin.getInstance(), FactionsPlugin.getInstance().conf().scoreboard().info().getExpiration() * 20L);
+        }.runTaskLater(AbstractFactionsPlugin.getInstance(), FactionsPlugin.getInstance().conf().scoreboard().info().getExpiration() * 20L);
     }
 
     private void updateObjective() {

@@ -1,7 +1,7 @@
 package dev.kitteh.factions.config.transition;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.Loader;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.adapter.PermSelectorTypeAdapter;
 import dev.kitteh.factions.util.TL;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class Transitioner {
-    private final FactionsPlugin plugin;
+    private final AbstractFactionsPlugin plugin;
 
-    public static void transition(FactionsPlugin plugin) {
+    public static void transition(AbstractFactionsPlugin plugin) {
         Transitioner transitioner = new Transitioner(plugin);
         transitioner.migrateV5A();
 
@@ -68,7 +68,7 @@ public class Transitioner {
     private final Path configFolder;
     private final Path oldConfigFolder;
 
-    private Transitioner(FactionsPlugin plugin) {
+    private Transitioner(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
         Path pluginFolder = this.plugin.getDataFolder().toPath();
         configFolder = pluginFolder.resolve("config");

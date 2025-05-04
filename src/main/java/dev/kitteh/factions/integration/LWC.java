@@ -58,7 +58,7 @@ public class LWC {
     }
 
     private static List<Block> findBlocks(FLocation flocation) {
-        World world = Bukkit.getWorld(flocation.getWorldName());
+        World world = Bukkit.getWorld(flocation.worldName());
         if (world == null) {
             return Collections.emptyList();  // world not loaded or something? cancel out to prevent error
         }

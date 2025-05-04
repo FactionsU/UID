@@ -15,6 +15,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -55,7 +56,7 @@ public class Worldguard {
     }
 
     private static void status(boolean success, String name) {
-        FactionsPlugin.getInstance().getLogger().info((success ? "Registered" : "Failed to register") + " flag '" + name + "' with WorldGuard.");
+        AbstractFactionsPlugin.getInstance().getLogger().info((success ? "Registered" : "Failed to register") + " flag '" + name + "' with WorldGuard.");
     }
 
     public boolean isNoLossFlag(Player player) {

@@ -11,6 +11,7 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.LWC;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.AsciiCompass;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
@@ -55,7 +56,7 @@ public abstract class MemoryBoard implements Board {
     // Get and Set
     //----------------------------------------------//
     private int getIdAt(FLocation flocation) {
-        WorldTracker tracker = worldTrackers.get(flocation.getWorldName());
+        WorldTracker tracker = worldTrackers.get(flocation.worldName());
         if (tracker != null) {
             int result = tracker.getIdAt(flocation);
             return result == WorldTracker.NO_MATCH ? 0 : result;
@@ -71,7 +72,7 @@ public abstract class MemoryBoard implements Board {
     private void setIdAt(int id, FLocation flocation) {
         removeAt(flocation);
 
-        this.getAndCreate(flocation.getWorldName()).addClaim(id, flocation);
+        this.getAndCreate(flocation.worldName()).addClaim(id, flocation);
     }
 
     @Override
@@ -98,9 +99,13 @@ public abstract class MemoryBoard implements Board {
                 }
             }
         }
-        clearOwnershipAt(flocation);
 
-        WorldTracker tracker = worldTrackers.get(flocation.getWorldName());
+        // Clear zone
+        if (faction.isNormal()) {
+            faction.zones().set(faction.zones().main(), flocation);
+        }
+
+        WorldTracker tracker = worldTrackers.get(flocation.worldName());
         if (tracker != null) {
             tracker.removeClaim(flocation);
         }
@@ -116,18 +121,9 @@ public abstract class MemoryBoard implements Board {
         return tracker == null ? new Int2ObjectOpenHashMap<>() : tracker.getAllClaimsForDynmap();
     }
 
-    // not to be confused with claims, ownership referring to further member-specific ownership of a claim
-    private void clearOwnershipAt(FLocation flocation) {
-        Faction faction = getFactionAt(flocation);
-        if (faction.isNormal()) {
-            faction.clearClaimOwnership(flocation);
-        }
-    }
-
     @Override
     public void unclaimAll(Faction faction) {
         if (faction.isNormal()) {
-            faction.clearAllClaimOwnership();
             faction.clearWarps();
         }
         clean(faction);
@@ -245,7 +241,7 @@ public abstract class MemoryBoard implements Board {
             }
             for (int dx = (dz < 3 ? 6 : 3); dx < width; dx++) {
                 if (dx == halfWidth && dz == halfHeight) {
-                    builder.append(Component.text().content("+").color(FactionsPlugin.getInstance().conf().map().getSelfColor()).hoverEvent(HoverEvent.showText(LegacyComponentSerializer.legacySection().deserialize(FactionsPlugin.getInstance().txt().parse(TL.CLAIM_YOUAREHERE.toString())))));
+                    builder.append(Component.text().content("+").color(FactionsPlugin.getInstance().conf().map().getSelfColor()).hoverEvent(HoverEvent.showText(LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(TL.CLAIM_YOUAREHERE.toString())))));
                 } else {
                     FLocation flocationHere = topLeft.getRelative(dx, dz);
                     Faction factionHere = getFactionAt(flocationHere);

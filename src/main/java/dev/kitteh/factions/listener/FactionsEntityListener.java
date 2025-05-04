@@ -9,6 +9,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Location;
@@ -322,7 +323,7 @@ public class FactionsEntityListener extends AbstractListener {
             return true;
         }
 
-        if (FactionsPlugin.getInstance().conf().worldGuard().isPVPPriority() && FactionsPlugin.getInstance().getWorldguard() != null && FactionsPlugin.getInstance().getWorldguard().isCustomPVPFlag((Player) damagee)) {
+        if (FactionsPlugin.getInstance().conf().worldGuard().isPVPPriority() && AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().isCustomPVPFlag((Player) damagee)) {
             return true;
         }
 

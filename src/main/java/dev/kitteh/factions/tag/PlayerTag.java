@@ -3,6 +3,7 @@ package dev.kitteh.factions.tag;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.Econ;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.TL;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
@@ -14,7 +15,7 @@ import java.util.function.Function;
 public enum PlayerTag implements Tag {
     GROUP("group", (fp) -> {
         if (fp.isOnline()) {
-            return FactionsPlugin.getInstance().getPrimaryGroup(fp.getPlayer());
+            return AbstractFactionsPlugin.getInstance().getPrimaryGroup(fp.getPlayer());
         } else {
             return "";
         }

@@ -5,10 +5,13 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.event.DTRLossEvent;
 import dev.kitteh.factions.integration.Essentials;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Bukkit;
@@ -51,6 +54,11 @@ public class DTRControl implements LandRaidControl {
 
     @Override
     public int getLandLimit(Faction faction) {
+        int boost = 0;
+        int level = faction.getUpgradeLevel(Upgrades.DTR_CLAIM_LIMIT);
+        if (level > 0) {
+            boost = Universe.getInstance().getUpgradeSettings(Upgrades.DTR_CLAIM_LIMIT).costAt(level).intValue();
+        }
         return conf().getLandStarting() + (faction.getFPlayers().size() * conf().getLandPerPlayer());
     }
 
@@ -119,7 +127,7 @@ public class DTRControl implements LandRaidControl {
         }
 
         DTRLossEvent dtrLossEvent = new DTRLossEvent(faction, fplayer);
-        if (FactionsPlugin.getInstance().getWorldguard() != null && FactionsPlugin.getInstance().getWorldguard().isNoLossFlag(player)) {
+        if (AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().isNoLossFlag(player)) {
             dtrLossEvent.setCancelled(true);
         }
 

@@ -10,6 +10,7 @@ import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.permissible.PermSelector;
 import dev.kitteh.factions.permissible.PermSelectorRegistry;
+import dev.kitteh.factions.permissible.PermState;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActionRegistry;
 import dev.kitteh.factions.permissible.Role;
@@ -33,7 +34,6 @@ import org.incendo.cloud.suggestion.SuggestionProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -111,7 +111,7 @@ public class CmdSetPerm implements Cmd {
 
     private void handleList(CommandContext<Sender> context) {
         Faction faction = ((Sender.Player) context.sender()).faction();
-        listSelectors(faction, context.sender(), ((MemoryFaction) faction).getPermissions(), FactionsPlugin.getInstance().tl().commands().permissions());
+        listSelectors(faction, context.sender(), faction.permissions(), FactionsPlugin.getInstance().tl().commands().permissions());
     }
 
     private void handleListOverrides(CommandContext<Sender> context) {
@@ -121,7 +121,7 @@ public class CmdSetPerm implements Cmd {
     private void handleAdd(CommandContext<Sender> context) {
         var tl = FactionsPlugin.getInstance().tl().commands().permissions();
         Faction faction = ((Sender.Player) context.sender()).faction();
-        var permissions = ((MemoryFaction) faction).getPermissions();
+        Faction.Permissions permissions = faction.permissions();
 
         Optional<String> argSelector = context.optional("selector");
         Optional<String> argAction = context.optional("perm");
@@ -170,7 +170,7 @@ public class CmdSetPerm implements Cmd {
         }
     }
 
-    private void handleAddSelector(String target, Sender sender, Faction faction, LinkedHashMap<PermSelector, Map<String, Boolean>> permissions, TranslationsConfig.Commands.Permissions tl) {
+    private void handleAddSelector(String target, Sender sender, Faction faction, Faction.Permissions permissions, TranslationsConfig.Commands.Permissions tl) {
         PermSelector selector = null;
         String ex = null;
         try {
@@ -226,10 +226,10 @@ public class CmdSetPerm implements Cmd {
             }
             return;
         }
-        if (permissions.containsKey(selector)) { // List options to add to this selector
+        if (permissions.has(selector)) { // List options to add to this selector
             List<String> actions = PermissibleActionRegistry.getActions().stream().map(PermissibleAction::getName).collect(Collectors.toCollection(ArrayList::new));
             actions.removeAll(FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getHiddenActions());
-            actions.removeAll(permissions.get(selector).keySet());
+            actions.removeAll(permissions.get(selector).actions());
             Collections.sort(actions);
 
             ComponentBuilder<TextComponent, TextComponent.Builder> build = Component.text();
@@ -256,16 +256,16 @@ public class CmdSetPerm implements Cmd {
                 sender.sendMessage(build);
             }
         } else { // Add selector
-            permissions.put(selector, new LinkedHashMap<>());
+            permissions.add(selector);
             listSelectors(faction, sender, permissions, tl);
         }
     }
 
-    private void handleAddPerm(String argSelector, String argAction, String choice, Sender sender, Faction faction, LinkedHashMap<PermSelector, Map<String, Boolean>> permissions, TranslationsConfig.Commands.Permissions tl) {
+    private void handleAddPerm(String argSelector, String argAction, String choice, Sender sender, Faction faction, Faction.Permissions permissions, TranslationsConfig.Commands.Permissions tl) {
         PermSelector selector = PermSelectorRegistry.create(argSelector, false);
         if (selector instanceof UnknownSelector) {
             sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.add().getSelectorNotFound()));
-        } else if (!permissions.containsKey(selector)) {
+        } else if (!permissions.has(selector)) {
             sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.add().getSelectorNotFound()));
         } else {
             PermissibleAction action = PermissibleActionRegistry.get(argAction);
@@ -284,7 +284,7 @@ public class CmdSetPerm implements Cmd {
                             Placeholder.unparsed("deny", tl.add().getActionDenyAlias().getFirst())));
                     return;
                 }
-                permissions.get(selector).put(action.getName(), allow);
+                permissions.add(selector).set(action, PermState.of(allow));
                 showSelector(faction, -1, selector, sender, permissions, tl);
             }
         }
@@ -293,13 +293,19 @@ public class CmdSetPerm implements Cmd {
     private void handleMove(CommandContext<Sender> context) {
         var tl = FactionsPlugin.getInstance().tl().commands().permissions();
         Faction faction = ((Sender.Player) context.sender()).faction();
-        var permissions = ((MemoryFaction) faction).getPermissions();
+        Faction.Permissions permissions = faction.permissions();
 
         int position = context.get("position");
         String direction = context.get("direction");
+        boolean up = false;
+        if (position < 0 || position >= permissions.selectors().size()) {
+            context.sender().sendMessage(MiniMessage.miniMessage().deserialize(tl.move().getErrorInvalidPosition()));
+        }
+        PermSelector selector = permissions.selectors().get(position);
 
         int hold;
         if (tl.move().getAliasUp().stream().anyMatch(i -> i.equalsIgnoreCase(direction))) {
+            up = true;
             hold = position - 1;
         } else if (tl.move().getAliasDown().stream().anyMatch(i -> i.equalsIgnoreCase(direction))) {
             hold = position;
@@ -311,25 +317,14 @@ public class CmdSetPerm implements Cmd {
         }
         if (hold < 1) {
             context.sender().sendMessage(MiniMessage.miniMessage().deserialize(tl.move().getErrorHighest()));
-        } else if (hold > permissions.size() - 1) {
+        } else if (hold > permissions.selectors().size() - 1) {
             context.sender().sendMessage(MiniMessage.miniMessage().deserialize(tl.move().getErrorLowest()));
         } else {
-            LinkedHashMap<PermSelector, Map<String, Boolean>> newMap = new LinkedHashMap<>();
-            int x = 0;
-            Map.Entry<PermSelector, Map<String, Boolean>> holdEntry = null;
-            for (Map.Entry<PermSelector, Map<String, Boolean>> entry : permissions.entrySet()) {
-                if (++x == hold) {
-                    holdEntry = entry;
-                } else {
-                    newMap.put(entry.getKey(), entry.getValue());
-                    if (holdEntry != null) {
-                        newMap.put(holdEntry.getKey(), holdEntry.getValue());
-                        holdEntry = null;
-                    }
-                }
+            if (up) {
+                permissions.moveSelectorUp(selector);
+            } else {
+                permissions.moveSelectorDown(selector);
             }
-            ((MemoryFaction) faction).setPermissions(newMap);
-            permissions = newMap;
         }
         listSelectors(faction, context.sender(), permissions, tl);
     }
@@ -337,7 +332,7 @@ public class CmdSetPerm implements Cmd {
     private void handleRemove(CommandContext<Sender> context) {
         var tl = FactionsPlugin.getInstance().tl().commands().permissions();
         Faction faction = ((Sender.Player) context.sender()).faction();
-        var permissions = ((MemoryFaction) faction).getPermissions();
+        Faction.Permissions permissions = faction.permissions();
 
         String argSelector = context.get("selector");
         Optional<String> argAction = context.optional("perm");
@@ -348,10 +343,8 @@ public class CmdSetPerm implements Cmd {
             listSelectors(faction, context.sender(), permissions, tl);
         } else {
             PermSelector selector = PermSelectorRegistry.create(argSelector, false);
-            Map<String, Boolean> map = permissions.get(selector);
-            if (map != null) {
-                String target = argAction.get();
-                map.keySet().removeIf(s -> s.equalsIgnoreCase(target));
+            if (permissions.has(selector)) {
+                permissions.get(selector).set(argAction.get(), PermState.UNSET);
             }
             showSelector(faction, -1, selector, context.sender(), permissions, tl);
         }
@@ -378,7 +371,7 @@ public class CmdSetPerm implements Cmd {
     private void handleShow(CommandContext<Sender> context) {
         var tl = FactionsPlugin.getInstance().tl().commands().permissions();
         Faction faction = ((Sender.Player) context.sender()).faction();
-        var permissions = ((MemoryFaction) faction).getPermissions();
+        Faction.Permissions permissions = faction.permissions();
 
         String argSelector = context.get("selector");
 
@@ -418,7 +411,7 @@ public class CmdSetPerm implements Cmd {
         return ChatColor.stripColor(LegacyComponentSerializer.legacySection().serialize(builder.build())).length();
     }
 
-    private void listSelectors(Faction faction, Sender sender, LinkedHashMap<PermSelector, Map<String, Boolean>> permissions, TranslationsConfig.Commands.Permissions tl) {
+    private void listSelectors(Faction faction, Sender sender, Faction.Permissions permissions, TranslationsConfig.Commands.Permissions tl) {
         int x = 0;
         String commandPiece = '/' + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + ' ' +
                 tl.getAliases().getFirst() + ' ';
@@ -430,15 +423,15 @@ public class CmdSetPerm implements Cmd {
                     Placeholder.parsed("commandadd", commandPiece + tl.add().getAliases().getFirst()),
                     Placeholder.parsed("commandoverride", commandPiece + tl.listOverride().getAliases().getFirst())));
         }
-        for (Map.Entry<PermSelector, ?> entry : permissions.entrySet()) {
+        for (PermSelector selector : permissions.selectors()) {
             x++;
             sender.sendMessage(MiniMessage.miniMessage().deserialize(
                     tl.list().getItem(),
-                    Placeholder.component("name", entry.getKey().displayName()),
-                    Placeholder.component("value", entry.getKey().displayValue(faction)),
+                    Placeholder.component("name", selector.displayName()),
+                    Placeholder.component("value", selector.displayValue(faction)),
                     Placeholder.parsed("commandmoveup", commandPiece + movePiece + x + ' ' + tl.move().getAliasUp().getFirst()),
                     Placeholder.parsed("commandmovedown", commandPiece + movePiece + x + ' ' + tl.move().getAliasDown().getFirst()),
-                    Placeholder.parsed("commandremove", commandPiece + removePiece + entry.getKey().serialize()),
+                    Placeholder.parsed("commandremove", commandPiece + removePiece + selector.serialize()),
                     Placeholder.parsed("commandshow", commandPiece + showPiece + x),
                     Placeholder.parsed("rownumber", Integer.toString(x))));
         }
@@ -478,40 +471,41 @@ public class CmdSetPerm implements Cmd {
         }
     }
 
-    private void showSelector(Faction faction, int index, PermSelector selector, Sender sender, LinkedHashMap<PermSelector, Map<String, Boolean>> permissions, TranslationsConfig.Commands.Permissions tl) {
+    private void showSelector(Faction faction, int index, PermSelector selector, Sender sender, Faction.Permissions permissions, TranslationsConfig.Commands.Permissions tl) {
         int x = 0;
         // don't show priority that only has hiddens
         String commandPiece = '/' + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + ' ' +
                 FactionsPlugin.getInstance().tl().commands().set().getAliases().getFirst() + ' ' +
                 tl.getAliases().getFirst() + ' ';
         boolean notShown = true;
-        for (Map.Entry<PermSelector, Map<String, Boolean>> entry : permissions.entrySet()) {
-            if (++x == index || entry.getKey().equals(selector)) {
+        for (PermSelector sel : permissions.selectors()) {
+            if (++x == index || sel.equals(selector)) {
                 notShown = false;
                 if (!tl.show().getHeader().isEmpty()) {
                     sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.show().getHeader(),
-                            Placeholder.component("name", entry.getKey().displayName()),
-                            Placeholder.component("value", entry.getKey().displayValue(faction)),
+                            Placeholder.component("name", sel.displayName()),
+                            Placeholder.component("value", sel.displayValue(faction)),
                             Placeholder.unparsed("rownumber", Integer.toString(x)),
-                            Placeholder.parsed("command", commandPiece + tl.add().getAliases().getFirst() + ' ' + entry.getKey().serialize())));
+                            Placeholder.parsed("command", commandPiece + tl.add().getAliases().getFirst() + ' ' + sel.serialize())));
                 }
-                for (Map.Entry<String, Boolean> e : entry.getValue().entrySet()) {
-                    if (FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getHiddenActions().contains(e.getKey())) {
+                Faction.Permissions.SelectorPerms perms = permissions.get(sel);
+                for (String actionName : permissions.get(sel).actions()) {
+                    if (FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getHiddenActions().contains(actionName.toUpperCase())) {
                         continue;
                     }
-                    PermissibleAction action = PermissibleActionRegistry.get(e.getKey());
+                    PermissibleAction action = PermissibleActionRegistry.get(actionName);
                     sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.show().getItem(),
-                            Placeholder.unparsed("shortdesc", action.getShortDescription()),
-                            Placeholder.unparsed("desc", action.getDescription()),
-                            Placeholder.unparsed("state", e.getValue().toString()),
-                            Placeholder.parsed("commandremove", commandPiece + tl.remove().getAliases().getFirst() + ' ' + entry.getKey().serialize() + ' ' + action.getName())));
+                            Placeholder.unparsed("shortdesc", action == null ? "???" : action.getShortDescription()),
+                            Placeholder.unparsed("desc", action == null ? "???" : action.getDescription()),
+                            Placeholder.unparsed("state", perms.get(actionName).toString()),
+                            Placeholder.parsed("commandremove", commandPiece + tl.remove().getAliases().getFirst() + ' ' + sel.serialize() + ' ' + actionName)));
                 }
                 if (!tl.show().getFooter().isEmpty()) {
                     sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.show().getFooter(),
-                            Placeholder.component("name", entry.getKey().displayName()),
-                            Placeholder.component("value", entry.getKey().displayValue(faction)),
+                            Placeholder.component("name", sel.displayName()),
+                            Placeholder.component("value", sel.displayValue(faction)),
                             Placeholder.unparsed("rownumber", Integer.toString(x)),
-                            Placeholder.parsed("command", commandPiece + tl.add().getAliases().getFirst() + ' ' + entry.getKey().serialize())));
+                            Placeholder.parsed("command", commandPiece + tl.add().getAliases().getFirst() + ' ' + sel.serialize())));
                 }
             }
         }
@@ -567,8 +561,8 @@ public class CmdSetPerm implements Cmd {
             }
             PermissibleAction action = PermissibleActionRegistry.get(e.getKey());
             sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.showOverride().getItem(),
-                    Placeholder.unparsed("shortdesc", action.getShortDescription()),
-                    Placeholder.unparsed("desc", action.getDescription()),
+                    Placeholder.unparsed("shortdesc", action == null ? "???" : action.getShortDescription()),
+                    Placeholder.unparsed("desc", action == null ? "???" : action.getDescription()),
                     Placeholder.unparsed("state", e.getValue().toString())));
         }
         if (!tl.showOverride().getFooter().isEmpty()) {

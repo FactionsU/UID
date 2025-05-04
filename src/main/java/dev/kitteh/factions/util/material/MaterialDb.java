@@ -2,6 +2,7 @@ package dev.kitteh.factions.util.material;
 
 import com.google.gson.reflect.TypeToken;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Material;
 
 import java.io.InputStreamReader;
@@ -40,7 +41,7 @@ public class MaterialDb {
     }
 
     public static void load() {
-        InputStreamReader reader = new InputStreamReader(FactionsPlugin.getInstance().getResource("materials.json"));
+        InputStreamReader reader = new InputStreamReader(AbstractFactionsPlugin.getInstance().getResource("materials.json"));
         Type typeToken = new TypeToken<HashMap<String, String>>() {
         }.getType();
         HashMap<String, String> materialData = FactionsPlugin.getInstance().getGson().fromJson(reader, typeToken);
@@ -57,6 +58,6 @@ public class MaterialDb {
             }
             map.put(nNull ? n : l, nNull ? matL : matN);
         });
-        FactionsPlugin.getInstance().getLogger().info(String.format("Loaded %s material mappings.", map.size()));
+        AbstractFactionsPlugin.getInstance().getLogger().info(String.format("Loaded %s material mappings.", map.size()));
     }
 }

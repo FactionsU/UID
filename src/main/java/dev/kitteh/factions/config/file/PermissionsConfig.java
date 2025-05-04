@@ -1,7 +1,6 @@
 package dev.kitteh.factions.config.file;
 
 import com.google.common.collect.ImmutableMap;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.permissible.PermSelector;
@@ -13,6 +12,7 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.selector.RelationAtLeastSelector;
 import dev.kitteh.factions.permissible.selector.RoleAtLeastSelector;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -82,6 +82,7 @@ public class PermissionsConfig {
                 .put(PermissibleActions.SETWARP.name(), true)
                 .put(PermissibleActions.TERRITORY.name(), true)
                 .put(PermissibleActions.TNTWITHDRAW.name(), true)
+                .put(PermissibleActions.SHIELD.name(), true)
                 .build());
 
         this.defaultPermissionsOrder.add(new RoleAtLeastSelector(Role.RECRUIT).serialize());
@@ -120,7 +121,7 @@ public class PermissionsConfig {
             defaultPermissionsMap = new LinkedHashMap<>();
             for (Map.Entry<String, Map<String, Boolean>> entry : defaultPermissions.entrySet()) {
                 if (!defaultPermissionsOrder.contains(entry.getKey())) {
-                    FactionsPlugin.getInstance().getLogger().warning("Found '" + entry.getKey() + "' in defaultPermissions but not in defaultPermissionsOrder. Ignoring.");
+                    AbstractFactionsPlugin.getInstance().getLogger().warning("Found '" + entry.getKey() + "' in defaultPermissions but not in defaultPermissionsOrder. Ignoring.");
                     continue;
                 }
                 defaultPermissionsMap.put(PermSelectorRegistry.create(entry.getKey(), true), entry.getValue());
@@ -134,7 +135,7 @@ public class PermissionsConfig {
             defaultPermissionsOrderList = new ArrayList<>();
             for (String selector : defaultPermissionsOrder) {
                 if (!defaultPermissions.containsKey(selector)) {
-                    FactionsPlugin.getInstance().getLogger().warning("Found '" + selector + "' in defaultPermissionsOrder but not in defaultPermissions. Ignoring.");
+                    AbstractFactionsPlugin.getInstance().getLogger().warning("Found '" + selector + "' in defaultPermissionsOrder but not in defaultPermissions. Ignoring.");
                     continue;
                 }
                 defaultPermissionsOrderList.add(PermSelectorRegistry.create(selector, true));
@@ -148,7 +149,7 @@ public class PermissionsConfig {
             overridePermissionsMap = new LinkedHashMap<>();
             for (Map.Entry<String, Map<String, Boolean>> entry : overridePermissions.entrySet()) {
                 if (!overridePermissionsOrder.contains(entry.getKey())) {
-                    FactionsPlugin.getInstance().getLogger().warning("Found '" + entry.getKey() + "' in overridePermissions but not in overridePermissionsOrder. Ignoring.");
+                    AbstractFactionsPlugin.getInstance().getLogger().warning("Found '" + entry.getKey() + "' in overridePermissions but not in overridePermissionsOrder. Ignoring.");
                     continue;
                 }
                 overridePermissionsMap.put(PermSelectorRegistry.create(entry.getKey(), true), entry.getValue());
@@ -162,7 +163,7 @@ public class PermissionsConfig {
             overridePermissionsOrderList = new ArrayList<>();
             for (String selector : overridePermissionsOrder) {
                 if (!overridePermissions.containsKey(selector)) {
-                    FactionsPlugin.getInstance().getLogger().warning("Found '" + selector + "' in overridePermissionsOrder but not in overridePermissions. Ignoring.");
+                    AbstractFactionsPlugin.getInstance().getLogger().warning("Found '" + selector + "' in overridePermissionsOrder but not in overridePermissions. Ignoring.");
                     continue;
                 }
                 overridePermissionsOrderList.add(PermSelectorRegistry.create(selector, true));

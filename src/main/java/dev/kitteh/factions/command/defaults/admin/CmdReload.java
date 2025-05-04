@@ -4,6 +4,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.incendo.cloud.Command;
@@ -28,8 +29,8 @@ public class CmdReload implements Cmd {
     private void handle(CommandContext<Sender> context) {
         long timeInitStart = System.currentTimeMillis();
         FactionsPlugin.getInstance().getConfigManager().loadConfigs();
-        FactionsPlugin.getInstance().reloadConfig();
-        FactionsPlugin.getInstance().loadLang();
+        AbstractFactionsPlugin.getInstance().reloadConfig();
+        AbstractFactionsPlugin.getInstance().loadLang();
         long timeReload = (System.currentTimeMillis() - timeInitStart);
 
         context.sender().msg(TL.COMMAND_RELOAD_TIME, timeReload);

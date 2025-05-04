@@ -1,6 +1,6 @@
 name: FactionsUUID
 version: ${version}
-main: dev.kitteh.factions.FactionsPlugin
+main: dev.kitteh.factions.plugin.AbstractFactionsPlugin
 authors: [mbaxter, drtshock, dariasc, Brett Flannigan, Olof Larsson]
 softdepend: [LuckPerms, WorldGuard]
 api-version: '1.21.4'
@@ -28,6 +28,7 @@ permissions:
     children:
       factions.kit.halfmod: true
       factions.disband.any: true
+      factions.grace.set: true
       factions.setpeaceful: true
       factions.setpermanent: true
       factions.setpermanentpower: true
@@ -70,6 +71,7 @@ permissions:
       factions.description: true
       factions.disband: true
       factions.dtr: true
+      factions.grace.view: true
       factions.help: true
       factions.home: true
       factions.invite: true
@@ -90,6 +92,7 @@ permissions:
       factions.relation: true
       factions.sethome: true
       factions.delhome: true
+      factions.shield: true
       factions.show: true
       factions.stuck: true
       factions.tag: true
@@ -109,6 +112,7 @@ permissions:
       factions.coleader: true
       factions.near: true
       factions.permissions: true
+      factions.upgrades: true
   factions.admin:
     description: hand over your admin rights
   factions.admin.any:
@@ -139,6 +143,10 @@ permissions:
     description: disband a faction
   factions.disband.any:
     description: disband another faction
+  factions.grace.view:
+    description: view grace status
+  factions.grace.set:
+    description: set grace
   factions.help:
     description: display a help page
   factions.home:
@@ -244,6 +252,8 @@ permissions:
     description: unset the faction home
   factions.sethome.any:
     description: set faction home for another faction
+  factions.shield:
+    description: use the shield feature
   factions.show:
     description: show faction information
   factions.show.bypassexempt:
@@ -326,3 +336,5 @@ permissions:
     description: List claims
   factions.listclaims.other:
     description: List claims of other factions
+  factions.upgrades:
+    description: Show faction upgrades

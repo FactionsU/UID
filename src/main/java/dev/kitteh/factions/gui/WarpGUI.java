@@ -5,6 +5,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
 import org.bukkit.Bukkit;
@@ -117,7 +118,7 @@ public class WarpGUI extends GUI<Integer> {
                 HashMap<Object, Object> sessionData = new HashMap<>();
                 sessionData.put("warp", warp);
                 PasswordPrompt passwordPrompt = new PasswordPrompt();
-                ConversationFactory inputFactory = new ConversationFactory(FactionsPlugin.getInstance())
+                ConversationFactory inputFactory = new ConversationFactory(AbstractFactionsPlugin.getInstance())
                         .withModality(false)
                         .withLocalEcho(false)
                         .withInitialSessionData(sessionData)

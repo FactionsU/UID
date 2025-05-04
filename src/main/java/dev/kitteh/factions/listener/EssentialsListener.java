@@ -7,6 +7,7 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -44,7 +45,7 @@ public class EssentialsListener implements Listener {
 
             Location loc = user.getHome(homeName);
             if (loc == null) { // Newer EssX just returns null on invalid world
-                FactionsPlugin.getInstance().getLogger().warning("Tried to check on home \"" + homeName + "\" for user \"" + event.getFPlayer().getName() + "\" but Essentials could not load that home (invalid world?). Skipping it.");
+                AbstractFactionsPlugin.getInstance().getLogger().warning("Tried to check on home \"" + homeName + "\" for user \"" + event.getFPlayer().getName() + "\" but Essentials could not load that home (invalid world?). Skipping it.");
                 continue;
             }
             FLocation floc = new FLocation(loc);

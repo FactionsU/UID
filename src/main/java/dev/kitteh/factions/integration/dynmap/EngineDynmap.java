@@ -9,6 +9,7 @@ import dev.kitteh.factions.config.file.DynmapConfig;
 import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tag.FactionTag;
 import dev.kitteh.factions.tag.GeneralTag;
 import dev.kitteh.factions.util.LazyLocation;
@@ -104,7 +105,7 @@ public class EngineDynmap {
         }
 
         // Schedule non thread safe sync at the end!
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(FactionsPlugin.getInstance(), () -> {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(AbstractFactionsPlugin.getInstance(), () -> {
 
             if (!updateCore()) {
                 return;
@@ -114,7 +115,7 @@ public class EngineDynmap {
 
             updatePlayersets(playerSets);
         }, 101L, 100L);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(FactionsPlugin.getInstance(), () -> {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(AbstractFactionsPlugin.getInstance(), () -> {
             boolean doIt = true;
             if (FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().dynmap().isOnlyUpdateWorldOnce()) {
                 if (this.stillNeedsToRunOnce) {
@@ -142,7 +143,7 @@ public class EngineDynmap {
                 worldFactionChunks.values().stream().flatMapToInt(m -> m.keySet().intStream()).distinct().forEach(factionId -> {
                     Faction faction = Factions.getInstance().getFactionById(factionId);
                     if (faction == null) { // why :(
-                        FactionsPlugin.getInstance().getLogger().warning("Found invalid faction ID " + factionId);
+                        AbstractFactionsPlugin.getInstance().getLogger().warning("Found invalid faction ID " + factionId);
                         invalidFactionsWat.add(factionId);
                         return;
                     }
@@ -167,9 +168,9 @@ public class EngineDynmap {
                             public void run() {
                                 updateAreas(areas);
                             }
-                        }.runTask(FactionsPlugin.getInstance());
+                        }.runTask(AbstractFactionsPlugin.getInstance());
                     }
-                }.runTaskAsynchronously(FactionsPlugin.getInstance());
+                }.runTaskAsynchronously(AbstractFactionsPlugin.getInstance());
 
             }
 
@@ -177,7 +178,7 @@ public class EngineDynmap {
         }, 100L, Math.max(1, dynmapConf.dynmap().getClaimUpdatePeriod()) * 20L);
 
         this.enabled = true;
-        FactionsPlugin.getInstance().getLogger().info("Enabled Dynmap integration");
+        AbstractFactionsPlugin.getInstance().getLogger().info("Enabled Dynmap integration");
         return true;
     }
 
@@ -845,7 +846,7 @@ public class EngineDynmap {
     // Thread Safe / Asynchronous: Yes
     static void severe(String msg) {
         String message = DYNMAP_INTEGRATION + ChatColor.RED + msg;
-        FactionsPlugin.getInstance().getLogger().severe(message);
+        AbstractFactionsPlugin.getInstance().getLogger().severe(message);
     }
 
     enum Direction {

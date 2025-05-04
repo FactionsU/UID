@@ -13,11 +13,11 @@ import com.denizenscript.denizencore.tags.TagRunnable;
 import com.denizenscript.depenizen.bukkit.Bridge;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.depenizen.FactionTag;
 import dev.kitteh.factions.integration.depenizen.FactionsLocationProperties;
 import dev.kitteh.factions.integration.depenizen.FactionsNPCProperties;
 import dev.kitteh.factions.integration.depenizen.FactionsPlayerProperties;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Level;
@@ -53,16 +53,16 @@ public class Depenizen extends Bridge {
                 depenizen.registerBridge("Factions", Depenizen::new);
             }
         } catch (Exception e) {
-            FactionsPlugin.getInstance().getLogger().log(Level.WARNING, "Could not load Depenizen integration", e);
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.WARNING, "Could not load Depenizen integration", e);
             return false;
         }
-        FactionsPlugin.getInstance().getLogger().info("Loaded Depenizen integration!");
+        AbstractFactionsPlugin.getInstance().getLogger().info("Loaded Depenizen integration!");
         return true;
     }
 
     @Override
     public void init() {
-        ObjectFetcher.registerWithObjectFetcher(FactionTag.class);
+        ObjectFetcher.registerWithObjectFetcher(FactionTag.class, null);
         PropertyParser.registerProperty(FactionsNPCProperties.class, NPCTag.class);
         PropertyParser.registerProperty(FactionsPlayerProperties.class, PlayerTag.class);
         PropertyParser.registerProperty(FactionsLocationProperties.class, LocationTag.class);
@@ -95,7 +95,7 @@ public class Depenizen extends Bridge {
         if (f == null) {
             try {
                 f = Factions.getInstance().getFactionById(Integer.parseInt(nameOrId));
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException ignored) {
             }
         }
         if (f != null) {

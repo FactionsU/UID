@@ -9,6 +9,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tag.FactionTag;
 import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.TL;
@@ -45,7 +46,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
     // Return the plugin version since this expansion is bundled with the dependency
     @Override
     public String getVersion() {
-        return FactionsPlugin.getInstance().getDescription().getVersion();
+        return AbstractFactionsPlugin.getInstance().getDescription().getVersion();
     }
 
     @Override
@@ -111,7 +112,7 @@ public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements R
                 String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fPlayer.getLastLoginTime(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
                 yield fPlayer.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fPlayer.getLastLoginTime() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
             }
-            case "player_group" -> FactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(fPlayer.getUniqueId()));
+            case "player_group" -> AbstractFactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(fPlayer.getUniqueId()));
             case "player_balance" -> Econ.isSetup() ? Econ.getFriendlyBalance(fPlayer) : TL.ECON_OFF.format("balance");
             case "player_power" -> String.valueOf(fPlayer.getPowerRounded());
             case "player_maxpower" -> String.valueOf(fPlayer.getPowerMaxRounded());

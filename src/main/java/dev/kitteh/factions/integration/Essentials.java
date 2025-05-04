@@ -4,6 +4,7 @@ import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.Trade;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.listener.EssentialsListener;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -20,7 +21,7 @@ public class Essentials {
 
     public static boolean setup(Plugin ess) {
         essentials = (IEssentials) ess;
-        FactionsPlugin plugin = FactionsPlugin.getInstance();
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
         plugin.getLogger().info("Found and connected to Essentials");
         if (plugin.conf().factions().other().isDeleteEssentialsHomes()) {
             plugin.getLogger().info("Based on main.conf will delete Essentials player homes in their old faction when they leave");

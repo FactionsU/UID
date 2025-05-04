@@ -22,6 +22,7 @@ import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.scoreboard.sidebar.FInfoSidebar;
 import dev.kitteh.factions.tag.Tag;
@@ -129,7 +130,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     public Faction getFaction() {
         Faction faction = Factions.getInstance().getFactionById(this.factionId);
         if (faction == null) {
-            FactionsPlugin.getInstance().getLogger().warning("Found null faction (id " + this.factionId + ") for player " + this.getName());
+            AbstractFactionsPlugin.getInstance().getLogger().warning("Found null faction (id " + this.factionId + ") for player " + this.getName());
             this.resetFactionData(true);
             faction = Factions.getInstance().getWilderness();
         }
@@ -310,7 +311,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (this.offlinePlayer == null) {
             this.offlinePlayer = Bukkit.getPlayer(this.id);
             if (this.offlinePlayer == null) {
-                this.offlinePlayer = FactionsPlugin.getInstance().getOfflinePlayer(this.name, this.id);
+                this.offlinePlayer = AbstractFactionsPlugin.getInstance().getOfflinePlayer(this.name, this.id);
             }
         }
         return this.offlinePlayer;
@@ -353,9 +354,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         Faction currentFaction = Factions.getInstance().getFactionById(this.factionId);
         if (currentFaction != null) {
             currentFaction.removeFPlayer(this);
-            if (currentFaction.isNormal()) {
-                currentFaction.clearClaimOwnership(this);
-            }
         }
 
         this.factionId = Factions.ID_WILDERNESS; // The default neutral faction
@@ -481,11 +479,11 @@ public abstract class MemoryFPlayer implements FPlayer {
                                             ((MemoryFPlayer) fplayer).setName(newName);
                                         }
                                     }
-                                }.runTask(FactionsPlugin.getInstance());
+                                }.runTask(AbstractFactionsPlugin.getInstance());
                             } catch (Exception ignored) {
                             }
                         }
-                    }.runTaskAsynchronously(FactionsPlugin.getInstance());
+                    }.runTaskAsynchronously(AbstractFactionsPlugin.getInstance());
                 }
             }
         }
@@ -715,7 +713,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             int out = FactionsPlugin.getInstance().conf().factions().enterTitles().getFadeOut();
 
             String title = Tag.parsePlain(toShow, this, FactionsPlugin.getInstance().conf().factions().enterTitles().getTitle());
-            String sub = FactionsPlugin.getInstance().txt().parse(Tag.parsePlain(toShow, this, FactionsPlugin.getInstance().conf().factions().enterTitles().getSubtitle()));
+            String sub = AbstractFactionsPlugin.getInstance().txt().parse(Tag.parsePlain(toShow, this, FactionsPlugin.getInstance().conf().factions().enterTitles().getSubtitle()));
 
             // We send null instead of empty because Spigot won't touch the title if it's null, but clears if empty.
             // We're just trying to be as unintrusive as possible.
@@ -729,7 +727,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             showChat = FactionsPlugin.getInstance().conf().scoreboard().info().isAlsoSendChat();
         }
         if (showChat) {
-            this.sendMessage(FactionsPlugin.getInstance().txt().parse(TL.FACTION_LEAVE.format(from.getTag(this), toShow.getTag(this))));
+            this.sendMessage(AbstractFactionsPlugin.getInstance().txt().parse(TL.FACTION_LEAVE.format(from.getTag(this), toShow.getTag(this))));
         }
     }
 
@@ -830,7 +828,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 fplayer.msg(TL.LEAVE_DISBANDED, myFaction.describeTo(fplayer, true));
             }
 
-            FactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(myFaction));
+            AbstractFactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(myFaction));
             Factions.getInstance().removeFaction(myFaction);
             if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
                 FactionsPlugin.getInstance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.getTag(), "" + myFaction.getId(), this.getName()));
@@ -853,7 +851,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (player == null) {
             return false;
         }
-        FactionsPlugin plugin = FactionsPlugin.getInstance();
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
         String denyReason = null;
         Faction myFaction = getFaction();
         Faction currentFaction = Board.getInstance().getFactionAt(flocation);
@@ -864,7 +862,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (plugin.conf().worldGuard().isCheckingEither() && plugin.getWorldguard() != null && plugin.getWorldguard().checkForRegionsInChunk(flocation.getChunk())) {
             // Checks for WorldGuard regions in the chunk attempting to be claimed
             denyReason = plugin.txt().parse(TL.CLAIM_PROTECTED.toString());
-        } else if (plugin.conf().factions().claims().getWorldsNoClaiming().contains(flocation.getWorldName())) {
+        } else if (plugin.conf().factions().claims().getWorldsNoClaiming().contains(flocation.worldName())) {
             // Cannot claim in this world
             denyReason = plugin.txt().parse(TL.CLAIM_DISABLED.toString());
         } else if (this.isAdminBypassing()) {
@@ -903,7 +901,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (currentFaction.getRelationTo(forFaction) == Relation.ALLY) {
             // // Can't claim ally
             denyReason = plugin.txt().parse(TL.CLAIM_ALLY.toString());
-        } else if (plugin.conf().factions().claims().isMustBeConnected() && !this.isAdminBypassing() && myFaction.getLandRoundedInWorld(flocation.getWorldName()) > 0 && Board.getInstance().isDisconnectedLocation(flocation, myFaction) && (!plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction() || !currentFaction.isNormal())) {
+        } else if (plugin.conf().factions().claims().isMustBeConnected() && !this.isAdminBypassing() && myFaction.getLandRoundedInWorld(flocation.worldName()) > 0 && Board.getInstance().isDisconnectedLocation(flocation, myFaction) && (!plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction() || !currentFaction.isNormal())) {
             // Must be contiguous/connected
             if (plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction()) {
                 denyReason = plugin.txt().parse(TL.CLAIM_CONTIGIOUS.toString());
@@ -971,7 +969,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (mustPay) {
             cost = Econ.calculateClaimCost(ownedLand, currentFaction.isNormal());
 
-            if (FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee() != 0.0 && forFaction.getLandRoundedInWorld(flocation.getWorldName()) > 0 && Board.getInstance().isDisconnectedLocation(flocation, forFaction)) {
+            if (FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee() != 0.0 && forFaction.getLandRoundedInWorld(flocation.worldName()) > 0 && Board.getInstance().isDisconnectedLocation(flocation, forFaction)) {
                 cost += FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee();
             }
 
@@ -1149,7 +1147,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public void msg(@NonNull String str, @NonNull Object @NonNull ... args) {
-        this.sendMessage(FactionsPlugin.getInstance().txt().parse(str, args));
+        this.sendMessage(AbstractFactionsPlugin.getInstance().txt().parse(str, args));
     }
 
     @Override
@@ -1225,7 +1223,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                     public void run() {
                         setTakeFallDamage(true);
                     }
-                }.runTaskLater(FactionsPlugin.getInstance(), 20L * cooldown);
+                }.runTaskLater(AbstractFactionsPlugin.getInstance(), 20L * cooldown);
             }
         }
 

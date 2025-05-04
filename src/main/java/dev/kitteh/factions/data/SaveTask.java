@@ -1,9 +1,6 @@
 package dev.kitteh.factions.data;
 
-import dev.kitteh.factions.Board;
-import dev.kitteh.factions.FPlayers;
-import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.*;
 
 public class SaveTask implements Runnable {
     private static boolean running = false;
@@ -23,6 +20,7 @@ public class SaveTask implements Runnable {
         ((MemoryFPlayers) FPlayers.getInstance()).forceSave(false);
         ((MemoryFactions) Factions.getInstance()).forceSave(false);
         ((MemoryBoard) Board.getInstance()).forceSave(false);
+        ((MemoryUniverse) Universe.getInstance()).forceSave(false);
         running = false;
     }
 }

@@ -6,6 +6,7 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -19,7 +20,7 @@ public class Graves {
 
     public static boolean init(Plugin graves) {
         plugin = (com.ranull.graves.Graves) graves;
-        FactionsPlugin plugin = FactionsPlugin.getInstance();
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
         plugin.getLogger().info("Found Graves plugin");
         MainConfig.Plugins.Graves g = plugin.conf().plugins().graves();
         if (g.isAllowAnyoneToOpenGraves()) {
@@ -35,7 +36,7 @@ public class Graves {
                 s = "safezone and warzone.";
             }
             plugin.getLogger().info("Configured to prevent graves in " + s);
-            FactionsPlugin.getInstance().getServer().getPluginManager().registerEvents(new GraveListener(), FactionsPlugin.getInstance());
+            plugin.getServer().getPluginManager().registerEvents(new GraveListener(), plugin);
         }
         return true;
     }
@@ -46,7 +47,7 @@ public class Graves {
                 return plugin.getBlockManager().getGraveFromBlock(block) != null;
             }
         } catch (Exception oops) {
-            FactionsPlugin.getInstance().getLogger().log(Level.WARNING, "A Grave(s) error occurred!", oops);
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.WARNING, "A Grave(s) error occurred!", oops);
         }
         return false;
     }

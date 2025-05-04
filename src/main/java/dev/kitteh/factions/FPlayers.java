@@ -1,5 +1,6 @@
 package dev.kitteh.factions;
 
+import dev.kitteh.factions.plugin.Instances;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NullMarked;

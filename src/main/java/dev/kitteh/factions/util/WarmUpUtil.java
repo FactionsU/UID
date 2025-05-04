@@ -1,7 +1,7 @@
 package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jspecify.annotations.NullMarked;
@@ -33,7 +33,7 @@ public class WarmUpUtil {
                         player.stopWarmup();
                         runnable.run();
                     }
-                }.runTaskLater(FactionsPlugin.getInstance(), delay * 20).getTaskId();
+                }.runTaskLater(AbstractFactionsPlugin.getInstance(), delay * 20).getTaskId();
                 player.addWarmup(warmup, id);
             }
         } else {

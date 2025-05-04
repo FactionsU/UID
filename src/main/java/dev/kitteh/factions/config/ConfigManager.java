@@ -1,23 +1,23 @@
 package dev.kitteh.factions.config;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.DynmapConfig;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.config.file.PermissionsConfig;
 import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.config.transition.Transitioner;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 
 import java.io.IOException;
 import java.util.logging.Level;
 
 public class ConfigManager {
-    private final FactionsPlugin plugin;
+    private final AbstractFactionsPlugin plugin;
     private PermissionsConfig permissionsConfig = null;
     private final MainConfig mainConfig = new MainConfig();
     private final DynmapConfig dynmapConfig = new DynmapConfig();
     private final TranslationsConfig translationsConfig = new TranslationsConfig();
 
-    public ConfigManager(FactionsPlugin plugin) {
+    public ConfigManager(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
         Transitioner.transition(this.plugin);
     }

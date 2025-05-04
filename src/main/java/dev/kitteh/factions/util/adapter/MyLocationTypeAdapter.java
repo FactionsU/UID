@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.LazyLocation;
 
 import java.lang.reflect.Type;
@@ -38,7 +38,7 @@ public class MyLocationTypeAdapter implements JsonDeserializer<LazyLocation>, Js
             return new LazyLocation(worldName, x, y, z, pitch, yaw);
 
         } catch (Exception ex) {
-            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while deserializing a LazyLocation.", ex);
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while deserializing a LazyLocation.", ex);
             return null;
         }
     }
@@ -57,7 +57,7 @@ public class MyLocationTypeAdapter implements JsonDeserializer<LazyLocation>, Js
 
             return obj;
         } catch (Exception ex) {
-            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while serializing a LazyLocation.", ex);
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while serializing a LazyLocation.", ex);
             return obj;
         }
     }

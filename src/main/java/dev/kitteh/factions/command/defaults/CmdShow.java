@@ -9,6 +9,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tag.FactionTag;
 import dev.kitteh.factions.tag.FancyTag;
 import dev.kitteh.factions.tag.Tag;
@@ -99,11 +100,11 @@ public class CmdShow implements Cmd {
             // send header and that's all
             String header = show.getFirst();
             if (FactionTag.HEADER.foundInString(header)) {
-                context.sender().sender().sendMessage(FactionsPlugin.getInstance().txt().titleize(tag));
+                context.sender().sender().sendMessage(AbstractFactionsPlugin.getInstance().txt().titleize(tag));
             } else {
                 String message = header.replace(FactionTag.FACTION.getTag(), tag);
                 message = Tag.parsePlain(faction, fPlayer, message);
-                context.sender().sender().sendMessage(FactionsPlugin.getInstance().txt().parse(message));
+                context.sender().sender().sendMessage(AbstractFactionsPlugin.getInstance().txt().parse(message));
             }
             return; // we only show header for non-normal factions
         }
@@ -129,7 +130,7 @@ public class CmdShow implements Cmd {
             }
         }
         if (fPlayer != null && this.groupPresent()) {
-            new GroupGetter(messageList, fPlayer, faction).runTaskAsynchronously(FactionsPlugin.getInstance());
+            new GroupGetter(messageList, fPlayer, faction).runTaskAsynchronously(AbstractFactionsPlugin.getInstance());
         } else {
             this.sendMessages(messageList, context.sender().sender(), faction, fPlayer);
         }
@@ -174,7 +175,7 @@ public class CmdShow implements Cmd {
                     }
                 }
             } else {
-                ComponentDispatcher.send(recipient, LegacyComponentSerializer.legacySection().deserialize(FactionsPlugin.getInstance().txt().parse(parsed)));
+                ComponentDispatcher.send(recipient, LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(parsed)));
             }
         }
     }
@@ -186,7 +187,7 @@ public class CmdShow implements Cmd {
             builder.append(first ? name : ", " + name);
             first = false;
         }
-        recipient.sendMessage(FactionsPlugin.getInstance().txt().parse(builder.toString()));
+        recipient.sendMessage(AbstractFactionsPlugin.getInstance().txt().parse(builder.toString()));
     }
 
     private void relationMessage(StringBuilder builder, CommandSender recipient, Faction faction, Relation relation) {
@@ -198,7 +199,7 @@ public class CmdShow implements Cmd {
                 first = false;
             }
         }
-        recipient.sendMessage(FactionsPlugin.getInstance().txt().parse(builder.toString()));
+        recipient.sendMessage(AbstractFactionsPlugin.getInstance().txt().parse(builder.toString()));
     }
 
     private boolean groupPresent() {
@@ -227,9 +228,9 @@ public class CmdShow implements Cmd {
         public void run() {
             Map<UUID, String> map = new HashMap<>();
             for (OfflinePlayer player : this.players) {
-                map.put(player.getUniqueId(), FactionsPlugin.getInstance().getPrimaryGroup(player));
+                map.put(player.getUniqueId(), AbstractFactionsPlugin.getInstance().getPrimaryGroup(player));
             }
-            new SenderRunner(this.messageList, this.sender, this.faction, map).runTask(FactionsPlugin.getInstance());
+            new SenderRunner(this.messageList, this.sender, this.faction, map).runTask(AbstractFactionsPlugin.getInstance());
         }
     }
 

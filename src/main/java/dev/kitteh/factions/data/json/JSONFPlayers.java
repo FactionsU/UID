@@ -6,27 +6,30 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.data.MemoryFPlayers;
-import dev.kitteh.factions.util.DiscUtil;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.adapter.OldJSONFPlayerDeserializer;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.logging.Level;
 
 @NullMarked
 public final class JSONFPlayers extends MemoryFPlayers {
-    private final File file;
+    private final Path path = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("data/players.json");
 
     public JSONFPlayers() {
-        if (FactionsPlugin.getInstance().getServerUUID() == null) {
-            FactionsPlugin.getInstance().grumpException(new RuntimeException());
+        if (AbstractFactionsPlugin.getInstance().getServerUUID() == null) {
+            AbstractFactionsPlugin.getInstance().grumpException(new RuntimeException());
         }
-        file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/players.json");
     }
 
     @Override
@@ -39,7 +42,7 @@ public final class JSONFPlayers extends MemoryFPlayers {
             }
         }
 
-        DiscUtil.writeCatch(file, FactionsPlugin.getInstance().getGson().toJson(entitiesThatShouldBeSaved), sync);
+        JsonSaver.write(path, () -> FactionsPlugin.getInstance().getGson().toJson(entitiesThatShouldBeSaved), sync);
     }
 
     @Override
@@ -54,26 +57,35 @@ public final class JSONFPlayers extends MemoryFPlayers {
     }
 
     private @Nullable List<JSONFPlayer> loadCore() {
-        if (!this.file.exists()) {
+        if (!Files.exists(path)) {
             return null;
         }
 
-        String content = DiscUtil.readCatch(this.file);
-        if (content == null || content.trim().isEmpty()) {
+        try (BufferedReader bufferedReader = Files.newBufferedReader(path)) {
+            int len = 50;
+            char[] chars = new char[len];
+            bufferedReader.mark(len + 1);
+            int read = bufferedReader.read(chars, 0, len);
+            if (read < 40) {
+                AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "JSON players were less than 40 chars in length???");
+                return null;
+            }
+            bufferedReader.reset();
+            if (new String(chars).trim().startsWith("{")) {
+                Gson gson = AbstractFactionsPlugin.getInstance().getGsonBuilder(false)
+                        .registerTypeAdapter(JSONFaction.class, new OldJSONFPlayerDeserializer())
+                        .create();
+
+                Map<String, JSONFPlayer> map = gson.fromJson(bufferedReader, new TypeToken<Map<String, JSONFPlayer>>() {
+                }.getType());
+                return new ArrayList<>(map.values());
+            } else {
+                return FactionsPlugin.getInstance().getGson().fromJson(bufferedReader, new TypeToken<List<JSONFPlayer>>() {
+                }.getType());
+            }
+        } catch (IOException e) {
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load JSON players", e);
             return null;
-        }
-
-        if (content.startsWith("{")) {
-            Gson gson = FactionsPlugin.getInstance().getGsonBuilder(false)
-                    .registerTypeAdapter(JSONFaction.class, new OldJSONFPlayerDeserializer())
-                    .create();
-
-            Map<String, JSONFPlayer> map = gson.fromJson(content, new TypeToken<Map<String, JSONFPlayer>>() {
-            }.getType());
-            return new ArrayList<>(map.values());
-        } else {
-            return FactionsPlugin.getInstance().getGson().fromJson(content, new TypeToken<List<JSONFPlayer>>() {
-            }.getType());
         }
     }
 

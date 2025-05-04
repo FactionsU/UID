@@ -11,6 +11,7 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerTeleportEvent;
 import dev.kitteh.factions.integration.Essentials;
 import dev.kitteh.factions.integration.IntegrationManager;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.SpiralTask;
 import dev.kitteh.factions.util.TL;
@@ -122,7 +123,7 @@ public class CmdStuck implements Cmd {
                         }
                     };
                 }
-            }.runTaskLater(FactionsPlugin.getInstance(), delay * 20).getTaskId();
+            }.runTaskLater(AbstractFactionsPlugin.getInstance(), delay * 20).getTaskId();
 
             FactionsPlugin.getInstance().getTimers().put(player.getUniqueId(), System.currentTimeMillis() + (delay * 1000));
             long wait = FactionsPlugin.getInstance().getTimers().get(player.getUniqueId()) - System.currentTimeMillis();

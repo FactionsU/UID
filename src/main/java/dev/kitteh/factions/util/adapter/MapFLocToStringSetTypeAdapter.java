@@ -10,7 +10,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import dev.kitteh.factions.FLocation;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 
 import java.lang.reflect.Type;
 import java.util.HashSet;
@@ -59,7 +59,7 @@ public class MapFLocToStringSetTypeAdapter implements JsonDeserializer<Map<FLoca
             return locationMap;
 
         } catch (Exception ex) {
-            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while deserializing a Map of FLocations to String Sets.", ex);
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while deserializing a Map of FLocations to String Sets.", ex);
             return null;
         }
     }
@@ -79,7 +79,7 @@ public class MapFLocToStringSetTypeAdapter implements JsonDeserializer<Map<FLoca
 
                 for (Entry<FLocation, Set<String>> entry : src.entrySet()) {
                     loc = entry.getKey();
-                    locWorld = loc.getWorldName();
+                    locWorld = loc.worldName();
                     nameSet = entry.getValue();
 
                     if (nameSet == null || nameSet.isEmpty()) {
@@ -103,7 +103,7 @@ public class MapFLocToStringSetTypeAdapter implements JsonDeserializer<Map<FLoca
             return obj;
 
         } catch (Exception ex) {
-            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while serializing a Map of FLocations to String Sets.", ex);
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while serializing a Map of FLocations to String Sets.", ex);
             return obj;
         }
     }

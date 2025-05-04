@@ -3,6 +3,7 @@ package dev.kitteh.factions.util;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.Selectable;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ListIterator;
@@ -24,12 +25,12 @@ public class AutoLeaveTask implements Runnable {
         }
 
         task = this.factions ? new AutoLeaveProcessFactionTask() : new AutoLeaveProcessTask();
-        task.runTaskTimer(FactionsPlugin.getInstance(), 1, 1);
+        task.runTaskTimer(AbstractFactionsPlugin.getInstance(), 1, 1);
 
         // maybe setting has been changed? if so, restart this task at new rate
         if (this.rate != FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes() ||
                 this.factions != FactionsPlugin.getInstance().conf().factions().other().isAutoLeaveOnlyEntireFactionInactive()) {
-            FactionsPlugin.getInstance().startAutoLeaveTask(true);
+            AbstractFactionsPlugin.getInstance().startAutoLeaveTask(true);
         }
     }
 

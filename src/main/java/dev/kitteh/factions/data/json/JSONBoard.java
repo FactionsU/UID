@@ -3,6 +3,7 @@ package dev.kitteh.factions.data.json;
 import com.google.gson.reflect.TypeToken;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryBoard;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.DiscUtil;
 import dev.kitteh.factions.util.Morton;
 import dev.kitteh.factions.util.WorldTracker;
@@ -19,7 +20,7 @@ import java.util.logging.Level;
 
 @NullMarked
 public final class JSONBoard extends MemoryBoard {
-    private static final File file = new File(FactionsPlugin.getInstance().getDataFolder(), "data/board.json");
+    private static final File file = new File(AbstractFactionsPlugin.getInstance().getDataFolder(), "data/board.json");
 
     // -------------------------------------------- //
     // Persistance
@@ -59,7 +60,7 @@ public final class JSONBoard extends MemoryBoard {
                 try {
                     factionId = Integer.parseInt(entry2.getValue().trim());
                 } catch (NumberFormatException ex) {
-                    FactionsPlugin.getInstance().getLogger().warning("Found invalid faction ID '" + entry2.getValue() + "' in " + worldName + " at " + entry2.getKey());
+                    AbstractFactionsPlugin.getInstance().getLogger().warning("Found invalid faction ID '" + entry2.getValue() + "' in " + worldName + " at " + entry2.getKey());
                     continue; // NOPE
                 }
 
@@ -77,7 +78,7 @@ public final class JSONBoard extends MemoryBoard {
     @Override
     public int load() {
         if (!file.exists()) {
-            FactionsPlugin.getInstance().getLogger().info("No board to load from disk. Creating new file.");
+            AbstractFactionsPlugin.getInstance().getLogger().info("No board to load from disk. Creating new file.");
             forceSave(true);
             return 0;
         }
@@ -88,7 +89,7 @@ public final class JSONBoard extends MemoryBoard {
             Map<String, Map<String, String>> worldCoordIds = FactionsPlugin.getInstance().getGson().fromJson(Files.newBufferedReader(file.toPath()), type);
             loadFromSaveFormat(worldCoordIds);
         } catch (Exception e) {
-            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load the board from disk.", e);
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load the board from disk.", e);
             return 0;
         }
 

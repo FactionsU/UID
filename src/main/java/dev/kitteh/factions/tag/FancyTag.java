@@ -5,6 +5,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.QuadFunction;
 import net.kyori.adventure.text.Component;
@@ -26,7 +27,7 @@ public enum FancyTag implements Tag {
     TRUCES_LIST("truces-list", (target, fme, prefix, gm) -> processRelation(prefix, target, fme, Relation.TRUCE)),
     ONLINE_LIST("online-list", (target, fme, prefix, gm) -> {
         List<Component> fancyMessages = new ArrayList<>();
-        TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(FactionsPlugin.getInstance().txt().parse(prefix)));
+        TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(prefix)));
         boolean first = true;
         for (FPlayer p : MiscUtil.rankOrder(target.getFPlayersWhereOnline(true, fme))) {
             if (fme.getPlayer() != null && !fme.getPlayer().canSee(p.getPlayer())) {
@@ -49,7 +50,7 @@ public enum FancyTag implements Tag {
     }),
     OFFLINE_LIST("offline-list", (target, fme, prefix, gm) -> {
         List<Component> fancyMessages = new ArrayList<>();
-        TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(FactionsPlugin.getInstance().txt().parse(prefix)));
+        TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(prefix)));
         boolean first = true;
         for (FPlayer p : MiscUtil.rankOrder(target.getFPlayers())) {
             // Also make sure to add players that are online BUT can't be seen.
@@ -77,7 +78,7 @@ public enum FancyTag implements Tag {
 
     private static List<Component> processRelation(String prefix, Faction faction, FPlayer fPlayer, Relation relation) {
         List<Component> fancyMessages = new ArrayList<>();
-        TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(FactionsPlugin.getInstance().txt().parse(prefix)));
+        TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(prefix)));
         boolean first = true;
         for (Faction otherFaction : Factions.getInstance().getAllFactions()) {
             if (otherFaction == faction) {

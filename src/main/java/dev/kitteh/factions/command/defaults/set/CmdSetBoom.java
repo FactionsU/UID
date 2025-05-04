@@ -43,7 +43,7 @@ public class CmdSetBoom implements Cmd {
             return;
         }
 
-        faction.setPeacefulExplosionsEnabled(context.getOrDefault("state", !faction.getPeacefulExplosionsEnabled()));
+        faction.setPeacefulExplosionsEnabled(context.getOrDefault("state", !faction.isPeacefulExplosionsEnabled()));
 
         String enabled = faction.noExplosionsInTerritory() ? TL.GENERIC_DISABLED.toString() : TL.GENERIC_ENABLED.toString();
 

@@ -10,7 +10,6 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerJoinEvent;
 import dev.kitteh.factions.event.FactionAttemptCreateEvent;
-import dev.kitteh.factions.event.FactionCreateEvent;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;

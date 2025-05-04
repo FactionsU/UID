@@ -2,11 +2,11 @@ package dev.kitteh.factions.config;
 
 import com.google.common.reflect.TypeToken;
 import com.typesafe.config.ConfigRenderOptions;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.ConfigName;
 import dev.kitteh.factions.config.annotation.DefinedType;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -30,7 +30,7 @@ public class Loader {
     }
 
     public static HoconConfigurationLoader getLoader(String file) {
-        Path configFolder = FactionsPlugin.getInstance().getDataFolder().toPath().resolve("config");
+        Path configFolder = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("config");
         if (!configFolder.toFile().exists()) {
             configFolder.toFile().mkdir();
         }
@@ -109,7 +109,7 @@ public class Loader {
                             //noinspection unchecked
                             newNewNode.setValue((TypeToken<Object>) tokenField.get(object), defaultValue);
                         } catch (ObjectMappingException | NoSuchFieldException e) {
-                            FactionsPlugin.getInstance().getLogger().severe("Failed horrifically to handle " + confName);
+                            AbstractFactionsPlugin.getInstance().getLogger().severe("Failed horrifically to handle " + confName);
                         }
                     }
                 } else {
@@ -121,7 +121,7 @@ public class Loader {
                         }
                         newNewNode.setValue(curNode.getValue());
                     } catch (IllegalArgumentException ex) {
-                        FactionsPlugin.getInstance().getLogger().severe("Found incorrect type for " + getNodeName(curNode.getPath()) + ": Expected " + field.getType() + ", found " + curNode.getValue().getClass());
+                        AbstractFactionsPlugin.getInstance().getLogger().severe("Found incorrect type for " + getNodeName(curNode.getPath()) + ": Expected " + field.getType() + ", found " + curNode.getValue().getClass());
                         field.set(object, defaultValue);
                     }
                 }

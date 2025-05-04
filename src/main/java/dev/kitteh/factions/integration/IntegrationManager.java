@@ -2,6 +2,7 @@ package dev.kitteh.factions.integration;
 
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.dynmap.EngineDynmap;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
@@ -39,18 +40,18 @@ public class IntegrationManager implements Listener {
             if (notSupported) {
                 FactionsPlugin.getInstance().log("Found an outdated LuckPerms. With LuckPerms 5.1.0 and above, FactionsUUID supports permission contexts!");
             } else {
-                if (LuckPerms.init(FactionsPlugin.getInstance())) {
-                    FactionsPlugin.getInstance().luckpermsEnabled();
+                if (LuckPerms.init(AbstractFactionsPlugin.getInstance())) {
+                    AbstractFactionsPlugin.getInstance().luckpermsEnabled();
                 }
             }
             return true;
         }),
         LWC("LWC", dev.kitteh.factions.integration.LWC::setup),
         MAGIC("Magic", p -> Magic.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
-        PLACEHOLDERAPI("PlaceholderAPI", p -> FactionsPlugin.getInstance().setupPlaceholderAPI()),
+        PLACEHOLDERAPI("PlaceholderAPI", p -> AbstractFactionsPlugin.getInstance().setupPlaceholderAPI()),
         SENTINEL("Sentinel", p -> Sentinel.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         WORLDGUARD("WorldGuard", plugin -> {
-            FactionsPlugin f = FactionsPlugin.getInstance();
+            AbstractFactionsPlugin f = AbstractFactionsPlugin.getInstance();
             String version = plugin.getDescription().getVersion();
             if (version.startsWith("7")) {
                 f.setWorldGuard(new Worldguard());
@@ -91,7 +92,7 @@ public class IntegrationManager implements Listener {
 
     private final Set<Integration> integrations = new HashSet<>();
 
-    public static void onLoad(FactionsPlugin plugin) {
+    public static void onLoad(AbstractFactionsPlugin plugin) {
         try {
             Field depGraph = SimplePluginManager.class.getDeclaredField("dependencyGraph");
             depGraph.setAccessible(true);
@@ -105,7 +106,7 @@ public class IntegrationManager implements Listener {
         }
     }
 
-    public IntegrationManager(FactionsPlugin plugin) {
+    public IntegrationManager(AbstractFactionsPlugin plugin) {
         for (Integration integration : Integration.values()) {
             Plugin plug = plugin.getServer().getPluginManager().getPlugin(integration.pluginName);
             if (plug != null && plug.isEnabled()) {

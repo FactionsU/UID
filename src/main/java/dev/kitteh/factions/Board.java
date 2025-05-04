@@ -1,5 +1,6 @@
 package dev.kitteh.factions;
 
+import dev.kitteh.factions.plugin.Instances;
 import org.bukkit.World;
 import org.jspecify.annotations.NullMarked;
 

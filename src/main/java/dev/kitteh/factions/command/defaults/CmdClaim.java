@@ -100,7 +100,7 @@ public class CmdClaim implements Cmd {
         }
 
         if (context.flags().get("radius") instanceof Integer radius) {
-            if (!Permission.CLAIM_RADIUS.has(player, false)) {
+            if (!Permission.CLAIM_RADIUS.has(player)) {
                 sender.msg(TL.COMMAND_CLAIM_DENIED);
                 return;
             }

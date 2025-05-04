@@ -1,6 +1,6 @@
 package dev.kitteh.factions.util;
 
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -30,7 +30,7 @@ public class DiscUtil {
                 public void run() {
                     writeCatch(lock, file, content);
                 }
-            }.runTaskAsynchronously(FactionsPlugin.getInstance());
+            }.runTaskAsynchronously(AbstractFactionsPlugin.getInstance());
         }
     }
 
@@ -39,7 +39,7 @@ public class DiscUtil {
         try {
             Files.writeString(file.toPath(), content.get());
         } catch (IOException e) {
-            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to write file " + file.getAbsolutePath(), e);
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to write file " + file.getAbsolutePath(), e);
         } finally {
             lock.unlock();
         }
@@ -49,7 +49,7 @@ public class DiscUtil {
         try {
             return Files.readString(file.toPath());
         } catch (IOException e) {
-            FactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to read file " + file.getAbsolutePath(), e);
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to read file " + file.getAbsolutePath(), e);
             return null;
         }
     }

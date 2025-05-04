@@ -27,6 +27,18 @@ public class WorldTracker {
         this.worldName = worldName;
     }
 
+    public WorldTracker(String worldName, Long2IntMap chunkToID) {
+        this(worldName);
+        this.chunkToID.putAll(chunkToID);
+        for (Long2IntMap.Entry entry : chunkToID.long2IntEntrySet()) {
+            this.getOrCreateClaims(entry.getIntValue()).add(entry.getLongKey());
+        }
+    }
+
+    public String getWorldName() {
+        return this.worldName;
+    }
+
     private LongSet getOrCreateClaims(int id) {
         return IDToChunk.computeIfAbsent(id, k -> new LongOpenHashSet());
     }
@@ -51,6 +63,7 @@ public class WorldTracker {
         int formerOwner = chunkToID.remove(mort);
         if (formerOwner != NO_MATCH) {
             LongSet set = IDToChunk.get(formerOwner);
+            //noinspection ConstantValue
             if (set != null) {
                 set.remove(mort);
             }
@@ -59,6 +72,7 @@ public class WorldTracker {
 
     public void removeAllClaims(int id) {
         LongSet claims = IDToChunk.remove(id);
+        //noinspection ConstantValue
         if (claims != null) {
             claims.forEach(chunkToID::remove);
         }
@@ -66,6 +80,7 @@ public class WorldTracker {
 
     public List<FLocation> getAllClaims(int id) {
         LongSet longs = this.IDToChunk.get(id);
+        //noinspection ConstantValue
         if (longs == null) {
             return List.of();
         }

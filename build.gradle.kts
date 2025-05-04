@@ -187,6 +187,8 @@ dependencies {
     exclude("com.google.guava", "guava")
     exclude("org.apache.commons", "commons-lang3")
   }
+  implementation(libs.ifchestonly)
+  implementation(libs.evalex)
 
   listOf(
     libs.vault.api,
@@ -208,7 +210,6 @@ dependencies {
     libs.luckperms.api,
     libs.magic.api,
     libs.graves,
-    libs.ifchestonly,
     libs.duels
   ).forEach {
     compileOnly(it) {
@@ -267,6 +268,7 @@ tasks.shadowJar {
     include(dependency("org.incendo:cloud-services"))
     include(dependency("io.leangen.geantyref:geantyref"))
     include(dependency("dev.kitteh.forkedproject:IF-ChestOnly"))
+    include(dependency("com.ezylang:EvalEx"))
   }
 
   relocate("com.typesafe", "moss.factions.shade.com.typesafe")
@@ -276,6 +278,7 @@ tasks.shadowJar {
   relocate("org.incendo", "moss.factions.shade.org.incendo")
   relocate("io.leangen", "moss.factions.shade.io.leangen")
   relocate("com.github.stefvanschie.inventoryframework", "moss.factions.shade.stefvanschie.if")
+  relocate("com.ezylang", "moss.factions.shade.com.ezylang")
 
   relocate("net.kyori", "moss.factions.shade.net.kyori")
   relocate("org.apache.commons.codec", "moss.factions.shade.org.apache.commons.codec")

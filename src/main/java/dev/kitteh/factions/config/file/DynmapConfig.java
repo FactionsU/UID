@@ -2,11 +2,11 @@ package dev.kitteh.factions.config.file;
 
 import com.google.common.reflect.TypeToken;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.DefinedType;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.integration.dynmap.DynmapStyle;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 
@@ -199,7 +199,7 @@ public class DynmapConfig {
                         }
                         styles.put(faction, style);
                     } else {
-                        FactionsPlugin.getInstance().getLogger().severe("Found broken Dynmap style entry for faction '" + faction + '\'');
+                        AbstractFactionsPlugin.getInstance().getLogger().severe("Found broken Dynmap style entry for faction '" + faction + '\'');
                     }
                 }
             }
