@@ -13,7 +13,7 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public final class Upgrades {
     public static final class Variables {
-        static List<UpgradeVariable> VARIABLES = new ArrayList<>();
+        static final List<UpgradeVariable> VARIABLES = new ArrayList<>();
 
         public static final UpgradeVariable CHANCE = UpgradeVariable.ofPercent("chance", BigDecimal.ZERO, BigDecimal.valueOf(100));
 
@@ -42,7 +42,7 @@ public final class Upgrades {
 
     public static final Upgrade ZONES = new Upgrade.Simple("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
-    static List<Upgrade> UPGRADES = new ArrayList<>();
+    static final List<Upgrade> UPGRADES = new ArrayList<>();
 
     static {
         for (Field field : Upgrades.class.getFields()) {
@@ -56,7 +56,7 @@ public final class Upgrades {
         }
     }
 
-    public static List<UpgradeSettings> defaults = List.of(
+    public static final List<UpgradeSettings> defaults = List.of(
             new UpgradeSettings(
                     Upgrades.DTR_CLAIM_LIMIT,
                     Map.of(Variables.POSITIVE_INCREASE, LeveledValueProvider.Equation.of("level * 9")),

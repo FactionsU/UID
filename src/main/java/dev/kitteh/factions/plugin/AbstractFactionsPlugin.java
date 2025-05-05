@@ -58,7 +58,6 @@ import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldTracker;
 import dev.kitteh.factions.util.WorldUtil;
 import dev.kitteh.factions.util.adapter.ChatTargetTypeAdapter;
-import dev.kitteh.factions.util.adapter.EnumTypeAdapter;
 import dev.kitteh.factions.util.adapter.LeveledValueProviderDeserializer;
 import dev.kitteh.factions.util.adapter.LeveledValueProviderEquationSerializer;
 import dev.kitteh.factions.util.adapter.MapFLocToStringSetTypeAdapter;
@@ -811,8 +810,7 @@ public class AbstractFactionsPlugin extends JavaPlugin implements FactionsPlugin
                 .registerTypeAdapter(LeveledValueProvider.class, new LeveledValueProviderDeserializer())
                 .registerTypeAdapter(LeveledValueProvider.Equation.class, new LeveledValueProviderEquationSerializer())
                 .registerTypeAdapter(worldTrackerMapType, new WorldTrackerTypeAdapter())
-                .registerTypeAdapter(MemoryFaction.Permissions.SelectorPerms.class, new SelectorPermsAdapter())
-                .registerTypeAdapterFactory(EnumTypeAdapter.ENUM_FACTORY);
+                .registerTypeAdapter(MemoryFaction.Permissions.SelectorPerms.class, new SelectorPermsAdapter());
     }
 
     @Override

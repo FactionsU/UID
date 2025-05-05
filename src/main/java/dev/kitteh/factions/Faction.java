@@ -431,7 +431,7 @@ public interface Faction extends Participator, Selectable {
     /**
      * Gets the faction power, as used for claims/raidability calculations
      *
-     * @return
+     * @return power
      */
     int getPower();
 

@@ -20,6 +20,7 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -193,7 +194,7 @@ public class WarpGUI extends GUI<Integer> {
     private class PasswordPrompt extends StringPrompt implements ConversationAbandonedListener {
 
         @Override
-        public String getPromptText(ConversationContext context) {
+        public @NotNull String getPromptText(@NotNull ConversationContext context) {
             return TL.COMMAND_FWARP_PASSWORD_REQUIRED.toString();
         }
 

@@ -58,7 +58,7 @@ public record FLocation(String worldName, int x, int z) {
     /**
      * Returns the chunk x value, a comma, and the chunk z value, without spaces.
      *
-     * @return
+     * @return coordinate string
      */
     public String getCoordString() {
         return x + "," + z; // Do not change without fixing usages, because it is used for serialization.

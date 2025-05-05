@@ -334,7 +334,7 @@ public abstract class MemoryFaction implements Faction {
     protected int tntBank;
     protected Object2IntOpenHashMap<String> upgrades = new Object2IntOpenHashMap<>();
     protected transient @Nullable OfflinePlayer offlinePlayer;
-    protected MemoryFaction.Permissions perms;
+    protected MemoryFaction.Permissions perms = new MemoryFaction.Permissions();
     protected Zones zones = new Zones();
 
     @SuppressWarnings("ConstantValue")
@@ -578,9 +578,7 @@ public abstract class MemoryFaction implements Faction {
         }
 
         // Wipe processed greetings for tag placeholder
-        this.zones.zones.values().forEach(zone -> {
-            zone.greetingComponent = null;
-        });
+        this.zones.zones.values().forEach(zone -> zone.greetingComponent = null);
         this.tag = str;
     }
 

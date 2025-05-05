@@ -15,9 +15,8 @@ public class FactionCreateEvent extends FactionEvent {
         PLUGIN
     }
 
-    private @Nullable
-    final FPlayer sender;
-    private Reason reason;
+    private final @Nullable FPlayer sender;
+    private final Reason reason;
 
     public FactionCreateEvent(@Nullable FPlayer sender, Faction faction, Reason reason) {
         super(faction);

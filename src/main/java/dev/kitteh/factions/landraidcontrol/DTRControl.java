@@ -59,7 +59,7 @@ public class DTRControl implements LandRaidControl {
         if (level > 0) {
             boost = Universe.getInstance().getUpgradeSettings(Upgrades.DTR_CLAIM_LIMIT).costAt(level).intValue();
         }
-        return conf().getLandStarting() + (faction.getFPlayers().size() * conf().getLandPerPlayer());
+        return boost + conf().getLandStarting() + (faction.getFPlayers().size() * conf().getLandPerPlayer());
     }
 
     @Override
