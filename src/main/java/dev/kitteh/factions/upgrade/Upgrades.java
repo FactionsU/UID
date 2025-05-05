@@ -1,6 +1,7 @@
 package dev.kitteh.factions.upgrade;
 
 import dev.kitteh.factions.config.file.TranslationsConfig;
+import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -11,27 +12,14 @@ import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("unused")
+@NullMarked
 public final class Upgrades {
     public static final class Variables {
-        static final List<UpgradeVariable> VARIABLES = new ArrayList<>();
-
         public static final UpgradeVariable CHANCE = UpgradeVariable.ofPercent("chance", BigDecimal.ZERO, BigDecimal.valueOf(100));
 
         public static final UpgradeVariable GROWTH_BOOST = UpgradeVariable.ofInteger("boost", BigDecimal.ONE, BigDecimal.valueOf(100));
 
         public static final UpgradeVariable POSITIVE_INCREASE = UpgradeVariable.ofInteger("increase", BigDecimal.ONE, BigDecimal.valueOf(Integer.MAX_VALUE));
-
-        static {
-            for (Field field : Upgrades.Variables.class.getFields()) {
-                if (Modifier.isStatic(field.getModifiers()) && field.getType() == UpgradeVariable.class) {
-                    try {
-                        Upgrades.Variables.VARIABLES.add((UpgradeVariable) field.get(null));
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        }
     }
 
     public static final Upgrade DTR_CLAIM_LIMIT = new Upgrade.Simple("dtr_claim_limit", TranslationsConfig.Upgrades::dtrClaimLimit, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
@@ -43,12 +31,22 @@ public final class Upgrades {
     public static final Upgrade ZONES = new Upgrade.Simple("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
     static final List<Upgrade> UPGRADES = new ArrayList<>();
+    static final List<UpgradeVariable> VARIABLES = new ArrayList<>();
 
     static {
         for (Field field : Upgrades.class.getFields()) {
             if (Modifier.isStatic(field.getModifiers()) && field.getType() == Upgrade.class) {
                 try {
                     UPGRADES.add((Upgrade) field.get(null));
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        for (Field field : Upgrades.Variables.class.getFields()) {
+            if (Modifier.isStatic(field.getModifiers()) && field.getType() == UpgradeVariable.class) {
+                try {
+                    Upgrades.VARIABLES.add((UpgradeVariable) field.get(null));
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }

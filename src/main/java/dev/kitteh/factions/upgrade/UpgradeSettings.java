@@ -1,10 +1,13 @@
 package dev.kitteh.factions.upgrade;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@NullMarked
 public final class UpgradeSettings {
     private final Upgrade upgrade;
     private final Map<UpgradeVariable, LeveledValueProvider> variableSettings;

@@ -15,7 +15,7 @@ public class UpgradeRegistry {
     private static final Map<String, UpgradeVariable> variableRegistry = new ConcurrentHashMap<>();
 
     static {
-        for (UpgradeVariable variable : Upgrades.Variables.VARIABLES) {
+        for (UpgradeVariable variable : Upgrades.VARIABLES) {
             registerVariable(variable);
         }
 

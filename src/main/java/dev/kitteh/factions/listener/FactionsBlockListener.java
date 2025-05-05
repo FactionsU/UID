@@ -296,9 +296,9 @@ public class FactionsBlockListener extends AbstractListener {
 
         // only notify every 10 seconds
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
-        boolean justCheck = fPlayer.getLastFrostwalkerMessage() + 10000 > System.currentTimeMillis();
+        boolean justCheck = fPlayer.getLastFrostwalkerMessageTime() + 10000 > System.currentTimeMillis();
         if (!justCheck) {
-            fPlayer.setLastFrostwalkerMessage();
+            fPlayer.setLastFrostwalkerMessageTime();
         }
 
         // Check if they have build permissions here. If not, block this from happening.

@@ -20,7 +20,7 @@ public class AutoLeaveProcessTask extends AutoLeaveTask.AutoLeaveProcessor<FPlay
         FPlayer fplayer = iterator.next();
 
         if (fplayer.isOffline() && now - fplayer.getLastLoginTime() > toleranceMillis) {
-            if (!fplayer.willAutoLeave()) {
+            if (fplayer.isAutoLeaveExempt()) {
                 FactionsPlugin.getInstance().debug(Level.INFO, fplayer.getName() + " was going to be auto-removed but was set not to.");
                 return;
             }

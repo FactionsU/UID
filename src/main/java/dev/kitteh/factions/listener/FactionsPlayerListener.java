@@ -140,7 +140,7 @@ public class FactionsPlayerListener extends AbstractListener {
         // Update the lastLoginTime for this fplayer
         me.setLastLoginTime(System.currentTimeMillis());
 
-        me.login(); // set kills / deaths
+        ((MemoryFPlayer) me).onLogInOut();
         me.setOfflinePlayer(player);
 
         if (me.isSpyingChat() && !player.hasPermission(Permission.CHATSPY.node)) {
@@ -185,8 +185,6 @@ public class FactionsPlayerListener extends AbstractListener {
             }
         }
 
-        // If they have the permission, don't let them autoleave. Bad inverted setter :\
-        me.setAutoLeave(!player.hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
         me.setTakeFallDamage(true);
         if (me.isFlying()) {
             player.setAllowFlight(true);
@@ -208,7 +206,7 @@ public class FactionsPlayerListener extends AbstractListener {
         // and update their last login time to point to when the logged off, for auto-remove routine
         me.setLastLoginTime(System.currentTimeMillis());
 
-        me.logout(); // cache kills / deaths
+        ((MemoryFPlayer) me).onLogInOut();
 
         // if player is waiting for fstuck teleport but leaves, remove
         if (this.plugin.getStuckMap().containsKey(player.getUniqueId())) {

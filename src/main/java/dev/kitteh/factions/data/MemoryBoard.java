@@ -76,7 +76,11 @@ public abstract class MemoryBoard implements Board {
 
     @Override
     public void setFactionAt(Faction faction, FLocation flocation) {
-        setIdAt(faction.getId(), flocation);
+        if (faction.isWilderness()) {
+            this.removeAt(flocation);
+        } else {
+            this.setIdAt(faction.getId(), flocation);
+        }
     }
 
     @Override

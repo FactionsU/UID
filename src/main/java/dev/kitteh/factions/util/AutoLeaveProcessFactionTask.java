@@ -27,7 +27,7 @@ public class AutoLeaveProcessFactionTask extends AutoLeaveTask.AutoLeaveProcesso
                 for (FPlayer fplayer : faction.getFPlayers()) {
                     if (fplayer.isOffline() && now - fplayer.getLastLoginTime() > toleranceMillis) {
                         // Check if they should be exempt from this.
-                        if (!fplayer.willAutoLeave()) {
+                        if (fplayer.isAutoLeaveExempt()) {
                             FactionsPlugin.getInstance().debug(Level.INFO, fplayer.getName() + " was going to be auto-removed but was set not to.");
                             continue;
                         }
@@ -45,7 +45,7 @@ public class AutoLeaveProcessFactionTask extends AutoLeaveTask.AutoLeaveProcesso
             if (fplayer.isOnline() || now - fplayer.getLastLoginTime() < toleranceMillis) {
                 return; // At least one still active player!
             }
-            if (!fplayer.willAutoLeave()) {
+            if (fplayer.isAutoLeaveExempt()) {
                 FactionsPlugin.getInstance().debug(Level.INFO, fplayer.getName() + " was going to be auto-removed but was set not to.");
                 return; // Won't autoremove this faction due to this player
             }

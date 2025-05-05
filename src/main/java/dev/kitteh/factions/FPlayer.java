@@ -26,23 +26,19 @@ import java.util.UUID;
  */
 @NullMarked
 public interface FPlayer extends Participator, Selectable {
-    void login();
-
-    void logout();
-
     Faction getFaction();
 
     boolean hasFaction();
 
     void setFaction(Faction faction);
 
-    boolean willAutoLeave();
+    boolean isAutoLeaveExempt();
 
-    void setAutoLeave(boolean autoLeave);
+    void setAutoLeaveExempt(boolean autoLeave);
 
-    long getLastFrostwalkerMessage();
+    long getLastFrostwalkerMessageTime();
 
-    void setLastFrostwalkerMessage();
+    void setLastFrostwalkerMessageTime();
 
     void setMonitorJoins(boolean monitor);
 
@@ -72,9 +68,9 @@ public interface FPlayer extends Participator, Selectable {
 
     boolean isAdminBypassing();
 
-    boolean isVanished();
-
     void setIsAdminBypassing(boolean val);
+
+    boolean isVanished();
 
     ChatTarget getChatTarget();
 

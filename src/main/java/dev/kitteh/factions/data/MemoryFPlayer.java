@@ -108,20 +108,11 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.shouldTakeFallDamage = true;
     }
 
-    @Override
-    public void login() {
-        this.logInOut();
-    }
-
-    @Override
-    public void logout() {
-        this.logInOut();
-    }
-
-    private void logInOut() {
+    public void onLogInOut() {
         if (this.getPlayer() instanceof Player player) {
             this.kills = player.getStatistic(Statistic.PLAYER_KILLS);
             this.deaths = player.getStatistic(Statistic.DEATHS);
+            this.setAutoLeaveExempt(player.hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
         }
     }
 
@@ -184,23 +175,22 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public boolean willAutoLeave() {
-        return this.willAutoLeave;
+    public boolean isAutoLeaveExempt() {
+        return !this.willAutoLeave;
     }
 
     @Override
-    public void setAutoLeave(boolean willLeave) {
-        this.willAutoLeave = willLeave;
-        FactionsPlugin.getInstance().debug(name + " set autoLeave to " + willLeave);
+    public void setAutoLeaveExempt(boolean exempt) {
+        this.willAutoLeave = !exempt;
     }
 
     @Override
-    public long getLastFrostwalkerMessage() {
+    public long getLastFrostwalkerMessageTime() {
         return this.lastFrostwalkerMessage;
     }
 
     @Override
-    public void setLastFrostwalkerMessage() {
+    public void setLastFrostwalkerMessageTime() {
         this.lastFrostwalkerMessage = System.currentTimeMillis();
     }
 
