@@ -11,12 +11,14 @@ import org.bukkit.plugin.Plugin;
 import org.mcmonkey.sentinel.SentinelIntegration;
 import org.mcmonkey.sentinel.SentinelPlugin;
 
+import java.util.List;
 import java.util.logging.Level;
 
 public class Sentinel extends SentinelIntegration {
     public static final String TARGET_FACTIONS = "factions";
     public static final String TARGET_FACTIONS_ENEMY = "factionsEnemy";
     public static final String TARGET_FACTIONS_ALLY = "factionsAlly";
+    public static final List<String> TARGETS = List.of(TARGET_FACTIONS, TARGET_FACTIONS_ALLY, TARGET_FACTIONS_ENEMY);
 
     public static boolean init(Plugin plugin) {
         AbstractFactionsPlugin.getInstance().getLogger().info("Attempting to integrate with Sentinel!");
@@ -72,7 +74,7 @@ public class Sentinel extends SentinelIntegration {
 
     @Override
     public boolean isTarget(LivingEntity ent, String prefix, String value) {
-        if (!(ent instanceof Player)) {
+        if (!(ent instanceof Player) || !TARGETS.contains(prefix)) {
             return false;
         }
         Faction faction = Factions.getInstance().getByTag(value);
