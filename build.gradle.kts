@@ -92,7 +92,7 @@ repositories {
 
   exclusiveContent {
     forRepository {
-      maven("https://repo.citizensnpcs.co")
+      maven("https://maven.citizensnpcs.co/repo")
     }
 
     filter {
