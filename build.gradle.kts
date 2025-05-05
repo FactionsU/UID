@@ -87,7 +87,6 @@ repositories {
 
     filter {
       includeModule("com.drtshock", "PlayerVaultsX")
-      includeModule("com.griefcraft.lwc", "Modern-LWC")
     }
   }
 
@@ -120,16 +119,6 @@ repositories {
 
     filter {
       includeGroup("com.ranull")
-    }
-  }
-
-  exclusiveContent {
-    forRepository {
-      maven("https://github.com/factions-site/repo/raw/public")
-    }
-
-    filter {
-      includeModule("be.maximvdw", "MVdWPlaceholderAPI")
     }
   }
 
@@ -201,8 +190,6 @@ dependencies {
     libs.dynmap,
     libs.playervaultsx,
     libs.placeholderapi,
-    libs.mvdwplaceholderapi,
-    libs.modernlwc,
     libs.sentinel,
     libs.denizen,
     libs.citizens,

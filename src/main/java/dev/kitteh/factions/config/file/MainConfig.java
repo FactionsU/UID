@@ -2895,24 +2895,6 @@ public class MainConfig {
         }
     }
 
-    public class LWC {
-        private boolean enabled = true;
-        private boolean resetLocksOnUnclaim = false;
-        private boolean resetLocksOnCapture = false;
-
-        public boolean isEnabled() {
-            return enabled;
-        }
-
-        public boolean isResetLocksOnUnclaim() {
-            return resetLocksOnUnclaim;
-        }
-
-        public boolean isResetLocksOnCapture() {
-            return resetLocksOnCapture;
-        }
-    }
-
     public class MagicPlugin {
         @Comment("If true, magic mobs will follow whatever pvp allowed/disallowed setting is present for the territory they're attacking into.")
         private boolean usePVPSettingForMagicMobs = false;
@@ -3066,17 +3048,11 @@ public class MainConfig {
     private Data data = new Data();
     private RestrictWorlds restrictWorlds = new RestrictWorlds();
     private Scoreboard scoreboard = new Scoreboard();
-    @Comment("""
-            LWC integration
-            This support targets the modern fork of LWC, called LWC Extended.
-            You can find it here: https://www.spigotmc.org/resources/lwc-extended.69551/
-            Note: Modern LWC is no longer supported, and its former maintainer now runs LWC Extended""")
-    private LWC lwc = new LWC();
     @Comment("Integration with the Magic plugin")
     private MagicPlugin magicPlugin = new MagicPlugin();
     @Comment("Paper features, when accessible.")
     private Paper paper = new Paper();
-    @Comment("Lists plugin integrations. Some other plugins (PVX, LWC, Magic, WG, WB) are currently\n" +
+    @Comment("Lists plugin integrations. Some other plugins (PVX, Magic, WG, WB) are currently\n" +
             " elsewhere but will migrate here in the future")
     private Plugins plugins = new Plugins();
     @Comment("""
@@ -3151,10 +3127,6 @@ public class MainConfig {
 
     public WorldGuard worldGuard() {
         return worldGuard;
-    }
-
-    public LWC lwc() {
-        return lwc;
     }
 
     public WorldBorder worldBorder() {

@@ -46,7 +46,6 @@ public class IntegrationManager implements Listener {
             }
             return true;
         }),
-        LWC("LWC", dev.kitteh.factions.integration.LWC::setup),
         MAGIC("Magic", p -> Magic.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         PLACEHOLDERAPI("PlaceholderAPI", p -> AbstractFactionsPlugin.getInstance().setupPlaceholderAPI()),
         SENTINEL("Sentinel", p -> Sentinel.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE

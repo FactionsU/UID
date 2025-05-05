@@ -9,7 +9,6 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.integration.LWC;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.AsciiCompass;
@@ -63,7 +62,7 @@ public abstract class MemoryBoard implements Board {
         }
         return 0;
     }
-    
+
     @Override
     public Faction getFactionAt(FLocation flocation) {
         return Factions.getInstance().getFactionById(getIdAt(flocation)) instanceof Faction faction ? faction : Factions.getInstance().getWilderness();
@@ -139,9 +138,6 @@ public abstract class MemoryBoard implements Board {
 
     public void clean(Faction faction) {
         List<FLocation> locations = this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(faction.getId()).stream()).toList();
-        if (LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim()) {
-            locations.forEach(LWC::clearAllLocks);
-        }
         for (FPlayer fPlayer : FPlayers.getInstance().getOnlinePlayers()) {
             if (locations.contains(fPlayer.getLastStoodAt())) {
                 if (FactionsPlugin.getInstance().conf().commands().fly().isEnable() && !fPlayer.isAdminBypassing() && fPlayer.isFlying()) {
@@ -161,14 +157,10 @@ public abstract class MemoryBoard implements Board {
     //----------------------------------------------//
 
     public void clean() {
-        boolean lwc = LWC.getEnabled() && FactionsPlugin.getInstance().conf().lwc().isResetLocksOnUnclaim();
         for (WorldTracker tracker : worldTrackers.values()) {
             for (int factionId : tracker.getIDs()) {
                 if (Factions.getInstance().getFactionById(factionId) == null) {
                     this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(factionId).stream()).forEach(loc -> {
-                        if (lwc) {
-                            LWC.clearAllLocks(loc);
-                        }
                         FactionsPlugin.getInstance().log("Board cleaner removed id " + factionId + " from " + loc);
                     });
                     this.worldTrackers.values().forEach(wt -> wt.removeAllClaims(factionId));

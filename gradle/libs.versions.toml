@@ -34,8 +34,6 @@ ifchestonly = { module = "dev.kitteh.forkedproject:IF-ChestOnly", version = "0.1
 jspecify = { module = "org.jspecify:jspecify", version = "0.3.0" }
 luckperms-api = { module = "net.luckperms:api", version = "5.0" }
 magic-api = { module = "com.elmakers.mine.bukkit:MagicAPI", version = "10.2" }
-modernlwc = { module = "com.griefcraft.lwc:Modern-LWC", version = "2.1.4" }
-mvdwplaceholderapi = { module = "be.maximvdw:MVdWPlaceholderAPI", version = "2.2.3-fuuid" }
 paper-lib = { module = "io.papermc:paperlib", version = "1.0.4" }
 placeholderapi = { module = "me.clip:placeholderapi", version = "2.11.6" }
 playervaultsx = { module = "com.drtshock:PlayerVaultsX", version = "4.2.15" }

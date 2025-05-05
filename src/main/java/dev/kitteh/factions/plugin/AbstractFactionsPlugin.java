@@ -26,7 +26,6 @@ import dev.kitteh.factions.integration.ClipPlaceholderAPIManager;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.integration.Essentials;
 import dev.kitteh.factions.integration.IntegrationManager;
-import dev.kitteh.factions.integration.LWC;
 import dev.kitteh.factions.integration.LuckPerms;
 import dev.kitteh.factions.integration.VaultPerms;
 import dev.kitteh.factions.integration.Worldguard;
@@ -525,18 +524,6 @@ public class AbstractFactionsPlugin extends JavaPlugin implements FactionsPlugin
             if (ess != null) {
                 this.metricsSimplePie("essentials_delete_homes", () -> "" + conf().factions().other().isDeleteEssentialsHomes());
                 this.metricsSimplePie("essentials_home_teleport", () -> "" + this.conf().factions().homes().isTeleportCommandEssentialsIntegration());
-            }
-        }
-
-        // LWC
-        Plugin lwc = LWC.getLWC();
-        this.metricsDrillPie("lwc", () -> this.metricsPluginInfo(lwc));
-        if (lwc != null) {
-            boolean enabled = conf().lwc().isEnabled();
-            this.metricsSimplePie("lwc_integration", () -> "" + enabled);
-            if (enabled) {
-                this.metricsSimplePie("lwc_reset_locks_unclaim", () -> "" + conf().lwc().isResetLocksOnUnclaim());
-                this.metricsSimplePie("lwc_reset_locks_capture", () -> "" + conf().lwc().isResetLocksOnCapture());
             }
         }
 
