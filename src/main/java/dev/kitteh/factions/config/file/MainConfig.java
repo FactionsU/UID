@@ -1086,7 +1086,7 @@ public class MainConfig {
             private boolean mustBeInClaimedTerritory = true;
             private boolean teleportToOnDeath = true;
             private boolean teleportCommandEnabled = true;
-            private boolean teleportCommandEssentialsIntegration = true;
+            private boolean teleportCommandEssentialsIntegration = false;
             private boolean teleportCommandSmokeEffectEnabled = true;
             private float teleportCommandSmokeEffectThickness = 3f;
             private boolean teleportAllowedFromEnemyTerritory = true;
