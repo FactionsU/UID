@@ -50,8 +50,8 @@ public class FPlayerLeaveEvent extends FactionPlayerEvent implements Cancellable
 
     @Override
     public void setCancelled(boolean c) {
-        if (this.isCancellable()) {
-            cancelled = c;
+        if (c && this.isCancellable()) {
+            cancelled = true;
         } else {
             throw new IllegalStateException("Cannot cancel leave reason '" + reason + "'");
         }

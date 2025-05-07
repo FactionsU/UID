@@ -18,6 +18,7 @@ public class CmdAdminSet implements Cmd {
             new CmdSetGrace().consumer().accept(manager, setBuilder);
             new CmdSetPeaceful().consumer().accept(manager, setBuilder);
             new CmdSetPermanent().consumer().accept(manager, setBuilder);
+            new CmdSetTag().consumer().accept(manager, setBuilder);
 
             new CmdSetMaxVaults().consumer().accept(manager, setBuilder);
         };

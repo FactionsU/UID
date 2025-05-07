@@ -44,6 +44,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -220,8 +221,6 @@ public abstract class MemoryFaction implements Faction {
     }
 
     protected class Zones implements Faction.Zones {
-
-
         private Object2ObjectOpenHashMap<String, WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
         private Int2ObjectOpenHashMap<Zone> zones = new Int2ObjectOpenHashMap<>();
         private int nextId = 1;
@@ -260,6 +259,11 @@ public abstract class MemoryFaction implements Faction {
         }
 
         @Override
+        public void delete(String name) {
+            this.zones.values().stream().filter(zone -> zone.name().equals(name)).findFirst().ifPresent(zone -> this.zones.remove(zone.id));
+        }
+
+        @Override
         public Zone get(FLocation fLocation) {
             WorldTracker tracker = this.worldTrackers.get(fLocation.worldName());
             int id;
@@ -274,6 +278,15 @@ public abstract class MemoryFaction implements Faction {
         @Override
         public Faction.@Nullable Zone get(String name) {
             return this.zones.values().stream().filter(zone -> zone.name().equals(name)).findFirst().orElse(null);
+        }
+
+        @Override
+        public List<Faction.Zone> get() {
+            List<Faction.Zone> zones = new ArrayList<>();
+            this.zones.values().stream()
+                    .sorted(Comparator.comparing(zone -> zone.id))
+                    .forEach(zones::add);
+            return Collections.unmodifiableList(zones);
         }
 
         @Override
@@ -355,6 +368,9 @@ public abstract class MemoryFaction implements Faction {
         }
         if (this.perms == null || !this.isNormal()) {
             this.resetPerms();
+        }
+        if (this.zones == null) {
+            this.zones = new Zones();
         }
         this.zones.cleanupDeserialization(); // Sets the transient helper main value.
     }
@@ -778,10 +794,10 @@ public abstract class MemoryFaction implements Faction {
     // -------------------------------------------- //
     // Construct
     // -------------------------------------------- //
-    public MemoryFaction(int id) {
+    public MemoryFaction(int id, String tag) {
         this.id = id;
         this.open = FactionsPlugin.getInstance().conf().factions().other().isNewFactionsDefaultOpen();
-        this.tag = "???";
+        this.tag = tag;
         this.description = TL.GENERIC_DEFAULTDESCRIPTION.toString();
         this.lastPlayerLoggedOffTime = 0;
         this.peaceful = FactionsPlugin.getInstance().conf().factions().other().isNewFactionsDefaultPeaceful();

@@ -5,7 +5,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public final class JSONFaction extends MemoryFaction {
-    public JSONFaction(int id) {
-        super(id);
+    public JSONFaction(int id, String tag) {
+        super(id, tag);
     }
 }

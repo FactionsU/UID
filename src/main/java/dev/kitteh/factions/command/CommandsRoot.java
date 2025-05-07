@@ -192,6 +192,7 @@ public class CommandsRoot {
         registerInternal("upgrades", new CmdUpgrades());
         registerInternal("version", new CmdVersion());
         registerInternal("warp", new CmdWarp());
+        registerInternal("zone", new CmdZone());
 
         if (Bukkit.getServer().getPluginManager().isPluginEnabled("PlayerVaults")) {
             registerInternal("vault", new CmdVault());

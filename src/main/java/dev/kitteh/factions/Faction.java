@@ -140,6 +140,13 @@ public interface Faction extends Participator, Selectable {
         Zone create(String name);
 
         /**
+         * Deletes a zone.
+         *
+         * @param name named zone
+         */
+        void delete(String name);
+
+        /**
          * Gets the zone at a given location.
          *
          * @param fLocation location
@@ -155,6 +162,13 @@ public interface Faction extends Participator, Selectable {
          */
         @Nullable
         Zone get(String name);
+
+        /**
+         * Gets an immutable list of all zones.
+         *
+         * @return zones
+         */
+        List<Zone> get();
 
         /**
          * Gets the main, default zone.

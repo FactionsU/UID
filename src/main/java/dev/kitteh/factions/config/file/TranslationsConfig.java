@@ -18,7 +18,17 @@ public class TranslationsConfig {
         }
 
         public List<String> getAliases() {
-            return this.aliases;
+            return List.copyOf(this.aliases);
+        }
+
+        public String getFirstAlias() {
+            return this.aliases.getFirst();
+        }
+
+        public String[] getSecondaryAliases() {
+            List<String> secondaries = new ArrayList<>(this.aliases);
+            secondaries.removeFirst();
+            return secondaries.toArray(new String[0]);
         }
     }
 
@@ -347,8 +357,126 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Zone extends AbsCommand {
+            public static class Create extends AbsCommand {
+                private String nameAlreadyInUse = "<red>Zone name '<name>' is already in use</red>";
+                private String success = "<yellow>Created new zone '<name>'";
+
+                public Create() {
+                    super("create");
+                }
+
+                public String getNameAlreadyInUse() {
+                    return nameAlreadyInUse;
+                }
+
+                public String getSuccess() {
+                    return success;
+                }
+            }
+
+            public static class Delete extends AbsCommand {
+                private String zoneNotFound = "<red>Zone named '<name>' not found</red>";
+                private String success = "<yellow>Deleted zone '<name>'";
+                private String confirm = "Are you sure you want to delete zone '<name>'? If so, run <command>";
+
+                public Delete() {
+                    super("delete");
+                }
+
+                public String getConfirm() {
+                    return confirm;
+                }
+
+                public String getSuccess() {
+                    return success;
+                }
+
+                public String getZoneNotFound() {
+                    return zoneNotFound;
+                }
+            }
+
+            public static class Set extends AbsCommand {
+                public static class Greeting extends AbsCommand {
+                    private String success = "<yellow>Set zone '<name>' greeting to '<greeting>'";
+                    private String zoneNotFound = "<red>Zone '<name>' not found</red>";
+
+                    protected Greeting() {
+                        super("greeting");
+                    }
+
+                    public String getSuccess() {
+                        return success;
+                    }
+
+                    public String getZoneNotFound() {
+                        return zoneNotFound;
+                    }
+                }
+
+                public static class Name extends AbsCommand {
+                    private String nameAlreadyInUse = "<red>Zone name '<name>' is already in use</red>";
+                    private String success = "<yellow>Set zone '<oldname>' name to '<newname>'";
+                    private String zoneNotFound = "<red>Zone '<name>' not found</red>";
+
+                    protected Name() {
+                        super("name");
+                    }
+
+                    public String getNameAlreadyInUse() {
+                        return nameAlreadyInUse;
+                    }
+
+                    public String getSuccess() {
+                        return success;
+                    }
+
+                    public String getZoneNotFound() {
+                        return zoneNotFound;
+                    }
+                }
+
+                private Greeting greeting = new Greeting();
+                private Name name = new Name();
+
+                public Set() {
+                    super("set");
+                }
+
+                public Greeting greeting() {
+                    return greeting;
+                }
+
+                public Name name() {
+                    return name;
+                }
+            }
+
+            private Create create = new Create();
+            private Delete delete = new Delete();
+            private Set set = new Set();
+
+            protected Zone() {
+                super("zone");
+            }
+
+            public Create create() {
+                return create;
+            }
+
+            public Delete delete() {
+                return delete;
+            }
+
+            public Set set() {
+                return set;
+            }
+        }
+
         private Set set = new Set();
         private Permissions permissions = new Permissions();
+        private Zone zone = new Zone();
 
         public Set set() {
             return set;
@@ -356,6 +484,10 @@ public class TranslationsConfig {
 
         public Permissions permissions() {
             return permissions;
+        }
+
+        public Zone zone() {
+            return zone;
         }
     }
 

@@ -28,6 +28,12 @@ public class CmdListFactions implements Cmd {
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
         return (manager, builder) -> {
             manager.command(
+                    builder
+                            .commandDescription(Cloudy.desc(TL.COMMAND_LIST_DESCRIPTION))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LIST)))
+                            .handler(this::handle)
+            );
+            manager.command(
                     builder.literal("factions")
                             .commandDescription(Cloudy.desc(TL.COMMAND_LIST_DESCRIPTION))
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LIST)))

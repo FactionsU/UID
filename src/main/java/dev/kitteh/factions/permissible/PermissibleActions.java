@@ -47,6 +47,8 @@ public enum PermissibleActions implements PermissibleAction {
     FLY(TL.PERM_FLY, TL.PERM_SHORT_FLY),
 
     UPGRADE(TL.PERM_UPGRADE, TL.PERM_SHORT_UPGRADE),
+
+    ZONE(TL.PERM_ZONE, TL.PERM_SHORT_ZONE),
     ;
 
     private final TL desc;

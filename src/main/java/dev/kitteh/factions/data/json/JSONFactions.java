@@ -147,15 +147,15 @@ public final class JSONFactions extends MemoryFactions {
     }
 
     @Override
-    public MemoryFaction generateFactionObject() {
+    public MemoryFaction generateFactionObject(String tag) {
         int id = getNextId();
-        MemoryFaction faction = new JSONFaction(id);
+        MemoryFaction faction = new JSONFaction(id, tag);
         updateNextIdForId(id);
         return faction;
     }
 
     @Override
-    public MemoryFaction generateFactionObject(int id) {
-        return new JSONFaction(id);
+    public MemoryFaction generateFactionObject(int id, String tag) {
+        return new JSONFaction(id, tag);
     }
 }

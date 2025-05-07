@@ -645,6 +645,7 @@ public enum TL {
     COMMAND_WARUNCLAIMALL_SUCCESS("&eYou unclaimed ALL war zone land."),
     COMMAND_WARUNCLAIMALL_LOG("%1$s unclaimed all war zones."),
 
+    COMMAND_ZONE_DESCRIPTION("Manage zones"),
 
     /**
      * Leaving - This is accessed through a command, and so it MAY need a COMMAND_* slug :s
@@ -874,6 +875,7 @@ public enum TL {
     PERM_FLY("Flying in faction territory"),
     PERM_SHIELD("Activating a faction shield"),
     PERM_UPGRADE("Purchasing faction upgrades"),
+    PERM_ZONE("Managing faction zones"),
 
     PERM_SHORT_BUILD("build"),
     PERM_SHORT_DESTROY("destroy"),
@@ -902,6 +904,7 @@ public enum TL {
     PERM_SHORT_FLY("fly"),
     PERM_SHORT_SHIELD("activate shields"),
     PERM_SHORT_UPGRADE("buy upgrades"),
+    PERM_SHORT_ZONE("manage zones"),
 
     PERM_DENIED_WILDERNESS("&cYou can't %s in the wilderness"),
     PERM_DENIED_SAFEZONE("&c>You can't %s in a safe zone"),

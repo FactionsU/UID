@@ -29,9 +29,8 @@ public abstract class MemoryFactions implements Factions {
 
         // Make sure the default neutral faction exists
         if (!factions.containsKey(Factions.ID_WILDERNESS)) {
-            MemoryFaction faction = generateFactionObject(Factions.ID_WILDERNESS);
+            MemoryFaction faction = generateFactionObject(Factions.ID_WILDERNESS, TL.WILDERNESS.toString());
             factions.put(Factions.ID_WILDERNESS, faction);
-            faction.setTag(TL.WILDERNESS.toString());
             faction.setDescription(TL.WILDERNESS_DESCRIPTION.toString());
         } else {
             Faction faction = factions.get(ID_WILDERNESS);
@@ -45,9 +44,8 @@ public abstract class MemoryFactions implements Factions {
 
         // Make sure the safe zone faction exists
         if (!factions.containsKey(Factions.ID_SAFEZONE)) {
-            MemoryFaction faction = generateFactionObject(Factions.ID_SAFEZONE);
+            MemoryFaction faction = generateFactionObject(Factions.ID_SAFEZONE, TL.SAFEZONE.toString());
             factions.put(Factions.ID_SAFEZONE, faction);
-            faction.setTag(TL.SAFEZONE.toString());
             faction.setDescription(TL.SAFEZONE_DESCRIPTION.toString());
         } else {
             Faction faction = factions.get(ID_SAFEZONE);
@@ -65,9 +63,8 @@ public abstract class MemoryFactions implements Factions {
 
         // Make sure the war zone faction exists
         if (!factions.containsKey(Factions.ID_WARZONE)) {
-            MemoryFaction faction = generateFactionObject(Factions.ID_WARZONE);
+            MemoryFaction faction = generateFactionObject(Factions.ID_WARZONE, TL.WARZONE.toString());
             factions.put(Factions.ID_WARZONE, faction);
-            faction.setTag(TL.WARZONE.toString());
             faction.setDescription(TL.WARZONE_DESCRIPTION.toString());
         } else {
             Faction faction = factions.get(ID_WARZONE);
@@ -92,7 +89,7 @@ public abstract class MemoryFactions implements Factions {
         return factions.get(id);
     }
 
-    public abstract MemoryFaction generateFactionObject(int id);
+    public abstract MemoryFaction generateFactionObject(int id, String tag);
 
     @Override
     public @Nullable Faction getByTag(String str) {
@@ -138,13 +135,13 @@ public abstract class MemoryFactions implements Factions {
 
     @Override
     public Faction createFaction(@Nullable FPlayer sender, String tag) {
-        MemoryFaction faction = generateFactionObject();
+        MemoryFaction faction = generateFactionObject(tag);
         factions.put(faction.getId(), faction);
         Bukkit.getServer().getPluginManager().callEvent(new FactionCreateEvent(sender, faction, sender == null ? FactionCreateEvent.Reason.PLUGIN : FactionCreateEvent.Reason.COMMAND));
         return faction;
     }
 
-    public abstract MemoryFaction generateFactionObject();
+    public abstract MemoryFaction generateFactionObject(String tag);
 
     @Override
     public void removeFaction(Faction faction) {
