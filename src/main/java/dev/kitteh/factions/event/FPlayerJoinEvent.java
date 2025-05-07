@@ -54,10 +54,14 @@ public class FPlayerJoinEvent extends FactionPlayerEvent implements Cancellable 
 
     @Override
     public void setCancelled(boolean c) {
-        if (c && this.isCancellable()) {
-            cancelled = true;
+        if (c) {
+            if (this.isCancellable()) {
+                cancelled = true;
+            } else {
+                throw new IllegalStateException("Cannot cancel join reason '" + reason + "'");
+            }
         } else {
-            throw new IllegalStateException("Cannot cancel join reason '" + reason + "'");
+            this.cancelled = false;
         }
     }
 }
