@@ -297,6 +297,12 @@ public class AbstractFactionsPlugin extends JavaPlugin implements FactionsPlugin
 
         this.getLogger().info("Server UUID " + this.serverUUID);
 
+        try {
+            this.getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", GameProfile.class);
+        } catch (Exception e) {
+            this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", e);
+        }
+
         loadLang();
 
         this.gson = this.getGsonBuilder(true).create();
@@ -389,12 +395,6 @@ public class AbstractFactionsPlugin extends JavaPlugin implements FactionsPlugin
 
         if (conf().commands().fly().isEnable()) {
             FlightUtil.start();
-        }
-
-        try {
-            this.getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", GameProfile.class);
-        } catch (Exception e) {
-            this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", e);
         }
 
         if (ChatColor.stripColor(TL.NOFACTION_PREFIX.toString()).equals("[4-]")) {

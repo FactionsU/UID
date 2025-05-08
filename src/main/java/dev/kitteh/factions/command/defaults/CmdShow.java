@@ -221,7 +221,7 @@ public class CmdShow implements Cmd {
             this.messageList = messageList;
             this.sender = sender;
             this.faction = faction;
-            this.players = faction.getFPlayers().stream().map(fp -> Bukkit.getOfflinePlayer(fp.getUniqueId())).collect(Collectors.toSet());
+            this.players = faction.getFPlayers().stream().map(fp -> AbstractFactionsPlugin.getInstance().getOfflinePlayer(fp.getName(), fp.getUniqueId())).collect(Collectors.toSet());
         }
 
         @Override
