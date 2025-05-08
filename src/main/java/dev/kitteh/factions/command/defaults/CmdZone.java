@@ -6,6 +6,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.command.defaults.set.CmdSetPerm;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Mini;
@@ -36,13 +37,13 @@ public class CmdZone implements Cmd {
 
             manager.command(
                     zoneBuilder.literal(tl.create().getFirstAlias(), tl.create().getSecondaryAliases())
-                            .required("name", StringParser.stringParser())
+                            .required("zone", StringParser.stringParser())
                             .handler(this::create)
             );
 
             manager.command(
                     zoneBuilder.literal(tl.set().getFirstAlias(), tl.set().getSecondaryAliases())
-                            .required("name", StringParser.stringParser(), SuggestionProvider.blockingStrings(zoneSuggester))
+                            .required("zone", StringParser.stringParser(), SuggestionProvider.blockingStrings(zoneSuggester))
                             .literal(tl.set().name().getFirstAlias(), tl.set().name().getSecondaryAliases())
                             .required("newName", StringParser.stringParser())
                             .handler(this::setName)
@@ -50,7 +51,7 @@ public class CmdZone implements Cmd {
 
             manager.command(
                     zoneBuilder.literal(tl.set().getFirstAlias(), tl.set().getSecondaryAliases())
-                            .required("name", StringParser.stringParser(), SuggestionProvider.blockingStrings(zoneSuggester))
+                            .required("zone", StringParser.stringParser(), SuggestionProvider.blockingStrings(zoneSuggester))
                             .literal(tl.set().greeting().getFirstAlias(), tl.set().greeting().getSecondaryAliases())
                             .required("greeting", StringParser.greedyStringParser())
                             .handler(this::setGreeting)
@@ -58,9 +59,33 @@ public class CmdZone implements Cmd {
 
             manager.command(
                     zoneBuilder.literal(tl.delete().getFirstAlias(), tl.delete().getSecondaryAliases())
-                            .required("name", StringParser.stringParser(), SuggestionProvider.blockingStrings(zoneSuggester))
+                            .required("zone", StringParser.stringParser(), SuggestionProvider.blockingStrings(zoneSuggester))
                             .handler(this::delete)
             );
+
+            new CmdSetPerm((ctx) -> '/' + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + ' ' + tl.getFirstAlias() +
+                    ' ' + tl.set().getFirstAlias() + ' ' + ctx.get("zone") + ' ' + FactionsPlugin.getInstance().tl().commands().permissions().getFirstAlias() + ' ', context -> {
+                FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
+                Faction faction = sender.getFaction();
+                String name = context.get("zone");
+                Faction.Zone zone = faction.zones().get(name);
+                if (zone == null) {
+                    sender.sendMessage(Mini.parse(tl.perms().getZoneNotFound(), Placeholder.unparsed("name", name)));
+                    return null;
+                }
+                return zone.id() == 0 ? faction.permissions() : zone.permissions();
+            }, context -> {
+                FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
+                Faction faction = sender.getFaction();
+                String name = context.get("zone");
+                Faction.Zone zone = faction.zones().get(name);
+                if (zone == null) {
+                    sender.sendMessage(Mini.parse(tl.perms().getZoneNotFound(), Placeholder.unparsed("name", name)));
+                    return false;
+                }
+                zone.permissions().clear();
+                return true;
+            }).consumer().accept(manager, zoneBuilder.literal(tl.set().getFirstAlias(), tl.set().getSecondaryAliases()).required("zone", StringParser.stringParser(), SuggestionProvider.blockingStrings(zoneSuggester)));
         };
     }
 
@@ -74,7 +99,7 @@ public class CmdZone implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.getFaction();
 
-        String name = context.get("name");
+        String name = context.get("zone");
 
         var tl = FactionsPlugin.getInstance().tl().commands().zone().create();
 
@@ -91,7 +116,7 @@ public class CmdZone implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.getFaction();
 
-        String name = context.get("name");
+        String name = context.get("zone");
 
         var tl = FactionsPlugin.getInstance().tl().commands().zone().set().name();
 
@@ -121,7 +146,7 @@ public class CmdZone implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.getFaction();
 
-        String name = context.get("name");
+        String name = context.get("zone");
 
         var tl = FactionsPlugin.getInstance().tl().commands().zone().set().greeting();
 
@@ -146,7 +171,7 @@ public class CmdZone implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.getFaction();
 
-        String name = context.get("name");
+        String name = context.get("zone");
 
         var tl = FactionsPlugin.getInstance().tl().commands().zone().delete();
 
@@ -185,8 +210,4 @@ public class CmdZone implements Cmd {
 
         sender.sendMessage(Mini.parse(tl.getSuccess(), Placeholder.unparsed("name", name)));
     }
-
-    /*
-    set perms <zone>
-     */
 }

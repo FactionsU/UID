@@ -1,6 +1,7 @@
 package dev.kitteh.factions.upgrade;
 
 import dev.kitteh.factions.config.file.TranslationsConfig;
+import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
@@ -28,7 +29,12 @@ public final class Upgrades {
 
     public static final Upgrade MAX_MEMBERS = new Upgrade.Simple("max_members", TranslationsConfig.Upgrades::maxMembers, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
-    public static final Upgrade ZONES = new Upgrade.Simple("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
+    public static final Upgrade ZONES = new Upgrade.Reactive("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE),
+            (f, o, n) -> {
+                if (o == 0) {
+                    f.getOnlinePlayers().forEach(Player::updateCommands);
+                }
+            });
 
     static final List<Upgrade> UPGRADES = new ArrayList<>();
     static final List<UpgradeVariable> VARIABLES = new ArrayList<>();

@@ -118,6 +118,9 @@ public abstract class MemoryFaction implements Faction {
 
         @Override
         public SelectorPerms add(PermSelector selector) {
+            if (!this.selectorOrder.contains(selector)) {
+                this.selectorOrder.add(selector);
+            }
             return this.perms.computeIfAbsent(selector, k -> new SelectorPerms());
         }
 
@@ -133,8 +136,8 @@ public abstract class MemoryFaction implements Faction {
             if (index <= 0) { // Not present or already top
                 return;
             }
-            index--;
             this.selectorOrder.remove(index);
+            index--;
             this.selectorOrder.add(index, selector);
         }
 
@@ -144,11 +147,12 @@ public abstract class MemoryFaction implements Faction {
             if (index == -1 || index == this.selectorOrder.size() - 1) { // Not present or already bottom
                 return;
             }
-            index++;
             this.selectorOrder.remove(index);
+            index++;
             this.selectorOrder.add(index, selector);
         }
 
+        @Override
         public void clear() {
             this.perms.clear();
             this.selectorOrder.clear();

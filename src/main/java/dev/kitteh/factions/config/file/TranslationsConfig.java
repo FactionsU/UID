@@ -255,10 +255,10 @@ public class TranslationsConfig {
             }
 
             public static class SubCmdShow extends AbsCommand {
-                private String header = "#<rownumber> <color:#66ebff><name></color:#66ebff>:<color:#66ffb0><value>";
+                private String header = "#<rownumber> <color:#66ebff><name></color:#66ebff>: <color:#66ffb0><value>";
                 private String footer = "   <click:run_command:\"<command>\"><color:#66ebff>[Add]";
                 private String item = "<hover:show_text:\"<color:#ff6666>Remove\"><click:run_command:\"<commandremove>\"><color:#ff6666>X</color:#ff6666></click></hover> " +
-                        "<hover:show_text:\"<desc>\"><color:#66ebff><shortdesc></color:#66ebff></hover>:<color:#66ffb0><state>";
+                        "<hover:show_text:\"<desc>\"><color:#66ebff><shortdesc></color:#66ebff></hover>: <color:#66ffb0><state>";
 
                 private String selectorNotFound = "<red>No selector available with that name</red>";
 
@@ -397,6 +397,14 @@ public class TranslationsConfig {
                 }
             }
 
+            public static class Perms {
+                private String zoneNotFound = "<red>Zone named '<name>' not found</red>";
+
+                public String getZoneNotFound() {
+                    return zoneNotFound;
+                }
+            }
+
             public static class Set extends AbsCommand {
                 public static class Greeting extends AbsCommand {
                     private String success = "<yellow>Set zone '<name>' greeting to '<greeting>'";
@@ -455,6 +463,8 @@ public class TranslationsConfig {
 
             private Create create = new Create();
             private Delete delete = new Delete();
+            @Comment("Reuses most things from the /f perms settings")
+            private Perms perms = new Perms();
             private Set set = new Set();
 
             protected Zone() {
@@ -467,6 +477,10 @@ public class TranslationsConfig {
 
             public Delete delete() {
                 return delete;
+            }
+
+            public Perms perms() {
+                return perms;
             }
 
             public Set set() {

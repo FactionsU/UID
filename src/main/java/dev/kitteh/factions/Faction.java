@@ -124,6 +124,11 @@ public interface Faction extends Participator, Selectable {
          * @param selector selector to remove
          */
         void remove(PermSelector selector);
+
+        /**
+         * Clears everything.
+         */
+        void clear();
     }
 
     /**
