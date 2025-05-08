@@ -22,10 +22,6 @@ import java.util.logging.Level;
 public final class JSONBoard extends MemoryBoard {
     private static final File file = new File(AbstractFactionsPlugin.getInstance().getDataFolder(), "data/board.json");
 
-    // -------------------------------------------- //
-    // Persistance
-    // -------------------------------------------- //
-
     private Map<String, Map<String, String>> dumpAsSaveFormat() {
         Map<String, Map<String, String>> worldCoordIds = new HashMap<>();
 

@@ -711,10 +711,6 @@ public abstract class MemoryFaction implements Faction {
         return deaths;
     }
 
-    // -------------------------------------------- //
-    // F Permissions stuff
-    // -------------------------------------------- //
-
     @Override
     public boolean hasAccess(Selectable selectable, PermissibleAction permissibleAction, @Nullable FLocation location) {
         //noinspection ConstantValue
@@ -790,9 +786,6 @@ public abstract class MemoryFaction implements Faction {
         this.defaultRole = role;
     }
 
-    // -------------------------------------------- //
-    // Construct
-    // -------------------------------------------- //
     public MemoryFaction(int id, String tag) {
         this.id = id;
         this.open = FactionsPlugin.getInstance().conf().factions().other().isNewFactionsDefaultOpen();
@@ -811,9 +804,6 @@ public abstract class MemoryFaction implements Faction {
         resetPerms(); // Reset on new Faction so it has default values.
     }
 
-    // -------------------------------------------- //
-    // Extra Getters And Setters
-    // -------------------------------------------- //
     @Override
     public boolean noPvPInTerritory() {
         return isSafeZone() || (peaceful && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisablePVP());
@@ -824,10 +814,6 @@ public abstract class MemoryFaction implements Faction {
         return isSafeZone() ||
                 (peaceful && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters());
     }
-
-    // -------------------------------
-    // Understand the type
-    // -------------------------------
 
     @Override
     public boolean isNormal() {
@@ -853,10 +839,6 @@ public abstract class MemoryFaction implements Faction {
     public boolean isPlayerFreeType() {
         return this.isSafeZone() || this.isWarZone();
     }
-
-    // -------------------------------
-    // Relation and relation colors
-    // -------------------------------
 
     @Override
     public Relation getRelationWish(Faction otherFaction) {
@@ -885,10 +867,6 @@ public abstract class MemoryFaction implements Faction {
         }
         return count;
     }
-
-    // ----------------------------------------------//
-    // DTR
-    // ----------------------------------------------//
 
     @Override
     public double getDTR() {
@@ -934,9 +912,6 @@ public abstract class MemoryFaction implements Faction {
         return System.currentTimeMillis() < this.frozenDTRUntilTime;
     }
 
-    // ----------------------------------------------//
-    // Power
-    // ----------------------------------------------//
     @Override
     public double getPowerExact() {
         if (this.permanentPower != null) {
@@ -1057,10 +1032,6 @@ public abstract class MemoryFaction implements Faction {
         this.sendMessage(MiniMessage.miniMessage().deserialize("<green>Upgraded <upgrade> to level " + newLevel + "!", Placeholder.component("upgrade", upgrade.nameComponent())));
         upgrade.onChange(this, oldLevel, newLevel);
     }
-
-    // -------------------------------
-    // FPlayers
-    // -------------------------------
 
     @Override
     public boolean addFPlayer(FPlayer fplayer) {
@@ -1261,9 +1232,6 @@ public abstract class MemoryFaction implements Faction {
         }
     }
 
-    // ----------------------------------------------//
-    // Messages
-    // ----------------------------------------------//
     @Override
     public void msg(String message, Object... args) {
         message = AbstractFactionsPlugin.getInstance().txt().parse(message, args);
@@ -1287,9 +1255,6 @@ public abstract class MemoryFaction implements Faction {
         }
     }
 
-    // ----------------------------------------------//
-    // Persistance and entity management
-    // ----------------------------------------------//
     public void remove() {
         if (Econ.shouldBeUsed() && FactionsPlugin.getInstance().conf().economy().isBankEnabled()) {
             Econ.setBalance(this, 0);

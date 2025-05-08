@@ -355,11 +355,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
     }
 
-    // -------------------------------------------- //
-    // Getters And Setters
-    // -------------------------------------------- //
-
-
     @Override
     public long getLastLoginTime() {
         return lastLoginTime;
@@ -739,10 +734,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     public void setShowScoreboard(boolean show) {
         this.showScoreboard = show;
     }
-
-    // -------------------------------
-    // Actions
-    // -------------------------------
 
     @Override
     public void leave(boolean makePay) {
@@ -1297,9 +1288,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         msg(TL.COMMAND_FLYTRAILS_PARTICLE_CHANGE, effect);
     }
 
-    // -------------------------------------------- //
-    // Message Sending Helpers
-    // -------------------------------------------- //
     @Override
     public void sendMessage(@NonNull Component component) {
         if (this.getPlayer() instanceof Player player) {

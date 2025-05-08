@@ -7,7 +7,6 @@ import dev.kitteh.factions.util.WarmUpUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -15,14 +14,12 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Logged in players always have exactly one FPlayer instance. Logged out players may or may not have an FPlayer
- * instance. They will always have one if they are part of a faction. This is because only players with a faction are
- * saved to disk (in order to not waste disk space).
+ * Logged in players always have exactly one FPlayer instance. Logged out players may or may not have a stored FPlayer
+ * instance. They will always have one if they are part of a faction.
  * <p>
  * The FPlayer is linked to a minecraft player using the player name.
  * <p>
- * The same instance is always returned for the same player. This means you can use the == operator. No .equals method
- * necessary.
+ * The same instance is always returned for the same player. This means you can use the == operator.
  */
 @NullMarked
 public interface FPlayer extends Participator, Selectable {
@@ -187,10 +184,6 @@ public interface FPlayer extends Participator, Selectable {
 
     void sendFactionHereMessage(Faction from);
 
-    // -------------------------------
-    // Actions
-    // -------------------------------
-
     void leave(boolean makePay);
 
     boolean canClaimForFaction(Faction forFaction);
@@ -252,10 +245,6 @@ public interface FPlayer extends Participator, Selectable {
     String getFlyTrailsEffect();
 
     void setFlyTrailsEffect(String effect);
-
-    // -------------------------------
-    // Warmups
-    // -------------------------------
 
     boolean isWarmingUp();
 

@@ -37,10 +37,6 @@ public final class JSONFactions extends MemoryFactions {
         return file;
     }
 
-    // -------------------------------------------- //
-    // CONSTRUCTORS
-    // -------------------------------------------- //
-
     public JSONFactions() {
         if (AbstractFactionsPlugin.getInstance().getServerUUID() == null) {
             AbstractFactionsPlugin.getInstance().grumpException(new RuntimeException());
@@ -124,10 +120,6 @@ public final class JSONFactions extends MemoryFactions {
             }.getType());
         }
     }
-
-    // -------------------------------------------- //
-    // ID MANAGEMENT
-    // -------------------------------------------- //
 
     public int getNextId() {
         while (!isIdFree(this.nextId)) {

@@ -14,10 +14,6 @@ public class Persist {
         this.plugin = plugin;
     }
 
-    // ------------------------------------------------------------ //
-    // GET FILE - In which file would we like to store this object?
-    // ------------------------------------------------------------ //
-
     public File getFile(String name) {
         return new File(plugin.getDataFolder(), name + ".json");
     }

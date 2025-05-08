@@ -401,19 +401,11 @@ public interface Faction extends Participator, Selectable {
 
     void setUpgradeLevel(Upgrade upgrade, int level);
 
-    // -------------------------------
-    // Relation and relation colors
-    // -------------------------------
-
     Relation getRelationWish(Faction otherFaction);
 
     void setRelationWish(Faction otherFaction, Relation relation);
 
     int getRelationCount(Relation relation);
-
-    // ----------------------------------------------//
-    // DTR
-    // ----------------------------------------------//
 
     double getDTR();
 
@@ -428,10 +420,6 @@ public interface Faction extends Participator, Selectable {
     void setFrozenDTR(long time);
 
     boolean isFrozenDTR();
-
-    // ----------------------------------------------//
-    // Power
-    // ----------------------------------------------//
 
     /**
      * Gets the exact faction power, which is not used for claim/raidability calculations
@@ -471,10 +459,6 @@ public interface Faction extends Participator, Selectable {
 
     boolean isPowerFrozen();
 
-    // -------------------------------
-    // FPlayers
-    // -------------------------------
-
     boolean addFPlayer(FPlayer fplayer);
 
     boolean removeFPlayer(FPlayer fplayer);
@@ -507,14 +491,10 @@ public interface Faction extends Participator, Selectable {
 
     List<Player> getOnlinePlayers();
 
-    // slightly faster check than getOnlinePlayers() if you just want to see if
-    // there are any players online
     boolean hasPlayersOnline();
 
     void memberLoggedOff();
 
-    // used when current leader is about to be removed from the faction;
-    // promotes new leader, or disbands faction if no other members left
     void promoteNewLeader();
 
     Role getDefaultRole();
