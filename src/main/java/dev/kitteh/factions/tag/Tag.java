@@ -5,6 +5,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public interface Tag {
@@ -44,7 +45,7 @@ public interface Tag {
         return GeneralTag.parse(PlayerTag.parse(FactionTag.parse(line, faction, fplayer), fplayer));
     }
 
-    static String parsePlaceholders(Player player, String line) {
+    static String parsePlaceholders(OfflinePlayer player, String line) {
         if (player == null || line == null) {
             return line;
         }

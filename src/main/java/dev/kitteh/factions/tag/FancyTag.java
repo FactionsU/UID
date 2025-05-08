@@ -180,6 +180,7 @@ public enum FancyTag implements Tag {
             if (string == null) {
                 continue;
             }
+            string = Tag.parsePlaceholders(fplayer.getOfflinePlayer(), string);
             lines.add(ChatColor.translateAlternateColorCodes('&', string));
         }
         return lines;
