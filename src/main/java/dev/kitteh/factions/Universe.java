@@ -7,8 +7,16 @@ import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;
 
+/**
+ * Information not tied to any given faction.
+ */
 @NullMarked
 public interface Universe {
+    /**
+     * Gets the universe.
+     *
+     * @return the universe
+     */
     static Universe getInstance() {
         return Instances.UNIVERSE;
     }
@@ -27,7 +35,19 @@ public interface Universe {
      */
     void setGraceRemaining(Duration graceRemaining);
 
+    /**
+     * Gets if a given upgrade is enabled.
+     *
+     * @param upgrade upgrade to check
+     * @return true if enabled
+     */
     boolean isUpgradeEnabled(Upgrade upgrade);
 
+    /**
+     * Gets the upgrade settings for an upgrade.
+     *
+     * @param upgrade upgrade
+     * @return settings for the upgrade
+     */
     UpgradeSettings getUpgradeSettings(Upgrade upgrade);
 }

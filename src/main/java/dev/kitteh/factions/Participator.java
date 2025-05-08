@@ -14,16 +14,36 @@ import org.jspecify.annotations.Nullable;
  */
 @NullMarked
 public interface Participator {
-    String getAccountId();
-
+    /**
+     * Gets an OfflinePlayer for the given participator.
+     *
+     * @return offline player representation
+     */
     OfflinePlayer getOfflinePlayer();
 
+    /**
+     * Sends a String.format-able message.
+     *
+     * @param str string
+     * @param args args
+     */
     void msg(String str, Object... args);
 
+    /**
+     * Sends a String.format-able message.
+     *
+     * @param translation translatable
+     * @param args args
+     */
     default void msg(TL translation, Object... args) {
         this.msg(translation.toString(), args);
     }
 
+    /**
+     * Sends a component.
+     *
+     * @param component component
+     */
     void sendMessage(Component component);
 
     default String describeTo(@Nullable Participator that) {

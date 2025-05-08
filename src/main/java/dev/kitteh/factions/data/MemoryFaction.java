@@ -675,14 +675,9 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public String getAccountId() {
-        return "faction-" + this.getId();
-    }
-
-    @Override
     public OfflinePlayer getOfflinePlayer() {
         if (this.offlinePlayer == null) {
-            this.offlinePlayer = FactionsPlugin.getInstance().getFactionOfflinePlayer(this.getAccountId());
+            this.offlinePlayer = FactionsPlugin.getInstance().getFactionOfflinePlayer("faction-" + this.id);
         }
         return this.offlinePlayer;
     }

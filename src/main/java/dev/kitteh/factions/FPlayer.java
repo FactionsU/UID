@@ -205,11 +205,6 @@ public interface FPlayer extends Participator, Selectable {
 
     UUID getUniqueId();
 
-    @Override
-    default @NonNull String getAccountId() {
-        return this.getUniqueId().toString();
-    }
-
     @Nullable
     Player getPlayer();
 
