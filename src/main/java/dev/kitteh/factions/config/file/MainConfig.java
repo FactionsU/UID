@@ -2348,6 +2348,7 @@ public class MainConfig {
         private boolean landClaims = true;
         private boolean landUnclaims = true;
         private boolean moneyTransactions = true;
+        @Comment("Log blocked player commands, specifically")
         private boolean playerCommands = true;
 
         public boolean isFactionCreate() {
@@ -2422,7 +2423,10 @@ public class MainConfig {
                 ******************
                 """)
         private boolean enabled = false;
+        @Comment("Universe accounts are receivers/sources of money in faction transactions. Not commonly used.")
         private String universeAccount = "";
+        @Comment("See the universe account comment. If your economy plugin uses a UUID, and you need a specific one for a universe account, add this too")
+        private String universeAccountUUID = "";
         @Comment("""
                 This setting matters in particular if you have per-world economy.
                 This setting is the world to use for:
@@ -2495,6 +2499,10 @@ public class MainConfig {
 
         public String getUniverseAccount() {
             return universeAccount;
+        }
+
+        public String getUniverseAccountUUID() {
+            return universeAccountUUID;
         }
 
         public double getCostClaimWilderness() {

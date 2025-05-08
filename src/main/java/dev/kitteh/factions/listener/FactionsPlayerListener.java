@@ -834,7 +834,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         if (FactionsPlayerListener.preventCommand(event.getMessage(), event.getPlayer())) {
-            if (plugin.logPlayerCommands()) {
+            if (plugin.conf().logging().isPlayerCommands()) {
                 plugin.getLogger().info("[PLAYER_COMMAND] " + event.getPlayer().getName() + ": " + event.getMessage());
             }
             event.setCancelled(true);

@@ -88,17 +88,26 @@ public class Econ {
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().economy().getUniverseAccount() == null) {
+        String universeAccount = FactionsPlugin.getInstance().conf().economy().getUniverseAccount();
+
+        if (universeAccount == null || universeAccount.isEmpty()) {
             return;
         }
-        if (FactionsPlugin.getInstance().conf().economy().getUniverseAccount().isEmpty()) {
-            return;
-        }
-        if (!hasAccount(getOfflinePlayerForName(FactionsPlugin.getInstance().conf().economy().getUniverseAccount()))) {
+        if (!hasAccount(getUniverseOfflinePlayer())) {
             return;
         }
 
         modifyBalance(getOfflinePlayerForName(FactionsPlugin.getInstance().conf().economy().getUniverseAccount()), delta);
+    }
+
+    private static OfflinePlayer getUniverseOfflinePlayer() {
+        String universeAccount = FactionsPlugin.getInstance().conf().economy().getUniverseAccount();
+        String universeUUID = FactionsPlugin.getInstance().conf().economy().getUniverseAccountUUID();
+
+        if (universeUUID==null) {
+            return getOfflinePlayerForName(universeAccount);
+        }
+        return AbstractFactionsPlugin.getInstance().getOfflinePlayer(universeAccount, UUID.fromString(universeUUID));
     }
 
     public static void sendBalanceInfo(FPlayer to, Participator about) {

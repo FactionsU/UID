@@ -53,8 +53,6 @@ public interface FactionsPlugin {
 
     LandRaidControl getLandRaidControl();
 
-    boolean logPlayerCommands();
-
     void debug(Level level, String s);
 
     void debug(String s);

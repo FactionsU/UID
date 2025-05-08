@@ -852,11 +852,6 @@ public class AbstractFactionsPlugin extends JavaPlugin implements FactionsPlugin
         }
     }
 
-    @Override
-    public boolean logPlayerCommands() {
-        return this.conf().logging().isPlayerCommands();
-    }
-
     public String getPrimaryGroup(OfflinePlayer player) {
         return this.vaultPerms.getPrimaryGroup(player);
     }
