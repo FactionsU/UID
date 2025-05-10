@@ -116,7 +116,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>4.19.0</version>
+            <version>4.21.0</version>
             <scope>compile</scope>
             <optional>true</optional>
             <exclusions>
@@ -133,7 +133,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-legacy</artifactId>
-            <version>4.19.0</version>
+            <version>4.21.0</version>
             <scope>compile</scope>
             <optional>true</optional>
             <exclusions>
@@ -150,7 +150,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.19.0</version>
+            <version>4.21.0</version>
             <scope>compile</scope>
             <optional>true</optional>
             <exclusions>
