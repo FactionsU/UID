@@ -108,7 +108,7 @@ public class CmdStuck implements Cmd {
                                 FactionsPlugin.getInstance().getTimers().remove(player.getUniqueId());
                                 FactionsPlugin.getInstance().getStuckMap().remove(player.getUniqueId());
                                 if (FactionsPlugin.getInstance().getIntegrationManager().isEnabled(IntegrationManager.Integration.ESS) && !Essentials.handleTeleport(player, tp)) {
-                                    FactionsPlugin.getInstance().teleport(player, tp);
+                                    AbstractFactionsPlugin.getInstance().teleport(player, tp);
                                     FactionsPlugin.getInstance().debug("/f stuck used regular teleport, not essentials!");
                                 }
                                 this.stop();

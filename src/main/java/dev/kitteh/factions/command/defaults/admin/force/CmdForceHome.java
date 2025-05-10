@@ -8,6 +8,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerTeleportEvent;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
@@ -46,7 +47,7 @@ public class CmdForceHome implements Cmd {
                 if (tpEvent.isCancelled()) {
                     return;
                 }
-                FactionsPlugin.getInstance().teleport(target.getPlayer(), destination).thenAccept(success -> {
+                AbstractFactionsPlugin.getInstance().teleport(target.getPlayer(), destination).thenAccept(success -> {
                     if (success) {
                         sender.msg(TL.COMMAND_AHOME_SUCCESS, target.getName());
                         target.msg(TL.COMMAND_AHOME_TARGET);

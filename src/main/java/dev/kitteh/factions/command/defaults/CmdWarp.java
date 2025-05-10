@@ -10,6 +10,7 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerTeleportEvent;
 import dev.kitteh.factions.gui.WarpGUI;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
@@ -81,7 +82,7 @@ public class CmdWarp implements Cmd {
                 WarmUpUtil.process(sender, WarmUpUtil.Warmup.WARP, TL.WARMUPS_NOTIFY_TELEPORT, warpName, () -> {
                     Player player = Bukkit.getPlayer(uuid);
                     if (destination == faction.getWarp(warpName) && player != null) {
-                        FactionsPlugin.getInstance().teleport(player, destination.getLocation()).thenAccept(success -> {
+                        AbstractFactionsPlugin.getInstance().teleport(player, destination.getLocation()).thenAccept(success -> {
                             if (success) {
                                 fPlayer.msg(TL.COMMAND_FWARP_WARPED, warpName);
                             }

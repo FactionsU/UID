@@ -15,6 +15,7 @@ import dev.kitteh.factions.integration.Essentials;
 import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.SmokeUtil;
 import dev.kitteh.factions.util.TL;
@@ -62,7 +63,7 @@ public class CmdHome implements Cmd {
 
         if (sender.isAdminBypassing() && context.flags().get("faction") instanceof Faction fac) {
             if (targetFaction.hasHome()) {
-                FactionsPlugin.getInstance().teleport(player, fac.getHome());
+                AbstractFactionsPlugin.getInstance().teleport(player, fac.getHome());
             } else {
                 sender.msg(TL.COMMAND_HOME_NOHOME);
             }
@@ -158,7 +159,7 @@ public class CmdHome implements Cmd {
                 SmokeUtil.spawnCloudRandom(smokeLocations, FactionsPlugin.getInstance().conf().factions().homes().getTeleportCommandSmokeEffectThickness());
             }
 
-            FactionsPlugin.getInstance().teleport(plr, destination);
+            AbstractFactionsPlugin.getInstance().teleport(plr, destination);
         }, FactionsPlugin.getInstance().conf().commands().home().getDelay());
     }
 }

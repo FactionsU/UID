@@ -872,7 +872,6 @@ public class AbstractFactionsPlugin extends JavaPlugin implements FactionsPlugin
         this.luckPermsSetup = true;
     }
 
-    @Override
     public CompletableFuture<Boolean> teleport(Player player, Location location) {
         if (this.conf().paper().isAsyncTeleport()) {
             return PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN);

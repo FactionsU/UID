@@ -57,8 +57,6 @@ public interface FactionsPlugin {
 
     void debug(String s);
 
-    CompletableFuture<Boolean> teleport(Player player, Location location);
-
     OfflinePlayer getFactionOfflinePlayer(String name);
 
     IntegrationManager getIntegrationManager();
