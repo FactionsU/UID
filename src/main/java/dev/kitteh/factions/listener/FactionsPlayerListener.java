@@ -22,7 +22,6 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.scoreboard.sidebar.FDefaultSidebar;
-import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
@@ -336,7 +335,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (me.isMapAutoUpdating()) {
             if (!showTimes.containsKey(player.getUniqueId()) || (showTimes.get(player.getUniqueId()) < System.currentTimeMillis())) {
                 for (Component component : ((MemoryBoard) Board.getInstance()).getMap(me, to, player.getLocation().getYaw())) {
-                    ComponentDispatcher.send(player, component);
+                    me.sendMessage(component);
                 }
                 showTimes.put(player.getUniqueId(), System.currentTimeMillis() + this.plugin.conf().commands().map().getCooldown());
             }
