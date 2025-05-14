@@ -40,7 +40,7 @@ public class IntegrationManager implements Listener {
             if (notSupported) {
                 FactionsPlugin.getInstance().log("Found an outdated LuckPerms. With LuckPerms 5.1.0 and above, FactionsUUID supports permission contexts!");
             } else {
-                if (LuckPerms.init(AbstractFactionsPlugin.getInstance())) {
+                if (LuckPerms.init(plugin)) {
                     AbstractFactionsPlugin.getInstance().luckpermsEnabled();
                 }
             }

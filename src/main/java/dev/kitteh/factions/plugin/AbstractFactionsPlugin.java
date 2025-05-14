@@ -120,7 +120,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class AbstractFactionsPlugin extends JavaPlugin implements FactionsPlugin {
+public abstract class AbstractFactionsPlugin extends JavaPlugin implements FactionsPlugin {
 
     // Our single plugin instance.
     // Single 4 life.

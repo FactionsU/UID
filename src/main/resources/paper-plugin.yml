@@ -1,10 +1,45 @@
 name: FactionsUUID
 version: ${version}
-main: dev.kitteh.factions.plugin.FactionsPluginSpigot
+main: dev.kitteh.factions.plugin.FactionsPluginPaper
 authors: [mbaxter, drtshock, dariasc, Brett Flannigan, Olof Larsson]
-softdepend: [LuckPerms, WorldGuard]
 api-version: '1.21.4'
 website: https://www.spigotmc.org/resources/factionsuuid.1035/
+
+dependencies:
+  server:
+    LuckPerms:
+      load: AFTER
+      required: false
+      join-classpath: true
+    WorldGuard:
+      load: AFTER
+      required: false
+      join-classpath: true
+    Essentials:
+      required: false
+      join-classpath: true
+    Depenizen:
+      required: false
+      join-classpath: true
+    Duels:
+      required: false
+      join-classpath: true
+    dynmap:
+      required: false
+      join-classpath: true
+    Magic:
+      required: false
+      join-classpath: true
+    PlaceholderAPI:
+      required: false
+      join-classpath: true
+    Sentinel:
+      required: false
+      join-classpath: true
+    Vault:
+      required: false
+      join-classpath: true
+
 permissions:
   factions.kit.admin:
     description: All faction permissions.

@@ -210,7 +210,7 @@ dependencies {
 }
 
 tasks.processResources {
-  filesMatching("plugin.yml") {
+  filesMatching("p*lugin.yml") {
     expand(mapOf(
       "version" to project.version
     ))
