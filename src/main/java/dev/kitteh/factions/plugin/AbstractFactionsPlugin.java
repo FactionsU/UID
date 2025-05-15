@@ -188,7 +188,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
     @Override
     public void onLoad() {
-        IntegrationManager.onLoad(this);
         try {
             Class.forName("com.sk89q.worldguard.WorldGuard");
             Worldguard.onLoad();

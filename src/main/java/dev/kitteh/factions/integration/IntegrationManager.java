@@ -91,7 +91,7 @@ public class IntegrationManager implements Listener {
 
     private final Set<Integration> integrations = new HashSet<>();
 
-    public static void onLoad(AbstractFactionsPlugin plugin) {
+    public static void onLoadFixSpigot(AbstractFactionsPlugin plugin) {
         try {
             Field depGraph = SimplePluginManager.class.getDeclaredField("dependencyGraph");
             depGraph.setAccessible(true);
