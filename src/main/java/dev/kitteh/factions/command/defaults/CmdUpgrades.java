@@ -52,7 +52,7 @@ public class CmdUpgrades implements Cmd {
         Player player = ((Sender.Player) context.sender()).player();
         Faction faction = sender.getFaction();
 
-        ChestGui gui = new ChestGui(6, ComponentHolder.of(Component.text("Upgrades", NamedTextColor.AQUA)));
+        ChestGui gui = new ChestGui(6, ComponentHolder.of(Component.text("Upgrades")));
 
         gui.setOnGlobalDrag(e -> e.setCancelled(true));
         gui.setOnGlobalClick(e -> e.setCancelled(true));
@@ -185,7 +185,7 @@ public class CmdUpgrades implements Cmd {
 
         ItemStack stack = new ItemStack(Material.STONE);
         ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(LegacyComponentSerializer.legacySection().serialize(upgrade.nameComponent()) + " " + (lvl < 1 ? "" : lvl));
+        meta.setDisplayName(LegacyComponentSerializer.legacySection().serialize(upgrade.nameComponent()) + " " + (lvl < 1 || settings.maxLevel() == 1 ? "" : lvl));
 
         List<String> lore = new ArrayList<>();
 
