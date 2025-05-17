@@ -1041,7 +1041,7 @@ public abstract class MemoryFaction implements Faction {
             return 0;
         }
         UpgradeSettings settings = Universe.getInstance().getUpgradeSettings(upgrade);
-        return Math.min(settings.maxLevel(), this.upgrades.getOrDefault(upgrade.name(), 0));
+        return Math.min(settings.maxLevel(), this.upgrades.getOrDefault(upgrade.name(), settings.startingLevel()));
     }
 
     @Override

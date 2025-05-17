@@ -12,11 +12,15 @@ public final class UpgradeSettings {
     private final Upgrade upgrade;
     private final Map<UpgradeVariable, LeveledValueProvider> variableSettings;
     private final int maxLevel;
+    private final int startingLevel;
     private final LeveledValueProvider costSettings;
 
-    public UpgradeSettings(Upgrade upgrade, Map<UpgradeVariable, LeveledValueProvider> variableSettings, int maxLevel, LeveledValueProvider costSettings) {
+    public UpgradeSettings(Upgrade upgrade, Map<UpgradeVariable, LeveledValueProvider> variableSettings, int maxLevel, int startingLevel, LeveledValueProvider costSettings) {
         if (maxLevel > upgrade.maxLevel()) {
             throw new IllegalArgumentException("Max level must be less than or equal to " + upgrade.maxLevel());
+        }
+        if (startingLevel > maxLevel) {
+            throw new IllegalArgumentException("Starting level must be less than or equal to " + maxLevel);
         }
         for (UpgradeVariable var : upgrade.variables()) {
             if (!variableSettings.containsKey(var)) {
@@ -32,6 +36,7 @@ public final class UpgradeSettings {
         this.upgrade = upgrade;
         this.variableSettings = new HashMap<>(variableSettings);
         this.maxLevel = maxLevel;
+        this.startingLevel = startingLevel;
         this.costSettings = costSettings;
     }
 
@@ -45,6 +50,10 @@ public final class UpgradeSettings {
 
     public int maxLevel() {
         return maxLevel;
+    }
+
+    public int startingLevel() {
+        return startingLevel;
     }
 
     public BigDecimal costAt(int level) {

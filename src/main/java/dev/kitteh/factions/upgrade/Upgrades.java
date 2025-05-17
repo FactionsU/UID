@@ -65,6 +65,7 @@ public final class Upgrades {
                     Upgrades.DTR_CLAIM_LIMIT,
                     Map.of(Variables.POSITIVE_INCREASE, LeveledValueProvider.Equation.of("level * 9")),
                     10,
+                    0,
                     LeveledValueProvider.Equation.of("100000 * level ^ 2")
             ),
             new UpgradeSettings(
@@ -74,6 +75,7 @@ public final class Upgrades {
                             Variables.GROWTH_BOOST, LeveledValueProvider.LevelMap.of(1, BigDecimal.ONE, 2, BigDecimal.ONE, 3, BigDecimal.TWO)
                     ),
                     3,
+                    0,
                     LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(2000000), 2, BigDecimal.valueOf(5000000), 3, BigDecimal.valueOf(10000000))
             ),
             new UpgradeSettings(
@@ -82,6 +84,7 @@ public final class Upgrades {
                             Variables.POSITIVE_INCREASE, LeveledValueProvider.Equation.of("level * 5")
                     ),
                     4,
+                    0,
                     LeveledValueProvider.Equation.of("100000*(level + 1)")
             ),
             new UpgradeSettings(
@@ -90,6 +93,7 @@ public final class Upgrades {
                             Variables.POSITIVE_INCREASE, LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(Integer.MAX_VALUE))
                     ),
                     1,
+                    0,
                     LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(10000))
             )
     );
