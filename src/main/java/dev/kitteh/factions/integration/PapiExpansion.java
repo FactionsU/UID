@@ -29,7 +29,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 @NullMarked
-public class ClipPlaceholderAPIManager extends PlaceholderExpansion implements Relational {
+public class PapiExpansion extends PlaceholderExpansion implements Relational {
     private static final String mapChars = "0123456789abcdef";
 
     // Identifier for this expansion

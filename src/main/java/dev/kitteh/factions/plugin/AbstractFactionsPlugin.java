@@ -22,7 +22,7 @@ import dev.kitteh.factions.data.SaveTask;
 import dev.kitteh.factions.event.FactionCreateEvent;
 import dev.kitteh.factions.event.FactionEvent;
 import dev.kitteh.factions.event.FactionRelationEvent;
-import dev.kitteh.factions.integration.ClipPlaceholderAPIManager;
+import dev.kitteh.factions.integration.PapiExpansion;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.integration.Essentials;
 import dev.kitteh.factions.integration.IntegrationManager;
@@ -160,8 +160,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     private final Map<UUID, Integer> stuckMap = new HashMap<>();
 
     private Integer autoLeaveTask = null;
-
-    private ClipPlaceholderAPIManager clipPlaceholderAPIManager;
 
     private SeeChunkUtil seeChunkUtil;
     private BukkitParticleProvider particleProvider;
@@ -763,19 +761,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
     public Worldguard getWorldguard() {
         return this.worldguard;
-    }
-
-    public boolean setupPlaceholderAPI() {
-        this.clipPlaceholderAPIManager = new ClipPlaceholderAPIManager();
-        if (this.clipPlaceholderAPIManager.register()) {
-            getLogger().info("Successfully registered placeholders with PlaceholderAPI.");
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isClipPlaceholderAPIHooked() {
-        return this.clipPlaceholderAPIManager != null;
     }
 
     public GsonBuilder getGsonBuilder(boolean confNotLoaded) {

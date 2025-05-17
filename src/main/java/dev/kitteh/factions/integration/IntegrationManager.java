@@ -47,7 +47,14 @@ public class IntegrationManager implements Listener {
             return true;
         }),
         MAGIC("Magic", p -> Magic.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
-        PLACEHOLDERAPI("PlaceholderAPI", p -> AbstractFactionsPlugin.getInstance().setupPlaceholderAPI()),
+        PLACEHOLDERAPI("PlaceholderAPI", p -> {
+            PapiExpansion papi = new PapiExpansion();
+            if (papi.register()) {
+                AbstractFactionsPlugin.getInstance().getLogger().info("Successfully registered placeholders with PlaceholderAPI.");
+                return true;
+            }
+            return false;
+        }),
         SENTINEL("Sentinel", p -> Sentinel.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         WORLDGUARD("WorldGuard", plugin -> {
             AbstractFactionsPlugin f = AbstractFactionsPlugin.getInstance();
