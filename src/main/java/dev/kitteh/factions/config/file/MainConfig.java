@@ -1524,6 +1524,8 @@ public class MainConfig {
             private boolean territoryDenyEndermanBlocks = true;
             private boolean territoryDenyEndermanBlocksWhenOffline = true;
             private boolean territoryBlockEntityDamageMatchingPerms = false;
+            @Comment("Blocks wind charge use to activate doors/levers/buttons etc. if lacking permission")
+            private boolean territoryBlockWindChargeInteractionMatchingPerms = false;
             @Comment("If true, lecterns can be interacted with, but taking the book will still be protected by CONTAINER perm")
             private boolean territoryAllowLecternReading = false;
             private boolean territoryDenyIceFormation = false;
@@ -1686,6 +1688,10 @@ public class MainConfig {
 
             public boolean isTerritoryBlockEntityDamageMatchingPerms() {
                 return territoryBlockEntityDamageMatchingPerms;
+            }
+
+            public boolean isTerritoryBlockWindChargeInteractionMatchingPerms() {
+                return territoryBlockWindChargeInteractionMatchingPerms;
             }
 
             public boolean isTerritoryAllowLecternReading() {

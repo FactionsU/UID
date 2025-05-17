@@ -13,15 +13,11 @@ import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Chunk;
+import org.bukkit.ExplosionResult;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
-import org.bukkit.entity.Wither;
+import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Listener;
@@ -87,7 +83,7 @@ public abstract class AbstractListener implements Listener {
         return true;
     }
 
-    protected void handleExplosion(Location loc, Entity boomer, Cancellable event, List<Block> blockList) {
+    protected void handleExplosion(Location loc, Entity boomer, Cancellable event, ExplosionResult result, List<Block> blockList) {
         if (!WorldUtil.isEnabled(loc.getWorld())) {
             return;
         }
@@ -95,6 +91,12 @@ public abstract class AbstractListener implements Listener {
         if (explosionDisallowed(boomer, new FLocation(loc))) {
             event.setCancelled(true);
             return;
+        }
+
+        if (result == ExplosionResult.TRIGGER_BLOCK && boomer != null &&
+                FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockWindChargeInteractionMatchingPerms() &&
+                boomer instanceof WindCharge charge && charge.getShooter() instanceof Player shooter) {
+            blockList.removeIf(block -> !canUseBlock(shooter, block.getType(), block.getLocation(), true));
         }
 
         List<Chunk> chunks = blockList.stream().map(Block::getChunk).distinct().collect(Collectors.toList());

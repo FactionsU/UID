@@ -171,7 +171,7 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityExplode(EntityExplodeEvent event) {
-        this.handleExplosion(event.getLocation(), event.getEntity(), event, event.blockList());
+        this.handleExplosion(event.getLocation(), event.getEntity(), event, event.getExplosionResult(), event.blockList());
     }
 
     // mainly for flaming arrows; don't want allies or people in safe zones to be ignited even after damage event is cancelled
