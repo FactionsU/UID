@@ -15,6 +15,7 @@ import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActionRegistry;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.selector.UnknownSelector;
+import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
@@ -254,8 +255,13 @@ public class CmdSetPerm implements Cmd {
             return;
         }
         if (permissions.has(selector)) { // List options to add to this selector
-            List<String> actions = PermissibleActionRegistry.getActions().stream().map(PermissibleAction::name).collect(Collectors.toCollection(ArrayList::new));
+            List<String> actions = PermissibleActionRegistry.getActions().stream()
+                    // Filter out unfulfilled prerequisites
+                    .filter(action -> !(action.prerequisite() instanceof Upgrade prereq) || faction.getUpgradeLevel(prereq) > 0)
+                    .map(PermissibleAction::name).collect(Collectors.toCollection(ArrayList::new));
+            // Remove hidden actions
             actions.removeAll(FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getHiddenActions());
+            // Remove actions already in use
             actions.removeAll(permissions.get(selector).actions());
             Collections.sort(actions);
 
