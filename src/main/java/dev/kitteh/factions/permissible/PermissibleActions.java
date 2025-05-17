@@ -47,7 +47,7 @@ public enum PermissibleActions implements PermissibleAction {
 
     SHIELD(TL.PERM_SHIELD, TL.PERM_SHORT_SHIELD),
 
-    FLY(TL.PERM_FLY, TL.PERM_SHORT_FLY),
+    FLY(TL.PERM_FLY, TL.PERM_SHORT_FLY, Upgrades.FLIGHT),
 
     UPGRADE(TL.PERM_UPGRADE, TL.PERM_SHORT_UPGRADE),
 

@@ -731,6 +731,10 @@ public abstract class MemoryFaction implements Faction {
             return false; // Fail in a safe way because people are foolish
         }
 
+        if (permissibleAction.prerequisite() instanceof Upgrade prereq && (!Universe.getInstance().isUpgradeEnabled(prereq) || this.getUpgradeLevel(prereq)==0)) {
+            return false;
+        }
+
         if (selectable == Role.ADMIN || (selectable instanceof FPlayer && ((FPlayer) selectable).getFaction() == this && ((FPlayer) selectable).getRole() == Role.ADMIN)) {
             return true;
         }

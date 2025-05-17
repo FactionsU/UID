@@ -749,6 +749,8 @@ public class TranslationsConfig {
 
         private UpgradeDetail dtrClaimLimit = new UpgradeDetail("<green>Claim Limit Increase", "<green>Increases maximum faction territory", "<green>+<increase> claims");
 
+        private UpgradeDetail flight = new UpgradeDetail("<green>Flight", "<green>Enables flying in faction territory", "");
+
         private UpgradeDetail growth = new UpgradeDetail("<green>Growth", "<green>Boosts plant growth in faction land", "<green><chance>% chance to grow <boost> extra step");
 
         private UpgradeDetail maxMembers = new UpgradeDetail("<green>Member Limit Increase", "<green>Increases maximum number of faction members", "<green>+<increase> members");
@@ -757,6 +759,10 @@ public class TranslationsConfig {
 
         public UpgradeDetail dtrClaimLimit() {
             return this.dtrClaimLimit;
+        }
+
+        public UpgradeDetail flight() {
+            return this.flight;
         }
 
         public UpgradeDetail growth() {

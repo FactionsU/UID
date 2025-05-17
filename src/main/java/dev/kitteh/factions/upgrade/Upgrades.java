@@ -25,6 +25,8 @@ public final class Upgrades {
 
     public static final Upgrade DTR_CLAIM_LIMIT = new Upgrade.Simple("dtr_claim_limit", TranslationsConfig.Upgrades::dtrClaimLimit, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
+    public static final Upgrade FLIGHT = new Upgrade.Simple("flight", TranslationsConfig.Upgrades::flight, 1, Set.of());
+
     public static final Upgrade GROWTH = new Upgrade.Simple("growth", TranslationsConfig.Upgrades::growth, Integer.MAX_VALUE, Set.of(Variables.CHANCE, Variables.GROWTH_BOOST));
 
     public static final Upgrade MAX_MEMBERS = new Upgrade.Simple("max_members", TranslationsConfig.Upgrades::maxMembers, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
@@ -67,6 +69,13 @@ public final class Upgrades {
                     10,
                     0,
                     LeveledValueProvider.Equation.of("100000 * level ^ 2")
+            ),
+            new UpgradeSettings(
+                    Upgrades.FLIGHT,
+                    Map.of(),
+                    1,
+                    1,
+                    LeveledValueProvider.LevelMap.of(1, BigDecimal.ZERO)
             ),
             new UpgradeSettings(
                     Upgrades.GROWTH,

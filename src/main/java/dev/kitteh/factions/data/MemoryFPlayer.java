@@ -26,6 +26,7 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.scoreboard.sidebar.FInfoSidebar;
 import dev.kitteh.factions.tag.Tag;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
