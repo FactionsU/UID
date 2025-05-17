@@ -14,12 +14,7 @@ import dev.kitteh.factions.event.FactionNewAdminEvent;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.landraidcontrol.LandRaidControl;
-import dev.kitteh.factions.permissible.PermSelector;
-import dev.kitteh.factions.permissible.PermState;
-import dev.kitteh.factions.permissible.PermissibleAction;
-import dev.kitteh.factions.permissible.Relation;
-import dev.kitteh.factions.permissible.Role;
-import dev.kitteh.factions.permissible.Selectable;
+import dev.kitteh.factions.permissible.*;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
@@ -220,7 +215,25 @@ public abstract class MemoryFaction implements Faction {
 
         @Override
         public Faction.Permissions permissions() {
-            return this.perms;
+            return this.id == 0 ? MemoryFaction.this.perms : this.perms;
+        }
+
+        @Override
+        public boolean canPlayerManage(FPlayer fPlayer) {
+            //noinspection ConstantValue
+            if (fPlayer == null) {
+                return false; // Fail in a safe way because people are foolish
+            }
+            if (fPlayer.getFaction() == MemoryFaction.this && (fPlayer.getRole() == Role.ADMIN)) {
+                return true;
+            }
+            if (MemoryFaction.this.hasOverrideAccess(fPlayer, PermissibleActions.ZONE) instanceof Boolean bool) {
+                return bool;
+            }
+            if (MemoryFaction.this.hasAccess(fPlayer, PermissibleActions.ZONE, this.perms) instanceof Boolean bool) {
+                return bool;
+            }
+            return false;
         }
     }
 
@@ -334,7 +347,7 @@ public abstract class MemoryFaction implements Faction {
     protected transient long lastPlayerLoggedOffTime;
     protected double powerBoost;
     protected Map<Integer, Relation> relationWish = new HashMap<>();
-    protected @Nullable Map<FLocation, Set<UUID>> claimOwnership = new ConcurrentHashMap<>();
+    protected @Nullable Map<FLocation, Set<UUID>> claimOwnership; // Leaving for now, for people who want to look back at it
     protected transient Set<FPlayer> fplayers = new HashSet<>();
     protected Set<UUID> invites = new HashSet<>();
     protected HashMap<UUID, List<String>> announcements = new HashMap<>();
@@ -722,13 +735,8 @@ public abstract class MemoryFaction implements Faction {
             return true;
         }
 
-        PermissionsConfig permConf = FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig();
-        List<PermSelector> priority = permConf.getOverridePermissionsOrder().stream().filter(s -> s.test(selectable, this)).toList();
-        for (PermSelector selector : priority) {
-            Boolean bool = permConf.getOverridePermissions().get(selector).get(permissibleAction.getName());
-            if (bool != null) {
-                return bool;
-            }
+        if (this.hasOverrideAccess(selectable, permissibleAction) instanceof Boolean bool) {
+            return bool;
         }
 
         if (location != null) {
@@ -743,6 +751,18 @@ public abstract class MemoryFaction implements Faction {
         }
 
         return false;
+    }
+
+    private @Nullable Boolean hasOverrideAccess(Selectable selectable, PermissibleAction permissibleAction) {
+        PermissionsConfig permConf = FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig();
+        List<PermSelector> priority = permConf.getOverridePermissionsOrder().stream().filter(s -> s.test(selectable, this)).toList();
+        for (PermSelector selector : priority) {
+            Boolean bool = permConf.getOverridePermissions().get(selector).get(permissibleAction.getName());
+            if (bool != null) {
+                return bool;
+            }
+        }
+        return null;
     }
 
     private @Nullable Boolean hasAccess(Selectable selectable, PermissibleAction permissibleAction, Permissions permissions) {

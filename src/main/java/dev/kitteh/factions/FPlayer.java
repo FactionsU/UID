@@ -59,6 +59,11 @@ public interface FPlayer extends Participator, Selectable {
     void setAutoClaimFor(@Nullable Faction faction);
 
     @Nullable
+    String getAutoSetZone();
+
+    void setAutoSetZone(@Nullable String zone);
+
+    @Nullable
     Faction getAutoUnclaimFor();
 
     void setAutoUnclaimFor(@Nullable Faction faction);
@@ -195,6 +200,8 @@ public interface FPlayer extends Participator, Selectable {
     boolean attemptClaim(Faction forFaction, FLocation location, boolean notifyFailure);
 
     boolean attemptUnclaim(Faction forFaction, FLocation flocation, boolean notifyFailure);
+
+    void attemptAutoSetZone(FLocation flocation);
 
     UUID getUniqueId();
 

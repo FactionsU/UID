@@ -247,6 +247,14 @@ public interface Faction extends Participator, Selectable {
          * @return zone permissions
          */
         Permissions permissions();
+
+        /**
+         * Gets if the given player can manage this zone, meaning they have the ZONE permission for specifically this zone (if not overridden).
+         *
+         * @param fPlayer player
+         * @return true if can manage
+         */
+        boolean canPlayerManage(FPlayer fPlayer);
     }
 
     int getId();

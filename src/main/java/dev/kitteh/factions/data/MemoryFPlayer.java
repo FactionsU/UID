@@ -9,6 +9,7 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.chat.ChatTarget;
+import dev.kitteh.factions.command.defaults.CmdZone;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.event.FactionAutoDisbandEvent;
 import dev.kitteh.factions.event.LandClaimEvent;
@@ -25,12 +26,9 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.scoreboard.sidebar.FInfoSidebar;
 import dev.kitteh.factions.tag.Tag;
-import dev.kitteh.factions.util.ComponentDispatcher;
-import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.WarmUpUtil;
-import dev.kitteh.factions.util.WorldUtil;
+import dev.kitteh.factions.util.*;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -98,6 +96,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected FLocation lastStoodAt = new FLocation(); // Where did this player stand the last time we checked?
     protected transient boolean mapAutoUpdating;
     protected transient @Nullable Faction autoClaimFor;
+    protected transient @Nullable String autoSetZone;
     protected transient @Nullable Faction autoUnclaimFor;
     protected transient boolean loginPvpDisabled;
     protected transient long lastFrostwalkerMessage;
@@ -208,6 +207,16 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
+    public @Nullable String getAutoSetZone() {
+        return this.autoSetZone;
+    }
+
+    @Override
+    public void setAutoSetZone(@Nullable String zone) {
+        this.autoSetZone = zone;
+    }
+
+    @Override
     public @Nullable Faction getAutoUnclaimFor() {
         return autoUnclaimFor;
     }
@@ -217,6 +226,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.autoUnclaimFor = faction;
         if (faction != null) {
             this.autoClaimFor = null;
+            this.autoSetZone = null;
         }
     }
 
@@ -349,6 +359,8 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.role = Role.NORMAL;
         this.title = "";
         this.autoClaimFor = null;
+        this.autoUnclaimFor = null;
+        this.autoSetZone = null;
 
         if (updateCommands && this.getPlayer() instanceof Player player) {
             player.updateCommands();
@@ -812,6 +824,25 @@ public abstract class MemoryFPlayer implements FPlayer {
             Factions.getInstance().removeFaction(myFaction);
             if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
                 FactionsPlugin.getInstance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.getTag(), "" + myFaction.getId(), this.getName()));
+            }
+        }
+    }
+
+    @Override
+    public void attemptAutoSetZone(FLocation flocation) {
+        if (this.hasFaction() && this.autoSetZone != null) {
+            Faction faction = this.getFaction();
+            Faction.Zone zone = faction.zones().get(this.autoSetZone);
+            if (zone == null) {
+                this.autoSetZone = null; // TODO should we warn about this?
+                return;
+            }
+            Faction.Zone currentZone = faction.zones().get(flocation);
+            if (currentZone == zone) {
+                return;
+            }
+            if (CmdZone.claim(this, faction, flocation, zone, false)) {
+                this.sendMessage(Mini.parse(FactionsPlugin.getInstance().tl().commands().zone().claim().getSuccess(), Placeholder.unparsed("oldzone", currentZone.name()), Placeholder.unparsed("newzone", zone.name())));
             }
         }
     }

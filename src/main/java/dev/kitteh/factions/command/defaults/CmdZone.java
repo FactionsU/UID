@@ -1,21 +1,23 @@
 package dev.kitteh.factions.command.defaults;
 
-import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.*;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.defaults.set.CmdSetPerm;
+import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Mini;
+import dev.kitteh.factions.util.SpiralTask;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.parser.standard.IntegerParser;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.BlockingSuggestionProvider;
 import org.incendo.cloud.suggestion.SuggestionProvider;
@@ -61,6 +63,14 @@ public class CmdZone implements Cmd {
                     zoneBuilder.literal(tl.delete().getFirstAlias(), tl.delete().getSecondaryAliases())
                             .required("zone", StringParser.stringParser(), SuggestionProvider.blockingStrings(zoneSuggester))
                             .handler(this::delete)
+            );
+
+            manager.command(
+                    zoneBuilder.literal(tl.claim().getFirstAlias(), tl.claim().getSecondaryAliases())
+                            .required("zone", StringParser.stringParser(), SuggestionProvider.blockingStrings(zoneSuggester))
+                            .flag(manager.flagBuilder("radius").withComponent(IntegerParser.integerParser(1)))
+                            .flag(manager.flagBuilder("auto"))
+                            .handler(this::claim)
             );
 
             new CmdSetPerm((ctx) -> '/' + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + ' ' + tl.getFirstAlias() +
@@ -165,6 +175,101 @@ public class CmdZone implements Cmd {
                 Placeholder.unparsed("name", name),
                 Placeholder.component("greeting", Mini.parse(greeting, Placeholder.unparsed("tag", faction.getTag())))
         ));
+    }
+
+    private void claim(CommandContext<Sender> context) {
+        FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
+        Player player = ((Sender.Player) context.sender()).player();
+        Faction faction = sender.getFaction();
+
+        String name = context.get("zone");
+
+        var tl = FactionsPlugin.getInstance().tl().commands().zone().claim();
+
+        Faction.Zone zone = faction.zones().get(name);
+
+        if (zone == null) {
+            sender.sendMessage(Mini.parse(tl.getZoneNotFound(), Placeholder.unparsed("name", name)));
+            return;
+        }
+
+        if (context.flags().hasFlag("auto")) {
+            if (sender.getAutoSetZone() == null) {
+                sender.setAutoSetZone(zone.name());
+                sender.sendMessage(Mini.parse(tl.getAutoSetOn(), Placeholder.unparsed("zone", zone.name())));
+            } else {
+                sender.setAutoSetZone(null);
+                sender.sendMessage(Mini.parse(tl.getAutoSetOff()));
+            }
+
+            return;
+        }
+
+        FLocation standing = new FLocation(player);
+
+        if (context.flags().get("radius") instanceof Integer radius) {
+            var claims = Board.getInstance().getAllClaims(faction);
+            sender.sendMessage(Mini.parse(tl.getAttemptingRadius(), Placeholder.unparsed("zone", zone.name())));
+
+            new SpiralTask(standing, radius) {
+                @Override
+                public boolean work() {
+                    FLocation loc = this.currentFLocation();
+                    if (claims.contains(loc)) {
+                        try {
+                            claim(sender, faction, loc, zone, tl, false);
+                        } catch (Exception ignored) {
+                        }
+                    }
+                    return true;
+                }
+            };
+            return;
+        }
+
+        claim(sender, faction, standing, zone, tl, true);
+    }
+
+    public static boolean claim(FPlayer sender, Faction faction, FLocation location, Faction.Zone zone, boolean msg) {
+        return claim(sender, faction, location, zone, FactionsPlugin.getInstance().tl().commands().zone().claim(), msg);
+    }
+
+    private static boolean claim(FPlayer sender, Faction faction, FLocation location, Faction.Zone zone, TranslationsConfig.Commands.Zone.Claim tl, boolean msg) {
+        if (location.getFaction() != faction) {
+            if (msg) {
+                sender.sendMessage(Mini.parse(tl.getNotInTerritory()));
+            }
+            return false;
+        }
+
+        Faction.Zone currentZone = faction.zones().get(location);
+
+        if (!currentZone.canPlayerManage(sender)) {
+            if (msg) {
+                sender.sendMessage(Mini.parse(tl.getCannotManage(), Placeholder.unparsed("zone", currentZone.name())));
+            }
+            return false;
+        }
+
+        if (currentZone == zone) {
+            if (msg) {
+                sender.sendMessage(Mini.parse(tl.getAlreadyZone(), Placeholder.unparsed("zone", zone.name())));
+            }
+            return false;
+        }
+
+        if ((currentZone != faction.zones().main()) && !zone.canPlayerManage(sender)) {
+            if (msg) {
+                sender.sendMessage(Mini.parse(tl.getCannotManage(), Placeholder.unparsed("zone", zone.name())));
+            }
+            return false;
+        }
+
+        faction.zones().set(zone, location);
+        if (msg) {
+            sender.sendMessage(Mini.parse(tl.getSuccess(), Placeholder.unparsed("oldzone", currentZone.name()), Placeholder.unparsed("newzone", zone.name())));
+        }
+        return true;
     }
 
     private void delete(CommandContext<Sender> context) {

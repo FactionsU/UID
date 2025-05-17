@@ -316,6 +316,10 @@ public class FactionsPlayerListener extends AbstractListener {
         Faction factionTo = Board.getInstance().getFactionAt(to);
         boolean changedFaction = (factionFrom != factionTo);
 
+        if (factionTo == me.getFaction()) {
+            me.attemptAutoSetZone(to);
+        }
+
         free:
         if (plugin.conf().commands().fly().isEnable() && !me.isAdminBypassing()) {
             boolean canFly = me.canFlyAtLocation(to);

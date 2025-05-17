@@ -105,7 +105,7 @@ public class CmdClaim implements Cmd {
                 return;
             }
 
-            new SpiralTask(new FLocation(player), radius) {
+            new SpiralTask(claimLocation, radius) {
                 private int failCount = 0;
                 private final int limit = FactionsPlugin.getInstance().conf().factions().claims().getRadiusClaimFailureLimit() - 1;
 

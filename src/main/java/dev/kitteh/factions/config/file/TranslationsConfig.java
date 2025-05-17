@@ -358,6 +358,54 @@ public class TranslationsConfig {
         }
 
         public static class Zone extends AbsCommand {
+            public static class Claim extends AbsCommand {
+                private String zoneNotFound = "<red>Zone named '<name>' not found</red>";
+
+                private String notInTerritory = "<red>Not standing in faction territory";
+                private String alreadyZone = "<red>Already standing in <green><zone></green>";
+                private String cannotManage = "<red>Cannot manage zone <green><zone></green>!";
+                private String success = "<yellow>Successfully set zone <green><newzone></green>!";
+                private String attemptingRadius = "<yellow>Setting zone <green><zone></green> for any chunks you can update";
+                private String autoSetOn = "<yellow>Automatically setting zone for <green><zone></green> as you enter chunks";
+                private String autoSetOff = "<yellow>Disabled automatic zone setting";
+
+                public Claim() {
+                    super("claim");
+                }
+
+                public String getAlreadyZone() {
+                    return alreadyZone;
+                }
+
+                public String getAttemptingRadius() {
+                    return attemptingRadius;
+                }
+
+                public String getCannotManage() {
+                    return cannotManage;
+                }
+
+                public String getNotInTerritory() {
+                    return notInTerritory;
+                }
+
+                public String getSuccess() {
+                    return success;
+                }
+
+                public String getAutoSetOn() {
+                    return autoSetOn;
+                }
+
+                public String getAutoSetOff() {
+                    return autoSetOff;
+                }
+
+                public String getZoneNotFound() {
+                    return zoneNotFound;
+                }
+            }
+
             public static class Create extends AbsCommand {
                 private String nameAlreadyInUse = "<red>Zone name '<name>' is already in use</red>";
                 private String success = "<yellow>Created new zone '<name>'";
@@ -461,6 +509,7 @@ public class TranslationsConfig {
                 }
             }
 
+            private Claim claim = new Claim();
             private Create create = new Create();
             private Delete delete = new Delete();
             @Comment("Reuses most things from the /f perms settings")
@@ -469,6 +518,10 @@ public class TranslationsConfig {
 
             protected Zone() {
                 super("zone");
+            }
+
+            public Claim claim() {
+                return claim;
             }
 
             public Create create() {

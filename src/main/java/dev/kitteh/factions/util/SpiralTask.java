@@ -9,7 +9,6 @@ import org.bukkit.World;
 
 import java.util.logging.Level;
 
-
 /*
  * reference diagram, task should move in this pattern out from chunk 0 in the center.
  *  8 [>][>][>][>][>] etc.
@@ -26,18 +25,18 @@ import java.util.logging.Level;
 public abstract class SpiralTask implements Runnable {
 
     // general task-related reference data
-    private final transient World world;
-    private transient boolean readyToGo = false;
-    private transient int taskID = -1;
-    private final transient int limit;
+    private final World world;
+    private boolean readyToGo = false;
+    private int taskID = -1;
+    private final int limit;
 
     // values for the spiral pattern routine
-    private transient int x = 0;
-    private transient int z = 0;
-    private transient boolean isZLeg = false;
-    private transient boolean isNeg = false;
-    private transient int length = -1;
-    private transient int current = 0;
+    private int x = 0;
+    private int z = 0;
+    private boolean isZLeg = false;
+    private boolean isNeg = false;
+    private int length = -1;
+    private int current = 0;
 
     @SuppressWarnings("LeakingThisInConstructor")
     public SpiralTask(FLocation fLocation, int radius) {
@@ -99,7 +98,7 @@ public abstract class SpiralTask implements Runnable {
      * Below are the guts of the class, which you normally wouldn't need to mess with.
      */
 
-    public final void setTaskID(int ID) {
+    private final void setTaskID(int ID) {
         if (ID == -1) {
             this.stop();
         }
