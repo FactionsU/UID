@@ -10,8 +10,12 @@ import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.perms.PermissibleActions;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.util.TL;
+import org.bukkit.Chunk;
+import org.bukkit.ExplosionResult;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.AbstractWindCharge;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
@@ -22,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.WindCharge;
 import org.bukkit.entity.Wither;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
@@ -44,9 +49,12 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class FactionsEntityListener extends AbstractListener {
@@ -169,7 +177,7 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityExplode(EntityExplodeEvent event) {
-        this.handleExplosion(event.getLocation(), event.getEntity(), event, event.blockList());
+        this.handleExplosion(event.getLocation(), event.getEntity(), event, event.getExplosionResult(), event.blockList());
     }
 
     // mainly for flaming arrows; don't want allies or people in safe zones to be ignited even after damage event is cancelled

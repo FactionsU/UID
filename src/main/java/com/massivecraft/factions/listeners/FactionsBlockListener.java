@@ -201,7 +201,7 @@ public class FactionsBlockListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockExplode(BlockExplodeEvent event) {
-        this.handleExplosion(event.getBlock().getLocation(), null, event, event.blockList());
+        this.handleExplosion(event.getBlock().getLocation(), null, event, event.getExplosionResult(), event.blockList());
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
