@@ -26,7 +26,7 @@ public class LuckPerms {
     }
 
     public static void shutdown(AbstractFactionsPlugin plugin) {
-        if (calculator != null && plugin.isEnabled()) {
+        if (calculator != null && LuckPerms.plugin.isEnabled()) {
             try {
                 net.luckperms.api.LuckPerms api = LuckPermsProvider.get();
                 api.getContextManager().unregisterCalculator(calculator);
