@@ -181,7 +181,7 @@ public class FTeamWrapper {
 
     private String apply(String prefixOrSuffix, FPlayer fplayer, int maxLength) {
         prefixOrSuffix = Tag.parsePlaceholders(fplayer.getPlayer(), prefixOrSuffix);
-        prefixOrSuffix = prefixOrSuffix.replace("{relationcolor}", faction.getRelationTo(fplayer).getColor().toString());
+        prefixOrSuffix = prefixOrSuffix.replace("{relationcolor}", faction.getRelationTo(fplayer).chatColor().toString());
         int remaining = Math.min("{faction}".length() + maxLength - prefixOrSuffix.length(), faction.getTag().length());
         prefixOrSuffix = prefixOrSuffix.replace("{faction}", remaining > 0 ? faction.getTag().substring(0, remaining) : "");
         prefixOrSuffix = Tag.parsePlain(fplayer, prefixOrSuffix);

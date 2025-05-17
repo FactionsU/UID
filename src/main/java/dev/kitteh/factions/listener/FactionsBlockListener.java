@@ -332,7 +332,7 @@ public class FactionsBlockListener extends AbstractListener {
             }
 
             if (!justCheck) {
-                me.msg(TL.PERM_DENIED_WILDERNESS, permissibleAction.getShortDescription());
+                me.msg(TL.PERM_DENIED_WILDERNESS, permissibleAction.shortDescription());
             }
 
             return false;
@@ -346,7 +346,7 @@ public class FactionsBlockListener extends AbstractListener {
             }
 
             if (!justCheck) {
-                me.msg(TL.PERM_DENIED_SAFEZONE, permissibleAction.getShortDescription());
+                me.msg(TL.PERM_DENIED_SAFEZONE, permissibleAction.shortDescription());
             }
 
             return false;
@@ -360,7 +360,7 @@ public class FactionsBlockListener extends AbstractListener {
             }
 
             if (!justCheck) {
-                me.msg(TL.PERM_DENIED_WARZONE, permissibleAction.getShortDescription());
+                me.msg(TL.PERM_DENIED_WARZONE, permissibleAction.shortDescription());
             }
 
             return false;
@@ -376,10 +376,10 @@ public class FactionsBlockListener extends AbstractListener {
         if (!otherFaction.hasAccess(me, permissibleAction, loc)) {
             if (pain && permissibleAction != PermissibleActions.FROSTWALK) {
                 player.damage(conf.factions().other().getActionDeniedPainAmount());
-                me.msg(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.getShortDescription(), otherFaction.getTag(myFaction));
+                me.msg(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.shortDescription(), otherFaction.getTag(myFaction));
                 return true;
             } else if (!justCheck) {
-                me.msg(TL.PERM_DENIED_TERRITORY, permissibleAction.getShortDescription(), otherFaction.getTag(myFaction));
+                me.msg(TL.PERM_DENIED_TERRITORY, permissibleAction.shortDescription(), otherFaction.getTag(myFaction));
             }
             return false;
         }

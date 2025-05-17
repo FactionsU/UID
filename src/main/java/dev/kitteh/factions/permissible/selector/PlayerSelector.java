@@ -60,6 +60,6 @@ public class PlayerSelector extends AbstractSelector {
         FPlayer player = FPlayers.getInstance().getById(this.uuid);
         return player.getName().equals(player.getUniqueId().toString()) ?
                 MiniMessage.miniMessage().deserialize(FactionsPlugin.getInstance().tl().permissions().selectors().player().getUuidValue(), Placeholder.unparsed("uuid", this.uuid.toString()))
-                : LegacyComponentSerializer.legacySection().deserialize(player.getRelationTo(context).getColor() + player.getName());
+                : LegacyComponentSerializer.legacySection().deserialize(player.getRelationTo(context).chatColor() + player.getName());
     }
 }

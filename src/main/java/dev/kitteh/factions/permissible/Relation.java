@@ -58,7 +58,7 @@ public enum Relation implements Permissible {
     }
 
     @Override
-    public String getTranslation() {
+    public String translation() {
         try {
             return TL.valueOf("RELATION_" + name() + "_SINGULAR").toString();
         } catch (IllegalArgumentException e) {
@@ -104,12 +104,7 @@ public enum Relation implements Permissible {
     }
 
     @Override
-    public ChatColor getColor() {
-        return TextUtil.getClosest(this.getTextColor());
-    }
-
-    @Override
-    public TextColor getTextColor() {
+    public TextColor color() {
         return switch (this) {
             case MEMBER -> FactionsPlugin.getInstance().conf().colors().relations().getMember();
             case ALLY -> FactionsPlugin.getInstance().conf().colors().relations().getAlly();

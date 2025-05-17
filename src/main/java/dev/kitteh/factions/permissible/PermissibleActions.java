@@ -1,7 +1,10 @@
 package dev.kitteh.factions.permissible;
 
+import dev.kitteh.factions.upgrade.Upgrade;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.TL;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public enum PermissibleActions implements PermissibleAction {
@@ -48,30 +51,36 @@ public enum PermissibleActions implements PermissibleAction {
 
     UPGRADE(TL.PERM_UPGRADE, TL.PERM_SHORT_UPGRADE),
 
-    ZONE(TL.PERM_ZONE, TL.PERM_SHORT_ZONE),
+    ZONE(TL.PERM_ZONE, TL.PERM_SHORT_ZONE, Upgrades.ZONES),
     ;
 
     private final TL desc;
     private final TL shortDesc;
+    private @Nullable Upgrade prerequisite;
 
     PermissibleActions(TL desc, TL shortDesc) {
         this.desc = desc;
         this.shortDesc = shortDesc;
     }
 
-    @Override
-    public String getName() {
-        return this.name();
+    PermissibleActions(TL desc, TL shortDesc, Upgrade prerequisite) {
+        this(desc, shortDesc);
+        this.prerequisite = prerequisite;
     }
 
     @Override
-    public String getDescription() {
+    public String description() {
         return this.desc.toString();
     }
 
     @Override
-    public String getShortDescription() {
+    public String shortDescription() {
         return this.shortDesc.toString();
+    }
+
+    @Override
+    public @Nullable Upgrade prerequisite() {
+        return this.prerequisite;
     }
 
     @Override

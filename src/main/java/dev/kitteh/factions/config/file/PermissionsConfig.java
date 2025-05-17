@@ -27,7 +27,7 @@ public class PermissionsConfig {
     private List<String> availableActions = new ArrayList<>() {
         {
             for (PermissibleAction action : PermissibleActionRegistry.getActions()) {
-                this.add(action.getName() + " - " + action.getDescription());
+                this.add(action.name() + " - " + action.description());
             }
         }
     };

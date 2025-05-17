@@ -119,7 +119,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "player_kills" -> String.valueOf(fPlayer.getKills());
             case "player_deaths" -> String.valueOf(fPlayer.getDeaths());
             case "player_role" -> fPlayer.hasFaction() ? fPlayer.getRole().getPrefix() : "";
-            case "player_role_name" -> fPlayer.hasFaction() ? fPlayer.getRole().getTranslation() : TL.PLACEHOLDER_ROLE_NAME.toString();
+            case "player_role_name" -> fPlayer.hasFaction() ? fPlayer.getRole().translation() : TL.PLACEHOLDER_ROLE_NAME.toString();
             case "player_factionless" -> fPlayer.hasFaction() ? "" : TL.GENERIC_FACTIONLESS.toString();
             // Then Faction stuff
             case "faction_name" -> (fPlayer.hasFaction() || territory) ? faction.getTag() : TL.NOFACTION_PREFIX.toString();

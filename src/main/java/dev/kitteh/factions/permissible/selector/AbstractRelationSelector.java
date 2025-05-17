@@ -31,14 +31,14 @@ public abstract class AbstractRelationSelector extends AbstractSelector {
         }
 
         @Override
-        public Map<String, String> getOptions(Faction faction) {
+        public Map<String, String> options(Faction faction) {
             List<PermSelector> available = new ArrayList<>(relationSelectors == null ? (relationSelectors = Arrays.stream(Relation.values()).map(function).collect(Collectors.toList())) : relationSelectors);
             available.removeAll(faction.permissions().selectors());
 
             Map<String, String> map = new LinkedHashMap<>();
 
             for (PermSelector selector : available) {
-                map.put(selector.serialize(), ((AbstractRelationSelector) selector).getRelation().getTranslation());
+                map.put(selector.serialize(), ((AbstractRelationSelector) selector).relation().translation());
             }
 
             return map;
@@ -52,7 +52,7 @@ public abstract class AbstractRelationSelector extends AbstractSelector {
         this.relation = relation;
     }
 
-    public Relation getRelation() {
+    public Relation relation() {
         return relation;
     }
 
@@ -63,7 +63,7 @@ public abstract class AbstractRelationSelector extends AbstractSelector {
 
     @Override
     public Component displayValue(Faction context) {
-        return LegacyComponentSerializer.legacySection().deserialize(this.relation.getColor() + this.relation.getTranslation());
+        return LegacyComponentSerializer.legacySection().deserialize(this.relation.chatColor() + this.relation.translation());
     }
 
     @Override

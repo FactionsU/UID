@@ -36,9 +36,9 @@ public class PermissibleActionRegistry {
         if (closed) {
             throw new IllegalStateException("Cannot register PermissibleActions. Must be done during onLoad().");
         }
-        if (registry.containsKey(action.getName().toLowerCase())) {
-            throw new IllegalArgumentException("Permissible action with name " + action.getName() + " already registered");
+        if (registry.containsKey(action.name().toLowerCase())) {
+            throw new IllegalArgumentException("Permissible action with name " + action.name() + " already registered");
         }
-        registry.put(action.getName().toLowerCase(), action);
+        registry.put(action.name().toLowerCase(), action);
     }
 }

@@ -34,7 +34,7 @@ public interface Faction extends Participator, Selectable {
              * @return perm state
              */
             default PermState get(PermissibleAction action) {
-                return this.get(action.getName());
+                return this.get(action.name());
             }
 
             /**
@@ -52,7 +52,7 @@ public interface Faction extends Participator, Selectable {
              * @param state  perm state
              */
             default void set(PermissibleAction action, PermState state) {
-                this.set(action.getName(), state);
+                this.set(action.name(), state);
             }
 
             /**

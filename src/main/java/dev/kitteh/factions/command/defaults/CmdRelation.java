@@ -80,7 +80,7 @@ public class CmdRelation implements Cmd {
         // try to set the new relation
         faction.setRelationWish(them, targetRelation);
         Relation currentRelation = faction.getRelationTo(them, true);
-        ChatColor currentRelationColor = currentRelation.getColor();
+        ChatColor currentRelationColor = currentRelation.chatColor();
 
         // if the relation change was successful
         if (targetRelation.value == currentRelation.value) {
@@ -88,13 +88,13 @@ public class CmdRelation implements Cmd {
             FactionRelationEvent relationEvent = new FactionRelationEvent(faction, them, oldRelation, currentRelation);
             Bukkit.getServer().getPluginManager().callEvent(relationEvent);
 
-            them.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.getTranslation(), currentRelationColor + faction.getTag());
-            faction.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.getTranslation(), currentRelationColor + them.getTag());
+            them.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + faction.getTag());
+            faction.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + them.getTag());
         } else {
             // inform the other faction of your request
-            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + faction.getTag(), targetRelation.getColor() + targetRelation.getTranslation());
+            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + faction.getTag(), targetRelation.chatColor() + targetRelation.translation());
             them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, FactionsPlugin.getInstance().conf().getCommandBase().getFirst(), targetRelation, faction.getTag());
-            faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.getTag(), "" + targetRelation.getColor() + targetRelation);
+            faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.getTag(), "" + targetRelation.chatColor() + targetRelation);
         }
 
         if (!targetRelation.isNeutral() && them.isPeaceful()) {

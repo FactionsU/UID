@@ -114,6 +114,6 @@ public class RelationUtil {
             }
         }
 
-        return getRelationTo(that, me).getTextColor();
+        return getRelationTo(that, me).color();
     }
 }

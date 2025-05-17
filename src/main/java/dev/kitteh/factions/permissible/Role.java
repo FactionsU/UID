@@ -75,7 +75,7 @@ public enum Role implements Permissible {
     }
 
     @Override
-    public String getTranslation() {
+    public String translation() {
         return translation.toString();
     }
 
@@ -104,13 +104,8 @@ public enum Role implements Permissible {
     }
 
     @Override
-    public ChatColor getColor() {
-        return Relation.MEMBER.getColor();
-    }
-
-    @Override
-    public TextColor getTextColor() {
-        return Relation.MEMBER.getTextColor();
+    public TextColor color() {
+        return Relation.MEMBER.color();
     }
 
     /**

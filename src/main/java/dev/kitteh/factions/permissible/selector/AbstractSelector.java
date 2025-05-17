@@ -35,12 +35,12 @@ public abstract class AbstractSelector implements PermSelector {
         }
 
         @Override
-        public String getName() {
+        public String name() {
             return this.name;
         }
 
         @Override
-        public Component getDisplayName() {
+        public Component displayName() {
             return MiniMessage.miniMessage().deserialize(this.displayName.get());
         }
 
@@ -60,7 +60,7 @@ public abstract class AbstractSelector implements PermSelector {
         }
 
         @Override
-        public @Nullable String getInstructions() {
+        public @Nullable String instructions() {
             return this.instructions == null ? null : this.instructions.get();
         }
     }

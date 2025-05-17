@@ -39,9 +39,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class CmdSetPerm implements Cmd {
@@ -225,10 +223,10 @@ public class CmdSetPerm implements Cmd {
                     selector = descriptor.create("");
                     break glass;
                 }
-                Map<String, String> options = descriptor.getOptions(faction);
-                if (descriptor.getInstructions() != null) {
-                    sender.sendMessage(Component.text(descriptor.getInstructions()));
-                    sender.sendMessage(MiniMessage.miniMessage().deserialize(this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + " \"" + descriptor.getName() + ':' + tl.add().getSelectorOptionHere() + "\""));
+                Map<String, String> options = descriptor.options(faction);
+                if (descriptor.instructions() != null) {
+                    sender.sendMessage(Component.text(descriptor.instructions()));
+                    sender.sendMessage(MiniMessage.miniMessage().deserialize(this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + " \"" + descriptor.name() + ':' + tl.add().getSelectorOptionHere() + "\""));
                 }
                 if (options != null) {
                     ComponentBuilder<TextComponent, TextComponent.Builder> build = Component.text();
@@ -256,7 +254,7 @@ public class CmdSetPerm implements Cmd {
             return;
         }
         if (permissions.has(selector)) { // List options to add to this selector
-            List<String> actions = PermissibleActionRegistry.getActions().stream().map(PermissibleAction::getName).collect(Collectors.toCollection(ArrayList::new));
+            List<String> actions = PermissibleActionRegistry.getActions().stream().map(PermissibleAction::name).collect(Collectors.toCollection(ArrayList::new));
             actions.removeAll(FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getHiddenActions());
             actions.removeAll(permissions.get(selector).actions());
             Collections.sort(actions);
@@ -269,7 +267,7 @@ public class CmdSetPerm implements Cmd {
 
             for (String action : actions) {
                 build.append(MiniMessage.miniMessage().deserialize(tl.add().getActionOptionsItem(),
-                        Placeholder.unparsed("description", PermissibleActionRegistry.get(action) instanceof PermissibleAction a ? a.getDescription() : "???"),
+                        Placeholder.unparsed("description", PermissibleActionRegistry.get(action) instanceof PermissibleAction a ? a.description() : "???"),
                         Placeholder.unparsed("action", action),
                         Placeholder.parsed("commandtrue", commandPiece + action + ' ' + tl.add().getActionAllowAlias().getFirst()),
                         Placeholder.parsed("commandfalse", commandPiece + action + ' ' + tl.add().getActionDenyAlias().getFirst())));
@@ -297,7 +295,7 @@ public class CmdSetPerm implements Cmd {
             sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.add().getSelectorNotFound()));
         } else {
             PermissibleAction action = PermissibleActionRegistry.get(argAction);
-            if (action == null || FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getHiddenActions().contains(action.getName())) {
+            if (action == null || FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getHiddenActions().contains(action.name())) {
                 sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.add().getActionNotFound()));
             } else {
                 Boolean allow = null;
@@ -528,8 +526,8 @@ public class CmdSetPerm implements Cmd {
                     }
                     PermissibleAction action = PermissibleActionRegistry.get(actionName);
                     sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.show().getItem(),
-                            Placeholder.unparsed("shortdesc", action == null ? "???" : action.getShortDescription()),
-                            Placeholder.unparsed("desc", action == null ? "???" : action.getDescription()),
+                            Placeholder.unparsed("shortdesc", action == null ? "???" : action.shortDescription()),
+                            Placeholder.unparsed("desc", action == null ? "???" : action.description()),
                             Placeholder.unparsed("state", perms.get(actionName).toString()),
                             Placeholder.parsed("commandremove", commandPiece + tl.remove().getAliases().getFirst() + " \"" + sel.serialize() + "\" " + actionName)));
                 }
@@ -594,8 +592,8 @@ public class CmdSetPerm implements Cmd {
             }
             PermissibleAction action = PermissibleActionRegistry.get(e.getKey());
             sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.showOverride().getItem(),
-                    Placeholder.unparsed("shortdesc", action == null ? "???" : action.getShortDescription()),
-                    Placeholder.unparsed("desc", action == null ? "???" : action.getDescription()),
+                    Placeholder.unparsed("shortdesc", action == null ? "???" : action.shortDescription()),
+                    Placeholder.unparsed("desc", action == null ? "???" : action.description()),
                     Placeholder.unparsed("state", e.getValue().toString())));
         }
         if (!tl.showOverride().getFooter().isEmpty()) {

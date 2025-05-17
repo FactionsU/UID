@@ -32,14 +32,14 @@ public abstract class AbstractRoleSelector extends AbstractSelector {
         }
 
         @Override
-        public Map<String, String> getOptions(Faction faction) {
+        public Map<String, String> options(Faction faction) {
             List<PermSelector> available = new ArrayList<>(roleSelectors == null ? (roleSelectors = Arrays.stream(Role.values()).map(function).collect(Collectors.toList())) : roleSelectors);
             available.removeAll(faction.permissions().selectors());
 
             Map<String, String> map = new LinkedHashMap<>();
 
             for (PermSelector selector : available) {
-                map.put(selector.serialize(), ((AbstractRoleSelector) selector).getRole().getTranslation());
+                map.put(selector.serialize(), ((AbstractRoleSelector) selector).role().translation());
             }
 
             return map;
@@ -53,7 +53,7 @@ public abstract class AbstractRoleSelector extends AbstractSelector {
         this.role = Objects.requireNonNull(role);
     }
 
-    public Role getRole() {
+    public Role role() {
         return role;
     }
 
@@ -64,7 +64,7 @@ public abstract class AbstractRoleSelector extends AbstractSelector {
 
     @Override
     public Component displayValue(Faction context) {
-        return LegacyComponentSerializer.legacySection().deserialize(this.role.getColor() + this.role.getTranslation());
+        return LegacyComponentSerializer.legacySection().deserialize(this.role.chatColor() + this.role.translation());
     }
 
     @Override

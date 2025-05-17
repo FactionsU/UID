@@ -35,14 +35,14 @@ public interface PermSelector {
          *
          * @return name
          */
-        String getName();
+        String name();
 
         /**
          * Name for display in chat.
          *
          * @return chat display name
          */
-        Component getDisplayName();
+        Component displayName();
 
         /**
          * Gets the options, if there's a reasonable number of choices that
@@ -52,7 +52,7 @@ public interface PermSelector {
          * @param faction faction for context
          * @return map as described
          */
-        default @Nullable Map<String, String> getOptions(Faction faction) {
+        default @Nullable Map<String, String> options(Faction faction) {
             return null;
         }
 
@@ -70,7 +70,7 @@ public interface PermSelector {
          *
          * @return instructions
          */
-        default @Nullable String getInstructions() {
+        default @Nullable String instructions() {
             return null;
         }
     }
@@ -97,7 +97,7 @@ public interface PermSelector {
      * @return serialized selector
      */
     default String serialize() {
-        return this.descriptor().getName() + ':' + this.serializeValue();
+        return this.descriptor().name() + ':' + this.serializeValue();
     }
 
     /**
@@ -106,7 +106,7 @@ public interface PermSelector {
      * @return display name
      */
     default Component displayName() {
-        return this.descriptor().getDisplayName();
+        return this.descriptor().displayName();
     }
 
     /**

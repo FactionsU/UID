@@ -77,7 +77,7 @@ public class PermSelectorRegistry {
         if (closed) {
             throw new IllegalStateException("Cannot register PermSelectors. Must be done during onLoad().");
         }
-        String name = descriptor.getName();
+        String name = descriptor.name();
         if (registry.containsKey(name.toLowerCase())) {
             throw new IllegalArgumentException("PermSelector with name " + name + " already registered");
         }

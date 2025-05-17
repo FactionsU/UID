@@ -757,7 +757,7 @@ public abstract class MemoryFaction implements Faction {
         PermissionsConfig permConf = FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig();
         List<PermSelector> priority = permConf.getOverridePermissionsOrder().stream().filter(s -> s.test(selectable, this)).toList();
         for (PermSelector selector : priority) {
-            Boolean bool = permConf.getOverridePermissions().get(selector).get(permissibleAction.getName());
+            Boolean bool = permConf.getOverridePermissions().get(selector).get(permissibleAction.name());
             if (bool != null) {
                 return bool;
             }
@@ -769,7 +769,7 @@ public abstract class MemoryFaction implements Faction {
         for (PermSelector selector : permissions.selectorOrder) {
             if (selector.test(selectable, this)) {
                 Permissions.SelectorPerms perm = permissions.perms.get(selector);
-                if (perm.perms.get(permissibleAction.getName()) instanceof Boolean bool) {
+                if (perm.perms.get(permissibleAction.name()) instanceof Boolean bool) {
                     return bool;
                 }
             }

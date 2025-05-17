@@ -1,5 +1,6 @@
 package dev.kitteh.factions.permissible;
 
+import dev.kitteh.factions.util.TextUtil;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
 import org.jspecify.annotations.NullMarked;
@@ -8,9 +9,12 @@ import org.jspecify.annotations.NullMarked;
 public interface Permissible extends Selectable {
     String name();
 
-    ChatColor getColor();
+    @Deprecated
+    default ChatColor chatColor() {
+        return TextUtil.getClosest(this.color());
+    }
 
-    TextColor getTextColor();
+    TextColor color();
 
-    String getTranslation();
+    String translation();
 }

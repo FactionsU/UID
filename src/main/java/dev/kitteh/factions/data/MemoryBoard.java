@@ -270,7 +270,7 @@ public abstract class MemoryBoard implements Board {
             TextComponent.Builder builder = Component.text();
             for (String key : fList.keySet()) {
                 final Relation relation = fplayer.getRelationTo(Factions.getInstance().getByTag(key));
-                builder.append(Component.text().content(String.format("%s: %s ", fList.get(key), key)).color(relation.getTextColor()));
+                builder.append(Component.text().content(String.format("%s: %s ", fList.get(key), key)).color(relation.color()));
             }
             ret.add(builder.build());
         }

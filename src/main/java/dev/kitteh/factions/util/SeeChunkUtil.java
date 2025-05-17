@@ -66,7 +66,7 @@ public class SeeChunkUtil extends BukkitRunnable {
 
         ParticleColor color = null;
         if (useColor) {
-            ChatColor chatColor = Board.getInstance().getFactionAt(flocation).getRelationTo(fme).getColor();
+            ChatColor chatColor = Board.getInstance().getFactionAt(flocation).getRelationTo(fme).chatColor();
             color = ParticleColor.fromChatColor(chatColor);
         }
 

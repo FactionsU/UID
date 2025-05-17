@@ -15,7 +15,7 @@ public class UnknownSelector extends AbstractSelector {
         this.text = text;
     }
 
-    public String getText() {
+    public String text() {
         return text;
     }
 

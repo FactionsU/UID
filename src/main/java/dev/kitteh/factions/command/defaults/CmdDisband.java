@@ -45,7 +45,7 @@ public class CmdDisband implements Cmd {
         Faction faction = sender.getFaction();
 
         if (!faction.hasAccess(sender, PermissibleActions.DISBAND, sender.getLastStoodAt())) {
-            sender.msg(TL.GENERIC_NOPERMISSION.format(PermissibleActions.DISBAND.getShortDescription()));
+            sender.msg(TL.GENERIC_NOPERMISSION.format(PermissibleActions.DISBAND.shortDescription()));
             return;
         }
 

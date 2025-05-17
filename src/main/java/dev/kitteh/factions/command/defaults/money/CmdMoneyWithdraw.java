@@ -60,7 +60,7 @@ public class CmdMoneyWithdraw implements Cmd {
         }
 
         if (!faction.hasAccess(sender, PermissibleActions.ECONOMY, sender.getLastStoodAt())) {
-            sender.msg(TL.GENERIC_NOPERMISSION, PermissibleActions.ECONOMY.getShortDescription());
+            sender.msg(TL.GENERIC_NOPERMISSION, PermissibleActions.ECONOMY.shortDescription());
             return;
         }
 

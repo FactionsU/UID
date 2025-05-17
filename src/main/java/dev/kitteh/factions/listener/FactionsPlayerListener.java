@@ -658,7 +658,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         PermissibleAction action = PermissibleActions.CONTAINER;
         if (!otherFaction.hasAccess(me, action, location)) {
-            me.msg(TL.GENERIC_NOPERMISSION, action.getShortDescription());
+            me.msg(TL.GENERIC_NOPERMISSION, action.shortDescription());
             event.setCancelled(true);
         }
     }
