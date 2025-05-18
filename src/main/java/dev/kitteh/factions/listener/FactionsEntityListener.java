@@ -1,15 +1,12 @@
 package dev.kitteh.factions.listener;
 
-import dev.kitteh.factions.Board;
-import dev.kitteh.factions.FLocation;
-import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FPlayers;
-import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.*;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.upgrade.UpgradeSettings;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Location;
@@ -45,6 +42,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -79,6 +77,18 @@ public class FactionsEntityListener extends AbstractListener {
     public void onEntityDamage(EntityDamageEvent event) {
         if (!WorldUtil.isEnabled(event.getEntity().getWorld())) {
             return;
+        }
+
+        if (event.getEntity() instanceof Player plr && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            Faction faction = FPlayers.getInstance().getByPlayer(plr).getFaction();
+            int lvl = faction.getUpgradeLevel(Upgrades.FALL_DAMAGE_REDUCTION);
+            if (new FLocation(plr).getFaction() == faction && lvl > 0) {
+                UpgradeSettings settings = Universe.getInstance().getUpgradeSettings(Upgrades.FALL_DAMAGE_REDUCTION);
+                double reduction = settings.valueAt(Upgrades.Variables.PERCENT, lvl).doubleValue();
+                reduction = Math.min(1, reduction);
+                reduction = Math.max(0, reduction);
+                event.setDamage(event.getDamage() * (1 - reduction));
+            }
         }
 
         if (event instanceof EntityDamageByEntityEvent sub) {

@@ -18,12 +18,16 @@ public final class Upgrades {
     public static final class Variables {
         public static final UpgradeVariable CHANCE = UpgradeVariable.ofPercent("chance", BigDecimal.ZERO, BigDecimal.valueOf(100));
 
+        public static final UpgradeVariable PERCENT = UpgradeVariable.ofPercent("chance", BigDecimal.valueOf(Double.NEGATIVE_INFINITY), BigDecimal.valueOf(Double.POSITIVE_INFINITY));
+
         public static final UpgradeVariable GROWTH_BOOST = UpgradeVariable.ofInteger("boost", BigDecimal.ONE, BigDecimal.valueOf(100));
 
         public static final UpgradeVariable POSITIVE_INCREASE = UpgradeVariable.ofInteger("increase", BigDecimal.ONE, BigDecimal.valueOf(Integer.MAX_VALUE));
     }
 
     public static final Upgrade DTR_CLAIM_LIMIT = new Upgrade.Simple("dtr_claim_limit", TranslationsConfig.Upgrades::dtrClaimLimit, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
+
+    public static final Upgrade FALL_DAMAGE_REDUCTION = new Upgrade.Simple("fall_damage_reduction", TranslationsConfig.Upgrades::fallDamage, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
     public static final Upgrade FLIGHT = new Upgrade.Simple("flight", TranslationsConfig.Upgrades::flight, 1, Set.of());
 
@@ -69,6 +73,23 @@ public final class Upgrades {
                     10,
                     0,
                     LeveledValueProvider.Equation.of("100000 * level ^ 2")
+            ),
+            new UpgradeSettings(
+                    Upgrades.FALL_DAMAGE_REDUCTION,
+                    Map.of(Variables.PERCENT, LeveledValueProvider.LevelMap.of(
+                            1, BigDecimal.valueOf(0.25),
+                            2, BigDecimal.valueOf(0.5),
+                            3, BigDecimal.valueOf(0.75),
+                            4, BigDecimal.valueOf(1)
+                    )),
+                    4,
+                    0,
+                    LeveledValueProvider.LevelMap.of(
+                            1, BigDecimal.valueOf(10000),
+                            2, BigDecimal.valueOf(50000),
+                            3, BigDecimal.valueOf(100000),
+                            4, BigDecimal.valueOf(1000000)
+                    )
             ),
             new UpgradeSettings(
                     Upgrades.FLIGHT,

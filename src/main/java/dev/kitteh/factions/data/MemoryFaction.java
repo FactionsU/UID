@@ -738,7 +738,7 @@ public abstract class MemoryFaction implements Faction {
             return false; // Fail in a safe way because people are foolish
         }
 
-        if (permissibleAction.prerequisite() instanceof Upgrade prereq && (!Universe.getInstance().isUpgradeEnabled(prereq) || this.getUpgradeLevel(prereq)==0)) {
+        if (permissibleAction.prerequisite() instanceof Upgrade prereq && (!Universe.getInstance().isUpgradeEnabled(prereq) || this.getUpgradeLevel(prereq) == 0)) {
             return false;
         }
 
@@ -1048,7 +1048,7 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public int getUpgradeLevel(Upgrade upgrade) {
-        if (!Universe.getInstance().isUpgradeEnabled(upgrade)) {
+        if (!this.isNormal() || !Universe.getInstance().isUpgradeEnabled(upgrade)) {
             return 0;
         }
         UpgradeSettings settings = Universe.getInstance().getUpgradeSettings(upgrade);
