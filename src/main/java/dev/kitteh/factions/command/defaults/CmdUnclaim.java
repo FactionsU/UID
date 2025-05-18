@@ -114,7 +114,7 @@ public class CmdUnclaim implements Cmd {
             return;
         }
 
-        if (context.flags().get("radius") instanceof Integer radius) {
+        if (context.flags().get("radius") instanceof Integer radius && radius > 1) {
             if (!Permission.CLAIM_RADIUS.has(player)) {
                 sender.msg(TL.COMMAND_CLAIM_DENIED);
                 return;
