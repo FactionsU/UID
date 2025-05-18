@@ -22,10 +22,7 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.scoreboard.sidebar.FDefaultSidebar;
-import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.TextUtil;
-import dev.kitteh.factions.util.WorldUtil;
+import dev.kitteh.factions.util.*;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -345,6 +342,14 @@ public class FactionsPlayerListener extends AbstractListener {
             }
         } else if (changedFaction) {
             me.sendFactionHereMessage(factionFrom);
+        }
+
+        if (factionTo.isNormal()) {
+            Faction.Zone oldZone = factionFrom.zones().get(from);
+            Faction.Zone newZone = factionTo.zones().get(to);
+            if (!oldZone.equals(newZone) && (changedFaction || !oldZone.greeting().equals(newZone.greeting()))) {
+                ComponentDispatcher.sendActionBar(player, newZone.greeting());
+            }
         }
     }
 

@@ -3,8 +3,10 @@ package dev.kitteh.factions.util;
 import com.google.gson.JsonElement;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -42,13 +44,20 @@ public class ComponentDispatcher {
     public static void send(CommandSender commandSender, ComponentLike component) {
         if (isPaper) {
             try {
-                Object comp = deserialize.invokeExact(gsonSerializer, GsonComponentSerializer.gson().serializeToTree(component.asComponent()));
-                sendMessage.invoke(commandSender, comp);
+                sendMessage.invoke(commandSender, component(component));
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         } else {
             commandSender.spigot().sendMessage(ComponentSerializer.deserialize(GsonComponentSerializer.gson().serializeToTree(component.asComponent())));
         }
+    }
+
+    public static void sendActionBar(Player player, ComponentLike component) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, ComponentSerializer.deserialize(GsonComponentSerializer.gson().serializeToTree(component.asComponent())));
+    }
+
+    private static Object component(ComponentLike component) throws Throwable {
+        return deserialize.invokeExact(gsonSerializer, GsonComponentSerializer.gson().serializeToTree(component.asComponent()));
     }
 }

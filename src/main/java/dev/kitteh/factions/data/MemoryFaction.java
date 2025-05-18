@@ -154,7 +154,7 @@ public abstract class MemoryFaction implements Faction {
         }
     }
 
-    protected class Zone implements Faction.Zone {
+    protected static class Zone implements Faction.Zone {
         private int id;
         private String name;
         @Nullable
@@ -162,10 +162,12 @@ public abstract class MemoryFaction implements Faction {
         @Nullable
         private transient Component greetingComponent;
         private Permissions perms = new Permissions();
+        private transient MemoryFaction faction;
 
-        private Zone(int id, String name) {
+        private Zone(int id, String name, MemoryFaction faction) {
             this.id = id;
             this.name = name;
+            this.faction = faction;
         }
 
         @Override
@@ -187,13 +189,13 @@ public abstract class MemoryFaction implements Faction {
         public Component greeting() {
             if (this.greetingComponent == null) {
                 if (this.greeting == null) {
-                    this.greetingComponent = MemoryFaction.this.zones.main.greetingComponent;
+                    this.greetingComponent = this.faction.zones.main.greetingComponent;
                     if (this.greetingComponent == null) {
                         this.greetingComponent = Component.text("");
                     }
                 } else {
                     this.greetingComponent = MiniMessage.miniMessage().deserialize(this.greeting,
-                            Placeholder.unparsed("tag", MemoryFaction.this.tag));
+                            Placeholder.unparsed("tag", this.faction.tag));
                 }
             }
             return this.greetingComponent;
@@ -215,7 +217,7 @@ public abstract class MemoryFaction implements Faction {
 
         @Override
         public Faction.Permissions permissions() {
-            return this.id == 0 ? MemoryFaction.this.perms : this.perms;
+            return this.id == 0 ? this.faction.perms : this.perms;
         }
 
         @Override
@@ -224,39 +226,44 @@ public abstract class MemoryFaction implements Faction {
             if (fPlayer == null) {
                 return false; // Fail in a safe way because people are foolish
             }
-            if (fPlayer.getFaction() == MemoryFaction.this && (fPlayer.getRole() == Role.ADMIN)) {
+            if (fPlayer.getFaction() == this.faction && (fPlayer.getRole() == Role.ADMIN)) {
                 return true;
             }
-            if (MemoryFaction.this.hasOverrideAccess(fPlayer, PermissibleActions.ZONE) instanceof Boolean bool) {
+            if (this.faction.hasOverrideAccess(fPlayer, PermissibleActions.ZONE) instanceof Boolean bool) {
                 return bool;
             }
-            if (MemoryFaction.this.hasAccess(fPlayer, PermissibleActions.ZONE, this.perms) instanceof Boolean bool) {
+            if (this.faction.hasAccess(fPlayer, PermissibleActions.ZONE, this.perms) instanceof Boolean bool) {
                 return bool;
             }
             return false;
         }
     }
 
-    protected class Zones implements Faction.Zones {
+    protected static class Zones implements Faction.Zones {
         private Object2ObjectOpenHashMap<String, WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
         private Int2ObjectOpenHashMap<Zone> zones = new Int2ObjectOpenHashMap<>();
         private int nextId = 1;
         private transient Zone main;
+        private transient MemoryFaction faction;
 
-        private Zones() {
-            this.cleanupDeserialization();
+        private Zones(MemoryFaction faction) {
+            this.cleanupDeserialization(faction);
         }
 
         @SuppressWarnings("ConstantValue")
-        private void cleanupDeserialization() {
+        private void cleanupDeserialization(MemoryFaction faction) {
+            this.faction = faction;
             if (this.main == null) {
                 this.main = this.zones.get(0);
                 if (this.main == null) {
-                    this.main = new Zone(0, "main");
-                    main.greeting = "<tag>";
+                    this.main = new Zone(0, "main", this.faction);
+                    main.greeting = "<tag> welcomes you!";
                     this.zones.put(0, this.main);
                 }
                 this.zones.defaultReturnValue(this.main);
+            }
+            for (Zone zone : this.zones.values()) {
+                zone.faction = faction;
             }
         }
 
@@ -270,7 +277,7 @@ public abstract class MemoryFaction implements Faction {
             if (this.get(name) != null) {
                 throw new IllegalArgumentException("The name '" + name + "' already exists");
             }
-            Zone zone = new Zone(this.nextId++, name);
+            Zone zone = new Zone(this.nextId++, name, this.faction);
             this.zones.put(zone.id(), zone);
             return zone;
         }
@@ -308,7 +315,7 @@ public abstract class MemoryFaction implements Faction {
 
         @Override
         public void set(Faction.Zone zone, FLocation fLocation) {
-            if (fLocation.getFaction() != MemoryFaction.this) {
+            if (fLocation.getFaction() != this.faction) {
                 throw new IllegalArgumentException("Cannot assign non-owned territory");
             }
             if (this.zones.get(zone.id()) != zone) {
@@ -365,7 +372,7 @@ public abstract class MemoryFaction implements Faction {
     protected Object2IntOpenHashMap<String> upgrades = new Object2IntOpenHashMap<>();
     protected transient @Nullable OfflinePlayer offlinePlayer;
     protected MemoryFaction.Permissions perms = new MemoryFaction.Permissions();
-    protected Zones zones = new Zones();
+    protected Zones zones = new Zones(this);
 
     @SuppressWarnings("ConstantValue")
     public void cleanupDeserialization() {
@@ -387,9 +394,9 @@ public abstract class MemoryFaction implements Faction {
             this.resetPerms();
         }
         if (this.zones == null) {
-            this.zones = new Zones();
+            this.zones = new Zones(this);
         }
-        this.zones.cleanupDeserialization(); // Sets the transient helper main value.
+        this.zones.cleanupDeserialization(this); // Sets the transient helper main value.
     }
 
     @Override

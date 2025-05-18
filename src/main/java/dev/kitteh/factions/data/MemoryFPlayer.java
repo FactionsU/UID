@@ -26,7 +26,6 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.scoreboard.sidebar.FInfoSidebar;
 import dev.kitteh.factions.tag.Tag;
-import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -712,8 +711,6 @@ public abstract class MemoryFPlayer implements FPlayer {
             String title = Tag.parsePlain(toShow, this, FactionsPlugin.getInstance().conf().factions().enterTitles().getTitle());
             String sub = AbstractFactionsPlugin.getInstance().txt().parse(Tag.parsePlain(toShow, this, FactionsPlugin.getInstance().conf().factions().enterTitles().getSubtitle()));
 
-            // We send null instead of empty because Spigot won't touch the title if it's null, but clears if empty.
-            // We're just trying to be as unintrusive as possible.
             player.sendTitle(title, sub, in, stay, out);
 
             showChat = FactionsPlugin.getInstance().conf().factions().enterTitles().isAlsoShowChat();

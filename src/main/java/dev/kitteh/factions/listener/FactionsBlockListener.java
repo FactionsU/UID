@@ -287,7 +287,7 @@ public class FactionsBlockListener extends AbstractListener {
             return;
         }
 
-        if (event.getEntity() == null || event.getEntity().getType() != EntityType.PLAYER || event.getBlock() == null) {
+        if (event.getEntity().getType() != EntityType.PLAYER) {
             return;
         }
 

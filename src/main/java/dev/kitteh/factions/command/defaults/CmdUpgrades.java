@@ -82,7 +82,7 @@ public class CmdUpgrades implements Cmd {
                         }
 
                         int buyHeight = 3;
-                        ChestGui buyGui = new ChestGui(buyHeight, "Purchase " + upgrade.name() + "?");
+                        ChestGui buyGui = new ChestGui(buyHeight, "Purchase " + upgrade.nameComponent() + "?");
                         buyGui.setOnGlobalDrag(ee -> e.setCancelled(true));
                         buyGui.setOnGlobalClick(ee -> e.setCancelled(true));
 
