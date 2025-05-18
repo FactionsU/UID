@@ -1,6 +1,5 @@
 package dev.kitteh.factions.integration.permcontext;
 
-import com.google.common.collect.ImmutableSet;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
@@ -24,19 +23,31 @@ import java.util.stream.Collectors;
 public enum Contexts implements Context {
     FACTION_ID((player) -> {
         FPlayer p = FPlayers.getInstance().getByPlayer(player);
-        return ImmutableSet.of(String.valueOf(p.hasFaction() ? p.getFaction().getId() : Factions.ID_WILDERNESS));
-    }, ImmutableSet.of(String.valueOf(Factions.ID_WILDERNESS))),
+        return Set.of(String.valueOf(p.hasFaction() ? p.getFaction().getId() : Factions.ID_WILDERNESS));
+    }, Set.of(String.valueOf(Factions.ID_WILDERNESS))),
     IS_PEACEFUL((player) -> {
         FPlayer p = FPlayers.getInstance().getByPlayer(player);
-        return ImmutableSet.of(p.hasFaction() && p.getFaction().isPeaceful() ? "true" : "false");
-    }, ImmutableSet.of("true", "false")),
+        return Set.of(p.hasFaction() && p.getFaction().isPeaceful() ? "true" : "false");
+    }, Set.of("true", "false")),
     IS_PERMANENT((player) -> {
         FPlayer p = FPlayers.getInstance().getByPlayer(player);
-        return ImmutableSet.of(p.hasFaction() && p.getFaction().isPermanent() ? "true" : "false");
-    }, ImmutableSet.of("true", "false")),
+        return Set.of(p.hasFaction() && p.getFaction().isPermanent() ? "true" : "false");
+    }, Set.of("true", "false")),
     TERRITORY_RELATION((player) ->
             FPlayers.getInstance().getByPlayer(player).getRelationTo(Board.getInstance().getFactionAt(new FLocation(player.getLocation()))).getNameInASet(),
             Arrays.stream(Relation.values()).map(relation -> relation.name().toLowerCase()).collect(Collectors.toSet())),
+    TERRITORY_IS_SAFEZONE((player) ->
+            Set.of(new FLocation(player).getFaction().isSafeZone() ? "true" : "false"),
+            Set.of("true", "false")),
+    TERRITORY_IS_WILDERNESS((player) ->
+            Set.of(new FLocation(player).getFaction().isWilderness() ? "true" : "false"),
+            Set.of("true", "false")),
+    TERRITORY_IS_WARZONE((player) ->
+            Set.of(new FLocation(player).getFaction().isWarZone() ? "true" : "false"),
+            Set.of("true", "false")),
+    TERRITORY_ID((player) ->
+            Set.of(String.valueOf(new FLocation(player).getFaction().getId())),
+            Set.of(String.valueOf(Factions.ID_WILDERNESS))),
     ROLE_AT_LEAST((player) ->
     {
         FPlayer p = FPlayers.getInstance().getByPlayer(player);
