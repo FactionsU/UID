@@ -98,7 +98,7 @@ public class CmdStuck implements Cmd {
                                 return true;
                             }
 
-                            Faction faction = board.getFactionAt(chunk);
+                            Faction faction = board.factionAt(chunk);
                             if (faction.isWilderness()) {
                                 int cx = FLocation.chunkToBlock(chunk.x());
                                 int cz = FLocation.chunkToBlock(chunk.z());

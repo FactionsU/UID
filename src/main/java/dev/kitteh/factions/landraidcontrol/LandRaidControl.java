@@ -50,7 +50,7 @@ public interface LandRaidControl {
 
     default void announceRaidable(Faction faction) {
         if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceRaidable()) {
-            Stream<FPlayer> stream = FPlayers.fPlayers().getOnlinePlayers().stream();
+            Stream<FPlayer> stream = FPlayers.fPlayers().online().stream();
             if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
                 stream = stream.filter(fp -> fp.getFaction() == faction || fp.getRelationTo(faction) == Relation.ENEMY);
             }
@@ -60,7 +60,7 @@ public interface LandRaidControl {
 
     default void announceNotRaidable(Faction faction) {
         if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceRaidable()) {
-            Stream<FPlayer> stream = FPlayers.fPlayers().getOnlinePlayers().stream();
+            Stream<FPlayer> stream = FPlayers.fPlayers().online().stream();
             if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
                 stream = stream.filter(fp -> fp.getFaction() == faction || fp.getRelationTo(faction) == Relation.ENEMY);
             }

@@ -85,15 +85,15 @@ public abstract class MemoryFactions implements Factions {
     public abstract void forceSave(boolean sync);
 
     @Override
-    public @Nullable Faction getFactionById(int id) {
+    public @Nullable Faction get(int id) {
         return factions.get(id);
     }
 
     public abstract MemoryFaction generateFactionObject(int id, String tag);
 
     @Override
-    public @Nullable Faction getByTag(String str) {
-        String compStr = MiscUtil.getComparisonString(Objects.requireNonNull(str));
+    public @Nullable Faction get(String tag) {
+        String compStr = MiscUtil.getComparisonString(Objects.requireNonNull(tag));
         for (Faction faction : factions.values()) {
             if (faction.getComparisonTag().equals(compStr)) {
                 return faction;
@@ -103,38 +103,7 @@ public abstract class MemoryFactions implements Factions {
     }
 
     @Override
-    public @Nullable Faction getBestTagMatch(String start) {
-        Objects.requireNonNull(start);
-        int best = 0;
-        start = start.toLowerCase();
-        int minlength = start.length();
-        Faction bestMatch = null;
-        for (Faction faction : factions.values()) {
-            String candidate = faction.getTag();
-            candidate = ChatColor.stripColor(candidate);
-            if (candidate.length() < minlength) {
-                continue;
-            }
-            if (!candidate.toLowerCase().startsWith(start)) {
-                continue;
-            }
-
-            // The closer to zero the better
-            int lendiff = candidate.length() - minlength;
-            if (lendiff == 0) {
-                return faction;
-            }
-            if (lendiff < best || best == 0) {
-                best = lendiff;
-                bestMatch = faction;
-            }
-        }
-
-        return bestMatch;
-    }
-
-    @Override
-    public Faction createFaction(@Nullable FPlayer sender, String tag) {
+    public Faction create(@Nullable FPlayer sender, String tag) {
         MemoryFaction faction = generateFactionObject(tag);
         factions.put(faction.getId(), faction);
         Bukkit.getServer().getPluginManager().callEvent(new FactionCreateEvent(sender, faction, sender == null ? FactionCreateEvent.Reason.PLUGIN : FactionCreateEvent.Reason.COMMAND));
@@ -144,27 +113,27 @@ public abstract class MemoryFactions implements Factions {
     public abstract MemoryFaction generateFactionObject(String tag);
 
     @Override
-    public void removeFaction(Faction faction) {
+    public void remove(Faction faction) {
         factions.remove(faction.getId()).remove();
     }
 
     @Override
-    public ArrayList<Faction> getAllFactions() {
+    public ArrayList<Faction> all() {
         return new ArrayList<>(factions.values());
     }
 
     @Override
-    public Faction getWilderness() {
+    public Faction wilderness() {
         return factions.get(ID_WILDERNESS);
     }
 
     @Override
-    public Faction getSafeZone() {
+    public Faction safeZone() {
         return factions.get(ID_SAFEZONE);
     }
 
     @Override
-    public Faction getWarZone() {
+    public Faction warZone() {
         return factions.get(ID_WARZONE);
     }
 }

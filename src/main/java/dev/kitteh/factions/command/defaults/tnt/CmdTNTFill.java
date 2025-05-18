@@ -56,7 +56,7 @@ public class CmdTNTFill implements Cmd {
         Player player = ((Sender.Player) context.sender()).player();
         Faction faction = sender.getFaction();
         
-        if (!faction.equals(Board.board().getFactionAt(new FLocation(player.getLocation())))) {
+        if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
             sender.msg(TL.COMMAND_TNT_TERRITORYONLY);
             return;
         }
@@ -125,7 +125,7 @@ public class CmdTNTFill implements Cmd {
             for (int y = location.getBlockY() - radius; y <= location.getBlockY() + radius; y++) {
                 for (int z = location.getBlockZ() - radius; z <= location.getBlockZ() + radius; z++) {
                     Block block = location.getWorld().getBlockAt(x, y, z);
-                    if (Board.board().getFactionAt(new FLocation(block)) != faction) {
+                    if (Board.board().factionAt(new FLocation(block)) != faction) {
                         continue;
                     }
                     if (block.getType() == Material.DISPENSER) {

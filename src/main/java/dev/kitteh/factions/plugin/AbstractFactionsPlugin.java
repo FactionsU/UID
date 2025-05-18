@@ -336,10 +336,10 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         int loadedPlayers = Instances.PLAYERS.load();
         int loadedFactions = Instances.FACTIONS.load();
-        for (FPlayer fPlayer : FPlayers.fPlayers().getAllFPlayers()) {
+        for (FPlayer fPlayer : FPlayers.fPlayers().all()) {
             ((MemoryFPlayer) fPlayer).cleanupDeserialization();
             int factionId = ((MemoryFPlayer) fPlayer).getFactionId();
-            Faction faction = Factions.factions().getFactionById(factionId);
+            Faction faction = Factions.factions().get(factionId);
             if (faction == null) {
                 log("Invalid faction id on " + fPlayer.getName() + ":" + factionId);
                 fPlayer.resetFactionData();
@@ -554,7 +554,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         this.metricsDrillPie("clipplaceholder", () -> this.metricsPluginInfo(clipPlugin));
 
         // Overall stats
-        this.metricsLine("factions", () -> Factions.factions().getAllFactions().size() - 3);
+        this.metricsLine("factions", () -> Factions.factions().all().size() - 3);
         this.metricsSimplePie("scoreboard", () -> "" + conf().scoreboard().constant().isEnabled());
 
         // Event listeners

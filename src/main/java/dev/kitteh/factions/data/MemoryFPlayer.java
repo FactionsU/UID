@@ -117,11 +117,11 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public Faction getFaction() {
-        Faction faction = Factions.factions().getFactionById(this.factionId);
+        Faction faction = Factions.factions().get(this.factionId);
         if (faction == null) {
             AbstractFactionsPlugin.getInstance().getLogger().warning("Found null faction (id " + this.factionId + ") for player " + this.getName());
             this.resetFactionData(true);
-            faction = Factions.factions().getWilderness();
+            faction = Factions.factions().wilderness();
         }
         return faction;
     }
@@ -336,7 +336,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.deaths = 0;
         this.mapHeight = FactionsPlugin.getInstance().conf().map().getHeight();
 
-        Faction newFaction = Factions.factions().getFactionById(FactionsPlugin.getInstance().conf().factions().other().getNewPlayerStartingFactionID());
+        Faction newFaction = Factions.factions().get(FactionsPlugin.getInstance().conf().factions().other().getNewPlayerStartingFactionID());
         if (newFaction != null) {
             this.factionId = FactionsPlugin.getInstance().conf().factions().other().getNewPlayerStartingFactionID();
         }
@@ -350,7 +350,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public void resetFactionData(boolean updateCommands) {
         // clean up any territory ownership in old faction, if there is one
-        Faction currentFaction = Factions.factions().getFactionById(this.factionId);
+        Faction currentFaction = Factions.factions().get(this.factionId);
         if (currentFaction != null) {
             currentFaction.removeFPlayer(this);
         }
@@ -448,7 +448,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public void setName(String name) {
         if (!name.equalsIgnoreCase(this.name)) {
-            for (FPlayer fplayer : FPlayers.fPlayers().getAllFPlayers()) {
+            for (FPlayer fplayer : FPlayers.fPlayers().all()) {
                 if (fplayer.getName() == null) {
                     continue;
                 }
@@ -693,12 +693,12 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     private Faction getStandingInFaction() {
         Player player = this.getPlayer();
-        return Board.board().getFactionAt(player == null ? this.lastStoodAt : new FLocation(player));
+        return Board.board().factionAt(player == null ? this.lastStoodAt : new FLocation(player));
     }
 
     @Override
     public void sendFactionHereMessage(Faction from) {
-        Faction toShow = Board.board().getFactionAt(getLastStoodAt());
+        Faction toShow = Board.board().factionAt(getLastStoodAt());
         boolean showTitle = FactionsPlugin.getInstance().conf().factions().enterTitles().isEnabled();
         boolean showChat = true;
         Player player = getPlayer();
@@ -814,12 +814,12 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         if (myFaction.isNormal() && !perm && myFaction.getFPlayers().isEmpty()) {
             // Remove this faction
-            for (FPlayer fplayer : FPlayers.fPlayers().getOnlinePlayers()) {
+            for (FPlayer fplayer : FPlayers.fPlayers().online()) {
                 fplayer.msg(TL.LEAVE_DISBANDED, myFaction.describeTo(fplayer, true));
             }
 
             AbstractFactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(myFaction));
-            Factions.factions().removeFaction(myFaction);
+            Factions.factions().remove(myFaction);
             if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
                 FactionsPlugin.getInstance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.getTag(), "" + myFaction.getId(), this.getName()));
             }
@@ -863,7 +863,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
         String denyReason = null;
         Faction myFaction = getFaction();
-        Faction currentFaction = Board.board().getFactionAt(flocation);
+        Faction currentFaction = Board.board().factionAt(flocation);
         int ownedLand = forFaction.getLandRounded();
         int factionBuffer = plugin.conf().factions().claims().getBufferZone();
         int worldBuffer = plugin.conf().worldBorder().getBuffer();
@@ -910,7 +910,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (currentFaction.getRelationTo(forFaction) == Relation.ALLY) {
             // // Can't claim ally
             denyReason = plugin.txt().parse(TL.CLAIM_ALLY.toString());
-        } else if (plugin.conf().factions().claims().isMustBeConnected() && !this.isAdminBypassing() && myFaction.getLandRoundedInWorld(flocation.worldName()) > 0 && Board.board().isDisconnectedLocation(flocation, myFaction) && (!plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction() || !currentFaction.isNormal())) {
+        } else if (plugin.conf().factions().claims().isMustBeConnected() && !this.isAdminBypassing() && myFaction.getLandRoundedInWorld(flocation.getWorld()) > 0 && Board.board().isDisconnectedLocation(flocation, myFaction) && (!plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction() || !currentFaction.isNormal())) {
             // Must be contiguous/connected
             if (plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction()) {
                 denyReason = plugin.txt().parse(TL.CLAIM_CONTIGIOUS.toString());
@@ -963,7 +963,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         // notifyFailure is false if called by auto-claim; no need to notify on every failure for it
         // return value is false on failure, true on success
 
-        Faction currentFaction = Board.board().getFactionAt(flocation);
+        Faction currentFaction = Board.board().factionAt(flocation);
 
         int ownedLand = forFaction.getLandRounded();
 
@@ -978,7 +978,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (mustPay) {
             cost = Econ.calculateClaimCost(ownedLand, currentFaction.isNormal());
 
-            if (FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee() != 0.0 && forFaction.getLandRoundedInWorld(flocation.worldName()) > 0 && Board.board().isDisconnectedLocation(flocation, forFaction)) {
+            if (FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee() != 0.0 && forFaction.getLandRoundedInWorld(flocation.getWorld()) > 0 && Board.board().isDisconnectedLocation(flocation, forFaction)) {
                 cost += FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee();
             }
 
@@ -1018,7 +1018,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             fp.msg(TL.CLAIM_CLAIMED, this.describeTo(fp, true), forFaction.describeTo(fp), currentFaction.describeTo(fp));
         }
 
-        Board.board().setFactionAt(forFaction, flocation);
+        Board.board().claim(flocation, forFaction);
 
         if (FactionsPlugin.getInstance().conf().logging().isLandClaims()) {
             FactionsPlugin.getInstance().log(TL.CLAIM_CLAIMEDLOG.toString(), this.getName(), flocation.getCoordString(), forFaction.getTag());
@@ -1029,7 +1029,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public boolean attemptUnclaim(Faction forFaction, FLocation flocation, boolean notifyFailure) {
-        Faction targetFaction = Board.board().getFactionAt(flocation);
+        Faction targetFaction = Board.board().factionAt(flocation);
 
         if (!targetFaction.equals(forFaction)) {
             this.msg(TL.COMMAND_UNCLAIM_WRONGFACTIONOTHER);
@@ -1043,7 +1043,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         if (targetFaction.isSafeZone()) {
             if (Permission.MANAGE_SAFE_ZONE.has(player)) {
-                Board.board().removeAt(flocation);
+                Board.board().unclaim(flocation);
                 this.msg(TL.COMMAND_UNCLAIM_SAFEZONE_SUCCESS);
 
                 if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
@@ -1058,7 +1058,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             }
         } else if (targetFaction.isWarZone()) {
             if (Permission.MANAGE_WAR_ZONE.has(player)) {
-                Board.board().removeAt(flocation);
+                Board.board().unclaim(flocation);
                 this.msg(TL.COMMAND_UNCLAIM_WARZONE_SUCCESS);
 
                 if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
@@ -1080,7 +1080,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 return false;
             }
 
-            Board.board().removeAt(flocation);
+            Board.board().unclaim(flocation);
 
             targetFaction.msg(TL.COMMAND_UNCLAIM_UNCLAIMED, this.describeTo(targetFaction, true));
             this.msg(TL.COMMAND_UNCLAIM_UNCLAIMS);
@@ -1133,7 +1133,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             }
         }
 
-        Board.board().removeAt(flocation);
+        Board.board().unclaim(flocation);
         this.getFaction().msg(TL.COMMAND_UNCLAIM_FACTIONUNCLAIMED, this.describeTo(this.getFaction(), true));
 
         if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
@@ -1257,7 +1257,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (player == null) {
             return false;
         }
-        Faction faction = Board.board().getFactionAt(location);
+        Faction faction = Board.board().factionAt(location);
         if (faction.isWilderness()) {
             return Permission.FLY_WILDERNESS.has(player);
         } else if (faction.isSafeZone()) {

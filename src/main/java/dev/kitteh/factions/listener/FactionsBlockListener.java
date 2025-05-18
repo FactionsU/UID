@@ -59,7 +59,7 @@ public class FactionsBlockListener extends AbstractListener {
             return;
         }
 
-        Faction targetFaction = Board.board().getFactionAt(new FLocation(event.getBlock().getLocation()));
+        Faction targetFaction = Board.board().factionAt(new FLocation(event.getBlock().getLocation()));
         if (targetFaction.isNormal() && !targetFaction.isPeaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().getIgnoreBuildMaterials().contains(event.getBlock().getType())) {
             return;
         }
@@ -82,8 +82,8 @@ public class FactionsBlockListener extends AbstractListener {
             return;
         }
 
-        Faction startFaction = Board.board().getFactionAt(start);
-        Faction endFaction = Board.board().getFactionAt(end);
+        Faction startFaction = Board.board().factionAt(start);
+        Faction endFaction = Board.board().factionAt(end);
         if (startFaction == endFaction) {
             return;
         }
@@ -132,8 +132,8 @@ public class FactionsBlockListener extends AbstractListener {
         boolean war = FactionsPlugin.getInstance().conf().factions().protection().isWarZonePreventLiquidFlowIn();
 
         if ((exp || safe || war) && event.getBlock().isLiquid() && event.getToBlock().isEmpty()) {
-            Faction from = Board.board().getFactionAt(new FLocation(event.getBlock()));
-            Faction to = Board.board().getFactionAt(new FLocation(event.getToBlock()));
+            Faction from = Board.board().factionAt(new FLocation(event.getBlock()));
+            Faction to = Board.board().factionAt(new FLocation(event.getToBlock()));
             if (from == to) {
                 // not concerned with inter-faction events
                 return;
@@ -159,7 +159,7 @@ public class FactionsBlockListener extends AbstractListener {
 
         if (event.getBlock().getType() == Material.ICE &&
                 FactionsPlugin.getInstance().conf().factions().protection().isTerritoryDenyIceFormation() &&
-                Board.board().getFactionAt(new FLocation(event.getBlock())).isNormal()) {
+                Board.board().factionAt(new FLocation(event.getBlock())).isNormal()) {
             event.setCancelled(true);
         }
     }
@@ -171,7 +171,7 @@ public class FactionsBlockListener extends AbstractListener {
         }
 
         if (FactionsPlugin.getInstance().conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
-                Board.board().getFactionAt(new FLocation(event.getBlock().getLocation())).isNormal()) {
+                Board.board().factionAt(new FLocation(event.getBlock().getLocation())).isNormal()) {
             return;
         }
 
@@ -187,7 +187,7 @@ public class FactionsBlockListener extends AbstractListener {
         }
 
         if (FactionsPlugin.getInstance().conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
-                Board.board().getFactionAt(new FLocation(event.getBlock().getLocation())).isNormal()) {
+                Board.board().factionAt(new FLocation(event.getBlock().getLocation())).isNormal()) {
             return;
         }
 
@@ -216,7 +216,7 @@ public class FactionsBlockListener extends AbstractListener {
             return;
         }
 
-        Faction pistonFaction = Board.board().getFactionAt(new FLocation(event.getBlock()));
+        Faction pistonFaction = Board.board().factionAt(new FLocation(event.getBlock()));
 
         if (!canPistonMoveBlock(pistonFaction, event.getBlocks(), event.getDirection())) {
             event.setCancelled(true);
@@ -241,7 +241,7 @@ public class FactionsBlockListener extends AbstractListener {
             return;
         }
 
-        Faction pistonFaction = Board.board().getFactionAt(new FLocation(event.getBlock()));
+        Faction pistonFaction = Board.board().factionAt(new FLocation(event.getBlock()));
 
         if (!canPistonMoveBlock(pistonFaction, blocks, null)) {
             event.setCancelled(true);
@@ -258,7 +258,7 @@ public class FactionsBlockListener extends AbstractListener {
 
         boolean disableOverall = FactionsPlugin.getInstance().conf().factions().other().isDisablePistonsInTerritory();
         for (FLocation location : locations) {
-            Faction otherFaction = Board.board().getFactionAt(location);
+            Faction otherFaction = Board.board().factionAt(location);
             if (pistonFaction == otherFaction) {
                 continue;
             }
@@ -295,7 +295,7 @@ public class FactionsBlockListener extends AbstractListener {
         Location location = event.getBlock().getLocation();
 
         // only notify every 10 seconds
-        FPlayer fPlayer = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer fPlayer = FPlayers.fPlayers().get(player);
         boolean justCheck = fPlayer.getLastFrostwalkerMessageTime() + 10000 > System.currentTimeMillis();
         if (!justCheck) {
             fPlayer.setLastFrostwalkerMessageTime();
@@ -314,13 +314,13 @@ public class FactionsBlockListener extends AbstractListener {
             return true;
         }
 
-        FPlayer me = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer me = FPlayers.fPlayers().get(player);
         if (me.isAdminBypassing()) {
             return true;
         }
 
         FLocation loc = new FLocation(location);
-        Faction otherFaction = Board.board().getFactionAt(loc);
+        Faction otherFaction = Board.board().factionAt(loc);
 
         if (otherFaction.isWilderness()) {
             if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().playerCanBuild(player, location)) {

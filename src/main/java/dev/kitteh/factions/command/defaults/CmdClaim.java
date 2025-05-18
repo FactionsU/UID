@@ -137,7 +137,7 @@ public class CmdClaim implements Cmd {
 
         final boolean bypass = sender.isAdminBypassing();
 
-        Faction currentFaction = Board.board().getFactionAt(loc);
+        Faction currentFaction = Board.board().factionAt(loc);
 
         if (currentFaction.equals(forFaction)) {
             sender.msg(TL.CLAIM_ALREADYOWN, forFaction.describeTo(sender, true));
@@ -209,7 +209,7 @@ public class CmdClaim implements Cmd {
     }
 
     private void addIf(Set<FLocation> toClaim, Queue<FLocation> queue, FLocation examine, Faction replacement) {
-        if (Board.board().getFactionAt(examine) == replacement && !toClaim.contains(examine)) {
+        if (Board.board().factionAt(examine) == replacement && !toClaim.contains(examine)) {
             toClaim.add(examine);
             queue.add(examine);
         }

@@ -33,7 +33,7 @@ public abstract class MemoryUniverse implements Universe {
     protected Data data = new Data();
 
     @Override
-    public Duration getGraceRemaining() {
+    public Duration graceRemaining() {
         long currentTime = System.currentTimeMillis();
         if (this.data.grace.graceTimeEnd < currentTime) {
             this.data.grace.graceTimeEnd = 0L;
@@ -42,7 +42,7 @@ public abstract class MemoryUniverse implements Universe {
     }
 
     @Override
-    public void setGraceRemaining(Duration graceRemaining) {
+    public void graceRemaining(Duration graceRemaining) {
         this.data.grace.graceTimeEnd = graceRemaining.isZero() ? 0L : System.currentTimeMillis() + graceRemaining.toMillis();
     }
 
@@ -52,7 +52,7 @@ public abstract class MemoryUniverse implements Universe {
     }
 
     @Override
-    public UpgradeSettings getUpgradeSettings(Upgrade upgrade) {
+    public UpgradeSettings upgradeSettings(Upgrade upgrade) {
         return this.data.upgrades.settings.get(upgrade.name());
     }
 

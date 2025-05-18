@@ -61,7 +61,7 @@ public class CmdUpgrades implements Cmd {
                 .sorted(Comparator.comparing(Upgrade::name))
                 .filter(Universe.universe()::isUpgradeEnabled)
                 .map(upgrade -> {
-                    UpgradeSettings settings = Universe.universe().getUpgradeSettings(upgrade);
+                    UpgradeSettings settings = Universe.universe().upgradeSettings(upgrade);
 
 
                     ItemStack stack = buildStack(settings, sender);

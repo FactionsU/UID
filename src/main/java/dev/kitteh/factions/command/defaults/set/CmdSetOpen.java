@@ -44,7 +44,7 @@ public class CmdSetOpen implements Cmd {
         String open = faction.getOpen() ? TL.COMMAND_OPEN_OPEN.toString() : TL.COMMAND_OPEN_CLOSED.toString();
 
         // Inform
-        for (FPlayer fplayer : FPlayers.fPlayers().getOnlinePlayers()) {
+        for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             if (fplayer.getFaction() == faction) {
                 fplayer.msg(TL.COMMAND_OPEN_CHANGES, sender.getName(), open);
                 continue;

@@ -50,7 +50,7 @@ public class EssentialsListener implements Listener {
             }
             FLocation floc = new FLocation(loc);
 
-            Faction factionAt = Board.board().getFactionAt(floc);
+            Faction factionAt = Board.board().factionAt(floc);
             // We're only going to remove homes in territory that belongs to THEIR faction.
             if (factionAt.equals(faction) && factionAt.isNormal()) {
                 user.delHome(homeName);

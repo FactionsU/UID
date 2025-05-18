@@ -52,9 +52,9 @@ public class FlightUtil {
 
         @Override
         public void run() {
-            Collection<FPlayer> players = FPlayers.fPlayers().getOnlinePlayers();
+            Collection<FPlayer> players = FPlayers.fPlayers().online();
             for (Player player : Bukkit.getOnlinePlayers()) {
-                FPlayer pilot = FPlayers.fPlayers().getByPlayer(player);
+                FPlayer pilot = FPlayers.fPlayers().get(player);
                 if (pilot.isFlying() && !pilot.isAdminBypassing()) {
                     if (enemiesNearby(pilot, FactionsPlugin.getInstance().conf().commands().fly().getEnemyRadius(), players)) {
                         pilot.msg(TL.COMMAND_FLY_ENEMY_DISABLE);
@@ -68,7 +68,7 @@ public class FlightUtil {
         }
 
         public boolean enemiesNearby(FPlayer target, int radius) {
-            return this.enemiesNearby(target, radius, FPlayers.fPlayers().getOnlinePlayers());
+            return this.enemiesNearby(target, radius, FPlayers.fPlayers().online());
         }
 
         public boolean enemiesNearby(FPlayer target, int radius, Collection<FPlayer> players) {
@@ -108,7 +108,7 @@ public class FlightUtil {
         @Override
         public void run() {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                FPlayer pilot = FPlayers.fPlayers().getByPlayer(player);
+                FPlayer pilot = FPlayers.fPlayers().get(player);
                 if (pilot.isFlying()) {
                     if (pilot.getFlyTrailsEffect() != null && Permission.FLY_TRAILS.has(player) && pilot.getFlyTrailsState()) {
                         Particle effect = FactionsPlugin.getInstance().getParticleProvider().effectFromString(pilot.getFlyTrailsEffect());

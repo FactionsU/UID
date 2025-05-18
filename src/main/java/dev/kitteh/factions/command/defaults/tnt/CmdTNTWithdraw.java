@@ -46,7 +46,7 @@ public class CmdTNTWithdraw implements Cmd {
         Player player = ((Sender.Player) context.sender()).player();
         Faction faction = sender.getFaction();
 
-        if (!faction.equals(Board.board().getFactionAt(new FLocation(player.getLocation())))) {
+        if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
             sender.msg(TL.COMMAND_TNT_TERRITORYONLY);
             return;
         }

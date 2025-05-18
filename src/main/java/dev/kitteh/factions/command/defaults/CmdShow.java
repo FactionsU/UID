@@ -73,7 +73,7 @@ public class CmdShow implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
-        Faction faction = context.getOrDefault("faction", fPlayer == null ? Factions.factions().getWilderness() : fPlayer.getFaction());
+        Faction faction = context.getOrDefault("faction", fPlayer == null ? Factions.factions().wilderness() : fPlayer.getFaction());
         if (faction.isWilderness()) {
             context.sender().msg(TL.COMMAND_SHOW_NOFACTION_OTHER);
             return;
@@ -192,7 +192,7 @@ public class CmdShow implements Cmd {
 
     private void relationMessage(StringBuilder builder, CommandSender recipient, Faction faction, Relation relation) {
         boolean first = true;
-        for (Faction otherFaction : Factions.factions().getAllFactions()) {
+        for (Faction otherFaction : Factions.factions().all()) {
             if (otherFaction != faction && otherFaction.getRelationTo(faction) == relation) {
                 String s = otherFaction.getTag();
                 builder.append(first ? s : ", " + s);

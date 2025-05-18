@@ -14,15 +14,15 @@ public interface FPlayers {
         return Instances.PLAYERS;
     }
 
-    default Collection<FPlayer> getOnlinePlayers() {
-        return Bukkit.getServer().getOnlinePlayers().stream().map(this::getByPlayer).toList();
+    default Collection<FPlayer> online() {
+        return Bukkit.getServer().getOnlinePlayers().stream().map(this::get).toList();
     }
 
-    Collection<FPlayer> getAllFPlayers();
+    Collection<FPlayer> all();
 
-    default FPlayer getByPlayer(OfflinePlayer player) {
-        return this.getById(player.getUniqueId());
+    default FPlayer get(OfflinePlayer player) {
+        return this.get(player.getUniqueId());
     }
 
-    FPlayer getById(UUID uuid);
+    FPlayer get(UUID uuid);
 }

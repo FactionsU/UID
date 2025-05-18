@@ -12,6 +12,7 @@ import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.LazyLocation;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
@@ -397,7 +398,7 @@ public interface Faction extends Participator, Selectable {
 
     int getLandRounded();
 
-    int getLandRoundedInWorld(String worldName);
+    int getLandRoundedInWorld(World world);
 
     int getTNTBank();
 
@@ -479,7 +480,7 @@ public interface Faction extends Participator, Selectable {
             return Integer.MAX_VALUE;
         }
         if (Universe.universe().isUpgradeEnabled(Upgrades.MAX_MEMBERS) && this.getUpgradeLevel(Upgrades.MAX_MEMBERS) > 0) {
-            int boost = Universe.universe().getUpgradeSettings(Upgrades.MAX_MEMBERS).valueAt(Upgrades.Variables.POSITIVE_INCREASE, this.getUpgradeLevel(Upgrades.MAX_MEMBERS)).intValue();
+            int boost = Universe.universe().upgradeSettings(Upgrades.MAX_MEMBERS).valueAt(Upgrades.Variables.POSITIVE_INCREASE, this.getUpgradeLevel(Upgrades.MAX_MEMBERS)).intValue();
             return confMax + boost;
         } else {
             return confMax;

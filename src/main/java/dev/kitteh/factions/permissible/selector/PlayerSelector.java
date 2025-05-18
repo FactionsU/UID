@@ -29,7 +29,7 @@ public class PlayerSelector extends AbstractSelector {
         try {
             uuid = UUID.fromString(str);
         } catch (IllegalArgumentException e) {
-            Optional<FPlayer> p = FPlayers.fPlayers().getAllFPlayers().stream().filter(pp -> pp.getName().equalsIgnoreCase(str)).findFirst();
+            Optional<FPlayer> p = FPlayers.fPlayers().all().stream().filter(pp -> pp.getName().equalsIgnoreCase(str)).findFirst();
             if (p.isPresent()) {
                 uuid = p.get().getUniqueId();
             }
@@ -57,7 +57,7 @@ public class PlayerSelector extends AbstractSelector {
 
     @Override
     public Component displayValue(Faction context) {
-        FPlayer player = FPlayers.fPlayers().getById(this.uuid);
+        FPlayer player = FPlayers.fPlayers().get(this.uuid);
         return player.getName().equals(player.getUniqueId().toString()) ?
                 MiniMessage.miniMessage().deserialize(FactionsPlugin.getInstance().tl().permissions().selectors().player().getUuidValue(), Placeholder.unparsed("uuid", this.uuid.toString()))
                 : LegacyComponentSerializer.legacySection().deserialize(player.getRelationTo(context).chatColor() + player.getName());

@@ -78,7 +78,7 @@ public class CmdTop implements Cmd {
             return;
         }
 
-        List<FTopFacValPair> sortedFactions = Factions.factions().getAllFactions().stream()
+        List<FTopFacValPair> sortedFactions = Factions.factions().all().stream()
                 .filter(Faction::isNormal)
                 .map(f -> new FTopFacValPair(f, ftopGenerator.apply(f)))
                 .sorted()

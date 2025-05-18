@@ -56,7 +56,7 @@ public class CmdSetHome implements Cmd {
 
         // Can the player set the faction home HERE?
         if (FactionsPlugin.getInstance().conf().factions().homes().isMustBeInClaimedTerritory() &&
-                Board.board().getFactionAt(new FLocation(player)) != faction) {
+                Board.board().factionAt(new FLocation(player)) != faction) {
             sender.msg(TL.COMMAND_SETHOME_NOTCLAIMED);
             return;
         }

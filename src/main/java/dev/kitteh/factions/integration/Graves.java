@@ -64,7 +64,7 @@ public class Graves {
             if (!WorldUtil.isEnabled(event.getGrave().getLocationDeath().getWorld())) {
                 return;
             }
-            Faction faction = Board.board().getFactionAt(new FLocation(event.getGrave().getLocationDeath()));
+            Faction faction = Board.board().factionAt(new FLocation(event.getGrave().getLocationDeath()));
             if ((safe && faction.isSafeZone()) || (war && faction.isWarZone())) {
                 event.setCancelled(true);
                 plugin.debugMessage("Grave not created for " + plugin.getEntityManager().getEntityName(event.getEntity()) + " because FactionsUUID (which is sending this debug message) blocked it (" + (faction.isSafeZone() ? "safezone" : "warzone") + " protected)", 2);

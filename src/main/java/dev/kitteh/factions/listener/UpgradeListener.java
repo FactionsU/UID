@@ -30,7 +30,7 @@ public class UpgradeListener implements Listener {
             return;
         }
 
-        UpgradeSettings settings = Universe.universe().getUpgradeSettings(Upgrades.GROWTH);
+        UpgradeSettings settings = Universe.universe().upgradeSettings(Upgrades.GROWTH);
 
         double chance = settings.valueAt(Upgrades.Variables.CHANCE, level).doubleValue();
         int boost = settings.valueAt(Upgrades.Variables.GROWTH_BOOST, level).intValue();

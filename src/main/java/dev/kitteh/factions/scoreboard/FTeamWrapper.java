@@ -71,7 +71,7 @@ public class FTeamWrapper {
         FTeamWrapper wrapper = wrappers.get(faction);
         Set<FPlayer> factionMembers = faction.getFPlayers();
 
-        if (wrapper != null && Factions.factions().getFactionById(faction.getId()) == null) {
+        if (wrapper != null && Factions.factions().get(faction.getId()) == null) {
             // Faction was disbanded
             wrapper.unregister();
             wrappers.remove(faction);
@@ -85,7 +85,7 @@ public class FTeamWrapper {
 
         for (String player : wrapper.getPlayers()) {
             Player plr = Bukkit.getPlayerExact(player);
-            if (plr == null || !plr.isOnline() || !factionMembers.contains(FPlayers.fPlayers().getByPlayer(plr))) {
+            if (plr == null || !plr.isOnline() || !factionMembers.contains(FPlayers.fPlayers().get(plr))) {
                 // Player is offline or no longer in faction
                 wrapper.removePlayer(player);
             }

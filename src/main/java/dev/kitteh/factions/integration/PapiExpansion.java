@@ -57,8 +57,8 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
     // Relational placeholders
     @Override
     public @Nullable String onPlaceholderRequest(Player p1, Player p2, String placeholder) {
-        FPlayer fp1 = FPlayers.fPlayers().getByPlayer(p1);
-        FPlayer fp2 = FPlayers.fPlayers().getByPlayer(p2);
+        FPlayer fp1 = FPlayers.fPlayers().get(p1);
+        FPlayer fp2 = FPlayers.fPlayers().get(p2);
 
         return switch (placeholder) {
             case "relation" -> fp1.getRelationTo(fp2).nicename;
@@ -78,11 +78,11 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             return "";
         }
 
-        FPlayer fPlayer = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer fPlayer = FPlayers.fPlayers().get(player);
         Faction faction = fPlayer.getFaction();
         boolean territory = false;
         if (placeholder.contains("faction_territory")) {
-            faction = Board.board().getFactionAt(fPlayer.getLastStoodAt());
+            faction = Board.board().factionAt(fPlayer.getLastStoodAt());
             placeholder = placeholder.replace("_territory", "");
             territory = true;
         }
@@ -200,7 +200,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
 
     private int countOn(Faction f, Relation relation, @Nullable Boolean status, FPlayer player) {
         int count = 0;
-        for (Faction faction : Factions.factions().getAllFactions()) {
+        for (Faction faction : Factions.factions().all()) {
             if (faction.getRelationTo(f) == relation) {
                 if (status == null) {
                     count += faction.getFPlayers().size();

@@ -12,7 +12,7 @@ import java.util.logging.Level;
 
 public class AutoLeaveProcessTask extends AutoLeaveTask.AutoLeaveProcessor<FPlayer> {
     public AutoLeaveProcessTask() {
-        this.iterator = ((ArrayList<FPlayer>) FPlayers.fPlayers().getAllFPlayers()).listIterator();
+        this.iterator = ((ArrayList<FPlayer>) FPlayers.fPlayers().all()).listIterator();
     }
 
     @Override

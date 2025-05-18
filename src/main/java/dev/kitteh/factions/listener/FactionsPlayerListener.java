@@ -84,7 +84,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     private void initPlayer(Player player) {
         // Make sure that all online players do have a fplayer.
-        final FPlayer me = FPlayers.fPlayers().getByPlayer(player);
+        final FPlayer me = FPlayers.fPlayers().get(player);
         ((MemoryFPlayer) me).setName(player.getName());
 
         this.plugin.getLandRaidControl().onJoin(me);
@@ -97,7 +97,7 @@ public class FactionsPlayerListener extends AbstractListener {
             long diff = System.currentTimeMillis() - me.getLastLoginTime();
             MainConfig.Factions.Protection.TerritoryTeleport terry = this.plugin.conf().factions().protection().territoryTeleport();
             if (diff > (1000L * terry.getTimeSinceLastSignedIn())) {
-                Faction standingFaction = Board.board().getFactionAt(standing);
+                Faction standingFaction = Board.board().factionAt(standing);
                 Relation relation = me.getRelationTo(standingFaction);
                 if (terry.isRelationToTeleportOut(relation, standingFaction)) {
                     Location target = null;
@@ -196,7 +196,7 @@ public class FactionsPlayerListener extends AbstractListener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        FPlayer me = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer me = FPlayers.fPlayers().get(player);
 
         this.plugin.getLandRaidControl().onQuit(me);
         // and update their last login time to point to when the logged off, for auto-remove routine
@@ -206,7 +206,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         // if player is waiting for fstuck teleport but leaves, remove
         if (this.plugin.getStuckMap().containsKey(player.getUniqueId())) {
-            FPlayers.fPlayers().getByPlayer(player).msg(TL.COMMAND_STUCK_CANCELLED);
+            FPlayers.fPlayers().get(player).msg(TL.COMMAND_STUCK_CANCELLED);
             this.plugin.getStuckMap().remove(player.getUniqueId());
             this.plugin.getTimers().remove(player.getUniqueId());
         }
@@ -238,7 +238,7 @@ public class FactionsPlayerListener extends AbstractListener {
             return;
         }
         if (event.getNewGameMode() == GameMode.SURVIVAL) {
-            FPlayer me = FPlayers.fPlayers().getByPlayer(event.getPlayer());
+            FPlayer me = FPlayers.fPlayers().get(event.getPlayer());
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -269,7 +269,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (!WorldUtil.isEnabled(player)) {
             return;
         }
-        FPlayer me = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer me = FPlayers.fPlayers().get(player);
 
         // clear visualization
         if (fromLoc.getBlockX() != toLoc.getBlockX() || fromLoc.getBlockY() != toLoc.getBlockY() || fromLoc.getBlockZ() != toLoc.getBlockZ() || fromLoc.getWorld() != toLoc.getWorld()) {
@@ -309,8 +309,8 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         // Did we change "host"(faction)?
-        Faction factionFrom = Board.board().getFactionAt(from);
-        Faction factionTo = Board.board().getFactionAt(to);
+        Faction factionFrom = Board.board().factionAt(from);
+        Faction factionTo = Board.board().factionAt(to);
         boolean changedFaction = (factionFrom != factionTo);
 
         if (factionTo == me.getFaction()) {
@@ -428,7 +428,7 @@ public class FactionsPlayerListener extends AbstractListener {
                 }
                 int count = attempt.increment();
                 if (count >= 10) {
-                    FPlayer me = FPlayers.fPlayers().getByPlayer(player);
+                    FPlayer me = FPlayers.fPlayers().get(player);
                     me.msg(TL.PLAYER_OUCH);
                     player.damage(NumberConversions.floor((double) count / 10));
                 }
@@ -501,13 +501,13 @@ public class FactionsPlayerListener extends AbstractListener {
             return true;
         }
 
-        FPlayer me = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer me = FPlayers.fPlayers().get(player);
         if (me.isAdminBypassing()) {
             return true;
         }
 
         FLocation loc = new FLocation(location);
-        Faction otherFaction = Board.board().getFactionAt(loc);
+        Faction otherFaction = Board.board().factionAt(loc);
 
         if (this.plugin.getLandRaidControl().isRaidable(otherFaction)) {
             return true;
@@ -573,7 +573,7 @@ public class FactionsPlayerListener extends AbstractListener {
             return;
         }
 
-        FPlayer me = FPlayers.fPlayers().getByPlayer(event.getPlayer());
+        FPlayer me = FPlayers.fPlayers().get(event.getPlayer());
 
         this.plugin.getLandRaidControl().onRespawn(me);
 
@@ -595,7 +595,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onChangedWorld(PlayerChangedWorldEvent event) {
-        FPlayer me = FPlayers.fPlayers().getByPlayer(event.getPlayer());
+        FPlayer me = FPlayers.fPlayers().get(event.getPlayer());
         boolean isEnabled = WorldUtil.isEnabled(event.getPlayer().getWorld());
         if (!isEnabled) {
             FScoreboard.remove(me, event.getPlayer());
@@ -650,13 +650,13 @@ public class FactionsPlayerListener extends AbstractListener {
             return;
         }
 
-        FPlayer me = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer me = FPlayers.fPlayers().get(player);
         if (me.isAdminBypassing()) {
             return;
         }
 
         FLocation location = new FLocation(event.getLectern().getLocation());
-        Faction otherFaction = Board.board().getFactionAt(location);
+        Faction otherFaction = Board.board().factionAt(location);
         if (this.plugin.getLandRaidControl().isRaidable(otherFaction)) {
             return;
         }
@@ -693,7 +693,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         fullCmd = fullCmd.toLowerCase();
 
-        FPlayer me = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer me = FPlayers.fPlayers().get(player);
 
         String shortCmd;  // command without the slash at the beginning
         if (fullCmd.startsWith("/")) {
@@ -712,7 +712,7 @@ public class FactionsPlayerListener extends AbstractListener {
             return true;
         }
 
-        Faction at = Board.board().getFactionAt(new FLocation(player.getLocation()));
+        Faction at = Board.board().factionAt(new FLocation(player.getLocation()));
         if (at.isWilderness() && !protection.getWildernessDenyCommands().isEmpty() && !me.isAdminBypassing() && isCommandInSet(fullCmd, shortCmd, protection.getWildernessDenyCommands())) {
             me.msg(TL.PLAYER_COMMAND_WILDERNESS, fullCmd);
             return true;
@@ -803,7 +803,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerKick(PlayerKickEvent event) {
-        FPlayer badGuy = FPlayers.fPlayers().getByPlayer(event.getPlayer());
+        FPlayer badGuy = FPlayers.fPlayers().get(event.getPlayer());
 
         // if player was banned (not just kicked), get rid of their stored info
         // TODO fix this nonsense
@@ -836,7 +836,7 @@ public class FactionsPlayerListener extends AbstractListener {
         String cmd = event.getMessage().split(" ")[0];
 
         if (this.plugin.conf().factions().chat().isTriggerPublicChat(cmd.startsWith("/") ? cmd.substring(1) : cmd)) {
-            FPlayer p = FPlayers.fPlayers().getByPlayer(event.getPlayer());
+            FPlayer p = FPlayers.fPlayers().get(event.getPlayer());
             p.setChatTarget(ChatTarget.PUBLIC);
             p.msg(TL.COMMAND_CHAT_MODE_PUBLIC);
         }
@@ -851,6 +851,6 @@ public class FactionsPlayerListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerPreLogin(PlayerLoginEvent event) {
-        FPlayers.fPlayers().getByPlayer(event.getPlayer());
+        FPlayers.fPlayers().get(event.getPlayer());
     }
 }

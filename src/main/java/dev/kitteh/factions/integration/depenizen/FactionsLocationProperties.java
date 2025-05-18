@@ -85,7 +85,7 @@ public class FactionsLocationProperties implements Property {
         // Returns the faction at the location. (Can also be SafeZone, WarZone, or Wilderness)
         // -->
         if (attribute.startsWith("faction")) {
-            return new FactionTag(Board.board().getFactionAt(new FLocation(location)))
+            return new FactionTag(Board.board().factionAt(new FLocation(location)))
                     .getObjectAttribute(attribute.fulfill(1));
         }
 

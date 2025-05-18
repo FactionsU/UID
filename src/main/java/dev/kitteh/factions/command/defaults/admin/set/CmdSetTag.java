@@ -40,7 +40,7 @@ public class CmdSetTag implements Cmd {
         String tag = context.get("tag");
 
         // TODO does not first shouldCancel cover selfcase?
-        if (Factions.factions().isTagTaken(tag) && !MiscUtil.getComparisonString(tag).equals(faction.getComparisonTag())) {
+        if (Factions.factions().get(tag) != null && !MiscUtil.getComparisonString(tag).equals(faction.getComparisonTag())) {
             sender.msg(TL.COMMAND_TAG_TAKEN);
             return;
         }
@@ -62,7 +62,7 @@ public class CmdSetTag implements Cmd {
         faction.setTag(tag);
 
         // Inform
-        for (FPlayer fplayer : FPlayers.fPlayers().getOnlinePlayers()) {
+        for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             if (fplayer.getFaction() == faction) {
                 fplayer.msg(TL.COMMAND_TAG_FACTION, sender.describeTo(faction, true), faction.getTag(faction));
                 continue;

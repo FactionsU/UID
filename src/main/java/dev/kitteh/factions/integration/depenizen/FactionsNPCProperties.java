@@ -74,7 +74,7 @@ public class FactionsNPCProperties implements Property {
     }
 
     public FPlayer getFPlayer() {
-        return FPlayers.fPlayers().getById(npc.getCitizen().getUniqueId());
+        return FPlayers.fPlayers().get(npc.getCitizen().getUniqueId());
     }
 
     NPCTag npc;

@@ -43,7 +43,7 @@ public class CmdSetPeaceful implements Cmd {
         }
 
         // Inform all players
-        for (FPlayer fplayer : FPlayers.fPlayers().getOnlinePlayers()) {
+        for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             String blame = (fPlayer == null ? TL.GENERIC_SERVERADMIN.toString() : fPlayer.describeTo(fplayer, true));
             if (fplayer.getFaction() == faction) {
                 fplayer.msg(TL.COMMAND_PEACEFUL_YOURS, blame, change);

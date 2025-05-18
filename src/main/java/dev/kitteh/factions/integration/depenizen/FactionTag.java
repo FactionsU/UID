@@ -53,7 +53,7 @@ public class FactionTag implements ObjectTag {
         }
 
         string = string.replace("faction@", "");
-        Faction faction = Factions.factions().getByTag(string);
+        Faction faction = Factions.factions().get(string);
         if (faction != null) {
             return new FactionTag(faction);
         }

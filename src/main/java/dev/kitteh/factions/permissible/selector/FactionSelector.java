@@ -27,18 +27,18 @@ public class FactionSelector extends AbstractSelector {
         super(DESCRIPTOR);
         String[] split = str.split(" "); // Old mistake
         if (split.length == 2) {
-            Faction faction = Factions.factions().getFactionById(Integer.parseInt(split[0]));
+            Faction faction = Factions.factions().get(Integer.parseInt(split[0]));
             this.id = Integer.parseInt(split[0]);
             this.lastKnown = faction == null ? split[1] : faction.getTag();
             return;
         }
         split = str.split(delimiter);
         if (split.length == 1) {
-            Faction faction = Factions.factions().getByTag(str);
+            Faction faction = Factions.factions().get(str);
             this.id = faction.getId();
             this.lastKnown = faction.getTag();
         } else {
-            Faction faction = Factions.factions().getFactionById(Integer.parseInt(split[0]));
+            Faction faction = Factions.factions().get(Integer.parseInt(split[0]));
             this.id = Integer.parseInt(split[0]);
             this.lastKnown = faction == null ? split[1] : faction.getTag();
         }
@@ -57,13 +57,13 @@ public class FactionSelector extends AbstractSelector {
 
     @Override
     public String serializeValue() {
-        Faction faction = Factions.factions().getFactionById(this.id);
+        Faction faction = Factions.factions().get(this.id);
         return this.id + delimiter + (faction == null ? this.lastKnown : faction.getTag());
     }
 
     @Override
     public Component displayValue(Faction context) {
-        Faction faction = Factions.factions().getFactionById(this.id);
+        Faction faction = Factions.factions().get(this.id);
         return faction == null ?
                 MiniMessage.miniMessage().deserialize(FactionsPlugin.getInstance().tl().permissions().selectors().faction().getDisbandedValue(), Placeholder.unparsed("lastknown", this.lastKnown)) :
                 LegacyComponentSerializer.legacySection().deserialize(faction.getTag(context));

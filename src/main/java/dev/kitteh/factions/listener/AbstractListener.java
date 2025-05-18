@@ -38,13 +38,13 @@ public abstract class AbstractListener implements Listener {
             return true;
         }
 
-        FPlayer me = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer me = FPlayers.fPlayers().get(player);
         if (me.isAdminBypassing()) {
             return true;
         }
 
         FLocation loc = new FLocation(location);
-        Faction otherFaction = Board.board().getFactionAt(loc);
+        Faction otherFaction = Board.board().factionAt(loc);
 
         if (FactionsPlugin.getInstance().getLandRaidControl().isRaidable(otherFaction)) {
             return true;
@@ -143,7 +143,7 @@ public abstract class AbstractListener implements Listener {
     }
 
     public static boolean explosionDisallowed(Entity boomer, FLocation location) {
-        Faction faction = Board.board().getFactionAt(location);
+        Faction faction = Board.board().factionAt(location);
         boolean online = faction.hasPlayersOnline();
         if (faction.noExplosionsInTerritory() || (faction.isPeaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
             // faction is peaceful and has explosions set to disabled
@@ -186,13 +186,13 @@ public abstract class AbstractListener implements Listener {
             return true;
         }
 
-        FPlayer me = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer me = FPlayers.fPlayers().get(player);
         if (me.isAdminBypassing()) {
             return true;
         }
 
         FLocation loc = new FLocation(location);
-        Faction otherFaction = Board.board().getFactionAt(loc);
+        Faction otherFaction = Board.board().factionAt(loc);
         String materialName = material.name();
 
         // no door/chest/whatever protection in wilderness, war zones, or safe zones

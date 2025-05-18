@@ -15,12 +15,12 @@ public abstract class MemoryFPlayers implements FPlayers {
     protected Map<UUID, FPlayer> fPlayers = new ConcurrentSkipListMap<>();
 
     @Override
-    public List<FPlayer> getAllFPlayers() {
+    public List<FPlayer> all() {
         return new ArrayList<>(fPlayers.values());
     }
 
     @Override
-    public FPlayer getById(UUID id) {
+    public FPlayer get(UUID id) {
         return fPlayers.computeIfAbsent(id, this::constructNewFPlayer);
     }
 

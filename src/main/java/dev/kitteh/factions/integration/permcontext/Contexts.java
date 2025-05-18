@@ -22,19 +22,19 @@ import java.util.stream.Collectors;
 @NullMarked
 public enum Contexts implements Context {
     FACTION_ID((player) -> {
-        FPlayer p = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer p = FPlayers.fPlayers().get(player);
         return Set.of(String.valueOf(p.hasFaction() ? p.getFaction().getId() : Factions.ID_WILDERNESS));
     }, Set.of(String.valueOf(Factions.ID_WILDERNESS))),
     IS_PEACEFUL((player) -> {
-        FPlayer p = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer p = FPlayers.fPlayers().get(player);
         return Set.of(p.hasFaction() && p.getFaction().isPeaceful() ? "true" : "false");
     }, Set.of("true", "false")),
     IS_PERMANENT((player) -> {
-        FPlayer p = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer p = FPlayers.fPlayers().get(player);
         return Set.of(p.hasFaction() && p.getFaction().isPermanent() ? "true" : "false");
     }, Set.of("true", "false")),
     TERRITORY_RELATION((player) ->
-            FPlayers.fPlayers().getByPlayer(player).getRelationTo(Board.board().getFactionAt(new FLocation(player.getLocation()))).getNameInASet(),
+            FPlayers.fPlayers().get(player).getRelationTo(Board.board().factionAt(new FLocation(player.getLocation()))).getNameInASet(),
             Arrays.stream(Relation.values()).map(relation -> relation.name().toLowerCase()).collect(Collectors.toSet())),
     TERRITORY_IS_SAFEZONE((player) ->
             Set.of(new FLocation(player).getFaction().isSafeZone() ? "true" : "false"),
@@ -50,13 +50,13 @@ public enum Contexts implements Context {
             Set.of(String.valueOf(Factions.ID_WILDERNESS))),
     ROLE_AT_LEAST((player) ->
     {
-        FPlayer p = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer p = FPlayers.fPlayers().get(player);
         return p.hasFaction() ? p.getRole().getRoleNamesAtOrBelow() : Collections.emptySet();
     },
             Arrays.stream(Role.values()).map(role -> role.name().toLowerCase()).collect(Collectors.toSet())),
     ROLE_AT_MOST((player) ->
     {
-        FPlayer p = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer p = FPlayers.fPlayers().get(player);
         return p.hasFaction() ? p.getRole().getRoleNamesAtOrAbove() : Collections.emptySet();
     },
             Arrays.stream(Role.values()).map(role -> role.name().toLowerCase()).collect(Collectors.toSet()));

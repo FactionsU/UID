@@ -96,7 +96,7 @@ public class CmdFly implements Cmd {
     private boolean flyTest(FPlayer fPlayer, boolean notify) {
         if (!fPlayer.canFlyAtLocation()) {
             if (notify) {
-                Faction factionAtLocation = Board.board().getFactionAt(fPlayer.getLastStoodAt());
+                Faction factionAtLocation = Board.board().factionAt(fPlayer.getLastStoodAt());
                 fPlayer.msg(TL.COMMAND_FLY_NO_ACCESS, factionAtLocation.getTag(fPlayer));
             }
             return false;

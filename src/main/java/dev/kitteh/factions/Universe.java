@@ -26,14 +26,14 @@ public interface Universe {
      *
      * @return remaining grace time or zero if not active
      */
-    Duration getGraceRemaining();
+    Duration graceRemaining();
 
     /**
      * Sets grace time remaining.
      *
      * @param graceRemaining remaining grace time or zero to deactivate
      */
-    void setGraceRemaining(Duration graceRemaining);
+    void graceRemaining(Duration graceRemaining);
 
     /**
      * Gets if a given upgrade is enabled.
@@ -49,5 +49,5 @@ public interface Universe {
      * @param upgrade upgrade
      * @return settings for the upgrade
      */
-    UpgradeSettings getUpgradeSettings(Upgrade upgrade);
+    UpgradeSettings upgradeSettings(Upgrade upgrade);
 }

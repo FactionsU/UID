@@ -40,7 +40,7 @@ public class FactionsChatListener implements Listener {
 
         Player talkingPlayer = event.getPlayer();
         String msg = event.getMessage();
-        FPlayer me = FPlayers.fPlayers().getByPlayer(talkingPlayer);
+        FPlayer me = FPlayers.fPlayers().get(talkingPlayer);
         Faction faction = me.getFaction();
         MainConfig.Factions.Chat.InternalChat chatConf = FactionsPlugin.getInstance().conf().factions().chat().internalChat();
 
@@ -71,7 +71,7 @@ public class FactionsChatListener implements Listener {
         } else if (chatTarget instanceof ChatTarget.Relation(Relation relation)) {
             String format = chatConf.getRelationChatFormat();
 
-            for (FPlayer fPlayer : FPlayers.fPlayers().getOnlinePlayers()) {
+            for (FPlayer fPlayer : FPlayers.fPlayers().online()) {
                 if (fPlayer.getFaction() == faction || (faction.getRelationTo(fPlayer) == relation &&
                         (
                                 (relation == Relation.ALLY && !fPlayer.isIgnoreAllianceChat()) ||
@@ -112,7 +112,7 @@ public class FactionsChatListener implements Listener {
         Player talkingPlayer = event.getPlayer();
         String msg = event.getMessage();
         String eventFormat = event.getFormat();
-        FPlayer me = FPlayers.fPlayers().getByPlayer(talkingPlayer);
+        FPlayer me = FPlayers.fPlayers().get(talkingPlayer);
         MainConfig.Factions.Chat chatConf = FactionsPlugin.getInstance().conf().factions().chat();
         int InsertIndex = chatConf.getTagInsertIndex();
 
@@ -149,7 +149,7 @@ public class FactionsChatListener implements Listener {
                 if (FactionsPlugin.getInstance().getIntegrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isIgnored(listeningPlayer, talkingPlayer)) {
                     continue;
                 }
-                FPlayer you = FPlayers.fPlayers().getByPlayer(listeningPlayer);
+                FPlayer you = FPlayers.fPlayers().get(listeningPlayer);
                 String yourFormat = formatStart + me.getChatTag(you).trim() + formatEnd;
                 try {
                     listeningPlayer.sendMessage(String.format(yourFormat, talkingPlayer.getDisplayName(), msg));

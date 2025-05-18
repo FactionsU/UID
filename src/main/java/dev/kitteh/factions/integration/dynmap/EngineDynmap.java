@@ -141,7 +141,7 @@ public class EngineDynmap {
                 Map<Integer, DynmapStyle> factionStyle = new HashMap<>();
                 Set<Integer> invalidFactionsWat = new HashSet<>();
                 worldFactionChunks.values().stream().flatMapToInt(m -> m.keySet().intStream()).distinct().forEach(factionId -> {
-                    Faction faction = Factions.factions().getFactionById(factionId);
+                    Faction faction = Factions.factions().get(factionId);
                     if (faction == null) { // why :(
                         AbstractFactionsPlugin.getInstance().getLogger().warning("Found invalid faction ID " + factionId);
                         invalidFactionsWat.add(factionId);
@@ -239,7 +239,7 @@ public class EngineDynmap {
         }
 
         // Loop current factions
-        for (Faction faction : Factions.factions().getAllFactions()) {
+        for (Faction faction : Factions.factions().all()) {
             Location ps = faction.getHome();
             if (ps == null) {
                 continue;
@@ -312,7 +312,7 @@ public class EngineDynmap {
         }
 
         // Loop current factions
-        for (Faction faction : Factions.factions().getAllFactions()) {
+        for (Faction faction : Factions.factions().all()) {
             Map<String, LazyLocation> warps = faction.getWarps();
             for (String key : warps.keySet()) {
                 LazyLocation lazyLocation = warps.get(key);
@@ -630,7 +630,7 @@ public class EngineDynmap {
 
         Map<String, Set<String>> ret = new HashMap<>();
 
-        for (Faction faction : Factions.factions().getAllFactions()) {
+        for (Faction faction : Factions.factions().all()) {
             String playersetId = createPlayersetId(faction);
             if (playersetId == null) {
                 continue;

@@ -57,7 +57,7 @@ public class DTRControl implements LandRaidControl {
         int boost = 0;
         int level = faction.getUpgradeLevel(Upgrades.DTR_CLAIM_LIMIT);
         if (level > 0) {
-            boost = Universe.universe().getUpgradeSettings(Upgrades.DTR_CLAIM_LIMIT).costAt(level).intValue();
+            boost = Universe.universe().upgradeSettings(Upgrades.DTR_CLAIM_LIMIT).costAt(level).intValue();
         }
         return boost + conf().getLandStarting() + (faction.getFPlayers().size() * conf().getLandPerPlayer());
     }
@@ -94,7 +94,7 @@ public class DTRControl implements LandRaidControl {
         if (toKick.getFaction().isNormal()) {
             Faction faction = toKick.getFaction();
             if (!FactionsPlugin.getInstance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
-                    Board.board().getFactionAt(toKick.getLastStoodAt()).getRelationTo(faction) == Relation.ENEMY) {
+                    Board.board().factionAt(toKick.getLastStoodAt()).getRelationTo(faction) == Relation.ENEMY) {
                 playerAttempting.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
                 return false;
             }
@@ -120,7 +120,7 @@ public class DTRControl implements LandRaidControl {
 
     @Override
     public void onDeath(Player player) {
-        FPlayer fplayer = FPlayers.fPlayers().getByPlayer(player);
+        FPlayer fplayer = FPlayers.fPlayers().get(player);
         Faction faction = fplayer.getFaction();
         if (!faction.isNormal()) {
             return;
@@ -140,7 +140,7 @@ public class DTRControl implements LandRaidControl {
             double diff = faction.getDTR() - startingDTR;
             double vamp = conf().getVampirism();
             if (player.getKiller() != null && vamp != 0D && diff > 0) {
-                FPlayer fKiller = FPlayers.fPlayers().getByPlayer(player.getKiller());
+                FPlayer fKiller = FPlayers.fPlayers().get(player.getKiller());
                 if (faction != fKiller.getFaction()) {
                     double change = vamp * diff;
                     double startingOther = fKiller.getFaction().getDTR();

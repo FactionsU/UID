@@ -12,13 +12,13 @@ public interface Board {
         return Instances.BOARD;
     }
 
-    Faction getFactionAt(FLocation flocation);
+    Faction factionAt(FLocation flocation);
 
-    void setFactionAt(Faction faction, FLocation flocation);
+    void claim(FLocation flocation, Faction faction);
 
-    void removeAt(FLocation flocation);
+    Set<FLocation> allClaims(Faction faction);
 
-    Set<FLocation> getAllClaims(Faction faction);
+    void unclaim(FLocation flocation);
 
     void unclaimAll(Faction faction);
 
@@ -27,12 +27,12 @@ public interface Board {
     // Is this coord NOT completely surrounded by coords claimed by the same faction?
     // Simpler: Is there any nearby coord with a faction other than the faction here?
     default boolean isBorderLocation(FLocation flocation) {
-        Faction faction = getFactionAt(flocation);
+        Faction faction = factionAt(flocation);
         FLocation a = flocation.getRelative(1, 0);
         FLocation b = flocation.getRelative(-1, 0);
         FLocation c = flocation.getRelative(0, 1);
         FLocation d = flocation.getRelative(0, -1);
-        return faction != getFactionAt(a) || faction != getFactionAt(b) || faction != getFactionAt(c) || faction != getFactionAt(d);
+        return faction != factionAt(a) || faction != factionAt(b) || faction != factionAt(c) || faction != factionAt(d);
     }
 
     default boolean isConnectedLocation(FLocation flocation, Faction faction) {
@@ -40,7 +40,7 @@ public interface Board {
         FLocation b = flocation.getRelative(-1, 0);
         FLocation c = flocation.getRelative(0, 1);
         FLocation d = flocation.getRelative(0, -1);
-        return faction == getFactionAt(a) || faction == getFactionAt(b) || faction == getFactionAt(c) || faction == getFactionAt(d);
+        return faction == factionAt(a) || faction == factionAt(b) || faction == factionAt(c) || faction == factionAt(d);
     }
 
     default boolean isDisconnectedLocation(FLocation flocation, Faction faction) {
@@ -48,7 +48,7 @@ public interface Board {
         FLocation b = flocation.getRelative(-1, 0);
         FLocation c = flocation.getRelative(0, 1);
         FLocation d = flocation.getRelative(0, -1);
-        return faction != getFactionAt(a) && faction != getFactionAt(b) && faction != getFactionAt(c) && faction != getFactionAt(d);
+        return faction != factionAt(a) && faction != factionAt(b) && faction != factionAt(c) && faction != factionAt(d);
     }
 
     /**
@@ -68,7 +68,7 @@ public interface Board {
                 }
 
                 FLocation relative = flocation.getRelative(x, z);
-                Faction other = getFactionAt(relative);
+                Faction other = factionAt(relative);
 
                 if (other.isNormal() && other != faction) {
                     return true;
@@ -82,7 +82,7 @@ public interface Board {
     // Coord count
     //----------------------------------------------//
 
-    int getFactionCoordCount(Faction faction);
+    int claimCount(Faction faction);
 
-    int getFactionCoordCountInWorld(Faction faction, String worldName);
+    int claimCount(Faction faction, World world);
 }

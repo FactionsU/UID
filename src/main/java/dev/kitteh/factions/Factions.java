@@ -17,40 +17,33 @@ public interface Factions {
     }
 
     @Nullable
-    Faction getFactionById(int id);
+    Faction get(int id);
 
     @Nullable
-    Faction getByTag(String str);
+    Faction get(String tag);
 
-    @Nullable
-    Faction getBestTagMatch(String start);
-
-    default boolean isTagTaken(String str) {
-        return this.getByTag(str) != null;
+    default Faction create(String tag) {
+        return this.create(null, tag);
     }
 
-    default Faction createFaction(String tag) {
-        return this.createFaction(null, tag);
-    }
+    Faction create(@Nullable FPlayer sender, String tag);
 
-    Faction createFaction(@Nullable FPlayer sender, String tag);
+    void remove(Faction faction);
 
-    void removeFaction(Faction faction);
-
-    List<Faction> getAllFactions();
+    List<Faction> all();
 
     @SuppressWarnings("DataFlowIssue")
-    default Faction getWilderness() {
-        return this.getFactionById(ID_WILDERNESS);
+    default Faction wilderness() {
+        return this.get(ID_WILDERNESS);
     }
 
     @SuppressWarnings("DataFlowIssue")
-    default Faction getSafeZone() {
-        return this.getFactionById(ID_SAFEZONE);
+    default Faction safeZone() {
+        return this.get(ID_SAFEZONE);
     }
 
     @SuppressWarnings("DataFlowIssue")
-    default Faction getWarZone() {
-        return this.getFactionById(ID_WARZONE);
+    default Faction warZone() {
+        return this.get(ID_WARZONE);
     }
 }
