@@ -53,21 +53,21 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
         String name = commandInput.peekString();
 
         // First we try an exact match
-        Faction faction = Factions.getInstance().getByTag(name);
+        Faction faction = Factions.factions().getByTag(name);
 
         // Now lets try for warzone / safezone. Helpful for custom warzone / safezone names.
         // Do this after we check for an exact match in case they rename the warzone / safezone
         // and a player created faction took one of the names.
         if (faction == null) {
             if (this.includeFactions.contains(Include.WAR) && name.equalsIgnoreCase("warzone")) {
-                faction = Factions.getInstance().getWarZone();
+                faction = Factions.factions().getWarZone();
             } else if (this.includeFactions.contains(Include.SAFE) && name.equalsIgnoreCase("safezone")) {
-                faction = Factions.getInstance().getSafeZone();
+                faction = Factions.factions().getSafeZone();
             }
         }
 
         if (faction == null && this.includeFactions.contains(Include.PLAYERS)) {
-            for (FPlayer fplayer : FPlayers.getInstance().getAllFPlayers()) {
+            for (FPlayer fplayer : FPlayers.fPlayers().getAllFPlayers()) {
                 if (fplayer.getName().equalsIgnoreCase(name)) {
                     faction = fplayer.getFaction();
                     break;
@@ -91,14 +91,14 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
     @Override
     public Iterable<? extends Suggestion> suggestions(CommandContext<Sender> context, CommandInput input) {
         List<String> output = new ArrayList<>();
-        List<String> secondary = Factions.getInstance().getAllFactions().stream().map(Faction::getTag).collect(Collectors.toCollection(ArrayList::new));
+        List<String> secondary = Factions.factions().getAllFactions().stream().map(Faction::getTag).collect(Collectors.toCollection(ArrayList::new));
 
         Player sendingPlayer = context.sender() instanceof Sender.Player player ? player.player() : null;
         for (Player player : AbstractFactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
             if (sendingPlayer != null && !player.canSee(player)) {
                 continue;
             }
-            Faction f = FPlayers.getInstance().getByPlayer(player).getFaction();
+            Faction f = FPlayers.fPlayers().getByPlayer(player).getFaction();
             if (!output.contains(f.getTag())) {
                 output.add(f.getTag());
                 secondary.remove(f.getTag());
@@ -112,7 +112,7 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
             boolean isPlayer = context.sender().isPlayer();
             int count = output.size();
 
-            for (FPlayer player : FPlayers.getInstance().getOnlinePlayers()) {
+            for (FPlayer player : FPlayers.fPlayers().getOnlinePlayers()) {
                 if (count > SANE_SUGGESTION_LIMIT) {
                     break;
                 }
@@ -133,13 +133,13 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
             output.remove(player.faction().getTag());
         }
         if (!this.includeFactions.contains(Include.SAFE)) {
-            output.remove(Factions.getInstance().getSafeZone().getTag());
+            output.remove(Factions.factions().getSafeZone().getTag());
         }
         if (!this.includeFactions.contains(Include.WAR)) {
-            output.remove(Factions.getInstance().getWarZone().getTag());
+            output.remove(Factions.factions().getWarZone().getTag());
         }
         if (!this.includeFactions.contains(Include.WILD)) {
-            output.remove(Factions.getInstance().getWilderness().getTag());
+            output.remove(Factions.factions().getWilderness().getTag());
         }
 
         return output.stream().map(Suggestion::suggestion).toList();

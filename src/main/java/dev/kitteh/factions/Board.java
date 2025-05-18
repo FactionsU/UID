@@ -8,7 +8,7 @@ import java.util.Set;
 
 @NullMarked
 public interface Board {
-    static Board getInstance() {
+    static Board board() {
         return Instances.BOARD;
     }
 

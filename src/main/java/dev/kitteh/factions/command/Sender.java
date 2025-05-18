@@ -26,7 +26,7 @@ public interface Sender {
 
     static Sender of(CommandSender sender) {
         if (sender instanceof org.bukkit.entity.Player player) {
-            FPlayer fp = FPlayers.getInstance().getByPlayer(player);
+            FPlayer fp = FPlayers.fPlayers().getByPlayer(player);
             return new Player(sender, player, fp, fp.getFaction());
         } else {
             return new Console(sender);

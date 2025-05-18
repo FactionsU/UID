@@ -18,7 +18,6 @@ import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -60,9 +59,9 @@ public class CmdUpgrades implements Cmd {
         PaginatedPane upperPane = new PaginatedPane(0, 0, 9, 5);
         upperPane.populateWithGuiItems(UpgradeRegistry.getUpgrades().stream()
                 .sorted(Comparator.comparing(Upgrade::name))
-                .filter(Universe.getInstance()::isUpgradeEnabled)
+                .filter(Universe.universe()::isUpgradeEnabled)
                 .map(upgrade -> {
-                    UpgradeSettings settings = Universe.getInstance().getUpgradeSettings(upgrade);
+                    UpgradeSettings settings = Universe.universe().getUpgradeSettings(upgrade);
 
 
                     ItemStack stack = buildStack(settings, sender);

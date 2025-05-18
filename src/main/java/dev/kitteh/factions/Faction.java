@@ -478,8 +478,8 @@ public interface Faction extends Participator, Selectable {
         if (confMax < 1) {
             return Integer.MAX_VALUE;
         }
-        if (Universe.getInstance().isUpgradeEnabled(Upgrades.MAX_MEMBERS) && this.getUpgradeLevel(Upgrades.MAX_MEMBERS) > 0) {
-            int boost = Universe.getInstance().getUpgradeSettings(Upgrades.MAX_MEMBERS).valueAt(Upgrades.Variables.POSITIVE_INCREASE, this.getUpgradeLevel(Upgrades.MAX_MEMBERS)).intValue();
+        if (Universe.universe().isUpgradeEnabled(Upgrades.MAX_MEMBERS) && this.getUpgradeLevel(Upgrades.MAX_MEMBERS) > 0) {
+            int boost = Universe.universe().getUpgradeSettings(Upgrades.MAX_MEMBERS).valueAt(Upgrades.Variables.POSITIVE_INCREASE, this.getUpgradeLevel(Upgrades.MAX_MEMBERS)).intValue();
             return confMax + boost;
         } else {
             return confMax;

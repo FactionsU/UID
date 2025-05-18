@@ -39,12 +39,12 @@ public class PortalListener implements Listener {
             return;
         }
 
-        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+        FPlayer fPlayer = FPlayers.fPlayers().getByPlayer(player);
 
         // Only 8 blocks so a loop should be fine.
         for (BlockState block : event.getBlocks()) {
             FLocation loc = new FLocation(block.getLocation());
-            Faction faction = Board.getInstance().getFactionAt(loc);
+            Faction faction = Board.board().getFactionAt(loc);
 
             if (faction.isWilderness()) {
                 continue; // We don't care about wilderness.

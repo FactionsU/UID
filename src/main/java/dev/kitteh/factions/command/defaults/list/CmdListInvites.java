@@ -38,7 +38,7 @@ public class CmdListInvites implements Cmd {
         LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
         Component component = legacy.deserialize(TL.COMMAND_SHOWINVITES_PENDING.toString()).color(NamedTextColor.GOLD);
         for (UUID id : sender.getFaction().getInvites()) {
-            FPlayer fp = FPlayers.getInstance().getById(id);
+            FPlayer fp = FPlayers.fPlayers().getById(id);
             String name = fp != null ? fp.getName() : id.toString();
             component = component.append(Component.text().color(NamedTextColor.WHITE).content(name + " ")
                     .hoverEvent(legacy.deserialize(TL.COMMAND_SHOWINVITES_CLICKTOREVOKE.format(name)).asHoverEvent())

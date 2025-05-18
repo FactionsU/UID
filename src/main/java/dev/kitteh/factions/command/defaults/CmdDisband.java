@@ -77,7 +77,7 @@ public class CmdDisband implements Cmd {
         }
 
         // Inform all players
-        for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
+        for (FPlayer fplayer : FPlayers.fPlayers().getOnlinePlayers()) {
             String who = sender.describeTo(fplayer);
             if (fplayer.getFaction() == faction) {
                 fplayer.msg(TL.COMMAND_DISBAND_BROADCAST_YOURS, who);
@@ -101,7 +101,7 @@ public class CmdDisband implements Cmd {
             }
         }
 
-        Factions.getInstance().removeFaction(faction);
+        Factions.factions().removeFaction(faction);
         FTeamWrapper.applyUpdates(faction);
     }
 }

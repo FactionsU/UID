@@ -56,7 +56,7 @@ public class CmdSetWarp implements Cmd {
             return;
         }
 
-        if (Board.getInstance().getFactionAt(new FLocation(player)) != faction) {
+        if (Board.board().getFactionAt(new FLocation(player)) != faction) {
             sender.msg(TL.COMMAND_SETFWARP_NOTCLAIMED);
             return;
         }

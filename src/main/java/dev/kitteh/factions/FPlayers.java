@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @NullMarked
 public interface FPlayers {
-    static FPlayers getInstance() {
+    static FPlayers fPlayers() {
         return Instances.PLAYERS;
     }
 

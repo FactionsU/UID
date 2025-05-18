@@ -141,7 +141,7 @@ public class EngineDynmap {
                 Map<Integer, DynmapStyle> factionStyle = new HashMap<>();
                 Set<Integer> invalidFactionsWat = new HashSet<>();
                 worldFactionChunks.values().stream().flatMapToInt(m -> m.keySet().intStream()).distinct().forEach(factionId -> {
-                    Faction faction = Factions.getInstance().getFactionById(factionId);
+                    Faction faction = Factions.factions().getFactionById(factionId);
                     if (faction == null) { // why :(
                         AbstractFactionsPlugin.getInstance().getLogger().warning("Found invalid faction ID " + factionId);
                         invalidFactionsWat.add(factionId);
@@ -239,7 +239,7 @@ public class EngineDynmap {
         }
 
         // Loop current factions
-        for (Faction faction : Factions.getInstance().getAllFactions()) {
+        for (Faction faction : Factions.factions().getAllFactions()) {
             Location ps = faction.getHome();
             if (ps == null) {
                 continue;
@@ -312,7 +312,7 @@ public class EngineDynmap {
         }
 
         // Loop current factions
-        for (Faction faction : Factions.getInstance().getAllFactions()) {
+        for (Faction faction : Factions.factions().getAllFactions()) {
             Map<String, LazyLocation> warps = faction.getWarps();
             for (String key : warps.keySet()) {
                 LazyLocation lazyLocation = warps.get(key);
@@ -347,7 +347,7 @@ public class EngineDynmap {
         Map<String, Int2ObjectMap<LongList>> worldFactionChunks = new HashMap<>();
 
         // Note: The board is the world. The board id is the world name.
-        MemoryBoard board = (MemoryBoard) Board.getInstance();
+        MemoryBoard board = (MemoryBoard) Board.board();
 
         for (World world : Bukkit.getWorlds()) {
             worldFactionChunks.put(world.getName(), board.getAllClaimsForDynmap(world));
@@ -630,7 +630,7 @@ public class EngineDynmap {
 
         Map<String, Set<String>> ret = new HashMap<>();
 
-        for (Faction faction : Factions.getInstance().getAllFactions()) {
+        for (Faction faction : Factions.factions().getAllFactions()) {
             String playersetId = createPlayersetId(faction);
             if (playersetId == null) {
                 continue;

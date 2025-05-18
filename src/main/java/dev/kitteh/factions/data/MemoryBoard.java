@@ -65,7 +65,7 @@ public abstract class MemoryBoard implements Board {
 
     @Override
     public Faction getFactionAt(FLocation flocation) {
-        return Factions.getInstance().getFactionById(getIdAt(flocation)) instanceof Faction faction ? faction : Factions.getInstance().getWilderness();
+        return Factions.factions().getFactionById(getIdAt(flocation)) instanceof Faction faction ? faction : Factions.factions().getWilderness();
     }
 
     private void setIdAt(int id, FLocation flocation) {
@@ -91,7 +91,7 @@ public abstract class MemoryBoard implements Board {
         if (flocation.getWorld().isChunkLoaded(flocation.x(), flocation.z())) {
             for (Entity entity : flocation.getChunk().getEntities()) {
                 if (entity instanceof Player) {
-                    FPlayer fPlayer = FPlayers.getInstance().getByPlayer((Player) entity);
+                    FPlayer fPlayer = FPlayers.fPlayers().getByPlayer((Player) entity);
                     if (!fPlayer.isAdminBypassing() && fPlayer.isFlying()) {
                         fPlayer.setFlying(false);
                     }
@@ -142,7 +142,7 @@ public abstract class MemoryBoard implements Board {
 
     public void clean(Faction faction) {
         List<FLocation> locations = this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(faction.getId()).stream()).toList();
-        for (FPlayer fPlayer : FPlayers.getInstance().getOnlinePlayers()) {
+        for (FPlayer fPlayer : FPlayers.fPlayers().getOnlinePlayers()) {
             if (locations.contains(fPlayer.getLastStoodAt())) {
                 if (FactionsPlugin.getInstance().conf().commands().fly().isEnable() && !fPlayer.isAdminBypassing() && fPlayer.isFlying()) {
                     fPlayer.setFlying(false);
@@ -163,7 +163,7 @@ public abstract class MemoryBoard implements Board {
     public void clean() {
         for (WorldTracker tracker : worldTrackers.values()) {
             for (int factionId : tracker.getIDs()) {
-                if (Factions.getInstance().getFactionById(factionId) == null) {
+                if (Factions.factions().getFactionById(factionId) == null) {
                     this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(factionId).stream()).forEach(loc -> {
                         FactionsPlugin.getInstance().log("Board cleaner removed id " + factionId + " from " + loc);
                     });
@@ -269,7 +269,7 @@ public abstract class MemoryBoard implements Board {
         if (FactionsPlugin.getInstance().conf().map().isShowFactionKey()) {
             TextComponent.Builder builder = Component.text();
             for (String key : fList.keySet()) {
-                final Relation relation = fplayer.getRelationTo(Factions.getInstance().getByTag(key));
+                final Relation relation = fplayer.getRelationTo(Factions.factions().getByTag(key));
                 builder.append(Component.text().content(String.format("%s: %s ", fList.get(key), key)).color(relation.color()));
             }
             ret.add(builder.build());

@@ -47,7 +47,7 @@ public class CmdCreate implements Cmd {
             return;
         }
 
-        if (Factions.getInstance().isTagTaken(tag)) {
+        if (Factions.factions().isTagTaken(tag)) {
             sender.msg(TL.COMMAND_CREATE_INUSE);
             return;
         }
@@ -74,7 +74,7 @@ public class CmdCreate implements Cmd {
             return;
         }
 
-        Faction faction = Factions.getInstance().createFaction(sender, tag);
+        Faction faction = Factions.factions().createFaction(sender, tag);
 
         // trigger the faction join event for the creator
         FPlayerJoinEvent joinEvent = new FPlayerJoinEvent(sender, faction, FPlayerJoinEvent.Reason.CREATE);
@@ -86,7 +86,7 @@ public class CmdCreate implements Cmd {
         sender.setFaction(faction);
         sender.getPlayer().updateCommands();
 
-        for (FPlayer follower : FPlayers.getInstance().getOnlinePlayers()) {
+        for (FPlayer follower : FPlayers.fPlayers().getOnlinePlayers()) {
             follower.msg(TL.COMMAND_CREATE_CREATED, sender.describeTo(follower, true), faction.getTag(follower));
         }
 

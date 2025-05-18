@@ -60,7 +60,7 @@ public class CmdMap implements Cmd {
             sender.msg(TL.COMMAND_MAP_UPDATE_ENABLED);
         }
 
-        for (Component component : ((MemoryBoard) Board.getInstance()).getMap(sender, new FLocation(player), player.getLocation().getYaw())) {
+        for (Component component : ((MemoryBoard) Board.board()).getMap(sender, new FLocation(player), player.getLocation().getYaw())) {
             context.sender().sendMessage(component);
         }
     }

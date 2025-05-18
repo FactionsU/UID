@@ -17,7 +17,7 @@ public class UpgradeListener implements Listener {
         if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
             return;
         }
-        if (!Universe.getInstance().isUpgradeEnabled(Upgrades.GROWTH)) {
+        if (!Universe.universe().isUpgradeEnabled(Upgrades.GROWTH)) {
             return;
         }
         FLocation loc = new FLocation(event.getBlock());
@@ -30,7 +30,7 @@ public class UpgradeListener implements Listener {
             return;
         }
 
-        UpgradeSettings settings = Universe.getInstance().getUpgradeSettings(Upgrades.GROWTH);
+        UpgradeSettings settings = Universe.universe().getUpgradeSettings(Upgrades.GROWTH);
 
         double chance = settings.valueAt(Upgrades.Variables.CHANCE, level).doubleValue();
         int boost = settings.valueAt(Upgrades.Variables.GROWTH_BOOST, level).intValue();

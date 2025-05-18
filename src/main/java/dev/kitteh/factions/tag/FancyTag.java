@@ -80,7 +80,7 @@ public enum FancyTag implements Tag {
         List<Component> fancyMessages = new ArrayList<>();
         TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(prefix)));
         boolean first = true;
-        for (Faction otherFaction : Factions.getInstance().getAllFactions()) {
+        for (Faction otherFaction : Factions.factions().getAllFactions()) {
             if (otherFaction == faction) {
                 continue;
             }

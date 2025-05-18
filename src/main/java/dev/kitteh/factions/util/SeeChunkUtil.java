@@ -45,7 +45,7 @@ public class SeeChunkUtil extends BukkitRunnable {
             if (!WorldUtil.isEnabled(player)) {
                 continue;
             }
-            FPlayer fme = FPlayers.getInstance().getByPlayer(player);
+            FPlayer fme = FPlayers.fPlayers().getByPlayer(player);
             showPillars(player, fme, this.effect, useColor);
         }
     }
@@ -66,7 +66,7 @@ public class SeeChunkUtil extends BukkitRunnable {
 
         ParticleColor color = null;
         if (useColor) {
-            ChatColor chatColor = Board.getInstance().getFactionAt(flocation).getRelationTo(fme).chatColor();
+            ChatColor chatColor = Board.board().getFactionAt(flocation).getRelationTo(fme).chatColor();
             color = ParticleColor.fromChatColor(chatColor);
         }
 

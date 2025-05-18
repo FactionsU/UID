@@ -51,7 +51,7 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
             return true;
         }
         if (player == null) {
-            return Board.getInstance().getFactionAt(new FLocation(block)).isWilderness();
+            return Board.board().getFactionAt(new FLocation(block)).isWilderness();
         }
         return FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleActions.BUILD, true);
     }
@@ -62,7 +62,7 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
             return true;
         }
         if (player == null) {
-            return Board.getInstance().getFactionAt(new FLocation(block)).isWilderness();
+            return Board.board().getFactionAt(new FLocation(block)).isWilderness();
         }
         return FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleActions.DESTROY, true);
     }
@@ -79,23 +79,23 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         if (player != null && facConf.protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
             return true;
         }
-        Faction defFaction = Board.getInstance().getFactionAt(new FLocation(location));
+        Faction defFaction = Board.board().getFactionAt(new FLocation(location));
         if (defFaction.noPvPInTerritory()) {
             return false;
         }
         if (player != null) {
-            FPlayer attacker = FPlayers.getInstance().getByPlayer(player);
+            FPlayer attacker = FPlayers.fPlayers().getByPlayer(player);
             if (attacker.hasLoginPvpDisabled()) {
                 return false;
             }
 
-            Faction locFaction = Board.getInstance().getFactionAt(new FLocation(player));
+            Faction locFaction = Board.board().getFactionAt(new FLocation(player));
             if (locFaction.noPvPInTerritory() || locFaction.isSafeZone()) {
                 return false;
             }
         }
 
-        Faction locFaction = Board.getInstance().getFactionAt(new FLocation(location));
+        Faction locFaction = Board.board().getFactionAt(new FLocation(location));
         if (locFaction.noPvPInTerritory()) {
             return false;
         }
@@ -107,8 +107,8 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         if (!(attacker instanceof Player && entity instanceof Player)) {
             return false;
         }
-        FPlayer attack = FPlayers.getInstance().getByPlayer((Player) attacker);
-        FPlayer defend = FPlayers.getInstance().getByPlayer((Player) entity);
+        FPlayer attack = FPlayers.fPlayers().getByPlayer((Player) attacker);
+        FPlayer defend = FPlayers.fPlayers().getByPlayer((Player) entity);
         if (attack.getFaction().isWilderness() || defend.getFaction().isWilderness()) {
             return false;
         }

@@ -686,7 +686,7 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public void confirmValidHome() {
-        if ((!FactionsPlugin.getInstance().conf().factions().homes().isMustBeInClaimedTerritory()) || (this.home == null) || (Board.getInstance().getFactionAt(new FLocation(this.home)) == this)) {
+        if ((!FactionsPlugin.getInstance().conf().factions().homes().isMustBeInClaimedTerritory()) || (this.home == null) || (Board.board().getFactionAt(new FLocation(this.home)) == this)) {
             return;
         }
 
@@ -738,7 +738,7 @@ public abstract class MemoryFaction implements Faction {
             return false; // Fail in a safe way because people are foolish
         }
 
-        if (permissibleAction.prerequisite() instanceof Upgrade prereq && (!Universe.getInstance().isUpgradeEnabled(prereq) || this.getUpgradeLevel(prereq) == 0)) {
+        if (permissibleAction.prerequisite() instanceof Upgrade prereq && (!Universe.universe().isUpgradeEnabled(prereq) || this.getUpgradeLevel(prereq) == 0)) {
             return false;
         }
 
@@ -891,7 +891,7 @@ public abstract class MemoryFaction implements Faction {
     @Override
     public int getRelationCount(Relation relation) {
         int count = 0;
-        for (Faction faction : Factions.getInstance().getAllFactions()) {
+        for (Faction faction : Factions.factions().getAllFactions()) {
             if (faction.getRelationTo(this) == relation) {
                 count++;
             }
@@ -1023,12 +1023,12 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public int getLandRounded() {
-        return Board.getInstance().getFactionCoordCount(this);
+        return Board.board().getFactionCoordCount(this);
     }
 
     @Override
     public int getLandRoundedInWorld(String worldName) {
-        return Board.getInstance().getFactionCoordCountInWorld(this, worldName);
+        return Board.board().getFactionCoordCountInWorld(this, worldName);
     }
 
     @Override
@@ -1048,10 +1048,10 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public int getUpgradeLevel(Upgrade upgrade) {
-        if (!this.isNormal() || !Universe.getInstance().isUpgradeEnabled(upgrade)) {
+        if (!this.isNormal() || !Universe.universe().isUpgradeEnabled(upgrade)) {
             return 0;
         }
-        UpgradeSettings settings = Universe.getInstance().getUpgradeSettings(upgrade);
+        UpgradeSettings settings = Universe.universe().getUpgradeSettings(upgrade);
         return Math.min(settings.maxLevel(), this.upgrades.getOrDefault(upgrade.name(), settings.startingLevel()));
     }
 
@@ -1171,7 +1171,7 @@ public abstract class MemoryFaction implements Faction {
         }
 
         for (Player player : AbstractFactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
-            FPlayer fplayer = FPlayers.getInstance().getByPlayer(player);
+            FPlayer fplayer = FPlayers.fPlayers().getByPlayer(player);
             if (fplayer.getFaction() == this) {
                 ret.add(player);
             }
@@ -1190,7 +1190,7 @@ public abstract class MemoryFaction implements Faction {
         }
 
         for (Player player : AbstractFactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
-            FPlayer fplayer = FPlayers.getInstance().getByPlayer(player);
+            FPlayer fplayer = FPlayers.fPlayers().getByPlayer(player);
             if (fplayer.getFaction() == this) {
                 return true;
             }
@@ -1244,13 +1244,13 @@ public abstract class MemoryFaction implements Faction {
                 FactionsPlugin.getInstance().log("The faction " + this.getTag() + " (" + this.getId() + ") has been disbanded since it has no members left.");
             }
 
-            for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
+            for (FPlayer fplayer : FPlayers.fPlayers().getOnlinePlayers()) {
                 fplayer.msg(TL.LEAVE_DISBANDED, this.getTag(fplayer));
             }
 
             AbstractFactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(this));
 
-            Factions.getInstance().removeFaction(this);
+            Factions.factions().removeFaction(this);
         } else { // promote new faction admin
             Bukkit.getServer().getPluginManager().callEvent(new FactionNewAdminEvent(replacements.getFirst(), this));
 
@@ -1292,7 +1292,7 @@ public abstract class MemoryFaction implements Faction {
         }
 
         // Clean the board
-        ((MemoryBoard) Board.getInstance()).clean(this);
+        ((MemoryBoard) Board.board()).clean(this);
 
         for (FPlayer fPlayer : fplayers) {
             fPlayer.resetFactionData(true);
@@ -1301,7 +1301,7 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public Set<FLocation> getAllClaims() {
-        return Board.getInstance().getAllClaims(this);
+        return Board.board().getAllClaims(this);
     }
 
     @Override

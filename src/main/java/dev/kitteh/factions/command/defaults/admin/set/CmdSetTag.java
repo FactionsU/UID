@@ -6,10 +6,8 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FactionRenameEvent;
-import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.util.MiscUtil;
-import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
@@ -42,7 +40,7 @@ public class CmdSetTag implements Cmd {
         String tag = context.get("tag");
 
         // TODO does not first shouldCancel cover selfcase?
-        if (Factions.getInstance().isTagTaken(tag) && !MiscUtil.getComparisonString(tag).equals(faction.getComparisonTag())) {
+        if (Factions.factions().isTagTaken(tag) && !MiscUtil.getComparisonString(tag).equals(faction.getComparisonTag())) {
             sender.msg(TL.COMMAND_TAG_TAKEN);
             return;
         }
@@ -64,7 +62,7 @@ public class CmdSetTag implements Cmd {
         faction.setTag(tag);
 
         // Inform
-        for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
+        for (FPlayer fplayer : FPlayers.fPlayers().getOnlinePlayers()) {
             if (fplayer.getFaction() == faction) {
                 fplayer.msg(TL.COMMAND_TAG_FACTION, sender.describeTo(faction, true), faction.getTag(faction));
                 continue;

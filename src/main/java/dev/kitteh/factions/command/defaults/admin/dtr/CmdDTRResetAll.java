@@ -29,7 +29,7 @@ public class CmdDTRResetAll implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         DTRControl dtr = (DTRControl) FactionsPlugin.getInstance().getLandRaidControl();
-        Factions.getInstance().getAllFactions().forEach(target -> target.setDTR(dtr.getMaxDTR(target)));
+        Factions.factions().getAllFactions().forEach(target -> target.setDTR(dtr.getMaxDTR(target)));
         context.sender().msg(TL.COMMAND_DTR_MODIFY_DONE, "EVERYONE", "MAX");
     }
 }

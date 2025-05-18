@@ -33,10 +33,10 @@ public class CmdSaveAll implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        ((MemoryFPlayers) FPlayers.getInstance()).forceSave(false);
-        ((MemoryFactions) Factions.getInstance()).forceSave(false);
-        ((MemoryBoard) Board.getInstance()).forceSave(false);
-        ((MemoryUniverse) Universe.getInstance()).forceSave(false);
+        ((MemoryFPlayers) FPlayers.fPlayers()).forceSave(false);
+        ((MemoryFactions) Factions.factions()).forceSave(false);
+        ((MemoryBoard) Board.board()).forceSave(false);
+        ((MemoryUniverse) Universe.universe()).forceSave(false);
         context.sender().msg(TL.COMMAND_SAVEALL_SUCCESS);
     }
 }

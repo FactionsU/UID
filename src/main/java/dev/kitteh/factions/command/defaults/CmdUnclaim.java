@@ -152,7 +152,7 @@ public class CmdUnclaim implements Cmd {
 
         final boolean bypass = sender.isAdminBypassing();
 
-        Faction currentFaction = Board.getInstance().getFactionAt(loc);
+        Faction currentFaction = Board.board().getFactionAt(loc);
 
         if (currentFaction != forFaction) {
             sender.msg(TL.COMMAND_UNCLAIMFILL_NOTCLAIMED);
@@ -248,7 +248,7 @@ public class CmdUnclaim implements Cmd {
     }
 
     private void addIf(Set<FLocation> toClaim, Queue<FLocation> queue, FLocation examine, Faction replacement) {
-        if (Board.getInstance().getFactionAt(examine) == replacement && !toClaim.contains(examine)) {
+        if (Board.board().getFactionAt(examine) == replacement && !toClaim.contains(examine)) {
             toClaim.add(examine);
             queue.add(examine);
         }
@@ -256,7 +256,7 @@ public class CmdUnclaim implements Cmd {
 
     private boolean attemptUnclaim(FPlayer fPlayer, FLocation target, Faction targetFaction, Tracker tracker) {
         if (targetFaction.isSafeZone() || targetFaction.isWarZone()) {
-            Board.getInstance().removeAt(target);
+            Board.board().removeAt(target);
             if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
                 FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
             }
@@ -276,7 +276,7 @@ public class CmdUnclaim implements Cmd {
             tracker.refund += Econ.calculateClaimRefund(targetFaction.getLandRounded());
         }
 
-        Board.getInstance().removeAt(target);
+        Board.board().removeAt(target);
 
         if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
             FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
@@ -316,7 +316,7 @@ public class CmdUnclaim implements Cmd {
             }
         }
 
-        Board.getInstance().unclaimAll(faction);
+        Board.board().unclaimAll(faction);
         faction.msg(TL.COMMAND_UNCLAIMALL_UNCLAIMED, sender.describeTo(faction, true));
 
         if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {

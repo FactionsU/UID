@@ -46,7 +46,7 @@ public class CmdTNTSiphon implements Cmd {
         Player player = ((Sender.Player) context.sender()).player();
         Faction faction = sender.getFaction();
 
-        if (!faction.equals(Board.getInstance().getFactionAt(new FLocation(player.getLocation())))) {
+        if (!faction.equals(Board.board().getFactionAt(new FLocation(player.getLocation())))) {
             sender.msg(TL.COMMAND_TNT_TERRITORYONLY);
             return;
         }

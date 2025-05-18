@@ -12,7 +12,7 @@ public interface Factions {
     int ID_SAFEZONE = -1;
     int ID_WARZONE = -2;
 
-    static Factions getInstance() {
+    static Factions factions() {
         return Instances.FACTIONS;
     }
 

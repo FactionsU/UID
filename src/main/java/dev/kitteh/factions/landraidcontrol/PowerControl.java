@@ -70,7 +70,7 @@ public class PowerControl implements LandRaidControl {
             return false;
         }
         if (toKick.isOnline() && !FactionsPlugin.getInstance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
-                Board.getInstance().getFactionAt(toKick.getLastStoodAt()).getRelationTo(toKick.getFaction()) == Relation.ENEMY) {
+                Board.board().getFactionAt(toKick.getLastStoodAt()).getRelationTo(toKick.getFaction()) == Relation.ENEMY) {
             playerAttempting.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
             return false;
         }
@@ -99,8 +99,8 @@ public class PowerControl implements LandRaidControl {
 
     @Override
     public void onDeath(Player player) {
-        FPlayer fplayer = FPlayers.getInstance().getByPlayer(player);
-        Faction faction = Board.getInstance().getFactionAt(new FLocation(player.getLocation()));
+        FPlayer fplayer = FPlayers.fPlayers().getByPlayer(player);
+        Faction faction = Board.board().getFactionAt(new FLocation(player.getLocation()));
 
         MainConfig.Factions.LandRaidControl.Power powerConf = FactionsPlugin.getInstance().conf().factions().landRaidControl().power();
         PowerLossEvent powerLossEvent = new PowerLossEvent(faction, fplayer);
@@ -142,7 +142,7 @@ public class PowerControl implements LandRaidControl {
             Player killer = player.getKiller();
             if (killer != null && vamp != 0D && powerDiff > 0) {
                 double powerChange = vamp * powerDiff;
-                FPlayer fKiller = FPlayers.getInstance().getByPlayer(killer);
+                FPlayer fKiller = FPlayers.fPlayers().getByPlayer(killer);
                 fKiller.alterPower(powerChange);
                 fKiller.msg(TL.PLAYER_POWER_VAMPIRISM_GAIN, powerChange, fplayer.describeTo(fKiller), fKiller.getPowerRounded(), fKiller.getPowerMaxRounded());
             }

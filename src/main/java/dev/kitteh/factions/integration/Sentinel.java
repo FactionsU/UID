@@ -77,11 +77,11 @@ public class Sentinel extends SentinelIntegration {
         if (!(ent instanceof Player) || !TARGETS.contains(prefix)) {
             return false;
         }
-        Faction faction = Factions.getInstance().getByTag(value);
+        Faction faction = Factions.factions().getByTag(value);
         if (faction == null) {
             return false;
         }
-        Faction plf = FPlayers.getInstance().getByPlayer((Player) ent).getFaction();
+        Faction plf = FPlayers.fPlayers().getByPlayer((Player) ent).getFaction();
         return switch (prefix) {
             case TARGET_FACTIONS -> faction == plf;
             case TARGET_FACTIONS_ENEMY -> faction.getRelationTo(plf).equals(Relation.ENEMY);

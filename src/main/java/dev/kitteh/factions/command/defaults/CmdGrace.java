@@ -31,7 +31,7 @@ public class CmdGrace implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        Duration remaining = Universe.getInstance().getGraceRemaining();
+        Duration remaining = Universe.universe().getGraceRemaining();
 
         if (remaining.isZero()) {
             context.sender().msg(TL.COMMAND_GRACE_NOT_SET);

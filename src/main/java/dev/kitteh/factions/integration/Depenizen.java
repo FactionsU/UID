@@ -91,10 +91,10 @@ public class Depenizen extends Bridge {
         // -->
         String nameOrId = attribute.getParam();
 
-        Faction f = Factions.getInstance().getByTag(nameOrId);
+        Faction f = Factions.factions().getByTag(nameOrId);
         if (f == null) {
             try {
-                f = Factions.getInstance().getFactionById(Integer.parseInt(nameOrId));
+                f = Factions.factions().getFactionById(Integer.parseInt(nameOrId));
             } catch (NumberFormatException ignored) {
             }
         }
@@ -115,7 +115,7 @@ public class Depenizen extends Bridge {
         // -->
         if (attribute.startsWith("list_factions")) {
             ListTag factions = new ListTag();
-            for (Faction f : Factions.getInstance().getAllFactions()) {
+            for (Faction f : Factions.factions().getAllFactions()) {
                 factions.addObject(new FactionTag(f));
             }
             event.setReplacedObject(factions.getObjectAttribute(attribute.fulfill(1)));

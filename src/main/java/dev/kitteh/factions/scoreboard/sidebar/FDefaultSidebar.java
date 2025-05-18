@@ -48,7 +48,7 @@ public class FDefaultSidebar extends FSidebarProvider {
             }
             if (next.contains("{map}")) {
                 if (mapMap == null) {
-                    mapMap = ((MemoryBoard) Board.getInstance()).getScoreboardMap(fplayer);
+                    mapMap = ((MemoryBoard) Board.board()).getScoreboardMap(fplayer);
                 }
                 String rep = mapMap.isEmpty() ? "" : LegacyComponentSerializer.legacySection().serialize(mapMap.removeFirst());
                 if (!rep.isEmpty() && !mapC.isEmpty()) {

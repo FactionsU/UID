@@ -52,7 +52,7 @@ public record FLocation(String worldName, int x, int z) {
     }
 
     public Faction getFaction() {
-        return Board.getInstance().getFactionAt(this);
+        return Board.board().getFactionAt(this);
     }
 
     /**

@@ -47,7 +47,7 @@ public class CmdSetPermanent implements Cmd {
         FactionsPlugin.getInstance().log((fPlayer == null ? "A server admin" : fPlayer.getName()) + " " + change + " the faction \"" + faction.getTag() + "\".");
 
         // Inform all players
-        for (FPlayer fplayer : FPlayers.getInstance().getOnlinePlayers()) {
+        for (FPlayer fplayer : FPlayers.fPlayers().getOnlinePlayers()) {
             String blame = (fPlayer == null ? TL.GENERIC_SERVERADMIN.toString() : fPlayer.describeTo(fplayer));
             if (fplayer.getFaction() == faction) {
                 fplayer.msg(TL.COMMAND_PERMANENT_YOURS, blame, change);

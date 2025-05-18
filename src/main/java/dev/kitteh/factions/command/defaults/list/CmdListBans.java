@@ -47,8 +47,8 @@ public class CmdListBans implements Cmd {
         int i = 1;
 
         for (BanInfo info : target.getBannedPlayers()) {
-            FPlayer banned = FPlayers.getInstance().getById(info.banned());
-            FPlayer banner = FPlayers.getInstance().getById(info.banner());
+            FPlayer banned = FPlayers.fPlayers().getById(info.banned());
+            FPlayer banner = FPlayers.fPlayers().getById(info.banner());
             String timestamp = TL.sdf.format(info.time());
 
             lines.add(TL.COMMAND_BANLIST_ENTRY.format(i, banned.getName(), banner.getName(), timestamp));

@@ -11,7 +11,7 @@ import java.util.logging.Level;
 
 public class AutoLeaveProcessFactionTask extends AutoLeaveTask.AutoLeaveProcessor<Faction> {
     public AutoLeaveProcessFactionTask() {
-        this.iterator = Factions.getInstance().getAllFactions().listIterator();
+        this.iterator = Factions.factions().getAllFactions().listIterator();
     }
 
     @Override

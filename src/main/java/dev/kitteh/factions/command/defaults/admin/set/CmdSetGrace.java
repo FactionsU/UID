@@ -32,7 +32,7 @@ public class CmdSetGrace implements Cmd {
     }
 
     private void handleOff(CommandContext<Sender> context) {
-        Universe.getInstance().setGraceRemaining(Duration.ZERO);
+        Universe.universe().setGraceRemaining(Duration.ZERO);
         context.sender().msg(TL.COMMAND_SET_GRACE_OFF);
     }
 
@@ -42,7 +42,7 @@ public class CmdSetGrace implements Cmd {
             this.handleOff(context);
             return;
         }
-        Universe.getInstance().setGraceRemaining(duration);
+        Universe.universe().setGraceRemaining(duration);
         context.sender().msg(TL.COMMAND_SET_GRACE_REMAINING_MESSAGE, CmdGrace.getGraceRemaining(duration));
     }
 }

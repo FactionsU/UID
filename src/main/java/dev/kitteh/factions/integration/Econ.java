@@ -378,7 +378,7 @@ public class Econ {
         try {
             Matcher matcher = FACTION_PATTERN.matcher(name);
             if (matcher.find()) {
-                return Factions.getInstance().getFactionById(Integer.parseInt(matcher.group(1))).getOfflinePlayer();
+                return Factions.factions().getFactionById(Integer.parseInt(matcher.group(1))).getOfflinePlayer();
             }
             return Bukkit.getOfflinePlayer(UUID.fromString(name));
         } catch (Exception ex) {

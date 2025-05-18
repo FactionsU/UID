@@ -208,7 +208,7 @@ public class CmdZone implements Cmd {
         FLocation standing = new FLocation(player);
 
         if (context.flags().get("radius") instanceof Integer radius) {
-            var claims = Board.getInstance().getAllClaims(faction);
+            var claims = Board.board().getAllClaims(faction);
             sender.sendMessage(Mini.parse(tl.getAttemptingRadius(), Placeholder.unparsed("zone", zone.name())));
 
             new SpiralTask(standing, radius) {

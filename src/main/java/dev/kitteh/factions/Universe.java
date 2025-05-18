@@ -17,7 +17,7 @@ public interface Universe {
      *
      * @return the universe
      */
-    static Universe getInstance() {
+    static Universe universe() {
         return Instances.UNIVERSE;
     }
 

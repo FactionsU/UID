@@ -52,7 +52,7 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
     public ArgumentParseResult<FPlayer> parse(CommandContext<Sender> commandContext, CommandInput commandInput) {
         String name = commandInput.peekString();
 
-        for (FPlayer fplayer : FPlayers.getInstance().getAllFPlayers()) {
+        for (FPlayer fplayer : FPlayers.fPlayers().getAllFPlayers()) {
             if (fplayer.getName().equalsIgnoreCase(name)) {
                 commandInput.readString();
                 return ArgumentParseResult.success(fplayer);
@@ -120,7 +120,7 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                     break;
                 case OTHER_FACTION:
                     Faction faction = context.sender() instanceof Sender.Player player && player.faction().isNormal() ? player.faction() : null;
-                    for (FPlayer player : FPlayers.getInstance().getOnlinePlayers()) {
+                    for (FPlayer player : FPlayers.fPlayers().getOnlinePlayers()) {
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
@@ -132,7 +132,7 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                             count++;
                         }
                     }
-                    for (FPlayer player : FPlayers.getInstance().getAllFPlayers()) {
+                    for (FPlayer player : FPlayers.fPlayers().getAllFPlayers()) {
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
@@ -143,7 +143,7 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                     }
                     break;
                 case NO_FACTION:
-                    for (FPlayer player : FPlayers.getInstance().getOnlinePlayers()) {
+                    for (FPlayer player : FPlayers.fPlayers().getOnlinePlayers()) {
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
@@ -155,7 +155,7 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                             count++;
                         }
                     }
-                    for (FPlayer player : FPlayers.getInstance().getAllFPlayers()) {
+                    for (FPlayer player : FPlayers.fPlayers().getAllFPlayers()) {
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
@@ -166,7 +166,7 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                     }
                     break;
                 case ONLINE:
-                    for (FPlayer player : FPlayers.getInstance().getOnlinePlayers()) {
+                    for (FPlayer player : FPlayers.fPlayers().getOnlinePlayers()) {
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
@@ -177,7 +177,7 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                         count++;
                     }
                 case ALL:
-                    for (FPlayer player : FPlayers.getInstance().getOnlinePlayers()) {
+                    for (FPlayer player : FPlayers.fPlayers().getOnlinePlayers()) {
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
@@ -187,7 +187,7 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                         temp1.add(player.getName());
                         count++;
                     }
-                    for (FPlayer player : FPlayers.getInstance().getAllFPlayers()) {
+                    for (FPlayer player : FPlayers.fPlayers().getAllFPlayers()) {
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }

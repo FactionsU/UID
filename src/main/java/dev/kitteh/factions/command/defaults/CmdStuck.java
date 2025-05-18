@@ -85,7 +85,7 @@ public class CmdStuck implements Cmd {
                         return;
                     }
 
-                    final Board board = Board.getInstance();
+                    final Board board = Board.board();
                     // spiral task to find nearest wilderness chunk
                     new SpiralTask(new FLocation(player), searchRadius) {
 

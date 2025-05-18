@@ -50,7 +50,7 @@ public class FScoreboard {
     }
 
     public static FScoreboard get(Player player) {
-        return fscoreboards.get(FPlayers.getInstance().getByPlayer(player));
+        return fscoreboards.get(FPlayers.fPlayers().getByPlayer(player));
     }
 
     private FScoreboard(FPlayer fplayer) {

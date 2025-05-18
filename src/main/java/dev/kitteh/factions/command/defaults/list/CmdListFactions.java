@@ -51,10 +51,10 @@ public class CmdListFactions implements Cmd {
             return;
         }
 
-        List<Faction> factionList = Factions.getInstance().getAllFactions();
-        factionList.remove(Factions.getInstance().getWilderness());
-        factionList.remove(Factions.getInstance().getSafeZone());
-        factionList.remove(Factions.getInstance().getWarZone());
+        List<Faction> factionList = Factions.factions().getAllFactions();
+        factionList.remove(Factions.factions().getWilderness());
+        factionList.remove(Factions.factions().getSafeZone());
+        factionList.remove(Factions.factions().getWarZone());
 
         // remove exempt factions
         if (!context.sender().hasPermission(Permission.SHOW_BYPASS_EXEMPT)) {
@@ -70,7 +70,7 @@ public class CmdListFactions implements Cmd {
 
         ArrayList<String> lines = new ArrayList<>();
 
-        factionList.addFirst(Factions.getInstance().getWilderness());
+        factionList.addFirst(Factions.factions().getWilderness());
 
         final int pageheight = 9;
         int pagenumber = context.getOrDefault("page", 1);
