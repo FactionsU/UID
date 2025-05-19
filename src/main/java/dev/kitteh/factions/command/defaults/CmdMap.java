@@ -41,12 +41,12 @@ public class CmdMap implements Cmd {
         Player player = ((Sender.Player) context.sender()).player();
 
         if (context.flags().get("setheight") instanceof Integer height) {
-            sender.setMapHeight(height);
-            sender.sendMessage(TL.COMMAND_MAPHEIGHT_SET.format(sender.getMapHeight()));
+            sender.mapHeight(height);
+            sender.sendMessage(TL.COMMAND_MAPHEIGHT_SET.format(sender.mapHeight()));
         }
 
         if (context.flags().hasFlag("auto-off")) {
-            sender.setMapAutoUpdating(false);
+            sender.mapAutoUpdating(false);
             sender.msg(TL.COMMAND_MAP_UPDATE_DISABLED);
             return;
         }
@@ -56,7 +56,7 @@ public class CmdMap implements Cmd {
         }
 
         if (context.flags().hasFlag("auto-on")) {
-            sender.setMapAutoUpdating(true);
+            sender.mapAutoUpdating(true);
             sender.msg(TL.COMMAND_MAP_UPDATE_ENABLED);
         }
 

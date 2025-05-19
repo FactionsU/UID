@@ -18,6 +18,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -258,24 +259,22 @@ public interface Faction extends Participator, Selectable {
         boolean canPlayerManage(FPlayer fPlayer);
     }
 
-    int getId();
-
-    Map<UUID, List<String>> getAnnouncements();
+    int id();
 
     void addAnnouncement(FPlayer fPlayer, String msg);
 
     void sendUnreadAnnouncements(FPlayer fPlayer);
 
-    void removeAnnouncements(FPlayer fPlayer);
-
-    Map<String, LazyLocation> getWarps();
+    Map<String, LazyLocation> warps();
 
     @Nullable
-    LazyLocation getWarp(String name);
+    LazyLocation warp(String name);
 
-    void setWarp(String name, LazyLocation loc);
+    default boolean isWarp(String name) {
+        return warp(name) != null;
+    }
 
-    boolean isWarp(String name);
+    void createWarp(String name, LazyLocation loc);
 
     boolean hasWarpPassword(String warp);
 
@@ -289,17 +288,17 @@ public interface Faction extends Participator, Selectable {
 
     void clearWarps();
 
-    int getMaxVaults();
+    int maxVaults();
 
-    void setMaxVaults(int value);
+    void maxVaults(int value);
 
-    Set<UUID> getInvites();
+    Set<UUID> invites();
 
     void invite(FPlayer fplayer);
 
-    void deinvite(FPlayer fplayer);
+    void deInvite(FPlayer fplayer);
 
-    boolean isInvited(FPlayer fplayer);
+    boolean hasInvite(FPlayer fplayer);
 
     void ban(FPlayer target, FPlayer banner);
 
@@ -307,82 +306,94 @@ public interface Faction extends Participator, Selectable {
 
     boolean isBanned(FPlayer player);
 
-    Set<BanInfo> getBannedPlayers();
+    Set<BanInfo> bans();
 
-    boolean getOpen();
+    boolean open();
 
-    void setOpen(boolean isOpen);
+    void open(boolean isOpen);
 
-    boolean isPeaceful();
+    boolean peaceful();
 
-    void setPeaceful(boolean isPeaceful);
+    void peaceful(boolean isPeaceful);
 
-    void setPeacefulExplosionsEnabled(boolean val);
+    void peacefulExplosionsEnabled(boolean val);
 
-    boolean isPeacefulExplosionsEnabled();
+    boolean peacefulExplosionsEnabled();
 
     default boolean noExplosionsInTerritory() {
-        return this.isShielded() || (this.isPeaceful() && !this.isPeacefulExplosionsEnabled());
+        return this.isShielded() || (this.peaceful() && !this.peacefulExplosionsEnabled());
     }
 
-    boolean isPermanent();
+    boolean permanent();
 
-    void setPermanent(boolean isPermanent);
+    void permanent(boolean isPermanent);
 
-    String getTag();
+    String tag();
 
-    String getTag(String prefix);
+    void tag(String str);
 
-    String getTag(@Nullable Faction otherFaction);
+    String tagString(@Nullable Faction otherFaction);
 
-    String getTag(@Nullable FPlayer otherFplayer);
+    String tagString(@Nullable FPlayer otherFplayer);
 
-    void setTag(String str);
+    String description();
 
-    String getComparisonTag();
+    void description(String value);
 
-    String getDescription();
+    String link();
 
-    void setDescription(String value);
+    void link(String value);
 
-    String getLink();
-
-    void setLink(String value);
-
-    void setHome(Location home);
+    void home(Location home);
 
     void delHome();
 
-    boolean hasHome();
+    default boolean hasHome() {
+        return this.home() != null;
+    }
 
     @Nullable
-    Location getHome();
+    Location home();
 
-    long getFoundedDate();
+    Instant founded();
 
-    void setFoundedDate(long newDate);
+    void founded(Instant when);
 
-    void confirmValidHome();
+    default boolean noPvPInTerritory() {
+        return isSafeZone() || (peaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisablePVP());
+    }
 
-    boolean noPvPInTerritory();
+    default boolean noMonstersInTerritory() {
+        return isSafeZone() || (peaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters());
+    }
 
-    boolean noMonstersInTerritory();
+    default boolean isNormal() {
+        return !(this.isWilderness() || this.isSafeZone() || this.isWarZone());
+    }
 
-    boolean isNormal();
+    default boolean isWilderness() {
+        return this.id() == Factions.ID_WILDERNESS;
+    }
 
-    boolean isWilderness();
+    default boolean isSafeZone() {
+        return this.id() == Factions.ID_SAFEZONE;
+    }
 
-    boolean isSafeZone();
+    default boolean isWarZone() {
+        return this.id() == Factions.ID_WARZONE;
+    }
 
-    boolean isWarZone();
+    void lastDeath(Instant time);
 
-    boolean isPlayerFreeType();
+    Instant lastDeath();
 
-    void setLastDeath(long time);
+    default int kills() {
+        return members().stream().mapToInt(FPlayer::kills).sum();
+    }
 
-    int getKills();
-
-    int getDeaths();
+    default int deaths() {
+        return members().stream().mapToInt(FPlayer::deaths).sum();
+    }
 
     /**
      * Get the access of a selectable for a given chunk.
@@ -396,132 +407,160 @@ public interface Faction extends Participator, Selectable {
 
     Permissions permissions();
 
-    int getLandRounded();
+    int tntBank();
 
-    int getLandRoundedInWorld(World world);
-
-    int getTNTBank();
-
-    void setTNTBank(int amount);
+    void tntBank(int amount);
 
     boolean isShielded();
 
-    int getUpgradeLevel(Upgrade upgrade);
+    int upgradeLevel(Upgrade upgrade);
 
-    void setUpgradeLevel(Upgrade upgrade, int level);
+    void upgradeLevel(Upgrade upgrade, int level);
 
-    Relation getRelationWish(Faction otherFaction);
+    Relation relationWish(Faction otherFaction);
 
-    void setRelationWish(Faction otherFaction, Relation relation);
+    void relationWish(Faction otherFaction, Relation relation);
 
-    int getRelationCount(Relation relation);
+    default int relationCount(Relation relation) {
+        int count = 0;
+        for (Faction faction : Factions.factions().all()) {
+            if (faction.relationTo(this) == relation) {
+                count++;
+            }
+        }
+        return count;
+    }
 
-    double getDTR();
+    double dtr();
 
-    double getDTRWithoutUpdate();
+    double dtrWithoutUpdate();
 
-    void setDTR(double dtr);
+    void dtr(double dtr);
 
-    long getLastDTRUpdateTime();
+    long dtrLastUpdated();
 
-    long getFrozenDTRUntilTime();
+    long dtrFrozenUntil();
 
-    void setFrozenDTR(long time);
+    void dtrFrozenUntil(long time);
 
-    boolean isFrozenDTR();
+    default boolean dtrFrozen() {
+        return System.currentTimeMillis() < this.dtrFrozenUntil();
+    }
 
     /**
      * Gets the exact faction power, which is not used for claim/raidability calculations
      *
      * @return exact power
      */
-    double getPowerExact();
+    double powerExact();
 
     /**
      * Gets the exact faction max power
      *
      * @return exactmax power
      */
-    double getPowerMaxExact();
+    double powerMaxExact();
 
     /**
      * Gets the faction power, as used for claims/raidability calculations
      *
      * @return power
      */
-    int getPower();
+    default int power() {
+        return (int) Math.round(this.powerExact());
+    }
 
-    int getPowerMax();
+    default int powerMax() {
+        return (int) Math.round(this.powerMaxExact());
+    }
 
     @Nullable
-    Integer getPermanentPower();
+    Integer permanentPower();
 
-    void setPermanentPower(@Nullable Integer permanentPower);
+    void permanentPower(@Nullable Integer permanentPower);
 
-    boolean hasPermanentPower();
+    default boolean hasPermanentPower() {
+        return this.permanentPower() != null;
+    }
 
-    double getPowerBoost();
+    double powerBoost();
 
-    void setPowerBoost(double powerBoost);
+    void powerBoost(double powerBoost);
 
-    boolean hasLandInflation();
+    default boolean hasLandInflation() {
+        return FactionsPlugin.getInstance().getLandRaidControl().hasLandInflation(this);
+    }
 
     boolean isPowerFrozen();
 
-    boolean addFPlayer(FPlayer fplayer);
+    int size();
 
-    boolean removeFPlayer(FPlayer fplayer);
-
-    int getSize();
-
-    default int getMaxMembers() {
+    default int memberLimit() {
         int confMax = FactionsPlugin.getInstance().conf().factions().other().getFactionMemberLimit();
         if (confMax < 1) {
             return Integer.MAX_VALUE;
         }
-        if (Universe.universe().isUpgradeEnabled(Upgrades.MAX_MEMBERS) && this.getUpgradeLevel(Upgrades.MAX_MEMBERS) > 0) {
-            int boost = Universe.universe().upgradeSettings(Upgrades.MAX_MEMBERS).valueAt(Upgrades.Variables.POSITIVE_INCREASE, this.getUpgradeLevel(Upgrades.MAX_MEMBERS)).intValue();
+        if (Universe.universe().isUpgradeEnabled(Upgrades.MAX_MEMBERS) && this.upgradeLevel(Upgrades.MAX_MEMBERS) > 0) {
+            int boost = Universe.universe().upgradeSettings(Upgrades.MAX_MEMBERS).valueAt(Upgrades.Variables.POSITIVE_INCREASE, this.upgradeLevel(Upgrades.MAX_MEMBERS)).intValue();
             return confMax + boost;
         } else {
             return confMax;
         }
     }
 
-    Set<FPlayer> getFPlayers();
+    Set<FPlayer> members();
 
-    Set<FPlayer> getFPlayersWhereOnline(boolean online);
+    Set<FPlayer> membersOnline(boolean online);
 
-    Set<FPlayer> getFPlayersWhereOnline(boolean online, @Nullable FPlayer viewer);
+    Set<FPlayer> membersOnline(boolean online, @Nullable FPlayer viewer);
 
     @Nullable
-    FPlayer getFPlayerAdmin();
+    FPlayer admin();
 
-    List<FPlayer> getFPlayersWhereRole(Role role);
+    List<FPlayer> members(Role role);
 
-    List<Player> getOnlinePlayers();
+    List<Player> membersOnlineAsPlayers();
 
-    boolean hasPlayersOnline();
+    boolean hasMembersOnline();
 
-    void memberLoggedOff();
+    void trackMemberLoggedOff();
 
     void promoteNewLeader();
 
-    Role getDefaultRole();
+    Role defaultRole();
 
-    void setDefaultRole(Role role);
+    void defaultRole(Role role);
 
     @Override
     default void sendMessage(@NonNull Component component) {
-        for (FPlayer fplayer : this.getFPlayersWhereOnline(true)) {
+        for (FPlayer fplayer : this.membersOnline(true)) {
             fplayer.sendMessage(component);
         }
     }
 
-    void sendMessage(String message);
+    default void sendMessage(String message) {
+        for (FPlayer fplayer : this.membersOnline(true)) {
+            fplayer.sendMessage(message);
+        }
+    }
 
-    void sendMessage(List<String> messages);
+    default void sendMessage(List<String> messages) {
+        for (FPlayer fplayer : this.membersOnline(true)) {
+            fplayer.sendMessage(messages);
+        }
+    }
 
-    Set<FLocation> getAllClaims();
+    default Set<FLocation> claims() {
+        return Board.board().allClaims(this);
+    }
+
+    default int claimCount() {
+        return Board.board().claimCount(this);
+    }
+
+    default int claimCount(World world) {
+        return Board.board().claimCount(this, world);
+    }
 
     /**
      * Gets the faction's zone controller.

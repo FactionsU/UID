@@ -10,6 +10,7 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
+import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -35,9 +36,9 @@ public class CmdSetTitle implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         FPlayer target = context.get("player");
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
-        if (sender.getFaction() != target.getFaction() || sender.getRole().value <= target.getRole().value) {
+        if (sender.faction() != target.faction() || sender.role().value <= target.role().value) {
             sender.msg(TL.COMMAND_TITLE_CANNOTPLAYER);
             return;
         }
@@ -51,7 +52,10 @@ public class CmdSetTitle implements Cmd {
             return;
         }
 
-        target.setTitle(context.sender().sender(), title);
+        if (context.sender().hasPermission(Permission.TITLE_COLOR)) {
+            title = ChatColor.translateAlternateColorCodes('&', title); // TODO minimessage
+        }
+        target.title(title);
 
         // Inform
         faction.msg(TL.COMMAND_TITLE_CHANGED, sender.describeTo(faction), target.describeTo(faction));

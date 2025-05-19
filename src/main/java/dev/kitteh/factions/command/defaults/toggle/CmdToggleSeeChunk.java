@@ -28,8 +28,8 @@ public class CmdToggleSeeChunk implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
-        boolean toggle = !sender.isSeeingChunk();
-        sender.setSeeingChunk(toggle);
+        boolean toggle = !sender.seeChunk();
+        sender.seeChunk(toggle);
         sender.msg(TL.COMMAND_SEECHUNK_TOGGLE, toggle ? "enabled" : "disabled");
     }
 }

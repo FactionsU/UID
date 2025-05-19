@@ -34,21 +34,21 @@ public class CmdSetPeaceful implements Cmd {
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
         String change;
-        if (faction.isPeaceful()) {
+        if (faction.peaceful()) {
             change = TL.COMMAND_PEACEFUL_REVOKE.toString();
-            faction.setPeaceful(false);
+            faction.peaceful(false);
         } else {
             change = TL.COMMAND_PEACEFUL_GRANT.toString();
-            faction.setPeaceful(true);
+            faction.peaceful(true);
         }
 
         // Inform all players
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             String blame = (fPlayer == null ? TL.GENERIC_SERVERADMIN.toString() : fPlayer.describeTo(fplayer, true));
-            if (fplayer.getFaction() == faction) {
+            if (fplayer.faction() == faction) {
                 fplayer.msg(TL.COMMAND_PEACEFUL_YOURS, blame, change);
             } else {
-                fplayer.msg(TL.COMMAND_PEACEFUL_OTHER, blame, change, faction.getTag(fplayer));
+                fplayer.msg(TL.COMMAND_PEACEFUL_OTHER, blame, change, faction.tagString(fplayer));
             }
         }
     }

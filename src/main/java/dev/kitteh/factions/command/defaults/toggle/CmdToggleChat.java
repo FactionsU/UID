@@ -43,11 +43,11 @@ public class CmdToggleChat implements Cmd {
 
         TL tl;
         if (target == ChatTarget.Relation.ALLY) {
-            sender.setIgnoreAllianceChat(!sender.isIgnoreAllianceChat());
-            tl = sender.isIgnoreAllianceChat() ? TL.COMMAND_TOGGLEALLIANCECHAT_IGNORE : TL.COMMAND_TOGGLEALLIANCECHAT_UNIGNORE;
+            sender.ignoreAllianceChat(!sender.ignoreAllianceChat());
+            tl = sender.ignoreAllianceChat() ? TL.COMMAND_TOGGLEALLIANCECHAT_IGNORE : TL.COMMAND_TOGGLEALLIANCECHAT_UNIGNORE;
         } else {
-            sender.setIgnoreTruceChat(!sender.isIgnoreTruceChat());
-            tl = sender.isIgnoreTruceChat() ? TL.COMMAND_TOGGLETRUCECHAT_IGNORE : TL.COMMAND_TOGGLETRUCECHAT_UNIGNORE;
+            sender.ignoreTruceChat(!sender.ignoreTruceChat());
+            tl = sender.ignoreTruceChat() ? TL.COMMAND_TOGGLETRUCECHAT_IGNORE : TL.COMMAND_TOGGLETRUCECHAT_UNIGNORE;
         }
         context.sender().msg(tl);
     }

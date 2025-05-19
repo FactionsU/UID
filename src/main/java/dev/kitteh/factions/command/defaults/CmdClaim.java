@@ -71,12 +71,12 @@ public class CmdClaim implements Cmd {
 
         FLocation claimLocation = new FLocation(player);
 
-        final Faction forFaction = context.flags().get("faction") instanceof Faction fac ? fac : sender.getFaction(); // Default to own
+        final Faction forFaction = context.flags().get("faction") instanceof Faction fac ? fac : sender.faction(); // Default to own
 
         if (context.flags().hasFlag("auto")) {
-            if (sender.getAutoClaimFor() == null) {
+            if (sender.autoClaim() == null) {
                 if (sender.canClaimForFaction(forFaction)) {
-                    sender.setAutoClaimFor(forFaction);
+                    sender.autoClaim(forFaction);
 
                     sender.msg(TL.COMMAND_AUTOCLAIM_ENABLED, forFaction.describeTo(sender));
                     sender.attemptClaim(forFaction, claimLocation, true);
@@ -84,7 +84,7 @@ public class CmdClaim implements Cmd {
                     sender.msg(TL.COMMAND_AUTOCLAIM_OTHERFACTION, forFaction.describeTo(sender));
                 }
             } else {
-                sender.setAutoClaimFor(null);
+                sender.autoClaim(null);
                 sender.msg(TL.COMMAND_AUTOCLAIM_DISABLED);
             }
 
@@ -135,7 +135,7 @@ public class CmdClaim implements Cmd {
             return;
         }
 
-        final boolean bypass = sender.isAdminBypassing();
+        final boolean bypass = sender.adminBypass();
 
         Faction currentFaction = Board.board().factionAt(loc);
 
@@ -153,9 +153,9 @@ public class CmdClaim implements Cmd {
                 (
                         (forFaction.isNormal() && !forFaction.hasAccess(sender, PermissibleActions.TERRITORY, null))
                                 ||
-                                (forFaction.isWarZone() && !Permission.MANAGE_WAR_ZONE.has(sender.getPlayer()))
+                                (forFaction.isWarZone() && !Permission.MANAGE_WAR_ZONE.has(sender.asPlayer()))
                                 ||
-                                (forFaction.isSafeZone() && !Permission.MANAGE_SAFE_ZONE.has(sender.getPlayer()))
+                                (forFaction.isSafeZone() && !Permission.MANAGE_SAFE_ZONE.has(sender.asPlayer()))
                 )
         ) {
             sender.msg(TL.CLAIM_CANTCLAIM, forFaction.describeTo(sender));

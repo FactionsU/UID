@@ -82,16 +82,16 @@ public class CmdCreate implements Cmd {
         // join event cannot be cancelled or you'll have an empty faction
 
         // finish setting up the FPlayer
-        sender.setRole(Role.ADMIN);
-        sender.setFaction(faction);
-        sender.getPlayer().updateCommands();
+        sender.role(Role.ADMIN);
+        sender.faction(faction);
+        sender.asPlayer().updateCommands();
 
         for (FPlayer follower : FPlayers.fPlayers().online()) {
-            follower.msg(TL.COMMAND_CREATE_CREATED, sender.describeTo(follower, true), faction.getTag(follower));
+            follower.msg(TL.COMMAND_CREATE_CREATED, sender.describeTo(follower, true), faction.tagString(follower));
         }
 
         if (FactionsPlugin.getInstance().conf().logging().isFactionCreate()) {
-            FactionsPlugin.getInstance().log(sender.getName() + TL.COMMAND_CREATE_CREATEDLOG + tag);
+            FactionsPlugin.getInstance().log(sender.name() + TL.COMMAND_CREATE_CREATEDLOG + tag);
         }
     }
 }

@@ -7,6 +7,7 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.BanInfo;
@@ -37,44 +38,44 @@ public class CmdBan implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         FPlayer target = context.get("player");
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         if (sender == target) {
             // You may not ban yourself
             sender.msg(TL.COMMAND_BAN_SELF);
             return;
-        } else if (target.getFaction() == faction && target.getRole().isAtLeast(sender.getRole())) {
+        } else if (target.faction() == faction && target.role().isAtLeast(sender.role())) {
             // You may not ban someone that has same or higher faction rank
-            sender.msg(TL.COMMAND_BAN_INSUFFICIENTRANK, target.getName());
+            sender.msg(TL.COMMAND_BAN_INSUFFICIENTRANK, target.name());
             return;
         }
 
         // Check if the user is already banned
-        if (faction.getBannedPlayers().stream().map(BanInfo::banned).anyMatch(u -> u.equals(target.getUniqueId()))) {
-            sender.msg(TL.COMMAND_BAN_ALREADYBANNED, target.getName());
+        if (faction.bans().stream().map(BanInfo::banned).anyMatch(u -> u.equals(target.uniqueId()))) {
+            sender.msg(TL.COMMAND_BAN_ALREADYBANNED, target.name());
             return;
         }
 
         // If in same Faction, lets make sure to kick them and throw an event.
-        if (target.getFaction() == faction) {
+        if (target.faction() == faction) {
             FPlayerLeaveEvent event = new FPlayerLeaveEvent(target, faction, FPlayerLeaveEvent.Reason.BANNED);
             Bukkit.getServer().getPluginManager().callEvent(event);
 
             if (event.isCancelled()) {
                 // if someone cancels a ban, we'll get people complaining here. So lets log it.
-                FactionsPlugin.getInstance().log(Level.WARNING, "Attempted to ban {0} but a plugin cancelled the kick event.", target.getName());
+                FactionsPlugin.getInstance().log(Level.WARNING, "Attempted to ban {0} but a plugin cancelled the kick event.", target.name());
                 return;
             }
 
             // Didn't get cancelled so remove them and reset their state.
-            faction.removeFPlayer(target);
+            ((MemoryFaction) faction).removeMember(target);
             target.resetFactionData(true);
         }
 
         faction.ban(target, sender);
-        faction.deinvite(target);
+        faction.deInvite(target);
 
-        target.msg(TL.COMMAND_BAN_TARGET, faction.getTag(target.getFaction()));
-        faction.msg(TL.COMMAND_BAN_BANNED, sender.getName(), target.getName());
+        target.msg(TL.COMMAND_BAN_TARGET, faction.tagString(target.faction()));
+        faction.msg(TL.COMMAND_BAN_BANNED, sender.name(), target.name());
     }
 }

@@ -57,7 +57,7 @@ public class PortalListener implements Listener {
             String minimumRelation = FactionsPlugin.getInstance().conf().factions().portals().getMinimumRelation();
 
             // Don't let people portal into nether bases if server owners don't want that.
-            if (!fPlayer.getFaction().getRelationTo(faction).isAtLeast(Relation.fromString(minimumRelation))) {
+            if (!fPlayer.faction().relationTo(faction).isAtLeast(Relation.fromString(minimumRelation))) {
                 event.setCancelled(true);
                 player.sendMessage(TL.PLAYER_PORTAL_NOTALLOWED.toString());
                 return;

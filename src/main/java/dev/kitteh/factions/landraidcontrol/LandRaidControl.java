@@ -27,7 +27,7 @@ public interface LandRaidControl {
     int getLandLimit(Faction faction);
 
     default int getPossibleClaimCount(Faction faction) {
-        return this.getLandLimit(faction) - faction.getLandRounded();
+        return this.getLandLimit(faction) - faction.claimCount();
     }
 
     boolean canJoinFaction(Faction faction, FPlayer player);
@@ -52,9 +52,9 @@ public interface LandRaidControl {
         if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceRaidable()) {
             Stream<FPlayer> stream = FPlayers.fPlayers().online().stream();
             if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
-                stream = stream.filter(fp -> fp.getFaction() == faction || fp.getRelationTo(faction) == Relation.ENEMY);
+                stream = stream.filter(fp -> fp.faction() == faction || fp.relationTo(faction) == Relation.ENEMY);
             }
-            stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOWRAIDABLE.format(faction.getTag(fp))));
+            stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOWRAIDABLE.format(faction.tagString(fp))));
         }
     }
 
@@ -62,9 +62,9 @@ public interface LandRaidControl {
         if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceRaidable()) {
             Stream<FPlayer> stream = FPlayers.fPlayers().online().stream();
             if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
-                stream = stream.filter(fp -> fp.getFaction() == faction || fp.getRelationTo(faction) == Relation.ENEMY);
+                stream = stream.filter(fp -> fp.faction() == faction || fp.relationTo(faction) == Relation.ENEMY);
             }
-            stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOLONGERRAIDABLE.format(faction.getTag(fp))));
+            stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOLONGERRAIDABLE.format(faction.tagString(fp))));
         }
     }
 }

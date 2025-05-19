@@ -45,7 +45,7 @@ public class CmdForceDisband implements Cmd {
     }
 
     private void doIt(FPlayer sender, Faction faction, boolean confirmed) {
-        if (faction.isPermanent()) {
+        if (faction.permanent()) {
             sender.msg(TL.COMMAND_DISBAND_MARKEDPERMANENT.toString());
             return;
         }
@@ -53,7 +53,7 @@ public class CmdForceDisband implements Cmd {
         if (!confirmed) {
             String conf = CmdConfirm.add(sender, s -> this.doIt(s, faction, true));
             // TODO TL
-            sender.sendMessage(ChatColor.YELLOW + "Are you sure you want to disband " + faction.getTag() + "? If so, run /f confirm " + conf);
+            sender.sendMessage(ChatColor.YELLOW + "Are you sure you want to disband " + faction.tag() + "? If so, run /f confirm " + conf);
             return;
         }
 
@@ -64,21 +64,21 @@ public class CmdForceDisband implements Cmd {
         }
 
         // Send FPlayerLeaveEvent for each player in the faction
-        for (FPlayer fplayer : faction.getFPlayers()) {
+        for (FPlayer fplayer : faction.members()) {
             Bukkit.getServer().getPluginManager().callEvent(new FPlayerLeaveEvent(fplayer, faction, FPlayerLeaveEvent.Reason.DISBAND));
         }
 
         // Inform all players
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             String who = sender.describeTo(fplayer);
-            if (fplayer.getFaction() == faction) {
+            if (fplayer.faction() == faction) {
                 fplayer.msg(TL.COMMAND_DISBAND_BROADCAST_YOURS, who);
             } else {
-                fplayer.msg(TL.COMMAND_DISBAND_BROADCAST_NOTYOURS, who, faction.getTag(fplayer));
+                fplayer.msg(TL.COMMAND_DISBAND_BROADCAST_NOTYOURS, who, faction.tagString(fplayer));
             }
         }
         if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
-            FactionsPlugin.getInstance().log("The faction " + faction.getTag() + " (" + faction.getId() + ") was disbanded by " + sender.getName() + ".");
+            FactionsPlugin.getInstance().log("The faction " + faction.tag() + " (" + faction.id() + ") was disbanded by " + sender.name() + ".");
         }
 
         if (Econ.shouldBeUsed() && FactionsPlugin.getInstance().conf().economy().isBankEnabled()) {
@@ -89,7 +89,7 @@ public class CmdForceDisband implements Cmd {
                 Econ.transferMoney(sender, faction, sender, amount, false);
                 String amountString = Econ.moneyString(amount);
                 sender.msg(TL.COMMAND_DISBAND_HOLDINGS, amountString);
-                FactionsPlugin.getInstance().log(sender.getName() + " has been given bank holdings of " + amountString + " from disbanding " + faction.getTag() + ".");
+                FactionsPlugin.getInstance().log(sender.name() + " has been given bank holdings of " + amountString + " from disbanding " + faction.tag() + ".");
             }
         }
 

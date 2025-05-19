@@ -32,10 +32,10 @@ public class CmdSetWarpProperty implements Cmd {
 
     private void handle(org.incendo.cloud.context.CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         String warp = context.get("name");
-        if (faction.getWarp(warp) == null) {
+        if (faction.warp(warp) == null) {
             sender.msg(TL.COMMAND_SETFWARPPROPERTY_NOWARP, warp);
             return;
         }

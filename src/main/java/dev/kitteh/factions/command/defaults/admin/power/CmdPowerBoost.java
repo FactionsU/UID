@@ -60,10 +60,10 @@ public class CmdPowerBoost implements Cmd {
         double value = context.get("value");
 
         if (modify) {
-            value += target.getPowerBoost();
+            value += target.powerBoost();
         }
 
-        target.setPowerBoost(value);
+        target.powerBoost(value);
 
         context.sender().msg(TL.COMMAND_POWERBOOST_BOOST, target, Math.round(value));
     }
@@ -73,10 +73,10 @@ public class CmdPowerBoost implements Cmd {
         double value = context.get("value");
 
         if (modify) {
-            value += target.getPowerBoost();
+            value += target.powerBoost();
         }
 
-        target.setPowerBoost(value);
+        target.powerBoost(value);
 
         context.sender().msg(TL.COMMAND_POWERBOOST_BOOST, target, Math.round(value));
     }

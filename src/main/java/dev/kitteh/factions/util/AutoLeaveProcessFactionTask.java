@@ -18,35 +18,35 @@ public class AutoLeaveProcessFactionTask extends AutoLeaveTask.AutoLeaveProcesso
     public void go(MainConfig conf) {
         Faction faction = iterator.next();
 
-        if (faction.isPlayerFreeType()) {
+        if (faction.isSafeZone() || faction.isWarZone()) {
             return;
         }
 
         if (faction.isWilderness()) {
             if (conf.factions().other().isAutoLeaveDeleteFPlayerData()) {
-                for (FPlayer fplayer : faction.getFPlayers()) {
-                    if (fplayer.isOffline() && now - fplayer.getLastLoginTime() > toleranceMillis) {
+                for (FPlayer fplayer : faction.members()) {
+                    if (!fplayer.isOnline() && now - fplayer.lastLogin() > toleranceMillis) {
                         // Check if they should be exempt from this.
-                        if (fplayer.isAutoLeaveExempt()) {
-                            FactionsPlugin.getInstance().debug(Level.INFO, fplayer.getName() + " was going to be auto-removed but was set not to.");
+                        if (fplayer.autoLeaveExempt()) {
+                            FactionsPlugin.getInstance().debug(Level.INFO, fplayer.name() + " was going to be auto-removed but was set not to.");
                             continue;
                         }
                         if ((conf.logging().isFactionLeave() || conf.logging().isFactionKick()) && (fplayer.hasFaction() || conf.factions().other().isAutoLeaveDeleteFPlayerData())) {
-                            FactionsPlugin.getInstance().log("Player " + fplayer.getName() + " was auto-removed due to inactivity.");
+                            FactionsPlugin.getInstance().log("Player " + fplayer.name() + " was auto-removed due to inactivity.");
                         }
-                        fplayer.remove();
+                        fplayer.eraseData();
                     }
                 }
             }
             return;
         }
 
-        for (FPlayer fplayer : faction.getFPlayers()) {
-            if (fplayer.isOnline() || now - fplayer.getLastLoginTime() < toleranceMillis) {
+        for (FPlayer fplayer : faction.members()) {
+            if (fplayer.isOnline() || now - fplayer.lastLogin() < toleranceMillis) {
                 return; // At least one still active player!
             }
-            if (fplayer.isAutoLeaveExempt()) {
-                FactionsPlugin.getInstance().debug(Level.INFO, fplayer.getName() + " was going to be auto-removed but was set not to.");
+            if (fplayer.autoLeaveExempt()) {
+                FactionsPlugin.getInstance().debug(Level.INFO, fplayer.name() + " was going to be auto-removed but was set not to.");
                 return; // Won't autoremove this faction due to this player
             }
         }
@@ -55,13 +55,13 @@ public class AutoLeaveProcessFactionTask extends AutoLeaveTask.AutoLeaveProcesso
 
         Role role = Role.getByValue(0);
         for (int i = 0; role != null; role = Role.getByValue(++i)) {
-            for (FPlayer fplayer : faction.getFPlayersWhereRole(role)) {
+            for (FPlayer fplayer : faction.members(role)) {
                 if ((conf.logging().isFactionLeave() || conf.logging().isFactionKick()) && (fplayer.hasFaction() || conf.factions().other().isAutoLeaveDeleteFPlayerData())) {
-                    FactionsPlugin.getInstance().log("Player " + fplayer.getName() + " was auto-removed due to inactivity.");
+                    FactionsPlugin.getInstance().log("Player " + fplayer.name() + " was auto-removed due to inactivity.");
                 }
                 fplayer.leave(false);
                 if (conf.factions().other().isAutoLeaveDeleteFPlayerData()) {
-                    fplayer.remove();
+                    fplayer.eraseData();
                 }
             }
         }

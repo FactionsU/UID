@@ -49,8 +49,8 @@ public class CmdPower implements Cmd {
             return;
         }
 
-        double powerBoost = target.getPowerBoost();
+        double powerBoost = target.powerBoost();
         String boost = (powerBoost == 0.0) ? "" : (powerBoost > 0.0 ? TL.COMMAND_POWER_BONUS.toString() : TL.COMMAND_POWER_PENALTY.toString()) + powerBoost + ")";
-        context.sender().msg(TL.COMMAND_POWER_POWER, target.describeTo(sender), target.getPowerRounded(), target.getPowerMaxRounded(), boost);
+        context.sender().msg(TL.COMMAND_POWER_POWER, target.describeTo(sender), target.powerRounded(), target.powerMaxRounded(), boost);
     }
 }

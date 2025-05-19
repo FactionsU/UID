@@ -43,7 +43,7 @@ public class CmdTNTDeposit implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
             sender.msg(TL.COMMAND_TNT_TERRITORYONLY);
@@ -60,12 +60,12 @@ public class CmdTNTDeposit implements Cmd {
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().commands().tnt().isAboveMaxStorage(faction.getTNTBank() + amount)) {
-            if (FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage() == faction.getTNTBank()) {
+        if (FactionsPlugin.getInstance().conf().commands().tnt().isAboveMaxStorage(faction.tntBank() + amount)) {
+            if (FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage() == faction.tntBank()) {
                 sender.msg(TL.COMMAND_TNT_DEPOSIT_FAIL_FULL, FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage());
                 return;
             }
-            amount = FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage() - faction.getTNTBank();
+            amount = FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage() - faction.tntBank();
         }
         int current = amount;
         Map<Integer, ? extends ItemStack> all = player.getInventory().all(Material.TNT);
@@ -82,7 +82,7 @@ public class CmdTNTDeposit implements Cmd {
                 break;
             }
         }
-        faction.setTNTBank(faction.getTNTBank() + amount);
-        sender.msg(TL.COMMAND_TNT_DEPOSIT_SUCCESS, faction.getTNTBank());
+        faction.tntBank(faction.tntBank() + amount);
+        sender.msg(TL.COMMAND_TNT_DEPOSIT_SUCCESS, faction.tntBank());
     }
 }

@@ -30,11 +30,9 @@ import dev.kitteh.factions.util.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -45,6 +43,7 @@ import org.jspecify.annotations.Nullable;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -108,18 +107,22 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     public void onLogInOut() {
-        if (this.getPlayer() instanceof Player player) {
+        if (this.asPlayer() instanceof Player player) {
             this.kills = player.getStatistic(Statistic.PLAYER_KILLS);
             this.deaths = player.getStatistic(Statistic.DEATHS);
-            this.setAutoLeaveExempt(player.hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
+            this.autoLeaveExempt(player.hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
+        }
+        this.lastLoginTime = System.currentTimeMillis();
+        if (FactionsPlugin.getInstance().conf().factions().pvp().getNoPVPDamageToOthersForXSecondsAfterLogin() > 0) {
+            this.loginPvpDisabled = true;
         }
     }
 
     @Override
-    public Faction getFaction() {
+    public Faction faction() {
         Faction faction = Factions.factions().get(this.factionId);
         if (faction == null) {
-            AbstractFactionsPlugin.getInstance().getLogger().warning("Found null faction (id " + this.factionId + ") for player " + this.getName());
+            AbstractFactionsPlugin.getInstance().getLogger().warning("Found null faction (id " + this.factionId + ") for player " + this.name());
             this.resetFactionData(true);
             faction = Factions.factions().wilderness();
         }
@@ -136,70 +139,70 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public void setFaction(Faction faction) {
-        Faction oldFaction = this.getFaction();
-        oldFaction.removeFPlayer(this);
-        faction.addFPlayer(this);
-        this.factionId = faction.getId();
+    public void faction(Faction faction) {
+        Faction oldFaction = this.faction();
+        ((MemoryFaction) oldFaction).removeMember(this);
+        ((MemoryFaction) faction).addMember(this);
+        this.factionId = faction.id();
     }
 
     @Override
-    public void setMonitorJoins(boolean monitor) {
+    public void monitorJoins(boolean monitor) {
         this.monitorJoins = monitor;
     }
 
     @Override
-    public boolean isMonitoringJoins() {
+    public boolean monitorJoins() {
         return this.monitorJoins;
     }
 
     @Override
-    public Role getRole() {
+    public Role role() {
         return this.role;
     }
 
     @Override
-    public void setRole(Role role) {
+    public void role(Role role) {
         this.role = Objects.requireNonNull(role);
     }
 
     @Override
-    public double getPowerBoost() {
+    public double powerBoost() {
         return this.powerBoost;
     }
 
     @Override
-    public void setPowerBoost(double powerBoost) {
+    public void powerBoost(double powerBoost) {
         this.powerBoost = powerBoost;
     }
 
     @Override
-    public boolean isAutoLeaveExempt() {
+    public boolean autoLeaveExempt() {
         return !this.willAutoLeave;
     }
 
     @Override
-    public void setAutoLeaveExempt(boolean exempt) {
+    public void autoLeaveExempt(boolean exempt) {
         this.willAutoLeave = !exempt;
     }
 
     @Override
-    public long getLastFrostwalkerMessageTime() {
+    public long lastFrostwalkerMessageTime() {
         return this.lastFrostwalkerMessage;
     }
 
     @Override
-    public void setLastFrostwalkerMessageTime() {
+    public void updateLastFrostwalkerMessageTime() {
         this.lastFrostwalkerMessage = System.currentTimeMillis();
     }
 
     @Override
-    public @Nullable Faction getAutoClaimFor() {
+    public @Nullable Faction autoClaim() {
         return autoClaimFor;
     }
 
     @Override
-    public void setAutoClaimFor(@Nullable Faction faction) {
+    public void autoClaim(@Nullable Faction faction) {
         this.autoClaimFor = faction;
         if (faction != null) {
             this.autoUnclaimFor = null;
@@ -207,22 +210,22 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public @Nullable String getAutoSetZone() {
+    public @Nullable String autoSetZone() {
         return this.autoSetZone;
     }
 
     @Override
-    public void setAutoSetZone(@Nullable String zone) {
+    public void autoSetZone(@Nullable String zone) {
         this.autoSetZone = zone;
     }
 
     @Override
-    public @Nullable Faction getAutoUnclaimFor() {
+    public @Nullable Faction autoUnclaim() {
         return autoUnclaimFor;
     }
 
     @Override
-    public void setAutoUnclaimFor(@Nullable Faction faction) {
+    public void autoUnclaim(@Nullable Faction faction) {
         this.autoUnclaimFor = faction;
         if (faction != null) {
             this.autoClaimFor = null;
@@ -231,13 +234,13 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public boolean isAdminBypassing() {
+    public boolean adminBypass() {
         return this.isAdminBypassing;
     }
 
     @Override
     public boolean isVanished() {
-        Player player = this.getPlayer();
+        Player player = this.asPlayer();
         if (FactionsPlugin.getInstance().getIntegrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isVanished(player)) {
             return true;
         }
@@ -252,20 +255,20 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public void setIsAdminBypassing(boolean val) {
+    public void adminBypass(boolean val) {
         this.isAdminBypassing = val;
-        if (this.getPlayer() instanceof Player player) {
+        if (this.asPlayer() instanceof Player player) {
             player.updateCommands();
         }
     }
 
     @Override
-    public void setChatTarget(ChatTarget chatTarget) {
+    public void chatTarget(ChatTarget chatTarget) {
         this.chatTarget = Objects.requireNonNull(chatTarget);
     }
 
     @Override
-    public ChatTarget getChatTarget() {
+    public ChatTarget chatTarget() {
         //noinspection ConstantValue
         if (this.chatTarget == null || this.factionId == Factions.ID_WILDERNESS ||
                 (this.chatTarget instanceof ChatTarget.Relation && !FactionsPlugin.getInstance().conf().factions().chat().internalChat().isRelationChatEnabled()) ||
@@ -276,37 +279,37 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public void setIgnoreAllianceChat(boolean ignore) {
+    public void ignoreAllianceChat(boolean ignore) {
         this.ignoreAllianceChat = ignore;
     }
 
     @Override
-    public boolean isIgnoreAllianceChat() {
+    public boolean ignoreAllianceChat() {
         return ignoreAllianceChat;
     }
 
     @Override
-    public void setIgnoreTruceChat(boolean ignore) {
+    public void ignoreTruceChat(boolean ignore) {
         this.ignoreTruceChat = ignore;
     }
 
     @Override
-    public boolean isIgnoreTruceChat() {
+    public boolean ignoreTruceChat() {
         return ignoreTruceChat;
     }
 
     @Override
-    public void setSpyingChat(boolean chatSpying) {
+    public void spyingChat(boolean chatSpying) {
         this.spyingChat = chatSpying;
     }
 
     @Override
-    public boolean isSpyingChat() {
+    public boolean spyingChat() {
         return spyingChat;
     }
 
     @Override
-    public OfflinePlayer getOfflinePlayer() {
+    public OfflinePlayer asOfflinePlayer() {
         if (this.offlinePlayer == null) {
             this.offlinePlayer = Bukkit.getPlayer(this.id);
             if (this.offlinePlayer == null) {
@@ -316,7 +319,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         return this.offlinePlayer;
     }
 
-    @Override
     public void setOfflinePlayer(@Nullable Player player) {
         this.offlinePlayer = player;
     }
@@ -352,7 +354,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         // clean up any territory ownership in old faction, if there is one
         Faction currentFaction = Factions.factions().get(this.factionId);
         if (currentFaction != null) {
-            currentFaction.removeFPlayer(this);
+            ((MemoryFaction) currentFaction).removeMember(this);
         }
 
         this.factionId = Factions.ID_WILDERNESS; // The default neutral faction
@@ -362,36 +364,28 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.autoUnclaimFor = null;
         this.autoSetZone = null;
 
-        if (updateCommands && this.getPlayer() instanceof Player player) {
+        if (updateCommands && this.asPlayer() instanceof Player player) {
             player.updateCommands();
         }
     }
 
     @Override
-    public long getLastLoginTime() {
+    public long lastLogin() {
         return lastLoginTime;
     }
 
     @Override
-    public void setLastLoginTime(long lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-        if (FactionsPlugin.getInstance().conf().factions().pvp().getNoPVPDamageToOthersForXSecondsAfterLogin() > 0) {
-            this.loginPvpDisabled = true;
-        }
-    }
-
-    @Override
-    public boolean isMapAutoUpdating() {
+    public boolean mapAutoUpdating() {
         return mapAutoUpdating;
     }
 
     @Override
-    public void setMapAutoUpdating(boolean mapAutoUpdating) {
+    public void mapAutoUpdating(boolean mapAutoUpdating) {
         this.mapAutoUpdating = mapAutoUpdating;
     }
 
     @Override
-    public boolean hasLoginPvpDisabled() {
+    public boolean loginPVPDisabled() {
         if (!loginPvpDisabled) {
             return false;
         }
@@ -403,12 +397,12 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public FLocation getLastStoodAt() {
+    public FLocation lastStoodAt() {
         return this.lastStoodAt;
     }
 
     @Override
-    public void setLastStoodAt(FLocation flocation) {
+    public void lastStoodAt(FLocation flocation) {
         this.lastStoodAt = flocation;
     }
 
@@ -419,22 +413,17 @@ public abstract class MemoryFPlayer implements FPlayer {
     // Base:
 
     @Override
-    public String getTitle() {
+    public String title() {
         return this.hasFaction() ? title : TL.NOFACTION_PREFIX.toString();
     }
 
     @Override
-    public void setTitle(CommandSender sender, String title) {
-        // Check if the setter has it.
-        if (sender.hasPermission(Permission.TITLE_COLOR.node)) {
-            title = ChatColor.translateAlternateColorCodes('&', title);
-        }
-
+    public void title(String title) {
         this.title = title;
     }
 
     @Override
-    public String getName() {
+    public String name() {
         //noinspection ConstantValue
         if (this.name == null) {
             this.name = this.id.toString();
@@ -449,11 +438,11 @@ public abstract class MemoryFPlayer implements FPlayer {
     public void setName(String name) {
         if (!name.equalsIgnoreCase(this.name)) {
             for (FPlayer fplayer : FPlayers.fPlayers().all()) {
-                if (fplayer.getName() == null) {
+                if (fplayer.name() == null) {
                     continue;
                 }
-                if (fplayer.getName().equalsIgnoreCase(name)) {
-                    UUID u = fplayer.getUniqueId();
+                if (fplayer.name().equalsIgnoreCase(name)) {
+                    UUID u = fplayer.uniqueId();
                     String uuidName = u.toString();
                     ((MemoryFPlayer) fplayer).name = uuidName; // Done this way to avoid loop
                     if (u.version() != 4) {
@@ -471,7 +460,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                                     @Override
                                     public void run() {
                                         //noinspection ConstantValue
-                                        if (newName != null && fplayer.getName().equals(uuidName)) {
+                                        if (newName != null && fplayer.name().equals(uuidName)) {
                                             ((MemoryFPlayer) fplayer).setName(newName);
                                         }
                                     }
@@ -486,76 +475,56 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.name = name;
     }
 
-    @Override
-    public String getTag() {
-        return this.hasFaction() ? this.getFaction().getTag() : "";
+    public String tagOrEmpty() {
+        return this.hasFaction() ? this.faction().tag() : "";
     }
 
     // Base concatenations:
 
-    @Override
-    public String getNameAndSomething(String something) {
+    public String nameAndSomething(String something) {
         String ret = this.role.getPrefix();
         if (!something.isEmpty()) {
             ret += something + " ";
         }
-        ret += this.getName();
+        ret += this.name();
         return ret;
     }
 
     @Override
-    public String getNameAndTitle() {
-        return this.getNameAndSomething(this.getTitle());
+    public String nameWithTitle() {
+        return this.nameAndSomething(this.title());
     }
 
     @Override
-    public String getNameAndTag() {
-        return this.getNameAndSomething(this.getTag());
-    }
-
-    // Colored concatenations:
-    // These are used in information messages
-
-    @Override
-    public String getNameAndTitle(@Nullable Faction faction) {
-        return this.getColorStringTo(faction) + this.getNameAndTitle();
-    }
-
-    @Override
-    public String getNameAndTitle(@Nullable FPlayer fplayer) {
-        return this.getColorStringTo(fplayer) + this.getNameAndTitle();
+    public String nameWithTag() {
+        return this.nameAndSomething(this.tagOrEmpty());
     }
 
     // Chat Tag:
     // These are injected into the format of global chat messages.
 
     @Override
-    public String getChatTag() {
-        return this.hasFaction() ? String.format(FactionsPlugin.getInstance().conf().factions().chat().getTagFormat(), this.getRole().getPrefix() + this.getTag()) : TL.NOFACTION_PREFIX.toString();
+    public String chatTag() {
+        return this.hasFaction() ? String.format(FactionsPlugin.getInstance().conf().factions().chat().getTagFormat(), this.role().getPrefix() + this.tagOrEmpty()) : TL.NOFACTION_PREFIX.toString();
     }
 
     // Colored Chat Tag
     @Override
-    public String getChatTag(@Nullable Faction faction) {
-        return this.hasFaction() ? this.getRelationTo(faction).chatColor() + getChatTag() : TL.NOFACTION_PREFIX.toString();
+    public String chatTag(@Nullable Participator participator) {
+        return this.hasFaction() ? this.relationTo(participator).chatColor() + chatTag() : TL.NOFACTION_PREFIX.toString();
     }
 
     @Override
-    public String getChatTag(@Nullable FPlayer fplayer) {
-        return this.hasFaction() ? this.getRelationTo(fplayer).chatColor() + getChatTag() : TL.NOFACTION_PREFIX.toString();
-    }
-
-    @Override
-    public int getKills() {
-        if (this.getPlayer() instanceof Player player) {
+    public int kills() {
+        if (this.asPlayer() instanceof Player player) {
             this.kills = player.getStatistic(Statistic.PLAYER_KILLS);
         }
         return this.kills;
     }
 
     @Override
-    public int getDeaths() {
-        if (this.getPlayer() instanceof Player player) {
+    public int deaths() {
+        if (this.asPlayer() instanceof Player player) {
             this.deaths = player.getStatistic(Statistic.DEATHS);
         }
         return this.deaths;
@@ -565,73 +534,73 @@ public abstract class MemoryFPlayer implements FPlayer {
     // Power
     //----------------------------------------------//
     @Override
-    public double getPower() {
+    public double power() {
         this.updatePower();
         return this.power;
     }
 
     @Override
-    public void setPower(double power) {
-        this.power = Math.min(Math.max(this.getPowerMin(), power), this.getPowerMax());
+    public void power(double power) {
+        this.power = Math.min(Math.max(this.powerMin(), power), this.powerMax());
     }
 
     @Override
     public void alterPower(double delta) {
         int start = (int) Math.round(this.power);
         this.power += delta;
-        if (this.power > this.getPowerMax()) {
-            this.power = this.getPowerMax();
-        } else if (this.power < this.getPowerMin()) {
-            this.power = this.getPowerMin();
+        if (this.power > this.powerMax()) {
+            this.power = this.powerMax();
+        } else if (this.power < this.powerMin()) {
+            this.power = this.powerMin();
         }
         int end = (int) Math.round(this.power);
         if (this.hasFaction() && end != start && FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
-            ((PowerControl) FactionsPlugin.getInstance().getLandRaidControl()).onPowerChange(this.getFaction(), start, end);
+            ((PowerControl) FactionsPlugin.getInstance().getLandRaidControl()).onPowerChange(this.faction(), start, end);
         }
     }
 
     @Override
-    public double getPowerMax() {
+    public double powerMax() {
         return FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getPlayerMax() + this.powerBoost;
     }
 
     @Override
-    public double getPowerMin() {
+    public double powerMin() {
         return FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getPlayerMin() + this.powerBoost;
     }
 
     @Override
-    public int getPowerRounded() {
-        return (int) Math.round(this.getPower());
+    public int powerRounded() {
+        return (int) Math.round(this.power());
     }
 
     @Override
-    public int getPowerMaxRounded() {
-        return (int) Math.round(this.getPowerMax());
+    public int powerMaxRounded() {
+        return (int) Math.round(this.powerMax());
     }
 
     @Override
-    public int getPowerMinRounded() {
-        return (int) Math.round(this.getPowerMin());
+    public int powerMinRounded() {
+        return (int) Math.round(this.powerMin());
     }
 
     @Override
     public void updatePower() {
-        if (this.isOffline()) {
+        if (!this.isOnline()) {
             losePowerFromBeingOffline();
             if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRegenOffline()) {
                 return;
             }
-        } else if (hasFaction() && getFaction().isPowerFrozen()) {
+        } else if (hasFaction() && faction().isPowerFrozen()) {
             return; // Don't let power regen if faction power is frozen.
-        } else if (FactionsPlugin.getInstance().conf().plugins().essentialsX().isPreventRegenWhileAfk() && Essentials.isAfk(this.getPlayer())) {
+        } else if (FactionsPlugin.getInstance().conf().plugins().essentialsX().isPreventRegenWhileAfk() && Essentials.isAfk(this.asPlayer())) {
             return;
         }
         long now = System.currentTimeMillis();
         long millisPassed = now - this.lastPowerUpdateTime;
         this.lastPowerUpdateTime = now;
 
-        Player thisPlayer = this.getPlayer();
+        Player thisPlayer = this.asPlayer();
         if (thisPlayer != null && thisPlayer.isDead()) {
             return;  // don't let dead players regain power until they respawn
         }
@@ -658,7 +627,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public void onDeath() {
         if (hasFaction()) {
-            getFaction().setLastDeath(System.currentTimeMillis());
+            faction().lastDeath(Instant.now());
         }
     }
 
@@ -667,41 +636,41 @@ public abstract class MemoryFPlayer implements FPlayer {
     //----------------------------------------------//
     @Override
     public boolean isInOwnTerritory() {
-        return getStandingInFaction() == this.getFaction();
+        return getStandingInFaction() == this.faction();
     }
 
     @Override
     public boolean isInOthersTerritory() {
         Faction factionHere = getStandingInFaction();
-        return factionHere.isNormal() && factionHere != this.getFaction();
+        return factionHere.isNormal() && factionHere != this.faction();
     }
 
     @Override
     public boolean isInAllyTerritory() {
-        return getStandingInFaction().getRelationTo(this).isAlly();
+        return getStandingInFaction().relationTo(this).isAlly();
     }
 
     @Override
     public boolean isInNeutralTerritory() {
-        return getStandingInFaction().getRelationTo(this).isNeutral();
+        return getStandingInFaction().relationTo(this).isNeutral();
     }
 
     @Override
     public boolean isInEnemyTerritory() {
-        return getStandingInFaction().getRelationTo(this).isEnemy();
+        return getStandingInFaction().relationTo(this).isEnemy();
     }
 
     private Faction getStandingInFaction() {
-        Player player = this.getPlayer();
+        Player player = this.asPlayer();
         return Board.board().factionAt(player == null ? this.lastStoodAt : new FLocation(player));
     }
 
     @Override
     public void sendFactionHereMessage(Faction from) {
-        Faction toShow = Board.board().factionAt(getLastStoodAt());
+        Faction toShow = Board.board().factionAt(lastStoodAt());
         boolean showTitle = FactionsPlugin.getInstance().conf().factions().enterTitles().isEnabled();
         boolean showChat = true;
-        Player player = getPlayer();
+        Player player = asPlayer();
 
         if (showTitle && player != null) {
             int in = FactionsPlugin.getInstance().conf().factions().enterTitles().getFadeIn();
@@ -721,7 +690,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             showChat = FactionsPlugin.getInstance().conf().scoreboard().info().isAlsoSendChat();
         }
         if (showChat) {
-            this.sendMessage(AbstractFactionsPlugin.getInstance().txt().parse(TL.FACTION_LEAVE.format(from.getTag(this), toShow.getTag(this))));
+            this.sendMessage(AbstractFactionsPlugin.getInstance().txt().parse(TL.FACTION_LEAVE.format(from.tagString(this), toShow.tagString(this))));
         }
     }
 
@@ -741,18 +710,18 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public void setShowScoreboard(boolean show) {
+    public void showScoreboard(boolean show) {
         this.showScoreboard = show;
     }
 
     @Override
     public void leave(boolean makePay) {
-        Faction myFaction = this.getFaction();
-        boolean econMakePay = makePay && Econ.shouldBeUsed() && !this.isAdminBypassing();
+        Faction myFaction = this.faction();
+        boolean econMakePay = makePay && Econ.shouldBeUsed() && !this.adminBypass();
 
-        boolean perm = myFaction.isPermanent();
+        boolean perm = myFaction.permanent();
 
-        if (!perm && this.getRole() == Role.ADMIN && myFaction.getFPlayers().size() > 1) {
+        if (!perm && this.role() == Role.ADMIN && myFaction.members().size() > 1) {
             msg(TL.LEAVE_PASSADMIN);
             return;
         }
@@ -778,7 +747,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         // Am I the last one in the faction?
-        if (myFaction.getFPlayers().size() == 1) {
+        if (myFaction.members().size() == 1) {
             // Transfer all money
             if (Econ.shouldBeUsed() && FactionsPlugin.getInstance().conf().economy().isBankEnabled()) {
                 if (!perm || FactionsPlugin.getInstance().conf().economy().isBankPermanentFactionSendBalanceToLastLeaver()) {
@@ -790,29 +759,28 @@ public abstract class MemoryFPlayer implements FPlayer {
                         String amountString = Econ.moneyString(amount);
                         this.msg(TL.COMMAND_DISBAND_HOLDINGS, amountString);
                         //TODO: Format this correctly and translate
-                        FactionsPlugin.getInstance().log(this.getName() + " has been given bank holdings of " + amountString + " from disbanding " + myFaction.getTag() + ".");
+                        FactionsPlugin.getInstance().log(this.name() + " has been given bank holdings of " + amountString + " from disbanding " + myFaction.tag() + ".");
                     }
                 }
             }
         }
 
         if (myFaction.isNormal()) {
-            for (FPlayer fplayer : myFaction.getFPlayersWhereOnline(true)) {
+            for (FPlayer fplayer : myFaction.membersOnline(true)) {
                 fplayer.msg(TL.LEAVE_LEFT, this.describeTo(fplayer, true), myFaction.describeTo(fplayer));
             }
 
             if (FactionsPlugin.getInstance().conf().logging().isFactionLeave()) {
-                FactionsPlugin.getInstance().log(TL.LEAVE_LEFT.format(this.getName(), myFaction.getTag()));
+                FactionsPlugin.getInstance().log(TL.LEAVE_LEFT.format(this.name(), myFaction.tag()));
             }
         }
 
-        myFaction.removeAnnouncements(this);
         this.resetFactionData(true);
         if (FactionsPlugin.getInstance().conf().commands().fly().isEnable()) {
-            setFlying(false, false);
+            flying(false, false);
         }
 
-        if (myFaction.isNormal() && !perm && myFaction.getFPlayers().isEmpty()) {
+        if (myFaction.isNormal() && !perm && myFaction.members().isEmpty()) {
             // Remove this faction
             for (FPlayer fplayer : FPlayers.fPlayers().online()) {
                 fplayer.msg(TL.LEAVE_DISBANDED, myFaction.describeTo(fplayer, true));
@@ -821,7 +789,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             AbstractFactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(myFaction));
             Factions.factions().remove(myFaction);
             if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
-                FactionsPlugin.getInstance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.getTag(), "" + myFaction.getId(), this.getName()));
+                FactionsPlugin.getInstance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.tag(), "" + myFaction.id(), this.name()));
             }
         }
     }
@@ -829,7 +797,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public void attemptAutoSetZone(FLocation flocation) {
         if (this.hasFaction() && this.autoSetZone != null) {
-            Faction faction = this.getFaction();
+            Faction faction = this.faction();
             Faction.Zone zone = faction.zones().get(this.autoSetZone);
             if (zone == null) {
                 this.autoSetZone = null; // TODO should we warn about this?
@@ -847,24 +815,24 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public boolean canClaimForFaction(Faction forFaction) {
-        Player player = this.getPlayer();
+        Player player = this.asPlayer();
         if (player == null) {
             return false;
         }
-        return this.isAdminBypassing() || !forFaction.isWilderness() && (forFaction == this.getFaction() && this.getFaction().hasAccess(this, PermissibleActions.TERRITORY, null)) || (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(player)) || (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(player));
+        return this.adminBypass() || !forFaction.isWilderness() && (forFaction == this.faction() && this.faction().hasAccess(this, PermissibleActions.TERRITORY, null)) || (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(player)) || (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(player));
     }
 
     @Override
     public boolean canClaimForFactionAtLocation(Faction forFaction, FLocation flocation, boolean notifyFailure) {
-        Player player = this.getPlayer();
+        Player player = this.asPlayer();
         if (player == null) {
             return false;
         }
         AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
         String denyReason = null;
-        Faction myFaction = getFaction();
+        Faction myFaction = faction();
         Faction currentFaction = Board.board().factionAt(flocation);
-        int ownedLand = forFaction.getLandRounded();
+        int ownedLand = forFaction.claimCount();
         int factionBuffer = plugin.conf().factions().claims().getBufferZone();
         int worldBuffer = plugin.conf().worldBorder().getBuffer();
 
@@ -874,7 +842,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (plugin.conf().factions().claims().getWorldsNoClaiming().contains(flocation.worldName())) {
             // Cannot claim in this world
             denyReason = plugin.txt().parse(TL.CLAIM_DISABLED.toString());
-        } else if (this.isAdminBypassing()) {
+        } else if (this.adminBypass()) {
             // Admin bypass
             return true;
         } else if (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(player)) {
@@ -889,7 +857,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (forFaction == currentFaction) {
             // Already owned by this faction, nitwit
             denyReason = plugin.txt().parse(TL.CLAIM_ALREADYOWN.toString(), forFaction.describeTo(this, true));
-        } else if (forFaction.getFPlayers().size() < plugin.conf().factions().claims().getRequireMinFactionMembers()) {
+        } else if (forFaction.members().size() < plugin.conf().factions().claims().getRequireMinFactionMembers()) {
             // Need more members in order to claim land
             denyReason = plugin.txt().parse(TL.CLAIM_MEMBERS.toString(), plugin.conf().factions().claims().getRequireMinFactionMembers());
         } else if (currentFaction.isSafeZone()) {
@@ -898,7 +866,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (currentFaction.isWarZone()) {
             // Cannot claim warzone
             denyReason = plugin.txt().parse(TL.CLAIM_WARZONE.toString());
-        } else if (plugin.getLandRaidControl() instanceof PowerControl && ownedLand >= forFaction.getPower()) {
+        } else if (plugin.getLandRaidControl() instanceof PowerControl && ownedLand >= forFaction.power()) {
             // Already own at least as much land as power
             denyReason = plugin.txt().parse(TL.CLAIM_POWER.toString());
         } else if (plugin.getLandRaidControl() instanceof DTRControl && ownedLand >= plugin.getLandRaidControl().getLandLimit(forFaction)) {
@@ -907,10 +875,10 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (plugin.conf().factions().claims().getLandsMax() != 0 && ownedLand >= plugin.conf().factions().claims().getLandsMax() && forFaction.isNormal()) {
             // Land limit reached
             denyReason = plugin.txt().parse(TL.CLAIM_LIMIT.toString());
-        } else if (currentFaction.getRelationTo(forFaction) == Relation.ALLY) {
+        } else if (currentFaction.relationTo(forFaction) == Relation.ALLY) {
             // // Can't claim ally
             denyReason = plugin.txt().parse(TL.CLAIM_ALLY.toString());
-        } else if (plugin.conf().factions().claims().isMustBeConnected() && !this.isAdminBypassing() && myFaction.getLandRoundedInWorld(flocation.getWorld()) > 0 && Board.board().isDisconnectedLocation(flocation, myFaction) && (!plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction() || !currentFaction.isNormal())) {
+        } else if (plugin.conf().factions().claims().isMustBeConnected() && !this.adminBypass() && myFaction.claimCount(flocation.getWorld()) > 0 && Board.board().isDisconnectedLocation(flocation, myFaction) && (!plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction() || !currentFaction.isNormal())) {
             // Must be contiguous/connected
             if (plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction()) {
                 denyReason = plugin.txt().parse(TL.CLAIM_CONTIGIOUS.toString());
@@ -928,16 +896,16 @@ public abstract class MemoryFPlayer implements FPlayer {
                 denyReason = plugin.txt().parse(TL.CLAIM_OUTSIDEWORLDBORDER.toString());
             }
         } else if (currentFaction.isNormal()) {
-            if (myFaction.isPeaceful()) {
+            if (myFaction.peaceful()) {
                 // Cannot claim as peaceful
-                denyReason = plugin.txt().parse(TL.CLAIM_PEACEFUL.toString(), currentFaction.getTag(this));
-            } else if (currentFaction.isPeaceful()) {
+                denyReason = plugin.txt().parse(TL.CLAIM_PEACEFUL.toString(), currentFaction.tagString(this));
+            } else if (currentFaction.peaceful()) {
                 // Cannot claim from peaceful
-                denyReason = plugin.txt().parse(TL.CLAIM_PEACEFULTARGET.toString(), currentFaction.getTag(this));
+                denyReason = plugin.txt().parse(TL.CLAIM_PEACEFULTARGET.toString(), currentFaction.tagString(this));
             } else if (!currentFaction.hasLandInflation()) {
                 // Cannot claim other faction (perhaps based on power/land ratio)
                 // TODO more messages WARN current faction most importantly
-                denyReason = plugin.txt().parse(TL.CLAIM_THISISSPARTA.toString(), currentFaction.getTag(this));
+                denyReason = plugin.txt().parse(TL.CLAIM_THISISSPARTA.toString(), currentFaction.tagString(this));
             } else if (currentFaction.hasLandInflation() && !plugin.conf().factions().claims().isAllowOverClaim()) {
                 // deny over claim when it normally would be allowed.
                 denyReason = plugin.txt().parse(TL.CLAIM_OVERCLAIM_DISABLED.toString());
@@ -965,25 +933,25 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         Faction currentFaction = Board.board().factionAt(flocation);
 
-        int ownedLand = forFaction.getLandRounded();
+        int ownedLand = forFaction.claimCount();
 
         if (!this.canClaimForFactionAtLocation(forFaction, flocation, notifyFailure)) {
             return false;
         }
 
         // if economy is enabled and they're not on the bypass list, make sure they can pay
-        boolean mustPay = Econ.shouldBeUsed() && !this.isAdminBypassing() && !forFaction.isSafeZone() && !forFaction.isWarZone();
+        boolean mustPay = Econ.shouldBeUsed() && !this.adminBypass() && !forFaction.isSafeZone() && !forFaction.isWarZone();
         double cost = 0.0;
         Participator payee = null;
         if (mustPay) {
             cost = Econ.calculateClaimCost(ownedLand, currentFaction.isNormal());
 
-            if (FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee() != 0.0 && forFaction.getLandRoundedInWorld(flocation.getWorld()) > 0 && Board.board().isDisconnectedLocation(flocation, forFaction)) {
+            if (FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee() != 0.0 && forFaction.claimCount(flocation.getWorld()) > 0 && Board.board().isDisconnectedLocation(flocation, forFaction)) {
                 cost += FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee();
             }
 
-            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysLandCosts() && this.hasFaction() && this.getFaction().hasAccess(this, PermissibleActions.ECONOMY, null)) {
-                payee = this.getFaction();
+            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysLandCosts() && this.hasFaction() && this.faction().hasAccess(this, PermissibleActions.ECONOMY, null)) {
+                payee = this.faction();
             } else {
                 payee = this;
             }
@@ -1013,7 +981,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         // announce success
         Set<FPlayer> informTheseFPlayers = new HashSet<>();
         informTheseFPlayers.add(this);
-        informTheseFPlayers.addAll(forFaction.getFPlayersWhereOnline(true));
+        informTheseFPlayers.addAll(forFaction.membersOnline(true));
         for (FPlayer fp : informTheseFPlayers) {
             fp.msg(TL.CLAIM_CLAIMED, this.describeTo(fp, true), forFaction.describeTo(fp), currentFaction.describeTo(fp));
         }
@@ -1021,7 +989,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         Board.board().claim(flocation, forFaction);
 
         if (FactionsPlugin.getInstance().conf().logging().isLandClaims()) {
-            FactionsPlugin.getInstance().log(TL.CLAIM_CLAIMEDLOG.toString(), this.getName(), flocation.getCoordString(), forFaction.getTag());
+            FactionsPlugin.getInstance().log(TL.CLAIM_CLAIMEDLOG.toString(), this.name(), flocation.getCoordString(), forFaction.tag());
         }
 
         return true;
@@ -1036,7 +1004,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             return false;
         }
 
-        Player player = this.getPlayer();
+        Player player = this.asPlayer();
         if (player == null) {
             return false;
         }
@@ -1047,7 +1015,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 this.msg(TL.COMMAND_UNCLAIM_SAFEZONE_SUCCESS);
 
                 if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-                    FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.getName(), flocation.getCoordString(), targetFaction.getTag()));
+                    FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.getCoordString(), targetFaction.tag()));
                 }
                 return true;
             } else {
@@ -1062,7 +1030,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 this.msg(TL.COMMAND_UNCLAIM_WARZONE_SUCCESS);
 
                 if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-                    FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.getName(), flocation.getCoordString(), targetFaction.getTag()));
+                    FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.getCoordString(), targetFaction.tag()));
                 }
                 return true;
             } else {
@@ -1073,7 +1041,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             }
         }
 
-        if (this.isAdminBypassing()) {
+        if (this.adminBypass()) {
             LandUnclaimEvent unclaimEvent = new LandUnclaimEvent(flocation, targetFaction, this);
             Bukkit.getServer().getPluginManager().callEvent(unclaimEvent);
             if (unclaimEvent.isCancelled()) {
@@ -1086,7 +1054,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             this.msg(TL.COMMAND_UNCLAIM_UNCLAIMS);
 
             if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-                FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.getName(), flocation.getCoordString(), targetFaction.getTag()));
+                FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.getCoordString(), targetFaction.tag()));
             }
 
             return true;
@@ -1106,7 +1074,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             return false;
         }
 
-        if (this.getFaction() != targetFaction) {
+        if (this.faction() != targetFaction) {
             if (notifyFailure) {
                 this.msg(TL.COMMAND_UNCLAIM_WRONGFACTION);
             }
@@ -1120,10 +1088,10 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         if (Econ.shouldBeUsed()) {
-            double refund = Econ.calculateClaimRefund(this.getFaction().getLandRounded());
+            double refund = Econ.calculateClaimRefund(this.faction().claimCount());
 
             if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysLandCosts()) {
-                if (!Econ.modifyMoney(this.getFaction(), refund, TL.COMMAND_UNCLAIM_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIM_FORUNCLAIM.toString())) {
+                if (!Econ.modifyMoney(this.faction(), refund, TL.COMMAND_UNCLAIM_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIM_FORUNCLAIM.toString())) {
                     return false;
                 }
             } else {
@@ -1134,10 +1102,10 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         Board.board().unclaim(flocation);
-        this.getFaction().msg(TL.COMMAND_UNCLAIM_FACTIONUNCLAIMED, this.describeTo(this.getFaction(), true));
+        this.faction().msg(TL.COMMAND_UNCLAIM_FACTIONUNCLAIMED, this.describeTo(this.faction(), true));
 
         if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.getName(), flocation.getCoordString(), targetFaction.getTag()));
+            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.getCoordString(), targetFaction.tag()));
         }
 
         return true;
@@ -1146,8 +1114,8 @@ public abstract class MemoryFPlayer implements FPlayer {
     public boolean shouldBeSaved() {
         return this.hasFaction() ||
                 (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl &&
-                        (this.getPowerRounded() != FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getPlayerStarting() ||
-                                this.getPowerBoost() != 0));
+                        (this.powerRounded() != FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getPlayerStarting() ||
+                                this.powerBoost() != 0));
     }
 
     @Override
@@ -1156,53 +1124,41 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public @Nullable Player getPlayer() {
+    public @Nullable Player asPlayer() {
         return Bukkit.getPlayer(this.id);
     }
 
     @Override
     public boolean isOnline() {
-        Player player = this.getPlayer();
+        Player player = this.asPlayer();
         return player != null && WorldUtil.isEnabled(player.getWorld());
-    }
-
-    // make sure target player should be able to detect that this player is online
-    @Override
-    public boolean isOnlineAndVisibleTo(Player player) {
-        Player target = this.getPlayer();
-        return target != null && player.canSee(target) && WorldUtil.isEnabled(player.getWorld());
-    }
-
-    @Override
-    public boolean isOffline() {
-        return !isOnline();
     }
 
     @Override
     public void flightCheck() {
-        if (FactionsPlugin.getInstance().conf().commands().fly().isEnable() && !this.isAdminBypassing()) {
-            boolean canFly = this.canFlyAtLocation(this.getLastStoodAt());
-            if (this.isFlying() && !canFly) {
-                this.setFlying(false, false);
-            } else if (this.isAutoFlying() && !this.isFlying() && canFly) {
-                this.setFlying(true);
+        if (FactionsPlugin.getInstance().conf().commands().fly().isEnable() && !this.adminBypass()) {
+            boolean canFly = this.canFlyAtLocation(this.lastStoodAt());
+            if (this.flying() && !canFly) {
+                this.flying(false, false);
+            } else if (this.autoFlying() && !this.flying() && canFly) {
+                this.flying(true);
             }
         }
     }
 
     @Override
-    public boolean isFlying() {
+    public boolean flying() {
         return isFlying;
     }
 
     @Override
-    public void setFlying(boolean fly) {
-        setFlying(fly, false);
+    public void flying(boolean fly) {
+        flying(fly, false);
     }
 
     @Override
-    public void setFlying(boolean fly, boolean damage) {
-        Player player = getPlayer();
+    public void flying(boolean fly, boolean damage) {
+        Player player = asPlayer();
         if (player != null) {
             player.setAllowFlight(fly);
             player.setFlying(fly);
@@ -1222,11 +1178,11 @@ public abstract class MemoryFPlayer implements FPlayer {
             // Otherwise, start a timer and have this cancel after a few seconds.
             // Short task so we're just doing it in method. Not clean but eh.
             if (cooldown > 0) {
-                setTakeFallDamage(false);
+                takeFallDamage(false);
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        setTakeFallDamage(true);
+                        takeFallDamage(true);
                     }
                 }.runTaskLater(AbstractFactionsPlugin.getInstance(), 20L * cooldown);
             }
@@ -1236,24 +1192,19 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public boolean isAutoFlying() {
+    public boolean autoFlying() {
         return isAutoFlying;
     }
 
     @Override
-    public void setAutoFlying(boolean autoFly) {
+    public void autoFlying(boolean autoFly) {
         msg(TL.COMMAND_FLY_AUTO, autoFly ? "enabled" : "disabled");
         this.isAutoFlying = autoFly;
     }
 
     @Override
-    public boolean canFlyAtLocation() {
-        return canFlyAtLocation(lastStoodAt);
-    }
-
-    @Override
     public boolean canFlyAtLocation(FLocation location) {
-        Player player = this.getPlayer();
+        Player player = this.asPlayer();
         if (player == null) {
             return false;
         }
@@ -1275,51 +1226,51 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public boolean shouldTakeFallDamage() {
+    public boolean takeFallDamage() {
         return this.shouldTakeFallDamage;
     }
 
     @Override
-    public void setTakeFallDamage(boolean fallDamage) {
+    public void takeFallDamage(boolean fallDamage) {
         this.shouldTakeFallDamage = fallDamage;
     }
 
     @Override
-    public boolean isSeeingChunk() {
+    public boolean seeChunk() {
         return seeingChunk;
     }
 
     @Override
-    public void setSeeingChunk(boolean seeingChunk) {
+    public void seeChunk(boolean seeingChunk) {
         this.seeingChunk = seeingChunk;
         FactionsPlugin.getInstance().getSeeChunkUtil().updatePlayerInfo(this.id, seeingChunk);
     }
 
     @Override
-    public boolean getFlyTrailsState() {
+    public boolean flyTrail() {
         return flyTrailsState;
     }
 
     @Override
-    public void setFlyTrailsState(boolean state) {
+    public void flyTrail(boolean state) {
         flyTrailsState = state;
         msg(TL.COMMAND_FLYTRAILS_CHANGE, state ? "enabled" : "disabled");
     }
 
     @Override
-    public @Nullable String getFlyTrailsEffect() {
+    public @Nullable String flyTrailEffect() {
         return flyTrailsEffect;
     }
 
     @Override
-    public void setFlyTrailsEffect(String effect) {
+    public void flyTrailEffect(String effect) {
         flyTrailsEffect = effect;
         msg(TL.COMMAND_FLYTRAILS_PARTICLE_CHANGE, effect);
     }
 
     @Override
     public void sendMessage(@NonNull Component component) {
-        if (this.getPlayer() instanceof Player player) {
+        if (this.asPlayer() instanceof Player player) {
             ComponentDispatcher.send(player, component);
         }
     }
@@ -1329,7 +1280,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (msg.contains("{null}")) {
             return; // user wants this message to not send
         }
-        Player player = this.getPlayer();
+        Player player = this.asPlayer();
         if (player == null) {
             return;
         }
@@ -1351,7 +1302,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public int getMapHeight() {
+    public int mapHeight() {
         if (this.mapHeight < 1) {
             this.mapHeight = FactionsPlugin.getInstance().conf().map().getHeight();
         }
@@ -1360,42 +1311,32 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public void setMapHeight(int height) {
+    public void mapHeight(int height) {
         this.mapHeight = Math.min(height, (FactionsPlugin.getInstance().conf().map().getHeight() * 2));
     }
 
     @Override
-    public UUID getUniqueId() {
+    public UUID uniqueId() {
         return id;
     }
 
     @Override
-    public void clearWarmup() {
+    public void cancelWarmup() {
         if (warmup != null) {
             Bukkit.getScheduler().cancelTask(warmupTask);
-            this.stopWarmup();
+            warmup = null;
         }
     }
 
     @Override
-    public void stopWarmup() {
-        warmup = null;
-    }
-
-    @Override
-    public boolean isWarmingUp() {
-        return warmup != null;
-    }
-
-    @Override
-    public WarmUpUtil.@Nullable Warmup getWarmupType() {
+    public WarmUpUtil.@Nullable Warmup warmup() {
         return warmup;
     }
 
     @Override
     public void addWarmup(WarmUpUtil.Warmup warmup, int taskId) {
         if (this.warmup != null) {
-            this.clearWarmup();
+            this.cancelWarmup();
         }
         this.warmup = warmup;
         this.warmupTask = taskId;

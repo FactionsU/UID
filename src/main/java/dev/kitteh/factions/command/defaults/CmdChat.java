@@ -57,7 +57,7 @@ public class CmdChat implements Cmd {
     private void handle(CommandContext<Sender> context, ChatTarget target) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
-        sender.setChatTarget(target);
+        sender.chatTarget(target);
 
         TL tl = switch (target) {
             case ChatTarget.Relation r ->

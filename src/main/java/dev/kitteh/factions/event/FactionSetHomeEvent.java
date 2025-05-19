@@ -11,7 +11,7 @@ public class FactionSetHomeEvent extends FactionPlayerEvent implements Cancellab
     private boolean cancelled;
 
     public FactionSetHomeEvent(FPlayer fPlayer, Location location) {
-        super(fPlayer.getFaction(), fPlayer);
+        super(fPlayer.faction(), fPlayer);
         this.location = location;
     }
 

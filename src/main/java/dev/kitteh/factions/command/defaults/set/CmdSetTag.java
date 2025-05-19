@@ -39,11 +39,10 @@ public class CmdSetTag implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
         String tag = context.get("tag");
 
-        // TODO does not first shouldCancel cover selfcase?
-        if (Factions.factions().get(tag) != null && !MiscUtil.getComparisonString(tag).equals(faction.getComparisonTag())) {
+        if (Factions.factions().get(tag) != null) {
             sender.msg(TL.COMMAND_TAG_TAKEN);
             return;
         }
@@ -71,20 +70,20 @@ public class CmdSetTag implements Cmd {
             return;
         }
 
-        String oldTag = faction.getTag();
-        faction.setTag(tag);
+        String oldTag = faction.tag();
+        faction.tag(tag);
 
         // Inform
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-            if (fplayer.getFaction() == faction) {
-                fplayer.msg(TL.COMMAND_TAG_FACTION, sender.describeTo(faction, true), faction.getTag(faction));
+            if (fplayer.faction() == faction) {
+                fplayer.msg(TL.COMMAND_TAG_FACTION, sender.describeTo(faction, true), faction.tagString(faction));
                 continue;
             }
 
             // Broadcast the tag change (if applicable)
             if (FactionsPlugin.getInstance().conf().factions().chat().isBroadcastTagChanges()) {
-                Faction fac = fplayer.getFaction();
-                fplayer.msg(TL.COMMAND_TAG_CHANGED, sender.getColorStringTo(fac) + oldTag, faction.getTag(fac));
+                Faction fac = fplayer.faction();
+                fplayer.msg(TL.COMMAND_TAG_CHANGED, sender.colorStringTo(fac) + oldTag, faction.tagString(fac));
             }
         }
 

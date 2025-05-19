@@ -28,8 +28,8 @@ public class CmdToggleLogins implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
-        boolean monitor = sender.isMonitoringJoins();
+        boolean monitor = sender.monitorJoins();
         sender.msg(TL.COMMAND_LOGINS_TOGGLE, String.valueOf(!monitor));
-        sender.setMonitorJoins(!monitor);
+        sender.monitorJoins(!monitor);
     }
 }

@@ -32,7 +32,7 @@ public class CmdSetDescription implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
         if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostDesc(), TL.COMMAND_DESCRIPTION_TOCHANGE, TL.COMMAND_DESCRIPTION_FORCHANGE)) {
@@ -48,15 +48,15 @@ public class CmdSetDescription implements Cmd {
             sender.msg(TL.COMMAND_DESCRIPTION_TOOLONG, String.valueOf(limit));
             return;
         }
-        faction.setDescription(desc);
+        faction.description(desc);
 
         if (!FactionsPlugin.getInstance().conf().factions().chat().isBroadcastDescriptionChanges()) {
             sender.msg(TL.COMMAND_DESCRIPTION_CHANGED, faction.describeTo(sender));
-            sender.sendMessage(faction.getDescription());
+            sender.sendMessage(faction.description());
             return;
         }
 
         sender.msg(TL.COMMAND_DESCRIPTION_CHANGES, faction.describeTo(sender));
-        sender.sendMessage(faction.getDescription());  // players can inject "&" or "`" or "<i>" or whatever in their description; &k is particularly interesting looking
+        sender.sendMessage(faction.description());  // players can inject "&" or "`" or "<i>" or whatever in their description; &k is particularly interesting looking
     }
 }

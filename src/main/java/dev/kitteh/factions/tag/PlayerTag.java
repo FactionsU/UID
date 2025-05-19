@@ -15,7 +15,7 @@ import java.util.function.Function;
 public enum PlayerTag implements Tag {
     GROUP("group", (fp) -> {
         if (fp.isOnline()) {
-            return AbstractFactionsPlugin.getInstance().getPrimaryGroup(fp.getPlayer());
+            return AbstractFactionsPlugin.getInstance().getPrimaryGroup(fp.asPlayer());
         } else {
             return "";
         }
@@ -24,30 +24,30 @@ public enum PlayerTag implements Tag {
         if (fp.isOnline() && !fp.isVanished()) {
             return ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString();
         }
-        long duration = Math.max(System.currentTimeMillis() - fp.getLastLoginTime(), FactionsPlugin.getInstance().conf().factions().other().getMinimumLastSeenTime() * 1000L);
+        long duration = Math.max(System.currentTimeMillis() - fp.lastLogin(), FactionsPlugin.getInstance().conf().factions().other().getMinimumLastSeenTime() * 1000L);
         String humanized = DurationFormatUtils.formatDurationWords(duration, true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
         return duration < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized;
     }),
     PLAYER_BALANCE("balance", (fp) -> Econ.isSetup() ? Econ.getFriendlyBalance(fp) : (Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance"))),
-    PLAYER_POWER("player-power", (fp) -> String.valueOf(fp.getPowerRounded())),
-    PLAYER_MAXPOWER("player-maxpower", (fp) -> String.valueOf(fp.getPowerMaxRounded())),
-    PLAYER_KILLS("player-kills", (fp) -> String.valueOf(fp.getKills())),
-    PLAYER_DEATHS("player-deaths", (fp) -> String.valueOf(fp.getDeaths())),
+    PLAYER_POWER("player-power", (fp) -> String.valueOf(fp.powerRounded())),
+    PLAYER_MAXPOWER("player-maxpower", (fp) -> String.valueOf(fp.powerMaxRounded())),
+    PLAYER_KILLS("player-kills", (fp) -> String.valueOf(fp.kills())),
+    PLAYER_DEATHS("player-deaths", (fp) -> String.valueOf(fp.deaths())),
     PLAYER_DISPLAYNAME("player-displayname", (fp) -> {
         if (fp.isOnline()) {
-            return fp.getPlayer().getDisplayName();
+            return fp.asPlayer().getDisplayName();
         } else {
-            return fp.getName();
+            return fp.name();
         }
     }),
-    PLAYER_NAME("name", FPlayer::getName),
-    PLAYER_ROLE("player-role-prefix", (fp) -> fp.hasFaction() ? fp.getRole().getPrefix() : ""),
+    PLAYER_NAME("name", FPlayer::name),
+    PLAYER_ROLE("player-role-prefix", (fp) -> fp.hasFaction() ? fp.role().getPrefix() : ""),
     TOTAL_ONLINE_VISIBLE("total-online-visible", (fp) -> {
         if (fp == null) {
             return String.valueOf(Bukkit.getOnlinePlayers().size());
         }
         int count = 0;
-        Player me = fp.getPlayer();
+        Player me = fp.asPlayer();
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (me.canSee(player)) {
                 count++;

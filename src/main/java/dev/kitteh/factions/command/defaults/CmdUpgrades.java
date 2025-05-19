@@ -49,7 +49,7 @@ public class CmdUpgrades implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         ChestGui gui = new ChestGui(6, ComponentHolder.of(Component.text("Upgrades")));
 
@@ -70,11 +70,11 @@ public class CmdUpgrades implements Cmd {
 
                     guiItem.setAction(e -> {
                         e.setCancelled(true);
-                        if (!sender.getFaction().hasAccess(sender, PermissibleActions.UPGRADE, null)) {
+                        if (!sender.faction().hasAccess(sender, PermissibleActions.UPGRADE, null)) {
                             return;
                         }
 
-                        int lvl = faction.getUpgradeLevel(upgrade);
+                        int lvl = faction.upgradeLevel(upgrade);
 
                         if (lvl == settings.maxLevel()) {
                             return;
@@ -97,7 +97,7 @@ public class CmdUpgrades implements Cmd {
                             ee.setCancelled(true);
 
                             if (context.sender().payForCommand(settings.costAt(lvl + 1).doubleValue(), TL.COMMAND_UPGRADES_TOUPGRADE, TL.COMMAND_UPGRADES_FORUPGRADE)) {
-                                faction.setUpgradeLevel(upgrade, lvl + 1);
+                                faction.upgradeLevel(upgrade, lvl + 1);
                                 guiItem.setItem(buildStack(settings, sender));
                                 gui.show(player);
                             } else {
@@ -180,7 +180,7 @@ public class CmdUpgrades implements Cmd {
     private ItemStack buildStack(UpgradeSettings settings, FPlayer sender) {
         Upgrade upgrade = settings.upgrade();
 
-        int lvl = sender.getFaction().getUpgradeLevel(upgrade);
+        int lvl = sender.faction().upgradeLevel(upgrade);
 
         ItemStack stack = new ItemStack(Material.STONE);
         ItemMeta meta = stack.getItemMeta();
@@ -195,7 +195,7 @@ public class CmdUpgrades implements Cmd {
         lore.add(" ");
         if (lvl < settings.maxLevel()) {
             lore.add("Upgrade available: Costs " + settings.costAt(lvl + 1));
-            if (sender.getFaction().hasAccess(sender, PermissibleActions.UPGRADE, null)) {
+            if (sender.faction().hasAccess(sender, PermissibleActions.UPGRADE, null)) {
                 lore.add("  Click to purchase!");
             } else {
                 lore.add("  You lack permission to purchase upgrades");

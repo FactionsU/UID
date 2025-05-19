@@ -27,7 +27,7 @@ public interface Sender {
     static Sender of(CommandSender sender) {
         if (sender instanceof org.bukkit.entity.Player player) {
             FPlayer fp = FPlayers.fPlayers().get(player);
-            return new Player(sender, player, fp, fp.getFaction());
+            return new Player(sender, player, fp, fp.faction());
         } else {
             return new Console(sender);
         }
@@ -56,11 +56,11 @@ public interface Sender {
     }
 
     default boolean isBypass() {
-        return this instanceof Console || this instanceof Player player && player.fPlayer.isAdminBypassing();
+        return this instanceof Console || this instanceof Player player && player.fPlayer.adminBypass();
     }
 
     default boolean isAtLeastRole(Role role) {
-        return this instanceof Player player && player.faction.isNormal() && player.fPlayer.getRole().isAtLeast(role);
+        return this instanceof Player player && player.faction.isNormal() && player.fPlayer.role().isAtLeast(role);
     }
 
     default void sendMessage(ComponentLike component) {
@@ -73,12 +73,12 @@ public interface Sender {
         }
         if (this instanceof Player player) {
             FPlayer fPlayer = player.fPlayer;
-            if (fPlayer.isAdminBypassing()) {
+            if (fPlayer.adminBypass()) {
                 return true;
             }
 
-            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.getFaction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.getLastStoodAt())) {
-                return Econ.modifyMoney(fPlayer.getFaction(), -cost, toDoThis.toString(), forDoingThis.toString());
+            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.faction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.lastStoodAt())) {
+                return Econ.modifyMoney(fPlayer.faction(), -cost, toDoThis.toString(), forDoingThis.toString());
             } else {
                 return Econ.modifyMoney(fPlayer, -cost, toDoThis.toString(), forDoingThis.toString());
             }
@@ -93,11 +93,11 @@ public interface Sender {
         }
         if (this instanceof Player player) {
             FPlayer fPlayer = player.fPlayer;
-            if (fPlayer.isAdminBypassing()) {
+            if (fPlayer.adminBypass()) {
                 return true;
             }
             if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction()) {
-                return Econ.hasAtLeast(fPlayer.getFaction(), cost, toDoThis.toString());
+                return Econ.hasAtLeast(fPlayer.faction(), cost, toDoThis.toString());
             } else {
                 return Econ.hasAtLeast(fPlayer, cost, toDoThis.toString());
             }

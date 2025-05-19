@@ -35,6 +35,6 @@ public class CmdTNT implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        context.sender().msg(TL.COMMAND_TNT_INFO_MESSAGE, ((Sender.Player) context.sender()).faction().getTNTBank());
+        context.sender().msg(TL.COMMAND_TNT_INFO_MESSAGE, ((Sender.Player) context.sender()).faction().tntBank());
     }
 }

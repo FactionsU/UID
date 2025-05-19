@@ -31,9 +31,9 @@ public class CmdSetBoom implements Cmd {
 
     private void handle(org.incendo.cloud.context.CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
-        if (!faction.isPeaceful()) {
+        if (!faction.peaceful()) {
             sender.msg(TL.COMMAND_BOOM_PEACEFULONLY);
             return;
         }
@@ -43,7 +43,7 @@ public class CmdSetBoom implements Cmd {
             return;
         }
 
-        faction.setPeacefulExplosionsEnabled(context.getOrDefault("state", !faction.isPeacefulExplosionsEnabled()));
+        faction.peacefulExplosionsEnabled(context.getOrDefault("state", !faction.peacefulExplosionsEnabled()));
 
         String enabled = faction.noExplosionsInTerritory() ? TL.GENERIC_DISABLED.toString() : TL.GENERIC_ENABLED.toString();
 

@@ -85,7 +85,7 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         }
         if (player != null) {
             FPlayer attacker = FPlayers.fPlayers().get(player);
-            if (attacker.hasLoginPvpDisabled()) {
+            if (attacker.loginPVPDisabled()) {
                 return false;
             }
 
@@ -109,10 +109,10 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         }
         FPlayer attack = FPlayers.fPlayers().get((Player) attacker);
         FPlayer defend = FPlayers.fPlayers().get((Player) entity);
-        if (attack.getFaction().isWilderness() || defend.getFaction().isWilderness()) {
+        if (attack.faction().isWilderness() || defend.faction().isWilderness()) {
             return false;
         }
-        return attack.getRelationTo(defend).isAtLeast(Relation.TRUCE);
+        return attack.relationTo(defend).isAtLeast(Relation.TRUCE);
     }
 
     @Override

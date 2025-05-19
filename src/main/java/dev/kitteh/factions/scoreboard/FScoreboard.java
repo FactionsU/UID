@@ -28,7 +28,7 @@ public class FScoreboard {
         fscoreboards.put(fplayer, fboard);
 
         if (fplayer.hasFaction()) {
-            FTeamWrapper.applyUpdates(fplayer.getFaction());
+            FTeamWrapper.applyUpdates(fplayer.faction());
         }
         FTeamWrapper.track(fboard);
     }
@@ -59,7 +59,7 @@ public class FScoreboard {
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.bufferedObjective = new BufferedObjective(scoreboard);
 
-        fplayer.getPlayer().setScoreboard(scoreboard);
+        fplayer.asPlayer().setScoreboard(scoreboard);
     }
 
     protected FPlayer getFPlayer() {

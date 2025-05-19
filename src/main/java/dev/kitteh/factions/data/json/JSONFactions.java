@@ -60,16 +60,16 @@ public final class JSONFactions extends MemoryFactions {
         if (factions != null) {
             List<JSONFaction> reRun = new ArrayList<>();
             factions.forEach(f -> {
-                if (f.getId() == Integer.MIN_VALUE) {
+                if (f.id() == Integer.MIN_VALUE) {
                     reRun.add(f);
                 } else {
-                    this.factions.put(f.getId(), f);
-                    this.updateNextIdForId(f.getId());
+                    this.factions.put(f.id(), f);
+                    this.updateNextIdForId(f.id());
                 }
             });
             reRun.forEach(f -> {
                 f.setId(this.nextId++);
-                this.factions.put(f.getId(), f);
+                this.factions.put(f.id(), f);
             });
         }
 
@@ -97,7 +97,7 @@ public final class JSONFactions extends MemoryFactions {
             }.getType());
             Faction storage = data.remove("```storage``");
             if (storage != null) {
-                this.nextId = Math.max(this.nextId, storage.getMaxVaults());
+                this.nextId = Math.max(this.nextId, storage.maxVaults());
             }
             for (Entry<String, JSONFaction> entry : data.entrySet()) {
                 String id = entry.getKey();

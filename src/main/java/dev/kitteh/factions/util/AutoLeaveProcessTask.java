@@ -19,27 +19,27 @@ public class AutoLeaveProcessTask extends AutoLeaveTask.AutoLeaveProcessor<FPlay
     public void go(MainConfig conf) {
         FPlayer fplayer = iterator.next();
 
-        if (fplayer.isOffline() && now - fplayer.getLastLoginTime() > toleranceMillis) {
-            if (fplayer.isAutoLeaveExempt()) {
-                FactionsPlugin.getInstance().debug(Level.INFO, fplayer.getName() + " was going to be auto-removed but was set not to.");
+        if (!fplayer.isOnline() && now - fplayer.lastLogin() > toleranceMillis) {
+            if (fplayer.autoLeaveExempt()) {
+                FactionsPlugin.getInstance().debug(Level.INFO, fplayer.name() + " was going to be auto-removed but was set not to.");
                 return;
             }
             if ((conf.logging().isFactionLeave() || conf.logging().isFactionKick()) && (fplayer.hasFaction() || conf.factions().other().isAutoLeaveDeleteFPlayerData())) {
-                FactionsPlugin.getInstance().log("Player " + fplayer.getName() + " was auto-removed due to inactivity.");
+                FactionsPlugin.getInstance().log("Player " + fplayer.name() + " was auto-removed due to inactivity.");
             }
 
             // if player is faction admin, sort out the faction since he's going away
-            if (fplayer.getRole() == Role.ADMIN) {
-                Faction faction = fplayer.getFaction();
+            if (fplayer.role() == Role.ADMIN) {
+                Faction faction = fplayer.faction();
                 if (faction != null) {
-                    fplayer.getFaction().promoteNewLeader();
+                    fplayer.faction().promoteNewLeader();
                 }
             }
 
             fplayer.leave(false);
             iterator.remove();  // go ahead and remove this list's link to the FPlayer object
             if (conf.factions().other().isAutoLeaveDeleteFPlayerData()) {
-                fplayer.remove();
+                fplayer.eraseData();
             }
         }
     }

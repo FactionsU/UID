@@ -61,7 +61,7 @@ public class CmdMoneySend implements Cmd {
         }
 
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction from = sender.getFaction();
+        Faction from = sender.faction();
 
         Faction to = context.get("faction");
 
@@ -83,14 +83,14 @@ public class CmdMoneySend implements Cmd {
         }
 
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction from = sender.getFaction();
+        Faction from = sender.faction();
 
         FPlayer to = context.get("player");
 
         boolean success = Econ.transferMoney(sender, from, to, amount);
 
         if (success && FactionsPlugin.getInstance().conf().logging().isMoneyTransactions()) {
-            FactionsPlugin.getInstance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYTRANSFERFP_TRANSFER.toString(), sender.getName(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
+            FactionsPlugin.getInstance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYTRANSFERFP_TRANSFER.toString(), sender.name(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
         }
     }
 }

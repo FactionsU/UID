@@ -34,10 +34,10 @@ public class CmdNear implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         int radius = FactionsPlugin.getInstance().conf().commands().near().getRadius();
-        Set<FPlayer> onlineMembers = faction.getFPlayersWhereOnline(true, sender);
+        Set<FPlayer> onlineMembers = faction.membersOnline(true, sender);
         List<FPlayer> nearbyMembers = new ArrayList<>();
 
         int radiusSquared = radius * radius;
@@ -48,7 +48,7 @@ public class CmdNear implements Cmd {
                 continue;
             }
 
-            player.getPlayer().getLocation(cur);
+            player.asPlayer().getLocation(cur);
             if (cur.getWorld().getUID().equals(loc.getWorld().getUID()) && cur.distanceSquared(loc) <= radiusSquared) {
                 nearbyMembers.add(player);
             }
@@ -69,12 +69,12 @@ public class CmdNear implements Cmd {
 
     private String parsePlaceholders(FPlayer user, FPlayer target, String string) {
         string = Tag.parsePlain(target, string);
-        string = Tag.parsePlaceholders(target.getPlayer(), string);
-        string = string.replace("{role}", target.getRole().toString());
-        string = string.replace("{role-prefix}", target.getRole().getPrefix());
+        string = Tag.parsePlaceholders(target.asPlayer(), string);
+        string = string.replace("{role}", target.role().toString());
+        string = string.replace("{role-prefix}", target.role().getPrefix());
         // Only run distance calculation if needed
         if (string.contains("{distance}")) {
-            double distance = Math.round(user.getPlayer().getLocation().distance(target.getPlayer().getLocation()));
+            double distance = Math.round(user.asPlayer().getLocation().distance(target.asPlayer().getLocation()));
             string = string.replace("{distance}", distance + "");
         }
         return string;

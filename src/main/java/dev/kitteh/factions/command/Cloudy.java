@@ -42,7 +42,7 @@ public class Cloudy {
     }
 
     public static PredicatePermission<Sender> hasSelfFactionPerms(PermissibleAction action) {
-        return PredicatePermission.of(s -> s instanceof Sender.Player player && player.faction().isNormal() && player.faction().hasAccess(player.fPlayer(), action, player.fPlayer().getLastStoodAt()));
+        return PredicatePermission.of(s -> s instanceof Sender.Player player && player.faction().isNormal() && player.faction().hasAccess(player.fPlayer(), action, player.fPlayer().lastStoodAt()));
     }
 
     public static Description desc(TL tl) {

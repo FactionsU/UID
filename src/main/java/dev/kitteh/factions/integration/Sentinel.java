@@ -81,11 +81,11 @@ public class Sentinel extends SentinelIntegration {
         if (faction == null) {
             return false;
         }
-        Faction plf = FPlayers.fPlayers().get((Player) ent).getFaction();
+        Faction plf = FPlayers.fPlayers().get((Player) ent).faction();
         return switch (prefix) {
             case TARGET_FACTIONS -> faction == plf;
-            case TARGET_FACTIONS_ENEMY -> faction.getRelationTo(plf).equals(Relation.ENEMY);
-            case TARGET_FACTIONS_ALLY -> faction.getRelationTo(plf).equals(Relation.ALLY);
+            case TARGET_FACTIONS_ENEMY -> faction.relationTo(plf).equals(Relation.ENEMY);
+            case TARGET_FACTIONS_ALLY -> faction.relationTo(plf).equals(Relation.ALLY);
             default -> false;
         };
     }

@@ -139,7 +139,7 @@ public class CmdTicketInfo implements Cmd {
         info.serverName = Bukkit.getName();
         info.serverVersion = Bukkit.getVersion();
         info.userName = context.sender().sender().getName();
-        info.userUUID = context.sender().fPlayerOrNull() instanceof FPlayer fp ? fp.getUniqueId() : null;
+        info.userUUID = context.sender().fPlayerOrNull() instanceof FPlayer fp ? fp.uniqueId() : null;
         try {
             info.num = FactionsPlugin.class.getDeclaredMethods().length;
         } catch (Throwable ignored) {

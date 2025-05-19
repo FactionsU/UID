@@ -40,11 +40,11 @@ public class DTRControl implements LandRaidControl {
 
     @Override
     public boolean isRaidable(Faction faction) {
-        return this.isRaidable(faction, faction.getDTR());
+        return this.isRaidable(faction, faction.dtr());
     }
 
     public boolean isRaidable(Faction faction, double dtr) {
-        return !faction.isPeaceful() && dtr <= 0;
+        return !faction.peaceful() && dtr <= 0;
     }
 
     @Override
@@ -55,16 +55,16 @@ public class DTRControl implements LandRaidControl {
     @Override
     public int getLandLimit(Faction faction) {
         int boost = 0;
-        int level = faction.getUpgradeLevel(Upgrades.DTR_CLAIM_LIMIT);
+        int level = faction.upgradeLevel(Upgrades.DTR_CLAIM_LIMIT);
         if (level > 0) {
             boost = Universe.universe().upgradeSettings(Upgrades.DTR_CLAIM_LIMIT).costAt(level).intValue();
         }
-        return boost + conf().getLandStarting() + (faction.getFPlayers().size() * conf().getLandPerPlayer());
+        return boost + conf().getLandStarting() + (faction.members().size() * conf().getLandPerPlayer());
     }
 
     @Override
     public boolean canJoinFaction(Faction faction, FPlayer player) {
-        if (faction.isFrozenDTR() && conf().isFreezePreventsJoin()) {
+        if (faction.dtrFrozen() && conf().isFreezePreventsJoin()) {
             player.msg(TL.DTR_CANNOT_FROZEN);
             return false;
         }
@@ -73,7 +73,7 @@ public class DTRControl implements LandRaidControl {
 
     @Override
     public boolean canLeaveFaction(FPlayer player) {
-        if (player.getFaction().isFrozenDTR() && conf().isFreezePreventsLeave()) {
+        if (player.faction().dtrFrozen() && conf().isFreezePreventsLeave()) {
             player.msg(TL.DTR_CANNOT_FROZEN);
             return false;
         }
@@ -82,7 +82,7 @@ public class DTRControl implements LandRaidControl {
 
     @Override
     public boolean canDisbandFaction(Faction faction, FPlayer playerAttempting) {
-        if (faction.isFrozenDTR() && conf().isFreezePreventsDisband()) {
+        if (faction.dtrFrozen() && conf().isFreezePreventsDisband()) {
             playerAttempting.msg(TL.DTR_CANNOT_FROZEN);
             return false;
         }
@@ -91,15 +91,15 @@ public class DTRControl implements LandRaidControl {
 
     @Override
     public boolean canKick(FPlayer toKick, FPlayer playerAttempting) {
-        if (toKick.getFaction().isNormal()) {
-            Faction faction = toKick.getFaction();
+        if (toKick.faction().isNormal()) {
+            Faction faction = toKick.faction();
             if (!FactionsPlugin.getInstance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
-                    Board.board().factionAt(toKick.getLastStoodAt()).getRelationTo(faction) == Relation.ENEMY) {
+                    Board.board().factionAt(toKick.lastStoodAt()).relationTo(faction) == Relation.ENEMY) {
                 playerAttempting.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
                 return false;
             }
-            if (faction.isFrozenDTR() && conf().getFreezeKickPenalty() > 0) {
-                faction.setDTR(Math.max(conf().getMinDTR(), faction.getDTR() - conf().getFreezeKickPenalty()));
+            if (faction.dtrFrozen() && conf().getFreezeKickPenalty() > 0) {
+                faction.dtr(Math.max(conf().getMinDTR(), faction.dtr() - conf().getFreezeKickPenalty()));
                 playerAttempting.msg(TL.DTR_KICK_PENALTY);
             }
         }
@@ -113,15 +113,15 @@ public class DTRControl implements LandRaidControl {
 
     @Override
     public void update(FPlayer player) {
-        if (player.getFaction().isNormal()) {
-            this.updateDTR(player.getFaction());
+        if (player.faction().isNormal()) {
+            this.updateDTR(player.faction());
         }
     }
 
     @Override
     public void onDeath(Player player) {
         FPlayer fplayer = FPlayers.fPlayers().get(player);
-        Faction faction = fplayer.getFaction();
+        Faction faction = fplayer.faction();
         if (!faction.isNormal()) {
             return;
         }
@@ -135,21 +135,21 @@ public class DTRControl implements LandRaidControl {
         Bukkit.getPluginManager().callEvent(dtrLossEvent);
 
         if (!dtrLossEvent.isCancelled()) {
-            double startingDTR = faction.getDTR();
-            faction.setDTR(Math.max(conf().getMinDTR(), faction.getDTR() - conf().getLossPerDeath(player.getWorld())));
-            double diff = faction.getDTR() - startingDTR;
+            double startingDTR = faction.dtr();
+            faction.dtr(Math.max(conf().getMinDTR(), faction.dtr() - conf().getLossPerDeath(player.getWorld())));
+            double diff = faction.dtr() - startingDTR;
             double vamp = conf().getVampirism();
             if (player.getKiller() != null && vamp != 0D && diff > 0) {
                 FPlayer fKiller = FPlayers.fPlayers().get(player.getKiller());
-                if (faction != fKiller.getFaction()) {
+                if (faction != fKiller.faction()) {
                     double change = vamp * diff;
-                    double startingOther = fKiller.getFaction().getDTR();
-                    fKiller.getFaction().setDTR(Math.min(conf().getMaxDTR(), faction.getDTR() + change));
-                    double killDiff = fKiller.getFaction().getDTR() - startingOther;
-                    fKiller.msg(TL.DTR_VAMPIRISM_GAIN, killDiff, fplayer.describeTo(fKiller), fKiller.getFaction().getDTR());
+                    double startingOther = fKiller.faction().dtr();
+                    fKiller.faction().dtr(Math.min(conf().getMaxDTR(), faction.dtr() + change));
+                    double killDiff = fKiller.faction().dtr() - startingOther;
+                    fKiller.msg(TL.DTR_VAMPIRISM_GAIN, killDiff, fplayer.describeTo(fKiller), fKiller.faction().dtr());
                 }
             }
-            faction.setFrozenDTR(System.currentTimeMillis() + (conf().getFreezeTime() * 1000L));
+            faction.dtrFrozenUntil(System.currentTimeMillis() + (conf().getFreezeTime() * 1000L));
         }
     }
 
@@ -160,8 +160,8 @@ public class DTRControl implements LandRaidControl {
 
     @Override
     public void onJoin(FPlayer player) {
-        if (player.getFaction().isNormal()) {
-            this.updateDTR(player.getFaction(), 1);
+        if (player.faction().isNormal()) {
+            this.updateDTR(player.faction(), 1);
         }
     }
 
@@ -171,23 +171,23 @@ public class DTRControl implements LandRaidControl {
 
     public void updateDTR(Faction faction, int minusPlayer) {
         long now = System.currentTimeMillis();
-        if (faction.getFrozenDTRUntilTime() > now) {
+        if (faction.dtrFrozenUntil() > now) {
             // Not yet time to regen
             return;
         }
-        long millisPassed = now - Math.max(faction.getLastDTRUpdateTime(), faction.getFrozenDTRUntilTime());
-        Stream<Player> stream = faction.getOnlinePlayers().stream().filter(p -> WorldUtil.isEnabled(p.getWorld()));
+        long millisPassed = now - Math.max(faction.dtrLastUpdated(), faction.dtrFrozenUntil());
+        Stream<Player> stream = faction.membersOnlineAsPlayers().stream().filter(p -> WorldUtil.isEnabled(p.getWorld()));
         if (FactionsPlugin.getInstance().conf().plugins().essentialsX().isPreventRegenWhileAfk()) {
             stream = stream.filter(Essentials::isAfk);
         }
         long onlineInEnabledWorlds = stream.count();
         double rate = Math.min(conf().getRegainPerMinuteMaxRate(), Math.max(0, onlineInEnabledWorlds - minusPlayer) * conf().getRegainPerMinutePerPlayer());
         double regain = (millisPassed / (60D * 1000D)) * rate;
-        faction.setDTR(Math.min(faction.getDTRWithoutUpdate() + regain, this.getMaxDTR(faction)));
+        faction.dtr(Math.min(faction.dtrWithoutUpdate() + regain, this.getMaxDTR(faction)));
     }
 
     public double getMaxDTR(Faction faction) {
-        return Math.min(conf().getStartingDTR() + (conf().getPerPlayer() * faction.getFPlayers().size()), conf().getMaxDTR());
+        return Math.min(conf().getStartingDTR() + (conf().getPerPlayer() * faction.members().size()), conf().getMaxDTR());
     }
 
     public void onDTRChange(Faction faction, double start, double end) {

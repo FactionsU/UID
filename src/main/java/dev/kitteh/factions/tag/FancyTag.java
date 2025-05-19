@@ -29,15 +29,15 @@ public enum FancyTag implements Tag {
         List<Component> fancyMessages = new ArrayList<>();
         TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(prefix)));
         boolean first = true;
-        for (FPlayer p : MiscUtil.rankOrder(target.getFPlayersWhereOnline(true, fme))) {
-            if (fme.getPlayer() != null && !fme.getPlayer().canSee(p.getPlayer())) {
+        for (FPlayer p : MiscUtil.rankOrder(target.membersOnline(true, fme))) {
+            if (fme.asPlayer() != null && !fme.asPlayer().canSee(p.asPlayer())) {
                 continue; // skip
             }
             if (!first) {
                 message.append(Component.text(", "));
             }
             Component tip = tip(tipPlayer(p, gm));
-            message.append(LegacyComponentSerializer.legacySection().deserialize(p.getNameAndTitle()).color(fme.getTextColorTo(p)).hoverEvent(HoverEvent.showText(tip)));
+            message.append(LegacyComponentSerializer.legacySection().deserialize(p.nameWithTitle()).color(fme.textColorTo(p)).hoverEvent(HoverEvent.showText(tip)));
             first = false;
             Component current = message.build();
             if (GsonComponentSerializer.gson().serialize(current).length() > ARBITRARY_LIMIT) {
@@ -52,14 +52,14 @@ public enum FancyTag implements Tag {
         List<Component> fancyMessages = new ArrayList<>();
         TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(prefix)));
         boolean first = true;
-        for (FPlayer p : MiscUtil.rankOrder(target.getFPlayers())) {
+        for (FPlayer p : MiscUtil.rankOrder(target.members())) {
             // Also make sure to add players that are online BUT can't be seen.
-            if (!p.isOnline() || (fme.getPlayer() != null && p.isOnline() && !fme.getPlayer().canSee(p.getPlayer()))) {
+            if (!p.isOnline() || (fme.asPlayer() != null && p.isOnline() && !fme.asPlayer().canSee(p.asPlayer()))) {
                 if (!first) {
                     message.append(Component.text(", "));
                 }
                 Component tip = tip(tipPlayer(p, gm));
-                message.append(LegacyComponentSerializer.legacySection().deserialize(p.getNameAndTitle()).color(fme.getTextColorTo(p)).hoverEvent(HoverEvent.showText(tip)));
+                message.append(LegacyComponentSerializer.legacySection().deserialize(p.nameWithTitle()).color(fme.textColorTo(p)).hoverEvent(HoverEvent.showText(tip)));
                 first = false;
                 Component current = message.build();
                 if (GsonComponentSerializer.gson().serialize(current).length() > ARBITRARY_LIMIT) {
@@ -84,12 +84,12 @@ public enum FancyTag implements Tag {
             if (otherFaction == faction) {
                 continue;
             }
-            if (otherFaction.getRelationTo(faction) == relation) {
+            if (otherFaction.relationTo(faction) == relation) {
                 if (!first) {
                     message.append(Component.text(", "));
                 }
                 Component tip = tip(tipFaction(otherFaction, fPlayer));
-                message.append(LegacyComponentSerializer.legacySection().deserialize(otherFaction.getTag(fPlayer)).color(fPlayer.getTextColorTo(otherFaction)).hoverEvent(HoverEvent.showText(tip)));
+                message.append(LegacyComponentSerializer.legacySection().deserialize(otherFaction.tagString(fPlayer)).color(fPlayer.textColorTo(otherFaction)).hoverEvent(HoverEvent.showText(tip)));
                 first = false;
                 Component current = message.build();
                 if (GsonComponentSerializer.gson().serialize(current).length() > ARBITRARY_LIMIT) {
@@ -168,7 +168,7 @@ public enum FancyTag implements Tag {
             everythingOnYourWayOut:
             if (line.contains("{group}")) {
                 if (groupMap != null) {
-                    String group = groupMap.getOrDefault(fplayer.getUniqueId(), "");
+                    String group = groupMap.getOrDefault(fplayer.uniqueId(), "");
                     if (!group.trim().isEmpty()) {
                         newLine = newLine.replace("{group}", group);
                         break everythingOnYourWayOut;
@@ -180,7 +180,7 @@ public enum FancyTag implements Tag {
             if (string == null) {
                 continue;
             }
-            string = Tag.parsePlaceholders(fplayer.getOfflinePlayer(), string);
+            string = Tag.parsePlaceholders(fplayer.asOfflinePlayer(), string);
             lines.add(ChatColor.translateAlternateColorCodes('&', string));
         }
         return lines;

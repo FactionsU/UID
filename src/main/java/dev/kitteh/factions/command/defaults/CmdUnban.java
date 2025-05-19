@@ -31,18 +31,18 @@ public class CmdUnban implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         FPlayer target = context.get("player");
 
         if (!faction.isBanned(target)) {
-            sender.msg(TL.COMMAND_UNBAN_NOTBANNED, target.getName());
+            sender.msg(TL.COMMAND_UNBAN_NOTBANNED, target.name());
             return;
         }
 
         faction.unban(target);
 
-        faction.msg(TL.COMMAND_UNBAN_UNBANNED, sender.getName(), target.getName());
-        target.msg(TL.COMMAND_UNBAN_TARGET, faction.getTag(target));
+        faction.msg(TL.COMMAND_UNBAN_UNBANNED, sender.name(), target.name());
+        target.msg(TL.COMMAND_UNBAN_TARGET, faction.tagString(target));
     }
 }

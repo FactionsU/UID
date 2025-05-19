@@ -53,7 +53,7 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
         String name = commandInput.peekString();
 
         for (FPlayer fplayer : FPlayers.fPlayers().all()) {
-            if (fplayer.getName().equalsIgnoreCase(name)) {
+            if (fplayer.name().equalsIgnoreCase(name)) {
                 commandInput.readString();
                 return ArgumentParseResult.success(fplayer);
             }
@@ -90,31 +90,31 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                     break;
                 case ROLE_AT_OR_BELOW:
                     if (context.sender() instanceof Sender.Player player && player.hasFaction()) {
-                        Role role = player.fPlayer().getRole();
-                        for (FPlayer member : player.faction().getFPlayers()) {
-                            if (member.getRole().isAtMost(role)) {
-                                (member.isOnline() ? temp1 : temp2).add(member.getName());
+                        Role role = player.fPlayer().role();
+                        for (FPlayer member : player.faction().members()) {
+                            if (member.role().isAtMost(role)) {
+                                (member.isOnline() ? temp1 : temp2).add(member.name());
                             }
                         }
                     }
                     break;
                 case ROLE_BELOW:
                     if (context.sender() instanceof Sender.Player player && player.hasFaction()) {
-                        Role role = Role.getRelative(player.fPlayer().getRole(), -1);
+                        Role role = Role.getRelative(player.fPlayer().role(), -1);
                         if (role == null) {
                             break;
                         }
-                        for (FPlayer member : player.faction().getFPlayers()) {
-                            if (member.getRole().isAtMost(role)) {
-                                (member.isOnline() ? temp1 : temp2).add(member.getName());
+                        for (FPlayer member : player.faction().members()) {
+                            if (member.role().isAtMost(role)) {
+                                (member.isOnline() ? temp1 : temp2).add(member.name());
                             }
                         }
                     }
                     break;
                 case SAME_FACTION:
                     if (context.sender() instanceof Sender.Player player && player.hasFaction()) {
-                        for (FPlayer member : player.faction().getFPlayers()) {
-                            (member.isOnline() ? temp1 : temp2).add(member.getName());
+                        for (FPlayer member : player.faction().members()) {
+                            (member.isOnline() ? temp1 : temp2).add(member.name());
                         }
                     }
                     break;
@@ -124,11 +124,11 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
-                        if (isPlayer && !((Sender.Player) context.sender()).player().canSee(player.getPlayer())) {
+                        if (isPlayer && !((Sender.Player) context.sender()).player().canSee(player.asPlayer())) {
                             continue;
                         }
-                        if (player.getFaction() != faction) {
-                            temp1.add(player.getName());
+                        if (player.faction() != faction) {
+                            temp1.add(player.name());
                             count++;
                         }
                     }
@@ -136,8 +136,8 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
-                        if (player.getFaction() != faction && !temp1.contains(player.getName())) {
-                            temp2.add(player.getName());
+                        if (player.faction() != faction && !temp1.contains(player.name())) {
+                            temp2.add(player.name());
                             count++;
                         }
                     }
@@ -147,11 +147,11 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
-                        if (isPlayer && !((Sender.Player) context.sender()).player().canSee(player.getPlayer())) {
+                        if (isPlayer && !((Sender.Player) context.sender()).player().canSee(player.asPlayer())) {
                             continue;
                         }
-                        if (player.getFaction().isWilderness()) {
-                            temp1.add(player.getName());
+                        if (player.faction().isWilderness()) {
+                            temp1.add(player.name());
                             count++;
                         }
                     }
@@ -159,8 +159,8 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
-                        if (player.getFaction().isWilderness() && !temp1.contains(player.getName())) {
-                            temp2.add(player.getName());
+                        if (player.faction().isWilderness() && !temp1.contains(player.name())) {
+                            temp2.add(player.name());
                             count++;
                         }
                     }
@@ -170,10 +170,10 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
-                        if (isPlayer && !((Sender.Player) context.sender()).player().canSee(player.getPlayer())) {
+                        if (isPlayer && !((Sender.Player) context.sender()).player().canSee(player.asPlayer())) {
                             continue;
                         }
-                        temp1.add(player.getName());
+                        temp1.add(player.name());
                         count++;
                     }
                 case ALL:
@@ -181,18 +181,18 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
-                        if (isPlayer && !((Sender.Player) context.sender()).player().canSee(player.getPlayer())) {
+                        if (isPlayer && !((Sender.Player) context.sender()).player().canSee(player.asPlayer())) {
                             continue;
                         }
-                        temp1.add(player.getName());
+                        temp1.add(player.name());
                         count++;
                     }
                     for (FPlayer player : FPlayers.fPlayers().all()) {
                         if (count > SANE_SUGGESTION_LIMIT) {
                             continue singingItForeverJustBecause;
                         }
-                        if (!temp1.contains(player.getName())) {
-                            temp2.add(player.getName());
+                        if (!temp1.contains(player.name())) {
+                            temp2.add(player.name());
                             count++;
                         }
                     }

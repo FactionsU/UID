@@ -61,8 +61,8 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
         FPlayer fp2 = FPlayers.fPlayers().get(p2);
 
         return switch (placeholder) {
-            case "relation" -> fp1.getRelationTo(fp2).nicename;
-            case "relation_color" -> fp1.getColorStringTo(fp2);
+            case "relation" -> fp1.relationTo(fp2).nicename;
+            case "relation_color" -> fp1.colorStringTo(fp2);
             default -> null;
         };
     }
@@ -79,10 +79,10 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
         }
 
         FPlayer fPlayer = FPlayers.fPlayers().get(player);
-        Faction faction = fPlayer.getFaction();
+        Faction faction = fPlayer.faction();
         boolean territory = false;
         if (placeholder.contains("faction_territory")) {
-            faction = Board.board().factionAt(fPlayer.getLastStoodAt());
+            faction = Board.board().factionAt(fPlayer.lastStoodAt());
             placeholder = placeholder.replace("_territory", "");
             territory = true;
         }
@@ -107,28 +107,28 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
 
         return switch (placeholder) {
             // First list player stuff
-            case "player_name" -> fPlayer.getName();
+            case "player_name" -> fPlayer.name();
             case "player_lastseen" -> {
-                String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fPlayer.getLastLoginTime(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
-                yield fPlayer.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fPlayer.getLastLoginTime() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
+                String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fPlayer.lastLogin(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
+                yield fPlayer.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fPlayer.lastLogin() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
             }
-            case "player_group" -> AbstractFactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(fPlayer.getUniqueId()));
+            case "player_group" -> AbstractFactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(fPlayer.uniqueId()));
             case "player_balance" -> Econ.isSetup() ? Econ.getFriendlyBalance(fPlayer) : TL.ECON_OFF.format("balance");
-            case "player_power" -> String.valueOf(fPlayer.getPowerRounded());
-            case "player_maxpower" -> String.valueOf(fPlayer.getPowerMaxRounded());
-            case "player_kills" -> String.valueOf(fPlayer.getKills());
-            case "player_deaths" -> String.valueOf(fPlayer.getDeaths());
-            case "player_role" -> fPlayer.hasFaction() ? fPlayer.getRole().getPrefix() : "";
-            case "player_role_name" -> fPlayer.hasFaction() ? fPlayer.getRole().translation() : TL.PLACEHOLDER_ROLE_NAME.toString();
+            case "player_power" -> String.valueOf(fPlayer.powerRounded());
+            case "player_maxpower" -> String.valueOf(fPlayer.powerMaxRounded());
+            case "player_kills" -> String.valueOf(fPlayer.kills());
+            case "player_deaths" -> String.valueOf(fPlayer.deaths());
+            case "player_role" -> fPlayer.hasFaction() ? fPlayer.role().getPrefix() : "";
+            case "player_role_name" -> fPlayer.hasFaction() ? fPlayer.role().translation() : TL.PLACEHOLDER_ROLE_NAME.toString();
             case "player_factionless" -> fPlayer.hasFaction() ? "" : TL.GENERIC_FACTIONLESS.toString();
             // Then Faction stuff
-            case "faction_name" -> (fPlayer.hasFaction() || territory) ? faction.getTag() : TL.NOFACTION_PREFIX.toString();
+            case "faction_name" -> (fPlayer.hasFaction() || territory) ? faction.tag() : TL.NOFACTION_PREFIX.toString();
             case "faction_name_custom" -> (fPlayer.hasFaction() || territory) ? Tag.parsePlain(fPlayer, TL.PLACEHOLDER_CUSTOM_FACTION.toString()) : "";
             case "faction_only_space" -> (fPlayer.hasFaction() || territory) ? " " : "";
-            case "faction_internal_id" -> faction.getId() + "";
-            case "faction_power" -> String.valueOf(faction.getPower());
-            case "faction_powermax" -> String.valueOf(faction.getPowerMax());
-            case "faction_dtr" -> (fPlayer.hasFaction() || territory) ? DTRControl.round(faction.getDTR()) : "";
+            case "faction_internal_id" -> faction.id() + "";
+            case "faction_power" -> String.valueOf(faction.power());
+            case "faction_powermax" -> String.valueOf(faction.powerMax());
+            case "faction_dtr" -> (fPlayer.hasFaction() || territory) ? DTRControl.round(faction.dtr()) : "";
             case "faction_dtrmax" -> {
                 if ((fPlayer.hasFaction() || territory) && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
                     yield DTRControl.round(((DTRControl) FactionsPlugin.getInstance().getLandRaidControl()).getMaxDTR(faction));
@@ -148,52 +148,52 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
                 yield "";
             }
             case "faction_maxclaims" -> (fPlayer.hasFaction() || territory) ? String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(faction)) : "";
-            case "faction_description" -> faction.getDescription();
-            case "faction_claims" -> String.valueOf(faction.getAllClaims().size());
-            case "faction_founded" -> TL.sdf.format(faction.getFoundedDate());
-            case "faction_joining" -> (faction.getOpen() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString());
-            case "faction_peaceful" -> faction.isPeaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getNeutral() + TL.COMMAND_SHOW_PEACEFUL.toString() : "";
+            case "faction_description" -> faction.description();
+            case "faction_claims" -> String.valueOf(faction.claims().size());
+            case "faction_founded" -> TL.sdf.format(faction.founded());
+            case "faction_joining" -> (faction.open() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString());
+            case "faction_peaceful" -> faction.peaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getNeutral() + TL.COMMAND_SHOW_PEACEFUL.toString() : "";
             case "faction_powerboost" -> {
-                double powerBoost = faction.getPowerBoost();
+                double powerBoost = faction.powerBoost();
                 yield (powerBoost == 0.0) ? "" : (powerBoost > 0.0 ? TL.COMMAND_SHOW_BONUS.toString() : TL.COMMAND_SHOW_PENALTY.toString()) + powerBoost + ")";
             }
             case "faction_leader" -> {
-                FPlayer fAdmin = faction.getFPlayerAdmin();
-                yield fAdmin == null ? "Server" : fAdmin.getName().substring(0, fAdmin.getName().length() > 14 ? 13 : fAdmin.getName().length());
+                FPlayer fAdmin = faction.admin();
+                yield fAdmin == null ? "Server" : fAdmin.name().substring(0, fAdmin.name().length() > 14 ? 13 : fAdmin.name().length());
             }
-            case "faction_warps" -> String.valueOf(faction.getWarps().size());
+            case "faction_warps" -> String.valueOf(faction.warps().size());
             case "faction_raidable" -> {
                 boolean raid = FactionsPlugin.getInstance().getLandRaidControl().isRaidable(faction);
                 yield raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
             }
-            case "faction_home_world" -> faction.getHome() instanceof Location home ? home.getWorld().getName() : "";
-            case "faction_home_x" -> faction.hasHome() ? String.valueOf(faction.getHome().getBlockX()) : "";
-            case "faction_home_y" -> faction.hasHome() ? String.valueOf(faction.getHome().getBlockY()) : "";
-            case "faction_home_z" -> faction.hasHome() ? String.valueOf(faction.getHome().getBlockZ()) : "";
-            case "faction_land_value" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(faction.getLandRounded())) : TL.ECON_OFF.format("value");
-            case "faction_land_refund" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.getLandRounded())) : TL.ECON_OFF.format("refund");
+            case "faction_home_world" -> faction.home() instanceof Location home ? home.getWorld().getName() : "";
+            case "faction_home_x" -> faction.hasHome() ? String.valueOf(faction.home().getBlockX()) : "";
+            case "faction_home_y" -> faction.hasHome() ? String.valueOf(faction.home().getBlockY()) : "";
+            case "faction_home_z" -> faction.hasHome() ? String.valueOf(faction.home().getBlockZ()) : "";
+            case "faction_land_value" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(faction.claimCount())) : TL.ECON_OFF.format("value");
+            case "faction_land_refund" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.claimCount())) : TL.ECON_OFF.format("refund");
             case "faction_bank_balance" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.getBalance(faction)) : TL.ECON_OFF.format("balance");
             case "faction_tnt_balance" -> FactionTag.TNT_BALANCE.replace(FactionTag.TNT_BALANCE.getTag(), faction);
             case "faction_tnt_max_balance" -> FactionTag.TNT_MAX.replace(FactionTag.TNT_MAX.getTag(), faction);
-            case "faction_allies" -> String.valueOf(faction.getRelationCount(Relation.ALLY));
+            case "faction_allies" -> String.valueOf(faction.relationCount(Relation.ALLY));
             case "faction_allies_players" -> String.valueOf(this.countOn(faction, Relation.ALLY, null, fPlayer));
             case "faction_allies_players_online" -> String.valueOf(this.countOn(faction, Relation.ALLY, true, fPlayer));
             case "faction_allies_players_offline" -> String.valueOf(this.countOn(faction, Relation.ALLY, false, fPlayer));
-            case "faction_enemies" -> String.valueOf(faction.getRelationCount(Relation.ENEMY));
+            case "faction_enemies" -> String.valueOf(faction.relationCount(Relation.ENEMY));
             case "faction_enemies_players" -> String.valueOf(this.countOn(faction, Relation.ENEMY, null, fPlayer));
             case "faction_enemies_players_online" -> String.valueOf(this.countOn(faction, Relation.ENEMY, true, fPlayer));
             case "faction_enemies_players_offline" -> String.valueOf(this.countOn(faction, Relation.ENEMY, false, fPlayer));
-            case "faction_truces" -> String.valueOf(faction.getRelationCount(Relation.TRUCE));
+            case "faction_truces" -> String.valueOf(faction.relationCount(Relation.TRUCE));
             case "faction_truces_players" -> String.valueOf(this.countOn(faction, Relation.TRUCE, null, fPlayer));
             case "faction_truces_players_online" -> String.valueOf(this.countOn(faction, Relation.TRUCE, true, fPlayer));
             case "faction_truces_players_offline" -> String.valueOf(this.countOn(faction, Relation.TRUCE, false, fPlayer));
-            case "faction_online" -> String.valueOf(faction.getOnlinePlayers().size());
-            case "faction_offline" -> String.valueOf(faction.getFPlayers().size() - faction.getOnlinePlayers().size());
-            case "faction_size" -> String.valueOf(faction.getFPlayers().size());
-            case "faction_kills" -> String.valueOf(faction.getKills());
-            case "faction_deaths" -> String.valueOf(faction.getDeaths());
-            case "faction_maxvaults" -> String.valueOf(faction.getMaxVaults());
-            case "faction_relation_color" -> fPlayer.getColorStringTo(faction);
+            case "faction_online" -> String.valueOf(faction.membersOnlineAsPlayers().size());
+            case "faction_offline" -> String.valueOf(faction.members().size() - faction.membersOnlineAsPlayers().size());
+            case "faction_size" -> String.valueOf(faction.members().size());
+            case "faction_kills" -> String.valueOf(faction.kills());
+            case "faction_deaths" -> String.valueOf(faction.deaths());
+            case "faction_maxvaults" -> String.valueOf(faction.maxVaults());
+            case "faction_relation_color" -> fPlayer.colorStringTo(faction);
             default -> null;
         };
     }
@@ -201,13 +201,13 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
     private int countOn(Faction f, Relation relation, @Nullable Boolean status, FPlayer player) {
         int count = 0;
         for (Faction faction : Factions.factions().all()) {
-            if (faction.getRelationTo(f) == relation) {
+            if (faction.relationTo(f) == relation) {
                 if (status == null) {
-                    count += faction.getFPlayers().size();
+                    count += faction.members().size();
                 } else if (status) {
-                    count += faction.getFPlayersWhereOnline(true, player).size();
+                    count += faction.membersOnline(true, player).size();
                 } else {
-                    count += faction.getFPlayersWhereOnline(false, player).size();
+                    count += faction.membersOnline(false, player).size();
                 }
             }
         }

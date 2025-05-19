@@ -34,7 +34,7 @@ public class CmdModifyPower implements Cmd {
         Double number = context.get("change");
 
         player.alterPower(number);
-        int newPower = player.getPowerRounded(); // int so we don't have super long doubles.
-        context.sender().msg(TL.COMMAND_MODIFYPOWER_ADDED, number, player.getName(), newPower);
+        int newPower = player.powerRounded(); // int so we don't have super long doubles.
+        context.sender().msg(TL.COMMAND_MODIFYPOWER_ADDED, number, player.name(), newPower);
     }
 }

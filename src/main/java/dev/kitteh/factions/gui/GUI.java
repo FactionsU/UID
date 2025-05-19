@@ -116,8 +116,8 @@ public abstract class GUI<Type> implements InventoryHolder {
     protected String parseDefault(String toParse) {
         toParse = TextUtil.parseColor(toParse);
         toParse = Tag.parsePlain(user, toParse);
-        toParse = Tag.parsePlain(user.getFaction(), toParse);
-        toParse = Tag.parsePlaceholders(user.getPlayer(), toParse);
+        toParse = Tag.parsePlain(user.faction(), toParse);
+        toParse = Tag.parsePlaceholders(user.asPlayer(), toParse);
         return toParse;
     }
 
@@ -127,7 +127,7 @@ public abstract class GUI<Type> implements InventoryHolder {
     }
 
     public void open() {
-        user.getPlayer().openInventory(getInventory());
+        user.asPlayer().openInventory(getInventory());
     }
 
     public interface Backable {

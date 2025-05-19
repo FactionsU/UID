@@ -257,7 +257,7 @@ public class CmdSetPerm implements Cmd {
         if (permissions.has(selector)) { // List options to add to this selector
             List<String> actions = PermissibleActionRegistry.getActions().stream()
                     // Filter out unfulfilled prerequisites
-                    .filter(action -> !(action.prerequisite() instanceof Upgrade prereq) || faction.getUpgradeLevel(prereq) > 0)
+                    .filter(action -> !(action.prerequisite() instanceof Upgrade prereq) || faction.upgradeLevel(prereq) > 0)
                     .map(PermissibleAction::name).collect(Collectors.toCollection(ArrayList::new));
             // Remove hidden actions
             actions.removeAll(FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig().getHiddenActions());

@@ -39,7 +39,7 @@ public abstract class AbstractListener implements Listener {
         }
 
         FPlayer me = FPlayers.fPlayers().get(player);
-        if (me.isAdminBypassing()) {
+        if (me.adminBypass()) {
             return true;
         }
 
@@ -76,7 +76,7 @@ public abstract class AbstractListener implements Listener {
 
         // Cancel if we are not in our own territory
         if (!access) {
-            me.msg(TL.PLAYER_USE_TERRITORY, "this", otherFaction.getTag(me.getFaction()));
+            me.msg(TL.PLAYER_USE_TERRITORY, "this", otherFaction.tagString(me.faction()));
             return false;
         }
 
@@ -144,8 +144,8 @@ public abstract class AbstractListener implements Listener {
 
     public static boolean explosionDisallowed(Entity boomer, FLocation location) {
         Faction faction = Board.board().factionAt(location);
-        boolean online = faction.hasPlayersOnline();
-        if (faction.noExplosionsInTerritory() || (faction.isPeaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
+        boolean online = faction.hasMembersOnline();
+        if (faction.noExplosionsInTerritory() || (faction.peaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
             // faction is peaceful and has explosions set to disabled
             return true;
         }
@@ -187,7 +187,7 @@ public abstract class AbstractListener implements Listener {
         }
 
         FPlayer me = FPlayers.fPlayers().get(player);
-        if (me.isAdminBypassing()) {
+        if (me.adminBypass()) {
             return true;
         }
 

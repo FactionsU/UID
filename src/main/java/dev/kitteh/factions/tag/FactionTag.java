@@ -15,37 +15,37 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public enum FactionTag implements Tag {
-    INTERNAL_ID("faction-internal-id", (fac) -> String.valueOf(fac.getId())),
-    HOME_X("x", (fac) -> fac.hasHome() ? String.valueOf(fac.getHome().getBlockX()) : Tag.isMinimalShow() ? null : "{ig}"),
-    HOME_Y("y", (fac) -> fac.hasHome() ? String.valueOf(fac.getHome().getBlockY()) : Tag.isMinimalShow() ? null : "{ig}"),
-    HOME_Z("z", (fac) -> fac.hasHome() ? String.valueOf(fac.getHome().getBlockZ()) : Tag.isMinimalShow() ? null : "{ig}"),
-    CHUNKS("chunks", (fac) -> String.valueOf(fac.getLandRounded())),
-    WARPS("warps", (fac) -> String.valueOf(fac.getWarps().size())),
-    HEADER("header", (fac, fp) -> AbstractFactionsPlugin.getInstance().txt().titleize(fac.getTag(fp))),
-    POWER("power", (fac) -> String.valueOf(fac.getPower())),
-    MAX_POWER("maxPower", (fac) -> String.valueOf(fac.getPowerMax())),
+    INTERNAL_ID("faction-internal-id", (fac) -> String.valueOf(fac.id())),
+    HOME_X("x", (fac) -> fac.hasHome() ? String.valueOf(fac.home().getBlockX()) : Tag.isMinimalShow() ? null : "{ig}"),
+    HOME_Y("y", (fac) -> fac.hasHome() ? String.valueOf(fac.home().getBlockY()) : Tag.isMinimalShow() ? null : "{ig}"),
+    HOME_Z("z", (fac) -> fac.hasHome() ? String.valueOf(fac.home().getBlockZ()) : Tag.isMinimalShow() ? null : "{ig}"),
+    CHUNKS("chunks", (fac) -> String.valueOf(fac.claimCount())),
+    WARPS("warps", (fac) -> String.valueOf(fac.warps().size())),
+    HEADER("header", (fac, fp) -> AbstractFactionsPlugin.getInstance().txt().titleize(fac.tagString(fp))),
+    POWER("power", (fac) -> String.valueOf(fac.power())),
+    MAX_POWER("maxPower", (fac) -> String.valueOf(fac.powerMax())),
     POWER_BOOST("power-boost", (fac) -> {
-        double powerBoost = fac.getPowerBoost();
+        double powerBoost = fac.powerBoost();
         return (powerBoost == 0.0) ? "" : (powerBoost > 0.0 ? TL.COMMAND_SHOW_BONUS.toString() : TL.COMMAND_SHOW_PENALTY.toString() + powerBoost + ")");
     }),
     LEADER("leader", (fac) -> {
-        FPlayer fAdmin = fac.getFPlayerAdmin();
-        return fAdmin == null ? TL.TAG_LEADER_OWNERLESS.toString() : fAdmin.getName().substring(0, fAdmin.getName().length() > 14 ? 13 : fAdmin.getName().length());
+        FPlayer fAdmin = fac.admin();
+        return fAdmin == null ? TL.TAG_LEADER_OWNERLESS.toString() : fAdmin.name().substring(0, fAdmin.name().length() > 14 ? 13 : fAdmin.name().length());
     }),
-    JOINING("joining", (fac) -> (fac.getOpen() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString())),
-    FACTION("faction", (fac) -> fac.getTag()),
-    FACTION_RELATION_COLOR("faction-relation-color", (fac, fp) -> fp == null ? "" : fp.getColorStringTo(fac)),
-    HOME_WORLD("world", (fac) -> fac.hasHome() ? fac.getHome().getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
+    JOINING("joining", (fac) -> (fac.open() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString())),
+    FACTION("faction", (fac) -> fac.tag()),
+    FACTION_RELATION_COLOR("faction-relation-color", (fac, fp) -> fp == null ? "" : fp.colorStringTo(fac)),
+    HOME_WORLD("world", (fac) -> fac.hasHome() ? fac.home().getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
     RAIDABLE("raidable", (fac) -> {
         boolean raid = FactionsPlugin.getInstance().getLandRaidControl().isRaidable(fac);
         return raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
     }),
     DTR("dtr", (fac) -> {
         if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
-            int dtr = fac.getLandRounded() >= fac.getPower() ? 0 : (int) Math.ceil(((double) (fac.getPower() - fac.getLandRounded())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
+            int dtr = fac.claimCount() >= fac.power() ? 0 : (int) Math.ceil(((double) (fac.power() - fac.claimCount())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
             return TL.COMMAND_SHOW_DEATHS_TIL_RAIDABLE.format(dtr);
         } else {
-            return DTRControl.round(fac.getDTR());
+            return DTRControl.round(fac.dtr());
         }
     }),
     MAX_DTR("max-dtr", (fac) -> {
@@ -54,17 +54,17 @@ public enum FactionTag implements Tag {
         }
         return Tag.isMinimalShow() ? null : "{ig}";
     }),
-    DTR_FROZEN("dtr-frozen-status", (fac -> TL.DTR_FROZEN_STATUS_MESSAGE.format(fac.isFrozenDTR() ? TL.DTR_FROZEN_STATUS_TRUE.toString() : TL.DTR_FROZEN_STATUS_FALSE.toString()))),
-    DTR_FROZEN_TIME("dtr-frozen-time", (fac -> TL.DTR_FROZEN_TIME_MESSAGE.format(fac.isFrozenDTR() ?
-            DurationFormatUtils.formatDuration(fac.getFrozenDTRUntilTime() - System.currentTimeMillis(), FactionsPlugin.getInstance().conf().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
+    DTR_FROZEN("dtr-frozen-status", (fac -> TL.DTR_FROZEN_STATUS_MESSAGE.format(fac.dtrFrozen() ? TL.DTR_FROZEN_STATUS_TRUE.toString() : TL.DTR_FROZEN_STATUS_FALSE.toString()))),
+    DTR_FROZEN_TIME("dtr-frozen-time", (fac -> TL.DTR_FROZEN_TIME_MESSAGE.format(fac.dtrFrozen() ?
+            DurationFormatUtils.formatDuration(fac.dtrFrozenUntil() - System.currentTimeMillis(), FactionsPlugin.getInstance().conf().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
             TL.DTR_FROZEN_TIME_NOTFROZEN.toString()))),
     MAX_CHUNKS("max-chunks", (fac -> String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(fac)))),
-    PEACEFUL("peaceful", (fac) -> fac.isPeaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getPeaceful() + TL.COMMAND_SHOW_PEACEFUL.toString() : ""),
-    PERMANENT("permanent", (fac) -> fac.isPermanent() ? "permanent" : "{notPermanent}"), // no braces needed
-    LAND_VALUE("land-value", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(fac.getLandRounded())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("value")),
-    DESCRIPTION("description", Faction::getDescription),
-    CREATE_DATE("create-date", (fac) -> TL.sdf.format(fac.getFoundedDate())),
-    LAND_REFUND("land-refund", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(fac.getLandRounded())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("refund")),
+    PEACEFUL("peaceful", (fac) -> fac.peaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getPeaceful() + TL.COMMAND_SHOW_PEACEFUL.toString() : ""),
+    PERMANENT("permanent", (fac) -> fac.permanent() ? "permanent" : "{notPermanent}"), // no braces needed
+    LAND_VALUE("land-value", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(fac.claimCount())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("value")),
+    DESCRIPTION("description", fac -> fac.description()),
+    CREATE_DATE("create-date", (fac) -> TL.sdf.format(fac.founded())),
+    LAND_REFUND("land-refund", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(fac.claimCount())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("refund")),
     BANK_BALANCE("faction-balance", (fac) -> {
         if (Econ.shouldBeUsed()) {
             return FactionsPlugin.getInstance().conf().economy().isBankEnabled() ? Econ.moneyString(Econ.getBalance(fac)) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance");
@@ -73,7 +73,7 @@ public enum FactionTag implements Tag {
     }),
     TNT_BALANCE("tnt-balance", (fac) -> {
         if (FactionsPlugin.getInstance().conf().commands().tnt().isEnable()) {
-            return String.valueOf(fac.getTNTBank());
+            return String.valueOf(fac.tntBank());
         }
         return Tag.isMinimalShow() ? null : "";
     }),
@@ -83,31 +83,31 @@ public enum FactionTag implements Tag {
         }
         return Tag.isMinimalShow() ? null : "";
     }),
-    ALLIES_COUNT("allies", (fac) -> String.valueOf(fac.getRelationCount(Relation.ALLY))),
-    ENEMIES_COUNT("enemies", (fac) -> String.valueOf(fac.getRelationCount(Relation.ENEMY))),
-    TRUCES_COUNT("truces", (fac) -> String.valueOf(fac.getRelationCount(Relation.TRUCE))),
+    ALLIES_COUNT("allies", (fac) -> String.valueOf(fac.relationCount(Relation.ALLY))),
+    ENEMIES_COUNT("enemies", (fac) -> String.valueOf(fac.relationCount(Relation.ENEMY))),
+    TRUCES_COUNT("truces", (fac) -> String.valueOf(fac.relationCount(Relation.TRUCE))),
     ONLINE_COUNT("online", (fac, fp) -> {
         if (fp != null && fp.isOnline()) {
-            return String.valueOf(fac.getFPlayersWhereOnline(true, fp).size());
+            return String.valueOf(fac.membersOnline(true, fp).size());
         } else {
             // Only console should ever get here.
-            return String.valueOf(fac.getFPlayersWhereOnline(true).size());
+            return String.valueOf(fac.membersOnline(true).size());
         }
     }),
     OFFLINE_COUNT("offline", (fac, fp) -> {
         if (fp != null && fp.isOnline()) {
-            return String.valueOf(fac.getFPlayers().size() - fac.getFPlayersWhereOnline(true, fp).size());
+            return String.valueOf(fac.members().size() - fac.membersOnline(true, fp).size());
         } else {
             // Only console should ever get here.
-            return String.valueOf(fac.getFPlayersWhereOnline(false).size());
+            return String.valueOf(fac.membersOnline(false).size());
         }
     }),
-    FACTION_SIZE("members", (fac) -> String.valueOf(fac.getFPlayers().size())),
-    FACTION_KILLS("faction-kills", (fac) -> String.valueOf(fac.getKills())),
-    FACTION_DEATHS("faction-deaths", (fac) -> String.valueOf(fac.getDeaths())),
-    FACTION_BANCOUNT("faction-bancount", (fac) -> String.valueOf(fac.getBannedPlayers().size())),
+    FACTION_SIZE("members", (fac) -> String.valueOf(fac.members().size())),
+    FACTION_KILLS("faction-kills", (fac) -> String.valueOf(fac.kills())),
+    FACTION_DEATHS("faction-deaths", (fac) -> String.valueOf(fac.deaths())),
+    FACTION_BANCOUNT("faction-bancount", (fac) -> String.valueOf(fac.bans().size())),
     @SuppressWarnings("Convert2MethodRef")
-    FACTION_LINK("faction-link", (fac) -> fac.getLink()),
+    FACTION_LINK("faction-link", (fac) -> fac.link()),
     ;
 
     private final String tag;

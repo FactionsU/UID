@@ -19,30 +19,30 @@ import org.jspecify.annotations.NullMarked;
 public class PowerControl implements LandRaidControl {
     @Override
     public boolean isRaidable(Faction faction) {
-        return this.isRaidable(faction, faction.getPower());
+        return this.isRaidable(faction, faction.power());
     }
 
     public boolean isRaidable(Faction faction, int power) {
-        return FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability() && faction.isNormal() && !faction.isPeaceful() &&
+        return FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability() && faction.isNormal() && !faction.peaceful() &&
                 (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidabilityOnEqualLandAndPower() ?
-                        (faction.getLandRounded() >= power) :
-                        (faction.getLandRounded() > power)
+                        (faction.claimCount() >= power) :
+                        (faction.claimCount() > power)
                 );
     }
 
     @Override
     public boolean hasLandInflation(Faction faction) {
-        return !faction.isPeaceful() && faction.getLandRounded() > faction.getPower();
+        return !faction.peaceful() && faction.claimCount() > faction.power();
     }
 
     @Override
     public int getLandLimit(Faction faction) {
-        return faction.getPower();
+        return faction.power();
     }
 
     @Override
     public boolean canJoinFaction(Faction faction, FPlayer player) {
-        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.getPower() < 0) {
+        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
             player.msg(TL.COMMAND_JOIN_NEGATIVEPOWER, player.describeTo(player, true));
             return false;
         }
@@ -51,7 +51,7 @@ public class PowerControl implements LandRaidControl {
 
     @Override
     public boolean canLeaveFaction(FPlayer player) {
-        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.getPower() < 0) {
+        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
             player.msg(TL.LEAVE_NEGATIVEPOWER);
             return false;
         }
@@ -65,12 +65,12 @@ public class PowerControl implements LandRaidControl {
 
     @Override
     public boolean canKick(FPlayer toKick, FPlayer playerAttempting) {
-        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.getPower() < 0) {
+        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.power() < 0) {
             playerAttempting.msg(TL.COMMAND_KICK_NEGATIVEPOWER);
             return false;
         }
         if (toKick.isOnline() && !FactionsPlugin.getInstance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
-                Board.board().factionAt(toKick.getLastStoodAt()).getRelationTo(toKick.getFaction()) == Relation.ENEMY) {
+                Board.board().factionAt(toKick.lastStoodAt()).relationTo(toKick.faction()) == Relation.ENEMY) {
             playerAttempting.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
             return false;
         }
@@ -123,7 +123,7 @@ public class PowerControl implements LandRaidControl {
         } else if (powerConf.getWorldsNoPowerLoss().contains(player.getWorld().getName())) {
             powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WORLD.toString());
             powerLossEvent.setCancelled(true);
-        } else if (powerConf.isPeacefulMembersDisablePowerLoss() && fplayer.hasFaction() && fplayer.getFaction().isPeaceful()) {
+        } else if (powerConf.isPeacefulMembersDisablePowerLoss() && fplayer.hasFaction() && fplayer.faction().peaceful()) {
             powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_PEACEFUL.toString());
             powerLossEvent.setCancelled(true);
         } else {
@@ -135,22 +135,22 @@ public class PowerControl implements LandRaidControl {
 
         fplayer.onDeath();
         if (!powerLossEvent.isCancelled()) {
-            double startingPower = fplayer.getPower();
+            double startingPower = fplayer.power();
             fplayer.alterPower(-powerConf.getLossPerDeath());
-            double powerDiff = fplayer.getPower() - startingPower;
+            double powerDiff = fplayer.power() - startingPower;
             double vamp = powerConf.getVampirism();
             Player killer = player.getKiller();
             if (killer != null && vamp != 0D && powerDiff > 0) {
                 double powerChange = vamp * powerDiff;
                 FPlayer fKiller = FPlayers.fPlayers().get(killer);
                 fKiller.alterPower(powerChange);
-                fKiller.msg(TL.PLAYER_POWER_VAMPIRISM_GAIN, powerChange, fplayer.describeTo(fKiller), fKiller.getPowerRounded(), fKiller.getPowerMaxRounded());
+                fKiller.msg(TL.PLAYER_POWER_VAMPIRISM_GAIN, powerChange, fplayer.describeTo(fKiller), fKiller.powerRounded(), fKiller.powerMaxRounded());
             }
         }
         // Send the message from the powerLossEvent
         final String msg = powerLossEvent.getMessage();
         if (msg != null && !msg.isEmpty()) {
-            fplayer.msg(msg, fplayer.getPowerRounded(), fplayer.getPowerMaxRounded());
+            fplayer.msg(msg, fplayer.powerRounded(), fplayer.powerMaxRounded());
         }
     }
 

@@ -34,25 +34,25 @@ public class CmdSetPermanent implements Cmd {
         Faction faction = context.get("faction");
 
         String change;
-        if (faction.isPermanent()) {
+        if (faction.permanent()) {
             change = TL.COMMAND_PERMANENT_REVOKE.toString();
-            faction.setPermanent(false);
+            faction.permanent(false);
         } else {
             change = TL.COMMAND_PERMANENT_GRANT.toString();
-            faction.setPermanent(true);
+            faction.permanent(true);
         }
 
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
-        FactionsPlugin.getInstance().log((fPlayer == null ? "A server admin" : fPlayer.getName()) + " " + change + " the faction \"" + faction.getTag() + "\".");
+        FactionsPlugin.getInstance().log((fPlayer == null ? "A server admin" : fPlayer.name()) + " " + change + " the faction \"" + faction.tag() + "\".");
 
         // Inform all players
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             String blame = (fPlayer == null ? TL.GENERIC_SERVERADMIN.toString() : fPlayer.describeTo(fplayer));
-            if (fplayer.getFaction() == faction) {
+            if (fplayer.faction() == faction) {
                 fplayer.msg(TL.COMMAND_PERMANENT_YOURS, blame, change);
             } else {
-                fplayer.msg(TL.COMMAND_PERMANENT_OTHER, blame, change, faction.getTag(fplayer));
+                fplayer.msg(TL.COMMAND_PERMANENT_OTHER, blame, change, faction.tagString(fplayer));
             }
         }
     }

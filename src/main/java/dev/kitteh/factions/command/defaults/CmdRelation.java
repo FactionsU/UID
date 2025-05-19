@@ -41,7 +41,7 @@ public class CmdRelation implements Cmd {
 
     private void handleRelation(CommandContext<Sender> context, Relation targetRelation) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         Faction them = context.get("faction");
 
@@ -56,8 +56,8 @@ public class CmdRelation implements Cmd {
             return;
         }
 
-        if (faction.getRelationWish(them) == targetRelation) {
-            sender.msg(TL.COMMAND_RELATIONS_ALREADYINRELATIONSHIP, them.getTag());
+        if (faction.relationWish(them) == targetRelation) {
+            sender.msg(TL.COMMAND_RELATIONS_ALREADYINRELATIONSHIP, them.tag());
             return;
         }
 
@@ -65,7 +65,7 @@ public class CmdRelation implements Cmd {
             // We message them down there with the count.
             return;
         }
-        Relation oldRelation = faction.getRelationTo(them, true);
+        Relation oldRelation = faction.relationTo(them, true);
         FactionRelationWishEvent wishEvent = new FactionRelationWishEvent(sender, faction, them, oldRelation, targetRelation);
         Bukkit.getPluginManager().callEvent(wishEvent);
         if (wishEvent.isCancelled()) {
@@ -78,8 +78,8 @@ public class CmdRelation implements Cmd {
         }
 
         // try to set the new relation
-        faction.setRelationWish(them, targetRelation);
-        Relation currentRelation = faction.getRelationTo(them, true);
+        faction.relationWish(them, targetRelation);
+        Relation currentRelation = faction.relationTo(them, true);
         ChatColor currentRelationColor = currentRelation.chatColor();
 
         // if the relation change was successful
@@ -88,21 +88,21 @@ public class CmdRelation implements Cmd {
             FactionRelationEvent relationEvent = new FactionRelationEvent(faction, them, oldRelation, currentRelation);
             Bukkit.getServer().getPluginManager().callEvent(relationEvent);
 
-            them.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + faction.getTag());
-            faction.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + them.getTag());
+            them.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + faction.tag());
+            faction.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + them.tag());
         } else {
             // inform the other faction of your request
-            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + faction.getTag(), targetRelation.chatColor() + targetRelation.translation());
-            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, FactionsPlugin.getInstance().conf().getCommandBase().getFirst(), targetRelation, faction.getTag());
-            faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.getTag(), "" + targetRelation.chatColor() + targetRelation);
+            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + faction.tag(), targetRelation.chatColor() + targetRelation.translation());
+            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, FactionsPlugin.getInstance().conf().getCommandBase().getFirst(), targetRelation, faction.tag());
+            faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.tag(), "" + targetRelation.chatColor() + targetRelation);
         }
 
-        if (!targetRelation.isNeutral() && them.isPeaceful()) {
+        if (!targetRelation.isNeutral() && them.peaceful()) {
             them.msg(TL.COMMAND_RELATIONS_PEACEFUL);
             faction.msg(TL.COMMAND_RELATIONS_PEACEFULOTHER);
         }
 
-        if (!targetRelation.isNeutral() && faction.isPeaceful()) {
+        if (!targetRelation.isNeutral() && faction.peaceful()) {
             them.msg(TL.COMMAND_RELATIONS_PEACEFULOTHER);
             faction.msg(TL.COMMAND_RELATIONS_PEACEFUL);
         }
@@ -115,11 +115,11 @@ public class CmdRelation implements Cmd {
         if (FactionsPlugin.getInstance().conf().factions().maxRelations().isEnabled()) {
             int max = targetRelation.getMax();
             if (max != -1) {
-                if (us.getRelationCount(targetRelation) >= max) {
+                if (us.relationCount(targetRelation) >= max) {
                     sender.msg(TL.COMMAND_RELATIONS_EXCEEDS_ME, max, targetRelation.getPluralTranslation());
                     return true;
                 }
-                if (them.getRelationCount(targetRelation) >= max) {
+                if (them.relationCount(targetRelation) >= max) {
                     sender.msg(TL.COMMAND_RELATIONS_EXCEEDS_THEY, max, targetRelation.getPluralTranslation());
                     return true;
                 }

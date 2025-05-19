@@ -36,22 +36,22 @@ public class CmdVault implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         int number = context.get("number"); // Default to 0 or show on 0
 
-        if (PlayerVaults.getInstance().getInVault().containsKey(sender.getUniqueId().toString())) {
+        if (PlayerVaults.getInstance().getInVault().containsKey(sender.uniqueId().toString())) {
             return; // Already in a vault so they must be trying to dupe.
         }
 
-        int max = faction.getMaxVaults();
+        int max = faction.maxVaults();
         if (number > max) {
             sender.sendMessage(TL.COMMAND_VAULT_TOOHIGH.format(number, max));
             return;
         }
 
         // Something like faction-id
-        String vaultName = String.format(FactionsPlugin.getInstance().conf().playerVaults().getVaultPrefix(), "" + faction.getId());
+        String vaultName = String.format(FactionsPlugin.getInstance().conf().playerVaults().getVaultPrefix(), "" + faction.id());
 
         if (number < 1) {
             // Message about which vaults that Faction has.
@@ -64,7 +64,7 @@ public class CmdVault implements Cmd {
                 for (String key : file.getKeys(false)) {
                     sb.append(key.replace("vault", "")).append(" ");
                 }
-                PlayerVaults.getInstance().getTL().existingVaults().title().with("player", sender.getTag()).with("vault", sb.toString().trim()).send(context.sender().sender());
+                PlayerVaults.getInstance().getTL().existingVaults().title().with("player", faction.tag()).with("vault", sb.toString().trim()).send(context.sender().sender());
             }
             return;
         } // end listing vaults.
@@ -72,7 +72,7 @@ public class CmdVault implements Cmd {
         // Attempt to open vault.
         if (VaultOperations.openOtherVault(((Sender.Player) context.sender()).player(), vaultName, String.valueOf(number))) {
             // Success
-            PlayerVaults.getInstance().getInVault().put(sender.getUniqueId().toString(), new VaultViewInfo(vaultName, number));
+            PlayerVaults.getInstance().getInVault().put(sender.uniqueId().toString(), new VaultViewInfo(vaultName, number));
         }
     }
 }

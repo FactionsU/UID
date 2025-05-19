@@ -29,18 +29,18 @@ public class FactionSelector extends AbstractSelector {
         if (split.length == 2) {
             Faction faction = Factions.factions().get(Integer.parseInt(split[0]));
             this.id = Integer.parseInt(split[0]);
-            this.lastKnown = faction == null ? split[1] : faction.getTag();
+            this.lastKnown = faction == null ? split[1] : faction.tag();
             return;
         }
         split = str.split(delimiter);
         if (split.length == 1) {
             Faction faction = Factions.factions().get(str);
-            this.id = faction.getId();
-            this.lastKnown = faction.getTag();
+            this.id = faction.id();
+            this.lastKnown = faction.tag();
         } else {
             Faction faction = Factions.factions().get(Integer.parseInt(split[0]));
             this.id = Integer.parseInt(split[0]);
-            this.lastKnown = faction == null ? split[1] : faction.getTag();
+            this.lastKnown = faction == null ? split[1] : faction.tag();
         }
     }
 
@@ -50,15 +50,15 @@ public class FactionSelector extends AbstractSelector {
         if (selectable instanceof Faction) {
             fac = (Faction) selectable;
         } else if (selectable instanceof FPlayer) {
-            fac = ((FPlayer) selectable).getFaction();
+            fac = ((FPlayer) selectable).faction();
         }
-        return fac != null && fac.getId() == this.id;
+        return fac != null && fac.id() == this.id;
     }
 
     @Override
     public String serializeValue() {
         Faction faction = Factions.factions().get(this.id);
-        return this.id + delimiter + (faction == null ? this.lastKnown : faction.getTag());
+        return this.id + delimiter + (faction == null ? this.lastKnown : faction.tag());
     }
 
     @Override
@@ -66,7 +66,7 @@ public class FactionSelector extends AbstractSelector {
         Faction faction = Factions.factions().get(this.id);
         return faction == null ?
                 MiniMessage.miniMessage().deserialize(FactionsPlugin.getInstance().tl().permissions().selectors().faction().getDisbandedValue(), Placeholder.unparsed("lastknown", this.lastKnown)) :
-                LegacyComponentSerializer.legacySection().deserialize(faction.getTag(context));
+                LegacyComponentSerializer.legacySection().deserialize(faction.tagString(context));
     }
 
     @Override

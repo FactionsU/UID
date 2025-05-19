@@ -55,12 +55,12 @@ public class WarpGUI extends GUI<Integer> {
     private WarpGUI(FPlayer user, int page, Faction faction) {
         super(user, getRows(faction));
         this.faction = faction;
-        warps = new ArrayList<>(faction.getWarps().keySet());
+        warps = new ArrayList<>(faction.warps().keySet());
         if (page == -1 && warps.size() > (5 * 9)) {
             page = 0;
         }
         this.page = page;
-        name = page == -1 ? TL.GUI_WARPS_ONE_PAGE.format(faction.getTag()) : TL.GUI_WARPS_PAGE.format(faction.getTag(), page + 1);
+        name = page == -1 ? TL.GUI_WARPS_ONE_PAGE.format(faction.tag()) : TL.GUI_WARPS_PAGE.format(faction.tag(), page + 1);
         build();
     }
 
@@ -70,7 +70,7 @@ public class WarpGUI extends GUI<Integer> {
     }
 
     private static int getRows(Faction faction) {
-        int warpCount = faction.getWarps().size();
+        int warpCount = faction.warps().size();
         if (warpCount == 0) {
             return 1;
         }
@@ -93,9 +93,9 @@ public class WarpGUI extends GUI<Integer> {
 
     @Override
     protected void onClick(Integer index, ClickType clickType) {
-        if (!faction.hasAccess(this.user, PermissibleActions.WARP, this.user.getLastStoodAt())) {
-            user.msg(TL.COMMAND_FWARP_NOACCESS, faction.getTag(user));
-            this.user.getPlayer().closeInventory();
+        if (!faction.hasAccess(this.user, PermissibleActions.WARP, this.user.lastStoodAt())) {
+            user.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagString(user));
+            this.user.asPlayer().closeInventory();
             return;
         }
         if (index == -1) {
@@ -127,8 +127,8 @@ public class WarpGUI extends GUI<Integer> {
                         .addConversationAbandonedListener(passwordPrompt)
                         .withTimeout(5);// TODO get config.getInt("password-timeout", 5)
 
-                user.getPlayer().closeInventory();
-                inputFactory.buildConversation(user.getPlayer()).begin();
+                user.asPlayer().closeInventory();
+                inputFactory.buildConversation(user.asPlayer()).begin();
             }
         }
     }
@@ -225,13 +225,13 @@ public class WarpGUI extends GUI<Integer> {
 
     private void doWarmup(final String warp) {
         WarmUpUtil.process(user, WarmUpUtil.Warmup.WARP, TL.WARMUPS_NOTIFY_TELEPORT, warp, () -> {
-            Player player = Bukkit.getPlayer(user.getPlayer().getUniqueId());
+            Player player = Bukkit.getPlayer(user.asPlayer().getUniqueId());
             if (player != null) {
-                if (!faction.hasAccess(this.user, PermissibleActions.WARP, this.user.getLastStoodAt())) {
-                    user.msg(TL.COMMAND_FWARP_NOACCESS, faction.getTag(user));
+                if (!faction.hasAccess(this.user, PermissibleActions.WARP, this.user.lastStoodAt())) {
+                    user.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagString(user));
                     return;
                 }
-                AbstractFactionsPlugin.getInstance().teleport(player, faction.getWarp(warp).getLocation()).thenAccept(success -> {
+                AbstractFactionsPlugin.getInstance().teleport(player, faction.warp(warp).getLocation()).thenAccept(success -> {
                     if (success) {
                         user.msg(TL.COMMAND_FWARP_WARPED, warp);
                     }
@@ -241,18 +241,18 @@ public class WarpGUI extends GUI<Integer> {
     }
 
     private boolean transact() {
-        if (!user.isAdminBypassing()) {
+        if (!user.adminBypass()) {
             return true;
         }
 
         double cost = FactionsPlugin.getInstance().conf().economy().getCostWarp();
 
-        if (!Econ.shouldBeUsed() || this.user == null || cost == 0.0 || user.isAdminBypassing()) {
+        if (!Econ.shouldBeUsed() || this.user == null || cost == 0.0 || user.adminBypass()) {
             return true;
         }
 
-        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && user.hasFaction() && user.getFaction().hasAccess(user, PermissibleActions.ECONOMY, this.user.getLastStoodAt())) {
-            return Econ.modifyMoney(user.getFaction(), -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());
+        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && user.hasFaction() && user.faction().hasAccess(user, PermissibleActions.ECONOMY, this.user.lastStoodAt())) {
+            return Econ.modifyMoney(user.faction(), -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());
         } else {
             return Econ.modifyMoney(user, -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());
         }

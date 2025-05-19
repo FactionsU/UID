@@ -73,14 +73,14 @@ public class CmdShow implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
-        Faction faction = context.getOrDefault("faction", fPlayer == null ? Factions.factions().wilderness() : fPlayer.getFaction());
+        Faction faction = context.getOrDefault("faction", fPlayer == null ? Factions.factions().wilderness() : fPlayer.faction());
         if (faction.isWilderness()) {
             context.sender().msg(TL.COMMAND_SHOW_NOFACTION_OTHER);
             return;
         }
 
         if (!context.sender().hasPermission(Permission.SHOW_BYPASS_EXEMPT)
-                && FactionsPlugin.getInstance().conf().commands().show().getExempt().contains(faction.getTag())) {
+                && FactionsPlugin.getInstance().conf().commands().show().getExempt().contains(faction.tag())) {
             context.sender().msg(TL.COMMAND_SHOW_EXEMPT);
             return;
         }
@@ -96,7 +96,7 @@ public class CmdShow implements Cmd {
         }
 
         if (!faction.isNormal()) {
-            String tag = faction.getTag(fPlayer);
+            String tag = faction.tagString(fPlayer);
             // send header and that's all
             String header = show.getFirst();
             if (FactionTag.HEADER.foundInString(header)) {
@@ -117,7 +117,7 @@ public class CmdShow implements Cmd {
             }
 
             if (fPlayer != null) {
-                parsed = Tag.parsePlaceholders(fPlayer.getPlayer(), parsed);
+                parsed = Tag.parsePlaceholders(fPlayer.asPlayer(), parsed);
             }
 
             if (!parsed.contains("{notFrozen}") && !parsed.contains("{notPermanent}")) {
@@ -182,8 +182,8 @@ public class CmdShow implements Cmd {
 
     private void onOffLineMessage(StringBuilder builder, CommandSender recipient, Faction faction, boolean online) {
         boolean first = true;
-        for (FPlayer p : MiscUtil.rankOrder(faction.getFPlayersWhereOnline(online))) {
-            String name = p.getNameAndTitle();
+        for (FPlayer p : MiscUtil.rankOrder(faction.membersOnline(online))) {
+            String name = p.nameWithTitle();
             builder.append(first ? name : ", " + name);
             first = false;
         }
@@ -193,8 +193,8 @@ public class CmdShow implements Cmd {
     private void relationMessage(StringBuilder builder, CommandSender recipient, Faction faction, Relation relation) {
         boolean first = true;
         for (Faction otherFaction : Factions.factions().all()) {
-            if (otherFaction != faction && otherFaction.getRelationTo(faction) == relation) {
-                String s = otherFaction.getTag();
+            if (otherFaction != faction && otherFaction.relationTo(faction) == relation) {
+                String s = otherFaction.tag();
                 builder.append(first ? s : ", " + s);
                 first = false;
             }
@@ -221,7 +221,7 @@ public class CmdShow implements Cmd {
             this.messageList = messageList;
             this.sender = sender;
             this.faction = faction;
-            this.players = faction.getFPlayers().stream().map(fp -> AbstractFactionsPlugin.getInstance().getOfflinePlayer(fp.getName(), fp.getUniqueId())).collect(Collectors.toSet());
+            this.players = faction.members().stream().map(fp -> AbstractFactionsPlugin.getInstance().getOfflinePlayer(fp.name(), fp.uniqueId())).collect(Collectors.toSet());
         }
 
         @Override
@@ -249,7 +249,7 @@ public class CmdShow implements Cmd {
 
         @Override
         public void run() {
-            Player player = Bukkit.getPlayerExact(sender.getName());
+            Player player = Bukkit.getPlayerExact(sender.name());
             if (player != null) {
                 CmdShow.this.sendMessages(messageList, player, faction, sender, map);
             }

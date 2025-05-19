@@ -54,7 +54,7 @@ public class CmdTNTFill implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
         
         if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
             sender.msg(TL.COMMAND_TNT_TERRITORYONLY);
@@ -68,7 +68,7 @@ public class CmdTNTFill implements Cmd {
             return;
         }
 
-        if (amount > faction.getTNTBank()) {
+        if (amount > faction.tntBank()) {
             sender.msg(TL.COMMAND_TNT_FILL_FAIL_NOTENOUGH, amount);
             return;
         }
@@ -101,9 +101,9 @@ public class CmdTNTFill implements Cmd {
             firstRound = false;
         }
 
-        faction.setTNTBank(faction.getTNTBank() - amount + remaining);
+        faction.tntBank(faction.tntBank() - amount + remaining);
 
-        sender.msg(TL.COMMAND_TNT_FILL_MESSAGE, amount - remaining, dispenserCount, faction.getTNTBank());
+        sender.msg(TL.COMMAND_TNT_FILL_MESSAGE, amount - remaining, dispenserCount, faction.tntBank());
     }
 
     static ItemStack[] getStacks(int count) {

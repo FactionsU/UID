@@ -341,11 +341,11 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
             int factionId = ((MemoryFPlayer) fPlayer).getFactionId();
             Faction faction = Factions.factions().get(factionId);
             if (faction == null) {
-                log("Invalid faction id on " + fPlayer.getName() + ":" + factionId);
+                log("Invalid faction id on " + fPlayer.name() + ":" + factionId);
                 fPlayer.resetFactionData();
                 continue;
             }
-            faction.addFPlayer(fPlayer);
+            ((MemoryFaction) faction).addMember(fPlayer);
         }
         int loadedClaims = Instances.BOARD.load();
         Instances.BOARD.clean();

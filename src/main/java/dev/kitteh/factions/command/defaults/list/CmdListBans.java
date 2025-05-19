@@ -35,7 +35,7 @@ public class CmdListBans implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
-        Faction target = context.getOrDefault("faction", sender.getFaction());
+        Faction target = context.getOrDefault("faction", sender.faction());
 
         if (!target.isNormal()) {
             sender.msg(TL.COMMAND_BANLIST_NOFACTION);
@@ -43,15 +43,15 @@ public class CmdListBans implements Cmd {
         }
 
         List<String> lines = new ArrayList<>();
-        lines.add(TL.COMMAND_BANLIST_HEADER.format(target.getBannedPlayers().size(), target.getTag(sender)));
+        lines.add(TL.COMMAND_BANLIST_HEADER.format(target.bans().size(), target.tagString(sender)));
         int i = 1;
 
-        for (BanInfo info : target.getBannedPlayers()) {
+        for (BanInfo info : target.bans()) {
             FPlayer banned = FPlayers.fPlayers().get(info.banned());
             FPlayer banner = FPlayers.fPlayers().get(info.banner());
             String timestamp = TL.sdf.format(info.time());
 
-            lines.add(TL.COMMAND_BANLIST_ENTRY.format(i, banned.getName(), banner.getName(), timestamp));
+            lines.add(TL.COMMAND_BANLIST_ENTRY.format(i, banned.name(), banner.name(), timestamp));
             i++;
         }
 

@@ -69,9 +69,9 @@ public class FTeamWrapper {
         }
 
         FTeamWrapper wrapper = wrappers.get(faction);
-        Set<FPlayer> factionMembers = faction.getFPlayers();
+        Set<FPlayer> factionMembers = faction.members();
 
-        if (wrapper != null && Factions.factions().get(faction.getId()) == null) {
+        if (wrapper != null && Factions.factions().get(faction.id()) == null) {
             // Faction was disbanded
             wrapper.unregister();
             wrappers.remove(faction);
@@ -97,7 +97,7 @@ public class FTeamWrapper {
             }
 
             // Scoreboard might not have player; add him/her
-            wrapper.addPlayer(fmember.getName());
+            wrapper.addPlayer(fmember.name());
         }
 
         wrapper.updatePrefixesAndSuffixes();
@@ -180,10 +180,10 @@ public class FTeamWrapper {
     }
 
     private String apply(String prefixOrSuffix, FPlayer fplayer, int maxLength) {
-        prefixOrSuffix = Tag.parsePlaceholders(fplayer.getPlayer(), prefixOrSuffix);
-        prefixOrSuffix = prefixOrSuffix.replace("{relationcolor}", faction.getRelationTo(fplayer).chatColor().toString());
-        int remaining = Math.min("{faction}".length() + maxLength - prefixOrSuffix.length(), faction.getTag().length());
-        prefixOrSuffix = prefixOrSuffix.replace("{faction}", remaining > 0 ? faction.getTag().substring(0, remaining) : "");
+        prefixOrSuffix = Tag.parsePlaceholders(fplayer.asPlayer(), prefixOrSuffix);
+        prefixOrSuffix = prefixOrSuffix.replace("{relationcolor}", faction.relationTo(fplayer).chatColor().toString());
+        int remaining = Math.min("{faction}".length() + maxLength - prefixOrSuffix.length(), faction.tag().length());
+        prefixOrSuffix = prefixOrSuffix.replace("{faction}", remaining > 0 ? faction.tag().substring(0, remaining) : "");
         prefixOrSuffix = Tag.parsePlain(fplayer, prefixOrSuffix);
         prefixOrSuffix = ChatColor.translateAlternateColorCodes('&', prefixOrSuffix);
 

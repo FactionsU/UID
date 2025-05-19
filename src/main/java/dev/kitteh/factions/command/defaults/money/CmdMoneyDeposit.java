@@ -47,7 +47,7 @@ public class CmdMoneyDeposit implements Cmd {
         if (context.flags().get("faction") instanceof Faction f) {
             faction = f;
         } else {
-            faction = sender.getFaction();
+            faction = sender.faction();
         }
 
         if (!faction.isNormal()) {
@@ -57,7 +57,7 @@ public class CmdMoneyDeposit implements Cmd {
         boolean success = Econ.transferMoney(sender, sender, faction, amount);
 
         if (success && FactionsPlugin.getInstance().conf().logging().isMoneyTransactions()) {
-            FactionsPlugin.getInstance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYDEPOSIT_DEPOSITED.toString(), sender.getName(), Econ.moneyString(amount), faction.describeTo(null))));
+            FactionsPlugin.getInstance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYDEPOSIT_DEPOSITED.toString(), sender.name(), Econ.moneyString(amount), faction.describeTo(null))));
         }
     }
 }

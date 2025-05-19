@@ -33,7 +33,7 @@ public class CmdConfirm implements Cmd {
 
     public static String add(FPlayer fPlayer, Consumer<FPlayer> consumer) {
         String code = decimalFormat.format(random.nextInt(100000));
-        cache.put(fPlayer.getUniqueId(), new Conf(code, consumer));
+        cache.put(fPlayer.uniqueId(), new Conf(code, consumer));
         return code;
     }
 
@@ -55,7 +55,7 @@ public class CmdConfirm implements Cmd {
         String string = context.get("confirmation-string");
 
         // TODO TL
-        Conf conf = cache.getIfPresent(sender.getUniqueId());
+        Conf conf = cache.getIfPresent(sender.uniqueId());
         if (conf == null) {
             sender.sendMessage("No confirmation found.");
             return;

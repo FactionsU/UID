@@ -34,7 +34,7 @@ public class CmdSetMaxVaults implements Cmd {
         Faction targetFaction = context.get("faction");
         int value = context.get("number");
 
-        targetFaction.setMaxVaults(value);
-        context.sender().sender().sendMessage(TL.COMMAND_SETMAXVAULTS_SUCCESS.format(targetFaction.getTag(), value));
+        targetFaction.maxVaults(value);
+        context.sender().sender().sendMessage(TL.COMMAND_SETMAXVAULTS_SUCCESS.format(targetFaction.tag(), value));
     }
 }

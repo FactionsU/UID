@@ -47,13 +47,13 @@ public class CmdFly implements Cmd {
         boolean unhandled = true;
         if (context.flags().hasFlag("auto")) {
             //if (Permission.FLY_AUTO.has(context.sender().sender(), true)) {
-            sender.setAutoFlying(!sender.isAutoFlying());
-            toggleFlight(sender, sender.isAutoFlying(), false);
+            sender.autoFlying(!sender.autoFlying());
+            toggleFlight(sender, sender.autoFlying(), false);
             unhandled = false;
             //}
         }
         if (context.flags().get("trail") instanceof Boolean bool) {
-            sender.setFlyTrailsState(bool);
+            sender.flyTrail(bool);
             unhandled = false;
         }
         if (context.flags().get("particle") instanceof String effectName) {
@@ -64,21 +64,21 @@ public class CmdFly implements Cmd {
             }
 
             if (context.sender().sender().hasPermission(Permission.FLY_TRAILS.node + "." + effectName)) {
-                sender.setFlyTrailsEffect(effectName);
+                sender.flyTrailEffect(effectName);
             } else {
                 sender.msg(TL.COMMAND_FLYTRAILS_PARTICLE_PERMS, effectName);
             }
             unhandled = false;
         }
         if (unhandled) {
-            toggleFlight(sender, !sender.isFlying(), true);
+            toggleFlight(sender, !sender.flying(), true);
         }
     }
 
     private void toggleFlight(FPlayer fPlayer, final boolean toggle, boolean notify) {
         // If false do nothing besides set
         if (!toggle) {
-            fPlayer.setFlying(false);
+            fPlayer.flying(false);
             return;
         }
         // Do checks if true
@@ -88,7 +88,7 @@ public class CmdFly implements Cmd {
 
         WarmUpUtil.process(fPlayer, WarmUpUtil.Warmup.FLIGHT, TL.WARMUPS_NOTIFY_FLIGHT, "Fly", () -> {
             if (flyTest(fPlayer, notify)) {
-                fPlayer.setFlying(true);
+                fPlayer.flying(true);
             }
         }, FactionsPlugin.getInstance().conf().commands().fly().getDelay());
     }
@@ -96,8 +96,8 @@ public class CmdFly implements Cmd {
     private boolean flyTest(FPlayer fPlayer, boolean notify) {
         if (!fPlayer.canFlyAtLocation()) {
             if (notify) {
-                Faction factionAtLocation = Board.board().factionAt(fPlayer.getLastStoodAt());
-                fPlayer.msg(TL.COMMAND_FLY_NO_ACCESS, factionAtLocation.getTag(fPlayer));
+                Faction factionAtLocation = Board.board().factionAt(fPlayer.lastStoodAt());
+                fPlayer.msg(TL.COMMAND_FLY_NO_ACCESS, factionAtLocation.tagString(fPlayer));
             }
             return false;
         } else if (FlightUtil.instance().enemiesNearby(fPlayer, FactionsPlugin.getInstance().conf().commands().fly().getEnemyRadius())) {

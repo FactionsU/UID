@@ -47,14 +47,14 @@ public class CmdTop implements Cmd {
     private static final Map<String, Function<Faction, FTopValue<?>>> topValueGenerators = new HashMap<>();
 
     static {
-        topValueGenerators.put("members", f -> new FTopGTIntValue(f.getFPlayers().size()));
-        topValueGenerators.put("start", f -> new FTopFoundedValue(f.getFoundedDate()));
-        topValueGenerators.put("power", f -> new FTopGTIntValue(f.getPower()));
-        topValueGenerators.put("land", f -> new FTopGTIntValue(f.getLandRounded()));
-        topValueGenerators.put("online", f -> new FTopGTIntValue(f.getFPlayersWhereOnline(true).size()));
+        topValueGenerators.put("members", f -> new FTopGTIntValue(f.members().size()));
+        topValueGenerators.put("start", f -> new FTopFoundedValue(f.founded().toEpochMilli()));
+        topValueGenerators.put("power", f -> new FTopGTIntValue(f.power()));
+        topValueGenerators.put("land", f -> new FTopGTIntValue(f.claimCount()));
+        topValueGenerators.put("online", f -> new FTopGTIntValue(f.membersOnline(true).size()));
         Function<Faction, FTopValue<?>> money = f -> {
             double monies = FactionsPlugin.getInstance().conf().economy().isEnabled() ? Econ.getBalance(f) : 0;
-            monies += f.getFPlayers().stream()
+            monies += f.members().stream()
                     .mapToDouble(Econ::getBalance)
                     .sum();
             return new FTopBalanceValue(monies);
@@ -109,7 +109,7 @@ public class CmdTop implements Cmd {
         for (FTopFacValPair fvpair : sortedFactions.subList(start, end)) {
             // Get the relation color if player is executing this.
             Faction faction = fvpair.faction;
-            String fac = context.sender().isPlayer() ? faction.getRelationTo(context.sender().fPlayerOrNull()).chatColor() + faction.getTag() : faction.getTag();
+            String fac = context.sender().isPlayer() ? faction.relationTo(context.sender().fPlayerOrNull()).chatColor() + faction.tag() : faction.tag();
             lines.add(TL.COMMAND_TOP_LINE.format(rank, fac, fvpair.value.getDisplayString()));
             rank++;
         }

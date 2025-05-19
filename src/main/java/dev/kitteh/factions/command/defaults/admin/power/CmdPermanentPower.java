@@ -35,7 +35,7 @@ public class CmdPermanentPower implements Cmd {
 
         Integer targetPower = context.getOrDefault("value", null);
 
-        targetFaction.setPermanentPower(targetPower);
+        targetFaction.permanentPower(targetPower);
 
         String change = TL.COMMAND_PERMANENTPOWER_REVOKE.toString();
         if (targetFaction.hasPermanentPower()) {
@@ -48,7 +48,7 @@ public class CmdPermanentPower implements Cmd {
         context.sender().msg(TL.COMMAND_PERMANENTPOWER_SUCCESS, change, targetFaction.describeTo(fPlayer));
 
         // Inform all other players
-        for (FPlayer fplayer : targetFaction.getFPlayersWhereOnline(true)) {
+        for (FPlayer fplayer : targetFaction.membersOnline(true)) {
             if (fplayer == fPlayer) {
                 continue;
             }

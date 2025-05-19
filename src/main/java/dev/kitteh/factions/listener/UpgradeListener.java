@@ -25,7 +25,7 @@ public class UpgradeListener implements Listener {
         if (!faction.isNormal()) {
             return;
         }
-        int level = faction.getUpgradeLevel(Upgrades.GROWTH);
+        int level = faction.upgradeLevel(Upgrades.GROWTH);
         if (level == 0) {
             return;
         }

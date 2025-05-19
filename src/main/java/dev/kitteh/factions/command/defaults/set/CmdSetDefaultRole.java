@@ -43,7 +43,7 @@ public class CmdSetDefaultRole implements Cmd {
             return;
         }
 
-        sender.getFaction().setDefaultRole(target);
+        sender.faction().defaultRole(target);
         sender.msg(TL.COMMAND_SETDEFAULTROLE_SUCCESS, target.nicename);
     }
 }

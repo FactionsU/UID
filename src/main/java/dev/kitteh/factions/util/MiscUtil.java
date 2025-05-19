@@ -137,7 +137,7 @@ public class MiscUtil {
         List<FPlayer> recruit = new ArrayList<>();
 
         for (FPlayer player : players) {
-            switch (player.getRole()) {
+            switch (player.role()) {
                 case ADMIN:
                     admins.add(player);
                     break;

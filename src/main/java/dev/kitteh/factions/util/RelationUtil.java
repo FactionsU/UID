@@ -24,15 +24,15 @@ public class RelationUtil {
             if (me instanceof FPlayer && myFaction == thatFaction) {
                 ret = TL.GENERIC_YOURFACTION.toString();
             } else {
-                ret = thatFaction.getTag();
+                ret = thatFaction.tag();
             }
         } else if (that instanceof FPlayer fplayerthat) {
             if (that == me) {
                 ret = TL.GENERIC_YOU.toString();
             } else if (thatFaction == myFaction) {
-                ret = fplayerthat.getNameAndTitle();
+                ret = fplayerthat.nameWithTitle();
             } else {
-                ret = fplayerthat.getNameAndTag();
+                ret = fplayerthat.nameWithTag();
             }
         }
 
@@ -70,15 +70,15 @@ public class RelationUtil {
             return Relation.MEMBER;
         }
 
-        if (!ignorePeaceful && (fme.isPeaceful() || fthat.isPeaceful())) {
+        if (!ignorePeaceful && (fme.peaceful() || fthat.peaceful())) {
             return Relation.NEUTRAL;
         }
 
-        if (fme.getRelationWish(fthat).value >= fthat.getRelationWish(fme).value) {
-            return fthat.getRelationWish(fme);
+        if (fme.relationWish(fthat).value >= fthat.relationWish(fme).value) {
+            return fthat.relationWish(fme);
         }
 
-        return fme.getRelationWish(fthat);
+        return fme.relationWish(fthat);
     }
 
     public static Faction getFaction(Participator rp) {
@@ -87,7 +87,7 @@ public class RelationUtil {
         }
 
         if (rp instanceof FPlayer) {
-            return ((FPlayer) rp).getFaction();
+            return ((FPlayer) rp).faction();
         }
 
         // ERROR
@@ -101,7 +101,7 @@ public class RelationUtil {
     public static TextColor getTextColorOfThatToMe(Participator that, Participator me) {
         Faction thatFaction = getFaction(that);
         if (thatFaction != null) {
-            if (thatFaction.isPeaceful() && thatFaction != getFaction(me)) {
+            if (thatFaction.peaceful() && thatFaction != getFaction(me)) {
                 return FactionsPlugin.getInstance().conf().colors().relations().getPeaceful();
             }
 

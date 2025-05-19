@@ -29,9 +29,9 @@ public class PlayerSelector extends AbstractSelector {
         try {
             uuid = UUID.fromString(str);
         } catch (IllegalArgumentException e) {
-            Optional<FPlayer> p = FPlayers.fPlayers().all().stream().filter(pp -> pp.getName().equalsIgnoreCase(str)).findFirst();
+            Optional<FPlayer> p = FPlayers.fPlayers().all().stream().filter(pp -> pp.name().equalsIgnoreCase(str)).findFirst();
             if (p.isPresent()) {
-                uuid = p.get().getUniqueId();
+                uuid = p.get().uniqueId();
             }
         }
         if (uuid == null) {
@@ -47,7 +47,7 @@ public class PlayerSelector extends AbstractSelector {
 
     @Override
     public boolean test(Selectable selectable, Faction faction) {
-        return selectable instanceof FPlayer && ((FPlayer) selectable).getUniqueId().equals(this.uuid);
+        return selectable instanceof FPlayer && ((FPlayer) selectable).uniqueId().equals(this.uuid);
     }
 
     @Override
@@ -58,8 +58,8 @@ public class PlayerSelector extends AbstractSelector {
     @Override
     public Component displayValue(Faction context) {
         FPlayer player = FPlayers.fPlayers().get(this.uuid);
-        return player.getName().equals(player.getUniqueId().toString()) ?
+        return player.name().equals(player.uniqueId().toString()) ?
                 MiniMessage.miniMessage().deserialize(FactionsPlugin.getInstance().tl().permissions().selectors().player().getUuidValue(), Placeholder.unparsed("uuid", this.uuid.toString()))
-                : LegacyComponentSerializer.legacySection().deserialize(player.getRelationTo(context).chatColor() + player.getName());
+                : LegacyComponentSerializer.legacySection().deserialize(player.relationTo(context).chatColor() + player.name());
     }
 }

@@ -29,7 +29,7 @@ public class CmdShield implements Cmd {
     private void handle(CommandContext<Sender> context, boolean exec) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
-        if (exec && sender.hasFaction() && sender.getFaction().hasAccess(sender, PermissibleActions.SHIELD, sender.getLastStoodAt())) {
+        if (exec && sender.hasFaction() && sender.faction().hasAccess(sender, PermissibleActions.SHIELD, sender.lastStoodAt())) {
             // TODO menu
         }
 

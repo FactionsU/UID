@@ -52,14 +52,14 @@ public class CmdMoneyWithdraw implements Cmd {
         if (context.flags().get("faction") instanceof Faction f) {
             faction = f;
         } else {
-            faction = sender.getFaction();
+            faction = sender.faction();
         }
 
         if (!faction.isNormal()) {
             return;
         }
 
-        if (!faction.hasAccess(sender, PermissibleActions.ECONOMY, sender.getLastStoodAt())) {
+        if (!faction.hasAccess(sender, PermissibleActions.ECONOMY, sender.lastStoodAt())) {
             sender.msg(TL.GENERIC_NOPERMISSION, PermissibleActions.ECONOMY.shortDescription());
             return;
         }
@@ -67,7 +67,7 @@ public class CmdMoneyWithdraw implements Cmd {
         boolean success = Econ.transferMoney(sender, faction, sender, amount);
 
         if (success && FactionsPlugin.getInstance().conf().logging().isMoneyTransactions()) {
-            FactionsPlugin.getInstance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYWITHDRAW_WITHDRAW.toString(), sender.getName(), Econ.moneyString(amount), faction.describeTo(null))));
+            FactionsPlugin.getInstance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYWITHDRAW_WITHDRAW.toString(), sender.name(), Econ.moneyString(amount), faction.describeTo(null))));
         }
     }
 }

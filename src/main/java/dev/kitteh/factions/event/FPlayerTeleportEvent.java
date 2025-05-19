@@ -19,7 +19,7 @@ public class FPlayerTeleportEvent extends FactionPlayerEvent implements Cancella
     private final @Nullable Location location;
 
     public FPlayerTeleportEvent(FPlayer p, @Nullable Location location, Reason r) {
-        super(p.getFaction(), p);
+        super(p.faction(), p);
         reason = Objects.requireNonNull(r);
         this.location = location;
     }

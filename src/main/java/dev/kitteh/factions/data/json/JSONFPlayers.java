@@ -52,7 +52,7 @@ public final class JSONFPlayers extends MemoryFPlayers {
             return 0;
         }
         this.fPlayers.clear();
-        fplayers.forEach(fp -> this.fPlayers.put(fp.getUniqueId(), fp));
+        fplayers.forEach(fp -> this.fPlayers.put(fp.uniqueId(), fp));
         return fPlayers.size();
     }
 
@@ -96,6 +96,6 @@ public final class JSONFPlayers extends MemoryFPlayers {
 
     @Override
     public void removePlayer(FPlayer fPlayer) {
-        this.fPlayers.remove(fPlayer.getUniqueId());
+        this.fPlayers.remove(fPlayer.uniqueId());
     }
 }

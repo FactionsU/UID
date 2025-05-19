@@ -51,7 +51,7 @@ public class CmdListClaims implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
         if (context.flags().hasFlag("faction") && context.sender().hasPermission(Permission.LISTCLAIMS_OTHER)) {
             faction = context.flags().get("faction");
         }
@@ -73,7 +73,7 @@ public class CmdListClaims implements Cmd {
             }
         }
         if (worldClaims.isEmpty()) {
-            sender.msg(TL.COMMAND_LISTCLAIMS_NOCLAIMS, faction.getTag(), world.getName());
+            sender.msg(TL.COMMAND_LISTCLAIMS_NOCLAIMS, faction.tag(), world.getName());
             return;
         }
         Set<FLoc> set;
@@ -111,7 +111,7 @@ public class CmdListClaims implements Cmd {
             }
         }
 
-        sender.msg(TL.COMMAND_LISTCLAIMS_MESSAGE, faction.getTag(), world.getName());
+        sender.msg(TL.COMMAND_LISTCLAIMS_MESSAGE, faction.tag(), world.getName());
         StringBuilder builder = new StringBuilder();
         String str;
         final String separator = "   ";

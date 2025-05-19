@@ -84,48 +84,48 @@ public class CmdRole implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         FPlayer target = context.get("member");
 
-        this.handle(sender, target, Role.getRelative(target.getRole(), 1));
+        this.handle(sender, target, Role.getRelative(target.role(), 1));
     }
 
     private void handleDemote(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         FPlayer target = context.get("member");
 
-        this.handle(sender, target, Role.getRelative(target.getRole(), -1));
+        this.handle(sender, target, Role.getRelative(target.role(), -1));
     }
 
     private void handle(FPlayer sender, FPlayer target, Role targetNewRole) {
-        if (!target.getFaction().equals(sender.getFaction())) {
+        if (!target.faction().equals(sender.faction())) {
             sender.msg(TL.COMMAND_ROLE_WRONGFACTION);
             return;
         }
-        if (targetNewRole == null || targetNewRole == Role.ADMIN || targetNewRole.isAtLeast(sender.getRole())) {
+        if (targetNewRole == null || targetNewRole == Role.ADMIN || targetNewRole.isAtLeast(sender.role())) {
             sender.msg(TL.COMMAND_ROLE_NOT_ALLOWED);
             return;
         }
 
         if (targetNewRole == Role.COLEADER &&
                 !FactionsPlugin.getInstance().conf().factions().other().isAllowMultipleColeaders() &&
-                !target.getFaction().getFPlayersWhereRole(Role.COLEADER).isEmpty()
+                !target.faction().members(Role.COLEADER).isEmpty()
         ) {
             sender.msg(TL.COMMAND_COLEADER_ALREADY_COLEADER);
             return;
         }
 
-        target.setRole(targetNewRole);
-        if (target.getPlayer() instanceof Player player) {
+        target.role(targetNewRole);
+        if (target.asPlayer() instanceof Player player) {
             player.updateCommands();
         }
 
-        target.msg(TL.COMMAND_ROLE_UPDATED, target.getName(), targetNewRole.nicename);
-        sender.msg(TL.COMMAND_ROLE_UPDATED, target.getName(), targetNewRole.nicename);
+        target.msg(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
+        sender.msg(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
     }
 
     private void handleAdmin(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         FPlayer target = context.get("member");
 
-        if (!sender.hasFaction() || sender.getRole() != Role.ADMIN) {
+        if (!sender.hasFaction() || sender.role() != Role.ADMIN) {
             sender.msg(TL.COMMAND_ADMIN_NOTADMIN);
             return;
         }
@@ -135,24 +135,24 @@ public class CmdRole implements Cmd {
             return;
         }
 
-        if (sender.getFaction() != target.getFaction()) {
+        if (sender.faction() != target.faction()) {
             sender.msg(TL.COMMAND_ADMIN_NOTMEMBER);
             return;
         }
 
-        Bukkit.getServer().getPluginManager().callEvent(new FactionNewAdminEvent(target, sender.getFaction()));
+        Bukkit.getServer().getPluginManager().callEvent(new FactionNewAdminEvent(target, sender.faction()));
 
         // promote target player, and demote existing admin
-        sender.setRole(Role.COLEADER); // TODO check limit here
-        target.setRole(Role.ADMIN);
-        if (sender.getPlayer() instanceof Player player) {
+        sender.role(Role.COLEADER); // TODO check limit here
+        target.role(Role.ADMIN);
+        if (sender.asPlayer() instanceof Player player) {
             player.updateCommands();
         }
-        if (target.getPlayer() instanceof Player player) {
+        if (target.asPlayer() instanceof Player player) {
             player.updateCommands();
         }
 
         // Inform all players
-        sender.getFaction().msg(TL.COMMAND_ADMIN_PROMOTED, sender.describeTo(target), target.describeTo(sender), sender.getFaction().describeTo(sender));
+        sender.faction().msg(TL.COMMAND_ADMIN_PROMOTED, sender.describeTo(target), target.describeTo(sender), sender.faction().describeTo(sender));
     }
 }

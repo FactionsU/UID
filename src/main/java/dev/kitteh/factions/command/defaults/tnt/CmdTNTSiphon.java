@@ -44,7 +44,7 @@ public class CmdTNTSiphon implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
             sender.msg(TL.COMMAND_TNT_TERRITORYONLY);
@@ -58,7 +58,7 @@ public class CmdTNTSiphon implements Cmd {
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().commands().tnt().isAboveMaxStorage(faction.getTNTBank() + 1)) {
+        if (FactionsPlugin.getInstance().conf().commands().tnt().isAboveMaxStorage(faction.tntBank() + 1)) {
             sender.msg(TL.COMMAND_TNT_SIPHON_FAIL_FULL);
             return;
         }
@@ -77,7 +77,7 @@ public class CmdTNTSiphon implements Cmd {
             canTake = FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage();
         }
 
-        canTake -= faction.getTNTBank();
+        canTake -= faction.tntBank();
 
         if (amount > 0 && amount < canTake) {
             canTake = amount;
@@ -99,8 +99,8 @@ public class CmdTNTSiphon implements Cmd {
 
         int acquired = canTake - remaining;
 
-        faction.setTNTBank(faction.getTNTBank() + acquired);
+        faction.tntBank(faction.tntBank() + acquired);
 
-        sender.msg(TL.COMMAND_TNT_SIPHON_MESSAGE, acquired, faction.getTNTBank());
+        sender.msg(TL.COMMAND_TNT_SIPHON_MESSAGE, acquired, faction.tntBank());
     }
 }

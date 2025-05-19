@@ -19,7 +19,7 @@ public interface Participator {
      *
      * @return offline player representation
      */
-    OfflinePlayer getOfflinePlayer();
+    OfflinePlayer asOfflinePlayer();
 
     /**
      * Sends a String.format-able message.
@@ -54,19 +54,19 @@ public interface Participator {
         return RelationUtil.describeThatToMe(this, that, uppercaseFirst);
     }
 
-    default Relation getRelationTo(@Nullable Participator that) {
+    default Relation relationTo(@Nullable Participator that) {
         return RelationUtil.getRelationTo(this, that);
     }
 
-    default Relation getRelationTo(@Nullable Participator that, boolean ignorePeaceful) {
+    default Relation relationTo(@Nullable Participator that, boolean ignorePeaceful) {
         return RelationUtil.getRelationTo(this, that, ignorePeaceful);
     }
 
-    default TextColor getTextColorTo(@Nullable Participator that) {
+    default TextColor textColorTo(@Nullable Participator that) {
         return RelationUtil.getTextColorOfThatToMe(this, that);
     }
 
-    default String getColorStringTo(@Nullable Participator that) {
+    default String colorStringTo(@Nullable Participator that) {
         return RelationUtil.getColorStringOfThatToMe(this, that);
     }
 }

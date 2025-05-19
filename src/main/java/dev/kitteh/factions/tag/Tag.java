@@ -7,7 +7,6 @@ import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 public interface Tag {
     int ARBITRARY_LIMIT = 20000;
@@ -31,7 +30,7 @@ public interface Tag {
      * @return clean line
      */
     static String parsePlain(FPlayer fplayer, String line) {
-        return parsePlain(fplayer.getFaction(), fplayer, line);
+        return parsePlain(fplayer.faction(), fplayer, line);
     }
 
     /**

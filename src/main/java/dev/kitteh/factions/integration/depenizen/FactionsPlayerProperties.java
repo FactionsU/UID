@@ -94,7 +94,7 @@ public class FactionsPlayerProperties implements Property {
             // Returns the player's power level.
             // -->
             if (attribute.startsWith("power")) {
-                return new ElementTag(getFPlayer().getPower()).getObjectAttribute(attribute.fulfill(1));
+                return new ElementTag(getFPlayer().power()).getObjectAttribute(attribute.fulfill(1));
             } else if (getFPlayer().hasFaction()) {
 
                 // <--[tag]
@@ -106,8 +106,8 @@ public class FactionsPlayerProperties implements Property {
                 // Note: In modern Factions these are called ranks instead of roles.
                 // -->
                 if (attribute.startsWith("role")) {
-                    if (getFPlayer().getRole() != null) {
-                        return new ElementTag(getFPlayer().getRole().toString()).getObjectAttribute(attribute.fulfill(1));
+                    if (getFPlayer().role() != null) {
+                        return new ElementTag(getFPlayer().role().toString()).getObjectAttribute(attribute.fulfill(1));
                     }
                 }
 
@@ -119,8 +119,8 @@ public class FactionsPlayerProperties implements Property {
                 // Returns the player's title.
                 // -->
                 else if (attribute.startsWith("title")) {
-                    if (getFPlayer().getTitle() != null) {
-                        return new ElementTag(getFPlayer().getTitle()).getObjectAttribute(attribute.fulfill(1));
+                    if (getFPlayer().title() != null) {
+                        return new ElementTag(getFPlayer().title()).getObjectAttribute(attribute.fulfill(1));
                     }
                 }
             }
@@ -135,7 +135,7 @@ public class FactionsPlayerProperties implements Property {
         // Returns the player's faction.
         // -->
         else if (attribute.startsWith("faction")) {
-            return new FactionTag(getFPlayer().getFaction()).getObjectAttribute(attribute.fulfill(1));
+            return new FactionTag(getFPlayer().faction()).getObjectAttribute(attribute.fulfill(1));
         }
 
         return null;

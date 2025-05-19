@@ -91,14 +91,14 @@ public class FactionsPlayerListener extends AbstractListener {
 
         FLocation standing = new FLocation(player.getLocation());
         // Store player's current FLocation
-        me.setLastStoodAt(standing);
+        me.lastStoodAt(standing);
 
         if (this.plugin.conf().factions().protection().territoryTeleport().isEnabled()) {
-            long diff = System.currentTimeMillis() - me.getLastLoginTime();
+            long diff = System.currentTimeMillis() - me.lastLogin();
             MainConfig.Factions.Protection.TerritoryTeleport terry = this.plugin.conf().factions().protection().territoryTeleport();
             if (diff > (1000L * terry.getTimeSinceLastSignedIn())) {
                 Faction standingFaction = Board.board().factionAt(standing);
-                Relation relation = me.getRelationTo(standingFaction);
+                Relation relation = me.relationTo(standingFaction);
                 if (terry.isRelationToTeleportOut(relation, standingFaction)) {
                     Location target = null;
                     for (String destination : terry.getDestination().split(",")) {
@@ -111,7 +111,7 @@ public class FactionsPlayerListener extends AbstractListener {
                                 break;
                             case "home":
                                 if (me.hasFaction()) {
-                                    target = me.getFaction().getHome();
+                                    target = me.faction().home();
                                 }
                                 break;
                             case "bed":
@@ -133,19 +133,16 @@ public class FactionsPlayerListener extends AbstractListener {
             }
         }
 
-        // Update the lastLoginTime for this fplayer
-        me.setLastLoginTime(System.currentTimeMillis());
-
         ((MemoryFPlayer) me).onLogInOut();
-        me.setOfflinePlayer(player);
+        ((MemoryFPlayer) me).setOfflinePlayer(player);
 
-        if (me.isSpyingChat() && !player.hasPermission(Permission.CHATSPY.node)) {
-            me.setSpyingChat(false);
+        if (me.spyingChat() && !player.hasPermission(Permission.CHATSPY.node)) {
+            me.spyingChat(false);
             this.plugin.log(Level.INFO, "Found %s spying chat without permission on login. Disabled their chat spying.", player.getName());
         }
 
-        if (me.isAdminBypassing() && !player.hasPermission(Permission.BYPASS.node)) {
-            me.setIsAdminBypassing(false);
+        if (me.adminBypass() && !player.hasPermission(Permission.BYPASS.node)) {
+            me.adminBypass(false);
             this.plugin.log(Level.INFO, "Found %s on admin Bypass without permission on login. Disabled it for them.", player.getName());
         }
 
@@ -161,7 +158,7 @@ public class FactionsPlayerListener extends AbstractListener {
             @Override
             public void run() {
                 if (me.isOnline()) {
-                    me.getFaction().sendUnreadAnnouncements(me);
+                    me.faction().sendUnreadAnnouncements(me);
                 }
             }
         }.runTaskLater(this.plugin, 33L); // Don't ask me why.
@@ -172,24 +169,24 @@ public class FactionsPlayerListener extends AbstractListener {
             FScoreboard.get(me).setSidebarVisibility(me.showScoreboard());
         }
 
-        Faction myFaction = me.getFaction();
+        Faction myFaction = me.faction();
         if (!myFaction.isWilderness()) {
-            for (FPlayer other : myFaction.getFPlayersWhereOnline(true)) {
-                if (other != me && other.isMonitoringJoins()) {
-                    other.msg(TL.FACTION_LOGIN, me.getName());
+            for (FPlayer other : myFaction.membersOnline(true)) {
+                if (other != me && other.monitorJoins()) {
+                    other.msg(TL.FACTION_LOGIN, me.name());
                 }
             }
         }
 
-        me.setTakeFallDamage(true);
-        if (me.isFlying()) {
+        me.takeFallDamage(true);
+        if (me.flying()) {
             player.setAllowFlight(true);
             player.setFlying(true);
         }
         me.flightCheck();
 
         if (this.plugin.getSeeChunkUtil() != null) {
-            this.plugin.getSeeChunkUtil().updatePlayerInfo(me.getUniqueId(), me.isSeeingChunk());
+            this.plugin.getSeeChunkUtil().updatePlayerInfo(me.uniqueId(), me.seeChunk());
         }
     }
 
@@ -199,8 +196,6 @@ public class FactionsPlayerListener extends AbstractListener {
         FPlayer me = FPlayers.fPlayers().get(player);
 
         this.plugin.getLandRaidControl().onQuit(me);
-        // and update their last login time to point to when the logged off, for auto-remove routine
-        me.setLastLoginTime(System.currentTimeMillis());
 
         ((MemoryFPlayer) me).onLogInOut();
 
@@ -211,15 +206,15 @@ public class FactionsPlayerListener extends AbstractListener {
             this.plugin.getTimers().remove(player.getUniqueId());
         }
 
-        Faction myFaction = me.getFaction();
+        Faction myFaction = me.faction();
         if (!myFaction.isWilderness()) {
-            myFaction.memberLoggedOff();
+            myFaction.trackMemberLoggedOff();
         }
 
         if (!myFaction.isWilderness()) {
-            for (FPlayer fPlayer : myFaction.getFPlayersWhereOnline(true)) {
-                if (fPlayer != me && fPlayer.isMonitoringJoins()) {
-                    fPlayer.msg(TL.FACTION_LOGOUT, me.getName());
+            for (FPlayer fPlayer : myFaction.membersOnline(true)) {
+                if (fPlayer != me && fPlayer.monitorJoins()) {
+                    fPlayer.msg(TL.FACTION_LOGOUT, me.name());
                 }
             }
         }
@@ -227,9 +222,9 @@ public class FactionsPlayerListener extends AbstractListener {
         FScoreboard.remove(me, event.getPlayer());
 
         if (this.plugin.getSeeChunkUtil() != null) {
-            this.plugin.getSeeChunkUtil().updatePlayerInfo(me.getUniqueId(), false);
+            this.plugin.getSeeChunkUtil().updatePlayerInfo(me.uniqueId(), false);
         }
-        me.setOfflinePlayer(null);
+        ((MemoryFPlayer) me).setOfflinePlayer(null);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -242,9 +237,9 @@ public class FactionsPlayerListener extends AbstractListener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (me.isFlying() && me.getPlayer() != null) {
-                        me.getPlayer().setAllowFlight(true);
-                        me.getPlayer().setFlying(true);
+                    if (me.flying() && me.asPlayer() != null) {
+                        me.asPlayer().setAllowFlight(true);
+                        me.asPlayer().setFlying(true);
                     }
                     me.flightCheck();
                 }
@@ -273,8 +268,8 @@ public class FactionsPlayerListener extends AbstractListener {
 
         // clear visualization
         if (fromLoc.getBlockX() != toLoc.getBlockX() || fromLoc.getBlockY() != toLoc.getBlockY() || fromLoc.getBlockZ() != toLoc.getBlockZ() || fromLoc.getWorld() != toLoc.getWorld()) {
-            if (me.isWarmingUp()) {
-                me.clearWarmup();
+            if (me.warmingUp()) {
+                me.cancelWarmup();
                 me.msg(TL.WARMUPS_CANCELLED);
             }
         }
@@ -298,14 +293,14 @@ public class FactionsPlayerListener extends AbstractListener {
 
         // Yes we did change coord (:
 
-        me.setLastStoodAt(to);
+        me.lastStoodAt(to);
 
         boolean canFlyPreClaim = me.canFlyAtLocation();
 
-        if (me.getAutoClaimFor() != null) {
-            me.attemptClaim(me.getAutoClaimFor(), to, true);
-        } else if (me.getAutoUnclaimFor() != null) {
-            me.attemptUnclaim(me.getAutoUnclaimFor(), to, true);
+        if (me.autoClaim() != null) {
+            me.attemptClaim(me.autoClaim(), to, true);
+        } else if (me.autoUnclaim() != null) {
+            me.attemptUnclaim(me.autoUnclaim(), to, true);
         }
 
         // Did we change "host"(faction)?
@@ -313,27 +308,27 @@ public class FactionsPlayerListener extends AbstractListener {
         Faction factionTo = Board.board().factionAt(to);
         boolean changedFaction = (factionFrom != factionTo);
 
-        if (factionTo == me.getFaction()) {
+        if (factionTo == me.faction()) {
             me.attemptAutoSetZone(to);
         }
 
         free:
-        if (plugin.conf().commands().fly().isEnable() && !me.isAdminBypassing()) {
+        if (plugin.conf().commands().fly().isEnable() && !me.adminBypass()) {
             boolean canFly = me.canFlyAtLocation(to);
             if (!changedFaction) {
-                if (canFly && !canFlyPreClaim && me.isFlying() && plugin.conf().commands().fly().isDisableFlightDuringAutoclaim()) {
-                    me.setFlying(false);
+                if (canFly && !canFlyPreClaim && me.flying() && plugin.conf().commands().fly().isDisableFlightDuringAutoclaim()) {
+                    me.flying(false);
                 }
                 break free;
             }
-            if (me.isFlying() && !canFly) {
-                me.setFlying(false);
-            } else if (me.isAutoFlying() && !me.isFlying() && canFly) {
-                me.setFlying(true);
+            if (me.flying() && !canFly) {
+                me.flying(false);
+            } else if (me.autoFlying() && !me.flying() && canFly) {
+                me.flying(true);
             }
         }
 
-        if (me.isMapAutoUpdating()) {
+        if (me.mapAutoUpdating()) {
             if (!showTimes.containsKey(player.getUniqueId()) || (showTimes.get(player.getUniqueId()) < System.currentTimeMillis())) {
                 for (Component component : ((MemoryBoard) Board.board()).getMap(me, to, player.getLocation().getYaw())) {
                     me.sendMessage(component);
@@ -502,7 +497,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         FPlayer me = FPlayers.fPlayers().get(player);
-        if (me.isAdminBypassing()) {
+        if (me.adminBypass()) {
             return true;
         }
 
@@ -514,7 +509,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         if (checkDenyList) {
-            if (otherFaction.hasPlayersOnline()) {
+            if (otherFaction.hasMembersOnline()) {
                 if (!facConf.protection().getTerritoryDenyUsageMaterials().contains(material)) {
                     return true; // Item isn't one we're preventing for online factions.
                 }
@@ -559,7 +554,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (!otherFaction.hasAccess(me, PermissibleActions.ITEM, loc)) {
             if (!justCheck) {
-                me.msg(TL.PLAYER_USE_TERRITORY, TextUtil.getMaterialName(material), otherFaction.getTag(me.getFaction()));
+                me.msg(TL.PLAYER_USE_TERRITORY, TextUtil.getMaterialName(material), otherFaction.tagString(me.faction()));
             }
             return false;
         }
@@ -577,7 +572,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         this.plugin.getLandRaidControl().onRespawn(me);
 
-        Location home = me.getFaction().getHome();
+        Location home = me.faction().home();
         MainConfig.Factions facConf = this.plugin.conf().factions();
         if (facConf.homes().isEnabled() &&
                 facConf.homes().isTeleportToOnDeath() &&
@@ -599,13 +594,13 @@ public class FactionsPlayerListener extends AbstractListener {
         boolean isEnabled = WorldUtil.isEnabled(event.getPlayer().getWorld());
         if (!isEnabled) {
             FScoreboard.remove(me, event.getPlayer());
-            if (me.isFlying()) {
-                me.setFlying(false);
+            if (me.flying()) {
+                me.flying(false);
             }
             return;
         }
         FLocation to = new FLocation(event.getPlayer().getLocation());
-        me.setLastStoodAt(to);
+        me.lastStoodAt(to);
         me.flightCheck();
         if (!event.getFrom().equals(event.getPlayer().getWorld()) && !WorldUtil.isEnabled(event.getFrom())) {
             this.plugin.getLandRaidControl().update(me);
@@ -651,7 +646,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         FPlayer me = FPlayers.fPlayers().get(player);
-        if (me.isAdminBypassing()) {
+        if (me.adminBypass()) {
             return;
         }
 
@@ -704,42 +699,42 @@ public class FactionsPlayerListener extends AbstractListener {
         }
 
         if (me.hasFaction() &&
-                !me.isAdminBypassing() &&
+                !me.adminBypass() &&
                 !protection.getPermanentFactionMemberDenyCommands().isEmpty() &&
-                me.getFaction().isPermanent() &&
+                me.faction().permanent() &&
                 isCommandInSet(fullCmd, shortCmd, protection.getPermanentFactionMemberDenyCommands())) {
             me.msg(TL.PLAYER_COMMAND_PERMANENT, fullCmd);
             return true;
         }
 
         Faction at = Board.board().factionAt(new FLocation(player.getLocation()));
-        if (at.isWilderness() && !protection.getWildernessDenyCommands().isEmpty() && !me.isAdminBypassing() && isCommandInSet(fullCmd, shortCmd, protection.getWildernessDenyCommands())) {
+        if (at.isWilderness() && !protection.getWildernessDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getWildernessDenyCommands())) {
             me.msg(TL.PLAYER_COMMAND_WILDERNESS, fullCmd);
             return true;
         }
 
-        Relation rel = at.getRelationTo(me);
-        if (at.isNormal() && rel.isAlly() && !protection.getTerritoryAllyDenyCommands().isEmpty() && !me.isAdminBypassing() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryAllyDenyCommands())) {
+        Relation rel = at.relationTo(me);
+        if (at.isNormal() && rel.isAlly() && !protection.getTerritoryAllyDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryAllyDenyCommands())) {
             me.msg(TL.PLAYER_COMMAND_ALLY, fullCmd);
             return true;
         }
 
-        if (at.isNormal() && rel.isTruce() && !protection.getTerritoryTruceDenyCommands().isEmpty() && !me.isAdminBypassing() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryTruceDenyCommands())) {
+        if (at.isNormal() && rel.isTruce() && !protection.getTerritoryTruceDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryTruceDenyCommands())) {
             me.msg(TL.PLAYER_COMMAND_TRUCE, fullCmd);
             return true;
         }
 
-        if (at.isNormal() && rel.isNeutral() && !protection.getTerritoryNeutralDenyCommands().isEmpty() && !me.isAdminBypassing() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryNeutralDenyCommands())) {
+        if (at.isNormal() && rel.isNeutral() && !protection.getTerritoryNeutralDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryNeutralDenyCommands())) {
             me.msg(TL.PLAYER_COMMAND_NEUTRAL, fullCmd);
             return true;
         }
 
-        if (at.isNormal() && rel.isEnemy() && !protection.getTerritoryEnemyDenyCommands().isEmpty() && !me.isAdminBypassing() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryEnemyDenyCommands())) {
+        if (at.isNormal() && rel.isEnemy() && !protection.getTerritoryEnemyDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryEnemyDenyCommands())) {
             me.msg(TL.PLAYER_COMMAND_ENEMY, fullCmd);
             return true;
         }
 
-        if (at.isWarZone() && !protection.getWarzoneDenyCommands().isEmpty() && !me.isAdminBypassing() && isCommandInSet(fullCmd, shortCmd, protection.getWarzoneDenyCommands())) {
+        if (at.isWarZone() && !protection.getWarzoneDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getWarzoneDenyCommands())) {
             me.msg(TL.PLAYER_COMMAND_WARZONE, fullCmd);
             return true;
         }
@@ -808,12 +803,12 @@ public class FactionsPlayerListener extends AbstractListener {
         // if player was banned (not just kicked), get rid of their stored info
         // TODO fix this nonsense
         if (this.plugin.conf().factions().other().isRemovePlayerDataWhenBanned() && event.getReason().equals("Banned by admin.")) {
-            if (badGuy.getRole() == Role.ADMIN) {
-                badGuy.getFaction().promoteNewLeader();
+            if (badGuy.role() == Role.ADMIN) {
+                badGuy.faction().promoteNewLeader();
             }
 
             badGuy.leave(false);
-            badGuy.remove();
+            badGuy.eraseData();
         }
     }
 
@@ -837,7 +832,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (this.plugin.conf().factions().chat().isTriggerPublicChat(cmd.startsWith("/") ? cmd.substring(1) : cmd)) {
             FPlayer p = FPlayers.fPlayers().get(event.getPlayer());
-            p.setChatTarget(ChatTarget.PUBLIC);
+            p.chatTarget(ChatTarget.PUBLIC);
             p.msg(TL.COMMAND_CHAT_MODE_PUBLIC);
         }
 

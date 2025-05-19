@@ -39,40 +39,40 @@ public class CmdKick implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         FPlayer toKick = context.getOrDefault("target", null);
 
         if (toKick == null) {
             LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
             Component component = legacy.deserialize(TL.COMMAND_KICK_CANDIDATES.toString()).color(NamedTextColor.GOLD);
-            for (FPlayer player : faction.getFPlayersWhereRole(Role.RECRUIT)) {
-                String s = player.getName();
+            for (FPlayer player : faction.members(Role.RECRUIT)) {
+                String s = player.name();
                 component = component.append(Component.text().color(NamedTextColor.WHITE).content(s + " ")
                         .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
                         .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " kick " + s))
                 );
             }
-            for (FPlayer player : faction.getFPlayersWhereRole(Role.NORMAL)) {
-                String s = player.getName();
+            for (FPlayer player : faction.members(Role.NORMAL)) {
+                String s = player.name();
                 component = component.append(Component.text().color(NamedTextColor.WHITE).content(s + " ")
                         .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
                         .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " kick " + s))
                 );
             }
-            if (sender.getRole().isAtLeast(Role.COLEADER)) {
+            if (sender.role().isAtLeast(Role.COLEADER)) {
                 // For both coleader and admin, add mods.
-                for (FPlayer player : faction.getFPlayersWhereRole(Role.MODERATOR)) {
-                    String s = player.getName();
+                for (FPlayer player : faction.members(Role.MODERATOR)) {
+                    String s = player.name();
                     component = component.append(Component.text().color(NamedTextColor.GRAY).content(s + " ")
                             .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
                             .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " kick " + s))
                     );
                 }
-                if (sender.getRole() == Role.ADMIN) {
+                if (sender.role() == Role.ADMIN) {
                     // Only add coleader to this for the leader.
-                    for (FPlayer player : faction.getFPlayersWhereRole(Role.COLEADER)) {
-                        String s = player.getName();
+                    for (FPlayer player : faction.members(Role.COLEADER)) {
+                        String s = player.name();
                         component = component.append(Component.text().color(NamedTextColor.RED).content(s + " ")
                                 .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
                                 .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " kick " + s))
@@ -90,7 +90,7 @@ public class CmdKick implements Cmd {
             return;
         }
 
-        Faction toKickFaction = toKick.getFaction();
+        Faction toKickFaction = toKick.faction();
 
         if (toKickFaction.isWilderness()) {
             sender.sendMessage(TL.COMMAND_KICK_NONE.toString());
@@ -102,7 +102,7 @@ public class CmdKick implements Cmd {
             return;
         }
 
-        if (toKick.getRole().isAtLeast(sender.getRole())) {
+        if (toKick.role().isAtLeast(sender.role())) {
             sender.msg(TL.COMMAND_KICK_INSUFFICIENTRANK);
             return;
         }
@@ -117,7 +117,7 @@ public class CmdKick implements Cmd {
         }
 
         // trigger the leave event (cancellable) [reason:kicked]
-        FPlayerLeaveEvent event = new FPlayerLeaveEvent(toKick, toKick.getFaction(), FPlayerLeaveEvent.Reason.KICKED);
+        FPlayerLeaveEvent event = new FPlayerLeaveEvent(toKick, toKick.faction(), FPlayerLeaveEvent.Reason.KICKED);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
@@ -132,10 +132,10 @@ public class CmdKick implements Cmd {
         toKick.msg(TL.COMMAND_KICK_KICKED, sender.describeTo(toKick, true), toKickFaction.describeTo(toKick));
 
         if (FactionsPlugin.getInstance().conf().logging().isFactionKick()) {
-            FactionsPlugin.getInstance().log(sender.getName() + " kicked " + toKick.getName() + " from the faction: " + toKickFaction.getTag());
+            FactionsPlugin.getInstance().log(sender.name() + " kicked " + toKick.name() + " from the faction: " + toKickFaction.tag());
         }
 
-        toKickFaction.deinvite(toKick);
+        toKickFaction.deInvite(toKick);
         toKick.resetFactionData(true);
     }
 }

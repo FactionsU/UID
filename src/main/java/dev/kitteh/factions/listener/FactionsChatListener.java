@@ -41,29 +41,29 @@ public class FactionsChatListener implements Listener {
         Player talkingPlayer = event.getPlayer();
         String msg = event.getMessage();
         FPlayer me = FPlayers.fPlayers().get(talkingPlayer);
-        Faction faction = me.getFaction();
+        Faction faction = me.faction();
         MainConfig.Factions.Chat.InternalChat chatConf = FactionsPlugin.getInstance().conf().factions().chat().internalChat();
 
-        ChatTarget chatTarget = me.getChatTarget();
+        ChatTarget chatTarget = me.chatTarget();
 
         LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
 
         if (chatTarget instanceof ChatTarget.Role(Role role)) {
             String format = role == Role.RECRUIT ? chatConf.getFactionMemberAllChatFormat() : chatConf.getFactionMemberChatFormat();
-            for (FPlayer fPlayer : faction.getFPlayersWhereOnline(true)) {
-                if (fPlayer.getRole().isAtLeast(role)) {
+            for (FPlayer fPlayer : faction.membersOnline(true)) {
+                if (fPlayer.role().isAtLeast(role)) {
                     fPlayer.sendMessage(MiniMessage.miniMessage().deserialize(format,
                             Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.getTag(fPlayer))),
+                            Placeholder.component("faction", legacy.deserialize(faction.tagString(fPlayer))),
                             Placeholder.unparsed("role", role.nicename),
-                            Placeholder.component("sender", legacy.deserialize(me.getChatTag(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(me.chatTag(fPlayer)))
                     ));
-                } else if (fPlayer.isSpyingChat()) {
+                } else if (fPlayer.spyingChat()) {
                     fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("[MCspy] " + format,
                             Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.getTag(fPlayer))),
+                            Placeholder.component("faction", legacy.deserialize(faction.tagString(fPlayer))),
                             Placeholder.unparsed("role", role.nicename),
-                            Placeholder.component("sender", legacy.deserialize(me.getChatTag(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(me.chatTag(fPlayer)))
                     ));
                 }
             }
@@ -72,23 +72,23 @@ public class FactionsChatListener implements Listener {
             String format = chatConf.getRelationChatFormat();
 
             for (FPlayer fPlayer : FPlayers.fPlayers().online()) {
-                if (fPlayer.getFaction() == faction || (faction.getRelationTo(fPlayer) == relation &&
+                if (fPlayer.faction() == faction || (faction.relationTo(fPlayer) == relation &&
                         (
-                                (relation == Relation.ALLY && !fPlayer.isIgnoreAllianceChat()) ||
-                                        (relation == Relation.TRUCE && !fPlayer.isIgnoreTruceChat())
+                                (relation == Relation.ALLY && !fPlayer.ignoreAllianceChat()) ||
+                                        (relation == Relation.TRUCE && !fPlayer.ignoreTruceChat())
                         ))) {
                     fPlayer.sendMessage(MiniMessage.miniMessage().deserialize(format,
                             Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.getTag(fPlayer))),
+                            Placeholder.component("faction", legacy.deserialize(faction.tagString(fPlayer))),
                             Placeholder.unparsed("relation", relation.nicename),
-                            Placeholder.component("sender", legacy.deserialize(me.getChatTag(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(me.chatTag(fPlayer)))
                     ));
-                } else if (fPlayer.isSpyingChat()) {
+                } else if (fPlayer.spyingChat()) {
                     fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("[MCspy] " + format,
                             Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.getTag(fPlayer))),
+                            Placeholder.component("faction", legacy.deserialize(faction.tagString(fPlayer))),
                             Placeholder.unparsed("relation", relation.nicename),
-                            Placeholder.component("sender", legacy.deserialize(me.getChatTag(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(me.chatTag(fPlayer)))
                     ));
                 }
             }
@@ -122,7 +122,7 @@ public class FactionsChatListener implements Listener {
         if (!chatConf.getTagReplaceString().isEmpty() && eventFormat.contains(chatConf.getTagReplaceString())) {
             // we're using the "replace" method of inserting the faction tags
             if (eventFormat.contains("[FACTION_TITLE]")) {
-                eventFormat = eventFormat.replace("[FACTION_TITLE]", me.getTitle());
+                eventFormat = eventFormat.replace("[FACTION_TITLE]", me.title());
             }
             InsertIndex = eventFormat.indexOf(chatConf.getTagReplaceString());
             eventFormat = eventFormat.replace(chatConf.getTagReplaceString(), "");
@@ -138,10 +138,10 @@ public class FactionsChatListener implements Listener {
             return;
         }
 
-        String formatStart = eventFormat.substring(0, InsertIndex) + ((padBefore && !me.getChatTag().isEmpty()) ? " " : "");
-        String formatEnd = ((padAfter && !me.getChatTag().isEmpty()) ? " " : "") + eventFormat.substring(InsertIndex);
+        String formatStart = eventFormat.substring(0, InsertIndex) + ((padBefore && !me.chatTag().isEmpty()) ? " " : "");
+        String formatEnd = ((padAfter && !me.chatTag().isEmpty()) ? " " : "") + eventFormat.substring(InsertIndex);
 
-        String nonColoredMsgFormat = formatStart + me.getChatTag().trim() + formatEnd;
+        String nonColoredMsgFormat = formatStart + me.chatTag().trim() + formatEnd;
 
         // Relation Colored?
         if (chatConf.isTagRelationColored()) {
@@ -150,7 +150,7 @@ public class FactionsChatListener implements Listener {
                     continue;
                 }
                 FPlayer you = FPlayers.fPlayers().get(listeningPlayer);
-                String yourFormat = formatStart + me.getChatTag(you).trim() + formatEnd;
+                String yourFormat = formatStart + me.chatTag(you).trim() + formatEnd;
                 try {
                     listeningPlayer.sendMessage(String.format(yourFormat, talkingPlayer.getDisplayName(), msg));
                 } catch (UnknownFormatConversionException ex) {

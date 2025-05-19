@@ -29,14 +29,14 @@ public class CmdBypass implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         
-        sender.setIsAdminBypassing(!sender.isAdminBypassing());
+        sender.adminBypass(!sender.adminBypass());
 
-        if (sender.isAdminBypassing()) {
+        if (sender.adminBypass()) {
             sender.msg(TL.COMMAND_BYPASS_ENABLE);
-            FactionsPlugin.getInstance().log(sender.getName() + TL.COMMAND_BYPASS_ENABLELOG);
+            FactionsPlugin.getInstance().log(sender.name() + TL.COMMAND_BYPASS_ENABLELOG);
         } else {
             sender.msg(TL.COMMAND_BYPASS_DISABLE);
-            FactionsPlugin.getInstance().log(sender.getName() + TL.COMMAND_BYPASS_DISABLELOG);
+            FactionsPlugin.getInstance().log(sender.name() + TL.COMMAND_BYPASS_DISABLELOG);
         }
     }
 }

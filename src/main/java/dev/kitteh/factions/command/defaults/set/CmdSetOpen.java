@@ -33,23 +33,23 @@ public class CmdSetOpen implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
         if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostOpen(), TL.COMMAND_OPEN_TOOPEN, TL.COMMAND_OPEN_FOROPEN)) {
             return;
         }
 
-        faction.setOpen(context.getOrDefault("openstate", !faction.getOpen()));
+        faction.open(context.getOrDefault("openstate", !faction.open()));
 
-        String open = faction.getOpen() ? TL.COMMAND_OPEN_OPEN.toString() : TL.COMMAND_OPEN_CLOSED.toString();
+        String open = faction.open() ? TL.COMMAND_OPEN_OPEN.toString() : TL.COMMAND_OPEN_CLOSED.toString();
 
         // Inform
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-            if (fplayer.getFaction() == faction) {
-                fplayer.msg(TL.COMMAND_OPEN_CHANGES, sender.getName(), open);
+            if (fplayer.faction() == faction) {
+                fplayer.msg(TL.COMMAND_OPEN_CHANGES, sender.name(), open);
                 continue;
             }
-            fplayer.msg(TL.COMMAND_OPEN_CHANGED, faction.getTag(fplayer.getFaction()), open);
+            fplayer.msg(TL.COMMAND_OPEN_CHANGED, faction.tagString(fplayer.faction()), open);
         }
     }
 }

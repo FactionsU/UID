@@ -38,7 +38,7 @@ public final class Upgrades {
     public static final Upgrade ZONES = new Upgrade.Reactive("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE),
             (f, o, n) -> {
                 if (o == 0) {
-                    f.getOnlinePlayers().forEach(Player::updateCommands);
+                    f.membersOnlineAsPlayers().forEach(Player::updateCommands);
                 }
             });
 

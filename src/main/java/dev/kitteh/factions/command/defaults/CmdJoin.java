@@ -41,15 +41,15 @@ public class CmdJoin implements Cmd {
             return;
         }
 
-        if (faction == sender.getFaction()) {
+        if (faction == sender.faction()) {
             //TODO:TL
-            sender.msg(TL.COMMAND_JOIN_ALREADYMEMBER, sender.describeTo(sender, false), "is", faction.getTag(sender));
+            sender.msg(TL.COMMAND_JOIN_ALREADYMEMBER, sender.describeTo(sender, false), "is", faction.tagString(sender));
             return;
         }
 
-        int max = faction.getMaxMembers();
-        if (faction.getSize() > max) {
-            sender.msg(TL.COMMAND_JOIN_ATLIMIT, faction.getTag(sender), max, sender.describeTo(sender, false));
+        int max = faction.memberLimit();
+        if (faction.size() > max) {
+            sender.msg(TL.COMMAND_JOIN_ATLIMIT, faction.tagString(sender), max, sender.describeTo(sender, false));
             return;
         }
 
@@ -63,7 +63,7 @@ public class CmdJoin implements Cmd {
             return;
         }
 
-        if (!(faction.getOpen() || faction.isInvited(sender))) {
+        if (!(faction.open() || faction.hasInvite(sender))) {
             sender.msg(TL.COMMAND_JOIN_REQUIRESINVITATION);
             if (!faction.isBanned(sender)) {
                 faction.msg(TL.COMMAND_JOIN_ATTEMPTEDJOIN, sender.describeTo(faction, true));
@@ -78,7 +78,7 @@ public class CmdJoin implements Cmd {
 
         // Check for ban
         if (faction.isBanned(sender)) {
-            sender.msg(TL.COMMAND_JOIN_BANNED, faction.getTag(sender));
+            sender.msg(TL.COMMAND_JOIN_BANNED, faction.tagString(sender));
             return;
         }
 
@@ -94,18 +94,18 @@ public class CmdJoin implements Cmd {
             return;
         }
 
-        sender.msg(TL.COMMAND_JOIN_SUCCESS, sender.describeTo(sender, true), faction.getTag(sender));
+        sender.msg(TL.COMMAND_JOIN_SUCCESS, sender.describeTo(sender, true), faction.tagString(sender));
 
         faction.msg(TL.COMMAND_JOIN_JOINED, sender.describeTo(faction, true));
 
         sender.resetFactionData();
-        sender.setFaction(faction);
-        faction.deinvite(sender);
-        sender.setRole(faction.getDefaultRole());
-        sender.getPlayer().updateCommands();
+        sender.faction(faction);
+        faction.deInvite(sender);
+        sender.role(faction.defaultRole());
+        sender.asPlayer().updateCommands();
 
         if (FactionsPlugin.getInstance().conf().logging().isFactionJoin()) {
-                FactionsPlugin.getInstance().log(TL.COMMAND_JOIN_JOINEDLOG.toString(), sender.getName(), faction.getTag());
+                FactionsPlugin.getInstance().log(TL.COMMAND_JOIN_JOINEDLOG.toString(), sender.name(), faction.tag());
         }
     }
 }

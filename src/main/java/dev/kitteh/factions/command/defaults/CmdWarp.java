@@ -45,10 +45,10 @@ public class CmdWarp implements Cmd {
         // TODO: check if in combat.
 
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = context.flags().get("faction") instanceof Faction fac ? fac : sender.getFaction();
+        Faction faction = context.flags().get("faction") instanceof Faction fac ? fac : sender.faction();
 
-        if (!context.sender().isBypass() && !faction.hasAccess(sender, PermissibleActions.WARP, sender.getLastStoodAt())) {
-            sender.msg(TL.COMMAND_FWARP_NOACCESS, faction.getTag(sender));
+        if (!context.sender().isBypass() && !faction.hasAccess(sender, PermissibleActions.WARP, sender.lastStoodAt())) {
+            sender.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagString(sender));
             return;
         }
 
@@ -59,10 +59,10 @@ public class CmdWarp implements Cmd {
         } else {
             final String passwordAttempt = context.getOrDefault("password", null);
 
-            LazyLocation destination = faction.getWarp(warpName);
+            LazyLocation destination = faction.warp(warpName);
             if (destination != null) {
                 // Check if requires password and if so, check if valid. CASE SENSITIVE
-                if (!sender.isAdminBypassing() && faction.hasWarpPassword(warpName) && !faction.isWarpPassword(warpName, passwordAttempt)) {
+                if (!sender.adminBypass() && faction.hasWarpPassword(warpName) && !faction.isWarpPassword(warpName, passwordAttempt)) {
                     sender.msg(TL.COMMAND_FWARP_INVALID_PASSWORD);
                     return;
                 }
@@ -77,11 +77,11 @@ public class CmdWarp implements Cmd {
                     return;
                 }
                 final FPlayer fPlayer = sender;
-                final UUID uuid = sender.getPlayer().getUniqueId();
+                final UUID uuid = sender.asPlayer().getUniqueId();
 
                 WarmUpUtil.process(sender, WarmUpUtil.Warmup.WARP, TL.WARMUPS_NOTIFY_TELEPORT, warpName, () -> {
                     Player player = Bukkit.getPlayer(uuid);
-                    if (destination == faction.getWarp(warpName) && player != null) {
+                    if (destination == faction.warp(warpName) && player != null) {
                         AbstractFactionsPlugin.getInstance().teleport(player, destination.getLocation()).thenAccept(success -> {
                             if (success) {
                                 fPlayer.msg(TL.COMMAND_FWARP_WARPED, warpName);
@@ -96,6 +96,6 @@ public class CmdWarp implements Cmd {
     }
 
     private boolean transact(FPlayer player, CommandContext<Sender> context) {
-        return player.isAdminBypassing() || context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostWarp(), TL.COMMAND_FWARP_TOWARP, TL.COMMAND_FWARP_FORWARPING);
+        return player.adminBypass() || context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostWarp(), TL.COMMAND_FWARP_TOWARP, TL.COMMAND_FWARP_FORWARPING);
     }
 }

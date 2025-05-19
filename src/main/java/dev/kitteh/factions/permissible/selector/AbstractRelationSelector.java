@@ -70,7 +70,7 @@ public abstract class AbstractRelationSelector extends AbstractSelector {
     public final boolean test(Selectable selectable, Faction faction) {
         Relation relation = null;
         if (selectable instanceof Participator) {
-            relation = ((Participator) selectable).getRelationTo(faction);
+            relation = ((Participator) selectable).relationTo(faction);
         } else if (selectable instanceof Relation) {
             relation = (Relation) selectable;
         }

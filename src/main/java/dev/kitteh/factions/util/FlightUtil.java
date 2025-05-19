@@ -55,12 +55,12 @@ public class FlightUtil {
             Collection<FPlayer> players = FPlayers.fPlayers().online();
             for (Player player : Bukkit.getOnlinePlayers()) {
                 FPlayer pilot = FPlayers.fPlayers().get(player);
-                if (pilot.isFlying() && !pilot.isAdminBypassing()) {
+                if (pilot.flying() && !pilot.adminBypass()) {
                     if (enemiesNearby(pilot, FactionsPlugin.getInstance().conf().commands().fly().getEnemyRadius(), players)) {
                         pilot.msg(TL.COMMAND_FLY_ENEMY_DISABLE);
-                        pilot.setFlying(false);
-                        if (pilot.isAutoFlying()) {
-                            pilot.setAutoFlying(false);
+                        pilot.flying(false);
+                        if (pilot.autoFlying()) {
+                            pilot.autoFlying(false);
                         }
                     }
                 }
@@ -72,22 +72,22 @@ public class FlightUtil {
         }
 
         public boolean enemiesNearby(FPlayer target, int radius, Collection<FPlayer> players) {
-            if (!WorldUtil.isEnabled(target.getPlayer().getWorld())) {
+            if (!WorldUtil.isEnabled(target.asPlayer().getWorld())) {
                 return false;
             }
             int radiusSquared = radius * radius;
-            Location loc = target.getPlayer().getLocation();
+            Location loc = target.asPlayer().getLocation();
             Location cur = new Location(loc.getWorld(), 0, 0, 0);
             for (FPlayer player : players) {
-                if (player == target || player.isAdminBypassing()) {
+                if (player == target || player.adminBypass()) {
                     continue;
                 }
 
-                player.getPlayer().getLocation(cur);
+                player.asPlayer().getLocation(cur);
                 if (cur.getWorld().getUID().equals(loc.getWorld().getUID()) &&
                         cur.distanceSquared(loc) <= radiusSquared &&
-                        player.getRelationTo(target) == Relation.ENEMY &&
-                        target.getPlayer().canSee(player.getPlayer())) {
+                        player.relationTo(target) == Relation.ENEMY &&
+                        target.asPlayer().canSee(player.asPlayer())) {
                     return true;
                 }
             }
@@ -109,9 +109,9 @@ public class FlightUtil {
         public void run() {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 FPlayer pilot = FPlayers.fPlayers().get(player);
-                if (pilot.isFlying()) {
-                    if (pilot.getFlyTrailsEffect() != null && Permission.FLY_TRAILS.has(player) && pilot.getFlyTrailsState()) {
-                        Particle effect = FactionsPlugin.getInstance().getParticleProvider().effectFromString(pilot.getFlyTrailsEffect());
+                if (pilot.flying()) {
+                    if (pilot.flyTrailEffect() != null && Permission.FLY_TRAILS.has(player) && pilot.flyTrail()) {
+                        Particle effect = FactionsPlugin.getInstance().getParticleProvider().effectFromString(pilot.flyTrailEffect());
                         FactionsPlugin.getInstance().getParticleProvider().spawn(effect, player.getLocation(), amount, speed, 0, 0, 0);
                     }
                 }

@@ -42,7 +42,7 @@ public class CmdMoneyBalance implements Cmd {
             faction = f;
         }
         if (faction == null && fPlayer != null) {
-            faction = fPlayer.getFaction();
+            faction = fPlayer.faction();
         }
 
         if (faction == null || !faction.isNormal()) {

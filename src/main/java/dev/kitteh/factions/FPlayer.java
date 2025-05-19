@@ -5,7 +5,6 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.util.WarmUpUtil;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -23,150 +22,135 @@ import java.util.UUID;
  */
 @NullMarked
 public interface FPlayer extends Participator, Selectable {
-    Faction getFaction();
+    UUID uniqueId();
+
+    String name();
+
+    Faction faction();
 
     boolean hasFaction();
 
-    void setFaction(Faction faction);
+    void faction(Faction faction);
 
-    boolean isAutoLeaveExempt();
+    boolean autoLeaveExempt();
 
-    void setAutoLeaveExempt(boolean autoLeave);
+    void autoLeaveExempt(boolean autoLeave);
 
-    long getLastFrostwalkerMessageTime();
+    long lastFrostwalkerMessageTime();
 
-    void setLastFrostwalkerMessageTime();
+    void updateLastFrostwalkerMessageTime();
 
-    void setMonitorJoins(boolean monitor);
+    void monitorJoins(boolean monitor);
 
-    boolean isMonitoringJoins();
+    boolean monitorJoins();
 
-    Role getRole();
+    Role role();
 
-    void setRole(Role role);
+    void role(Role role);
 
-    boolean shouldTakeFallDamage();
+    boolean takeFallDamage();
 
-    void setTakeFallDamage(boolean fallDamage);
-
-    double getPowerBoost();
-
-    void setPowerBoost(double powerBoost);
+    void takeFallDamage(boolean fallDamage);
 
     @Nullable
-    Faction getAutoClaimFor();
+    Faction autoClaim();
 
-    void setAutoClaimFor(@Nullable Faction faction);
-
-    @Nullable
-    String getAutoSetZone();
-
-    void setAutoSetZone(@Nullable String zone);
+    void autoClaim(@Nullable Faction faction);
 
     @Nullable
-    Faction getAutoUnclaimFor();
+    String autoSetZone();
 
-    void setAutoUnclaimFor(@Nullable Faction faction);
+    void autoSetZone(@Nullable String zone);
 
-    boolean isAdminBypassing();
+    @Nullable
+    Faction autoUnclaim();
 
-    void setIsAdminBypassing(boolean val);
+    void autoUnclaim(@Nullable Faction faction);
+
+    boolean adminBypass();
+
+    void adminBypass(boolean val);
 
     boolean isVanished();
 
-    ChatTarget getChatTarget();
+    ChatTarget chatTarget();
 
-    void setChatTarget(ChatTarget chatTarget);
+    void chatTarget(ChatTarget chatTarget);
 
-    void setIgnoreAllianceChat(boolean ignore);
+    void ignoreAllianceChat(boolean ignore);
 
-    boolean isIgnoreAllianceChat();
+    boolean ignoreAllianceChat();
 
-    void setIgnoreTruceChat(boolean ignore);
+    void ignoreTruceChat(boolean ignore);
 
-    boolean isIgnoreTruceChat();
+    boolean ignoreTruceChat();
 
-    void setSpyingChat(boolean chatSpying);
+    void spyingChat(boolean chatSpying);
 
-    boolean isSpyingChat();
+    boolean spyingChat();
 
     boolean showScoreboard();
 
-    void setShowScoreboard(boolean show);
+    void showScoreboard(boolean show);
 
     void resetFactionData();
 
     void resetFactionData(boolean updateCommands);
 
-    long getLastLoginTime();
+    long lastLogin();
 
-    void setLastLoginTime(long lastLoginTime);
+    boolean mapAutoUpdating();
 
-    boolean isMapAutoUpdating();
+    void mapAutoUpdating(boolean mapAutoUpdating);
 
-    void setMapAutoUpdating(boolean mapAutoUpdating);
+    boolean loginPVPDisabled();
 
-    boolean hasLoginPvpDisabled();
+    FLocation lastStoodAt();
 
-    FLocation getLastStoodAt();
+    void lastStoodAt(FLocation flocation);
 
-    void setLastStoodAt(FLocation flocation);
+    String title();
 
-    String getTitle();
+    void title(String title);
 
-    void setTitle(CommandSender sender, String title);
+    String nameWithTitle();
 
-    String getName();
-
-    String getTag();
-
-    // Base concatenations:
-
-    String getNameAndSomething(String something);
-
-    String getNameAndTitle();
-
-    String getNameAndTag();
-
-    // Colored concatenations:
-    // These are used in information messages
-
-    String getNameAndTitle(@Nullable Faction faction);
-
-    String getNameAndTitle(@Nullable FPlayer fplayer);
+    String nameWithTag();
 
     // Chat Tag:
     // These are injected into the format of global chat messages.
 
-    String getChatTag();
+    String chatTag();
 
     // Colored Chat Tag
-    String getChatTag(@Nullable Faction faction);
+    String chatTag(@Nullable Participator participator);
 
-    String getChatTag(@Nullable FPlayer fplayer);
+    int kills();
 
-    int getKills();
-
-    int getDeaths();
+    int deaths();
 
     //----------------------------------------------//
     // Power
     //----------------------------------------------//
-    double getPower();
+    double power();
 
-    void setPower(double power);
+    void power(double power);
 
     void alterPower(double delta);
 
-    double getPowerMax();
+    double powerMax();
 
-    double getPowerMin();
+    double powerMin();
 
-    int getPowerRounded();
+    int powerRounded();
 
-    int getPowerMaxRounded();
+    int powerMaxRounded();
 
-    int getPowerMinRounded();
+    int powerMinRounded();
+
+    double powerBoost();
+
+    void powerBoost(double powerBoost);
 
     void updatePower();
 
@@ -203,10 +187,8 @@ public interface FPlayer extends Participator, Selectable {
 
     void attemptAutoSetZone(FLocation flocation);
 
-    UUID getUniqueId();
-
     @Nullable
-    Player getPlayer();
+    Player asPlayer();
 
     boolean isOnline();
 
@@ -214,54 +196,50 @@ public interface FPlayer extends Participator, Selectable {
 
     void sendMessage(List<String> messages);
 
-    int getMapHeight();
+    int mapHeight();
 
-    void setMapHeight(int height);
+    void mapHeight(int height);
 
-    boolean isOnlineAndVisibleTo(Player me);
-
-    void remove();
-
-    boolean isOffline();
+    void eraseData();
 
     void flightCheck();
 
-    boolean isFlying();
+    boolean flying();
 
-    void setFlying(boolean fly);
+    void flying(boolean fly);
 
-    void setFlying(boolean fly, boolean damage);
+    void flying(boolean fly, boolean damage);
 
-    boolean isAutoFlying();
+    boolean autoFlying();
 
-    void setAutoFlying(boolean autoFly);
+    void autoFlying(boolean autoFly);
 
-    boolean canFlyAtLocation();
+    default boolean canFlyAtLocation() {
+        return this.canFlyAtLocation(this.lastStoodAt());
+    }
 
     boolean canFlyAtLocation(FLocation location);
 
-    boolean isSeeingChunk();
+    boolean seeChunk();
 
-    void setSeeingChunk(boolean seeingChunk);
+    void seeChunk(boolean seeingChunk);
 
-    boolean getFlyTrailsState();
+    boolean flyTrail();
 
-    void setFlyTrailsState(boolean state);
+    void flyTrail(boolean state);
 
     @Nullable
-    String getFlyTrailsEffect();
+    String flyTrailEffect();
 
-    void setFlyTrailsEffect(String effect);
+    void flyTrailEffect(String effect);
 
-    boolean isWarmingUp();
+    default boolean warmingUp() {
+        return this.warmup() != null;
+    }
 
-    WarmUpUtil.@Nullable Warmup getWarmupType();
+    WarmUpUtil.@Nullable Warmup warmup();
 
     void addWarmup(WarmUpUtil.Warmup warmup, int taskId);
 
-    void stopWarmup();
-
-    void clearWarmup();
-
-    void setOfflinePlayer(@Nullable Player player);
+    void cancelWarmup();
 }

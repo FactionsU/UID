@@ -147,7 +147,7 @@ public class EngineDynmap {
                         invalidFactionsWat.add(factionId);
                         return;
                     }
-                    factionTag.put(factionId, faction.getTag());
+                    factionTag.put(factionId, faction.tag());
                     factionDesc.put(factionId, getDescription(faction));
                     factionStyle.put(factionId, getStyle(faction));
                 });
@@ -240,17 +240,17 @@ public class EngineDynmap {
 
         // Loop current factions
         for (Faction faction : Factions.factions().all()) {
-            Location ps = faction.getHome();
+            Location ps = faction.home();
             if (ps == null) {
                 continue;
             }
 
             DynmapStyle style = getStyle(faction);
 
-            String markerId = FACTIONS_HOME_ + faction.getId();
+            String markerId = FACTIONS_HOME_ + faction.id();
 
             TempMarker temp = new TempMarker();
-            temp.label = ChatColor.stripColor(faction.getTag());
+            temp.label = ChatColor.stripColor(faction.tag());
             temp.world = ps.getWorld().getName();
             temp.x = ps.getX();
             temp.y = ps.getY();
@@ -313,16 +313,16 @@ public class EngineDynmap {
 
         // Loop current factions
         for (Faction faction : Factions.factions().all()) {
-            Map<String, LazyLocation> warps = faction.getWarps();
+            Map<String, LazyLocation> warps = faction.warps();
             for (String key : warps.keySet()) {
                 LazyLocation lazyLocation = warps.get(key);
 
                 DynmapStyle style = getStyle(faction);
 
-                String markerId = FACTIONS_WARP_ + faction.getId() + "_" + key;
+                String markerId = FACTIONS_WARP_ + faction.id() + "_" + key;
 
                 TempMarker temp = new TempMarker();
-                temp.label = ChatColor.stripColor(faction.getTag());
+                temp.label = ChatColor.stripColor(faction.tag());
                 temp.world = lazyLocation.worldName();
                 temp.x = lazyLocation.x();
                 temp.y = lazyLocation.y();
@@ -599,7 +599,7 @@ public class EngineDynmap {
         if (faction.isWilderness()) {
             return null;
         }
-        return FACTIONS_PLAYERSET_ + faction.getId();
+        return FACTIONS_PLAYERSET_ + faction.id();
     }
 
     // Thread Safe / Asynchronous: Yes
@@ -613,10 +613,10 @@ public class EngineDynmap {
 
         Set<String> ret = new HashSet<>();
 
-        for (FPlayer fplayer : faction.getFPlayers()) {
+        for (FPlayer fplayer : faction.members()) {
             // NOTE: We add both UUID and name. This might be a good idea for future proofing.
-            ret.add(fplayer.getUniqueId().toString());
-            ret.add(fplayer.getName());
+            ret.add(fplayer.uniqueId().toString());
+            ret.add(fplayer.name());
         }
 
         return ret;
@@ -699,13 +699,13 @@ public class EngineDynmap {
         String ret = "<div class=\"regioninfo\">" + dynmapConf.dynmap().getDescription() + "</div>";
 
         // Name
-        String name = faction.getTag();
+        String name = faction.tag();
         name = ChatColor.stripColor(name);
         name = escapeHtml(name);
         ret = ret.replace("%name%", name);
 
         // Description
-        String description = faction.getDescription();
+        String description = faction.description();
         description = ChatColor.stripColor(description);
         description = escapeHtml(description);
         ret = ret.replace("%description%", description);
@@ -720,31 +720,31 @@ public class EngineDynmap {
 
 
         // Players
-        Set<FPlayer> playersList = faction.getFPlayers();
+        Set<FPlayer> playersList = faction.members();
         String playersCount = String.valueOf(playersList.size());
         String players = getHtmlPlayerString(playersList);
 
-        FPlayer playersLeaderObject = faction.getFPlayerAdmin();
+        FPlayer playersLeaderObject = faction.admin();
         String playersLeader = getHtmlPlayerName(playersLeaderObject);
 
-        List<FPlayer> playersAdminsList = faction.getFPlayersWhereRole(Role.ADMIN);
+        List<FPlayer> playersAdminsList = faction.members(Role.ADMIN);
         String playersAdminsCount = String.valueOf(playersAdminsList.size());
         String playersAdmins = getHtmlPlayerString(playersAdminsList);
 
-        List<FPlayer> playersCoLeadersList = faction.getFPlayersWhereRole(Role.COLEADER);
+        List<FPlayer> playersCoLeadersList = faction.members(Role.COLEADER);
         String playersCoLeadersCount = String.valueOf(playersCoLeadersList.size());
         String playersCoLeaders = getHtmlPlayerString(playersCoLeadersList);
 
-        List<FPlayer> playersModeratorsList = faction.getFPlayersWhereRole(Role.MODERATOR);
+        List<FPlayer> playersModeratorsList = faction.members(Role.MODERATOR);
         String playersModeratorsCount = String.valueOf(playersModeratorsList.size());
         String playersModerators = getHtmlPlayerString(playersModeratorsList);
 
 
-        List<FPlayer> playersNormalsList = faction.getFPlayersWhereRole(Role.NORMAL);
+        List<FPlayer> playersNormalsList = faction.members(Role.NORMAL);
         String playersNormalsCount = String.valueOf(playersNormalsList.size());
         String playersNormals = getHtmlPlayerString(playersNormalsList);
 
-        List<FPlayer> playersRecruitsList = faction.getFPlayersWhereRole(Role.RECRUIT);
+        List<FPlayer> playersRecruitsList = faction.members(Role.RECRUIT);
         String playersRecruitsCount = String.valueOf(playersRecruitsList.size());
         String playersRecruits = getHtmlPlayerString(playersRecruitsList);
 
@@ -793,7 +793,7 @@ public class EngineDynmap {
         if (fplayer == null) {
             return "none";
         }
-        return escapeHtml(fplayer.getName());
+        return escapeHtml(fplayer.name());
     }
 
     public static String escapeHtml(String string) {
@@ -830,12 +830,12 @@ public class EngineDynmap {
     public DynmapStyle getStyle(Faction faction) {
         DynmapStyle ret;
 
-        ret = dynmapConf.dynmap().getFactionStyles().get(String.valueOf(faction.getId()));
+        ret = dynmapConf.dynmap().getFactionStyles().get(String.valueOf(faction.id()));
         if (ret != null) {
             return ret;
         }
 
-        ret = dynmapConf.dynmap().getFactionStyles().get(faction.getTag());
+        ret = dynmapConf.dynmap().getFactionStyles().get(faction.tag());
         if (ret != null) {
             return ret;
         }

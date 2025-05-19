@@ -31,11 +31,11 @@ public class CmdSetLink implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         String link = context.get("link");
 
-        if (!sender.getRole().isAtLeast(Role.MODERATOR)) {
+        if (!sender.role().isAtLeast(Role.MODERATOR)) {
             sender.msg(TL.GENERIC_YOUMUSTBE, Role.MODERATOR.translation);
             return;
         }
@@ -45,7 +45,7 @@ public class CmdSetLink implements Cmd {
             return;
         }
 
-        faction.setLink(link);
+        faction.link(link);
 
         faction.msg(TL.COMMAND_LINK_CHANGED, sender);
         faction.sendMessage(link);

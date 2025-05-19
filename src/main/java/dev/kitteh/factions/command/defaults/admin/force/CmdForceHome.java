@@ -2,7 +2,6 @@ package dev.kitteh.factions.command.defaults.admin.force;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
@@ -39,26 +38,26 @@ public class CmdForceHome implements Cmd {
         FPlayer target = context.get("target");
 
         if (target.isOnline()) {
-            Faction faction = target.getFaction();
+            Faction faction = target.faction();
             if (faction.hasHome()) {
-                Location destination = faction.getHome();
+                Location destination = faction.home();
                 FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(target, destination, FPlayerTeleportEvent.Reason.AHOME);
                 Bukkit.getServer().getPluginManager().callEvent(tpEvent);
                 if (tpEvent.isCancelled()) {
                     return;
                 }
-                AbstractFactionsPlugin.getInstance().teleport(target.getPlayer(), destination).thenAccept(success -> {
+                AbstractFactionsPlugin.getInstance().teleport(target.asPlayer(), destination).thenAccept(success -> {
                     if (success) {
-                        sender.msg(TL.COMMAND_AHOME_SUCCESS, target.getName());
+                        sender.msg(TL.COMMAND_AHOME_SUCCESS, target.name());
                         target.msg(TL.COMMAND_AHOME_TARGET);
                     }
                 });
 
             } else {
-                sender.msg(TL.COMMAND_AHOME_NOHOME, target.getName());
+                sender.msg(TL.COMMAND_AHOME_NOHOME, target.name());
             }
         } else {
-            sender.msg(TL.COMMAND_AHOME_OFFLINE, target.getName());
+            sender.msg(TL.COMMAND_AHOME_OFFLINE, target.name());
         }
     }
 }

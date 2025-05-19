@@ -103,7 +103,7 @@ public class FactionTag implements ObjectTag {
 
     @Override
     public String identify() {
-        return "faction@" + faction.getTag();
+        return "faction@" + faction.tag();
     }
 
     @Override
@@ -140,14 +140,14 @@ public class FactionTag implements ObjectTag {
         // Note that this was previously named "home" instead of "warp".
         // -->
         else if (attribute.startsWith("warp") && attribute.hasParam()) {
-            LazyLocation warp = faction.getWarp(attribute.getParam());
+            LazyLocation warp = faction.warp(attribute.getParam());
             if (warp != null) {
                 return new LocationTag(warp.getLocation())
                         .getObjectAttribute(attribute.fulfill(1));
             }
         } else if (attribute.startsWith("home")) { // Legacy sorta-compat
             if (faction.hasHome()) {
-                return new LocationTag(faction.getHome())
+                return new LocationTag(faction.home())
                         .getObjectAttribute(attribute.fulfill(1));
             }
         }
@@ -160,7 +160,7 @@ public class FactionTag implements ObjectTag {
         // Returns the unique ID for this faction.
         // -->
         else if (attribute.startsWith("id")) {
-            return new ElementTag(String.valueOf(faction.getId())).getObjectAttribute(attribute.fulfill(1));
+            return new ElementTag(String.valueOf(faction.id())).getObjectAttribute(attribute.fulfill(1));
         }
 
         // <--[tag]
@@ -171,7 +171,7 @@ public class FactionTag implements ObjectTag {
         // Returns true if the faction is open.
         // -->
         else if (attribute.startsWith("isopen") || attribute.startsWith("is_open")) {
-            return new ElementTag(faction.getOpen())
+            return new ElementTag(faction.open())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -183,7 +183,7 @@ public class FactionTag implements ObjectTag {
         // Returns true if the faction is peaceful.
         // -->
         else if (attribute.startsWith("ispeaceful") || attribute.startsWith("is_peaceful")) {
-            return new ElementTag(faction.isPeaceful())
+            return new ElementTag(faction.peaceful())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -195,7 +195,7 @@ public class FactionTag implements ObjectTag {
         // Returns true if the faction is permanent.
         // -->
         else if (attribute.startsWith("ispermanent") || attribute.startsWith("is_permanent")) {
-            return new ElementTag(faction.isPermanent())
+            return new ElementTag(faction.permanent())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -207,8 +207,8 @@ public class FactionTag implements ObjectTag {
         // Returns the faction's leader as a PlayerTag.
         // -->
         else if (attribute.startsWith("leader")) {
-            if (faction.getFPlayerAdmin() != null) {
-                return new PlayerTag(faction.getFPlayerAdmin().getUniqueId())
+            if (faction.admin() != null) {
+                return new PlayerTag(faction.admin().uniqueId())
                         .getObjectAttribute(attribute.fulfill(1));
             }
         }
@@ -221,7 +221,7 @@ public class FactionTag implements ObjectTag {
         // Returns the name of the faction.
         // -->
         else if (attribute.startsWith("name")) {
-            return new ElementTag(faction.getTag())
+            return new ElementTag(faction.tag())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -233,7 +233,7 @@ public class FactionTag implements ObjectTag {
         // Returns the number of players in the faction.
         // -->
         else if (attribute.startsWith("playercount") || attribute.startsWith("player_count")) {
-            return new ElementTag(faction.getFPlayers().size())
+            return new ElementTag(faction.members().size())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -245,7 +245,7 @@ public class FactionTag implements ObjectTag {
         // Returns the amount of power the faction currently has.
         // -->
         else if (attribute.startsWith("power")) {
-            return new ElementTag(faction.getPower())
+            return new ElementTag(faction.power())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -259,7 +259,7 @@ public class FactionTag implements ObjectTag {
         else if (attribute.startsWith("relation")) {
             FactionTag to = valueOf(attribute.getParam());
             if (to != null) {
-                return new ElementTag(faction.getRelationTo(to.getFaction()).toString())
+                return new ElementTag(faction.relationTo(to.getFaction()).toString())
                         .getObjectAttribute(attribute.fulfill(1));
             }
         }
@@ -272,7 +272,7 @@ public class FactionTag implements ObjectTag {
         // Returns the amount of land the faction has.
         // -->
         else if (attribute.startsWith("size")) {
-            return new ElementTag(faction.getAllClaims().size())
+            return new ElementTag(faction.claims().size())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -285,7 +285,7 @@ public class FactionTag implements ObjectTag {
         // -->
         if (attribute.startsWith("claimed_chunks")) {
             ListTag dchunks = new ListTag();
-            for (FLocation claim : faction.getAllClaims()) {
+            for (FLocation claim : faction.claims()) {
                 dchunks.addObject(new ChunkTag(claim.getChunk()));
             }
             return dchunks.getObjectAttribute(attribute.fulfill(1));
@@ -300,8 +300,8 @@ public class FactionTag implements ObjectTag {
         // -->
         if (attribute.startsWith("list_players")) {
             ListTag players = new ListTag();
-            for (FPlayer ps : faction.getFPlayers()) {
-                players.addObject(new PlayerTag(ps.getUniqueId()));
+            for (FPlayer ps : faction.members()) {
+                players.addObject(new PlayerTag(ps.uniqueId()));
             }
             return players.getObjectAttribute(attribute.fulfill(1));
         }

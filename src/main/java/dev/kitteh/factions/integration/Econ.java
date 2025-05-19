@@ -123,7 +123,7 @@ public class Econ {
             FactionsPlugin.getInstance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
-        to.sendMessage(ChatColor.stripColor(String.format(TL.ECON_BALANCE.toString(), about.getTag(), Econ.moneyString(getBalance(about)))));
+        to.sendMessage(ChatColor.stripColor(String.format(TL.ECON_BALANCE.toString(), about.tag(), Econ.moneyString(getBalance(about)))));
     }
 
     public static boolean canIControlYou(Participator i, Participator you) {
@@ -136,12 +136,12 @@ public class Econ {
         }
 
         // Bypassing players can do any kind of transaction
-        if (i instanceof FPlayer fPlayer && fPlayer.isAdminBypassing()) {
+        if (i instanceof FPlayer fPlayer && fPlayer.adminBypass()) {
             return true;
         }
 
         // Players with the any withdraw can do.
-        if (i instanceof FPlayer fPlayer && Permission.MONEY_WITHDRAW_ANY.has(fPlayer.getPlayer())) {
+        if (i instanceof FPlayer fPlayer && Permission.MONEY_WITHDRAW_ANY.has(fPlayer.asPlayer())) {
             return true;
         }
 
@@ -158,7 +158,7 @@ public class Econ {
         }
 
         // Factions can be controlled by members that are moderators... or any member if any member can withdraw.
-        if (you instanceof Faction && fI == fYou && (FactionsPlugin.getInstance().conf().economy().isBankMembersCanWithdraw() || ((FPlayer) i).getRole().value >= Role.MODERATOR.value)) {
+        if (you instanceof Faction && fI == fYou && (FactionsPlugin.getInstance().conf().economy().isBankMembersCanWithdraw() || ((FPlayer) i).role().value >= Role.MODERATOR.value)) {
             return true;
         }
 
@@ -191,8 +191,8 @@ public class Econ {
             return false;
         }
 
-        OfflinePlayer fromAcc = checkStatus(from.getOfflinePlayer());
-        OfflinePlayer toAcc = checkStatus(to.getOfflinePlayer());
+        OfflinePlayer fromAcc = checkStatus(from.asOfflinePlayer());
+        OfflinePlayer toAcc = checkStatus(to.asOfflinePlayer());
 
         // Is there enough money for the transaction to happen?
         if (!has(fromAcc, amount)) {
@@ -236,7 +236,7 @@ public class Econ {
         if (participator instanceof FPlayer fPlayer) {
             fPlayers.add(fPlayer);
         } else if (participator instanceof Faction faction) {
-            fPlayers.addAll(faction.getFPlayers());
+            fPlayers.addAll(faction.members());
         }
     }
 
@@ -295,7 +295,7 @@ public class Econ {
             return true;
         }
 
-        OfflinePlayer acc = checkStatus(ep.getOfflinePlayer());
+        OfflinePlayer acc = checkStatus(ep.asOfflinePlayer());
 
         String You = ep.describeTo(ep, true);
 
@@ -378,7 +378,7 @@ public class Econ {
         try {
             Matcher matcher = FACTION_PATTERN.matcher(name);
             if (matcher.find()) {
-                return Factions.factions().get(Integer.parseInt(matcher.group(1))).getOfflinePlayer();
+                return Factions.factions().get(Integer.parseInt(matcher.group(1))).asOfflinePlayer();
             }
             return Bukkit.getOfflinePlayer(UUID.fromString(name));
         } catch (Exception ex) {
@@ -387,7 +387,7 @@ public class Econ {
     }
 
     public static boolean hasAccount(Participator ep) {
-        return hasAccount(ep.getOfflinePlayer());
+        return hasAccount(ep.asOfflinePlayer());
     }
 
     private static boolean hasAccount(OfflinePlayer op) {
@@ -395,7 +395,7 @@ public class Econ {
     }
 
     public static double getBalance(Participator ep) {
-        return getBalance(ep.getOfflinePlayer());
+        return getBalance(ep.asOfflinePlayer());
     }
 
     private static double getBalance(OfflinePlayer op) {
@@ -403,7 +403,7 @@ public class Econ {
     }
 
     public static boolean has(Participator ep, double amount) {
-        return has(ep.getOfflinePlayer(), amount);
+        return has(ep.asOfflinePlayer(), amount);
     }
 
     private static boolean has(OfflinePlayer op, double amount) {
@@ -414,14 +414,14 @@ public class Econ {
 
     public static String getFriendlyBalance(FPlayer player) {
         OfflinePlayer p;
-        if ((p = player.getPlayer()) == null) {
+        if ((p = player.asPlayer()) == null) {
             return "0";
         }
         return format.format(getBalance(p));
     }
 
     public static boolean setBalance(Participator ep, double amount) {
-        return setBalance(ep.getOfflinePlayer(), amount);
+        return setBalance(ep.asOfflinePlayer(), amount);
     }
 
     private static boolean setBalance(OfflinePlayer op, double amount) {
@@ -434,7 +434,7 @@ public class Econ {
     }
 
     public static boolean modifyBalance(Participator ep, double amount) {
-        return modifyBalance(ep.getOfflinePlayer(), amount);
+        return modifyBalance(ep.asOfflinePlayer(), amount);
     }
 
     private static boolean modifyBalance(OfflinePlayer op, double amount) {
@@ -446,7 +446,7 @@ public class Econ {
     }
 
     public static boolean deposit(Participator ep, double amount) {
-        return deposit(ep.getOfflinePlayer(), amount);
+        return deposit(ep.asOfflinePlayer(), amount);
     }
 
     private static boolean deposit(OfflinePlayer op, double amount) {
@@ -454,7 +454,7 @@ public class Econ {
     }
 
     public static boolean withdraw(Participator ep, double amount) {
-        return withdraw(ep.getOfflinePlayer(), amount);
+        return withdraw(ep.asOfflinePlayer(), amount);
     }
 
     private static boolean withdraw(OfflinePlayer op, double amount) {
@@ -462,7 +462,7 @@ public class Econ {
     }
 
     public static void createAccount(Participator ep) {
-        createAccount(ep.getOfflinePlayer());
+        createAccount(ep.asOfflinePlayer());
     }
 
     private static void createAccount(OfflinePlayer op) {

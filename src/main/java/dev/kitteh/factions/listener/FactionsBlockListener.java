@@ -60,7 +60,7 @@ public class FactionsBlockListener extends AbstractListener {
         }
 
         Faction targetFaction = Board.board().factionAt(new FLocation(event.getBlock().getLocation()));
-        if (targetFaction.isNormal() && !targetFaction.isPeaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().getIgnoreBuildMaterials().contains(event.getBlock().getType())) {
+        if (targetFaction.isNormal() && !targetFaction.peaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().getIgnoreBuildMaterials().contains(event.getBlock().getType())) {
             return;
         }
 
@@ -93,7 +93,7 @@ public class FactionsBlockListener extends AbstractListener {
 
         MainConfig.Factions.Protection protConf = FactionsPlugin.getInstance().conf().factions().protection();
 
-        if (endFaction.hasPlayersOnline()) {
+        if (endFaction.hasMembersOnline()) {
             if (!protConf.getTerritoryDenyUsageMaterials().contains(material)) {
                 return; // Item isn't one we're preventing for online factions.
             }
@@ -140,7 +140,7 @@ public class FactionsBlockListener extends AbstractListener {
             }
             // from faction != to faction
             if (exp && to.isNormal()) {
-                if (from.isNormal() && from.getRelationTo(to).isAlly()) {
+                if (from.isNormal() && from.relationTo(to).isAlly()) {
                     return;
                 }
                 event.setCancelled(true);
@@ -273,7 +273,7 @@ public class FactionsBlockListener extends AbstractListener {
             } else if (otherFaction.isWarZone() && FactionsPlugin.getInstance().conf().factions().protection().isWarZoneDenyBuild()) {
                 return false;
             }
-            Relation rel = pistonFaction.getRelationTo(otherFaction);
+            Relation rel = pistonFaction.relationTo(otherFaction);
             if (!otherFaction.hasAccess(rel, PermissibleActions.BUILD, location)) {
                 return false;
             }
@@ -296,9 +296,9 @@ public class FactionsBlockListener extends AbstractListener {
 
         // only notify every 10 seconds
         FPlayer fPlayer = FPlayers.fPlayers().get(player);
-        boolean justCheck = fPlayer.getLastFrostwalkerMessageTime() + 10000 > System.currentTimeMillis();
+        boolean justCheck = fPlayer.lastFrostwalkerMessageTime() + 10000 > System.currentTimeMillis();
         if (!justCheck) {
-            fPlayer.setLastFrostwalkerMessageTime();
+            fPlayer.updateLastFrostwalkerMessageTime();
         }
 
         // Check if they have build permissions here. If not, block this from happening.
@@ -315,7 +315,7 @@ public class FactionsBlockListener extends AbstractListener {
         }
 
         FPlayer me = FPlayers.fPlayers().get(player);
-        if (me.isAdminBypassing()) {
+        if (me.adminBypass()) {
             return true;
         }
 
@@ -369,17 +369,17 @@ public class FactionsBlockListener extends AbstractListener {
             return true;
         }
 
-        Faction myFaction = me.getFaction();
+        Faction myFaction = me.faction();
         boolean pain = !justCheck && otherFaction.hasAccess(me, PermissibleActions.PAINBUILD, loc);
 
         // If the faction hasn't: defined access or denied, fallback to config values
         if (!otherFaction.hasAccess(me, permissibleAction, loc)) {
             if (pain && permissibleAction != PermissibleActions.FROSTWALK) {
                 player.damage(conf.factions().other().getActionDeniedPainAmount());
-                me.msg(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.shortDescription(), otherFaction.getTag(myFaction));
+                me.msg(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.shortDescription(), otherFaction.tagString(myFaction));
                 return true;
             } else if (!justCheck) {
-                me.msg(TL.PERM_DENIED_TERRITORY, permissibleAction.shortDescription(), otherFaction.getTag(myFaction));
+                me.msg(TL.PERM_DENIED_TERRITORY, permissibleAction.shortDescription(), otherFaction.tagString(myFaction));
             }
             return false;
         }

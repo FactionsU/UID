@@ -33,7 +33,7 @@ public class CmdZone implements Cmd {
                     .commandDescription(Cloudy.desc(TL.COMMAND_ZONE_DESCRIPTION))
                     .permission(builder.commandPermission()
                             .and(Cloudy.predicate(Sender::hasFaction))
-                            .and(Cloudy.predicate(s -> s.fPlayerOrNull() instanceof FPlayer fp && fp.getFaction().getUpgradeLevel(Upgrades.ZONES) > 0))
+                            .and(Cloudy.predicate(s -> s.fPlayerOrNull() instanceof FPlayer fp && fp.faction().upgradeLevel(Upgrades.ZONES) > 0))
                             .and(Cloudy.hasSelfFactionPerms(PermissibleActions.ZONE))
                     );
 
@@ -76,7 +76,7 @@ public class CmdZone implements Cmd {
             new CmdSetPerm((ctx) -> '/' + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + ' ' + tl.getFirstAlias() +
                     ' ' + tl.set().getFirstAlias() + ' ' + ctx.get("zone") + ' ' + FactionsPlugin.getInstance().tl().commands().permissions().getFirstAlias() + ' ', context -> {
                 FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-                Faction faction = sender.getFaction();
+                Faction faction = sender.faction();
                 String name = context.get("zone");
                 Faction.Zone zone = faction.zones().get(name);
                 if (zone == null) {
@@ -86,7 +86,7 @@ public class CmdZone implements Cmd {
                 return zone.id() == 0 ? faction.permissions() : zone.permissions();
             }, context -> {
                 FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-                Faction faction = sender.getFaction();
+                Faction faction = sender.faction();
                 String name = context.get("zone");
                 Faction.Zone zone = faction.zones().get(name);
                 if (zone == null) {
@@ -100,14 +100,14 @@ public class CmdZone implements Cmd {
     }
 
     static BlockingSuggestionProvider.@NonNull Strings<Sender> zoneSuggester = (c, i) ->
-            c.sender().fPlayerOrNull().getFaction().zones().get().stream()
+            c.sender().fPlayerOrNull().faction().zones().get().stream()
                     .map(Faction.Zone::name)
                     .filter(s -> s.toLowerCase().startsWith(i.peekString().toLowerCase()))
                     .toList();
 
     private void create(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         String name = context.get("zone");
 
@@ -124,7 +124,7 @@ public class CmdZone implements Cmd {
 
     private void setName(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         String name = context.get("zone");
 
@@ -154,7 +154,7 @@ public class CmdZone implements Cmd {
 
     private void setGreeting(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         String name = context.get("zone");
 
@@ -173,14 +173,14 @@ public class CmdZone implements Cmd {
 
         sender.sendMessage(Mini.parse(tl.getSuccess(),
                 Placeholder.unparsed("name", name),
-                Placeholder.component("greeting", Mini.parse(greeting, Placeholder.unparsed("tag", faction.getTag())))
+                Placeholder.component("greeting", Mini.parse(greeting, Placeholder.unparsed("tag", faction.tag())))
         ));
     }
 
     private void claim(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         String name = context.get("zone");
 
@@ -194,11 +194,11 @@ public class CmdZone implements Cmd {
         }
 
         if (context.flags().hasFlag("auto")) {
-            if (sender.getAutoSetZone() == null) {
-                sender.setAutoSetZone(zone.name());
+            if (sender.autoSetZone() == null) {
+                sender.autoSetZone(zone.name());
                 sender.sendMessage(Mini.parse(tl.getAutoSetOn(), Placeholder.unparsed("zone", zone.name())));
             } else {
-                sender.setAutoSetZone(null);
+                sender.autoSetZone(null);
                 sender.sendMessage(Mini.parse(tl.getAutoSetOff()));
             }
 
@@ -274,7 +274,7 @@ public class CmdZone implements Cmd {
 
     private void delete(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         String name = context.get("zone");
 
@@ -296,7 +296,7 @@ public class CmdZone implements Cmd {
     }
 
     private void delete(FPlayer sender, String name) {
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         if (!faction.hasAccess(sender, PermissibleActions.ZONE, null)) {
             return; // Lost perms while confirming, just silently die, meh

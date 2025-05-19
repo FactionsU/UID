@@ -59,14 +59,14 @@ public class CmdListFactions implements Cmd {
         // remove exempt factions
         if (!context.sender().hasPermission(Permission.SHOW_BYPASS_EXEMPT)) {
             List<String> exemptFactions = FactionsPlugin.getInstance().conf().commands().show().getExempt();
-            factionList.removeIf(next -> exemptFactions.contains(next.getTag()));
+            factionList.removeIf(next -> exemptFactions.contains(next.tag()));
         }
 
         // Sort by total followers first
-        factionList.sort(this.compare(Faction::getFPlayers));
+        factionList.sort(this.compare(Faction::members));
 
         // Then sort by how many members are online now
-        factionList.sort(this.compare(f -> f.getFPlayersWhereOnline(true, fPlayer)));
+        factionList.sort(this.compare(f -> f.membersOnline(true, fPlayer)));
 
         ArrayList<String> lines = new ArrayList<>();
 

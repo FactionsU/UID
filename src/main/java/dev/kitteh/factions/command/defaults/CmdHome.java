@@ -59,11 +59,11 @@ public class CmdHome implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
 
-        Faction targetFaction = sender.getFaction();
+        Faction targetFaction = sender.faction();
 
-        if (sender.isAdminBypassing() && context.flags().get("faction") instanceof Faction fac) {
+        if (sender.adminBypass() && context.flags().get("faction") instanceof Faction fac) {
             if (targetFaction.hasHome()) {
-                AbstractFactionsPlugin.getInstance().teleport(player, fac.getHome());
+                AbstractFactionsPlugin.getInstance().teleport(player, fac.home());
             } else {
                 sender.msg(TL.COMMAND_HOME_NOHOME);
             }
@@ -75,8 +75,8 @@ public class CmdHome implements Cmd {
             return;
         }
 
-        if (!targetFaction.hasAccess(sender, PermissibleActions.HOME, sender.getLastStoodAt())) {
-            sender.msg(TL.COMMAND_HOME_DENIED, targetFaction.getTag(sender));
+        if (!targetFaction.hasAccess(sender, PermissibleActions.HOME, sender.lastStoodAt())) {
+            sender.msg(TL.COMMAND_HOME_DENIED, targetFaction.tagString(sender));
             return;
         }
 
@@ -85,7 +85,7 @@ public class CmdHome implements Cmd {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().conf().factions().homes().isTeleportAllowedFromDifferentWorld() && player.getWorld().getUID() != targetFaction.getHome().getWorld().getUID()) {
+        if (!FactionsPlugin.getInstance().conf().factions().homes().isTeleportAllowedFromDifferentWorld() && player.getWorld().getUID() != targetFaction.home().getWorld().getUID()) {
             sender.msg(TL.COMMAND_HOME_WRONGWORLD);
             return;
         }
@@ -108,7 +108,7 @@ public class CmdHome implements Cmd {
                 }
 
                 FPlayer fp = FPlayers.fPlayers().get(p);
-                if (sender.getRelationTo(fp) != Relation.ENEMY || fp.isVanished()) {
+                if (sender.relationTo(fp) != Relation.ENEMY || fp.isVanished()) {
                     continue;
                 }
 
@@ -128,7 +128,7 @@ public class CmdHome implements Cmd {
             }
         }
 
-        Location destination = targetFaction.getHome();
+        Location destination = targetFaction.home();
         FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, destination, FPlayerTeleportEvent.Reason.HOME);
         Bukkit.getServer().getPluginManager().callEvent(tpEvent);
         if (tpEvent.isCancelled()) {
@@ -146,7 +146,7 @@ public class CmdHome implements Cmd {
         }
 
         WarmUpUtil.process(sender, WarmUpUtil.Warmup.HOME, TL.WARMUPS_NOTIFY_TELEPORT, "Home", () -> {
-            Player plr = sender.getPlayer();
+            Player plr = sender.asPlayer();
 
             if (plr == null) return;
             // Create a smoke effect

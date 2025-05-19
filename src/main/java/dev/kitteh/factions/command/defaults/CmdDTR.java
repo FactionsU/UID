@@ -35,7 +35,7 @@ public class CmdDTR implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer fPlayer = context.sender().fPlayerOrNull();
-        Faction faction = fPlayer != null && fPlayer.hasFaction() ? fPlayer.getFaction() : null;
+        Faction faction = fPlayer != null && fPlayer.hasFaction() ? fPlayer.faction() : null;
 
         Faction target = context.getOrDefault("faction", faction);
         if (target == null) {
@@ -52,6 +52,6 @@ public class CmdDTR implements Cmd {
         }
 
         DTRControl dtr = (DTRControl) FactionsPlugin.getInstance().getLandRaidControl();
-        context.sender().msg(TL.COMMAND_DTR_DTR, target.describeTo(fPlayer, false), DTRControl.round(target.getDTR()), DTRControl.round(dtr.getMaxDTR(target)));
+        context.sender().msg(TL.COMMAND_DTR_DTR, target.describeTo(fPlayer, false), DTRControl.round(target.dtr()), DTRControl.round(dtr.getMaxDTR(target)));
     }
 }

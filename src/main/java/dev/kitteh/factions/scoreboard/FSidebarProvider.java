@@ -15,14 +15,14 @@ public abstract class FSidebarProvider {
     public abstract List<String> getLines(FPlayer fplayer);
 
     public String replaceTags(FPlayer fPlayer, String s) {
-        s = Tag.parsePlaceholders(fPlayer.getPlayer(), s);
+        s = Tag.parsePlaceholders(fPlayer.asPlayer(), s);
 
         return qualityAssure(Tag.parsePlain(fPlayer, s));
     }
 
     public String replaceTags(Faction faction, FPlayer fPlayer, String s) {
         // Run through Placeholder API first
-        s = Tag.parsePlaceholders(fPlayer.getPlayer(), s);
+        s = Tag.parsePlaceholders(fPlayer.asPlayer(), s);
 
         return qualityAssure(Tag.parsePlain(faction, fPlayer, s));
     }

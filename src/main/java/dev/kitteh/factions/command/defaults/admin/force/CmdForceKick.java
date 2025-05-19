@@ -37,7 +37,7 @@ public class CmdForceKick implements Cmd {
 
         FPlayer toKick = context.get("target");
 
-        Faction toKickFaction = toKick.getFaction();
+        Faction toKickFaction = toKick.faction();
 
         if (toKickFaction.isWilderness()) {
             sender.sendMessage(TL.COMMAND_KICK_NONE.toString());
@@ -45,7 +45,7 @@ public class CmdForceKick implements Cmd {
         }
 
         // trigger the leave event (cancellable) [reason:kicked]
-        FPlayerLeaveEvent event = new FPlayerLeaveEvent(toKick, toKick.getFaction(), FPlayerLeaveEvent.Reason.ADMIN_KICKED);
+        FPlayerLeaveEvent event = new FPlayerLeaveEvent(toKick, toKick.faction(), FPlayerLeaveEvent.Reason.ADMIN_KICKED);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
@@ -55,14 +55,14 @@ public class CmdForceKick implements Cmd {
         toKick.msg(TL.COMMAND_KICK_KICKED, sender.describeTo(toKick, true), toKickFaction.describeTo(toKick));
 
         if (FactionsPlugin.getInstance().conf().logging().isFactionKick()) {
-            FactionsPlugin.getInstance().log(sender.getName() + " kicked " + toKick.getName() + " from the faction: " + toKickFaction.getTag());
+            FactionsPlugin.getInstance().log(sender.name() + " kicked " + toKick.name() + " from the faction: " + toKickFaction.tag());
         }
 
-        if (toKick.getRole() == Role.ADMIN) {
+        if (toKick.role() == Role.ADMIN) {
             toKickFaction.promoteNewLeader();
         }
 
-        toKickFaction.deinvite(toKick);
+        toKickFaction.deInvite(toKick);
         toKick.resetFactionData(true);
     }
 }

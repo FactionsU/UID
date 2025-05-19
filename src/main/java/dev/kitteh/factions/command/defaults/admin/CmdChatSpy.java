@@ -29,14 +29,14 @@ public class CmdChatSpy implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
-        sender.setSpyingChat(!sender.isSpyingChat());
+        sender.spyingChat(!sender.spyingChat());
 
-        if (sender.isSpyingChat()) {
+        if (sender.spyingChat()) {
             sender.msg(TL.COMMAND_CHATSPY_ENABLE);
-            FactionsPlugin.getInstance().log(sender.getName() + TL.COMMAND_CHATSPY_ENABLELOG);
+            FactionsPlugin.getInstance().log(sender.name() + TL.COMMAND_CHATSPY_ENABLELOG);
         } else {
             sender.msg(TL.COMMAND_CHATSPY_DISABLE);
-            FactionsPlugin.getInstance().log(sender.getName() + TL.COMMAND_CHATSPY_DISABLELOG);
+            FactionsPlugin.getInstance().log(sender.name() + TL.COMMAND_CHATSPY_DISABLELOG);
         }
     }
 }

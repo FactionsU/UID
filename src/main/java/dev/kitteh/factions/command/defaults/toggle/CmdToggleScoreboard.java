@@ -37,6 +37,6 @@ public class CmdToggleScoreboard implements Cmd {
             sender.sendMessage(TL.TOGGLE_SB.toString().replace("{value}", String.valueOf(toggleTo)));
             board.setSidebarVisibility(toggleTo);
         }
-        sender.setShowScoreboard(toggleTo);
+        sender.showScoreboard(toggleTo);
     }
 }

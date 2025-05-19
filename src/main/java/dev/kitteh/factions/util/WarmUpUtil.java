@@ -18,19 +18,19 @@ public class WarmUpUtil {
      *                       note: for translations: %s = action, %d = delay
      */
     public static void process(final FPlayer player, Warmup warmup, TL translationKey, String action, final Runnable runnable, long delay) {
-        Player plr = player.getPlayer();
+        Player plr = player.asPlayer();
         if (plr != null && Permission.WARMUP_EXEMPT.has(plr)) {
             delay = 0;
         }
         if (delay > 0) {
-            if (player.isWarmingUp()) {
+            if (player.warmingUp()) {
                 player.msg(TL.WARMUPS_ALREADY);
             } else {
                 player.msg(translationKey.format(action, delay));
                 int id = new BukkitRunnable() {
                     @Override
                     public void run() {
-                        player.stopWarmup();
+                        player.cancelWarmup();
                         runnable.run();
                     }
                 }.runTaskLater(AbstractFactionsPlugin.getInstance(), delay * 20).getTaskId();

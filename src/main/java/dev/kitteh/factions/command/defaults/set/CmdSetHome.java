@@ -47,7 +47,7 @@ public class CmdSetHome implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         if (context.flags().hasFlag("delete")) {
             this.handleDel(context, sender, faction);
@@ -76,7 +76,7 @@ public class CmdSetHome implements Cmd {
             return;
         }
 
-        faction.setHome(player.getLocation());
+        faction.home(player.getLocation());
 
         faction.msg(TL.COMMAND_SETHOME_SET, sender.describeTo(faction, true));
     }
@@ -87,7 +87,7 @@ public class CmdSetHome implements Cmd {
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.getWarps().isEmpty()) {
+        if (FactionsPlugin.getInstance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.warps().isEmpty()) {
             sender.msg(TL.COMMAND_HOME_WARPSREMAIN);
             return;
         }

@@ -68,8 +68,8 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
 
         if (faction == null && this.includeFactions.contains(Include.PLAYERS)) {
             for (FPlayer fplayer : FPlayers.fPlayers().all()) {
-                if (fplayer.getName().equalsIgnoreCase(name)) {
-                    faction = fplayer.getFaction();
+                if (fplayer.name().equalsIgnoreCase(name)) {
+                    faction = fplayer.faction();
                     break;
                 }
             }
@@ -91,17 +91,17 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
     @Override
     public Iterable<? extends Suggestion> suggestions(CommandContext<Sender> context, CommandInput input) {
         List<String> output = new ArrayList<>();
-        List<String> secondary = Factions.factions().all().stream().map(Faction::getTag).collect(Collectors.toCollection(ArrayList::new));
+        List<String> secondary = Factions.factions().all().stream().map(Faction::tag).collect(Collectors.toCollection(ArrayList::new));
 
         Player sendingPlayer = context.sender() instanceof Sender.Player player ? player.player() : null;
         for (Player player : AbstractFactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
             if (sendingPlayer != null && !player.canSee(player)) {
                 continue;
             }
-            Faction f = FPlayers.fPlayers().get(player).getFaction();
-            if (!output.contains(f.getTag())) {
-                output.add(f.getTag());
-                secondary.remove(f.getTag());
+            Faction f = FPlayers.fPlayers().get(player).faction();
+            if (!output.contains(f.tag())) {
+                output.add(f.tag());
+                secondary.remove(f.tag());
             }
         }
 
@@ -116,10 +116,10 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
                 if (count > SANE_SUGGESTION_LIMIT) {
                     break;
                 }
-                if (isPlayer && !((Sender.Player) context.sender()).player().canSee(player.getPlayer())) {
+                if (isPlayer && !((Sender.Player) context.sender()).player().canSee(player.asPlayer())) {
                     continue;
                 }
-                output.add(player.getName());
+                output.add(player.name());
                 count++;
             }
         }
@@ -130,16 +130,16 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
         }
 
         if (!this.includeFactions.contains(Include.SELF) && context.sender() instanceof Sender.Player player && player.faction().isNormal()) {
-            output.remove(player.faction().getTag());
+            output.remove(player.faction().tag());
         }
         if (!this.includeFactions.contains(Include.SAFE)) {
-            output.remove(Factions.factions().safeZone().getTag());
+            output.remove(Factions.factions().safeZone().tag());
         }
         if (!this.includeFactions.contains(Include.WAR)) {
-            output.remove(Factions.factions().warZone().getTag());
+            output.remove(Factions.factions().warZone().tag());
         }
         if (!this.includeFactions.contains(Include.WILD)) {
-            output.remove(Factions.factions().wilderness().getTag());
+            output.remove(Factions.factions().wilderness().tag());
         }
 
         return output.stream().map(Suggestion::suggestion).toList();

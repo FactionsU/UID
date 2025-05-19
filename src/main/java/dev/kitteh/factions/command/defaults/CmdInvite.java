@@ -38,17 +38,17 @@ public class CmdInvite implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         FPlayer target = context.get("player");
 
-        if (target.getFaction() == faction) {
-            sender.msg(TL.COMMAND_INVITE_ALREADYMEMBER, target.getName(), faction.getTag());
+        if (target.faction() == faction) {
+            sender.msg(TL.COMMAND_INVITE_ALREADYMEMBER, target.name(), faction.tag());
             return;
         }
 
         if (context.flags().hasFlag("delete")) {
-            faction.deinvite(target);
+            faction.deInvite(target);
             target.msg(TL.COMMAND_DEINVITE_REVOKED, sender.describeTo(target), faction.describeTo(target));
             faction.msg(TL.COMMAND_DEINVITE_REVOKES, sender.describeTo(faction), target.describeTo(faction));
             return;
@@ -60,7 +60,7 @@ public class CmdInvite implements Cmd {
         }
 
         if (faction.isBanned(target)) {
-            sender.msg(TL.COMMAND_INVITE_BANNED, target.getName());
+            sender.msg(TL.COMMAND_INVITE_BANNED, target.name());
             return;
         }
 
@@ -71,7 +71,7 @@ public class CmdInvite implements Cmd {
                     .append(legacy.deserialize(TL.COMMAND_INVITE_INVITEDYOU.toString()).color(NamedTextColor.YELLOW))
                     .append(legacy.deserialize(faction.describeTo(target)));
             component = component.hoverEvent(legacy.deserialize(TL.COMMAND_INVITE_CLICKTOJOIN.toString()).asHoverEvent())
-                    .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " join " + ChatColor.stripColor(faction.getTag())));
+                    .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " join " + ChatColor.stripColor(faction.tag())));
             target.sendMessage(component);
         }
 

@@ -39,7 +39,7 @@ public class CmdSetWarp implements Cmd {
     private void handle(org.incendo.cloud.context.CommandContext<Sender> context) {
         Player player = ((Sender.Player) context.sender()).player();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        Faction faction = sender.getFaction();
+        Faction faction = sender.faction();
 
         String warp = context.get("name");
 
@@ -62,7 +62,7 @@ public class CmdSetWarp implements Cmd {
         }
 
         int maxWarps = FactionsPlugin.getInstance().conf().commands().warp().getMaxWarps();
-        if (maxWarps <= faction.getWarps().size()) {
+        if (maxWarps <= faction.warps().size()) {
             sender.msg(TL.COMMAND_SETFWARP_LIMIT, maxWarps);
             return;
         }
@@ -78,7 +78,7 @@ public class CmdSetWarp implements Cmd {
         String password = context.flags().get("password");
 
         LazyLocation loc = new LazyLocation(player.getLocation());
-        faction.setWarp(warp, loc);
+        faction.createWarp(warp, loc);
         if (password != null) {
             faction.setWarpPassword(warp, password);
         }

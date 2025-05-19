@@ -40,7 +40,7 @@ public class CmdDTRModify implements Cmd {
         }
 
         DTRControl dtr = (DTRControl) FactionsPlugin.getInstance().getLandRaidControl();
-        target.setDTR(Math.max(Math.min(target.getDTR() + amount, dtr.getMaxDTR(target)), FactionsPlugin.getInstance().conf().factions().landRaidControl().dtr().getMinDTR()));
-        context.sender().msg(TL.COMMAND_DTR_MODIFY_DONE, target.describeTo(context.sender().fPlayerOrNull(), false), DTRControl.round(target.getDTR()));
+        target.dtr(Math.max(Math.min(target.dtr() + amount, dtr.getMaxDTR(target)), FactionsPlugin.getInstance().conf().factions().landRaidControl().dtr().getMinDTR()));
+        context.sender().msg(TL.COMMAND_DTR_MODIFY_DONE, target.describeTo(context.sender().fPlayerOrNull(), false), DTRControl.round(target.dtr()));
     }
 }

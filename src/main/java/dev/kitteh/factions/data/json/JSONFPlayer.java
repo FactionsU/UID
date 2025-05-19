@@ -14,7 +14,7 @@ public final class JSONFPlayer extends MemoryFPlayer {
     }
 
     @Override
-    public void remove() {
+    public void eraseData() {
         ((MemoryFPlayers) FPlayers.fPlayers()).removePlayer(this);
     }
 }

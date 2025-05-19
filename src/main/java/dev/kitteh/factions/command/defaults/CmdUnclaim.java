@@ -81,7 +81,7 @@ public class CmdUnclaim implements Cmd {
 
         FLocation claimLocation = new FLocation(player);
 
-        final Faction forFaction = context.flags().get("faction") instanceof Faction fac ? fac : sender.getFaction(); // Default to own
+        final Faction forFaction = context.flags().get("faction") instanceof Faction fac ? fac : sender.faction(); // Default to own
 
         if (context.flags().hasFlag("all-territory")) {
             this.unclaimAll(sender, forFaction, false);
@@ -89,9 +89,9 @@ public class CmdUnclaim implements Cmd {
         }
 
         if (context.flags().hasFlag("auto")) {
-            if (sender.getAutoUnclaimFor() == null) {
+            if (sender.autoUnclaim() == null) {
                 if (sender.canClaimForFaction(forFaction)) {
-                    sender.setAutoUnclaimFor(forFaction);
+                    sender.autoUnclaim(forFaction);
 
                     sender.msg(TL.COMMAND_AUTOUNCLAIM_ENABLED, forFaction.describeTo(sender));
                     sender.attemptUnclaim(forFaction, claimLocation, true);
@@ -99,7 +99,7 @@ public class CmdUnclaim implements Cmd {
                     sender.msg(TL.COMMAND_AUTOUNCLAIM_OTHERFACTION, forFaction.describeTo(sender));
                 }
             } else {
-                sender.setAutoUnclaimFor(null);
+                sender.autoUnclaim(null);
                 sender.msg(TL.COMMAND_AUTOUNCLAIM_DISABLED);
             }
 
@@ -150,7 +150,7 @@ public class CmdUnclaim implements Cmd {
             return;
         }
 
-        final boolean bypass = sender.isAdminBypassing();
+        final boolean bypass = sender.adminBypass();
 
         Faction currentFaction = Board.board().factionAt(loc);
 
@@ -163,9 +163,9 @@ public class CmdUnclaim implements Cmd {
                 (
                         (forFaction.isNormal() && !forFaction.hasAccess(sender, PermissibleActions.TERRITORY, loc))
                                 ||
-                                (forFaction.isWarZone() && !Permission.MANAGE_WAR_ZONE.has(sender.getPlayer()))
+                                (forFaction.isWarZone() && !Permission.MANAGE_WAR_ZONE.has(sender.asPlayer()))
                                 ||
-                                (forFaction.isSafeZone() && !Permission.MANAGE_SAFE_ZONE.has(sender.getPlayer()))
+                                (forFaction.isSafeZone() && !Permission.MANAGE_SAFE_ZONE.has(sender.asPlayer()))
                 )
         ) {
             sender.msg(TL.CLAIM_CANTUNCLAIM, forFaction.describeTo(sender));
@@ -258,11 +258,11 @@ public class CmdUnclaim implements Cmd {
         if (targetFaction.isSafeZone() || targetFaction.isWarZone()) {
             Board.board().unclaim(target);
             if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-                FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
+                FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.getCoordString(), targetFaction.tag()));
             }
             return true;
         }
-        if (!fPlayer.isAdminBypassing() && !targetFaction.hasAccess(fPlayer, PermissibleActions.TERRITORY, target)) {
+        if (!fPlayer.adminBypass() && !targetFaction.hasAccess(fPlayer, PermissibleActions.TERRITORY, target)) {
             fPlayer.msg(TL.CLAIM_CANTUNCLAIM, targetFaction.describeTo(fPlayer));
             return false;
         }
@@ -272,20 +272,20 @@ public class CmdUnclaim implements Cmd {
             return false;
         }
 
-        if (!fPlayer.isAdminBypassing() && Econ.shouldBeUsed()) {
-            tracker.refund += Econ.calculateClaimRefund(targetFaction.getLandRounded());
+        if (!fPlayer.adminBypass() && Econ.shouldBeUsed()) {
+            tracker.refund += Econ.calculateClaimRefund(targetFaction.claimCount());
         }
 
         Board.board().unclaim(target);
 
         if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.getName(), target.getCoordString(), targetFaction.getTag()));
+            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.getCoordString(), targetFaction.tag()));
         }
         return true;
     }
 
     private void unclaimAll(FPlayer sender, Faction faction, boolean confirmed) {
-        if (sender.getRole() != Role.ADMIN && !sender.isAdminBypassing()) {
+        if (sender.role() != Role.ADMIN && !sender.adminBypass()) {
             sender.msg(TL.CLAIM_CANTUNCLAIM, faction.describeTo(sender));
             return;
         }
@@ -293,7 +293,7 @@ public class CmdUnclaim implements Cmd {
         if (!confirmed) {
             String conf = CmdConfirm.add(sender, s -> this.unclaimAll(s, faction, true));
             // TODO TL
-            sender.sendMessage(ChatColor.YELLOW + "Are you sure you want to unclaim ALL " + faction.getTag() + " territory? If so, run /f confirm " + conf);
+            sender.sendMessage(ChatColor.YELLOW + "Are you sure you want to unclaim ALL " + faction.tag() + " territory? If so, run /f confirm " + conf);
             return;
         }
 
@@ -304,7 +304,7 @@ public class CmdUnclaim implements Cmd {
         }
 
         if (Econ.shouldBeUsed()) {
-            double refund = Econ.calculateTotalLandRefund(faction.getLandRounded());
+            double refund = Econ.calculateTotalLandRefund(faction.claimCount());
             if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysLandCosts()) {
                 if (!Econ.modifyMoney(faction, refund, TL.COMMAND_UNCLAIMALL_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIMALL_FORUNCLAIM.toString())) {
                     return;
@@ -320,7 +320,7 @@ public class CmdUnclaim implements Cmd {
         faction.msg(TL.COMMAND_UNCLAIMALL_UNCLAIMED, sender.describeTo(faction, true));
 
         if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIMALL_LOG.format(sender.getName(), faction.getTag()));
+            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIMALL_LOG.format(sender.name(), faction.tag()));
         }
     }
 }

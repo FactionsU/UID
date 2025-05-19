@@ -80,7 +80,7 @@ public abstract class MemoryBoard implements Board {
         if (faction.isWilderness()) {
             this.unclaim(flocation);
         } else {
-            this.setIdAt(faction.getId(), flocation);
+            this.setIdAt(faction.id(), flocation);
         }
     }
 
@@ -88,16 +88,16 @@ public abstract class MemoryBoard implements Board {
     public void unclaim(FLocation flocation) {
         Objects.requireNonNull(flocation);
         Faction faction = factionAt(flocation);
-        faction.getWarps().values().removeIf(flocation::isInChunk);
+        faction.warps().values().removeIf(flocation::isInChunk);
         if (flocation.getWorld().isChunkLoaded(flocation.x(), flocation.z())) {
             for (Entity entity : flocation.getChunk().getEntities()) {
                 if (entity instanceof Player) {
                     FPlayer fPlayer = FPlayers.fPlayers().get((Player) entity);
-                    if (!fPlayer.isAdminBypassing() && fPlayer.isFlying()) {
-                        fPlayer.setFlying(false);
+                    if (!fPlayer.adminBypass() && fPlayer.flying()) {
+                        fPlayer.flying(false);
                     }
-                    if (fPlayer.isWarmingUp()) {
-                        fPlayer.clearWarmup();
+                    if (fPlayer.warmingUp()) {
+                        fPlayer.cancelWarmup();
                         fPlayer.msg(TL.WARMUPS_CANCELLED);
                     }
                 }
@@ -117,7 +117,7 @@ public abstract class MemoryBoard implements Board {
 
     @Override
     public Set<FLocation> allClaims(Faction faction) {
-        return worldTrackers.values().stream().flatMap(tracker -> tracker.getAllClaims(faction.getId()).stream()).collect(Collectors.toSet());
+        return worldTrackers.values().stream().flatMap(tracker -> tracker.getAllClaims(faction.id()).stream()).collect(Collectors.toSet());
     }
 
     public Int2ObjectMap<LongList> getAllClaimsForDynmap(World world) {
@@ -137,24 +137,24 @@ public abstract class MemoryBoard implements Board {
     public void unclaimAllInWorld(Faction faction, World world) {
         WorldTracker tracker = worldTrackers.get(world.getName());
         if (tracker != null) {
-            tracker.getAllClaims(faction.getId()).forEach(this::unclaim);
+            tracker.getAllClaims(faction.id()).forEach(this::unclaim);
         }
     }
 
     public void clean(Faction faction) {
-        List<FLocation> locations = this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(faction.getId()).stream()).toList();
+        List<FLocation> locations = this.worldTrackers.values().stream().flatMap(wt -> wt.getAllClaims(faction.id()).stream()).toList();
         for (FPlayer fPlayer : FPlayers.fPlayers().online()) {
-            if (locations.contains(fPlayer.getLastStoodAt())) {
-                if (FactionsPlugin.getInstance().conf().commands().fly().isEnable() && !fPlayer.isAdminBypassing() && fPlayer.isFlying()) {
-                    fPlayer.setFlying(false);
+            if (locations.contains(fPlayer.lastStoodAt())) {
+                if (FactionsPlugin.getInstance().conf().commands().fly().isEnable() && !fPlayer.adminBypass() && fPlayer.flying()) {
+                    fPlayer.flying(false);
                 }
-                if (fPlayer.isWarmingUp()) {
-                    fPlayer.clearWarmup();
+                if (fPlayer.warmingUp()) {
+                    fPlayer.cancelWarmup();
                     fPlayer.msg(TL.WARMUPS_CANCELLED);
                 }
             }
         }
-        this.worldTrackers.values().forEach(wt -> wt.removeAllClaims(faction.getId()));
+        this.worldTrackers.values().forEach(wt -> wt.removeAllClaims(faction.id()));
     }
 
     //----------------------------------------------//
@@ -184,13 +184,13 @@ public abstract class MemoryBoard implements Board {
 
     @Override
     public int claimCount(Faction faction) {
-        return getFactionCoordCount(faction.getId());
+        return getFactionCoordCount(faction.id());
     }
 
     @Override
     public int claimCount(Faction faction, World world) {
         WorldTracker tracker = worldTrackers.get(world.getName());
-        return tracker == null ? 0 : tracker.countClaims(faction.getId());
+        return tracker == null ? 0 : tracker.countClaims(faction.id());
     }
 
     public int getTotalCount() {
@@ -206,17 +206,17 @@ public abstract class MemoryBoard implements Board {
      * of decreasing z
      */
     public List<Component> getMap(FPlayer fplayer, FLocation flocation, double inDegrees) {
-        Faction faction = fplayer.getFaction();
+        Faction faction = fplayer.faction();
         ArrayList<Component> ret = new ArrayList<>();
         Faction factionLoc = factionAt(flocation);
-        ret.add(TextUtil.titleizeC("(" + flocation.getCoordString() + ") " + factionLoc.getTag(fplayer)));
+        ret.add(TextUtil.titleizeC("(" + flocation.getCoordString() + ") " + factionLoc.tagString(fplayer)));
 
         // Get the compass
         List<Component> asciiCompass = AsciiCompass.getAsciiCompass(inDegrees, "<red>", "<gold>");
 
         int halfWidth = FactionsPlugin.getInstance().conf().map().getWidth() / 2;
         // Use player's value for height
-        int halfHeight = fplayer.getMapHeight() / 2;
+        int halfHeight = fplayer.mapHeight() / 2;
         FLocation topLeft = flocation.getRelative(-halfWidth, -halfHeight);
         int width = halfWidth * 2 + 1;
         int height = halfHeight * 2 + 1;
@@ -242,7 +242,7 @@ public abstract class MemoryBoard implements Board {
                 } else {
                     FLocation flocationHere = topLeft.getRelative(dx, dz);
                     Faction factionHere = factionAt(flocationHere);
-                    Relation relation = fplayer.getRelationTo(factionHere);
+                    Relation relation = fplayer.relationTo(factionHere);
                     if (factionHere.isWilderness()) {
                         builder.append(Component.text().content("-").color(FactionsPlugin.getInstance().conf().colors().factions().getWilderness()));
                     } else if (factionHere.isSafeZone()) {
@@ -253,11 +253,11 @@ public abstract class MemoryBoard implements Board {
                             (FactionsPlugin.getInstance().conf().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
                             (FactionsPlugin.getInstance().conf().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
                             FactionsPlugin.getInstance().conf().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
-                        if (!fList.containsKey(factionHere.getTag())) {
-                            fList.put(factionHere.getTag(), String.valueOf(this.mapKeyChrs[Math.min(chrIdx++, this.mapKeyChrs.length - 1)]));
+                        if (!fList.containsKey(factionHere.tag())) {
+                            fList.put(factionHere.tag(), String.valueOf(this.mapKeyChrs[Math.min(chrIdx++, this.mapKeyChrs.length - 1)]));
                         }
-                        String tag = fList.get(factionHere.getTag());
-                        builder.append(Component.text().content(tag).color(factionHere.getTextColorTo(faction)));
+                        String tag = fList.get(factionHere.tag());
+                        builder.append(Component.text().content(tag).color(factionHere.textColorTo(faction)));
                     } else {
                         builder.append(Component.text().content("-").color(NamedTextColor.GRAY));
                     }
@@ -270,7 +270,7 @@ public abstract class MemoryBoard implements Board {
         if (FactionsPlugin.getInstance().conf().map().isShowFactionKey()) {
             TextComponent.Builder builder = Component.text();
             for (String key : fList.keySet()) {
-                final Relation relation = fplayer.getRelationTo(Factions.factions().get(key));
+                final Relation relation = fplayer.relationTo(Factions.factions().get(key));
                 builder.append(Component.text().content(String.format("%s: %s ", fList.get(key), key)).color(relation.color()));
             }
             ret.add(builder.build());
@@ -295,8 +295,8 @@ public abstract class MemoryBoard implements Board {
     }
 
     private List<Component> makeScoreboardMap(FPlayer fplayer) {
-        FLocation flocation = fplayer.getLastStoodAt();
-        Faction faction = fplayer.getFaction();
+        FLocation flocation = fplayer.lastStoodAt();
+        Faction faction = fplayer.faction();
         ArrayList<Component> ret = new ArrayList<>();
         Faction factionLoc = factionAt(flocation);
 
@@ -304,7 +304,7 @@ public abstract class MemoryBoard implements Board {
         int halfHeight = FactionsPlugin.getInstance().conf().map().getScoreboardHeight() / 2;
         int width = halfWidth * 2 + 1;
         int height = halfHeight * 2 + 1;
-        double degrees = (fplayer.getPlayer().getLocation().getYaw() - 180) % 360;
+        double degrees = (fplayer.asPlayer().getLocation().getYaw() - 180) % 360;
         if (degrees < 0) {
             degrees += 360;
         }
@@ -342,7 +342,7 @@ public abstract class MemoryBoard implements Board {
                         default -> topLeft.getRelative(r, width - c - 1);
                     };
                     Faction factionHere = factionAt(flocationHere);
-                    Relation relation = fplayer.getRelationTo(factionHere);
+                    Relation relation = fplayer.relationTo(factionHere);
                     if (factionHere.isWilderness()) {
                         builder.append(Component.text().content("\u2B1B").color(FactionsPlugin.getInstance().conf().colors().factions().getWilderness()));
                     } else if (factionHere.isSafeZone()) {
@@ -353,7 +353,7 @@ public abstract class MemoryBoard implements Board {
                             (FactionsPlugin.getInstance().conf().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
                             (FactionsPlugin.getInstance().conf().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
                             FactionsPlugin.getInstance().conf().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
-                        builder.append(Component.text().content("\u2B1B").color(factionHere.getTextColorTo(faction)));
+                        builder.append(Component.text().content("\u2B1B").color(factionHere.textColorTo(faction)));
                     } else {
                         builder.append(Component.text().content("\u2B1B").color(NamedTextColor.GRAY));
                     }
