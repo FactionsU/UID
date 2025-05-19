@@ -18,7 +18,7 @@ public final class Upgrades {
     public static final class Variables {
         public static final UpgradeVariable CHANCE = UpgradeVariable.ofPercent("chance", BigDecimal.ZERO, BigDecimal.valueOf(100));
 
-        public static final UpgradeVariable PERCENT = UpgradeVariable.ofPercent("chance", BigDecimal.valueOf(Double.NEGATIVE_INFINITY), BigDecimal.valueOf(Double.POSITIVE_INFINITY));
+        public static final UpgradeVariable PERCENT = UpgradeVariable.ofPercent("percent", BigDecimal.valueOf(Integer.MIN_VALUE), BigDecimal.valueOf(Integer.MAX_VALUE));
 
         public static final UpgradeVariable GROWTH_BOOST = UpgradeVariable.ofInteger("boost", BigDecimal.ONE, BigDecimal.valueOf(100));
 
