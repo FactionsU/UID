@@ -24,7 +24,7 @@ public class OldJSONFactionDeserializer implements JsonDeserializer<JSONFaction>
         JsonElement relationWish = jsonElement.getAsJsonObject().get("relationWish").getAsJsonObject();
 
         Iterator<String> iterator = relationWish.getAsJsonObject().keySet().iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             String key = iterator.next();
             try {
                 Integer.parseInt(key);

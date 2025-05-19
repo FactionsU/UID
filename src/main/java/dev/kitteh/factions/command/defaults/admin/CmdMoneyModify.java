@@ -24,7 +24,7 @@ public class CmdMoneyModify implements Cmd {
         return (manager, builder) -> {
             Command.Builder<Sender> moneyBuilder = builder.literal("money")
                     .commandDescription(Cloudy.desc(TL.COMMAND_MONEYMODIFY_DESCRIPTION))
-                    .permission(builder.commandPermission().and(Cloudy.predicate(s->FactionsPlugin.instance().conf().economy().isBankEnabled()).and(Cloudy.hasPermission(Permission.MONEY_MODIFY))))
+                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().economy().isBankEnabled()).and(Cloudy.hasPermission(Permission.MONEY_MODIFY))))
                     .required("faction", FactionParser.of(FactionParser.Include.SELF));
 
 
@@ -32,14 +32,14 @@ public class CmdMoneyModify implements Cmd {
                     moneyBuilder.literal("modify")
                             .required("amount", DoubleParser.doubleParser())
                             .flag(manager.flagBuilder("notify"))
-                            .handler(ctx-> this.handle(ctx, true))
+                            .handler(ctx -> this.handle(ctx, true))
             );
 
             manager.command(
                     moneyBuilder.literal("set")
                             .required("amount", DoubleParser.doubleParser())
                             .flag(manager.flagBuilder("notify"))
-                            .handler(ctx-> this.handle(ctx, false))
+                            .handler(ctx -> this.handle(ctx, false))
             );
         };
     }

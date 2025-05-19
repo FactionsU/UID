@@ -104,7 +104,7 @@ public class Econ {
         String universeAccount = FactionsPlugin.instance().conf().economy().getUniverseAccount();
         String universeUUID = FactionsPlugin.instance().conf().economy().getUniverseAccountUUID();
 
-        if (universeUUID==null) {
+        if (universeUUID == null) {
             return getOfflinePlayerForName(universeAccount);
         }
         return AbstractFactionsPlugin.getInstance().getOfflinePlayer(universeAccount, UUID.fromString(universeUUID));

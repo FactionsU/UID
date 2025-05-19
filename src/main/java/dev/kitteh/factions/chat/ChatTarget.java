@@ -12,10 +12,10 @@ public interface ChatTarget {
     }
 
     record Role(dev.kitteh.factions.permissible.Role role) implements ChatTarget {
-         public static final Role COLEADER = new Role(dev.kitteh.factions.permissible.Role.COLEADER);
-         public static final Role MODERATOR = new Role(dev.kitteh.factions.permissible.Role.MODERATOR);
-         public static final Role NORMAL = new Role(dev.kitteh.factions.permissible.Role.NORMAL);
-         public static final Role ALL = new Role(dev.kitteh.factions.permissible.Role.RECRUIT);
+        public static final Role COLEADER = new Role(dev.kitteh.factions.permissible.Role.COLEADER);
+        public static final Role MODERATOR = new Role(dev.kitteh.factions.permissible.Role.MODERATOR);
+        public static final Role NORMAL = new Role(dev.kitteh.factions.permissible.Role.NORMAL);
+        public static final Role ALL = new Role(dev.kitteh.factions.permissible.Role.RECRUIT);
     }
 
     record Public() implements ChatTarget {

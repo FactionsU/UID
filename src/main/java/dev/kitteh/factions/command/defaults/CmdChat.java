@@ -60,8 +60,7 @@ public class CmdChat implements Cmd {
         sender.chatTarget(target);
 
         TL tl = switch (target) {
-            case ChatTarget.Relation r ->
-                    r.relation() == Relation.ALLY ? TL.COMMAND_CHAT_MODE_ALLIANCE : TL.COMMAND_CHAT_MODE_TRUCE;
+            case ChatTarget.Relation r -> r.relation() == Relation.ALLY ? TL.COMMAND_CHAT_MODE_ALLIANCE : TL.COMMAND_CHAT_MODE_TRUCE;
             case ChatTarget.Role r -> switch (r.role()) {
                 case COLEADER -> TL.COMMAND_CHAT_MODE_COLEADER;
                 case MODERATOR -> TL.COMMAND_CHAT_MODE_MOD;

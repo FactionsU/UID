@@ -105,7 +105,7 @@ public class CmdJoin implements Cmd {
         sender.asPlayer().updateCommands();
 
         if (FactionsPlugin.instance().conf().logging().isFactionJoin()) {
-                FactionsPlugin.instance().log(TL.COMMAND_JOIN_JOINEDLOG.toString(), sender.name(), faction.tag());
+            FactionsPlugin.instance().log(TL.COMMAND_JOIN_JOINEDLOG.toString(), sender.name(), faction.tag());
         }
     }
 }

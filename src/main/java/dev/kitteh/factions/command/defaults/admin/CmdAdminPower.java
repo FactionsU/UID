@@ -19,7 +19,7 @@ public class CmdAdminPower implements Cmd {
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
         return (manager, builder) -> {
             Command.Builder<Sender> powerBuilder = builder.literal("power")
-                    .permission(builder.commandPermission().and(Cloudy.predicate(s-> FactionsPlugin.instance().landRaidControl() instanceof PowerControl)));
+                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof PowerControl)));
 
             new CmdPowerBoost().consumer().accept(manager, powerBuilder);
             new CmdModifyPower().consumer().accept(manager, powerBuilder);

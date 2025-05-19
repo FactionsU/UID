@@ -28,7 +28,7 @@ public class CmdBypass implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        
+
         sender.adminBypass(!sender.adminBypass());
 
         if (sender.adminBypass()) {
