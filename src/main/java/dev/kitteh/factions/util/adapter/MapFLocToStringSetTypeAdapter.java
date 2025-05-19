@@ -97,7 +97,8 @@ public class MapFLocToStringSetTypeAdapter implements JsonDeserializer<Map<FLoca
                         obj.add(locWorld, new JsonObject());
                     }
 
-                    obj.get(locWorld).getAsJsonObject().add(loc.getCoordString(), nameArray);
+                    String coordString = loc.x() + "," + loc.z();
+                    obj.get(locWorld).getAsJsonObject().add(coordString, nameArray);
                 }
             }
             return obj;

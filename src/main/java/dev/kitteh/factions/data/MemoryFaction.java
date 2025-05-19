@@ -315,7 +315,7 @@ public abstract class MemoryFaction implements Faction {
 
         @Override
         public void set(Faction.Zone zone, FLocation fLocation) {
-            if (fLocation.getFaction() != this.faction) {
+            if (fLocation.faction() != this.faction) {
                 throw new IllegalArgumentException("Cannot assign non-owned territory");
             }
             if (this.zones.get(zone.id()) != zone) {
@@ -647,7 +647,7 @@ public abstract class MemoryFaction implements Faction {
     }
 
     public void confirmValidHome() {
-        if ((!FactionsPlugin.getInstance().conf().factions().homes().isMustBeInClaimedTerritory()) || (this.home == null) || (new FLocation(this.home).getFaction() == this)) {
+        if ((!FactionsPlugin.getInstance().conf().factions().homes().isMustBeInClaimedTerritory()) || (this.home == null) || (new FLocation(this.home).faction() == this)) {
             return;
         }
 

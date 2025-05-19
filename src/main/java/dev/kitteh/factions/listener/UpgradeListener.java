@@ -21,7 +21,7 @@ public class UpgradeListener implements Listener {
             return;
         }
         FLocation loc = new FLocation(event.getBlock());
-        Faction faction = loc.getFaction();
+        Faction faction = loc.faction();
         if (!faction.isNormal()) {
             return;
         }

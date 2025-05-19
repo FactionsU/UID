@@ -47,11 +47,11 @@ public record FLocation(String worldName, int x, int z) {
     // Getters and Setters
     //----------------------------------------------//
 
-    public World getWorld() {
+    public World world() {
         return Bukkit.getWorld(worldName);
     }
 
-    public Faction getFaction() {
+    public Faction faction() {
         return Board.board().factionAt(this);
     }
 
@@ -60,17 +60,12 @@ public record FLocation(String worldName, int x, int z) {
      *
      * @return coordinate string
      */
-    public String getCoordString() {
-        return x + "," + z; // Do not change without fixing usages, because it is used for serialization.
+    public String coordString() {
+        return x + "," + z;
     }
 
-    public Chunk getChunk() {
-        return getWorld().getChunkAt(x, z);
-    }
-
-    @Override
-    public String toString() {
-        return "[" + this.worldName() + "," + this.getCoordString() + "]";
+    public Chunk chunk() {
+        return world().getChunkAt(x, z);
     }
 
     //----------------------------------------------//
@@ -90,7 +85,7 @@ public record FLocation(String worldName, int x, int z) {
     // Misc Geometry
     //----------------------------------------------//
 
-    public FLocation getRelative(int dx, int dz) {
+    public FLocation relative(int dx, int dz) {
         return new FLocation(this.worldName, this.x + dx, this.z + dz);
     }
 
@@ -109,7 +104,7 @@ public record FLocation(String worldName, int x, int z) {
      * @return whether this location is outside of the border
      */
     public boolean isOutsideWorldBorder(int buffer) {
-        WorldBorder border = getWorld().getWorldBorder();
+        WorldBorder border = world().getWorldBorder();
 
         Location center = border.getCenter();
         double size = border.getSize();
@@ -149,5 +144,10 @@ public record FLocation(String worldName, int x, int z) {
         }
 
         return this.x == xx && this.z == zz && (Objects.equals(this.worldName, world));
+    }
+
+    @Override
+    public String toString() {
+        return "[" + this.worldName() + "," + this.coordString() + "]";
     }
 }

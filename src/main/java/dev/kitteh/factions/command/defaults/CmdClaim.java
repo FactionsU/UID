@@ -179,10 +179,10 @@ public class CmdClaim implements Cmd {
                 return;
             }
 
-            addIf(toClaim, queue, currentHead.getRelative(0, 1), currentFaction);
-            addIf(toClaim, queue, currentHead.getRelative(0, -1), currentFaction);
-            addIf(toClaim, queue, currentHead.getRelative(1, 0), currentFaction);
-            addIf(toClaim, queue, currentHead.getRelative(-1, 0), currentFaction);
+            addIf(toClaim, queue, currentHead.relative(0, 1), currentFaction);
+            addIf(toClaim, queue, currentHead.relative(0, -1), currentFaction);
+            addIf(toClaim, queue, currentHead.relative(1, 0), currentFaction);
+            addIf(toClaim, queue, currentHead.relative(-1, 0), currentFaction);
         }
 
         if (toClaim.size() > limit) {

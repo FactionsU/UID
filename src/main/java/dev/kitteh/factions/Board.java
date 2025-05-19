@@ -28,26 +28,26 @@ public interface Board {
     // Simpler: Is there any nearby coord with a faction other than the faction here?
     default boolean isBorderLocation(FLocation flocation) {
         Faction faction = factionAt(flocation);
-        FLocation a = flocation.getRelative(1, 0);
-        FLocation b = flocation.getRelative(-1, 0);
-        FLocation c = flocation.getRelative(0, 1);
-        FLocation d = flocation.getRelative(0, -1);
+        FLocation a = flocation.relative(1, 0);
+        FLocation b = flocation.relative(-1, 0);
+        FLocation c = flocation.relative(0, 1);
+        FLocation d = flocation.relative(0, -1);
         return faction != factionAt(a) || faction != factionAt(b) || faction != factionAt(c) || faction != factionAt(d);
     }
 
     default boolean isConnectedLocation(FLocation flocation, Faction faction) {
-        FLocation a = flocation.getRelative(1, 0);
-        FLocation b = flocation.getRelative(-1, 0);
-        FLocation c = flocation.getRelative(0, 1);
-        FLocation d = flocation.getRelative(0, -1);
+        FLocation a = flocation.relative(1, 0);
+        FLocation b = flocation.relative(-1, 0);
+        FLocation c = flocation.relative(0, 1);
+        FLocation d = flocation.relative(0, -1);
         return faction == factionAt(a) || faction == factionAt(b) || faction == factionAt(c) || faction == factionAt(d);
     }
 
     default boolean isDisconnectedLocation(FLocation flocation, Faction faction) {
-        FLocation a = flocation.getRelative(1, 0);
-        FLocation b = flocation.getRelative(-1, 0);
-        FLocation c = flocation.getRelative(0, 1);
-        FLocation d = flocation.getRelative(0, -1);
+        FLocation a = flocation.relative(1, 0);
+        FLocation b = flocation.relative(-1, 0);
+        FLocation c = flocation.relative(0, 1);
+        FLocation d = flocation.relative(0, -1);
         return faction != factionAt(a) && faction != factionAt(b) && faction != factionAt(c) && faction != factionAt(d);
     }
 
@@ -67,7 +67,7 @@ public interface Board {
                     continue;
                 }
 
-                FLocation relative = flocation.getRelative(x, z);
+                FLocation relative = flocation.relative(x, z);
                 Faction other = factionAt(relative);
 
                 if (other.isNormal() && other != faction) {

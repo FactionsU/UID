@@ -836,7 +836,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         int factionBuffer = plugin.conf().factions().claims().getBufferZone();
         int worldBuffer = plugin.conf().worldBorder().getBuffer();
 
-        if (plugin.conf().worldGuard().isCheckingEither() && plugin.getWorldguard() != null && plugin.getWorldguard().checkForRegionsInChunk(flocation.getChunk())) {
+        if (plugin.conf().worldGuard().isCheckingEither() && plugin.getWorldguard() != null && plugin.getWorldguard().checkForRegionsInChunk(flocation.chunk())) {
             // Checks for WorldGuard regions in the chunk attempting to be claimed
             denyReason = plugin.txt().parse(TL.CLAIM_PROTECTED.toString());
         } else if (plugin.conf().factions().claims().getWorldsNoClaiming().contains(flocation.worldName())) {
@@ -878,7 +878,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (currentFaction.relationTo(forFaction) == Relation.ALLY) {
             // // Can't claim ally
             denyReason = plugin.txt().parse(TL.CLAIM_ALLY.toString());
-        } else if (plugin.conf().factions().claims().isMustBeConnected() && !this.adminBypass() && myFaction.claimCount(flocation.getWorld()) > 0 && Board.board().isDisconnectedLocation(flocation, myFaction) && (!plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction() || !currentFaction.isNormal())) {
+        } else if (plugin.conf().factions().claims().isMustBeConnected() && !this.adminBypass() && myFaction.claimCount(flocation.world()) > 0 && Board.board().isDisconnectedLocation(flocation, myFaction) && (!plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction() || !currentFaction.isNormal())) {
             // Must be contiguous/connected
             if (plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction()) {
                 denyReason = plugin.txt().parse(TL.CLAIM_CONTIGIOUS.toString());
@@ -946,7 +946,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (mustPay) {
             cost = Econ.calculateClaimCost(ownedLand, currentFaction.isNormal());
 
-            if (FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee() != 0.0 && forFaction.claimCount(flocation.getWorld()) > 0 && Board.board().isDisconnectedLocation(flocation, forFaction)) {
+            if (FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee() != 0.0 && forFaction.claimCount(flocation.world()) > 0 && Board.board().isDisconnectedLocation(flocation, forFaction)) {
                 cost += FactionsPlugin.getInstance().conf().economy().getClaimUnconnectedFee();
             }
 
@@ -989,7 +989,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         Board.board().claim(flocation, forFaction);
 
         if (FactionsPlugin.getInstance().conf().logging().isLandClaims()) {
-            FactionsPlugin.getInstance().log(TL.CLAIM_CLAIMEDLOG.toString(), this.name(), flocation.getCoordString(), forFaction.tag());
+            FactionsPlugin.getInstance().log(TL.CLAIM_CLAIMEDLOG.toString(), this.name(), flocation.coordString(), forFaction.tag());
         }
 
         return true;
@@ -1015,7 +1015,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 this.msg(TL.COMMAND_UNCLAIM_SAFEZONE_SUCCESS);
 
                 if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-                    FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.getCoordString(), targetFaction.tag()));
+                    FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.coordString(), targetFaction.tag()));
                 }
                 return true;
             } else {
@@ -1030,7 +1030,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 this.msg(TL.COMMAND_UNCLAIM_WARZONE_SUCCESS);
 
                 if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-                    FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.getCoordString(), targetFaction.tag()));
+                    FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.coordString(), targetFaction.tag()));
                 }
                 return true;
             } else {
@@ -1054,7 +1054,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             this.msg(TL.COMMAND_UNCLAIM_UNCLAIMS);
 
             if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-                FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.getCoordString(), targetFaction.tag()));
+                FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.coordString(), targetFaction.tag()));
             }
 
             return true;
@@ -1105,7 +1105,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.faction().msg(TL.COMMAND_UNCLAIM_FACTIONUNCLAIMED, this.describeTo(this.faction(), true));
 
         if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.getCoordString(), targetFaction.tag()));
+            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.coordString(), targetFaction.tag()));
         }
 
         return true;

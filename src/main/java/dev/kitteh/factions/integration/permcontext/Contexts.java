@@ -37,16 +37,16 @@ public enum Contexts implements Context {
             FPlayers.fPlayers().get(player).relationTo(Board.board().factionAt(new FLocation(player.getLocation()))).getNameInASet(),
             Arrays.stream(Relation.values()).map(relation -> relation.name().toLowerCase()).collect(Collectors.toSet())),
     TERRITORY_IS_SAFEZONE((player) ->
-            Set.of(new FLocation(player).getFaction().isSafeZone() ? "true" : "false"),
+            Set.of(new FLocation(player).faction().isSafeZone() ? "true" : "false"),
             Set.of("true", "false")),
     TERRITORY_IS_WILDERNESS((player) ->
-            Set.of(new FLocation(player).getFaction().isWilderness() ? "true" : "false"),
+            Set.of(new FLocation(player).faction().isWilderness() ? "true" : "false"),
             Set.of("true", "false")),
     TERRITORY_IS_WARZONE((player) ->
-            Set.of(new FLocation(player).getFaction().isWarZone() ? "true" : "false"),
+            Set.of(new FLocation(player).faction().isWarZone() ? "true" : "false"),
             Set.of("true", "false")),
     TERRITORY_ID((player) ->
-            Set.of(String.valueOf(new FLocation(player).getFaction().id())),
+            Set.of(String.valueOf(new FLocation(player).faction().id())),
             Set.of(String.valueOf(Factions.ID_WILDERNESS))),
     ROLE_AT_LEAST((player) ->
     {

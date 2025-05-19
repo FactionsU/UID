@@ -81,7 +81,7 @@ public class FactionsEntityListener extends AbstractListener {
         if (event.getEntity() instanceof Player plr && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
             Faction faction = FPlayers.fPlayers().get(plr).faction();
             int lvl = faction.upgradeLevel(Upgrades.FALL_DAMAGE_REDUCTION);
-            if (new FLocation(plr).getFaction() == faction && lvl > 0) {
+            if (new FLocation(plr).faction() == faction && lvl > 0) {
                 UpgradeSettings settings = Universe.universe().upgradeSettings(Upgrades.FALL_DAMAGE_REDUCTION);
                 double reduction = settings.valueAt(Upgrades.Variables.PERCENT, lvl).doubleValue();
                 reduction = Math.min(1, reduction);

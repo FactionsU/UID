@@ -235,7 +235,7 @@ public class CmdZone implements Cmd {
     }
 
     private static boolean claim(FPlayer sender, Faction faction, FLocation location, Faction.Zone zone, TranslationsConfig.Commands.Zone.Claim tl, boolean msg) {
-        if (location.getFaction() != faction) {
+        if (location.faction() != faction) {
             if (msg) {
                 sender.sendMessage(Mini.parse(tl.getNotInTerritory()));
             }

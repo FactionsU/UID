@@ -89,8 +89,8 @@ public abstract class MemoryBoard implements Board {
         Objects.requireNonNull(flocation);
         Faction faction = factionAt(flocation);
         faction.warps().values().removeIf(flocation::isInChunk);
-        if (flocation.getWorld().isChunkLoaded(flocation.x(), flocation.z())) {
-            for (Entity entity : flocation.getChunk().getEntities()) {
+        if (flocation.world().isChunkLoaded(flocation.x(), flocation.z())) {
+            for (Entity entity : flocation.chunk().getEntities()) {
                 if (entity instanceof Player) {
                     FPlayer fPlayer = FPlayers.fPlayers().get((Player) entity);
                     if (!fPlayer.adminBypass() && fPlayer.flying()) {
@@ -209,7 +209,7 @@ public abstract class MemoryBoard implements Board {
         Faction faction = fplayer.faction();
         ArrayList<Component> ret = new ArrayList<>();
         Faction factionLoc = factionAt(flocation);
-        ret.add(TextUtil.titleizeC("(" + flocation.getCoordString() + ") " + factionLoc.tagString(fplayer)));
+        ret.add(TextUtil.titleizeC("(" + flocation.coordString() + ") " + factionLoc.tagString(fplayer)));
 
         // Get the compass
         List<Component> asciiCompass = AsciiCompass.getAsciiCompass(inDegrees, "<red>", "<gold>");
@@ -217,7 +217,7 @@ public abstract class MemoryBoard implements Board {
         int halfWidth = FactionsPlugin.getInstance().conf().map().getWidth() / 2;
         // Use player's value for height
         int halfHeight = fplayer.mapHeight() / 2;
-        FLocation topLeft = flocation.getRelative(-halfWidth, -halfHeight);
+        FLocation topLeft = flocation.relative(-halfWidth, -halfHeight);
         int width = halfWidth * 2 + 1;
         int height = halfHeight * 2 + 1;
 
@@ -240,7 +240,7 @@ public abstract class MemoryBoard implements Board {
                 if (dx == halfWidth && dz == halfHeight) {
                     builder.append(Component.text().content("+").color(FactionsPlugin.getInstance().conf().map().getSelfColor()).hoverEvent(HoverEvent.showText(LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(TL.CLAIM_YOUAREHERE.toString())))));
                 } else {
-                    FLocation flocationHere = topLeft.getRelative(dx, dz);
+                    FLocation flocationHere = topLeft.relative(dx, dz);
                     Faction factionHere = factionAt(flocationHere);
                     Relation relation = fplayer.relationTo(factionHere);
                     if (factionHere.isWilderness()) {
@@ -320,10 +320,10 @@ public abstract class MemoryBoard implements Board {
         }
 
         FLocation topLeft = switch (dir) {
-            case N -> flocation.getRelative(-halfWidth, -halfHeight);
-            case S -> flocation.getRelative(halfWidth, halfHeight);
-            case E -> flocation.getRelative(halfHeight, halfWidth);
-            default -> flocation.getRelative(-halfHeight, -halfWidth);
+            case N -> flocation.relative(-halfWidth, -halfHeight);
+            case S -> flocation.relative(halfWidth, halfHeight);
+            case E -> flocation.relative(halfHeight, halfWidth);
+            default -> flocation.relative(-halfHeight, -halfWidth);
         };
 
         // For each row
@@ -336,10 +336,10 @@ public abstract class MemoryBoard implements Board {
                     builder.append(Component.text().content("\u2B1B").color(FactionsPlugin.getInstance().conf().map().getSelfColor()));
                 } else {
                     FLocation flocationHere = switch (dir) {
-                        case N -> topLeft.getRelative(c, r);
-                        case S -> topLeft.getRelative(-c, -r);
-                        case E -> topLeft.getRelative(-r, -(width - c - 1));
-                        default -> topLeft.getRelative(r, width - c - 1);
+                        case N -> topLeft.relative(c, r);
+                        case S -> topLeft.relative(-c, -r);
+                        case E -> topLeft.relative(-r, -(width - c - 1));
+                        default -> topLeft.relative(r, width - c - 1);
                     };
                     Faction factionHere = factionAt(flocationHere);
                     Relation relation = fplayer.relationTo(factionHere);

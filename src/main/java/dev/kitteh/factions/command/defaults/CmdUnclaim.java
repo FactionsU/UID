@@ -189,10 +189,10 @@ public class CmdUnclaim implements Cmd {
                 return;
             }
 
-            addIf(toClaim, queue, currentHead.getRelative(0, 1), currentFaction);
-            addIf(toClaim, queue, currentHead.getRelative(0, -1), currentFaction);
-            addIf(toClaim, queue, currentHead.getRelative(1, 0), currentFaction);
-            addIf(toClaim, queue, currentHead.getRelative(-1, 0), currentFaction);
+            addIf(toClaim, queue, currentHead.relative(0, 1), currentFaction);
+            addIf(toClaim, queue, currentHead.relative(0, -1), currentFaction);
+            addIf(toClaim, queue, currentHead.relative(1, 0), currentFaction);
+            addIf(toClaim, queue, currentHead.relative(-1, 0), currentFaction);
         }
 
         if (toClaim.size() > limit) {
@@ -258,7 +258,7 @@ public class CmdUnclaim implements Cmd {
         if (targetFaction.isSafeZone() || targetFaction.isWarZone()) {
             Board.board().unclaim(target);
             if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-                FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.getCoordString(), targetFaction.tag()));
+                FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.coordString(), targetFaction.tag()));
             }
             return true;
         }
@@ -279,7 +279,7 @@ public class CmdUnclaim implements Cmd {
         Board.board().unclaim(target);
 
         if (FactionsPlugin.getInstance().conf().logging().isLandUnclaims()) {
-            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.getCoordString(), targetFaction.tag()));
+            FactionsPlugin.getInstance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.coordString(), targetFaction.tag()));
         }
         return true;
     }
