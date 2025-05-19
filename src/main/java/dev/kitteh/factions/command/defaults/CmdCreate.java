@@ -59,7 +59,7 @@ public class CmdCreate implements Cmd {
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make sure they can pay
-        if (!context.sender().canAffordCommand(FactionsPlugin.getInstance().conf().economy().getCostCreate(), TL.COMMAND_CREATE_TOCREATE)) {
+        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostCreate(), TL.COMMAND_CREATE_TOCREATE)) {
             return;
         }
 
@@ -70,7 +70,7 @@ public class CmdCreate implements Cmd {
         }
 
         // then make 'em pay (if applicable)
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostCreate(), TL.COMMAND_CREATE_TOCREATE, TL.COMMAND_CREATE_FORCREATE)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostCreate(), TL.COMMAND_CREATE_TOCREATE, TL.COMMAND_CREATE_FORCREATE)) {
             return;
         }
 
@@ -90,8 +90,8 @@ public class CmdCreate implements Cmd {
             follower.msg(TL.COMMAND_CREATE_CREATED, sender.describeTo(follower, true), faction.tagString(follower));
         }
 
-        if (FactionsPlugin.getInstance().conf().logging().isFactionCreate()) {
-            FactionsPlugin.getInstance().log(sender.name() + TL.COMMAND_CREATE_CREATEDLOG + tag);
+        if (FactionsPlugin.instance().conf().logging().isFactionCreate()) {
+            FactionsPlugin.instance().log(sender.name() + TL.COMMAND_CREATE_CREATEDLOG + tag);
         }
     }
 }

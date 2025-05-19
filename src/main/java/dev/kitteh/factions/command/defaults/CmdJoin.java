@@ -59,7 +59,7 @@ public class CmdJoin implements Cmd {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().getLandRaidControl().canJoinFaction(faction, sender)) {
+        if (!FactionsPlugin.instance().landRaidControl().canJoinFaction(faction, sender)) {
             return;
         }
 
@@ -72,7 +72,7 @@ public class CmdJoin implements Cmd {
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make sure they can pay
-        if (!context.sender().canAffordCommand(FactionsPlugin.getInstance().conf().economy().getCostJoin(), TL.COMMAND_JOIN_TOJOIN)) {
+        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostJoin(), TL.COMMAND_JOIN_TOJOIN)) {
             return;
         }
 
@@ -90,7 +90,7 @@ public class CmdJoin implements Cmd {
         }
 
         // then make 'em pay (if applicable)
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostJoin(), TL.COMMAND_JOIN_TOJOIN, TL.COMMAND_JOIN_FORJOIN)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostJoin(), TL.COMMAND_JOIN_TOJOIN, TL.COMMAND_JOIN_FORJOIN)) {
             return;
         }
 
@@ -104,8 +104,8 @@ public class CmdJoin implements Cmd {
         sender.role(faction.defaultRole());
         sender.asPlayer().updateCommands();
 
-        if (FactionsPlugin.getInstance().conf().logging().isFactionJoin()) {
-                FactionsPlugin.getInstance().log(TL.COMMAND_JOIN_JOINEDLOG.toString(), sender.name(), faction.tag());
+        if (FactionsPlugin.instance().conf().logging().isFactionJoin()) {
+                FactionsPlugin.instance().log(TL.COMMAND_JOIN_JOINEDLOG.toString(), sender.name(), faction.tag());
         }
     }
 }

@@ -37,29 +37,29 @@ public enum FactionTag implements Tag {
     FACTION_RELATION_COLOR("faction-relation-color", (fac, fp) -> fp == null ? "" : fp.colorStringTo(fac)),
     HOME_WORLD("world", (fac) -> fac.hasHome() ? fac.home().getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
     RAIDABLE("raidable", (fac) -> {
-        boolean raid = FactionsPlugin.getInstance().getLandRaidControl().isRaidable(fac);
+        boolean raid = FactionsPlugin.instance().landRaidControl().isRaidable(fac);
         return raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
     }),
     DTR("dtr", (fac) -> {
-        if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
-            int dtr = fac.claimCount() >= fac.power() ? 0 : (int) Math.ceil(((double) (fac.power() - fac.claimCount())) / FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getLossPerDeath());
+        if (FactionsPlugin.instance().landRaidControl() instanceof PowerControl) {
+            int dtr = fac.claimCount() >= fac.power() ? 0 : (int) Math.ceil(((double) (fac.power() - fac.claimCount())) / FactionsPlugin.instance().conf().factions().landRaidControl().power().getLossPerDeath());
             return TL.COMMAND_SHOW_DEATHS_TIL_RAIDABLE.format(dtr);
         } else {
             return DTRControl.round(fac.dtr());
         }
     }),
     MAX_DTR("max-dtr", (fac) -> {
-        if (FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
-            return DTRControl.round(((DTRControl) FactionsPlugin.getInstance().getLandRaidControl()).getMaxDTR(fac));
+        if (FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
+            return DTRControl.round(((DTRControl) FactionsPlugin.instance().landRaidControl()).getMaxDTR(fac));
         }
         return Tag.isMinimalShow() ? null : "{ig}";
     }),
     DTR_FROZEN("dtr-frozen-status", (fac -> TL.DTR_FROZEN_STATUS_MESSAGE.format(fac.dtrFrozen() ? TL.DTR_FROZEN_STATUS_TRUE.toString() : TL.DTR_FROZEN_STATUS_FALSE.toString()))),
     DTR_FROZEN_TIME("dtr-frozen-time", (fac -> TL.DTR_FROZEN_TIME_MESSAGE.format(fac.dtrFrozen() ?
-            DurationFormatUtils.formatDuration(fac.dtrFrozenUntil() - System.currentTimeMillis(), FactionsPlugin.getInstance().conf().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
+            DurationFormatUtils.formatDuration(fac.dtrFrozenUntil() - System.currentTimeMillis(), FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
             TL.DTR_FROZEN_TIME_NOTFROZEN.toString()))),
-    MAX_CHUNKS("max-chunks", (fac -> String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(fac)))),
-    PEACEFUL("peaceful", (fac) -> fac.peaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getPeaceful() + TL.COMMAND_SHOW_PEACEFUL.toString() : ""),
+    MAX_CHUNKS("max-chunks", (fac -> String.valueOf(FactionsPlugin.instance().landRaidControl().landLimit(fac)))),
+    PEACEFUL("peaceful", (fac) -> fac.peaceful() ? FactionsPlugin.instance().conf().colors().relations().getPeaceful() + TL.COMMAND_SHOW_PEACEFUL.toString() : ""),
     PERMANENT("permanent", (fac) -> fac.permanent() ? "permanent" : "{notPermanent}"), // no braces needed
     LAND_VALUE("land-value", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(fac.claimCount())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("value")),
     DESCRIPTION("description", fac -> fac.description()),
@@ -67,19 +67,19 @@ public enum FactionTag implements Tag {
     LAND_REFUND("land-refund", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(fac.claimCount())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("refund")),
     BANK_BALANCE("faction-balance", (fac) -> {
         if (Econ.shouldBeUsed()) {
-            return FactionsPlugin.getInstance().conf().economy().isBankEnabled() ? Econ.moneyString(Econ.getBalance(fac)) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance");
+            return FactionsPlugin.instance().conf().economy().isBankEnabled() ? Econ.moneyString(Econ.getBalance(fac)) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance");
         }
         return Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance");
     }),
     TNT_BALANCE("tnt-balance", (fac) -> {
-        if (FactionsPlugin.getInstance().conf().commands().tnt().isEnable()) {
+        if (FactionsPlugin.instance().conf().commands().tnt().isEnable()) {
             return String.valueOf(fac.tntBank());
         }
         return Tag.isMinimalShow() ? null : "";
     }),
     TNT_MAX("tnt-max-balance", (fac) -> {
-        if (FactionsPlugin.getInstance().conf().commands().tnt().isEnable()) {
-            return String.valueOf(FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage());
+        if (FactionsPlugin.instance().conf().commands().tnt().isEnable()) {
+            return String.valueOf(FactionsPlugin.instance().conf().commands().tnt().getMaxStorage());
         }
         return Tag.isMinimalShow() ? null : "";
     }),

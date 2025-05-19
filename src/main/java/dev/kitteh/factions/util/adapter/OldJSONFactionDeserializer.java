@@ -33,6 +33,6 @@ public class OldJSONFactionDeserializer implements JsonDeserializer<JSONFaction>
             }
         }
 
-        return FactionsPlugin.getInstance().getGson().fromJson(jsonElement, JSONFaction.class);
+        return FactionsPlugin.instance().gson().fromJson(jsonElement, JSONFaction.class);
     }
 }

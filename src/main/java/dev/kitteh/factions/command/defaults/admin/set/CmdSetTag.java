@@ -68,7 +68,7 @@ public class CmdSetTag implements Cmd {
             }
 
             // Broadcast the tag change (if applicable)
-            if (FactionsPlugin.getInstance().conf().factions().chat().isBroadcastTagChanges()) {
+            if (FactionsPlugin.instance().conf().factions().chat().isBroadcastTagChanges()) {
                 Faction fac = fplayer.faction();
                 fplayer.msg(TL.COMMAND_TAG_CHANGED, sender.colorStringTo(fac) + oldTag, faction.tagString(fac));
             }

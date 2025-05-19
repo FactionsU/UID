@@ -34,7 +34,7 @@ public abstract class AbstractListener implements Listener {
 
     public static boolean canInteractHere(Player player, Location location) {
         String name = player.getName();
-        if (FactionsPlugin.getInstance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(name)) {
+        if (FactionsPlugin.instance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(name)) {
             return true;
         }
 
@@ -46,11 +46,11 @@ public abstract class AbstractListener implements Listener {
         FLocation loc = new FLocation(location);
         Faction otherFaction = Board.board().factionAt(loc);
 
-        if (FactionsPlugin.getInstance().getLandRaidControl().isRaidable(otherFaction)) {
+        if (FactionsPlugin.instance().landRaidControl().isRaidable(otherFaction)) {
             return true;
         }
 
-        MainConfig.Factions.Protection protection = FactionsPlugin.getInstance().conf().factions().protection();
+        MainConfig.Factions.Protection protection = FactionsPlugin.instance().conf().factions().protection();
         if (otherFaction.isWilderness()) {
             if (!protection.isWildernessDenyUsage() || protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) {
                 return true; // This is not faction territory. Use whatever you like here.
@@ -94,7 +94,7 @@ public abstract class AbstractListener implements Listener {
         }
 
         if (result == ExplosionResult.TRIGGER_BLOCK && boomer != null &&
-                FactionsPlugin.getInstance().conf().factions().protection().isTerritoryBlockWindChargeInteractionMatchingPerms() &&
+                FactionsPlugin.instance().conf().factions().protection().isTerritoryBlockWindChargeInteractionMatchingPerms() &&
                 boomer instanceof WindCharge charge && charge.getShooter() instanceof Player shooter) {
             blockList.removeIf(block -> !canUseBlock(shooter, block.getType(), block.getLocation(), true));
         }
@@ -104,7 +104,7 @@ public abstract class AbstractListener implements Listener {
             blockList.removeIf(block -> !chunks.contains(block.getChunk()));
         }
 
-        if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && FactionsPlugin.getInstance().conf().exploits().isTntWaterlog()) {
+        if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && FactionsPlugin.instance().conf().exploits().isTntWaterlog()) {
             // TNT in water/lava doesn't normally destroy any surrounding blocks, which is usually desired behavior, but...
             // this change below provides workaround for waterwalling providing perfect protection,
             // and makes cheap (non-obsidian) TNT cannons require minor maintenance between shots
@@ -145,11 +145,11 @@ public abstract class AbstractListener implements Listener {
     public static boolean explosionDisallowed(Entity boomer, FLocation location) {
         Faction faction = Board.board().factionAt(location);
         boolean online = faction.hasMembersOnline();
-        if (faction.noExplosionsInTerritory() || (faction.peaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
+        if (faction.noExplosionsInTerritory() || (faction.peaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
             // faction is peaceful and has explosions set to disabled
             return true;
         }
-        MainConfig.Factions.Protection protection = FactionsPlugin.getInstance().conf().factions().protection();
+        MainConfig.Factions.Protection protection = FactionsPlugin.instance().conf().factions().protection();
         if (boomer instanceof Creeper && ((faction.isWilderness() && protection.isWildernessBlockCreepers() && !protection.getWorldsNoWildernessProtection().contains(location.worldName())) ||
                 (faction.isNormal() && (online ? protection.isTerritoryBlockCreepers() : protection.isTerritoryBlockCreepersWhenOffline())) ||
                 (faction.isWarZone() && protection.isWarZoneBlockCreepers()) ||
@@ -182,7 +182,7 @@ public abstract class AbstractListener implements Listener {
     }
 
     public static boolean canUseBlock(Player player, Material material, Location location, boolean justCheck) {
-        if (FactionsPlugin.getInstance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
+        if (FactionsPlugin.instance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
             return true;
         }
 
@@ -205,7 +205,7 @@ public abstract class AbstractListener implements Listener {
             return true;
         }
 
-        if (FactionsPlugin.getInstance().getLandRaidControl().isRaidable(otherFaction)) {
+        if (FactionsPlugin.instance().landRaidControl().isRaidable(otherFaction)) {
             return true;
         }
 
@@ -252,7 +252,7 @@ public abstract class AbstractListener implements Listener {
                 materialName.contains("ANVIL") ||
                 materialName.startsWith("POTTED") ||
                 materialName.contains("FURNACE") ||
-                FactionsPlugin.getInstance().conf().factions().protection().getCustomContainers().contains(material)
+                FactionsPlugin.instance().conf().factions().protection().getCustomContainers().contains(material)
         ) {
             action = PermissibleActions.CONTAINER;
         }
@@ -264,11 +264,11 @@ public abstract class AbstractListener implements Listener {
         // Ignored types
         if (action == PermissibleActions.CONTAINER &&
                 (
-                        FactionsPlugin.getInstance().conf().factions().protection().getContainerExceptions().contains(material) ||
+                        FactionsPlugin.instance().conf().factions().protection().getContainerExceptions().contains(material) ||
                                 (
                                         otherFaction.isNormal() &&
                                                 material == Material.LECTERN &&
-                                                FactionsPlugin.getInstance().conf().factions().protection().isTerritoryAllowLecternReading()
+                                                FactionsPlugin.instance().conf().factions().protection().isTerritoryAllowLecternReading()
                                 )
                 )) {
             return true;

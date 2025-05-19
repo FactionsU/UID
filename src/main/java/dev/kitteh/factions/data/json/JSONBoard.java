@@ -28,7 +28,7 @@ public final class JSONBoard extends MemoryBoard {
         this.worldTrackers.forEach((world, tracker) -> {
             Map<String, String> worldMap = new TreeMap<>();
             worldCoordIds.put(world, worldMap);
-            tracker.getChunkToIDForSave().forEach((chunk, faction) -> {
+            tracker.chunkIdMapForSave().forEach((chunk, faction) -> {
                 int x = Morton.getX(chunk);
                 int z = Morton.getZ(chunk);
                 worldMap.put(x + "," + z, String.valueOf(faction));
@@ -68,7 +68,7 @@ public final class JSONBoard extends MemoryBoard {
     @Override
     public void forceSave(boolean sync) {
         Map<String, Map<String, String>> map = dumpAsSaveFormat();
-        DiscUtil.writeCatch(file, () -> FactionsPlugin.getInstance().getGson().toJson(map), sync);
+        DiscUtil.writeCatch(file, () -> FactionsPlugin.instance().gson().toJson(map), sync);
     }
 
     @Override
@@ -82,7 +82,7 @@ public final class JSONBoard extends MemoryBoard {
         try {
             Type type = new TypeToken<Map<String, Map<String, String>>>() {
             }.getType();
-            Map<String, Map<String, String>> worldCoordIds = FactionsPlugin.getInstance().getGson().fromJson(Files.newBufferedReader(file.toPath()), type);
+            Map<String, Map<String, String>> worldCoordIds = FactionsPlugin.instance().gson().fromJson(Files.newBufferedReader(file.toPath()), type);
             loadFromSaveFormat(worldCoordIds);
         } catch (Exception e) {
             AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load the board from disk.", e);

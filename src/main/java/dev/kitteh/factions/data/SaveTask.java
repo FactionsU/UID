@@ -13,7 +13,7 @@ public class SaveTask implements Runnable {
 
     @Override
     public void run() {
-        if (!plugin.getAutoSave() || running) {
+        if (!plugin.autoSave() || running) {
             return;
         }
         running = true;

@@ -23,8 +23,8 @@ public class PowerControl implements LandRaidControl {
     }
 
     public boolean isRaidable(Faction faction, int power) {
-        return FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidability() && faction.isNormal() && !faction.peaceful() &&
-                (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().isRaidabilityOnEqualLandAndPower() ?
+        return FactionsPlugin.instance().conf().factions().landRaidControl().power().isRaidability() && faction.isNormal() && !faction.peaceful() &&
+                (FactionsPlugin.instance().conf().factions().landRaidControl().power().isRaidabilityOnEqualLandAndPower() ?
                         (faction.claimCount() >= power) :
                         (faction.claimCount() > power)
                 );
@@ -36,13 +36,13 @@ public class PowerControl implements LandRaidControl {
     }
 
     @Override
-    public int getLandLimit(Faction faction) {
+    public int landLimit(Faction faction) {
         return faction.power();
     }
 
     @Override
     public boolean canJoinFaction(Faction faction, FPlayer player) {
-        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
+        if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
             player.msg(TL.COMMAND_JOIN_NEGATIVEPOWER, player.describeTo(player, true));
             return false;
         }
@@ -51,7 +51,7 @@ public class PowerControl implements LandRaidControl {
 
     @Override
     public boolean canLeaveFaction(FPlayer player) {
-        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
+        if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
             player.msg(TL.LEAVE_NEGATIVEPOWER);
             return false;
         }
@@ -65,11 +65,11 @@ public class PowerControl implements LandRaidControl {
 
     @Override
     public boolean canKick(FPlayer toKick, FPlayer playerAttempting) {
-        if (!FactionsPlugin.getInstance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.power() < 0) {
+        if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.power() < 0) {
             playerAttempting.msg(TL.COMMAND_KICK_NEGATIVEPOWER);
             return false;
         }
-        if (toKick.isOnline() && !FactionsPlugin.getInstance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
+        if (toKick.isOnline() && !FactionsPlugin.instance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
                 Board.board().factionAt(toKick.lastStoodAt()).relationTo(toKick.faction()) == Relation.ENEMY) {
             playerAttempting.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
             return false;
@@ -102,7 +102,7 @@ public class PowerControl implements LandRaidControl {
         FPlayer fplayer = FPlayers.fPlayers().get(player);
         Faction faction = Board.board().factionAt(new FLocation(player.getLocation()));
 
-        MainConfig.Factions.LandRaidControl.Power powerConf = FactionsPlugin.getInstance().conf().factions().landRaidControl().power();
+        MainConfig.Factions.LandRaidControl.Power powerConf = FactionsPlugin.instance().conf().factions().landRaidControl().power();
         PowerLossEvent powerLossEvent = new PowerLossEvent(faction, fplayer);
         // Check for no power loss conditions
         if (AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().isNoLossFlag(player)) {
@@ -117,7 +117,7 @@ public class PowerControl implements LandRaidControl {
             if (powerConf.getWorldsNoPowerLoss().contains(player.getWorld().getName())) {
                 powerLossEvent.setMessage(TL.PLAYER_POWER_LOSS_WARZONE.toString());
             }
-        } else if (faction.isWilderness() && !powerConf.isWildernessPowerLoss() && !FactionsPlugin.getInstance().conf().factions().protection().getWorldsNoWildernessProtection().contains(player.getWorld().getName())) {
+        } else if (faction.isWilderness() && !powerConf.isWildernessPowerLoss() && !FactionsPlugin.instance().conf().factions().protection().getWorldsNoWildernessProtection().contains(player.getWorld().getName())) {
             powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WILDERNESS.toString());
             powerLossEvent.setCancelled(true);
         } else if (powerConf.getWorldsNoPowerLoss().contains(player.getWorld().getName())) {

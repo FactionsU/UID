@@ -644,17 +644,17 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     }
 
     @Override
-    public Gson getGson() {
+    public Gson gson() {
         return gson;
     }
 
     @Override
-    public SeeChunkUtil getSeeChunkUtil() {
+    public SeeChunkUtil seeChunkUtil() {
         return seeChunkUtil;
     }
 
     @Override
-    public BukkitParticleProvider getParticleProvider() {
+    public BukkitParticleProvider particleProvider() {
         return particleProvider;
     }
 
@@ -696,12 +696,12 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     }
 
     @Override
-    public Map<UUID, Integer> getStuckMap() {
+    public Map<UUID, Integer> stuckMap() {
         return this.stuckMap;
     }
 
     @Override
-    public Map<UUID, Long> getTimers() {
+    public Map<UUID, Long> timers() {
         return this.timers;
     }
 
@@ -729,32 +729,32 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     }
 
     @Override
-    public boolean getAutoSave() {
+    public boolean autoSave() {
         return this.autoSave;
     }
 
     @Override
-    public void setAutoSave(boolean val) {
+    public void autoSave(boolean val) {
         this.autoSave = val;
     }
 
     @Override
-    public ConfigManager getConfigManager() {
+    public ConfigManager configManager() {
         return this.configManager;
     }
 
     @Override
     public MainConfig conf() {
-        return this.configManager.getMainConfig();
+        return this.configManager.mainConfig();
     }
 
     @Override
     public TranslationsConfig tl() {
-        return this.configManager.getTranslationsConfig();
+        return this.configManager.translationsConfig();
     }
 
     @Override
-    public LandRaidControl getLandRaidControl() {
+    public LandRaidControl landRaidControl() {
         return this.landRaidControl;
     }
 
@@ -858,7 +858,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     }
 
     @Override
-    public OfflinePlayer getFactionOfflinePlayer(String name) {
+    public OfflinePlayer factionOfflinePlayer(String name) {
         return this.getOfflinePlayer(name, UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
     }
 
@@ -953,7 +953,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     }
 
     @Override
-    public IntegrationManager getIntegrationManager() {
+    public IntegrationManager integrationManager() {
         return this.integrationManager;
     }
 }

@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class RoleAtLeastSelector extends AbstractRoleSelector {
     public static final String NAME = "role-atleast";
-    public static final Descriptor DESCRIPTOR = new AbstractRoleSelector.RoleDescriptor(NAME, FactionsPlugin.getInstance().tl().permissions().selectors().roleAtLeast()::getDisplayName, RoleAtLeastSelector::new);
+    public static final Descriptor DESCRIPTOR = new AbstractRoleSelector.RoleDescriptor(NAME, FactionsPlugin.instance().tl().permissions().selectors().roleAtLeast()::getDisplayName, RoleAtLeastSelector::new);
 
     public RoleAtLeastSelector(Role role) {
         super(DESCRIPTOR, role);

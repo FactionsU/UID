@@ -33,10 +33,10 @@ public class CmdChatSpy implements Cmd {
 
         if (sender.spyingChat()) {
             sender.msg(TL.COMMAND_CHATSPY_ENABLE);
-            FactionsPlugin.getInstance().log(sender.name() + TL.COMMAND_CHATSPY_ENABLELOG);
+            FactionsPlugin.instance().log(sender.name() + TL.COMMAND_CHATSPY_ENABLELOG);
         } else {
             sender.msg(TL.COMMAND_CHATSPY_DISABLE);
-            FactionsPlugin.getInstance().log(sender.name() + TL.COMMAND_CHATSPY_DISABLELOG);
+            FactionsPlugin.instance().log(sender.name() + TL.COMMAND_CHATSPY_DISABLELOG);
         }
     }
 }

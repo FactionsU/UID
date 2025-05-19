@@ -28,7 +28,7 @@ public class CmdZone implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
         return (manager, builder) -> {
-            var tl = FactionsPlugin.getInstance().tl().commands().zone();
+            var tl = FactionsPlugin.instance().tl().commands().zone();
             Command.Builder<Sender> zoneBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(TL.COMMAND_ZONE_DESCRIPTION))
                     .permission(builder.commandPermission()
@@ -73,8 +73,8 @@ public class CmdZone implements Cmd {
                             .handler(this::claim)
             );
 
-            new CmdSetPerm((ctx) -> '/' + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + ' ' + tl.getFirstAlias() +
-                    ' ' + tl.set().getFirstAlias() + ' ' + ctx.get("zone") + ' ' + FactionsPlugin.getInstance().tl().commands().permissions().getFirstAlias() + ' ', context -> {
+            new CmdSetPerm((ctx) -> '/' + FactionsPlugin.instance().conf().getCommandBase().getFirst() + ' ' + tl.getFirstAlias() +
+                    ' ' + tl.set().getFirstAlias() + ' ' + ctx.get("zone") + ' ' + FactionsPlugin.instance().tl().commands().permissions().getFirstAlias() + ' ', context -> {
                 FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
                 Faction faction = sender.faction();
                 String name = context.get("zone");
@@ -111,7 +111,7 @@ public class CmdZone implements Cmd {
 
         String name = context.get("zone");
 
-        var tl = FactionsPlugin.getInstance().tl().commands().zone().create();
+        var tl = FactionsPlugin.instance().tl().commands().zone().create();
 
         if (faction.zones().get(name) != null) {
             sender.sendMessage(Mini.parse(tl.getNameAlreadyInUse(), Placeholder.unparsed("name", name)));
@@ -128,7 +128,7 @@ public class CmdZone implements Cmd {
 
         String name = context.get("zone");
 
-        var tl = FactionsPlugin.getInstance().tl().commands().zone().set().name();
+        var tl = FactionsPlugin.instance().tl().commands().zone().set().name();
 
         Faction.Zone zone = faction.zones().get(name);
 
@@ -158,7 +158,7 @@ public class CmdZone implements Cmd {
 
         String name = context.get("zone");
 
-        var tl = FactionsPlugin.getInstance().tl().commands().zone().set().greeting();
+        var tl = FactionsPlugin.instance().tl().commands().zone().set().greeting();
 
         Faction.Zone zone = faction.zones().get(name);
 
@@ -184,7 +184,7 @@ public class CmdZone implements Cmd {
 
         String name = context.get("zone");
 
-        var tl = FactionsPlugin.getInstance().tl().commands().zone().claim();
+        var tl = FactionsPlugin.instance().tl().commands().zone().claim();
 
         Faction.Zone zone = faction.zones().get(name);
 
@@ -231,7 +231,7 @@ public class CmdZone implements Cmd {
     }
 
     public static boolean claim(FPlayer sender, Faction faction, FLocation location, Faction.Zone zone, boolean msg) {
-        return claim(sender, faction, location, zone, FactionsPlugin.getInstance().tl().commands().zone().claim(), msg);
+        return claim(sender, faction, location, zone, FactionsPlugin.instance().tl().commands().zone().claim(), msg);
     }
 
     private static boolean claim(FPlayer sender, Faction faction, FLocation location, Faction.Zone zone, TranslationsConfig.Commands.Zone.Claim tl, boolean msg) {
@@ -278,7 +278,7 @@ public class CmdZone implements Cmd {
 
         String name = context.get("zone");
 
-        var tl = FactionsPlugin.getInstance().tl().commands().zone().delete();
+        var tl = FactionsPlugin.instance().tl().commands().zone().delete();
 
         Faction.Zone zone = faction.zones().get(name);
 
@@ -302,7 +302,7 @@ public class CmdZone implements Cmd {
             return; // Lost perms while confirming, just silently die, meh
         }
 
-        var tl = FactionsPlugin.getInstance().tl().commands().zone().set().greeting();
+        var tl = FactionsPlugin.instance().tl().commands().zone().set().greeting();
 
         Faction.Zone zone = faction.zones().get(name);
 

@@ -23,7 +23,7 @@ public class CmdPower implements Cmd {
                     builder.literal("power")
                             .commandDescription(Cloudy.desc(TL.COMMAND_POWER_DESCRIPTION))
                             .permission(builder.commandPermission().and(
-                                    Cloudy.predicate(s -> FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl)
+                                    Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof PowerControl)
                                             .and(Cloudy.hasPermission(Permission.POWER))
                             ))
                             .optional("player", FPlayerParser.of(FPlayerParser.Include.ALL))
@@ -45,7 +45,7 @@ public class CmdPower implements Cmd {
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostPower(), TL.COMMAND_POWER_TOSHOW, TL.COMMAND_POWER_FORSHOW)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostPower(), TL.COMMAND_POWER_TOSHOW, TL.COMMAND_POWER_FORSHOW)) {
             return;
         }
 

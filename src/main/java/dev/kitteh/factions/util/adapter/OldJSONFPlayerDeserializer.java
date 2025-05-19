@@ -21,6 +21,6 @@ public class OldJSONFPlayerDeserializer implements JsonDeserializer<JSONFPlayer>
             factionId = 0;
         }
         jsonElement.getAsJsonObject().addProperty("factionId", factionId);
-        return FactionsPlugin.getInstance().getGson().fromJson(jsonElement, JSONFPlayer.class);
+        return FactionsPlugin.instance().gson().fromJson(jsonElement, JSONFPlayer.class);
     }
 }

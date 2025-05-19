@@ -9,29 +9,26 @@ import dev.kitteh.factions.landraidcontrol.LandRaidControl;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.SeeChunkUtil;
 import dev.kitteh.factions.util.particle.BukkitParticleProvider;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 public interface FactionsPlugin {
-    static FactionsPlugin getInstance() {
+    static FactionsPlugin instance() {
         return AbstractFactionsPlugin.getInstance();
     }
 
-    Gson getGson();
+    Gson gson();
 
-    SeeChunkUtil getSeeChunkUtil();
+    SeeChunkUtil seeChunkUtil();
 
-    BukkitParticleProvider getParticleProvider();
+    BukkitParticleProvider particleProvider();
 
-    Map<UUID, Integer> getStuckMap();
+    Map<UUID, Integer> stuckMap();
 
-    Map<UUID, Long> getTimers();
+    Map<UUID, Long> timers();
 
     void log(String msg);
 
@@ -41,23 +38,23 @@ public interface FactionsPlugin {
 
     void log(Level level, String msg);
 
-    boolean getAutoSave();
+    boolean autoSave();
 
-    void setAutoSave(boolean val);
+    void autoSave(boolean val);
 
-    ConfigManager getConfigManager();
+    ConfigManager configManager();
 
     MainConfig conf();
 
     TranslationsConfig tl();
 
-    LandRaidControl getLandRaidControl();
+    LandRaidControl landRaidControl();
 
     void debug(Level level, String s);
 
     void debug(String s);
 
-    OfflinePlayer getFactionOfflinePlayer(String name);
+    OfflinePlayer factionOfflinePlayer(String name);
 
-    IntegrationManager getIntegrationManager();
+    IntegrationManager integrationManager();
 }

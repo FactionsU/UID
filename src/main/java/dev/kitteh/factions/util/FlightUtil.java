@@ -20,13 +20,13 @@ public class FlightUtil {
     private EnemiesTask enemiesTask;
 
     private FlightUtil() {
-        double enemyCheck = FactionsPlugin.getInstance().conf().commands().fly().getRadiusCheck() * 20;
+        double enemyCheck = FactionsPlugin.instance().conf().commands().fly().getRadiusCheck() * 20;
         if (enemyCheck > 0) {
             enemiesTask = new EnemiesTask();
             enemiesTask.runTaskTimer(AbstractFactionsPlugin.getInstance(), 0, (long) enemyCheck);
         }
 
-        double spawnRate = FactionsPlugin.getInstance().conf().commands().fly().particles().getSpawnRate() * 20;
+        double spawnRate = FactionsPlugin.instance().conf().commands().fly().particles().getSpawnRate() * 20;
         if (spawnRate > 0) {
             new ParticleTrailsTask().runTaskTimer(AbstractFactionsPlugin.getInstance(), 0, (long) spawnRate);
         }
@@ -56,7 +56,7 @@ public class FlightUtil {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 FPlayer pilot = FPlayers.fPlayers().get(player);
                 if (pilot.flying() && !pilot.adminBypass()) {
-                    if (enemiesNearby(pilot, FactionsPlugin.getInstance().conf().commands().fly().getEnemyRadius(), players)) {
+                    if (enemiesNearby(pilot, FactionsPlugin.instance().conf().commands().fly().getEnemyRadius(), players)) {
                         pilot.msg(TL.COMMAND_FLY_ENEMY_DISABLE);
                         pilot.flying(false);
                         if (pilot.autoFlying()) {
@@ -101,8 +101,8 @@ public class FlightUtil {
         private final float speed;
 
         private ParticleTrailsTask() {
-            this.amount = FactionsPlugin.getInstance().conf().commands().fly().particles().getAmount();
-            this.speed = (float) FactionsPlugin.getInstance().conf().commands().fly().particles().getSpeed();
+            this.amount = FactionsPlugin.instance().conf().commands().fly().particles().getAmount();
+            this.speed = (float) FactionsPlugin.instance().conf().commands().fly().particles().getSpeed();
         }
 
         @Override
@@ -111,8 +111,8 @@ public class FlightUtil {
                 FPlayer pilot = FPlayers.fPlayers().get(player);
                 if (pilot.flying()) {
                     if (pilot.flyTrailEffect() != null && Permission.FLY_TRAILS.has(player) && pilot.flyTrail()) {
-                        Particle effect = FactionsPlugin.getInstance().getParticleProvider().effectFromString(pilot.flyTrailEffect());
-                        FactionsPlugin.getInstance().getParticleProvider().spawn(effect, player.getLocation(), amount, speed, 0, 0, 0);
+                        Particle effect = FactionsPlugin.instance().particleProvider().effectFromString(pilot.flyTrailEffect());
+                        FactionsPlugin.instance().particleProvider().spawn(effect, player.getLocation(), amount, speed, 0, 0, 0);
                     }
                 }
             }

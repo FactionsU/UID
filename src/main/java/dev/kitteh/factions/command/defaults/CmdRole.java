@@ -105,7 +105,7 @@ public class CmdRole implements Cmd {
         }
 
         if (targetNewRole == Role.COLEADER &&
-                !FactionsPlugin.getInstance().conf().factions().other().isAllowMultipleColeaders() &&
+                !FactionsPlugin.instance().conf().factions().other().isAllowMultipleColeaders() &&
                 !target.faction().members(Role.COLEADER).isEmpty()
         ) {
             sender.msg(TL.COMMAND_COLEADER_ALREADY_COLEADER);

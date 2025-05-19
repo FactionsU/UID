@@ -54,7 +54,7 @@ public class CmdClaim implements Cmd {
                             .flag(
                                     manager.flagBuilder("fill-limit")
                                             .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
-                                            .withComponent(IntegerParser.integerParser(1, FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxClaims()))
+                                            .withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims()))
                             )
                             .flag(
                                     manager.flagBuilder("auto")
@@ -92,7 +92,7 @@ public class CmdClaim implements Cmd {
         }
 
         if (context.flags().hasFlag("fill")) {
-            int limit = context.flags().get("fill-limit") instanceof Integer i ? i : FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxClaims();
+            int limit = context.flags().get("fill-limit") instanceof Integer i ? i : FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims();
 
             this.fill(sender, claimLocation, forFaction, limit);
 
@@ -107,7 +107,7 @@ public class CmdClaim implements Cmd {
 
             new SpiralTask(claimLocation, radius) {
                 private int failCount = 0;
-                private final int limit = FactionsPlugin.getInstance().conf().factions().claims().getRadiusClaimFailureLimit() - 1;
+                private final int limit = FactionsPlugin.instance().conf().factions().claims().getRadiusClaimFailureLimit() - 1;
 
                 @Override
                 public boolean work() {
@@ -130,8 +130,8 @@ public class CmdClaim implements Cmd {
     }
 
     private void fill(FPlayer sender, FLocation loc, Faction forFaction, int limit) {
-        if (limit > FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxClaims()) {
-            sender.msg(TL.COMMAND_CLAIMFILL_ABOVEMAX, FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxClaims());
+        if (limit > FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims()) {
+            sender.msg(TL.COMMAND_CLAIMFILL_ABOVEMAX, FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims());
             return;
         }
 
@@ -162,7 +162,7 @@ public class CmdClaim implements Cmd {
             return;
         }
 
-        final double distance = FactionsPlugin.getInstance().conf().factions().claims().getFillClaimMaxDistance();
+        final double distance = FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxDistance();
         int startX = loc.x();
         int startZ = loc.z();
 
@@ -190,12 +190,12 @@ public class CmdClaim implements Cmd {
             return;
         }
 
-        if (forFaction.isNormal() && toClaim.size() > FactionsPlugin.getInstance().getLandRaidControl().getPossibleClaimCount(forFaction)) {
+        if (forFaction.isNormal() && toClaim.size() > FactionsPlugin.instance().landRaidControl().possibleClaimCount(forFaction)) {
             sender.msg(TL.COMMAND_CLAIMFILL_NOTENOUGHLANDLEFT, forFaction.describeTo(sender), toClaim.size());
             return;
         }
 
-        final int limFail = FactionsPlugin.getInstance().conf().factions().claims().getRadiusClaimFailureLimit();
+        final int limFail = FactionsPlugin.instance().conf().factions().claims().getRadiusClaimFailureLimit();
         int fails = 0;
         for (FLocation currentLocation : toClaim) {
             if (!sender.attemptClaim(forFaction, currentLocation, true)) {

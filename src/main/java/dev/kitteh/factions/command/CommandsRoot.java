@@ -61,7 +61,7 @@ public class CommandsRoot {
         if (adminRegistry == null) {
             throw new IllegalStateException("Registration closed");
         }
-        if (Objects.requireNonNull(providingPlugin) == FactionsPlugin.getInstance()) {
+        if (Objects.requireNonNull(providingPlugin) == FactionsPlugin.instance()) {
             throw new IllegalArgumentException("Use your own plugin!");
         }
         adminRegistry.put(Objects.requireNonNull(command), new Register(Objects.requireNonNull(consumer), providingPlugin, command));

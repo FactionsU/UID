@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 @NullMarked
 public class DTRControl implements LandRaidControl {
-    private static FactionsPlugin plugin = FactionsPlugin.getInstance();
+    private static FactionsPlugin plugin = FactionsPlugin.instance();
 
     public static String round(double dtr) {
         return BigDecimal.valueOf(dtr).setScale(conf().getDecimalDigits(), RoundingMode.UP).toPlainString();
@@ -35,7 +35,7 @@ public class DTRControl implements LandRaidControl {
     }
 
     public DTRControl() {
-        plugin = FactionsPlugin.getInstance();
+        plugin = FactionsPlugin.instance();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class DTRControl implements LandRaidControl {
     }
 
     @Override
-    public int getLandLimit(Faction faction) {
+    public int landLimit(Faction faction) {
         int boost = 0;
         int level = faction.upgradeLevel(Upgrades.DTR_CLAIM_LIMIT);
         if (level > 0) {
@@ -93,7 +93,7 @@ public class DTRControl implements LandRaidControl {
     public boolean canKick(FPlayer toKick, FPlayer playerAttempting) {
         if (toKick.faction().isNormal()) {
             Faction faction = toKick.faction();
-            if (!FactionsPlugin.getInstance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
+            if (!FactionsPlugin.instance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
                     Board.board().factionAt(toKick.lastStoodAt()).relationTo(faction) == Relation.ENEMY) {
                 playerAttempting.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
                 return false;
@@ -177,7 +177,7 @@ public class DTRControl implements LandRaidControl {
         }
         long millisPassed = now - Math.max(faction.dtrLastUpdated(), faction.dtrFrozenUntil());
         Stream<Player> stream = faction.membersOnlineAsPlayers().stream().filter(p -> WorldUtil.isEnabled(p.getWorld()));
-        if (FactionsPlugin.getInstance().conf().plugins().essentialsX().isPreventRegenWhileAfk()) {
+        if (FactionsPlugin.instance().conf().plugins().essentialsX().isPreventRegenWhileAfk()) {
             stream = stream.filter(Essentials::isAfk);
         }
         long onlineInEnabledWorlds = stream.count();

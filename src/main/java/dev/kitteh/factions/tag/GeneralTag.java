@@ -9,7 +9,7 @@ import org.bukkit.Bukkit;
 import java.util.function.Supplier;
 
 public enum GeneralTag implements Tag {
-    MAX_WARPS("max-warps", () -> String.valueOf(FactionsPlugin.getInstance().conf().commands().warp().getMaxWarps())),
+    MAX_WARPS("max-warps", () -> String.valueOf(FactionsPlugin.instance().conf().commands().warp().getMaxWarps())),
     MAX_ALLIES("max-allies", () -> getRelation(Relation.ALLY)),
     MAX_ENEMIES("max-enemies", () -> getRelation(Relation.ENEMY)),
     MAX_TRUCES("max-truces", () -> getRelation(Relation.TRUCE)),
@@ -22,7 +22,7 @@ public enum GeneralTag implements Tag {
     private final Supplier<String> supplier;
 
     private static String getRelation(Relation relation) {
-        if (FactionsPlugin.getInstance().conf().factions().maxRelations().isEnabled()) {
+        if (FactionsPlugin.instance().conf().factions().maxRelations().isEnabled()) {
             return String.valueOf(relation.getMax());
         }
         return TL.GENERIC_INFINITY.toString();

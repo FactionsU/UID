@@ -76,7 +76,7 @@ public class Worldguard {
         RegionQuery query = container.createQuery();
 
         boolean q = query.testState(localPlayer.getLocation(), localPlayer, flag);
-        FactionsPlugin.getInstance().debug("Testing " + name + " flag for player " + player.getName() + ": " + q);
+        FactionsPlugin.instance().debug("Testing " + name + " flag for player " + player.getName() + ": " + q);
         return q;
     }
 
@@ -113,7 +113,7 @@ public class Worldguard {
         ProtectedRegion region = new ProtectedCuboidRegion("wgregionflagcheckforfactions", min, max);
         ApplicableRegionSet set = regions.getApplicableRegions(region);
 
-        if (FactionsPlugin.getInstance().conf().worldGuard().isChecking()) {
+        if (FactionsPlugin.instance().conf().worldGuard().isChecking()) {
             return set.size() > 0;
         }
         if (FLAG_CLAIM == null) {

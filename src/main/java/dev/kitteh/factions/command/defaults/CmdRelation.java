@@ -93,7 +93,7 @@ public class CmdRelation implements Cmd {
         } else {
             // inform the other faction of your request
             them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + faction.tag(), targetRelation.chatColor() + targetRelation.translation());
-            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, FactionsPlugin.getInstance().conf().getCommandBase().getFirst(), targetRelation, faction.tag());
+            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, FactionsPlugin.instance().conf().getCommandBase().getFirst(), targetRelation, faction.tag());
             faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.tag(), "" + targetRelation.chatColor() + targetRelation);
         }
 
@@ -112,7 +112,7 @@ public class CmdRelation implements Cmd {
     }
 
     private boolean hasMaxRelations(Faction them, Relation targetRelation, Faction us, FPlayer sender) {
-        if (FactionsPlugin.getInstance().conf().factions().maxRelations().isEnabled()) {
+        if (FactionsPlugin.instance().conf().factions().maxRelations().isEnabled()) {
             int max = targetRelation.getMax();
             if (max != -1) {
                 if (us.relationCount(targetRelation) >= max) {

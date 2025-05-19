@@ -35,7 +35,7 @@ public class CmdSetDescription implements Cmd {
         Faction faction = sender.faction();
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostDesc(), TL.COMMAND_DESCRIPTION_TOCHANGE, TL.COMMAND_DESCRIPTION_FORCHANGE)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDesc(), TL.COMMAND_DESCRIPTION_TOCHANGE, TL.COMMAND_DESCRIPTION_FORCHANGE)) {
             return;
         }
 
@@ -43,14 +43,14 @@ public class CmdSetDescription implements Cmd {
         // And replace all the % because it messes with string formatting and this is an easy way around that.
         String desc = context.get("description");
         desc = desc.replaceAll("%", "").replaceAll("(&([a-f0-9klmnor]))", "& $2");
-        int limit = FactionsPlugin.getInstance().conf().commands().description().getMaxLength();
+        int limit = FactionsPlugin.instance().conf().commands().description().getMaxLength();
         if (limit > 0 && desc.length() > limit) {
             sender.msg(TL.COMMAND_DESCRIPTION_TOOLONG, String.valueOf(limit));
             return;
         }
         faction.description(desc);
 
-        if (!FactionsPlugin.getInstance().conf().factions().chat().isBroadcastDescriptionChanges()) {
+        if (!FactionsPlugin.instance().conf().factions().chat().isBroadcastDescriptionChanges()) {
             sender.msg(TL.COMMAND_DESCRIPTION_CHANGED, faction.describeTo(sender));
             sender.sendMessage(faction.description());
             return;

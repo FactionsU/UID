@@ -48,7 +48,7 @@ public class CmdSetTitle implements Cmd {
         title = title.replaceAll(",", "");
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostTitle(), TL.COMMAND_TITLE_TOCHANGE, TL.COMMAND_TITLE_FORCHANGE)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostTitle(), TL.COMMAND_TITLE_TOCHANGE, TL.COMMAND_TITLE_FORCHANGE)) {
             return;
         }
 

@@ -20,7 +20,7 @@ public record UpgradeVariable(String name, BigDecimal min, BigDecimal max, Funct
         return new UpgradeVariable(name, min, max, b -> {
             BigInteger bigInteger = b.toBigInteger();
             if (bigInteger.equals(INT_MAX)) {
-                return FactionsPlugin.getInstance().tl().upgrades().getUnlimited();
+                return FactionsPlugin.instance().tl().upgrades().getUnlimited();
             }
             return b.toBigInteger().toString();
         });

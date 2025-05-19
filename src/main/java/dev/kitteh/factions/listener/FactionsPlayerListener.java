@@ -87,7 +87,7 @@ public class FactionsPlayerListener extends AbstractListener {
         final FPlayer me = FPlayers.fPlayers().get(player);
         ((MemoryFPlayer) me).setName(player.getName());
 
-        this.plugin.getLandRaidControl().onJoin(me);
+        this.plugin.landRaidControl().onJoin(me);
 
         FLocation standing = new FLocation(player.getLocation());
         // Store player's current FLocation
@@ -185,8 +185,8 @@ public class FactionsPlayerListener extends AbstractListener {
         }
         me.flightCheck();
 
-        if (this.plugin.getSeeChunkUtil() != null) {
-            this.plugin.getSeeChunkUtil().updatePlayerInfo(me.uniqueId(), me.seeChunk());
+        if (this.plugin.seeChunkUtil() != null) {
+            this.plugin.seeChunkUtil().updatePlayerInfo(me.uniqueId(), me.seeChunk());
         }
     }
 
@@ -195,15 +195,15 @@ public class FactionsPlayerListener extends AbstractListener {
         Player player = event.getPlayer();
         FPlayer me = FPlayers.fPlayers().get(player);
 
-        this.plugin.getLandRaidControl().onQuit(me);
+        this.plugin.landRaidControl().onQuit(me);
 
         ((MemoryFPlayer) me).onLogInOut();
 
         // if player is waiting for fstuck teleport but leaves, remove
-        if (this.plugin.getStuckMap().containsKey(player.getUniqueId())) {
+        if (this.plugin.stuckMap().containsKey(player.getUniqueId())) {
             FPlayers.fPlayers().get(player).msg(TL.COMMAND_STUCK_CANCELLED);
-            this.plugin.getStuckMap().remove(player.getUniqueId());
-            this.plugin.getTimers().remove(player.getUniqueId());
+            this.plugin.stuckMap().remove(player.getUniqueId());
+            this.plugin.timers().remove(player.getUniqueId());
         }
 
         Faction myFaction = me.faction();
@@ -221,8 +221,8 @@ public class FactionsPlayerListener extends AbstractListener {
 
         FScoreboard.remove(me, event.getPlayer());
 
-        if (this.plugin.getSeeChunkUtil() != null) {
-            this.plugin.getSeeChunkUtil().updatePlayerInfo(me.uniqueId(), false);
+        if (this.plugin.seeChunkUtil() != null) {
+            this.plugin.seeChunkUtil().updatePlayerInfo(me.uniqueId(), false);
         }
         ((MemoryFPlayer) me).setOfflinePlayer(null);
     }
@@ -504,7 +504,7 @@ public class FactionsPlayerListener extends AbstractListener {
         FLocation loc = new FLocation(location);
         Faction otherFaction = Board.board().factionAt(loc);
 
-        if (this.plugin.getLandRaidControl().isRaidable(otherFaction)) {
+        if (this.plugin.landRaidControl().isRaidable(otherFaction)) {
             return true;
         }
 
@@ -570,7 +570,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         FPlayer me = FPlayers.fPlayers().get(event.getPlayer());
 
-        this.plugin.getLandRaidControl().onRespawn(me);
+        this.plugin.landRaidControl().onRespawn(me);
 
         Location home = me.faction().home();
         MainConfig.Factions facConf = this.plugin.conf().factions();
@@ -603,7 +603,7 @@ public class FactionsPlayerListener extends AbstractListener {
         me.lastStoodAt(to);
         me.flightCheck();
         if (!event.getFrom().equals(event.getPlayer().getWorld()) && !WorldUtil.isEnabled(event.getFrom())) {
-            this.plugin.getLandRaidControl().update(me);
+            this.plugin.landRaidControl().update(me);
             this.initFactionWorld(event.getPlayer(), me);
         }
     }
@@ -652,7 +652,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         FLocation location = new FLocation(event.getLectern().getLocation());
         Faction otherFaction = Board.board().factionAt(location);
-        if (this.plugin.getLandRaidControl().isRaidable(otherFaction)) {
+        if (this.plugin.landRaidControl().isRaidable(otherFaction)) {
             return;
         }
 
@@ -675,7 +675,7 @@ public class FactionsPlayerListener extends AbstractListener {
     }
 
     public static boolean preventCommand(String fullCmd, Player player) {
-        MainConfig.Factions.Protection protection = FactionsPlugin.getInstance().conf().factions().protection();
+        MainConfig.Factions.Protection protection = FactionsPlugin.instance().conf().factions().protection();
         if ((protection.getTerritoryNeutralDenyCommands().isEmpty() &&
                 protection.getTerritoryEnemyDenyCommands().isEmpty() &&
                 protection.getPermanentFactionMemberDenyCommands().isEmpty() &&

@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class RelationAtMostSelector extends AbstractRelationSelector {
     public static final String NAME = "relation-atmost";
-    public static final Descriptor DESCRIPTOR = new RelationDescriptor(NAME, FactionsPlugin.getInstance().tl().permissions().selectors().relationAtMost()::getDisplayName, RelationAtMostSelector::new);
+    public static final Descriptor DESCRIPTOR = new RelationDescriptor(NAME, FactionsPlugin.instance().tl().permissions().selectors().relationAtMost()::getDisplayName, RelationAtMostSelector::new);
 
     public RelationAtMostSelector(Relation relation) {
         super(DESCRIPTOR, relation);

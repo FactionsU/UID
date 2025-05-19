@@ -85,7 +85,7 @@ public class MiscUtil {
         str = ChatColor.stripColor(str);
         str = str.toLowerCase();
 
-        MainConfig.Factions.Other conf = FactionsPlugin.getInstance().conf().factions().other();
+        MainConfig.Factions.Other conf = FactionsPlugin.instance().conf().factions().other();
         for (char c : str.toCharArray()) {
             if (conf.isValidTagCharacter(c)) {
                 ret.append(c);
@@ -97,22 +97,22 @@ public class MiscUtil {
     public static ArrayList<String> validateTag(String str) {
         ArrayList<String> errors = new ArrayList<>();
 
-        for (String blacklistItem : FactionsPlugin.getInstance().conf().factions().other().getNameBlacklist()) {
+        for (String blacklistItem : FactionsPlugin.instance().conf().factions().other().getNameBlacklist()) {
             if (str.toLowerCase().contains(blacklistItem.toLowerCase())) {
                 errors.add(AbstractFactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_BLACKLIST.toString()));
                 break;
             }
         }
 
-        if (getComparisonString(str).length() < FactionsPlugin.getInstance().conf().factions().other().getTagLengthMin()) {
-            errors.add(AbstractFactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), FactionsPlugin.getInstance().conf().factions().other().getTagLengthMin()));
+        if (getComparisonString(str).length() < FactionsPlugin.instance().conf().factions().other().getTagLengthMin()) {
+            errors.add(AbstractFactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), FactionsPlugin.instance().conf().factions().other().getTagLengthMin()));
         }
 
-        if (str.length() > FactionsPlugin.getInstance().conf().factions().other().getTagLengthMax()) {
-            errors.add(AbstractFactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), FactionsPlugin.getInstance().conf().factions().other().getTagLengthMax()));
+        if (str.length() > FactionsPlugin.instance().conf().factions().other().getTagLengthMax()) {
+            errors.add(AbstractFactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), FactionsPlugin.instance().conf().factions().other().getTagLengthMax()));
         }
 
-        MainConfig.Factions.Other conf = FactionsPlugin.getInstance().conf().factions().other();
+        MainConfig.Factions.Other conf = FactionsPlugin.instance().conf().factions().other();
         List<String> badChars = null;
         for (char c : str.toCharArray()) {
             if (!conf.isValidTagCharacter(c)) {

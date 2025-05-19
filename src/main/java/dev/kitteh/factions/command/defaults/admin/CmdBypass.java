@@ -33,10 +33,10 @@ public class CmdBypass implements Cmd {
 
         if (sender.adminBypass()) {
             sender.msg(TL.COMMAND_BYPASS_ENABLE);
-            FactionsPlugin.getInstance().log(sender.name() + TL.COMMAND_BYPASS_ENABLELOG);
+            FactionsPlugin.instance().log(sender.name() + TL.COMMAND_BYPASS_ENABLELOG);
         } else {
             sender.msg(TL.COMMAND_BYPASS_DISABLE);
-            FactionsPlugin.getInstance().log(sender.name() + TL.COMMAND_BYPASS_DISABLELOG);
+            FactionsPlugin.instance().log(sender.name() + TL.COMMAND_BYPASS_DISABLELOG);
         }
     }
 }

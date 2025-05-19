@@ -25,7 +25,7 @@ public class Persist {
     }
 
     public void save(Object instance, File file) {
-        DiscUtil.writeCatch(file, plugin.getGson().toJson(instance), true);
+        DiscUtil.writeCatch(file, plugin.gson().toJson(instance), true);
     }
 
     // LOAD BY TYPE
@@ -40,7 +40,7 @@ public class Persist {
         }
 
         try {
-            return plugin.getGson().fromJson(content, typeOfT);
+            return plugin.gson().fromJson(content, typeOfT);
         } catch (
                 Exception ex) {    // output the error message rather than full stack trace; error parsing the file, most likely
             plugin.log(Level.WARNING, ex.getMessage());

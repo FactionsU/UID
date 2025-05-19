@@ -19,7 +19,7 @@ public class CmdMoney implements Cmd {
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
         return (manager, builder) -> {
             Command.Builder<Sender> moneyBuilder = builder.literal("money")
-                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> Econ.shouldBeUsed() && FactionsPlugin.getInstance().conf().economy().isBankEnabled())));
+                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled())));
 
             new CmdMoneyBalance().consumer().accept(manager, moneyBuilder);
             new CmdMoneyDeposit().consumer().accept(manager, moneyBuilder);

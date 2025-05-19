@@ -27,7 +27,7 @@ public final class JSONFactions extends MemoryFactions {
     }
 
     public Gson getGson() {
-        return FactionsPlugin.getInstance().getGson();
+        return FactionsPlugin.instance().gson();
     }
 
     private final File file;
@@ -50,8 +50,8 @@ public final class JSONFactions extends MemoryFactions {
     public void forceSave(boolean sync) {
         final List<Faction> entitiesThatShouldBeSaved = new ArrayList<>(this.factions.values());
         // Serialize sync, write (a)sync
-        DiscUtil.writeCatch(file, FactionsPlugin.getInstance().getGson().toJson(entitiesThatShouldBeSaved), sync);
-        DiscUtil.writeCatch(this.nextIdFile, FactionsPlugin.getInstance().getGson().toJson(new NextId(this.nextId)), sync);
+        DiscUtil.writeCatch(file, FactionsPlugin.instance().gson().toJson(entitiesThatShouldBeSaved), sync);
+        DiscUtil.writeCatch(this.nextIdFile, FactionsPlugin.instance().gson().toJson(new NextId(this.nextId)), sync);
     }
 
     @Override
@@ -112,11 +112,11 @@ public final class JSONFactions extends MemoryFactions {
             return new ArrayList<>(data.values());
         } else {
             String nextIdData = DiscUtil.readCatch(this.nextIdFile);
-            NextId next = FactionsPlugin.getInstance().getGson().fromJson(nextIdData, NextId.class);
+            NextId next = FactionsPlugin.instance().gson().fromJson(nextIdData, NextId.class);
             if (next != null) {
                 this.nextId = next.next();
             }
-            return FactionsPlugin.getInstance().getGson().fromJson(content, new TypeToken<List<JSONFaction>>() {
+            return FactionsPlugin.instance().gson().fromJson(content, new TypeToken<List<JSONFaction>>() {
             }.getType());
         }
     }

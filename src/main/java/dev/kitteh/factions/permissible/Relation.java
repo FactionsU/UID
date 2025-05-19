@@ -2,9 +2,7 @@ package dev.kitteh.factions.permissible;
 
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.TextUtil;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.ChatColor;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;
@@ -106,32 +104,32 @@ public enum Relation implements Permissible {
     @Override
     public TextColor color() {
         return switch (this) {
-            case MEMBER -> FactionsPlugin.getInstance().conf().colors().relations().getMember();
-            case ALLY -> FactionsPlugin.getInstance().conf().colors().relations().getAlly();
-            case NEUTRAL -> FactionsPlugin.getInstance().conf().colors().relations().getNeutral();
-            case TRUCE -> FactionsPlugin.getInstance().conf().colors().relations().getTruce();
-            default -> FactionsPlugin.getInstance().conf().colors().relations().getEnemy();
+            case MEMBER -> FactionsPlugin.instance().conf().colors().relations().getMember();
+            case ALLY -> FactionsPlugin.instance().conf().colors().relations().getAlly();
+            case NEUTRAL -> FactionsPlugin.instance().conf().colors().relations().getNeutral();
+            case TRUCE -> FactionsPlugin.instance().conf().colors().relations().getTruce();
+            default -> FactionsPlugin.instance().conf().colors().relations().getEnemy();
         };
     }
 
     public int getMax() {
         return switch (this) {
-            case ALLY -> FactionsPlugin.getInstance().conf().factions().maxRelations().getAlly();
-            case ENEMY -> FactionsPlugin.getInstance().conf().factions().maxRelations().getEnemy();
-            case TRUCE -> FactionsPlugin.getInstance().conf().factions().maxRelations().getTruce();
-            default -> FactionsPlugin.getInstance().conf().factions().maxRelations().getNeutral();
+            case ALLY -> FactionsPlugin.instance().conf().factions().maxRelations().getAlly();
+            case ENEMY -> FactionsPlugin.instance().conf().factions().maxRelations().getEnemy();
+            case TRUCE -> FactionsPlugin.instance().conf().factions().maxRelations().getTruce();
+            default -> FactionsPlugin.instance().conf().factions().maxRelations().getNeutral();
         };
     }
 
     public double getRelationCost() {
         if (isEnemy()) {
-            return FactionsPlugin.getInstance().conf().economy().getCostEnemy();
+            return FactionsPlugin.instance().conf().economy().getCostEnemy();
         } else if (isAlly()) {
-            return FactionsPlugin.getInstance().conf().economy().getCostAlly();
+            return FactionsPlugin.instance().conf().economy().getCostAlly();
         } else if (isTruce()) {
-            return FactionsPlugin.getInstance().conf().economy().getCostTruce();
+            return FactionsPlugin.instance().conf().economy().getCostTruce();
         } else {
-            return FactionsPlugin.getInstance().conf().economy().getCostNeutral();
+            return FactionsPlugin.instance().conf().economy().getCostNeutral();
         }
     }
 

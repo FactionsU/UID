@@ -102,15 +102,15 @@ public class RelationUtil {
         Faction thatFaction = getFaction(that);
         if (thatFaction != null) {
             if (thatFaction.peaceful() && thatFaction != getFaction(me)) {
-                return FactionsPlugin.getInstance().conf().colors().relations().getPeaceful();
+                return FactionsPlugin.instance().conf().colors().relations().getPeaceful();
             }
 
             if (thatFaction.isSafeZone() && thatFaction != getFaction(me)) {
-                return FactionsPlugin.getInstance().conf().colors().factions().getSafezone();
+                return FactionsPlugin.instance().conf().colors().factions().getSafezone();
             }
 
             if (thatFaction.isWarZone() && thatFaction != getFaction(me)) {
-                return FactionsPlugin.getInstance().conf().colors().factions().getWarzone();
+                return FactionsPlugin.instance().conf().colors().factions().getWarzone();
             }
         }
 

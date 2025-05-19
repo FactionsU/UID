@@ -60,12 +60,12 @@ public class CmdTNTDeposit implements Cmd {
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().commands().tnt().isAboveMaxStorage(faction.tntBank() + amount)) {
-            if (FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage() == faction.tntBank()) {
-                sender.msg(TL.COMMAND_TNT_DEPOSIT_FAIL_FULL, FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage());
+        if (FactionsPlugin.instance().conf().commands().tnt().isAboveMaxStorage(faction.tntBank() + amount)) {
+            if (FactionsPlugin.instance().conf().commands().tnt().getMaxStorage() == faction.tntBank()) {
+                sender.msg(TL.COMMAND_TNT_DEPOSIT_FAIL_FULL, FactionsPlugin.instance().conf().commands().tnt().getMaxStorage());
                 return;
             }
-            amount = FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage() - faction.tntBank();
+            amount = FactionsPlugin.instance().conf().commands().tnt().getMaxStorage() - faction.tntBank();
         }
         int current = amount;
         Map<Integer, ? extends ItemStack> all = player.getInventory().all(Material.TNT);

@@ -24,7 +24,7 @@ public class WorldTrackerTypeAdapter extends TypeAdapter<Object2ObjectOpenHashMa
             out.name(entry.getKey());
             out.beginArray();
             out.setFormattingStyle(FormattingStyle.COMPACT);
-            Long2IntMap map = entry.getValue().getChunkToIDForSave();
+            Long2IntMap map = entry.getValue().chunkIdMapForSave();
             for (Long2IntMap.Entry e : map.long2IntEntrySet()) {
                 out.value(e.getLongKey());
                 out.value(e.getIntValue());

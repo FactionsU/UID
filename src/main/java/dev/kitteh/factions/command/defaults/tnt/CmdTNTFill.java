@@ -73,8 +73,8 @@ public class CmdTNTFill implements Cmd {
             return;
         }
 
-        if (radius > FactionsPlugin.getInstance().conf().commands().tnt().getMaxRadius()) {
-            sender.msg(TL.COMMAND_TNT_FILL_FAIL_MAXRADIUS, radius, FactionsPlugin.getInstance().conf().commands().tnt().getMaxRadius());
+        if (radius > FactionsPlugin.instance().conf().commands().tnt().getMaxRadius()) {
+            sender.msg(TL.COMMAND_TNT_FILL_FAIL_MAXRADIUS, radius, FactionsPlugin.instance().conf().commands().tnt().getMaxRadius());
             return;
         }
 

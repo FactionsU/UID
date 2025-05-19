@@ -54,7 +54,7 @@ public class CmdSetTag implements Cmd {
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make sure they can pay
-        if (!context.sender().canAffordCommand(FactionsPlugin.getInstance().conf().economy().getCostTag(), TL.COMMAND_TAG_TOCHANGE)) {
+        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostTag(), TL.COMMAND_TAG_TOCHANGE)) {
             return;
         }
 
@@ -66,7 +66,7 @@ public class CmdSetTag implements Cmd {
         }
 
         // then make 'em pay (if applicable)
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostTag(), TL.COMMAND_TAG_TOCHANGE, TL.COMMAND_TAG_FORCHANGE)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostTag(), TL.COMMAND_TAG_TOCHANGE, TL.COMMAND_TAG_FORCHANGE)) {
             return;
         }
 
@@ -81,7 +81,7 @@ public class CmdSetTag implements Cmd {
             }
 
             // Broadcast the tag change (if applicable)
-            if (FactionsPlugin.getInstance().conf().factions().chat().isBroadcastTagChanges()) {
+            if (FactionsPlugin.instance().conf().factions().chat().isBroadcastTagChanges()) {
                 Faction fac = fplayer.faction();
                 fplayer.msg(TL.COMMAND_TAG_CHANGED, sender.colorStringTo(fac) + oldTag, faction.tagString(fac));
             }

@@ -14,8 +14,8 @@ public class AutoLeaveTask implements Runnable {
     private final boolean factions;
 
     public AutoLeaveTask() {
-        this.rate = FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes();
-        this.factions = FactionsPlugin.getInstance().conf().factions().other().isAutoLeaveOnlyEntireFactionInactive();
+        this.rate = FactionsPlugin.instance().conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes();
+        this.factions = FactionsPlugin.instance().conf().factions().other().isAutoLeaveOnlyEntireFactionInactive();
     }
 
     @Override
@@ -28,8 +28,8 @@ public class AutoLeaveTask implements Runnable {
         task.runTaskTimer(AbstractFactionsPlugin.getInstance(), 1, 1);
 
         // maybe setting has been changed? if so, restart this task at new rate
-        if (this.rate != FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes() ||
-                this.factions != FactionsPlugin.getInstance().conf().factions().other().isAutoLeaveOnlyEntireFactionInactive()) {
+        if (this.rate != FactionsPlugin.instance().conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes() ||
+                this.factions != FactionsPlugin.instance().conf().factions().other().isAutoLeaveOnlyEntireFactionInactive()) {
             AbstractFactionsPlugin.getInstance().startAutoLeaveTask(true);
         }
     }
@@ -38,7 +38,7 @@ public class AutoLeaveTask implements Runnable {
         protected transient boolean readyToGo = true;
         protected transient boolean finished;
         protected transient ListIterator<T> iterator;
-        protected final transient double toleranceMillis = FactionsPlugin.getInstance().conf().factions().other().getAutoLeaveAfterDaysOfInactivity() * 24 * 60 * 60 * 1000;
+        protected final transient double toleranceMillis = FactionsPlugin.instance().conf().factions().other().getAutoLeaveAfterDaysOfInactivity() * 24 * 60 * 60 * 1000;
         protected long now;
 
         // we're done, shut down
@@ -51,7 +51,7 @@ public class AutoLeaveTask implements Runnable {
 
         @Override
         public final void run() {
-            MainConfig conf = FactionsPlugin.getInstance().conf();
+            MainConfig conf = FactionsPlugin.instance().conf();
             if (conf.factions().other().getAutoLeaveAfterDaysOfInactivity() <= 0.0 || conf.factions().other().getAutoLeaveRoutineMaxMillisecondsPerTick() <= 0) {
                 this.stop();
                 return;

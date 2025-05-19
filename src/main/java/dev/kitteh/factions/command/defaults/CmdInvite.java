@@ -55,7 +55,7 @@ public class CmdInvite implements Cmd {
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostInvite(), TL.COMMAND_INVITE_TOINVITE, TL.COMMAND_INVITE_FORINVITE)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostInvite(), TL.COMMAND_INVITE_TOINVITE, TL.COMMAND_INVITE_FORINVITE)) {
             return;
         }
 
@@ -71,7 +71,7 @@ public class CmdInvite implements Cmd {
                     .append(legacy.deserialize(TL.COMMAND_INVITE_INVITEDYOU.toString()).color(NamedTextColor.YELLOW))
                     .append(legacy.deserialize(faction.describeTo(target)));
             component = component.hoverEvent(legacy.deserialize(TL.COMMAND_INVITE_CLICKTOJOIN.toString()).asHoverEvent())
-                    .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " join " + ChatColor.stripColor(faction.tag())));
+                    .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.instance().conf().getCommandBase().getFirst() + " join " + ChatColor.stripColor(faction.tag())));
             target.sendMessage(component);
         }
 

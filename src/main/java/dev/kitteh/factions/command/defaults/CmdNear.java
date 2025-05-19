@@ -36,7 +36,7 @@ public class CmdNear implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
 
-        int radius = FactionsPlugin.getInstance().conf().commands().near().getRadius();
+        int radius = FactionsPlugin.instance().conf().commands().near().getRadius();
         Set<FPlayer> onlineMembers = faction.membersOnline(true, sender);
         List<FPlayer> nearbyMembers = new ArrayList<>();
 

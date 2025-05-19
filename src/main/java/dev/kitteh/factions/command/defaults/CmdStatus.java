@@ -38,7 +38,7 @@ public class CmdStatus implements Cmd {
             String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fp.lastLogin(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
             String last = fp.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fp.lastLogin() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
             String power;
-            if (FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) {
+            if (FactionsPlugin.instance().landRaidControl() instanceof PowerControl) {
                 power = ChatColor.YELLOW + String.valueOf(fp.powerRounded()) + " / " + fp.powerMaxRounded() + ChatColor.RESET;
             } else {
                 power = "n/a";

@@ -53,7 +53,7 @@ public class CmdTop implements Cmd {
         topValueGenerators.put("land", f -> new FTopGTIntValue(f.claimCount()));
         topValueGenerators.put("online", f -> new FTopGTIntValue(f.membersOnline(true).size()));
         Function<Faction, FTopValue<?>> money = f -> {
-            double monies = FactionsPlugin.getInstance().conf().economy().isEnabled() ? Econ.getBalance(f) : 0;
+            double monies = FactionsPlugin.instance().conf().economy().isEnabled() ? Econ.getBalance(f) : 0;
             monies += f.members().stream()
                     .mapToDouble(Econ::getBalance)
                     .sum();
@@ -73,7 +73,7 @@ public class CmdTop implements Cmd {
         criteria = criteria.toLowerCase();
 
         Function<Faction, FTopValue<?>> ftopGenerator = topValueGenerators.get(criteria);
-        if (ftopGenerator == null || (!(FactionsPlugin.getInstance().getLandRaidControl() instanceof PowerControl) && criteria.equalsIgnoreCase("power"))) {
+        if (ftopGenerator == null || (!(FactionsPlugin.instance().landRaidControl() instanceof PowerControl) && criteria.equalsIgnoreCase("power"))) {
             context.sender().msg(TL.COMMAND_TOP_INVALID, criteria);
             return;
         }

@@ -130,29 +130,29 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_powermax" -> String.valueOf(faction.powerMax());
             case "faction_dtr" -> (fPlayer.hasFaction() || territory) ? DTRControl.round(faction.dtr()) : "";
             case "faction_dtrmax" -> {
-                if ((fPlayer.hasFaction() || territory) && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
-                    yield DTRControl.round(((DTRControl) FactionsPlugin.getInstance().getLandRaidControl()).getMaxDTR(faction));
+                if ((fPlayer.hasFaction() || territory) && FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
+                    yield DTRControl.round(((DTRControl) FactionsPlugin.instance().landRaidControl()).getMaxDTR(faction));
                 }
                 yield "";
             }
             case "faction_dtr_frozen" -> {
-                if ((fPlayer.hasFaction() || territory) && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
+                if ((fPlayer.hasFaction() || territory) && FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
                     yield FactionTag.DTR_FROZEN.replace(FactionTag.DTR_FROZEN.getTag(), faction);
                 }
                 yield "";
             }
             case "faction_dtr_frozen_time" -> {
-                if ((fPlayer.hasFaction() || territory) && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl) {
+                if ((fPlayer.hasFaction() || territory) && FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
                     yield FactionTag.DTR_FROZEN_TIME.replace(FactionTag.DTR_FROZEN_TIME.getTag(), faction);
                 }
                 yield "";
             }
-            case "faction_maxclaims" -> (fPlayer.hasFaction() || territory) ? String.valueOf(FactionsPlugin.getInstance().getLandRaidControl().getLandLimit(faction)) : "";
+            case "faction_maxclaims" -> (fPlayer.hasFaction() || territory) ? String.valueOf(FactionsPlugin.instance().landRaidControl().landLimit(faction)) : "";
             case "faction_description" -> faction.description();
             case "faction_claims" -> String.valueOf(faction.claims().size());
             case "faction_founded" -> TL.sdf.format(faction.founded());
             case "faction_joining" -> (faction.open() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString());
-            case "faction_peaceful" -> faction.peaceful() ? FactionsPlugin.getInstance().conf().colors().relations().getNeutral() + TL.COMMAND_SHOW_PEACEFUL.toString() : "";
+            case "faction_peaceful" -> faction.peaceful() ? FactionsPlugin.instance().conf().colors().relations().getNeutral() + TL.COMMAND_SHOW_PEACEFUL.toString() : "";
             case "faction_powerboost" -> {
                 double powerBoost = faction.powerBoost();
                 yield (powerBoost == 0.0) ? "" : (powerBoost > 0.0 ? TL.COMMAND_SHOW_BONUS.toString() : TL.COMMAND_SHOW_PENALTY.toString()) + powerBoost + ")";
@@ -163,7 +163,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             }
             case "faction_warps" -> String.valueOf(faction.warps().size());
             case "faction_raidable" -> {
-                boolean raid = FactionsPlugin.getInstance().getLandRaidControl().isRaidable(faction);
+                boolean raid = FactionsPlugin.instance().landRaidControl().isRaidable(faction);
                 yield raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
             }
             case "faction_home_world" -> faction.home() instanceof Location home ? home.getWorld().getName() : "";

@@ -24,10 +24,10 @@ public interface LandRaidControl {
 
     boolean hasLandInflation(Faction faction);
 
-    int getLandLimit(Faction faction);
+    int landLimit(Faction faction);
 
-    default int getPossibleClaimCount(Faction faction) {
-        return this.getLandLimit(faction) - faction.claimCount();
+    default int possibleClaimCount(Faction faction) {
+        return this.landLimit(faction) - faction.claimCount();
     }
 
     boolean canJoinFaction(Faction faction, FPlayer player);
@@ -49,9 +49,9 @@ public interface LandRaidControl {
     void update(FPlayer player);
 
     default void announceRaidable(Faction faction) {
-        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceRaidable()) {
+        if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceRaidable()) {
             Stream<FPlayer> stream = FPlayers.fPlayers().online().stream();
-            if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
+            if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
                 stream = stream.filter(fp -> fp.faction() == faction || fp.relationTo(faction) == Relation.ENEMY);
             }
             stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOWRAIDABLE.format(faction.tagString(fp))));
@@ -59,9 +59,9 @@ public interface LandRaidControl {
     }
 
     default void announceNotRaidable(Faction faction) {
-        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceRaidable()) {
+        if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceRaidable()) {
             Stream<FPlayer> stream = FPlayers.fPlayers().online().stream();
-            if (FactionsPlugin.getInstance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
+            if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
                 stream = stream.filter(fp -> fp.faction() == faction || fp.relationTo(faction) == Relation.ENEMY);
             }
             stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOLONGERRAIDABLE.format(faction.tagString(fp))));

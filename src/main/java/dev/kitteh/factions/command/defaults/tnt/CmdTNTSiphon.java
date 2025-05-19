@@ -58,23 +58,23 @@ public class CmdTNTSiphon implements Cmd {
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().commands().tnt().isAboveMaxStorage(faction.tntBank() + 1)) {
+        if (FactionsPlugin.instance().conf().commands().tnt().isAboveMaxStorage(faction.tntBank() + 1)) {
             sender.msg(TL.COMMAND_TNT_SIPHON_FAIL_FULL);
             return;
         }
 
-        if (radius > FactionsPlugin.getInstance().conf().commands().tnt().getMaxRadius()) {
-            sender.msg(TL.COMMAND_TNT_SIPHON_FAIL_MAXRADIUS, radius, FactionsPlugin.getInstance().conf().commands().tnt().getMaxRadius());
+        if (radius > FactionsPlugin.instance().conf().commands().tnt().getMaxRadius()) {
+            sender.msg(TL.COMMAND_TNT_SIPHON_FAIL_MAXRADIUS, radius, FactionsPlugin.instance().conf().commands().tnt().getMaxRadius());
             return;
         }
 
         List<Dispenser> list = CmdTNTFill.getDispensers(player.getLocation(), radius, faction);
 
         int canTake;
-        if (FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage() < 0) {
+        if (FactionsPlugin.instance().conf().commands().tnt().getMaxStorage() < 0) {
             canTake = Integer.MAX_VALUE;
         } else {
-            canTake = FactionsPlugin.getInstance().conf().commands().tnt().getMaxStorage();
+            canTake = FactionsPlugin.instance().conf().commands().tnt().getMaxStorage();
         }
 
         canTake -= faction.tntBank();

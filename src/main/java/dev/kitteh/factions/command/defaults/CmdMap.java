@@ -30,7 +30,7 @@ public class CmdMap implements Cmd {
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MAP).and(Cloudy.isPlayer())))
                             .flag(manager.flagBuilder("auto-on"))
                             .flag(manager.flagBuilder("auto-off"))
-                            .flag(manager.flagBuilder("setheight").withComponent(IntegerParser.integerParser(1, FactionsPlugin.getInstance().conf().map().getHeight() * 2)))
+                            .flag(manager.flagBuilder("setheight").withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().map().getHeight() * 2)))
                             .handler(this::handle)
             );
         };
@@ -51,7 +51,7 @@ public class CmdMap implements Cmd {
             return;
         }
 
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostMap(), TL.COMMAND_MAP_TOSHOW, TL.COMMAND_MAP_FORSHOW)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostMap(), TL.COMMAND_MAP_TOSHOW, TL.COMMAND_MAP_FORSHOW)) {
             return;
         }
 

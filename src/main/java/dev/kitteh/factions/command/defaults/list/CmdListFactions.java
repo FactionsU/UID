@@ -47,7 +47,7 @@ public class CmdListFactions implements Cmd {
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostList(), TL.COMMAND_LIST_TOLIST, TL.COMMAND_LIST_FORLIST)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostList(), TL.COMMAND_LIST_TOLIST, TL.COMMAND_LIST_FORLIST)) {
             return;
         }
 
@@ -58,7 +58,7 @@ public class CmdListFactions implements Cmd {
 
         // remove exempt factions
         if (!context.sender().hasPermission(Permission.SHOW_BYPASS_EXEMPT)) {
-            List<String> exemptFactions = FactionsPlugin.getInstance().conf().commands().show().getExempt();
+            List<String> exemptFactions = FactionsPlugin.instance().conf().commands().show().getExempt();
             factionList.removeIf(next -> exemptFactions.contains(next.tag()));
         }
 

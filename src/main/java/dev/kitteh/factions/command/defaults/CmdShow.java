@@ -80,17 +80,17 @@ public class CmdShow implements Cmd {
         }
 
         if (!context.sender().hasPermission(Permission.SHOW_BYPASS_EXEMPT)
-                && FactionsPlugin.getInstance().conf().commands().show().getExempt().contains(faction.tag())) {
+                && FactionsPlugin.instance().conf().commands().show().getExempt().contains(faction.tag())) {
             context.sender().msg(TL.COMMAND_SHOW_EXEMPT);
             return;
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostShow(), TL.COMMAND_SHOW_TOSHOW, TL.COMMAND_SHOW_FORSHOW)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostShow(), TL.COMMAND_SHOW_TOSHOW, TL.COMMAND_SHOW_FORSHOW)) {
             return;
         }
 
-        List<String> show = FactionsPlugin.getInstance().conf().commands().show().getFormat();
+        List<String> show = FactionsPlugin.instance().conf().commands().show().getFormat();
         if (show == null || show.isEmpty()) {
             show = defaults;
         }
@@ -203,7 +203,7 @@ public class CmdShow implements Cmd {
     }
 
     private boolean groupPresent() {
-        for (String line : FactionsPlugin.getInstance().conf().commands().toolTips().getPlayer()) {
+        for (String line : FactionsPlugin.instance().conf().commands().toolTips().getPlayer()) {
             if (line.contains("{group}")) {
                 return true;
             }

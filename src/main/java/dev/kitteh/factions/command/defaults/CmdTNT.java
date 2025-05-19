@@ -22,7 +22,7 @@ public class CmdTNT implements Cmd {
         return (manager, builder) -> {
             Command.Builder<Sender> tntBuilder = builder.literal("tnt")
                     .commandDescription(Cloudy.desc(TL.COMMAND_TNT_INFO_DESCRIPTION))
-                    .permission(builder.commandPermission().and(Cloudy.hasFaction().and(Cloudy.predicate(s -> FactionsPlugin.getInstance().conf().commands().tnt().isEnable()))));
+                    .permission(builder.commandPermission().and(Cloudy.hasFaction().and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().commands().tnt().isEnable()))));
 
             manager.command(tntBuilder.permission(tntBuilder.commandPermission().and(Cloudy.hasPermission(Permission.TNT_INFO))).handler(this::handle));
             manager.command(tntBuilder.literal("info").permission(tntBuilder.commandPermission().and(Cloudy.hasPermission(Permission.TNT_INFO))).handler(this::handle));

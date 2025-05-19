@@ -45,7 +45,7 @@ public class CmdSetWarp implements Cmd {
 
         if (context.flags().hasFlag("delete")) {
             if (faction.isWarp(warp)) {
-                if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostDelWarp(), TL.COMMAND_DELFWARP_TODELETE, TL.COMMAND_DELFWARP_FORDELETE)) {
+                if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDelWarp(), TL.COMMAND_DELFWARP_TODELETE, TL.COMMAND_DELFWARP_FORDELETE)) {
                     return;
                 }
                 faction.removeWarp(warp);
@@ -61,17 +61,17 @@ public class CmdSetWarp implements Cmd {
             return;
         }
 
-        int maxWarps = FactionsPlugin.getInstance().conf().commands().warp().getMaxWarps();
+        int maxWarps = FactionsPlugin.instance().conf().commands().warp().getMaxWarps();
         if (maxWarps <= faction.warps().size()) {
             sender.msg(TL.COMMAND_SETFWARP_LIMIT, maxWarps);
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.hasHome()) {
+        if (FactionsPlugin.instance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.hasHome()) {
             sender.msg(TL.COMMAND_SETFWARP_HOMEREQUIRED);
         }
 
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostSetWarp(), TL.COMMAND_SETFWARP_TOSET, TL.COMMAND_SETFWARP_FORSET)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostSetWarp(), TL.COMMAND_SETFWARP_TOSET, TL.COMMAND_SETFWARP_FORSET)) {
             return;
         }
 

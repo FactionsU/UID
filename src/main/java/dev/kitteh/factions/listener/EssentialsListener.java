@@ -29,7 +29,7 @@ public class EssentialsListener implements Listener {
         Faction faction = event.getFaction();
         User user = ess.getUser(event.getFPlayer().uniqueId());
         if (user == null) {
-            FactionsPlugin.getInstance().log(Level.WARNING, "Attempted to remove Essentials homes for " + event.getFPlayer().name() + " " +
+            FactionsPlugin.instance().log(Level.WARNING, "Attempted to remove Essentials homes for " + event.getFPlayer().name() + " " +
                     "but no Essentials data at all was found for this user. " +
                     "This may be a bug in Essentials, or may be that the player only played prior to adding Essentials to the server");
             return;
@@ -54,7 +54,7 @@ public class EssentialsListener implements Listener {
             // We're only going to remove homes in territory that belongs to THEIR faction.
             if (factionAt.equals(faction) && factionAt.isNormal()) {
                 user.delHome(homeName);
-                FactionsPlugin.getInstance().log(Level.INFO, "FactionLeaveEvent: Removing home %s, player %s, in territory of %s",
+                FactionsPlugin.instance().log(Level.INFO, "FactionLeaveEvent: Removing home %s, player %s, in territory of %s",
                         homeName, event.getFPlayer().name(), faction.tag());
             }
         }

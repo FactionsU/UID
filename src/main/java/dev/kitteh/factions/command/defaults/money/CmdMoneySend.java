@@ -71,8 +71,8 @@ public class CmdMoneySend implements Cmd {
 
         boolean success = Econ.transferMoney(sender, from, to, amount);
 
-        if (success && FactionsPlugin.getInstance().conf().logging().isMoneyTransactions()) {
-            FactionsPlugin.getInstance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYTRANSFERFF_TRANSFER.toString(), context.sender().sender().getName(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
+        if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
+            FactionsPlugin.instance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYTRANSFERFF_TRANSFER.toString(), context.sender().sender().getName(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
         }
     }
 
@@ -89,8 +89,8 @@ public class CmdMoneySend implements Cmd {
 
         boolean success = Econ.transferMoney(sender, from, to, amount);
 
-        if (success && FactionsPlugin.getInstance().conf().logging().isMoneyTransactions()) {
-            FactionsPlugin.getInstance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYTRANSFERFP_TRANSFER.toString(), sender.name(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
+        if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
+            FactionsPlugin.instance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYTRANSFERFP_TRANSFER.toString(), sender.name(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
         }
     }
 }

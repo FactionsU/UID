@@ -11,7 +11,7 @@ public class UnknownSelector extends AbstractSelector {
     private final String text;
 
     public UnknownSelector(String text) {
-        super(new BasicDescriptor("unknown", FactionsPlugin.getInstance().tl().permissions().selectors().unknown()::getDisplayName, UnknownSelector::new));
+        super(new BasicDescriptor("unknown", FactionsPlugin.instance().tl().permissions().selectors().unknown()::getDisplayName, UnknownSelector::new));
         this.text = text;
     }
 

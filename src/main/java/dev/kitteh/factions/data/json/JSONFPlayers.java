@@ -35,14 +35,14 @@ public final class JSONFPlayers extends MemoryFPlayers {
     @Override
     public void forceSave(boolean sync) {
         final List<JSONFPlayer> entitiesThatShouldBeSaved = new ArrayList<>();
-        boolean saveAll = FactionsPlugin.getInstance().conf().data().json().isSaveAllPlayers();
+        boolean saveAll = FactionsPlugin.instance().conf().data().json().isSaveAllPlayers();
         for (FPlayer entity : this.fPlayers.values()) {
             if (saveAll || ((MemoryFPlayer) entity).shouldBeSaved()) {
                 entitiesThatShouldBeSaved.add((JSONFPlayer) entity);
             }
         }
 
-        JsonSaver.write(path, () -> FactionsPlugin.getInstance().getGson().toJson(entitiesThatShouldBeSaved), sync);
+        JsonSaver.write(path, () -> FactionsPlugin.instance().gson().toJson(entitiesThatShouldBeSaved), sync);
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class JSONFPlayers extends MemoryFPlayers {
                 }.getType());
                 return new ArrayList<>(map.values());
             } else {
-                return FactionsPlugin.getInstance().getGson().fromJson(bufferedReader, new TypeToken<List<JSONFPlayer>>() {
+                return FactionsPlugin.instance().gson().fromJson(bufferedReader, new TypeToken<List<JSONFPlayer>>() {
                 }.getType());
             }
         } catch (IOException e) {

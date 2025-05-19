@@ -66,8 +66,8 @@ public class CmdMoneyWithdraw implements Cmd {
 
         boolean success = Econ.transferMoney(sender, faction, sender, amount);
 
-        if (success && FactionsPlugin.getInstance().conf().logging().isMoneyTransactions()) {
-            FactionsPlugin.getInstance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYWITHDRAW_WITHDRAW.toString(), sender.name(), Econ.moneyString(amount), faction.describeTo(null))));
+        if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
+            FactionsPlugin.instance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYWITHDRAW_WITHDRAW.toString(), sender.name(), Econ.moneyString(amount), faction.describeTo(null))));
         }
     }
 }

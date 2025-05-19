@@ -54,7 +54,7 @@ public class CmdDisband implements Cmd {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().getLandRaidControl().canDisbandFaction(faction, sender)) {
+        if (!FactionsPlugin.instance().landRaidControl().canDisbandFaction(faction, sender)) {
             return;
         }
 
@@ -85,11 +85,11 @@ public class CmdDisband implements Cmd {
                 fplayer.msg(TL.COMMAND_DISBAND_BROADCAST_NOTYOURS, who, faction.tagString(fplayer));
             }
         }
-        if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
-            FactionsPlugin.getInstance().log("The faction " + faction.tag() + " (" + faction.id() + ") was disbanded by " + sender.name() + ".");
+        if (FactionsPlugin.instance().conf().logging().isFactionDisband()) {
+            FactionsPlugin.instance().log("The faction " + faction.tag() + " (" + faction.id() + ") was disbanded by " + sender.name() + ".");
         }
 
-        if (Econ.shouldBeUsed() && FactionsPlugin.getInstance().conf().economy().isBankEnabled()) {
+        if (Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled()) {
             //Give all the faction's money to the disbander
             double amount = Econ.getBalance(faction);
 
@@ -97,7 +97,7 @@ public class CmdDisband implements Cmd {
                 Econ.transferMoney(sender, faction, sender, amount, false);
                 String amountString = Econ.moneyString(amount);
                 sender.msg(TL.COMMAND_DISBAND_HOLDINGS, amountString);
-                FactionsPlugin.getInstance().log(sender.name() + " has been given bank holdings of " + amountString + " from disbanding " + faction.tag() + ".");
+                FactionsPlugin.instance().log(sender.name() + " has been given bank holdings of " + amountString + " from disbanding " + faction.tag() + ".");
             }
         }
 

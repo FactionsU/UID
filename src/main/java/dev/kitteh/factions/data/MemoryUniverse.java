@@ -64,7 +64,7 @@ public abstract class MemoryUniverse implements Universe {
             String name = upgrade.upgrade().name();
             if (!this.data.upgrades.settings.containsKey(name)) {
                 this.data.upgrades.settings.put(name, upgrade);
-                if (!(upgrade.upgrade() == Upgrades.FLIGHT && FactionsPlugin.getInstance().conf().commands().fly().isEnable())) {
+                if (!(upgrade.upgrade() == Upgrades.FLIGHT && FactionsPlugin.instance().conf().commands().fly().isEnable())) {
                     this.data.upgrades.disabled.add(name);
                 }
             }

@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class RelationSingleSelector extends AbstractRelationSelector {
     public static final String NAME = "relation-single";
-    public static final Descriptor DESCRIPTOR = new RelationDescriptor(NAME, FactionsPlugin.getInstance().tl().permissions().selectors().relationSingle()::getDisplayName, RelationSingleSelector::new);
+    public static final Descriptor DESCRIPTOR = new RelationDescriptor(NAME, FactionsPlugin.instance().tl().permissions().selectors().relationSingle()::getDisplayName, RelationSingleSelector::new);
 
     public RelationSingleSelector(Relation relation) {
         super(DESCRIPTOR, relation);

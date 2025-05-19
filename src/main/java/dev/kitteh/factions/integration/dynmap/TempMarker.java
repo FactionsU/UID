@@ -66,7 +66,7 @@ public class TempMarker {
     public static MarkerIcon getMarkerIcon(MarkerAPI markerApi, String name) {
         MarkerIcon ret = markerApi.getMarkerIcon(name);
         if (ret == null) {
-            ret = markerApi.getMarkerIcon(FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style().getHomeMarker());
+            ret = markerApi.getMarkerIcon(FactionsPlugin.instance().configManager().dynmapConfig().style().getHomeMarker());
         }
         return ret;
     }

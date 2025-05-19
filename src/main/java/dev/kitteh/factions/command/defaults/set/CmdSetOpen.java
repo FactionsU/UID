@@ -35,7 +35,7 @@ public class CmdSetOpen implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostOpen(), TL.COMMAND_OPEN_TOOPEN, TL.COMMAND_OPEN_FOROPEN)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostOpen(), TL.COMMAND_OPEN_TOOPEN, TL.COMMAND_OPEN_FOROPEN)) {
             return;
         }
 

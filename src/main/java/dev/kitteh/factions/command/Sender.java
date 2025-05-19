@@ -77,7 +77,7 @@ public interface Sender {
                 return true;
             }
 
-            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.faction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.lastStoodAt())) {
+            if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.faction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.lastStoodAt())) {
                 return Econ.modifyMoney(fPlayer.faction(), -cost, toDoThis.toString(), forDoingThis.toString());
             } else {
                 return Econ.modifyMoney(fPlayer, -cost, toDoThis.toString(), forDoingThis.toString());
@@ -96,7 +96,7 @@ public interface Sender {
             if (fPlayer.adminBypass()) {
                 return true;
             }
-            if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction()) {
+            if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction()) {
                 return Econ.hasAtLeast(fPlayer.faction(), cost, toDoThis.toString());
             } else {
                 return Econ.hasAtLeast(fPlayer, cost, toDoThis.toString());

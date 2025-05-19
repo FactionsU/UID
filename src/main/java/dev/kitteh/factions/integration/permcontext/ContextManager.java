@@ -82,7 +82,7 @@ public class ContextManager implements Listener {
 
     @EventHandler
     public void onDisable(PluginDisableEvent event) {
-        if (event.getPlugin().equals(FactionsPlugin.getInstance())) {
+        if (event.getPlugin().equals(FactionsPlugin.instance())) {
             return;
         }
         if (registeredContexts != null) {

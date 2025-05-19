@@ -237,7 +237,7 @@ public class WarpGUI extends GUI<Integer> {
                     }
                 });
             }
-        }, FactionsPlugin.getInstance().conf().commands().warp().getDelay());
+        }, FactionsPlugin.instance().conf().commands().warp().getDelay());
     }
 
     private boolean transact() {
@@ -245,13 +245,13 @@ public class WarpGUI extends GUI<Integer> {
             return true;
         }
 
-        double cost = FactionsPlugin.getInstance().conf().economy().getCostWarp();
+        double cost = FactionsPlugin.instance().conf().economy().getCostWarp();
 
         if (!Econ.shouldBeUsed() || this.user == null || cost == 0.0 || user.adminBypass()) {
             return true;
         }
 
-        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && FactionsPlugin.getInstance().conf().economy().isBankFactionPaysCosts() && user.hasFaction() && user.faction().hasAccess(user, PermissibleActions.ECONOMY, this.user.lastStoodAt())) {
+        if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts() && user.hasFaction() && user.faction().hasAccess(user, PermissibleActions.ECONOMY, this.user.lastStoodAt())) {
             return Econ.modifyMoney(user.faction(), -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());
         } else {
             return Econ.modifyMoney(user, -cost, TL.COMMAND_FWARP_TOWARP.toString(), TL.COMMAND_FWARP_FORWARPING.toString());

@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.ChatColor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -81,23 +80,23 @@ public enum Role implements Permissible {
 
     public String getPrefix() {
         if (this == Role.ADMIN) {
-            return FactionsPlugin.getInstance().conf().factions().prefixes().getAdmin();
+            return FactionsPlugin.instance().conf().factions().prefixes().getAdmin();
         }
 
         if (this == Role.COLEADER) {
-            return FactionsPlugin.getInstance().conf().factions().prefixes().getColeader();
+            return FactionsPlugin.instance().conf().factions().prefixes().getColeader();
         }
 
         if (this == Role.MODERATOR) {
-            return FactionsPlugin.getInstance().conf().factions().prefixes().getMod();
+            return FactionsPlugin.instance().conf().factions().prefixes().getMod();
         }
 
         if (this == Role.NORMAL) {
-            return FactionsPlugin.getInstance().conf().factions().prefixes().getNormal();
+            return FactionsPlugin.instance().conf().factions().prefixes().getNormal();
         }
 
         if (this == Role.RECRUIT) {
-            return FactionsPlugin.getInstance().conf().factions().prefixes().getRecruit();
+            return FactionsPlugin.instance().conf().factions().prefixes().getRecruit();
         }
 
         return "";

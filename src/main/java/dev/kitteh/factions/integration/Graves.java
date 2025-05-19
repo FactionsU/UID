@@ -43,7 +43,7 @@ public class Graves {
 
     public static boolean allowAnyway(Block block) {
         try {
-            if (plugin != null && FactionsPlugin.getInstance().conf().plugins().graves().isAllowAnyoneToOpenGraves()) {
+            if (plugin != null && FactionsPlugin.instance().conf().plugins().graves().isAllowAnyoneToOpenGraves()) {
                 return plugin.getBlockManager().getGraveFromBlock(block) != null;
             }
         } catch (Exception oops) {
@@ -55,8 +55,8 @@ public class Graves {
     private static class GraveListener implements Listener {
         @EventHandler
         public void graveCreate(GraveCreateEvent event) {
-            boolean safe = FactionsPlugin.getInstance().conf().plugins().graves().isPreventGravesInSafezone();
-            boolean war = FactionsPlugin.getInstance().conf().plugins().graves().isPreventGravesInWarzone();
+            boolean safe = FactionsPlugin.instance().conf().plugins().graves().isPreventGravesInSafezone();
+            boolean war = FactionsPlugin.instance().conf().plugins().graves().isPreventGravesInWarzone();
             if (!safe && !war) {
                 return;
             }

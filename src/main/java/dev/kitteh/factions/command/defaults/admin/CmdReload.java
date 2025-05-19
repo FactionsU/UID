@@ -28,7 +28,7 @@ public class CmdReload implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         long timeInitStart = System.currentTimeMillis();
-        FactionsPlugin.getInstance().getConfigManager().loadConfigs();
+        FactionsPlugin.instance().configManager().loadConfigs();
         AbstractFactionsPlugin.getInstance().reloadConfig();
         AbstractFactionsPlugin.getInstance().loadLang();
         long timeReload = (System.currentTimeMillis() - timeInitStart);

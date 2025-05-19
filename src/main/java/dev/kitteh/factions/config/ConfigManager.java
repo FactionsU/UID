@@ -41,19 +41,19 @@ public class ConfigManager {
         }
     }
 
-    public PermissionsConfig getPermissionsConfig() {
+    public PermissionsConfig permissionsConfig() {
         return this.permissionsConfig;
     }
 
-    public MainConfig getMainConfig() {
+    public MainConfig mainConfig() {
         return this.mainConfig;
     }
 
-    public DynmapConfig getDynmapConfig() {
+    public DynmapConfig dynmapConfig() {
         return this.dynmapConfig;
     }
 
-    public TranslationsConfig getTranslationsConfig() {
+    public TranslationsConfig translationsConfig() {
         return this.translationsConfig;
     }
 }

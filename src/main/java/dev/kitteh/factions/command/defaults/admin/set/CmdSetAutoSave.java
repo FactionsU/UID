@@ -29,7 +29,7 @@ public class CmdSetAutoSave implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         boolean state = context.get("state");
-        FactionsPlugin.getInstance().setAutoSave(state);
+        FactionsPlugin.instance().autoSave(state);
         context.sender().msg(state ? TL.COMMAND_SETAUTOSAVE_ENABLED : TL.COMMAND_SETAUTOSAVE_DISABLED);
     }
 }

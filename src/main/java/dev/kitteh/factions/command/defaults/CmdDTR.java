@@ -24,7 +24,7 @@ public class CmdDTR implements Cmd {
                     builder.literal("dtr")
                             .commandDescription(Cloudy.desc(TL.COMMAND_DTR_DESCRIPTION))
                             .permission(builder.commandPermission().and(
-                                    Cloudy.predicate(s -> FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl)
+                                    Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof DTRControl)
                                             .and(Cloudy.hasPermission(Permission.DTR))
                             ))
                             .optional("faction", FactionParser.of(FactionParser.Include.PLAYERS))
@@ -47,11 +47,11 @@ public class CmdDTR implements Cmd {
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostDTR(), TL.COMMAND_DTR_TOSHOW, TL.COMMAND_DTR_FORSHOW)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDTR(), TL.COMMAND_DTR_TOSHOW, TL.COMMAND_DTR_FORSHOW)) {
             return;
         }
 
-        DTRControl dtr = (DTRControl) FactionsPlugin.getInstance().getLandRaidControl();
+        DTRControl dtr = (DTRControl) FactionsPlugin.instance().landRaidControl();
         context.sender().msg(TL.COMMAND_DTR_DTR, target.describeTo(fPlayer, false), DTRControl.round(target.dtr()), DTRControl.round(dtr.getMaxDTR(target)));
     }
 }

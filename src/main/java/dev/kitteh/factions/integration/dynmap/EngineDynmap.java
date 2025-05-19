@@ -93,7 +93,7 @@ public class EngineDynmap {
     public boolean init(Plugin dynmap) {
         this.dynmapApi = (DynmapAPI) dynmap;
 
-        dynmapConf = FactionsPlugin.getInstance().getConfigManager().getDynmapConfig();
+        dynmapConf = FactionsPlugin.instance().configManager().dynmapConfig();
 
         // Should we even use dynmap?
         if (!dynmapConf.dynmap().isEnabled()) {
@@ -117,7 +117,7 @@ public class EngineDynmap {
         }, 101L, 100L);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(AbstractFactionsPlugin.getInstance(), () -> {
             boolean doIt = true;
-            if (FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().dynmap().isOnlyUpdateWorldOnce()) {
+            if (FactionsPlugin.instance().configManager().dynmapConfig().dynmap().isOnlyUpdateWorldOnce()) {
                 if (this.stillNeedsToRunOnce) {
                     this.stillNeedsToRunOnce = false;
                 } else {
@@ -234,7 +234,7 @@ public class EngineDynmap {
     public Map<String, TempMarker> createHomes() {
         Map<String, TempMarker> ret = new HashMap<>();
 
-        if (!FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().dynmap().isShowMarkers()) {
+        if (!FactionsPlugin.instance().configManager().dynmapConfig().dynmap().isShowMarkers()) {
             return ret;
         }
 
@@ -307,7 +307,7 @@ public class EngineDynmap {
     public Map<String, TempMarker> createWarps() {
         Map<String, TempMarker> ret = new HashMap<>();
 
-        if (!FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().dynmap().isShowWarpMarkers()) {
+        if (!FactionsPlugin.instance().configManager().dynmapConfig().dynmap().isShowWarpMarkers()) {
             return ret;
         }
 
@@ -713,7 +713,7 @@ public class EngineDynmap {
         // Money
 
         String money = "unavailable";
-        if (FactionsPlugin.getInstance().conf().economy().isBankEnabled() && dynmapConf.dynmap().isDescriptionMoney()) {
+        if (FactionsPlugin.instance().conf().economy().isBankEnabled() && dynmapConf.dynmap().isDescriptionMoney()) {
             money = String.format("%.2f", Econ.getBalance(faction));
         }
         ret = ret.replace("%money%", money);

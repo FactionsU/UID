@@ -27,7 +27,7 @@ public class CmdFly implements Cmd {
                     builder.literal("fly")
                             .commandDescription(Cloudy.desc(TL.COMMAND_FLY_DESCRIPTION))
                             .permission(builder.commandPermission().and(
-                                    Cloudy.predicate(s -> FactionsPlugin.getInstance().conf().commands().fly().isEnable())
+                                    Cloudy.predicate(s -> FactionsPlugin.instance().conf().commands().fly().isEnable())
                                             .and(Cloudy.hasPermission(Permission.FLY))
                                             .and(Cloudy.hasFaction())))
                             .flag(manager.flagBuilder("auto").withPermission(Cloudy.hasPermission(Permission.FLY_AUTO)))
@@ -57,7 +57,7 @@ public class CmdFly implements Cmd {
             unhandled = false;
         }
         if (context.flags().get("particle") instanceof String effectName) {
-            Particle particleEffect = FactionsPlugin.getInstance().getParticleProvider().effectFromString(effectName);
+            Particle particleEffect = FactionsPlugin.instance().particleProvider().effectFromString(effectName);
             if (particleEffect == null) {
                 sender.msg(TL.COMMAND_FLYTRAILS_PARTICLE_INVALID);
                 return;
@@ -90,7 +90,7 @@ public class CmdFly implements Cmd {
             if (flyTest(fPlayer, notify)) {
                 fPlayer.flying(true);
             }
-        }, FactionsPlugin.getInstance().conf().commands().fly().getDelay());
+        }, FactionsPlugin.instance().conf().commands().fly().getDelay());
     }
 
     private boolean flyTest(FPlayer fPlayer, boolean notify) {
@@ -100,7 +100,7 @@ public class CmdFly implements Cmd {
                 fPlayer.msg(TL.COMMAND_FLY_NO_ACCESS, factionAtLocation.tagString(fPlayer));
             }
             return false;
-        } else if (FlightUtil.instance().enemiesNearby(fPlayer, FactionsPlugin.getInstance().conf().commands().fly().getEnemyRadius())) {
+        } else if (FlightUtil.instance().enemiesNearby(fPlayer, FactionsPlugin.instance().conf().commands().fly().getEnemyRadius())) {
             if (notify) {
                 fPlayer.msg(TL.COMMAND_FLY_ENEMY_NEARBY);
             }

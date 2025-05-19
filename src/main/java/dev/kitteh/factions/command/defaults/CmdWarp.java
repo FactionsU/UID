@@ -88,7 +88,7 @@ public class CmdWarp implements Cmd {
                             }
                         });
                     }
-                }, FactionsPlugin.getInstance().conf().commands().warp().getDelay());
+                }, FactionsPlugin.instance().conf().commands().warp().getDelay());
             } else {
                 sender.msg(TL.COMMAND_FWARP_INVALID_WARP, warpName);
             }
@@ -96,6 +96,6 @@ public class CmdWarp implements Cmd {
     }
 
     private boolean transact(FPlayer player, CommandContext<Sender> context) {
-        return player.adminBypass() || context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostWarp(), TL.COMMAND_FWARP_TOWARP, TL.COMMAND_FWARP_FORWARPING);
+        return player.adminBypass() || context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostWarp(), TL.COMMAND_FWARP_TOWARP, TL.COMMAND_FWARP_FORWARPING);
     }
 }

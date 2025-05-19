@@ -50,14 +50,14 @@ public class CmdKick implements Cmd {
                 String s = player.name();
                 component = component.append(Component.text().color(NamedTextColor.WHITE).content(s + " ")
                         .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
-                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " kick " + s))
+                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.instance().conf().getCommandBase().getFirst() + " kick " + s))
                 );
             }
             for (FPlayer player : faction.members(Role.NORMAL)) {
                 String s = player.name();
                 component = component.append(Component.text().color(NamedTextColor.WHITE).content(s + " ")
                         .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
-                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " kick " + s))
+                        .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.instance().conf().getCommandBase().getFirst() + " kick " + s))
                 );
             }
             if (sender.role().isAtLeast(Role.COLEADER)) {
@@ -66,7 +66,7 @@ public class CmdKick implements Cmd {
                     String s = player.name();
                     component = component.append(Component.text().color(NamedTextColor.GRAY).content(s + " ")
                             .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
-                            .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " kick " + s))
+                            .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.instance().conf().getCommandBase().getFirst() + " kick " + s))
                     );
                 }
                 if (sender.role() == Role.ADMIN) {
@@ -75,7 +75,7 @@ public class CmdKick implements Cmd {
                         String s = player.name();
                         component = component.append(Component.text().color(NamedTextColor.RED).content(s + " ")
                                 .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
-                                .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.getInstance().conf().getCommandBase().getFirst() + " kick " + s))
+                                .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.instance().conf().getCommandBase().getFirst() + " kick " + s))
                         );
                     }
                 }
@@ -107,12 +107,12 @@ public class CmdKick implements Cmd {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().getLandRaidControl().canKick(toKick, sender)) {
+        if (!FactionsPlugin.instance().landRaidControl().canKick(toKick, sender)) {
             return;
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make sure they can pay
-        if (!context.sender().canAffordCommand(FactionsPlugin.getInstance().conf().economy().getCostKick(), TL.COMMAND_KICK_TOKICK)) {
+        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostKick(), TL.COMMAND_KICK_TOKICK)) {
             return;
         }
 
@@ -124,15 +124,15 @@ public class CmdKick implements Cmd {
         }
 
         // then make 'em pay (if applicable)
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostKick(), TL.COMMAND_KICK_TOKICK, TL.COMMAND_KICK_FORKICK)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostKick(), TL.COMMAND_KICK_TOKICK, TL.COMMAND_KICK_FORKICK)) {
             return;
         }
 
         toKickFaction.msg(TL.COMMAND_KICK_FACTION, sender.describeTo(toKickFaction, true), toKick.describeTo(toKickFaction, true));
         toKick.msg(TL.COMMAND_KICK_KICKED, sender.describeTo(toKick, true), toKickFaction.describeTo(toKick));
 
-        if (FactionsPlugin.getInstance().conf().logging().isFactionKick()) {
-            FactionsPlugin.getInstance().log(sender.name() + " kicked " + toKick.name() + " from the faction: " + toKickFaction.tag());
+        if (FactionsPlugin.instance().conf().logging().isFactionKick()) {
+            FactionsPlugin.instance().log(sender.name() + " kicked " + toKick.name() + " from the faction: " + toKickFaction.tag());
         }
 
         toKickFaction.deInvite(toKick);

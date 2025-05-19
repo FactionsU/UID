@@ -27,14 +27,14 @@ public class CmdSetHome implements Cmd {
             manager.command(builder.literal("home")
                     .commandDescription(Cloudy.desc(TL.COMMAND_SETHOME_DESCRIPTION))
                     .permission(builder.commandPermission().and(
-                            Cloudy.predicate(s -> FactionsPlugin.getInstance().conf().factions().homes().isEnabled())
+                            Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled())
                                     .and(Cloudy.hasPermission(Permission.SETHOME))
                                     .and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETHOME))
                     ))
                     .flag(
                             manager.flagBuilder("delete")
                                     .withPermission(
-                                            Cloudy.predicate(s -> FactionsPlugin.getInstance().conf().factions().homes().isEnabled())
+                                            Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled())
                                                     .and(Cloudy.hasPermission(Permission.DELHOME))
                                                     .and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETHOME))
                                     )
@@ -55,13 +55,13 @@ public class CmdSetHome implements Cmd {
         }
 
         // Can the player set the faction home HERE?
-        if (FactionsPlugin.getInstance().conf().factions().homes().isMustBeInClaimedTerritory() &&
+        if (FactionsPlugin.instance().conf().factions().homes().isMustBeInClaimedTerritory() &&
                 Board.board().factionAt(new FLocation(player)) != faction) {
             sender.msg(TL.COMMAND_SETHOME_NOTCLAIMED);
             return;
         }
 
-        if (!context.sender().canAffordCommand(FactionsPlugin.getInstance().conf().economy().getCostSethome(), TL.COMMAND_SETHOME_TOSET)) {
+        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostSethome(), TL.COMMAND_SETHOME_TOSET)) {
             return;
         }
 
@@ -72,7 +72,7 @@ public class CmdSetHome implements Cmd {
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostSethome(), TL.COMMAND_SETHOME_TOSET, TL.COMMAND_SETHOME_FORSET)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostSethome(), TL.COMMAND_SETHOME_TOSET, TL.COMMAND_SETHOME_FORSET)) {
             return;
         }
 
@@ -87,12 +87,12 @@ public class CmdSetHome implements Cmd {
             return;
         }
 
-        if (FactionsPlugin.getInstance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.warps().isEmpty()) {
+        if (FactionsPlugin.instance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.warps().isEmpty()) {
             sender.msg(TL.COMMAND_HOME_WARPSREMAIN);
             return;
         }
 
-        if (!context.sender().payForCommand(FactionsPlugin.getInstance().conf().economy().getCostDelhome(), TL.COMMAND_DELHOME_TOSET, TL.COMMAND_DELHOME_FORSET)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDelhome(), TL.COMMAND_DELHOME_TOSET, TL.COMMAND_DELHOME_FORSET)) {
             return;
         }
 

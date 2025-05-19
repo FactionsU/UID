@@ -35,7 +35,7 @@ public class WorldTracker {
         }
     }
 
-    public String getWorldName() {
+    public String worldName() {
         return this.worldName;
     }
 
@@ -78,7 +78,7 @@ public class WorldTracker {
         }
     }
 
-    public List<FLocation> getAllClaims(int id) {
+    public List<FLocation> allClaims(int id) {
         LongSet longs = this.IDToChunk.get(id);
         //noinspection ConstantValue
         if (longs == null) {
@@ -87,17 +87,17 @@ public class WorldTracker {
         return longs.longStream().mapToObj(mort -> new FLocation(this.worldName, Morton.getX(mort), Morton.getZ(mort))).toList();
     }
 
-    public Long2IntMap getChunkToIDForSave() {
+    public Long2IntMap chunkIdMapForSave() {
         return chunkToID;
     }
 
-    public Int2ObjectMap<LongList> getAllClaimsForDynmap() {
+    public Int2ObjectMap<LongList> allClaimsForDynmap() {
         Int2ObjectMap<LongList> newMap = new Int2ObjectOpenHashMap<>();
         this.IDToChunk.int2ObjectEntrySet().forEach(entry -> newMap.put(entry.getIntKey(), new LongArrayList(entry.getValue())));
         return newMap;
     }
 
-    public int getIdAt(FLocation location) {
+    public int idAt(FLocation location) {
         return chunkToID.get(Morton.get(location));
     }
 
@@ -109,7 +109,7 @@ public class WorldTracker {
         return this.chunkToID.size();
     }
 
-    public IntList getIDs() {
+    public IntList ids() {
         return new IntArrayList(this.IDToChunk.keySet());
     }
 }

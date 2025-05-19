@@ -10,6 +10,7 @@ import java.util.function.BiConsumer;
 /**
  * For the registry of commands from other plugins.
  */
+@SuppressWarnings("unused")
 @NullMarked
 public final class ThirdPartyCommands {
     private ThirdPartyCommands() {

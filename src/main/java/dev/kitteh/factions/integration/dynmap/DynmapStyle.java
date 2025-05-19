@@ -33,7 +33,7 @@ public class DynmapStyle {
     }
 
     private static DynmapConfig.Style styleConf() {
-        return FactionsPlugin.getInstance().getConfigManager().getDynmapConfig().style();
+        return FactionsPlugin.instance().configManager().dynmapConfig().style();
     }
 
     // -------------------------------------------- //

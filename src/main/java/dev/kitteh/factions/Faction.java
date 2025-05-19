@@ -360,11 +360,11 @@ public interface Faction extends Participator, Selectable {
     void founded(Instant when);
 
     default boolean noPvPInTerritory() {
-        return isSafeZone() || (peaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisablePVP());
+        return isSafeZone() || (peaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisablePVP());
     }
 
     default boolean noMonstersInTerritory() {
-        return isSafeZone() || (peaceful() && FactionsPlugin.getInstance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters());
+        return isSafeZone() || (peaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters());
     }
 
     default boolean isNormal() {
@@ -488,7 +488,7 @@ public interface Faction extends Participator, Selectable {
     void powerBoost(double powerBoost);
 
     default boolean hasLandInflation() {
-        return FactionsPlugin.getInstance().getLandRaidControl().hasLandInflation(this);
+        return FactionsPlugin.instance().landRaidControl().hasLandInflation(this);
     }
 
     boolean isPowerFrozen();
@@ -496,7 +496,7 @@ public interface Faction extends Participator, Selectable {
     int size();
 
     default int memberLimit() {
-        int confMax = FactionsPlugin.getInstance().conf().factions().other().getFactionMemberLimit();
+        int confMax = FactionsPlugin.instance().conf().factions().other().getFactionMemberLimit();
         if (confMax < 1) {
             return Integer.MAX_VALUE;
         }

@@ -38,7 +38,7 @@ public class FTeamWrapper {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes() && !FactionsPlugin.getInstance().conf().scoreboard().constant().isSuffixes()) {
+        if (!FactionsPlugin.instance().conf().scoreboard().constant().isPrefixes() && !FactionsPlugin.instance().conf().scoreboard().constant().isSuffixes()) {
             return;
         }
 
@@ -59,7 +59,7 @@ public class FTeamWrapper {
             return;
         }
 
-        if (!FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes() && !FactionsPlugin.getInstance().conf().scoreboard().constant().isSuffixes()) {
+        if (!FactionsPlugin.instance().conf().scoreboard().constant().isPrefixes() && !FactionsPlugin.instance().conf().scoreboard().constant().isSuffixes()) {
             return;
         }
 
@@ -152,7 +152,7 @@ public class FTeamWrapper {
     }
 
     private void updatePrefixesAndSuffixes() {
-        if (FactionsPlugin.getInstance().conf().scoreboard().constant().isPrefixes() || FactionsPlugin.getInstance().conf().scoreboard().constant().isSuffixes()) {
+        if (FactionsPlugin.instance().conf().scoreboard().constant().isPrefixes() || FactionsPlugin.instance().conf().scoreboard().constant().isSuffixes()) {
             for (FScoreboard fboard : teams.keySet()) {
                 updatePrefixAndSuffix(fboard);
             }
@@ -160,7 +160,7 @@ public class FTeamWrapper {
     }
 
     private void updatePrefixAndSuffix(FScoreboard fboard) {
-        MainConfig.Scoreboard.Constant conf = FactionsPlugin.getInstance().conf().scoreboard().constant();
+        MainConfig.Scoreboard.Constant conf = FactionsPlugin.instance().conf().scoreboard().constant();
         if (conf.isPrefixes()) {
             Team team = teams.get(fboard);
             String prefix = this.apply(conf.getPrefixTemplate(), fboard.getFPlayer(), conf.getPrefixLength());

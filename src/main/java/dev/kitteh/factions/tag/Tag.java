@@ -50,7 +50,7 @@ public interface Tag {
             return line;
         }
 
-        if (AbstractFactionsPlugin.getInstance().getIntegrationManager().isEnabled(IntegrationManager.Integration.PLACEHOLDERAPI) && player.isOnline()) {
+        if (AbstractFactionsPlugin.getInstance().integrationManager().isEnabled(IntegrationManager.Integration.PLACEHOLDERAPI) && player.isOnline()) {
             line = PlaceholderAPI.setPlaceholders(player, line);
         }
 
@@ -58,7 +58,7 @@ public interface Tag {
     }
 
     static boolean isMinimalShow() {
-        return FactionsPlugin.getInstance().conf().commands().show().isMinimal();
+        return FactionsPlugin.instance().conf().commands().show().isMinimal();
     }
 
     /**

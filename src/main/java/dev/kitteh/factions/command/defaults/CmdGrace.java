@@ -22,7 +22,7 @@ public class CmdGrace implements Cmd {
                     builder.literal("grace")
                             .commandDescription(Cloudy.desc(TL.COMMAND_GRACE_DESCRIPTION))
                             .permission(builder.commandPermission()
-                                    .and(Cloudy.predicate(s -> FactionsPlugin.getInstance().conf().factions().protection().isGraceSystem()))
+                                    .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().protection().isGraceSystem()))
                                     .and(Cloudy.hasPermission(Permission.GRACE_VIEW))
                             )
                             .handler(this::handle)

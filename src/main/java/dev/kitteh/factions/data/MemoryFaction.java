@@ -292,7 +292,7 @@ public abstract class MemoryFaction implements Faction {
             WorldTracker tracker = this.worldTrackers.get(fLocation.worldName());
             int id;
             //noinspection ConstantValue
-            if (tracker == null || (id = tracker.getIdAt(fLocation)) == WorldTracker.NO_MATCH) {
+            if (tracker == null || (id = tracker.idAt(fLocation)) == WorldTracker.NO_MATCH) {
                 return this.main();
             }
 
@@ -598,7 +598,7 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public void tag(String str) {
-        if (FactionsPlugin.getInstance().conf().factions().other().isTagForceUpperCase()) {
+        if (FactionsPlugin.instance().conf().factions().other().isTagForceUpperCase()) {
             str = str.toUpperCase();
         }
 
@@ -620,7 +620,7 @@ public abstract class MemoryFaction implements Faction {
     @Override
     public String link() {
         if (this.link == null) {
-            this.link = FactionsPlugin.getInstance().conf().commands().link().getDefaultURL();
+            this.link = FactionsPlugin.instance().conf().commands().link().getDefaultURL();
         }
         return this.link;
     }
@@ -647,7 +647,7 @@ public abstract class MemoryFaction implements Faction {
     }
 
     public void confirmValidHome() {
-        if ((!FactionsPlugin.getInstance().conf().factions().homes().isMustBeInClaimedTerritory()) || (this.home == null) || (new FLocation(this.home).faction() == this)) {
+        if ((!FactionsPlugin.instance().conf().factions().homes().isMustBeInClaimedTerritory()) || (this.home == null) || (new FLocation(this.home).faction() == this)) {
             return;
         }
 
@@ -671,7 +671,7 @@ public abstract class MemoryFaction implements Faction {
     @Override
     public OfflinePlayer asOfflinePlayer() {
         if (this.offlinePlayer == null) {
-            this.offlinePlayer = FactionsPlugin.getInstance().getFactionOfflinePlayer("faction-" + this.id);
+            this.offlinePlayer = FactionsPlugin.instance().factionOfflinePlayer("faction-" + this.id);
         }
         return this.offlinePlayer;
     }
@@ -735,7 +735,7 @@ public abstract class MemoryFaction implements Faction {
     }
 
     private @Nullable Boolean hasOverrideAccess(Selectable selectable, PermissibleAction permissibleAction) {
-        PermissionsConfig permConf = FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig();
+        PermissionsConfig permConf = FactionsPlugin.instance().configManager().permissionsConfig();
         List<PermSelector> priority = permConf.getOverridePermissionsOrder().stream().filter(s -> s.test(selectable, this)).toList();
         for (PermSelector selector : priority) {
             Boolean bool = permConf.getOverridePermissions().get(selector).get(permissibleAction.name());
@@ -770,7 +770,7 @@ public abstract class MemoryFaction implements Faction {
             return;
         }
 
-        PermissionsConfig permConf = FactionsPlugin.getInstance().getConfigManager().getPermissionsConfig();
+        PermissionsConfig permConf = FactionsPlugin.instance().configManager().permissionsConfig();
         for (PermSelector selector : permConf.getDefaultPermissionsOrder()) {
             this.perms.selectorOrder.add(selector);
             this.perms.perms.put(selector, new Permissions.SelectorPerms(new HashMap<>(permConf.getDefaultPermissions().get(selector))));
@@ -789,18 +789,18 @@ public abstract class MemoryFaction implements Faction {
 
     public MemoryFaction(int id, String tag) {
         this.id = id;
-        this.open = FactionsPlugin.getInstance().conf().factions().other().isNewFactionsDefaultOpen();
+        this.open = FactionsPlugin.instance().conf().factions().other().isNewFactionsDefaultOpen();
         this.tag = tag;
         this.description = TL.GENERIC_DEFAULTDESCRIPTION.toString();
         this.lastPlayerLoggedOffTime = 0;
-        this.peaceful = FactionsPlugin.getInstance().conf().factions().other().isNewFactionsDefaultPeaceful();
+        this.peaceful = FactionsPlugin.instance().conf().factions().other().isNewFactionsDefaultPeaceful();
         this.peacefulExplosionsEnabled = false;
         this.permanent = false;
         this.powerBoost = 0.0;
         this.foundedDate = System.currentTimeMillis();
-        this.maxVaults = FactionsPlugin.getInstance().conf().playerVaults().getDefaultMaxVaults();
-        this.defaultRole = FactionsPlugin.getInstance().conf().factions().other().getDefaultRole();
-        this.dtr = FactionsPlugin.getInstance().conf().factions().landRaidControl().dtr().getStartingDTR();
+        this.maxVaults = FactionsPlugin.instance().conf().playerVaults().getDefaultMaxVaults();
+        this.defaultRole = FactionsPlugin.instance().conf().factions().other().getDefaultRole();
+        this.dtr = FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getStartingDTR();
 
         resetPerms(); // Reset on new Faction so it has default values.
     }
@@ -810,7 +810,7 @@ public abstract class MemoryFaction implements Faction {
         if (this.relationWish.containsKey(otherFaction.id())) {
             return this.relationWish.get(otherFaction.id());
         }
-        return FactionsPlugin.getInstance().conf().factions().other().getDefaultRelation();
+        return FactionsPlugin.instance().conf().factions().other().getDefaultRelation();
     }
 
     @Override
@@ -824,7 +824,7 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public double dtr() {
-        LandRaidControl lrc = FactionsPlugin.getInstance().getLandRaidControl();
+        LandRaidControl lrc = FactionsPlugin.instance().landRaidControl();
         if (lrc instanceof DTRControl dtrControl) {
             dtrControl.updateDTR(this);
         }
@@ -841,7 +841,7 @@ public abstract class MemoryFaction implements Faction {
         double start = this.dtr;
         this.dtr = dtr;
         this.lastDTRUpdateTime = System.currentTimeMillis();
-        if (start != this.dtr && FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl dtrControl) {
+        if (start != this.dtr && FactionsPlugin.instance().landRaidControl() instanceof DTRControl dtrControl) {
             dtrControl.onDTRChange(this, start, this.dtr);
         }
     }
@@ -876,8 +876,8 @@ public abstract class MemoryFaction implements Faction {
         for (FPlayer fplayer : fplayers) {
             ret += fplayer.power();
         }
-        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getFactionMax() > 0 && ret > FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getFactionMax()) {
-            ret = FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getFactionMax();
+        if (FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax() > 0 && ret > FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax()) {
+            ret = FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax();
         }
         return ret + this.powerBoost;
     }
@@ -892,8 +892,8 @@ public abstract class MemoryFaction implements Faction {
         for (FPlayer fplayer : fplayers) {
             ret += fplayer.powerMax();
         }
-        if (FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getFactionMax() > 0 && ret > FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getFactionMax()) {
-            ret = FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getFactionMax();
+        if (FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax() > 0 && ret > FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax()) {
+            ret = FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax();
         }
         return ret + this.powerBoost;
     }
@@ -920,7 +920,7 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public boolean isPowerFrozen() {
-        int freezeSeconds = FactionsPlugin.getInstance().conf().factions().landRaidControl().power().getPowerFreeze();
+        int freezeSeconds = FactionsPlugin.instance().conf().factions().landRaidControl().power().getPowerFreeze();
         return freezeSeconds != 0 && System.currentTimeMillis() - lastDeath < freezeSeconds * 1000L;
     }
 
@@ -1090,7 +1090,7 @@ public abstract class MemoryFaction implements Faction {
 
         // even if all players are technically logged off, maybe someone was on
         // recently enough to not consider them officially offline yet
-        return FactionsPlugin.getInstance().conf().factions().other().getConsiderFactionsReallyOfflineAfterXMinutes() > 0 && System.currentTimeMillis() < lastPlayerLoggedOffTime + (FactionsPlugin.getInstance().conf().factions().other().getConsiderFactionsReallyOfflineAfterXMinutes() * 60000);
+        return FactionsPlugin.instance().conf().factions().other().getConsiderFactionsReallyOfflineAfterXMinutes() > 0 && System.currentTimeMillis() < lastPlayerLoggedOffTime + (FactionsPlugin.instance().conf().factions().other().getConsiderFactionsReallyOfflineAfterXMinutes() * 60000);
     }
 
     @Override
@@ -1107,7 +1107,7 @@ public abstract class MemoryFaction implements Faction {
         if (!this.isNormal()) {
             return;
         }
-        if (this.permanent() && FactionsPlugin.getInstance().conf().factions().specialCase().isPermanentFactionsDisableLeaderPromotion()) {
+        if (this.permanent() && FactionsPlugin.instance().conf().factions().specialCase().isPermanentFactionsDisableLeaderPromotion()) {
             return;
         }
 
@@ -1132,8 +1132,8 @@ public abstract class MemoryFaction implements Faction {
             }
 
             // no members left and faction isn't permanent, so disband it
-            if (FactionsPlugin.getInstance().conf().logging().isFactionDisband()) {
-                FactionsPlugin.getInstance().log("The faction " + this.tag() + " (" + this.id() + ") has been disbanded since it has no members left.");
+            if (FactionsPlugin.instance().conf().logging().isFactionDisband()) {
+                FactionsPlugin.instance().log("The faction " + this.tag() + " (" + this.id() + ") has been disbanded since it has no members left.");
             }
 
             for (FPlayer fplayer : FPlayers.fPlayers().online()) {
@@ -1151,7 +1151,7 @@ public abstract class MemoryFaction implements Faction {
             }
             replacements.getFirst().role(Role.ADMIN);
             this.msg(TL.FACTION_NEWLEADER, oldLeader == null ? "" : oldLeader.name(), replacements.getFirst().name());
-            FactionsPlugin.getInstance().log("Faction " + this.tag() + " (" + this.id() + ") admin was removed. Replacement admin: " + replacements.getFirst().name());
+            FactionsPlugin.instance().log("Faction " + this.tag() + " (" + this.id() + ") admin was removed. Replacement admin: " + replacements.getFirst().name());
         }
     }
 
@@ -1165,7 +1165,7 @@ public abstract class MemoryFaction implements Faction {
     }
 
     public void remove() {
-        if (Econ.shouldBeUsed() && FactionsPlugin.getInstance().conf().economy().isBankEnabled()) {
+        if (Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled()) {
             Econ.setBalance(this, 0);
         }
 

@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class RoleSingleSelector extends AbstractRoleSelector {
     public static final String NAME = "role-single";
-    public static final Descriptor DESCRIPTOR = new AbstractRoleSelector.RoleDescriptor(NAME, FactionsPlugin.getInstance().tl().permissions().selectors().roleSingle()::getDisplayName, RoleSingleSelector::new);
+    public static final Descriptor DESCRIPTOR = new AbstractRoleSelector.RoleDescriptor(NAME, FactionsPlugin.instance().tl().permissions().selectors().roleSingle()::getDisplayName, RoleSingleSelector::new);
 
     public RoleSingleSelector(Role role) {
         super(DESCRIPTOR, role);

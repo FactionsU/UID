@@ -27,11 +27,11 @@ public class SeeChunkUtil extends BukkitRunnable {
     private final Particle effect;
 
     public SeeChunkUtil() {
-        String effectName = FactionsPlugin.getInstance().conf().commands().seeChunk().getParticleName();
-        this.effect = FactionsPlugin.getInstance().getParticleProvider().effectFromString(effectName);
-        this.useColor = FactionsPlugin.getInstance().conf().commands().seeChunk().isRelationalColor();
+        String effectName = FactionsPlugin.instance().conf().commands().seeChunk().getParticleName();
+        this.effect = FactionsPlugin.instance().particleProvider().effectFromString(effectName);
+        this.useColor = FactionsPlugin.instance().conf().commands().seeChunk().isRelationalColor();
 
-        AbstractFactionsPlugin.getInstance().getLogger().info(AbstractFactionsPlugin.getInstance().txt().parse("Using %s as the ParticleEffect for /f sc", FactionsPlugin.getInstance().getParticleProvider().effectName(effect)));
+        AbstractFactionsPlugin.getInstance().getLogger().info(AbstractFactionsPlugin.getInstance().txt().parse("Using %s as the ParticleEffect for /f sc", FactionsPlugin.instance().particleProvider().effectName(effect)));
     }
 
     @Override
@@ -99,9 +99,9 @@ public class SeeChunkUtil extends BukkitRunnable {
             }
 
             if (color == null) {
-                FactionsPlugin.getInstance().getParticleProvider().playerSpawn(player, effect, loc, 1);
+                FactionsPlugin.instance().particleProvider().playerSpawn(player, effect, loc, 1);
             } else {
-                FactionsPlugin.getInstance().getParticleProvider().playerSpawn(player, effect, loc, color);
+                FactionsPlugin.instance().particleProvider().playerSpawn(player, effect, loc, color);
             }
         }
     }

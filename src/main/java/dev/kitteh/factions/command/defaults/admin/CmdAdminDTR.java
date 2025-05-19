@@ -18,7 +18,7 @@ public class CmdAdminDTR implements Cmd {
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
         return (manager, builder) -> {
             Command.Builder<Sender> dtrBuilder = builder.literal("dtr")
-                    .permission(builder.commandPermission().and(Cloudy.predicate(s-> FactionsPlugin.getInstance().getLandRaidControl() instanceof DTRControl)));
+                    .permission(builder.commandPermission().and(Cloudy.predicate(s-> FactionsPlugin.instance().landRaidControl() instanceof DTRControl)));
 
             new CmdDTRModify().consumer().accept(manager, dtrBuilder);
             new CmdDTRResetAll().consumer().accept(manager, dtrBuilder);

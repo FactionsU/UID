@@ -24,7 +24,7 @@ public class CmdMoneyModify implements Cmd {
         return (manager, builder) -> {
             Command.Builder<Sender> moneyBuilder = builder.literal("money")
                     .commandDescription(Cloudy.desc(TL.COMMAND_MONEYMODIFY_DESCRIPTION))
-                    .permission(builder.commandPermission().and(Cloudy.predicate(s->FactionsPlugin.getInstance().conf().economy().isBankEnabled()).and(Cloudy.hasPermission(Permission.MONEY_MODIFY))))
+                    .permission(builder.commandPermission().and(Cloudy.predicate(s->FactionsPlugin.instance().conf().economy().isBankEnabled()).and(Cloudy.hasPermission(Permission.MONEY_MODIFY))))
                     .required("faction", FactionParser.of(FactionParser.Include.SELF));
 
 
@@ -45,7 +45,7 @@ public class CmdMoneyModify implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context, boolean modify) {
-        if (!FactionsPlugin.getInstance().conf().economy().isBankEnabled()) {
+        if (!FactionsPlugin.instance().conf().economy().isBankEnabled()) {
             context.sender().msg(TL.ECON_DISABLED);
             return;
         }
@@ -59,8 +59,8 @@ public class CmdMoneyModify implements Cmd {
                 faction.msg(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYMODIFY_NOTIFY.toString(), faction.describeTo(null), Econ.moneyString(amount)));
             }
 
-            if (FactionsPlugin.getInstance().conf().logging().isMoneyTransactions()) {
-                FactionsPlugin.getInstance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYMODIFY_MODIFIED.toString(), faction.describeTo(null), Econ.moneyString(amount))));
+            if (FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
+                FactionsPlugin.instance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYMODIFY_MODIFIED.toString(), faction.describeTo(null), Econ.moneyString(amount))));
             }
         }
     }

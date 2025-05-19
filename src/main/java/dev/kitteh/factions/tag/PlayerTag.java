@@ -24,7 +24,7 @@ public enum PlayerTag implements Tag {
         if (fp.isOnline() && !fp.isVanished()) {
             return ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString();
         }
-        long duration = Math.max(System.currentTimeMillis() - fp.lastLogin(), FactionsPlugin.getInstance().conf().factions().other().getMinimumLastSeenTime() * 1000L);
+        long duration = Math.max(System.currentTimeMillis() - fp.lastLogin(), FactionsPlugin.instance().conf().factions().other().getMinimumLastSeenTime() * 1000L);
         String humanized = DurationFormatUtils.formatDurationWords(duration, true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
         return duration < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized;
     }),

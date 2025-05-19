@@ -35,12 +35,12 @@ public class Essentials {
 
     // return false if feature is disabled or Essentials isn't available
     public static boolean handleTeleport(Player player, Location loc) {
-        if (!FactionsPlugin.getInstance().conf().factions().homes().isTeleportCommandEssentialsIntegration() || essentials == null) {
+        if (!FactionsPlugin.instance().conf().factions().homes().isTeleportCommandEssentialsIntegration() || essentials == null) {
             return false;
         }
 
         AsyncTeleport teleport = essentials.getUser(player).getAsyncTeleport();
-        Trade trade = new Trade(BigDecimal.valueOf(FactionsPlugin.getInstance().conf().economy().getCostHome()), essentials);
+        Trade trade = new Trade(BigDecimal.valueOf(FactionsPlugin.instance().conf().economy().getCostHome()), essentials);
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         future.exceptionally(e -> {
             player.sendMessage(ChatColor.RED + e.getMessage());

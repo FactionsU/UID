@@ -16,18 +16,18 @@ public class FDefaultSidebar extends FSidebarProvider {
 
     @Override
     public String getTitle(FPlayer fplayer) {
-        if (FactionsPlugin.getInstance().conf().scoreboard().constant().isFactionlessEnabled() && !fplayer.hasFaction()) {
-            return replaceTags(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getFactionlessTitle());
+        if (FactionsPlugin.instance().conf().scoreboard().constant().isFactionlessEnabled() && !fplayer.hasFaction()) {
+            return replaceTags(fplayer, FactionsPlugin.instance().conf().scoreboard().constant().getFactionlessTitle());
         }
-        return replaceTags(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getTitle());
+        return replaceTags(fplayer, FactionsPlugin.instance().conf().scoreboard().constant().getTitle());
     }
 
     @Override
     public List<String> getLines(FPlayer fplayer) {
-        if (FactionsPlugin.getInstance().conf().scoreboard().constant().isFactionlessEnabled() && !fplayer.hasFaction()) {
-            return getOutput(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getFactionlessContent());
+        if (FactionsPlugin.instance().conf().scoreboard().constant().isFactionlessEnabled() && !fplayer.hasFaction()) {
+            return getOutput(fplayer, FactionsPlugin.instance().conf().scoreboard().constant().getFactionlessContent());
         }
-        return getOutput(fplayer, FactionsPlugin.getInstance().conf().scoreboard().constant().getContent());
+        return getOutput(fplayer, FactionsPlugin.instance().conf().scoreboard().constant().getContent());
     }
 
     public List<String> getOutput(FPlayer fplayer, List<String> lines) {

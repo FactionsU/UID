@@ -29,18 +29,18 @@ public interface Upgrade {
     interface Impl extends Upgrade {
         @Override
         default Component nameComponent() {
-            return MiniMessage.miniMessage().deserialize(tl().apply(FactionsPlugin.getInstance().tl().upgrades()).getName());
+            return MiniMessage.miniMessage().deserialize(tl().apply(FactionsPlugin.instance().tl().upgrades()).getName());
         }
 
         @Override
         default Component description() {
-            return MiniMessage.miniMessage().deserialize(tl().apply(FactionsPlugin.getInstance().tl().upgrades()).getDescription());
+            return MiniMessage.miniMessage().deserialize(tl().apply(FactionsPlugin.instance().tl().upgrades()).getDescription());
         }
 
         @Override
         default Component details(UpgradeSettings settings, int level) {
             return MiniMessage.miniMessage().deserialize(
-                    tl().apply(FactionsPlugin.getInstance().tl().upgrades()).getDetail(),
+                    tl().apply(FactionsPlugin.instance().tl().upgrades()).getDetail(),
                     TagResolver.resolver(this.variables().stream().map(up -> Placeholder.unparsed(up.name(), up.formatter().apply(settings.valueAt(up, level)))).toList())
             );
         }

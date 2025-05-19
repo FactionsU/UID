@@ -16,8 +16,8 @@ import java.util.Objects;
 @NullMarked
 public class FactionSelector extends AbstractSelector {
     public static final String NAME = "faction";
-    public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, FactionsPlugin.getInstance().tl().permissions().selectors().faction()::getDisplayName, FactionSelector::new)
-            .withInstructions(FactionsPlugin.getInstance().tl().permissions().selectors().faction()::getInstructions);
+    public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, FactionsPlugin.instance().tl().permissions().selectors().faction()::getDisplayName, FactionSelector::new)
+            .withInstructions(FactionsPlugin.instance().tl().permissions().selectors().faction()::getInstructions);
 
     private final int id;
     private final String lastKnown;
@@ -65,7 +65,7 @@ public class FactionSelector extends AbstractSelector {
     public Component displayValue(Faction context) {
         Faction faction = Factions.factions().get(this.id);
         return faction == null ?
-                MiniMessage.miniMessage().deserialize(FactionsPlugin.getInstance().tl().permissions().selectors().faction().getDisbandedValue(), Placeholder.unparsed("lastknown", this.lastKnown)) :
+                MiniMessage.miniMessage().deserialize(FactionsPlugin.instance().tl().permissions().selectors().faction().getDisbandedValue(), Placeholder.unparsed("lastknown", this.lastKnown)) :
                 LegacyComponentSerializer.legacySection().deserialize(faction.tagString(context));
     }
 

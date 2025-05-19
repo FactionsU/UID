@@ -54,8 +54,8 @@ public class CmdForceKick implements Cmd {
         toKickFaction.msg(TL.COMMAND_KICK_FACTION, sender.describeTo(toKickFaction, true), toKick.describeTo(toKickFaction, true));
         toKick.msg(TL.COMMAND_KICK_KICKED, sender.describeTo(toKick, true), toKickFaction.describeTo(toKick));
 
-        if (FactionsPlugin.getInstance().conf().logging().isFactionKick()) {
-            FactionsPlugin.getInstance().log(sender.name() + " kicked " + toKick.name() + " from the faction: " + toKickFaction.tag());
+        if (FactionsPlugin.instance().conf().logging().isFactionKick()) {
+            FactionsPlugin.instance().log(sender.name() + " kicked " + toKick.name() + " from the faction: " + toKickFaction.tag());
         }
 
         if (toKick.role() == Role.ADMIN) {
