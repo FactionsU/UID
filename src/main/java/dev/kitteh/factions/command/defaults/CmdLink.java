@@ -16,14 +16,12 @@ import java.util.function.BiConsumer;
 public class CmdLink implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("link")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_LINK_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LINK).and(Cloudy.hasFaction())))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("link")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_LINK_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LINK).and(Cloudy.hasFaction())))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

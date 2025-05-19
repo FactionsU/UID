@@ -18,15 +18,13 @@ import java.util.function.BiConsumer;
 public class CmdSetPeaceful implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("peaceful")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_PEACEFUL_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SET_PEACEFUL)))
-                            .required("faction", FactionParser.of(FactionParser.Include.SELF))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("peaceful")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_PEACEFUL_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SET_PEACEFUL)))
+                        .required("faction", FactionParser.of(FactionParser.Include.SELF))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

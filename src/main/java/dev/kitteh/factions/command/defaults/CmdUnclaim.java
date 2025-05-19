@@ -34,45 +34,43 @@ import java.util.function.BiConsumer;
 public class CmdUnclaim implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("unclaim")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_UNCLAIM_DESCRIPTION))
-                            .permission(
-                                    builder.commandPermission()
-                                            .and(Cloudy.hasPermission(Permission.UNCLAIM)
-                                                    .and(
-                                                            Cloudy.hasFaction()
-                                                                    .or(Cloudy.hasPermission(Permission.MANAGE_SAFE_ZONE).or(Cloudy.hasPermission(Permission.MANAGE_WAR_ZONE)))
-                                                    )
-                                            )
-                            )
-                            .flag(manager.flagBuilder("faction").withComponent(FactionParser.of()))
-                            .flag(
-                                    manager.flagBuilder("radius")
-                                            .withComponent(IntegerParser.integerParser(1))
-                                            .withPermission(Cloudy.hasPermission(Permission.CLAIM_RADIUS))
-                            )
-                            .flag(
-                                    manager.flagBuilder("fill")
-                                            .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
-                            )
-                            .flag(
-                                    manager.flagBuilder("fill-limit")
-                                            .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
-                                            .withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims()))
-                            )
-                            .flag(
-                                    manager.flagBuilder("auto")
-                                            .withPermission(Cloudy.hasPermission(Permission.AUTOCLAIM))
-                            )
-                            .flag(
-                                    manager.flagBuilder("all-territory")
-                                            .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_ALL).and(Cloudy.isAtLeastRole(Role.ADMIN).or(Cloudy.isBypass())))
-                            )
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("unclaim")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_UNCLAIM_DESCRIPTION))
+                        .permission(
+                                builder.commandPermission()
+                                        .and(Cloudy.hasPermission(Permission.UNCLAIM)
+                                                .and(
+                                                        Cloudy.hasFaction()
+                                                                .or(Cloudy.hasPermission(Permission.MANAGE_SAFE_ZONE).or(Cloudy.hasPermission(Permission.MANAGE_WAR_ZONE)))
+                                                )
+                                        )
+                        )
+                        .flag(manager.flagBuilder("faction").withComponent(FactionParser.of()))
+                        .flag(
+                                manager.flagBuilder("radius")
+                                        .withComponent(IntegerParser.integerParser(1))
+                                        .withPermission(Cloudy.hasPermission(Permission.CLAIM_RADIUS))
+                        )
+                        .flag(
+                                manager.flagBuilder("fill")
+                                        .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
+                        )
+                        .flag(
+                                manager.flagBuilder("fill-limit")
+                                        .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
+                                        .withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims()))
+                        )
+                        .flag(
+                                manager.flagBuilder("auto")
+                                        .withPermission(Cloudy.hasPermission(Permission.AUTOCLAIM))
+                        )
+                        .flag(
+                                manager.flagBuilder("all-territory")
+                                        .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_ALL).and(Cloudy.isAtLeastRole(Role.ADMIN).or(Cloudy.isBypass())))
+                        )
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

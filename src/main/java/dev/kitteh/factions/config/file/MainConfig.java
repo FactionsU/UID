@@ -985,12 +985,12 @@ public class MainConfig {
             private int tagInsertIndex = 0;
             private boolean tagPadBefore = false;
             private boolean tagPadAfter = true;
-            private String tagFormat = "%s\u00A7f";
+            private String tagFormat = "%s§f";
             private boolean alwaysShowChatTag = true;
-            private String factionChatFormat = "%s:\u00A7f %s";
-            private String allianceChatFormat = "\u00A7d%s:\u00A7f %s";
-            private String truceChatFormat = "\u00A75%s:\u00A7f %s";
-            private String modChatFormat = "\u00A7c%s:\u00A7f %s";
+            private String factionChatFormat = "%s:§f %s";
+            private String allianceChatFormat = "§d%s:§f %s";
+            private String truceChatFormat = "§5%s:§f %s";
+            private String modChatFormat = "§c%s:§f %s";
             private boolean broadcastDescriptionChanges = false;
             private boolean broadcastTagChanges = false;
             @Comment("Add items here (comma-separated) for commands to listen to that will auto-return the user to public chat")

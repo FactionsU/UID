@@ -23,25 +23,23 @@ import java.util.function.BiConsumer;
 public class CmdSetHome implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(builder.literal("home")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_SETHOME_DESCRIPTION))
-                    .permission(builder.commandPermission().and(
-                            Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled())
-                                    .and(Cloudy.hasPermission(Permission.SETHOME))
-                                    .and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETHOME))
-                    ))
-                    .flag(
-                            manager.flagBuilder("delete")
-                                    .withPermission(
-                                            Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled())
-                                                    .and(Cloudy.hasPermission(Permission.DELHOME))
-                                                    .and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETHOME))
-                                    )
-                    )
-                    .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(builder.literal("home")
+                .commandDescription(Cloudy.desc(TL.COMMAND_SETHOME_DESCRIPTION))
+                .permission(builder.commandPermission().and(
+                        Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled())
+                                .and(Cloudy.hasPermission(Permission.SETHOME))
+                                .and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETHOME))
+                ))
+                .flag(
+                        manager.flagBuilder("delete")
+                                .withPermission(
+                                        Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled())
+                                                .and(Cloudy.hasPermission(Permission.DELHOME))
+                                                .and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETHOME))
+                                )
+                )
+                .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

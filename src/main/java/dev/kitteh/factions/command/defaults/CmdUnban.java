@@ -18,15 +18,13 @@ import java.util.function.BiConsumer;
 public class CmdUnban implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("unban")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_UNBAN_DESCRIPTION))
-                            .required("player", FPlayerParser.of(FPlayerParser.Include.OTHER_FACTION)) // TODO can I make this the list
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BAN).and(Cloudy.hasSelfFactionPerms(PermissibleActions.BAN))))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("unban")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_UNBAN_DESCRIPTION))
+                        .required("player", FPlayerParser.of(FPlayerParser.Include.OTHER_FACTION)) // TODO can I make this the list
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BAN).and(Cloudy.hasSelfFactionPerms(PermissibleActions.BAN))))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

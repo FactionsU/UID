@@ -145,9 +145,7 @@ public class CommandsRoot {
                                         .collect(Collectors.toList())
                                 )
                         )
-                        .handler(context -> {
-                            help.queryCommands(context.get("query"), context.sender());
-                        })
+                        .handler(context -> help.queryCommands(context.get("query"), context.sender()))
         );
 
         registry = null; // Last step!

@@ -17,16 +17,14 @@ import java.util.function.BiConsumer;
 public class CmdSetPower implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("set")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_MODIFYPOWER_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MODIFY_POWER)))
-                            .required("player", FPlayerParser.of(FPlayerParser.Include.ALL))
-                            .required("value", DoubleParser.doubleParser())
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("set")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_MODIFYPOWER_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MODIFY_POWER)))
+                        .required("player", FPlayerParser.of(FPlayerParser.Include.ALL))
+                        .required("value", DoubleParser.doubleParser())
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

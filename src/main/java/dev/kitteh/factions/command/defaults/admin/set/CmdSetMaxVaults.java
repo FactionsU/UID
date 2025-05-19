@@ -18,16 +18,14 @@ import java.util.function.BiConsumer;
 public class CmdSetMaxVaults implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("maxvaults")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_SETMAXVAULTS_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.predicate(s -> Bukkit.getServer().getPluginManager().isPluginEnabled("PlayerVaults")).and(Cloudy.hasPermission(Permission.SETMAXVAULTS))))
-                            .required("faction", FactionParser.of(FactionParser.Include.SELF))
-                            .required("number", IntegerParser.integerParser(0))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("maxvaults")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_SETMAXVAULTS_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.predicate(s -> Bukkit.getServer().getPluginManager().isPluginEnabled("PlayerVaults")).and(Cloudy.hasPermission(Permission.SETMAXVAULTS))))
+                        .required("faction", FactionParser.of(FactionParser.Include.SELF))
+                        .required("number", IntegerParser.integerParser(0))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

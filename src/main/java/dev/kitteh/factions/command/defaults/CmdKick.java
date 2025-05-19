@@ -26,15 +26,13 @@ import java.util.function.BiConsumer;
 public class CmdKick implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("kick")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_KICK_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.KICK).and(Cloudy.hasSelfFactionPerms(PermissibleActions.KICK))))
-                            .optional("target", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("kick")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_KICK_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.KICK).and(Cloudy.hasSelfFactionPerms(PermissibleActions.KICK))))
+                        .optional("target", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

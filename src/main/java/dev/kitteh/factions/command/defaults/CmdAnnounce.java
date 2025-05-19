@@ -19,15 +19,13 @@ import java.util.function.BiConsumer;
 public class CmdAnnounce implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("announce")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_ANNOUNCE_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.ANNOUNCE).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
-                            .required("message", StringParser.greedyStringParser())
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("announce")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_ANNOUNCE_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.ANNOUNCE).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
+                        .required("message", StringParser.greedyStringParser())
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

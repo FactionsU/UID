@@ -140,7 +140,7 @@ public class Econ {
             return true;
         }
 
-        // Players with the any withdraw can do.
+        // Players with the any-withdraw can do.
         if (i instanceof FPlayer fPlayer && Permission.MONEY_WITHDRAW_ANY.has(fPlayer.asPlayer())) {
             return true;
         }
@@ -150,7 +150,7 @@ public class Econ {
             return true;
         }
 
-        // A faction can always transfer away the money of it's members and its own money...
+        // A faction can always transfer away the money of its members and its own money...
         // This will however probably never happen as a faction does not have free will.
         // Ohh by the way... Yes it could. For daily rent to the faction.
         if (i == fI && fI == fYou) {

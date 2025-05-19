@@ -21,16 +21,14 @@ import java.util.function.BiConsumer;
 public class CmdSetTitle implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("title")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_TITLE_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TITLE).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
-                            .required("player", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION))
-                            .optional("title", StringParser.greedyStringParser())
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("title")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_TITLE_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TITLE).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
+                        .required("player", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION))
+                        .optional("title", StringParser.greedyStringParser())
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

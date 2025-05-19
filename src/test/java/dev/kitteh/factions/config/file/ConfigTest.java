@@ -33,7 +33,7 @@ public class ConfigTest {
         field.setAccessible(true);
         Object oo = field.get(o);
         Assertions.assertNotNull(oo, field.getName() + " was null");
-        if (oo.getClass().getPackage().getName().startsWith("com.massivecraft.factions.config")) {
+        if (oo.getClass().getPackage().getName().startsWith("dev.kitteh.factions.config")) {
             assertNotNull(oo, oo.getClass());
         }
     }

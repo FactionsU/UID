@@ -23,17 +23,15 @@ import java.util.function.BiConsumer;
 public class CmdMap implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("map")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_MAP_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MAP).and(Cloudy.isPlayer())))
-                            .flag(manager.flagBuilder("auto-on"))
-                            .flag(manager.flagBuilder("auto-off"))
-                            .flag(manager.flagBuilder("setheight").withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().map().getHeight() * 2)))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("map")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_MAP_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MAP).and(Cloudy.isPlayer())))
+                        .flag(manager.flagBuilder("auto-on"))
+                        .flag(manager.flagBuilder("auto-off"))
+                        .flag(manager.flagBuilder("setheight").withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().map().getHeight() * 2)))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

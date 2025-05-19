@@ -25,20 +25,18 @@ import java.util.function.BiConsumer;
 public class CmdTNTSiphon implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("siphon")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_TNT_SIPHON_DESCRIPTION))
-                            .permission(
-                                    builder.commandPermission()
-                                            .and(Cloudy.hasPermission(Permission.TNT_SIPHON))
-                                            .and(Cloudy.hasSelfFactionPerms(PermissibleActions.TNTDEPOSIT))
-                            )
-                            .required("radius", IntegerParser.integerParser(1))
-                            .optional("amount", IntegerParser.integerParser(1))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("siphon")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_TNT_SIPHON_DESCRIPTION))
+                        .permission(
+                                builder.commandPermission()
+                                        .and(Cloudy.hasPermission(Permission.TNT_SIPHON))
+                                        .and(Cloudy.hasSelfFactionPerms(PermissibleActions.TNTDEPOSIT))
+                        )
+                        .required("radius", IntegerParser.integerParser(1))
+                        .optional("amount", IntegerParser.integerParser(1))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

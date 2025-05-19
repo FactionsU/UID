@@ -165,9 +165,8 @@ public abstract class MemoryBoard implements Board {
         for (WorldTracker tracker : worldTrackers.values()) {
             for (int factionId : tracker.ids()) {
                 if (Factions.factions().get(factionId) == null) {
-                    this.worldTrackers.values().stream().flatMap(wt -> wt.allClaims(factionId).stream()).forEach(loc -> {
-                        FactionsPlugin.instance().log("Board cleaner removed id " + factionId + " from " + loc);
-                    });
+                    this.worldTrackers.values().stream().flatMap(wt -> wt.allClaims(factionId).stream())
+                            .forEach(loc -> FactionsPlugin.instance().log("Board cleaner removed id " + factionId + " from " + loc));
                     this.worldTrackers.values().forEach(wt -> wt.removeAllClaims(factionId));
                 }
             }
@@ -333,7 +332,7 @@ public abstract class MemoryBoard implements Board {
 
             for (int c = 0; c < width; c++) {
                 if (c == halfWidth && r == halfHeight) {
-                    builder.append(Component.text().content("\u2B1B").color(FactionsPlugin.instance().conf().map().getSelfColor()));
+                    builder.append(Component.text().content("⬛").color(FactionsPlugin.instance().conf().map().getSelfColor()));
                 } else {
                     FLocation flocationHere = switch (dir) {
                         case N -> topLeft.relative(c, r);
@@ -344,18 +343,18 @@ public abstract class MemoryBoard implements Board {
                     Faction factionHere = factionAt(flocationHere);
                     Relation relation = fplayer.relationTo(factionHere);
                     if (factionHere.isWilderness()) {
-                        builder.append(Component.text().content("\u2B1B").color(FactionsPlugin.instance().conf().colors().factions().getWilderness()));
+                        builder.append(Component.text().content("⬛").color(FactionsPlugin.instance().conf().colors().factions().getWilderness()));
                     } else if (factionHere.isSafeZone()) {
-                        builder.append(Component.text().content("\u2B1B").color(FactionsPlugin.instance().conf().colors().factions().getSafezone()));
+                        builder.append(Component.text().content("⬛").color(FactionsPlugin.instance().conf().colors().factions().getSafezone()));
                     } else if (factionHere.isWarZone()) {
-                        builder.append(Component.text().content("\u2B1B").color(FactionsPlugin.instance().conf().colors().factions().getWarzone()));
+                        builder.append(Component.text().content("⬛").color(FactionsPlugin.instance().conf().colors().factions().getWarzone()));
                     } else if (factionHere == faction || factionHere == factionLoc || relation.isAtLeast(Relation.ALLY) ||
                             (FactionsPlugin.instance().conf().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
                             (FactionsPlugin.instance().conf().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
                             FactionsPlugin.instance().conf().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
-                        builder.append(Component.text().content("\u2B1B").color(factionHere.textColorTo(faction)));
+                        builder.append(Component.text().content("⬛").color(factionHere.textColorTo(faction)));
                     } else {
-                        builder.append(Component.text().content("\u2B1B").color(NamedTextColor.GRAY));
+                        builder.append(Component.text().content("⬛").color(NamedTextColor.GRAY));
                     }
                 }
             }

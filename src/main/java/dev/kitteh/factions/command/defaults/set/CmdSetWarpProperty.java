@@ -17,17 +17,15 @@ import java.util.function.BiConsumer;
 public class CmdSetWarpProperty implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("warp-property")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_SETFWARPPROPERTY_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SETWARP).and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETWARP))))
-                            .required("name", StringParser.stringParser())
-                            .flag(manager.flagBuilder("password").withComponent(StringParser.stringParser()))
-                            .flag(manager.flagBuilder("remove-password"))// TODO more flags, translatable password string
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("warp-property")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_SETFWARPPROPERTY_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SETWARP).and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETWARP))))
+                        .required("name", StringParser.stringParser())
+                        .flag(manager.flagBuilder("password").withComponent(StringParser.stringParser()))
+                        .flag(manager.flagBuilder("remove-password"))// TODO more flags, translatable password string
+                        .handler(this::handle)
+        );
     }
 
     private void handle(org.incendo.cloud.context.CommandContext<Sender> context) {

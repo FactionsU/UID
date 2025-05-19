@@ -21,15 +21,13 @@ import java.util.function.BiConsumer;
 public class CmdListBans implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("banlist")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_BANLIST_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BAN).and(Cloudy.hasFaction())))
-                            .optional("faction", FactionParser.of(FactionParser.Include.SELF))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("banlist")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_BANLIST_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BAN).and(Cloudy.hasFaction())))
+                        .optional("faction", FactionParser.of(FactionParser.Include.SELF))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

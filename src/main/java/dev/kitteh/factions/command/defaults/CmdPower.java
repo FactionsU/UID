@@ -18,18 +18,16 @@ import java.util.function.BiConsumer;
 public class CmdPower implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("power")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_POWER_DESCRIPTION))
-                            .permission(builder.commandPermission().and(
-                                    Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof PowerControl)
-                                            .and(Cloudy.hasPermission(Permission.POWER))
-                            ))
-                            .optional("player", FPlayerParser.of(FPlayerParser.Include.ALL))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("power")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_POWER_DESCRIPTION))
+                        .permission(builder.commandPermission().and(
+                                Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof PowerControl)
+                                        .and(Cloudy.hasPermission(Permission.POWER))
+                        ))
+                        .optional("player", FPlayerParser.of(FPlayerParser.Include.ALL))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

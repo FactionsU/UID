@@ -23,19 +23,17 @@ import java.util.function.BiConsumer;
 public class CmdMoneyWithdraw implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("withdraw")
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MONEY_WITHDRAW)).and(Cloudy.isPlayer()))
-                            .required("amount", DoubleParser.doubleParser(0))
-                            .flag(
-                                    manager.flagBuilder("faction")
-                                            .withComponent(FactionParser.of(FactionParser.Include.SELF))
-                                            .withPermission(Cloudy.hasPermission(Permission.MONEY_WITHDRAW_ANY))
-                            )
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("withdraw")
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MONEY_WITHDRAW)).and(Cloudy.isPlayer()))
+                        .required("amount", DoubleParser.doubleParser(0))
+                        .flag(
+                                manager.flagBuilder("faction")
+                                        .withComponent(FactionParser.of(FactionParser.Include.SELF))
+                                        .withPermission(Cloudy.hasPermission(Permission.MONEY_WITHDRAW_ANY))
+                        )
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

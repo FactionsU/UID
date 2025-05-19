@@ -35,24 +35,22 @@ import java.util.function.BiConsumer;
 public class CmdHome implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("home")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_HOME_DESCRIPTION))
-                            .permission(builder.commandPermission().and(
-                                    Cloudy.hasPermission(Permission.HOME)
-                                            .and(Cloudy.hasFaction())
-                                            .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled()))
-                                            .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isTeleportCommandEnabled()))
-                            ))
-                            .flag(
-                                    manager.flagBuilder("faction")
-                                            .withComponent(FactionParser.of(FactionParser.Include.PLAYERS))
-                                            .withPermission(Cloudy.isBypass())
-                            )
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("home")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_HOME_DESCRIPTION))
+                        .permission(builder.commandPermission().and(
+                                Cloudy.hasPermission(Permission.HOME)
+                                        .and(Cloudy.hasFaction())
+                                        .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled()))
+                                        .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isTeleportCommandEnabled()))
+                        ))
+                        .flag(
+                                manager.flagBuilder("faction")
+                                        .withComponent(FactionParser.of(FactionParser.Include.PLAYERS))
+                                        .withPermission(Cloudy.isBypass())
+                        )
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

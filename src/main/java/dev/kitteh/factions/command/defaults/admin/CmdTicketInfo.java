@@ -52,15 +52,13 @@ public class CmdTicketInfo implements Cmd {
 
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("bypass")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_TICKETINFO_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DEBUG)))
-                            .flag(manager.flagBuilder("full"))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("bypass")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_TICKETINFO_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DEBUG)))
+                        .flag(manager.flagBuilder("full"))
+                        .handler(this::handle)
+        );
     }
 
     @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "MismatchedQueryAndUpdateOfCollection", "unused"})

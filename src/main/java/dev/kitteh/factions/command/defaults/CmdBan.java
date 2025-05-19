@@ -24,15 +24,13 @@ import java.util.logging.Level;
 public class CmdBan implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("ban")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_BAN_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BAN).and(Cloudy.hasSelfFactionPerms(PermissibleActions.BAN))))
-                            .required("player", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION, FPlayerParser.Include.ROLE_BELOW, FPlayerParser.Include.OTHER_FACTION))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("ban")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_BAN_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BAN).and(Cloudy.hasSelfFactionPerms(PermissibleActions.BAN))))
+                        .required("player", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION, FPlayerParser.Include.ROLE_BELOW, FPlayerParser.Include.OTHER_FACTION))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

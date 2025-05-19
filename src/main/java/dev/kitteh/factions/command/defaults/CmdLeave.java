@@ -15,14 +15,12 @@ import java.util.function.BiConsumer;
 public class CmdLeave implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("leave")
-                            .commandDescription(Cloudy.desc(TL.LEAVE_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LEAVE).and(Cloudy.hasFaction())))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("leave")
+                        .commandDescription(Cloudy.desc(TL.LEAVE_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LEAVE).and(Cloudy.hasFaction())))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

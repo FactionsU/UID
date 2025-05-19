@@ -52,7 +52,7 @@ public class FDefaultSidebar extends FSidebarProvider {
                 }
                 String rep = mapMap.isEmpty() ? "" : LegacyComponentSerializer.legacySection().serialize(mapMap.removeFirst());
                 if (!rep.isEmpty() && !mapC.isEmpty()) {
-                    rep = "\u00A7" + mapC.charAt(0) + "\u00A7r" + rep;
+                    rep = "§" + mapC.charAt(0) + "§r" + rep;
                     mapC = mapC.substring(1);
                 }
                 next = next.replace("{map}", rep);

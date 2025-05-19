@@ -22,15 +22,13 @@ import java.util.function.BiConsumer;
 public class CmdMoneyDeposit implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("deposit")
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MONEY_DEPOSIT)).and(Cloudy.isPlayer()))
-                            .required("amount", DoubleParser.doubleParser(0))
-                            .flag(manager.flagBuilder("faction").withComponent(FactionParser.of(FactionParser.Include.SELF)))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("deposit")
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MONEY_DEPOSIT)).and(Cloudy.isPlayer()))
+                        .required("amount", DoubleParser.doubleParser(0))
+                        .flag(manager.flagBuilder("faction").withComponent(FactionParser.of(FactionParser.Include.SELF)))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

@@ -16,14 +16,12 @@ import java.util.function.BiConsumer;
 public class CmdToggleScoreboard implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("scoreboard")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_SCOREBOARD_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SCOREBOARD).and(Cloudy.isPlayer())))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("scoreboard")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_SCOREBOARD_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SCOREBOARD).and(Cloudy.isPlayer())))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

@@ -36,14 +36,12 @@ import java.util.function.BiConsumer;
 public class CmdUpgrades implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("upgrades")
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.UPGRADES).and(Cloudy.hasFaction())))
-                            .commandDescription(Cloudy.desc(TL.COMMAND_UPGRADES_DESCRIPTION))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("upgrades")
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.UPGRADES).and(Cloudy.hasFaction())))
+                        .commandDescription(Cloudy.desc(TL.COMMAND_UPGRADES_DESCRIPTION))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

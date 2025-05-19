@@ -32,20 +32,18 @@ import java.util.function.BiConsumer;
 public class CmdListClaims implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("claims")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_LISTCLAIMS_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LISTCLAIMS).and(Cloudy.hasSelfFactionPerms(PermissibleActions.LISTCLAIMS))))
-                            .flag(manager.flagBuilder("world").withComponent(StringParser.stringParser()))
-                            .flag(
-                                    manager.flagBuilder("faction")
-                                            .withComponent(FactionParser.of(FactionParser.Include.SELF))
-                                            .withPermission(Cloudy.hasPermission(Permission.LISTCLAIMS_OTHER))
-                            )
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("claims")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_LISTCLAIMS_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LISTCLAIMS).and(Cloudy.hasSelfFactionPerms(PermissibleActions.LISTCLAIMS))))
+                        .flag(manager.flagBuilder("world").withComponent(StringParser.stringParser()))
+                        .flag(
+                                manager.flagBuilder("faction")
+                                        .withComponent(FactionParser.of(FactionParser.Include.SELF))
+                                        .withPermission(Cloudy.hasPermission(Permission.LISTCLAIMS_OTHER))
+                        )
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

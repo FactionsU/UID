@@ -19,16 +19,14 @@ import java.util.function.BiConsumer;
 public class CmdDTRModify implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("modify")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_DTR_MODIFY_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MODIFY_DTR)))
-                            .required("faction", FactionParser.of(FactionParser.Include.SELF))
-                            .required("amount", DoubleParser.doubleParser(0))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("modify")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_DTR_MODIFY_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MODIFY_DTR)))
+                        .required("faction", FactionParser.of(FactionParser.Include.SELF))
+                        .required("amount", DoubleParser.doubleParser(0))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

@@ -32,16 +32,14 @@ import java.util.function.Function;
 public class CmdTop implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("top")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_TOP_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TOP)))
-                            .required("criteria", StringParser.stringParser(), SuggestionProvider.suggestingStrings(topValueGenerators.keySet()))
-                            .optional("page", IntegerParser.integerParser(1))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("top")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_TOP_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TOP)))
+                        .required("criteria", StringParser.stringParser(), SuggestionProvider.suggestingStrings(topValueGenerators.keySet()))
+                        .optional("page", IntegerParser.integerParser(1))
+                        .handler(this::handle)
+        );
     }
 
     private static final Map<String, Function<Faction, FTopValue<?>>> topValueGenerators = new HashMap<>();

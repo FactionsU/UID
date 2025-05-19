@@ -24,16 +24,14 @@ import java.util.function.BiConsumer;
 public class CmdInvite implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("invite")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_INVITE_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.INVITE).and(Cloudy.hasSelfFactionPerms(PermissibleActions.INVITE))))
-                            .required("player", FPlayerParser.of(FPlayerParser.Include.OTHER_FACTION))
-                            .flag(manager.flagBuilder("delete"))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("invite")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_INVITE_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.INVITE).and(Cloudy.hasSelfFactionPerms(PermissibleActions.INVITE))))
+                        .required("player", FPlayerParser.of(FPlayerParser.Include.OTHER_FACTION))
+                        .flag(manager.flagBuilder("delete"))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

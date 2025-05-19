@@ -16,14 +16,12 @@ import java.util.function.BiConsumer;
 public class CmdReload implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("reload")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_RELOAD_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.RELOAD)))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("reload")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_RELOAD_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.RELOAD)))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

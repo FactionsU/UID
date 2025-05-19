@@ -11,7 +11,7 @@ public class TempMarkerSet {
     public boolean hideByDefault;
 
     public MarkerSet create(MarkerAPI markerApi, String id) {
-        MarkerSet ret = markerApi.createMarkerSet(id, this.label, null, false); // ("null, false" at the end means "all icons allowed, not perisistent")
+        MarkerSet ret = markerApi.createMarkerSet(id, this.label, null, false); // ("null, false" at the end means "all icons allowed, not persistent")
 
         if (ret == null) {
             return null;

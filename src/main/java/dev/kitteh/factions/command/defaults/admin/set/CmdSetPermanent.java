@@ -19,15 +19,13 @@ import java.util.function.BiConsumer;
 public class CmdSetPermanent implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("permanent")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_PERMANENT_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SET_PERMANENT)))
-                            .required("faction", FactionParser.of(FactionParser.Include.SELF))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("permanent")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_PERMANENT_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SET_PERMANENT)))
+                        .required("faction", FactionParser.of(FactionParser.Include.SELF))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

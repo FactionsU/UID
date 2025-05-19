@@ -28,17 +28,15 @@ import java.util.function.BiConsumer;
 public class CmdWarp implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("warp")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_FWARP_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.WARP).and(Cloudy.hasSelfFactionPerms(PermissibleActions.WARP).or(Cloudy.isBypass()))))
-                            .optional("warp", StringParser.stringParser())
-                            .optional("password", StringParser.stringParser())
-                            .flag(manager.flagBuilder("faction").withComponent(FactionParser.of()))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("warp")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_FWARP_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.WARP).and(Cloudy.hasSelfFactionPerms(PermissibleActions.WARP).or(Cloudy.isBypass()))))
+                        .optional("warp", StringParser.stringParser())
+                        .optional("password", StringParser.stringParser())
+                        .flag(manager.flagBuilder("faction").withComponent(FactionParser.of()))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {
@@ -61,7 +59,6 @@ public class CmdWarp implements Cmd {
 
             LazyLocation destination = faction.warp(warpName);
             if (destination != null) {
-                // Check if requires password and if so, check if valid. CASE SENSITIVE
                 if (!sender.adminBypass() && faction.hasWarpPassword(warpName) && !faction.isWarpPassword(warpName, passwordAttempt)) {
                     sender.msg(TL.COMMAND_FWARP_INVALID_PASSWORD);
                     return;

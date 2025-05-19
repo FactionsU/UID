@@ -16,14 +16,12 @@ import java.util.function.BiConsumer;
 public class CmdBypass implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("bypass")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_BYPASS_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BYPASS).and(Cloudy.isPlayer())))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("bypass")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_BYPASS_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BYPASS).and(Cloudy.isPlayer())))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

@@ -20,15 +20,13 @@ import java.util.function.BiConsumer;
 public class CmdJoin implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("join")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_JOIN_DESCRIPTION))
-                            .required("faction", FactionParser.of())
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.JOIN).and(Cloudy.isPlayer())))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("join")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_JOIN_DESCRIPTION))
+                        .required("faction", FactionParser.of())
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.JOIN).and(Cloudy.isPlayer())))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

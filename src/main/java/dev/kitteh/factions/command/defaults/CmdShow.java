@@ -40,15 +40,13 @@ import java.util.stream.Collectors;
 public class CmdShow implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("show")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_SHOW_COMMANDDESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SHOW)))
-                            .optional("faction", FactionParser.of(FactionParser.Include.SELF, FactionParser.Include.PLAYERS))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("show")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_SHOW_COMMANDDESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SHOW)))
+                        .optional("faction", FactionParser.of(FactionParser.Include.SELF, FactionParser.Include.PLAYERS))
+                        .handler(this::handle)
+        );
     }
 
     final List<String> defaults = new ArrayList<>();

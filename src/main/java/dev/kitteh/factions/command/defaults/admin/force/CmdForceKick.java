@@ -21,15 +21,13 @@ import java.util.function.BiConsumer;
 public class CmdForceKick implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("kick")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_KICK_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.KICK_ANY)))
-                            .required("target", FPlayerParser.of(FPlayerParser.Include.ALL))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("kick")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_KICK_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.KICK_ANY)))
+                        .required("target", FPlayerParser.of(FPlayerParser.Include.ALL))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

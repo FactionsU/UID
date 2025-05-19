@@ -16,14 +16,12 @@ import java.util.function.BiConsumer;
 public class CmdCoords implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("coords")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_COORDS_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.COORDS).and(Cloudy.hasFaction())))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("coords")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_COORDS_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.COORDS).and(Cloudy.hasFaction())))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

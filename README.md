@@ -1,5 +1,5 @@
 <center>
-  <a href="https://www.spigotmc.org/resources/factionsuuid.1035/"><img src="https://i.imgur.com/3PCF7tz.png"></a>
+  <a href="https://www.spigotmc.org/resources/factionsuuid.1035/"><img alt="FactionsUUID" src="https://i.imgur.com/3PCF7tz.png"></a>
 </center>
 
 [![Discord](https://imgur.com/MFRRBn4.png)](https://discord.gg/FfAz3eE)
@@ -34,7 +34,7 @@ Usage
 Installing
 ----------
 1. Download the latest release [on Spigot](https://www.spigotmc.org/resources/factionsuuid.1035/)
-2. Put Factions.jar in the plugins folder.
+2. Put Factions.jar in the `plugins` folder.
 
 Default config files will be created on the first run.
 

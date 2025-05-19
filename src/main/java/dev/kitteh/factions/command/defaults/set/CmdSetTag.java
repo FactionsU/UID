@@ -26,15 +26,13 @@ import java.util.function.BiConsumer;
 public class CmdSetTag implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("tag")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_TAG_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TAG).and(Cloudy.isAtLeastRole(Role.ADMIN))))
-                            .required("tag", StringParser.stringParser())
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("tag")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_TAG_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TAG).and(Cloudy.isAtLeastRole(Role.ADMIN))))
+                        .required("tag", StringParser.stringParser())
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

@@ -20,15 +20,13 @@ import java.util.function.BiConsumer;
 public class CmdSetOpen implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("open")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_OPEN_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.OPEN).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
-                            .optional("openstate", BooleanParser.booleanParser(true))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("open")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_OPEN_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.OPEN).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
+                        .optional("openstate", BooleanParser.booleanParser(true))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

@@ -673,7 +673,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         this.rawTags.put("i", "<yellow>"); // info
         this.rawTags.put("g", "<lime>"); // good
         this.rawTags.put("b", "<rose>"); // bad
-        this.rawTags.put("h", "<pink>"); // highligh
+        this.rawTags.put("h", "<pink>"); // highlight
         this.rawTags.put("c", "<aqua>"); // command
         this.rawTags.put("p", "<teal>"); // parameter
     }

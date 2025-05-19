@@ -91,7 +91,7 @@ public class SeeChunkUtil extends BukkitRunnable {
     }
 
     public static void showPillar(Player player, World world, int blockX, int blockZ, Particle effect, ParticleColor color) {
-        // Lets start at the player's Y spot -30 to optimize
+        // Let's start at the player's Y spot -30 to optimize
         for (int blockY = player.getLocation().getBlockY() - 30; blockY < player.getLocation().getBlockY() + 30; blockY++) {
             Location loc = new Location(world, blockX, blockY, blockZ);
             if (loc.getBlock().getType() != Material.AIR) {

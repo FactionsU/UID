@@ -39,14 +39,12 @@ public class CmdConfirm implements Cmd {
 
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("confirm")
-                            .permission(builder.commandPermission().and(Cloudy.hasFaction().or(Cloudy.predicate(s -> !s.isPlayer()))))
-                            .required("confirmation-string", StringParser.stringParser())
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("confirm")
+                        .permission(builder.commandPermission().and(Cloudy.hasFaction().or(Cloudy.predicate(s -> !s.isPlayer()))))
+                        .required("confirmation-string", StringParser.stringParser())
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

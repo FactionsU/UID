@@ -35,20 +35,18 @@ import java.util.stream.Collectors;
 public class CmdTNTFill implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("fill")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_TNT_FILL_DESCRIPTION))
-                            .permission(
-                                    builder.commandPermission()
-                                            .and(Cloudy.hasPermission(Permission.TNT_FILL))
-                                            .and(Cloudy.hasSelfFactionPerms(PermissibleActions.TNTWITHDRAW))
-                            )
-                            .required("radius", IntegerParser.integerParser(1))
-                            .required("amount", IntegerParser.integerParser(1))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("fill")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_TNT_FILL_DESCRIPTION))
+                        .permission(
+                                builder.commandPermission()
+                                        .and(Cloudy.hasPermission(Permission.TNT_FILL))
+                                        .and(Cloudy.hasSelfFactionPerms(PermissibleActions.TNTWITHDRAW))
+                        )
+                        .required("radius", IntegerParser.integerParser(1))
+                        .required("amount", IntegerParser.integerParser(1))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

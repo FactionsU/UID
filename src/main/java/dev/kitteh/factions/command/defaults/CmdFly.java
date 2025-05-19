@@ -22,23 +22,21 @@ import java.util.function.BiConsumer;
 public class CmdFly implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("fly")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_FLY_DESCRIPTION))
-                            .permission(builder.commandPermission().and(
-                                    Cloudy.predicate(s -> FactionsPlugin.instance().conf().commands().fly().isEnable())
-                                            .and(Cloudy.hasPermission(Permission.FLY))
-                                            .and(Cloudy.hasFaction())))
-                            .flag(manager.flagBuilder("auto").withPermission(Cloudy.hasPermission(Permission.FLY_AUTO)))
-                            .flag(
-                                    manager.flagBuilder("trail")
-                                            .withPermission(Cloudy.hasPermission(Permission.FLY_TRAILS))
-                                            .withComponent(BooleanParser.booleanParser(true))
-                            )
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("fly")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_FLY_DESCRIPTION))
+                        .permission(builder.commandPermission().and(
+                                Cloudy.predicate(s -> FactionsPlugin.instance().conf().commands().fly().isEnable())
+                                        .and(Cloudy.hasPermission(Permission.FLY))
+                                        .and(Cloudy.hasFaction())))
+                        .flag(manager.flagBuilder("auto").withPermission(Cloudy.hasPermission(Permission.FLY_AUTO)))
+                        .flag(
+                                manager.flagBuilder("trail")
+                                        .withPermission(Cloudy.hasPermission(Permission.FLY_TRAILS))
+                                        .withComponent(BooleanParser.booleanParser(true))
+                        )
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

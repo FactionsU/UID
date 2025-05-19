@@ -108,8 +108,8 @@ public class TextUtil {
     }
 
     public static String parseColorAmp(String string) {
-        string = string.replaceAll("(§([a-z0-9]))", "\u00A7$2");
-        string = string.replaceAll("(&([a-z0-9]))", "\u00A7$2");
+        string = string.replaceAll("(§([a-z0-9]))", "§$2");
+        string = string.replaceAll("(&([a-z0-9]))", "§$2");
         string = string.replace("&&", "&");
         return string;
     }
@@ -119,7 +119,7 @@ public class TextUtil {
     }
 
     public static String parseColorTags(String string) {
-        return string.replace("<empty>", "").replace("<black>", "\u00A70").replace("<navy>", "\u00A71").replace("<green>", "\u00A72").replace("<teal>", "\u00A73").replace("<red>", "\u00A74").replace("<purple>", "\u00A75").replace("<gold>", "\u00A76").replace("<silver>", "\u00A77").replace("<gray>", "\u00A78").replace("<blue>", "\u00A79").replace("<lime>", "\u00A7a").replace("<aqua>", "\u00A7b").replace("<rose>", "\u00A7c").replace("<pink>", "\u00A7d").replace("<yellow>", "\u00A7e").replace("<white>", "\u00A7f");
+        return string.replace("<empty>", "").replace("<black>", "§0").replace("<navy>", "§1").replace("<green>", "§2").replace("<teal>", "§3").replace("<red>", "§4").replace("<purple>", "§5").replace("<gold>", "§6").replace("<silver>", "§7").replace("<gray>", "§8").replace("<blue>", "§9").replace("<lime>", "§a").replace("<aqua>", "§b").replace("<rose>", "§c").replace("<pink>", "§d").replace("<yellow>", "§e").replace("<white>", "§f");
     }
 
     // -------------------------------------------- //

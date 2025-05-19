@@ -18,10 +18,7 @@ import dev.kitteh.factions.permissible.*;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
-import dev.kitteh.factions.util.BanInfo;
-import dev.kitteh.factions.util.LazyLocation;
-import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.WorldTracker;
+import dev.kitteh.factions.util.*;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -1004,21 +1001,13 @@ public abstract class MemoryFaction implements Faction {
             return ret;
         }
 
+        Player viewerPlayer = viewer.asPlayer();
+
         for (FPlayer viewed : fplayers) {
             // Add if their online status is what we want
-            if (viewed.isOnline() == online) {
-                // If we want online, check to see if we are able to see this player
-                // This checks if they are in vanish.
-                if (online
-                        && viewed.asPlayer() != null
-                        && viewer.asPlayer() != null
-                        && viewer.asPlayer().canSee(viewed.asPlayer())) {
-                    ret.add(viewed);
-                    // If we want offline, just add them.
-                    // Prob a better way to do this but idk.
-                } else if (!online) {
-                    ret.add(viewed);
-                }
+            boolean on = viewed.asPlayer() instanceof Player viewedPlayer && WorldUtil.isEnabled(viewedPlayer.getWorld()) && (viewerPlayer == null || viewerPlayer.canSee(viewedPlayer));
+            if (on == online) {
+                ret.add(viewed);
             }
         }
 

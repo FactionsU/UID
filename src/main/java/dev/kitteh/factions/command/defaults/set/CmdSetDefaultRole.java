@@ -18,15 +18,13 @@ import java.util.function.BiConsumer;
 public class CmdSetDefaultRole implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("defaultrole")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_SETDEFAULTROLE_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DEFAULTRANK).and(Cloudy.isAtLeastRole(Role.ADMIN))))
-                            .required("role", StringParser.stringParser(), SuggestionProvider.suggestingStrings(Role.COLEADER.getRoleNamesAtOrBelow()))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("defaultrole")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_SETDEFAULTROLE_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DEFAULTRANK).and(Cloudy.isAtLeastRole(Role.ADMIN))))
+                        .required("role", StringParser.stringParser(), SuggestionProvider.suggestingStrings(Role.COLEADER.getRoleNamesAtOrBelow()))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

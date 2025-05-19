@@ -27,15 +27,13 @@ import java.util.function.BiConsumer;
 public class CmdForceDisband implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
-            manager.command(
-                    builder.literal("disband")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_DISBAND_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DISBAND_ANY)))
-                            .required("faction", FactionParser.of(FactionParser.Include.SELF))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder) -> manager.command(
+                builder.literal("disband")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_DISBAND_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DISBAND_ANY)))
+                        .required("faction", FactionParser.of(FactionParser.Include.SELF))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

@@ -101,7 +101,7 @@ public record FLocation(String worldName, int x, int z) {
      * Checks if the chunk represented by this FLocation is outside the world border
      *
      * @param buffer the number of chunks from the border that will be treated as "outside"
-     * @return whether this location is outside of the border
+     * @return whether this location is outside the border
      */
     public boolean isOutsideWorldBorder(int buffer) {
         WorldBorder border = world().getWorldBorder();
