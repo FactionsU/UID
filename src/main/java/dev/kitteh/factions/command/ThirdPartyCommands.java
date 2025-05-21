@@ -8,7 +8,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.function.BiConsumer;
 
 /**
- * For the registry of commands from other plugins.
+ * For the registry of /f and /fa commands from other plugins.
  */
 @SuppressWarnings("unused")
 @NullMarked

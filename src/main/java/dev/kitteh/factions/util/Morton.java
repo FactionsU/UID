@@ -8,8 +8,8 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 public final class Morton {
-    public static long get(FLocation location) {
-        return Morton.get(location.x(), location.z());
+    public static long of(FLocation location) {
+        return Morton.of(location.x(), location.z());
     }
 
     /**
@@ -19,7 +19,7 @@ public final class Morton {
      * @param z z coordinate
      * @return Morton code for the coordinates
      */
-    public static long get(int x, int z) {
+    public static long of(int x, int z) {
         return (Morton.spreadOut(z) << 1) + Morton.spreadOut(x);
     }
 

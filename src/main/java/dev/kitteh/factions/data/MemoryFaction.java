@@ -254,7 +254,7 @@ public abstract class MemoryFaction implements Faction {
                 this.main = this.zones.get(0);
                 if (this.main == null) {
                     this.main = new Zone(0, "main", this.faction);
-                    main.greeting = "<tag> welcomes you!";
+                    main.greeting = "<tag> welcomes you!"; // TODO default in config
                     this.zones.put(0, this.main);
                 }
                 this.zones.defaultReturnValue(this.main);

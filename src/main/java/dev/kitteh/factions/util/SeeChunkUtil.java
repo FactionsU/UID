@@ -7,6 +7,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.particle.ParticleColor;
+import dev.kitteh.factions.util.particle.ParticleProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -28,10 +29,10 @@ public class SeeChunkUtil extends BukkitRunnable {
 
     public SeeChunkUtil() {
         String effectName = FactionsPlugin.instance().conf().commands().seeChunk().getParticleName();
-        this.effect = FactionsPlugin.instance().particleProvider().effectFromString(effectName);
+        this.effect = ParticleProvider.effectFromString(effectName);
         this.useColor = FactionsPlugin.instance().conf().commands().seeChunk().isRelationalColor();
 
-        AbstractFactionsPlugin.getInstance().getLogger().info(AbstractFactionsPlugin.getInstance().txt().parse("Using %s as the ParticleEffect for /f sc", FactionsPlugin.instance().particleProvider().effectName(effect)));
+        AbstractFactionsPlugin.getInstance().getLogger().info(AbstractFactionsPlugin.getInstance().txt().parse("Using %s as the ParticleEffect for /f sc", effect.name()));
     }
 
     @Override
@@ -99,9 +100,9 @@ public class SeeChunkUtil extends BukkitRunnable {
             }
 
             if (color == null) {
-                FactionsPlugin.instance().particleProvider().playerSpawn(player, effect, loc, 1);
+                FactionsPlugin.instance().particleProvider().spawn(player, effect, loc, 1);
             } else {
-                FactionsPlugin.instance().particleProvider().playerSpawn(player, effect, loc, color);
+                FactionsPlugin.instance().particleProvider().spawn(player, effect, loc, color);
             }
         }
     }

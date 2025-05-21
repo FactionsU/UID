@@ -286,7 +286,7 @@ public class FactionTag implements ObjectTag {
         if (attribute.startsWith("claimed_chunks")) {
             ListTag dchunks = new ListTag();
             for (FLocation claim : faction.claims()) {
-                dchunks.addObject(new ChunkTag(claim.chunk()));
+                dchunks.addObject(new ChunkTag(claim.asChunk()));
             }
             return dchunks.getObjectAttribute(attribute.fulfill(1));
         }

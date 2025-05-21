@@ -4,14 +4,14 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
-public class BukkitParticleProvider {
-    private final Particle fallback = Particle.DUST;
+public class ParticleProvider {
+    private static final Particle fallback = Particle.DUST;
 
     public void spawn(Particle effect, Location location, int count) {
         location.getWorld().spawnParticle(effect, location, count);
     }
 
-    public void playerSpawn(Player player, Particle effect, Location location, int count) {
+    public void spawn(Player player, Particle effect, Location location, int count) {
         player.spawnParticle(effect, location, count);
     }
 
@@ -19,7 +19,7 @@ public class BukkitParticleProvider {
         location.getWorld().spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, speed);
     }
 
-    public void playerSpawn(Player player, Particle particle, Location location, int count, double speed, double offsetX, double offsetY, double offsetZ) {
+    public void spawn(Player player, Particle particle, Location location, int count, double speed, double offsetX, double offsetY, double offsetZ) {
         player.spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, speed);
     }
 
@@ -31,7 +31,7 @@ public class BukkitParticleProvider {
         }
     }
 
-    public void playerSpawn(Player player, Particle particle, Location location, ParticleColor color) {
+    public void spawn(Player player, Particle particle, Location location, ParticleColor color) {
         if (particle.getDataType().equals(Particle.DustOptions.class)) {
             player.spawnParticle(particle, location, 1, new Particle.DustOptions(color.getColor(), 1.5f));
         } else if (particle.getDataType() == Void.class) {
@@ -39,16 +39,12 @@ public class BukkitParticleProvider {
         }
     }
 
-    public Particle effectFromString(String string) {
+    public static Particle effectFromString(String string) {
         for (Particle particle : Particle.values()) {
             if (particle.name().equalsIgnoreCase(string)) {
                 return particle;
             }
         }
         return fallback;
-    }
-
-    public String effectName(Particle particle) {
-        return particle.name();
     }
 }

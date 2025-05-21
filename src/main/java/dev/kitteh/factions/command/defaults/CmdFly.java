@@ -11,6 +11,7 @@ import dev.kitteh.factions.util.FlightUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
+import dev.kitteh.factions.util.particle.ParticleProvider;
 import org.bukkit.Particle;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -55,7 +56,7 @@ public class CmdFly implements Cmd {
             unhandled = false;
         }
         if (context.flags().get("particle") instanceof String effectName) {
-            Particle particleEffect = FactionsPlugin.instance().particleProvider().effectFromString(effectName);
+            Particle particleEffect = ParticleProvider.effectFromString(effectName);
             if (particleEffect == null) {
                 sender.msg(TL.COMMAND_FLYTRAILS_PARTICLE_INVALID);
                 return;

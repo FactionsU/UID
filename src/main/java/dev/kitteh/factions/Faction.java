@@ -42,7 +42,7 @@ public interface Faction extends Participator, Selectable {
             /**
              * Gets this selector's permission state for the given action name.
              *
-             * @param action action name
+             * @param action action name, case-insensitive
              * @return perm state
              */
             PermState get(String action);
@@ -60,7 +60,7 @@ public interface Faction extends Participator, Selectable {
             /**
              * Sets this selector's permission state for the given action name.
              *
-             * @param action action
+             * @param action action, case-insensitive
              * @param state  perm state
              */
             void set(String action, PermState state);

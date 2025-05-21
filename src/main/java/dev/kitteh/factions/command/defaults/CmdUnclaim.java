@@ -256,7 +256,7 @@ public class CmdUnclaim implements Cmd {
         if (targetFaction.isSafeZone() || targetFaction.isWarZone()) {
             Board.board().unclaim(target);
             if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.coordString(), targetFaction.tag()));
+                FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.asCoordString(), targetFaction.tag()));
             }
             return true;
         }
@@ -277,7 +277,7 @@ public class CmdUnclaim implements Cmd {
         Board.board().unclaim(target);
 
         if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-            FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.coordString(), targetFaction.tag()));
+            FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.asCoordString(), targetFaction.tag()));
         }
         return true;
     }

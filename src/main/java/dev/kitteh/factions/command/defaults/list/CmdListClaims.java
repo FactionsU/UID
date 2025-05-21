@@ -66,7 +66,7 @@ public class CmdListClaims implements Cmd {
 
         Map<Long, FLoc> worldClaims = new HashMap<>();
         for (FLocation loc : Board.board().allClaims(faction)) {
-            if (loc.world().equals(world)) {
+            if (loc.worldName().equals(world.getName())) {
                 worldClaims.put(getLong(loc.x(), loc.z()), new FLoc(loc.x(), loc.z()));
             }
         }

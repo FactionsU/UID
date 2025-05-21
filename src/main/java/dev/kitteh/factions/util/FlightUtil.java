@@ -5,6 +5,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.util.particle.ParticleProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -111,7 +112,7 @@ public class FlightUtil {
                 FPlayer pilot = FPlayers.fPlayers().get(player);
                 if (pilot.flying()) {
                     if (pilot.flyTrailEffect() != null && Permission.FLY_TRAILS.has(player) && pilot.flyTrail()) {
-                        Particle effect = FactionsPlugin.instance().particleProvider().effectFromString(pilot.flyTrailEffect());
+                        Particle effect = ParticleProvider.effectFromString(pilot.flyTrailEffect());
                         FactionsPlugin.instance().particleProvider().spawn(effect, player.getLocation(), amount, speed, 0, 0, 0);
                     }
                 }

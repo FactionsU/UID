@@ -100,7 +100,7 @@ public class CommandsRoot {
             manager.registerBrigadier();
         }
 
-        manager.captionRegistry().registerProvider(new Captioner<>());
+        manager.captionRegistry().registerProvider(new Captioner());
 
         List<String> aliases = new ArrayList<>(plugin.conf().getCommandBase());
         String main = aliases.removeFirst();

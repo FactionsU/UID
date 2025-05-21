@@ -67,7 +67,7 @@ import dev.kitteh.factions.util.adapter.UpgradeTypeAdapter;
 import dev.kitteh.factions.util.adapter.UpgradeVariableTypeAdapter;
 import dev.kitteh.factions.util.adapter.WorldTrackerTypeAdapter;
 import dev.kitteh.factions.util.material.MaterialDb;
-import dev.kitteh.factions.util.particle.BukkitParticleProvider;
+import dev.kitteh.factions.util.particle.ParticleProvider;
 import io.papermc.lib.PaperLib;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
@@ -161,7 +161,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     private Integer autoLeaveTask = null;
 
     private SeeChunkUtil seeChunkUtil;
-    private BukkitParticleProvider particleProvider;
+    private ParticleProvider particleProvider;
     private Worldguard worldguard;
     private LandRaidControl landRaidControl;
     private boolean luckPermsSetup;
@@ -368,7 +368,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         startAutoLeaveTask(false);
 
         // Run before initializing listeners to handle reloads properly.
-        particleProvider = new BukkitParticleProvider();
+        particleProvider = new ParticleProvider();
         double delay = Math.floor(conf().commands().seeChunk().getParticleUpdateTime() * 20);
         seeChunkUtil = new SeeChunkUtil();
         seeChunkUtil.runTaskTimer(this, 0, (long) delay);
@@ -654,7 +654,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     }
 
     @Override
-    public BukkitParticleProvider particleProvider() {
+    public ParticleProvider particleProvider() {
         return particleProvider;
     }
 

@@ -8,7 +8,7 @@ import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.landraidcontrol.LandRaidControl;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.SeeChunkUtil;
-import dev.kitteh.factions.util.particle.BukkitParticleProvider;
+import dev.kitteh.factions.util.particle.ParticleProvider;
 import org.bukkit.OfflinePlayer;
 
 import java.util.Map;
@@ -24,7 +24,7 @@ public interface FactionsPlugin {
 
     SeeChunkUtil seeChunkUtil();
 
-    BukkitParticleProvider particleProvider();
+    ParticleProvider particleProvider();
 
     Map<UUID, Integer> stuckMap();
 

@@ -55,16 +55,20 @@ public record FLocation(String worldName, int x, int z) {
         return Board.board().factionAt(this);
     }
 
+    public Faction.Zone zone() {
+        return Board.board().factionAt(this).zones().get(this);
+    }
+
     /**
      * Returns the chunk x value, a comma, and the chunk z value, without spaces.
      *
      * @return coordinate string
      */
-    public String coordString() {
+    public String asCoordString() {
         return x + "," + z;
     }
 
-    public Chunk chunk() {
+    public Chunk asChunk() {
         return world().getChunkAt(x, z);
     }
 
@@ -89,11 +93,11 @@ public record FLocation(String worldName, int x, int z) {
         return new FLocation(this.worldName, this.x + dx, this.z + dz);
     }
 
-    public boolean isInChunk(Location loc) {
+    public boolean contains(Location loc) {
         return loc.getWorld().getName().equalsIgnoreCase(worldName()) && blockToChunk(loc.getBlockX()) == x && blockToChunk(loc.getBlockZ()) == z;
     }
 
-    public boolean isInChunk(LazyLocation loc) {
+    public boolean contains(LazyLocation loc) {
         return loc.worldName().equalsIgnoreCase(worldName()) && blockToChunk(NumberConversions.floor(loc.x())) == x && blockToChunk(NumberConversions.floor(loc.z())) == z;
     }
 
@@ -148,6 +152,6 @@ public record FLocation(String worldName, int x, int z) {
 
     @Override
     public String toString() {
-        return "[" + this.worldName() + "," + this.coordString() + "]";
+        return "[" + this.worldName() + "," + this.asCoordString() + "]";
     }
 }

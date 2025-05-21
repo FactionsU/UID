@@ -29,7 +29,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +45,7 @@ public abstract class MemoryBoard implements Board {
 
     private final char[] mapKeyChrs = "\\/#$%=&^ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890abcdeghjmnopqrsuvwxyz?".toCharArray();
 
-    protected Object2ObjectMap<String, @Nullable WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
+    protected Object2ObjectMap<String, WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
 
     protected WorldTracker getAndCreate(String world) {
         return this.worldTrackers.computeIfAbsent(world, k -> new WorldTracker(world));
@@ -57,6 +56,7 @@ public abstract class MemoryBoard implements Board {
     //----------------------------------------------//
     private int getIdAt(FLocation flocation) {
         WorldTracker tracker = worldTrackers.get(flocation.worldName());
+        //noinspection ConstantValue
         if (tracker != null) {
             int result = tracker.idAt(flocation);
             return result == WorldTracker.NO_MATCH ? 0 : result;
@@ -88,9 +88,9 @@ public abstract class MemoryBoard implements Board {
     public void unclaim(FLocation flocation) {
         Objects.requireNonNull(flocation);
         Faction faction = factionAt(flocation);
-        faction.warps().values().removeIf(flocation::isInChunk);
+        faction.warps().values().removeIf(flocation::contains);
         if (flocation.world().isChunkLoaded(flocation.x(), flocation.z())) {
-            for (Entity entity : flocation.chunk().getEntities()) {
+            for (Entity entity : flocation.asChunk().getEntities()) {
                 if (entity instanceof Player) {
                     FPlayer fPlayer = FPlayers.fPlayers().get((Player) entity);
                     if (!fPlayer.adminBypass() && fPlayer.flying()) {
@@ -110,6 +110,7 @@ public abstract class MemoryBoard implements Board {
         }
 
         WorldTracker tracker = worldTrackers.get(flocation.worldName());
+        //noinspection ConstantValue
         if (tracker != null) {
             tracker.removeClaim(flocation);
         }
@@ -122,6 +123,7 @@ public abstract class MemoryBoard implements Board {
 
     public Int2ObjectMap<LongList> getAllClaimsForDynmap(World world) {
         WorldTracker tracker = worldTrackers.get(world.getName());
+        //noinspection ConstantValue
         return tracker == null ? new Int2ObjectOpenHashMap<>() : tracker.allClaimsForDynmap();
     }
 
@@ -136,6 +138,7 @@ public abstract class MemoryBoard implements Board {
     @Override
     public void unclaimAllInWorld(Faction faction, World world) {
         WorldTracker tracker = worldTrackers.get(world.getName());
+        //noinspection ConstantValue
         if (tracker != null) {
             tracker.allClaims(faction.id()).forEach(this::unclaim);
         }
@@ -189,6 +192,7 @@ public abstract class MemoryBoard implements Board {
     @Override
     public int claimCount(Faction faction, World world) {
         WorldTracker tracker = worldTrackers.get(world.getName());
+        //noinspection ConstantValue
         return tracker == null ? 0 : tracker.countClaims(faction.id());
     }
 
@@ -208,7 +212,7 @@ public abstract class MemoryBoard implements Board {
         Faction faction = fplayer.faction();
         ArrayList<Component> ret = new ArrayList<>();
         Faction factionLoc = factionAt(flocation);
-        ret.add(TextUtil.titleizeC("(" + flocation.coordString() + ") " + factionLoc.tagString(fplayer)));
+        ret.add(TextUtil.titleizeC("(" + flocation.asCoordString() + ") " + factionLoc.tagString(fplayer)));
 
         // Get the compass
         List<Component> asciiCompass = AsciiCompass.getAsciiCompass(inDegrees, "<red>", "<gold>");
@@ -296,6 +300,10 @@ public abstract class MemoryBoard implements Board {
     private List<Component> makeScoreboardMap(FPlayer fplayer) {
         FLocation flocation = fplayer.lastStoodAt();
         Faction faction = fplayer.faction();
+        Player player = fplayer.asPlayer();
+        if (player == null) {
+            return List.of();
+        }
         ArrayList<Component> ret = new ArrayList<>();
         Faction factionLoc = factionAt(flocation);
 
@@ -303,7 +311,7 @@ public abstract class MemoryBoard implements Board {
         int halfHeight = FactionsPlugin.instance().conf().map().getScoreboardHeight() / 2;
         int width = halfWidth * 2 + 1;
         int height = halfHeight * 2 + 1;
-        double degrees = (fplayer.asPlayer().getLocation().getYaw() - 180) % 360;
+        double degrees = (player.getLocation().getYaw() - 180) % 360;
         if (degrees < 0) {
             degrees += 360;
         }

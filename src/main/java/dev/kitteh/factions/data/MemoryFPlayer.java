@@ -836,7 +836,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         int factionBuffer = plugin.conf().factions().claims().getBufferZone();
         int worldBuffer = plugin.conf().worldBorder().getBuffer();
 
-        if (plugin.conf().worldGuard().isCheckingEither() && plugin.getWorldguard() != null && plugin.getWorldguard().checkForRegionsInChunk(flocation.chunk())) {
+        if (plugin.conf().worldGuard().isCheckingEither() && plugin.getWorldguard() != null && plugin.getWorldguard().checkForRegionsInChunk(flocation.asChunk())) {
             // Checks for WorldGuard regions in the chunk attempting to be claimed
             denyReason = plugin.txt().parse(TL.CLAIM_PROTECTED.toString());
         } else if (plugin.conf().factions().claims().getWorldsNoClaiming().contains(flocation.worldName())) {
@@ -989,7 +989,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         Board.board().claim(flocation, forFaction);
 
         if (FactionsPlugin.instance().conf().logging().isLandClaims()) {
-            FactionsPlugin.instance().log(TL.CLAIM_CLAIMEDLOG.toString(), this.name(), flocation.coordString(), forFaction.tag());
+            FactionsPlugin.instance().log(TL.CLAIM_CLAIMEDLOG.toString(), this.name(), flocation.asCoordString(), forFaction.tag());
         }
 
         return true;
@@ -1015,7 +1015,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 this.msg(TL.COMMAND_UNCLAIM_SAFEZONE_SUCCESS);
 
                 if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                    FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.coordString(), targetFaction.tag()));
+                    FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
                 }
                 return true;
             } else {
@@ -1030,7 +1030,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 this.msg(TL.COMMAND_UNCLAIM_WARZONE_SUCCESS);
 
                 if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                    FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.coordString(), targetFaction.tag()));
+                    FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
                 }
                 return true;
             } else {
@@ -1054,7 +1054,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             this.msg(TL.COMMAND_UNCLAIM_UNCLAIMS);
 
             if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.coordString(), targetFaction.tag()));
+                FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
             }
 
             return true;
@@ -1105,7 +1105,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.faction().msg(TL.COMMAND_UNCLAIM_FACTIONUNCLAIMED, this.describeTo(this.faction(), true));
 
         if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-            FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.coordString(), targetFaction.tag()));
+            FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
         }
 
         return true;

@@ -44,7 +44,7 @@ public class WorldTracker {
     }
 
     public void addClaim(int id, FLocation location) {
-        long mort = Morton.get(location);
+        long mort = Morton.of(location);
         removeClaim(location);
         if (id != 0) {
             chunkToID.put(mort, id);
@@ -53,13 +53,13 @@ public class WorldTracker {
     }
 
     public void addClaimOnLoad(int id, int x, int z) {
-        long mort = Morton.get(x, z);
+        long mort = Morton.of(x, z);
         chunkToID.put(mort, id);
         getOrCreateClaims(id).add(mort);
     }
 
     public void removeClaim(FLocation location) {
-        long mort = Morton.get(location);
+        long mort = Morton.of(location);
         int formerOwner = chunkToID.remove(mort);
         if (formerOwner != NO_MATCH) {
             LongSet set = IDToChunk.get(formerOwner);
@@ -98,7 +98,7 @@ public class WorldTracker {
     }
 
     public int idAt(FLocation location) {
-        return chunkToID.get(Morton.get(location));
+        return chunkToID.get(Morton.of(location));
     }
 
     public int countClaims(int id) {
