@@ -4,14 +4,13 @@ import com.google.gson.reflect.TypeToken;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.util.DiscUtil;
 import dev.kitteh.factions.util.Morton;
 import dev.kitteh.factions.util.WorldTracker;
 import org.jspecify.annotations.NullMarked;
 
-import java.io.File;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,7 +19,11 @@ import java.util.logging.Level;
 
 @NullMarked
 public final class JSONBoard extends MemoryBoard {
-    private static final File file = new File(AbstractFactionsPlugin.getInstance().getDataFolder(), "data/board.json");
+    private final Path boardPath;
+
+    public JSONBoard() {
+        this.boardPath = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("data/board.json");
+    }
 
     private Map<String, Map<String, String>> dumpAsSaveFormat() {
         Map<String, Map<String, String>> worldCoordIds = new HashMap<>();
@@ -68,12 +71,12 @@ public final class JSONBoard extends MemoryBoard {
     @Override
     public void forceSave(boolean sync) {
         Map<String, Map<String, String>> map = dumpAsSaveFormat();
-        DiscUtil.writeCatch(file, () -> FactionsPlugin.instance().gson().toJson(map), sync);
+        JsonSaver.write(boardPath, () -> FactionsPlugin.instance().gson().toJson(map), sync);
     }
 
     @Override
     public int load() {
-        if (!file.exists()) {
+        if (!Files.exists(boardPath)) {
             AbstractFactionsPlugin.getInstance().getLogger().info("No board to load from disk. Creating new file.");
             forceSave(true);
             return 0;
@@ -82,7 +85,7 @@ public final class JSONBoard extends MemoryBoard {
         try {
             Type type = new TypeToken<Map<String, Map<String, String>>>() {
             }.getType();
-            Map<String, Map<String, String>> worldCoordIds = FactionsPlugin.instance().gson().fromJson(Files.newBufferedReader(file.toPath()), type);
+            Map<String, Map<String, String>> worldCoordIds = FactionsPlugin.instance().gson().fromJson(Files.newBufferedReader(boardPath), type);
             loadFromSaveFormat(worldCoordIds);
         } catch (Exception e) {
             AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load the board from disk.", e);

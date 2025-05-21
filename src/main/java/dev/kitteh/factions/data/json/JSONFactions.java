@@ -7,16 +7,18 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.data.MemoryFactions;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.util.DiscUtil;
 import dev.kitteh.factions.util.adapter.OldJSONFactionDeserializer;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
 @NullMarked
 public final class JSONFactions extends MemoryFactions {
@@ -30,19 +32,15 @@ public final class JSONFactions extends MemoryFactions {
         return FactionsPlugin.instance().gson();
     }
 
-    private final File file;
-    private final File nextIdFile;
-
-    public File getFile() {
-        return file;
-    }
+    private final Path factionsPath;
+    private final Path nextIdPath;
 
     public JSONFactions() {
         if (AbstractFactionsPlugin.getInstance().getServerUUID() == null) {
             AbstractFactionsPlugin.getInstance().grumpException(new RuntimeException());
         }
-        this.file = new File(AbstractFactionsPlugin.getInstance().getDataFolder(), "data/factions.json");
-        this.nextIdFile = new File(AbstractFactionsPlugin.getInstance().getDataFolder(), "data/nextFactionId.json");
+        this.factionsPath = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("data/factions.json");
+        this.nextIdPath = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("data/nextFactionId.json");
         this.nextId = 1;
     }
 
@@ -50,8 +48,10 @@ public final class JSONFactions extends MemoryFactions {
     public void forceSave(boolean sync) {
         final List<Faction> entitiesThatShouldBeSaved = new ArrayList<>(this.factions.values());
         // Serialize sync, write (a)sync
-        DiscUtil.writeCatch(file, FactionsPlugin.instance().gson().toJson(entitiesThatShouldBeSaved), sync);
-        DiscUtil.writeCatch(this.nextIdFile, FactionsPlugin.instance().gson().toJson(new NextId(this.nextId)), sync);
+        String json = FactionsPlugin.instance().gson().toJson(entitiesThatShouldBeSaved);
+        JsonSaver.write(factionsPath, () -> json, sync);
+        String jsonId = FactionsPlugin.instance().gson().toJson(new NextId(this.nextId));
+        JsonSaver.write(this.nextIdPath, () -> jsonId, sync);
     }
 
     @Override
@@ -78,12 +78,18 @@ public final class JSONFactions extends MemoryFactions {
     }
 
     private @Nullable List<JSONFaction> loadCore() {
-        if (!this.file.exists()) {
+        if (!Files.exists(this.factionsPath)) {
             return null;
         }
 
-        String content = DiscUtil.readCatch(this.file);
-        if (content == null || content.trim().isEmpty()) {
+        String content;
+        try {
+            content = Files.readString(this.factionsPath);
+        } catch (IOException e) {
+            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to read file " + this.factionsPath, e);
+            return null;
+        }
+        if (content.trim().isEmpty()) {
             return null;
         }
 
@@ -111,11 +117,13 @@ public final class JSONFactions extends MemoryFactions {
             }
             return new ArrayList<>(data.values());
         } else {
-            String nextIdData = DiscUtil.readCatch(this.nextIdFile);
-            NextId next = FactionsPlugin.instance().gson().fromJson(nextIdData, NextId.class);
-            if (next != null) {
-                this.nextId = next.next();
+            String nextIdData = "";
+            try {
+                nextIdData = Files.readString(this.nextIdPath);
+            } catch (IOException ignored) {
             }
+            NextId next = FactionsPlugin.instance().gson().fromJson(nextIdData, NextId.class);
+            this.nextId = next.next();
             return FactionsPlugin.instance().gson().fromJson(content, new TypeToken<List<JSONFaction>>() {
             }.getType());
         }

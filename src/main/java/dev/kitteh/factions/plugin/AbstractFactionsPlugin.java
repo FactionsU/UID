@@ -50,7 +50,6 @@ import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.FlightUtil;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Metrics;
-import dev.kitteh.factions.util.Persist;
 import dev.kitteh.factions.util.SeeChunkUtil;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
@@ -100,6 +99,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -138,7 +138,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     private boolean loadSuccessful = false;
 
     // Some utils
-    private Persist persist;
     private TextUtil txt;
 
     public TextUtil txt() {
@@ -322,7 +321,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         MaterialDb.load();
 
         // Create Utility Instances
-        this.persist = new Persist(this);
         WorldUtil.init(this.conf().restrictWorlds());
 
         this.txt = new TextUtil();
@@ -662,35 +660,35 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     // LANG AND TAGS
     // -------------------------------------------- //
 
-    // These are not supposed to be used directly.
-    // They are loaded and used through the TextUtil instance for the plugin.
-    private final Map<String, String> rawTags = new LinkedHashMap<>();
-
-    private void addRawTags() {
-        this.rawTags.put("l", "<green>"); // logo
-        this.rawTags.put("a", "<gold>"); // art
-        this.rawTags.put("n", "<silver>"); // notice
-        this.rawTags.put("i", "<yellow>"); // info
-        this.rawTags.put("g", "<lime>"); // good
-        this.rawTags.put("b", "<rose>"); // bad
-        this.rawTags.put("h", "<pink>"); // highlight
-        this.rawTags.put("c", "<aqua>"); // command
-        this.rawTags.put("p", "<teal>"); // parameter
-    }
-
     private void initTXT() {
-        this.addRawTags();
+        Map<String, String> rawTags = new LinkedHashMap<>();
+        rawTags.put("l", "<green>"); // logo
+        rawTags.put("a", "<gold>"); // art
+        rawTags.put("n", "<silver>"); // notice
+        rawTags.put("i", "<yellow>"); // info
+        rawTags.put("g", "<lime>"); // good
+        rawTags.put("b", "<rose>"); // bad
+        rawTags.put("h", "<pink>"); // highlight
+        rawTags.put("c", "<aqua>"); // command
+        rawTags.put("p", "<teal>"); // parameter
 
         Type type = new TypeToken<Map<String, String>>() {
         }.getType();
 
-        Map<String, String> tagsFromFile = this.persist.load(type, "tags");
-        if (tagsFromFile != null) {
-            this.rawTags.putAll(tagsFromFile);
-        }
-        this.persist.save(this.rawTags, "tags");
+        Map<String, String> tagsFromFile = null;
 
-        for (Map.Entry<String, String> rawTag : this.rawTags.entrySet()) {
+        try {
+            String content = Files.readString(AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("tags.json"));
+            tagsFromFile = AbstractFactionsPlugin.getInstance().gson().fromJson(content, type);
+        } catch (Exception e) {
+            AbstractFactionsPlugin.getInstance().log(Level.WARNING, e.getMessage());
+        }
+
+        if (tagsFromFile != null) {
+            rawTags.putAll(tagsFromFile);
+        }
+
+        for (Map.Entry<String, String> rawTag : rawTags.entrySet()) {
             this.txt.tags.put(rawTag.getKey(), TextUtil.parseColor(rawTag.getValue()));
         }
     }

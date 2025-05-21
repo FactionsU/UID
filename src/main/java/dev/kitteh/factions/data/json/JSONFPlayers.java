@@ -24,7 +24,7 @@ import java.util.logging.Level;
 
 @NullMarked
 public final class JSONFPlayers extends MemoryFPlayers {
-    private final Path path = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("data/players.json");
+    private final Path playersPath = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("data/players.json");
 
     public JSONFPlayers() {
         if (AbstractFactionsPlugin.getInstance().getServerUUID() == null) {
@@ -42,7 +42,7 @@ public final class JSONFPlayers extends MemoryFPlayers {
             }
         }
 
-        JsonSaver.write(path, () -> FactionsPlugin.instance().gson().toJson(entitiesThatShouldBeSaved), sync);
+        JsonSaver.write(playersPath, () -> FactionsPlugin.instance().gson().toJson(entitiesThatShouldBeSaved), sync);
     }
 
     @Override
@@ -57,11 +57,11 @@ public final class JSONFPlayers extends MemoryFPlayers {
     }
 
     private @Nullable List<JSONFPlayer> loadCore() {
-        if (!Files.exists(path)) {
+        if (!Files.exists(playersPath)) {
             return null;
         }
 
-        try (BufferedReader bufferedReader = Files.newBufferedReader(path)) {
+        try (BufferedReader bufferedReader = Files.newBufferedReader(playersPath)) {
             int len = 50;
             char[] chars = new char[len];
             bufferedReader.mark(len + 1);
