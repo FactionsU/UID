@@ -20,7 +20,7 @@ import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.parser.standard.StringParser;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class CmdSetTag implements Cmd {
@@ -45,7 +45,7 @@ public class CmdSetTag implements Cmd {
             return;
         }
 
-        ArrayList<String> errors = MiscUtil.validateTag(tag);
+        List<String> errors = MiscUtil.validateTag(tag);
         if (!errors.isEmpty()) {
             sender.sendMessage(errors);
             return;

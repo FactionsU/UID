@@ -62,23 +62,6 @@ public class MiscUtil {
         return Collections.unmodifiableSet(typeSet);
     }
 
-    // Inclusive range
-    public static long[] range(long start, long end) {
-        long[] values = new long[(int) Math.abs(end - start) + 1];
-
-        if (end < start) {
-            long oldstart = start;
-            start = end;
-            end = oldstart;
-        }
-
-        for (long i = start; i <= end; i++) {
-            values[(int) (i - start)] = i;
-        }
-
-        return values;
-    }
-
     public static String getComparisonString(String str) {
         StringBuilder ret = new StringBuilder();
 
@@ -94,7 +77,7 @@ public class MiscUtil {
         return ret.toString().toLowerCase();
     }
 
-    public static ArrayList<String> validateTag(String str) {
+    public static List<String> validateTag(String str) {
         ArrayList<String> errors = new ArrayList<>();
 
         for (String blacklistItem : FactionsPlugin.instance().conf().factions().other().getNameBlacklist()) {

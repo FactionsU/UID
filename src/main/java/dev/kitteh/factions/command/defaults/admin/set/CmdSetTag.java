@@ -1,6 +1,10 @@
 package dev.kitteh.factions.command.defaults.admin.set;
 
-import dev.kitteh.factions.*;
+import dev.kitteh.factions.FPlayer;
+import dev.kitteh.factions.FPlayers;
+import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.Factions;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
@@ -15,7 +19,7 @@ import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.parser.standard.StringParser;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class CmdSetTag implements Cmd {
@@ -42,7 +46,7 @@ public class CmdSetTag implements Cmd {
             return;
         }
 
-        ArrayList<String> errors = MiscUtil.validateTag(tag);
+        List<String> errors = MiscUtil.validateTag(tag);
         if (!errors.isEmpty()) {
             sender.sendMessage(errors);
             return;
