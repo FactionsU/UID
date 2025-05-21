@@ -1,6 +1,7 @@
 package dev.kitteh.factions.upgrade;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -16,28 +17,35 @@ public final class UpgradeSettings {
     private final LeveledValueProvider costSettings;
 
     public UpgradeSettings(Upgrade upgrade, Map<UpgradeVariable, LeveledValueProvider> variableSettings, int maxLevel, int startingLevel, LeveledValueProvider costSettings) {
-        if (maxLevel > upgrade.maxLevel()) {
-            throw new IllegalArgumentException("Max level must be less than or equal to " + upgrade.maxLevel());
-        }
-        if (startingLevel > maxLevel) {
-            throw new IllegalArgumentException("Starting level must be less than or equal to " + maxLevel);
-        }
-        for (UpgradeVariable var : upgrade.variables()) {
-            if (!variableSettings.containsKey(var)) {
-                throw new IllegalArgumentException("Variable '" + var.name() + "' does not exist in settings");
-            }
-            if (!variableSettings.get(var).supportsUpToLevel(maxLevel)) {
-                throw new IllegalArgumentException("Variable '" + var.name() + "' does not support up to max level");
-            }
-        }
-        if (!costSettings.supportsUpToLevel(maxLevel)) {
-            throw new IllegalArgumentException("Cost settings must support up to max level");
-        }
         this.upgrade = upgrade;
         this.variableSettings = new HashMap<>(variableSettings);
         this.maxLevel = maxLevel;
         this.startingLevel = startingLevel;
         this.costSettings = costSettings;
+        if (this.findFlaw() instanceof String issue) {
+            throw new IllegalArgumentException(issue);
+        }
+    }
+
+    public @Nullable String findFlaw() {
+        if (maxLevel > upgrade.maxLevel()) {
+            return "Max level must be less than or equal to " + upgrade.maxLevel();
+        }
+        if (startingLevel > maxLevel) {
+            return "Starting level must be less than or equal to " + maxLevel;
+        }
+        for (UpgradeVariable var : upgrade.variables()) {
+            if (!variableSettings.containsKey(var)) {
+                return "Variable '" + var.name() + "' does not exist in settings";
+            }
+            if (!variableSettings.get(var).supportsUpToLevel(maxLevel)) {
+                return "Variable '" + var.name() + "' does not support up to max level";
+            }
+        }
+        if (!costSettings.supportsUpToLevel(maxLevel)) {
+            return "Cost settings must support up to max level";
+        }
+        return null;
     }
 
     public Upgrade upgrade() {

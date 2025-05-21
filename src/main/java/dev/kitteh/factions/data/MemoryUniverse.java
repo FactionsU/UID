@@ -2,6 +2,7 @@ package dev.kitteh.factions.data;
 
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
@@ -62,6 +63,13 @@ public abstract class MemoryUniverse implements Universe {
         this.loadData();
         Upgrades.defaults.forEach(upgrade -> {
             String name = upgrade.upgrade().name();
+            UpgradeSettings settings = this.data.upgrades.settings.get(name);
+            if (settings != null) {
+                if (settings.findFlaw() instanceof String issue) {
+                    AbstractFactionsPlugin.getInstance().getLogger().warning("Could not load upgrade setting for " + name + ": " + issue);
+                    this.data.upgrades.settings.remove(name);
+                }
+            }
             if (!this.data.upgrades.settings.containsKey(name)) {
                 this.data.upgrades.settings.put(name, upgrade);
                 if (!(upgrade.upgrade() == Upgrades.FLIGHT && FactionsPlugin.instance().conf().commands().fly().isEnable())) {
