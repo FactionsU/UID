@@ -64,7 +64,7 @@ public class CmdWarp implements Cmd {
                     return;
                 }
 
-                FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, destination.getLocation(), FPlayerTeleportEvent.Reason.WARP);
+                FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, destination.asLocation(), FPlayerTeleportEvent.Reason.WARP);
                 Bukkit.getServer().getPluginManager().callEvent(tpEvent);
                 if (tpEvent.isCancelled()) {
                     return;
@@ -79,7 +79,7 @@ public class CmdWarp implements Cmd {
                 WarmUpUtil.process(sender, WarmUpUtil.Warmup.WARP, TL.WARMUPS_NOTIFY_TELEPORT, warpName, () -> {
                     Player player = Bukkit.getPlayer(uuid);
                     if (destination == faction.warp(warpName) && player != null) {
-                        AbstractFactionsPlugin.getInstance().teleport(player, destination.getLocation()).thenAccept(success -> {
+                        AbstractFactionsPlugin.getInstance().teleport(player, destination.asLocation()).thenAccept(success -> {
                             if (success) {
                                 fPlayer.msg(TL.COMMAND_FWARP_WARPED, warpName);
                             }

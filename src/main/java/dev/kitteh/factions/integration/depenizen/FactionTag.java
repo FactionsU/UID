@@ -142,7 +142,7 @@ public class FactionTag implements ObjectTag {
         else if (attribute.startsWith("warp") && attribute.hasParam()) {
             LazyLocation warp = faction.warp(attribute.getParam());
             if (warp != null) {
-                return new LocationTag(warp.getLocation())
+                return new LocationTag(warp.asLocation())
                         .getObjectAttribute(attribute.fulfill(1));
             }
         } else if (attribute.startsWith("home")) { // Legacy sorta-compat

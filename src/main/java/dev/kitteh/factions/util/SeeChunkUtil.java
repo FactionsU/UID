@@ -6,10 +6,10 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.util.particle.ParticleColor;
 import dev.kitteh.factions.util.particle.ParticleProvider;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -65,10 +65,10 @@ public class SeeChunkUtil extends BukkitRunnable {
         int chunkX = flocation.x();
         int chunkZ = flocation.z();
 
-        ParticleColor color = null;
+        Color color = null;
         if (useColor) {
-            ChatColor chatColor = Board.board().factionAt(flocation).relationTo(fme).chatColor();
-            color = ParticleColor.fromChatColor(chatColor);
+            TextColor textColor = Board.board().factionAt(flocation).relationTo(fme).color();
+            color = Color.fromRGB(textColor.red(), textColor.green(), textColor.blue());
         }
 
         int blockX;
@@ -91,7 +91,7 @@ public class SeeChunkUtil extends BukkitRunnable {
         showPillar(me, world, blockX, blockZ, effect, color);
     }
 
-    public static void showPillar(Player player, World world, int blockX, int blockZ, Particle effect, ParticleColor color) {
+    public static void showPillar(Player player, World world, int blockX, int blockZ, Particle effect, Color color) {
         // Let's start at the player's Y spot -30 to optimize
         for (int blockY = player.getLocation().getBlockY() - 30; blockY < player.getLocation().getBlockY() + 30; blockY++) {
             Location loc = new Location(world, blockX, blockY, blockZ);
@@ -100,9 +100,9 @@ public class SeeChunkUtil extends BukkitRunnable {
             }
 
             if (color == null) {
-                FactionsPlugin.instance().particleProvider().spawn(player, effect, loc, 1);
+                ParticleProvider.spawn(player, effect, loc, 1);
             } else {
-                FactionsPlugin.instance().particleProvider().spawn(player, effect, loc, color);
+                ParticleProvider.spawn(player, effect, loc, color);
             }
         }
     }

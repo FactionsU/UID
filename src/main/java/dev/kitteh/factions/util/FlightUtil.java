@@ -113,7 +113,7 @@ public class FlightUtil {
                 if (pilot.flying()) {
                     if (pilot.flyTrailEffect() != null && Permission.FLY_TRAILS.has(player) && pilot.flyTrail()) {
                         Particle effect = ParticleProvider.effectFromString(pilot.flyTrailEffect());
-                        FactionsPlugin.instance().particleProvider().spawn(effect, player.getLocation(), amount, speed, 0, 0, 0);
+                        ParticleProvider.spawn(effect, player.getLocation(), amount, speed, 0, 0, 0);
                     }
                 }
             }

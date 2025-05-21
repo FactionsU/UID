@@ -640,7 +640,7 @@ public abstract class MemoryFaction implements Faction {
     @Override
     public @Nullable Location home() {
         confirmValidHome();
-        return (this.home != null) ? this.home.getLocation() : null;
+        return (this.home != null) ? this.home.asLocation() : null;
     }
 
     public void confirmValidHome() {

@@ -24,8 +24,6 @@ public interface FactionsPlugin {
 
     SeeChunkUtil seeChunkUtil();
 
-    ParticleProvider particleProvider();
-
     Map<UUID, Integer> stuckMap();
 
     Map<UUID, Long> timers();
