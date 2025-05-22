@@ -11,7 +11,7 @@ import dev.kitteh.factions.util.FlightUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
-import dev.kitteh.factions.util.particle.ParticleProvider;
+import dev.kitteh.factions.util.ParticleProvider;
 import org.bukkit.Particle;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;

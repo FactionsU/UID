@@ -1,4 +1,4 @@
-package dev.kitteh.factions.util.material;
+package dev.kitteh.factions.util;
 
 import com.google.gson.reflect.TypeToken;
 import dev.kitteh.factions.FactionsPlugin;

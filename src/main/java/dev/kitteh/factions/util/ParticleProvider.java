@@ -1,4 +1,4 @@
-package dev.kitteh.factions.util.particle;
+package dev.kitteh.factions.util;
 
 import org.bukkit.Color;
 import org.bukkit.Location;

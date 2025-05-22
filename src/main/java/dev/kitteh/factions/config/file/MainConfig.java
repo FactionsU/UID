@@ -6,7 +6,7 @@ import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.MiscUtil;
-import dev.kitteh.factions.util.material.MaterialDb;
+import dev.kitteh.factions.util.MaterialDb;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
