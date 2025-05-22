@@ -5,6 +5,9 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Parent interface of roles and relations, who can be granted faction access.
+ */
 @NullMarked
 public interface Permissible extends Selectable {
     String name();

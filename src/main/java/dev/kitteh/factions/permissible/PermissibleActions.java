@@ -6,6 +6,9 @@ import dev.kitteh.factions.util.TL;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * Default permissible actions.
+ */
 @NullMarked
 public enum PermissibleActions implements PermissibleAction {
     BUILD(TL.PERM_BUILD, TL.PERM_SHORT_BUILD),
