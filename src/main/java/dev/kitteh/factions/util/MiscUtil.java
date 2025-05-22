@@ -8,6 +8,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+@NullMarked
 public class MiscUtil {
     private static final Map<String, EntityType> entityTypeMap;
     public static final Function<String, EntityType> ENTITY_TYPE_FUNCTION;
@@ -31,24 +34,18 @@ public class MiscUtil {
         for (EntityType entityType : EntityType.values()) {
             entityTypeMap.put(entityType.name(), entityType);
         }
-        ENTITY_TYPE_FUNCTION = (string) -> string == null ? null : entityTypeMap.get(string.toUpperCase());
+        ENTITY_TYPE_FUNCTION = (string) -> entityTypeMap.get(string.toUpperCase());
 
-        MATERIAL_FUNCTION = (string) -> {
-            Material mat = null;
-            if (string != null) {
-                mat = MaterialDb.get(string, null);
-            }
-            return mat;
-        };
+        MATERIAL_FUNCTION = (string) -> MaterialDb.get(string, null);
 
         spawnReasonMap = new HashMap<>();
         for (CreatureSpawnEvent.SpawnReason reason : CreatureSpawnEvent.SpawnReason.values()) {
             spawnReasonMap.put(reason.name(), reason);
         }
-        SPAWN_REASON_FUNCTION = (string) -> string == null ? null : spawnReasonMap.get(string.toUpperCase());
+        SPAWN_REASON_FUNCTION = (string) -> spawnReasonMap.get(string.toUpperCase());
     }
 
-    public static <Type> Set<Type> typeSetFromStringSet(Set<String> stringSet, Function<String, Type> function) {
+    public static <Type> Set<Type> typeSetFromStringSet(Set<@Nullable String> stringSet, Function<String, Type> function) {
         Set<Type> typeSet = new HashSet<>();
         for (String string : stringSet) {
             if (string != null) {

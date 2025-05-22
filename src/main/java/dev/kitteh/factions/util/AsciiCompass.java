@@ -1,10 +1,12 @@
 package dev.kitteh.factions.util;
 
 import net.kyori.adventure.text.Component;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NullMarked
 public class AsciiCompass {
     private enum Point {
 

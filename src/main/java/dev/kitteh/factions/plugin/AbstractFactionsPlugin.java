@@ -232,6 +232,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         UpdateCheck update = new UpdateCheck("FactionsUUID", this.getDescription().getVersion(), this.getServer().getName(), this.getServer().getVersion());
         update.meow = this.getClass().getDeclaredMethods().length;
         // Ensure basefolder exists!
+        //noinspection ResultOfMethodCallIgnored
         this.getDataFolder().mkdirs();
 
         byte[] m = Bukkit.getMotd().getBytes(StandardCharsets.UTF_8);
@@ -312,6 +313,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         File dataFolder = new File(this.getDataFolder(), "data");
         if (!dataFolder.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             dataFolder.mkdir();
         }
 
