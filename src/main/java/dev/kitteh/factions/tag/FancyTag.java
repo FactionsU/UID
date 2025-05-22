@@ -14,6 +14,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +31,7 @@ public enum FancyTag implements Tag {
         TextComponent.Builder message = Component.text().append(LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(prefix)));
         boolean first = true;
         for (FPlayer p : MiscUtil.rankOrder(target.membersOnline(true, fme))) {
-            if (fme.asPlayer() != null && !fme.asPlayer().canSee(p.asPlayer())) {
+            if (fme.asPlayer() instanceof Player plr && p.asPlayer() instanceof Player pplr && !plr.canSee(pplr)) {
                 continue; // skip
             }
             if (!first) {
@@ -54,7 +55,7 @@ public enum FancyTag implements Tag {
         boolean first = true;
         for (FPlayer p : MiscUtil.rankOrder(target.members())) {
             // Also make sure to add players that are online BUT can't be seen.
-            if (!p.isOnline() || (fme.asPlayer() != null && p.isOnline() && !fme.asPlayer().canSee(p.asPlayer()))) {
+            if (!(fme.asPlayer() instanceof Player mplr && p.asPlayer() instanceof Player plr && mplr.canSee(plr))) {
                 if (!first) {
                     message.append(Component.text(", "));
                 }
@@ -122,10 +123,6 @@ public enum FancyTag implements Tag {
             }
         }
         return Collections.emptyList(); // We really shouldn't be here.
-    }
-
-    public static boolean anyMatch(String text) {
-        return getMatch(text) != null;
     }
 
     public static FancyTag getMatch(String text) {

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AsciiCompass {
-    public enum Point {
+    private enum Point {
 
         N('N'),
         NE('/'),
@@ -49,36 +49,37 @@ public class AsciiCompass {
         }
     }
 
-    public static AsciiCompass.Point getCompassPointForDirection(double inDegrees) {
+    public static List<Component> of(double inDegrees, String colorActive, String colorDefault) {
         double degrees = (inDegrees - 180) % 360;
         if (degrees < 0) {
             degrees += 360;
         }
 
-        if (0 <= degrees && degrees < 22.5) {
-            return AsciiCompass.Point.N;
-        } else if (22.5 <= degrees && degrees < 67.5) {
-            return AsciiCompass.Point.NE;
-        } else if (67.5 <= degrees && degrees < 112.5) {
-            return AsciiCompass.Point.E;
-        } else if (112.5 <= degrees && degrees < 157.5) {
-            return AsciiCompass.Point.SE;
-        } else if (157.5 <= degrees && degrees < 202.5) {
-            return AsciiCompass.Point.S;
-        } else if (202.5 <= degrees && degrees < 247.5) {
-            return AsciiCompass.Point.SW;
-        } else if (247.5 <= degrees && degrees < 292.5) {
-            return AsciiCompass.Point.W;
-        } else if (292.5 <= degrees && degrees < 337.5) {
-            return AsciiCompass.Point.NW;
-        } else if (337.5 <= degrees && degrees < 360.0) {
-            return AsciiCompass.Point.N;
-        } else {
-            return null;
-        }
-    }
+        Point point;
 
-    public static List<Component> getAsciiCompass(Point point, String colorActive, String colorDefault) {
+        if (0 <= degrees && degrees < 22.5) {
+            point = AsciiCompass.Point.N;
+        } else if (22.5 <= degrees && degrees < 67.5) {
+            point = AsciiCompass.Point.NE;
+        } else if (67.5 <= degrees && degrees < 112.5) {
+            point = AsciiCompass.Point.E;
+        } else if (112.5 <= degrees && degrees < 157.5) {
+            point = AsciiCompass.Point.SE;
+        } else if (157.5 <= degrees && degrees < 202.5) {
+            point = AsciiCompass.Point.S;
+        } else if (202.5 <= degrees && degrees < 247.5) {
+            point = AsciiCompass.Point.SW;
+        } else if (247.5 <= degrees && degrees < 292.5) {
+            point = AsciiCompass.Point.W;
+        } else if (292.5 <= degrees && degrees < 337.5) {
+            point = AsciiCompass.Point.NW;
+        } else if (337.5 <= degrees && degrees < 360.0) {
+            point = AsciiCompass.Point.N;
+        } else {
+            point = AsciiCompass.Point.N; // yolo
+        }
+
+
         ArrayList<Component> ret = new ArrayList<>();
         String row;
 
@@ -101,9 +102,5 @@ public class AsciiCompass {
         ret.add(Mini.parse(row.replace("\\", "\\\\")));
 
         return ret;
-    }
-
-    public static List<Component> getAsciiCompass(double inDegrees, String colorActive, String colorDefault) {
-        return getAsciiCompass(getCompassPointForDirection(inDegrees), colorActive, colorDefault);
     }
 }

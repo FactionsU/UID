@@ -215,7 +215,7 @@ public abstract class MemoryBoard implements Board {
         ret.add(TextUtil.titleizeC("(" + flocation.asCoordString() + ") " + factionLoc.tagString(fplayer)));
 
         // Get the compass
-        List<Component> asciiCompass = AsciiCompass.getAsciiCompass(inDegrees, "<red>", "<gold>");
+        List<Component> asciiCompass = AsciiCompass.of(inDegrees, "<red>", "<gold>");
 
         int halfWidth = FactionsPlugin.instance().conf().map().getWidth() / 2;
         // Use player's value for height
