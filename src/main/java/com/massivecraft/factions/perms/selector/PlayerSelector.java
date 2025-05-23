@@ -5,6 +5,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.perms.Selectable;
+import com.massivecraft.factions.util.RelationUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -60,6 +61,6 @@ public class PlayerSelector extends AbstractSelector {
         FPlayer player = FPlayers.getInstance().getById(this.uuid.toString());
         return player == null ?
                 MiniMessage.miniMessage().deserialize(FactionsPlugin.getInstance().tl().permissions().selectors().player().getUuidValue(), Placeholder.unparsed("uuid", this.uuid.toString()))
-                : LegacyComponentSerializer.legacySection().deserialize(player.getRelationTo(context).getColor() + player.getName());
+                : LegacyComponentSerializer.legacySection().deserialize(RelationUtil.getColorStringOfThatToMe(context, player) + player.getName());
     }
 }

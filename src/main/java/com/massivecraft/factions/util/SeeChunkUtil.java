@@ -7,6 +7,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.util.material.MaterialDb;
 import com.massivecraft.factions.util.particle.ParticleColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -61,8 +62,7 @@ public class SeeChunkUtil extends BukkitRunnable {
 
         ParticleColor color = null;
         if (useColor) {
-            ChatColor chatColor = Board.getInstance().getFactionAt(flocation).getRelationTo(fme).getColor();
-            color = ParticleColor.fromChatColor(chatColor);
+            color = new ParticleColor(Board.getInstance().getFactionAt(flocation).getRelationTo(fme).getTextColor());
         }
 
         int blockX;

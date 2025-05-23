@@ -7,6 +7,7 @@ import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.FactionsPlugin;
 import com.massivecraft.factions.config.file.MainConfig;
 import com.massivecraft.factions.tag.Tag;
+import com.massivecraft.factions.util.RelationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -198,7 +199,7 @@ public class FTeamWrapper {
 
     private String apply(String prefixOrSuffix, FPlayer fplayer, int maxLength) {
         prefixOrSuffix = Tag.parsePlaceholders(fplayer.getPlayer(), prefixOrSuffix);
-        prefixOrSuffix = prefixOrSuffix.replace("{relationcolor}", faction.getRelationTo(fplayer).getColor().toString());
+        prefixOrSuffix = prefixOrSuffix.replace("{relationcolor}", RelationUtil.getColorStringOfThatToMe(fplayer, faction));
         int remaining = Math.min("{faction}".length() + maxLength - prefixOrSuffix.length(), faction.getTag().length());
         prefixOrSuffix = prefixOrSuffix.replace("{faction}", remaining > 0 ? faction.getTag().substring(0, remaining) : "");
         prefixOrSuffix = Tag.parsePlain(fplayer, prefixOrSuffix);

@@ -6,6 +6,7 @@ import com.massivecraft.factions.data.MemoryFaction;
 import com.massivecraft.factions.perms.PermSelector;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.perms.Selectable;
+import com.massivecraft.factions.util.TextUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
@@ -62,7 +63,7 @@ public abstract class AbstractRoleSelector extends AbstractSelector {
 
     @Override
     public Component displayValue(Faction context) {
-        return LegacyComponentSerializer.legacySection().deserialize(this.role.getColor() + this.role.getTranslation());
+        return LegacyComponentSerializer.legacySection().deserialize(TextUtil.getString(this.role.getTextColor()) + this.role.getTranslation());
     }
 
     @Override

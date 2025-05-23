@@ -11,6 +11,7 @@ import com.massivecraft.factions.cmd.top.FTopValue;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.landraidcontrol.PowerControl;
 import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.util.RelationUtil;
 import com.massivecraft.factions.util.TL;
 import org.bukkit.entity.Player;
 
@@ -98,7 +99,7 @@ public class CmdTop extends FCommand {
         for (FTopFacValPair fvpair : sortedFactions.subList(start, end)) {
             // Get the relation color if player is executing this.
             Faction faction = fvpair.faction;
-            String fac = context.sender instanceof Player ? faction.getRelationTo(context.fPlayer).getColor() + faction.getTag() : faction.getTag();
+            String fac = context.sender instanceof Player ? RelationUtil.getColorStringOfThatToMe(context.fPlayer, faction) + faction.getTag() : faction.getTag();
             lines.add(TL.COMMAND_TOP_LINE.format(rank, fac, fvpair.value.getDisplayString()));
             rank++;
         }

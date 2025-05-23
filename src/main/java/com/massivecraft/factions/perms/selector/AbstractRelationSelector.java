@@ -6,6 +6,7 @@ import com.massivecraft.factions.iface.RelationParticipator;
 import com.massivecraft.factions.perms.PermSelector;
 import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Selectable;
+import com.massivecraft.factions.util.TextUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
@@ -61,7 +62,7 @@ public abstract class AbstractRelationSelector extends AbstractSelector {
 
     @Override
     public Component displayValue(Faction context) {
-        return LegacyComponentSerializer.legacySection().deserialize(this.relation.getColor() + this.relation.getTranslation());
+        return LegacyComponentSerializer.legacySection().deserialize(TextUtil.getString(this.relation.getTextColor()) + this.relation.getTranslation());
     }
 
     @Override

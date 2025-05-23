@@ -11,7 +11,9 @@ import com.massivecraft.factions.perms.Relation;
 import com.massivecraft.factions.perms.Role;
 import com.massivecraft.factions.scoreboards.FTeamWrapper;
 import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.util.RelationUtil;
 import com.massivecraft.factions.util.TL;
+import com.massivecraft.factions.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -72,7 +74,7 @@ public abstract class FRelationCommand extends FCommand {
         // try to set the new relation
         context.faction.setRelationWish(them, targetRelation);
         Relation currentRelation = context.faction.getRelationTo(them, true);
-        ChatColor currentRelationColor = currentRelation.getColor();
+        String currentRelationColor = RelationUtil.getColorStringOfThatToMe(them, context.faction);
 
         // if the relation change was successful
         if (targetRelation.value == currentRelation.value) {
@@ -84,9 +86,9 @@ public abstract class FRelationCommand extends FCommand {
             context.faction.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.getTranslation(), currentRelationColor + them.getTag());
         } else {
             // inform the other faction of your request
-            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + context.faction.getTag(), targetRelation.getColor() + targetRelation.getTranslation());
+            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + context.faction.getTag(), TextUtil.getString(targetRelation.getTextColor()) + targetRelation.getTranslation());
             them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, FactionsPlugin.getInstance().conf().getCommandBase().getFirst(), targetRelation, context.faction.getTag());
-            context.faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.getTag(), "" + targetRelation.getColor() + targetRelation);
+            context.faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.getTag(), "" + TextUtil.getString(targetRelation.getTextColor()) + targetRelation);
         }
 
         if (!targetRelation.isNeutral() && them.isPeaceful()) {
