@@ -42,6 +42,8 @@ public final class Upgrades {
 
     public static final Upgrade POWER_MAX = new Upgrade.Simple("power_max", TranslationsConfig.Upgrades::powerMax, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
+    public static final Upgrade REDSTONE_PROTECT = new Upgrade.Simple("redstone_anti_flood", TranslationsConfig.Upgrades::redstoneAntiFlood, 1, Set.of());
+
     public static final Upgrade ZONES = new Upgrade.Reactive("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE),
             (f, o, n) -> {
                 if (o == 0) {
@@ -132,6 +134,13 @@ public final class Upgrades {
                     10,
                     0,
                     LeveledValueProvider.Equation.of("100000 * (level * level)")
+            ),
+            new UpgradeSettings(
+                    Upgrades.REDSTONE_PROTECT,
+                    Map.of(),
+                    1,
+                    0,
+                    LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(10000))
             ),
             new UpgradeSettings(
                     Upgrades.ZONES,

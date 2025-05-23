@@ -759,6 +759,8 @@ public class TranslationsConfig {
 
         private UpgradeDetail powerMax = new UpgradeDetail("<green>Maximum Power Limit Increase", "<green>Increases the maximum limit on faction power", "<green>+<increase> power");
 
+        private UpgradeDetail redstoneAntiFlood = new UpgradeDetail("<green>Redstone Anti-Flood", "<green>Protect circuits from flooding", "");
+
         private UpgradeDetail zones = new UpgradeDetail("<green>Zones", "<green>Assign your faction claims to zones to label or grant different permissions", "<green>Grants <increase> zones");
 
         public UpgradeDetail dtrClaimLimit() {
@@ -783,6 +785,10 @@ public class TranslationsConfig {
 
         public UpgradeDetail powerMax() {
             return this.powerMax;
+        }
+
+        public UpgradeDetail redstoneAntiFlood() {
+            return this.redstoneAntiFlood;
         }
 
         public UpgradeDetail zones() {

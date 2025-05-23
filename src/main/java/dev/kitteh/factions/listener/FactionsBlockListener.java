@@ -11,6 +11,7 @@ import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
@@ -35,6 +36,7 @@ import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.material.Directional;
 
 import java.util.List;
+import java.util.Set;
 
 public class FactionsBlockListener extends AbstractListener {
 
@@ -121,6 +123,8 @@ public class FactionsBlockListener extends AbstractListener {
         event.setCancelled(true);
     }
 
+    private static Set<Material> waterBreakable = Set.of(Material.REDSTONE_WIRE, Material.REDSTONE_TORCH, Material.REDSTONE_WALL_TORCH, Material.COMPARATOR, Material.REPEATER);
+
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockFromTo(BlockFromToEvent event) {
         if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
@@ -148,6 +152,10 @@ public class FactionsBlockListener extends AbstractListener {
             if ((safe && to.isSafeZone() || (war && to.isWarZone()))) {
                 event.setCancelled(true);
             }
+        }
+
+        if (event.getBlock().getType() == Material.WATER && waterBreakable.contains(event.getToBlock().getType()) && new FLocation(event.getToBlock()).faction().upgradeLevel(Upgrades.REDSTONE_PROTECT) > 0) {
+            event.setCancelled(true);
         }
     }
 
