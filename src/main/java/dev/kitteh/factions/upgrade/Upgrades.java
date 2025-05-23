@@ -29,11 +29,18 @@ public final class Upgrades {
 
     public static final Upgrade FALL_DAMAGE_REDUCTION = new Upgrade.Simple("fall_damage_reduction", TranslationsConfig.Upgrades::fallDamage, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
-    public static final Upgrade FLIGHT = new Upgrade.Simple("flight", TranslationsConfig.Upgrades::flight, 1, Set.of());
+    public static final Upgrade FLIGHT = new Upgrade.Reactive("flight", TranslationsConfig.Upgrades::flight, 1, Set.of(),
+            (f, o, n) -> {
+                if (o == 0) {
+                    f.membersOnlineAsPlayers().forEach(Player::updateCommands);
+                }
+            });
 
     public static final Upgrade GROWTH = new Upgrade.Simple("growth", TranslationsConfig.Upgrades::growth, Integer.MAX_VALUE, Set.of(Variables.CHANCE, Variables.GROWTH_BOOST));
 
     public static final Upgrade MAX_MEMBERS = new Upgrade.Simple("max_members", TranslationsConfig.Upgrades::maxMembers, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
+
+    public static final Upgrade POWER_MAX = new Upgrade.Simple("power_max", TranslationsConfig.Upgrades::powerMax, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
     public static final Upgrade ZONES = new Upgrade.Reactive("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE),
             (f, o, n) -> {
@@ -115,7 +122,16 @@ public final class Upgrades {
                     ),
                     4,
                     0,
-                    LeveledValueProvider.Equation.of("100000*(level + 1)")
+                    LeveledValueProvider.Equation.of("100000 * (level + 1)")
+            ),
+            new UpgradeSettings(
+                    Upgrades.POWER_MAX,
+                    Map.of(
+                            Variables.POSITIVE_INCREASE, LeveledValueProvider.Equation.of("level * 5")
+                    ),
+                    10,
+                    0,
+                    LeveledValueProvider.Equation.of("100000 * (level * level)")
             ),
             new UpgradeSettings(
                     Upgrades.ZONES,

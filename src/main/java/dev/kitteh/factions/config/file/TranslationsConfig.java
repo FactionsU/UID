@@ -757,6 +757,8 @@ public class TranslationsConfig {
 
         private UpgradeDetail maxMembers = new UpgradeDetail("<green>Member Limit Increase", "<green>Increases maximum number of faction members", "<green>+<increase> members");
 
+        private UpgradeDetail powerMax = new UpgradeDetail("<green>Maximum Power Limit Increase", "<green>Increases the maximum limit on faction power", "<green>+<increase> power");
+
         private UpgradeDetail zones = new UpgradeDetail("<green>Zones", "<green>Assign your faction claims to zones to label or grant different permissions", "<green>Grants <increase> zones");
 
         public UpgradeDetail dtrClaimLimit() {
@@ -777,6 +779,10 @@ public class TranslationsConfig {
 
         public UpgradeDetail maxMembers() {
             return this.maxMembers;
+        }
+
+        public UpgradeDetail powerMax() {
+            return this.powerMax;
         }
 
         public UpgradeDetail zones() {

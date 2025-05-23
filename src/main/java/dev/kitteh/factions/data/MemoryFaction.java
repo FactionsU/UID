@@ -18,6 +18,7 @@ import dev.kitteh.factions.permissible.*;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.*;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -889,8 +890,14 @@ public abstract class MemoryFaction implements Faction {
         for (FPlayer fplayer : fplayers) {
             ret += fplayer.powerMax();
         }
-        if (FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax() > 0 && ret > FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax()) {
-            ret = FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax();
+        double confMax = FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax();
+        if (confMax > 0) {
+            double limit = confMax;
+            int lvl = this.upgradeLevel(Upgrades.POWER_MAX);
+            if (lvl > 0) {
+                limit += Universe.universe().upgradeSettings(Upgrades.POWER_MAX).valueAt(Upgrades.Variables.POSITIVE_INCREASE, lvl).doubleValue();
+            }
+            ret = Math.min(ret, limit);
         }
         return ret + this.powerBoost;
     }
