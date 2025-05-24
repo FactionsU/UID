@@ -24,6 +24,11 @@ public abstract class MemoryFPlayers implements FPlayers {
         return fPlayers.computeIfAbsent(id, this::constructNewFPlayer);
     }
 
+    @Override
+    public boolean has(UUID uuid) {
+        return fPlayers.containsKey(uuid);
+    }
+
     protected abstract FPlayer constructNewFPlayer(UUID id);
 
     public abstract int load();

@@ -35,6 +35,7 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
         SELF,
         ROLE_AT_OR_BELOW,
         ROLE_BELOW,
+        BANNED,
         SAME_FACTION,
         OTHER_FACTION,
         NO_FACTION,
@@ -195,6 +196,15 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                             temp2.add(player.name());
                             count++;
                         }
+                    }
+                    break;
+                case BANNED:
+                    if (context.sender() instanceof Sender.Player player && player.faction().isNormal()) {
+                        player.faction().bans().stream()
+                                .filter(b -> FPlayers.fPlayers().has(b.banned()))
+                                .map(b -> FPlayers.fPlayers().get(b.banned()))
+                                .filter(fp -> !fp.uniqueId().toString().equals(fp.name()))
+                                .forEach(fp -> temp1.add(fp.name()));
                     }
                     break;
             }

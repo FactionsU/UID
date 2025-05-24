@@ -21,7 +21,7 @@ public class CmdUnban implements Cmd {
         return (manager, builder) -> manager.command(
                 builder.literal("unban")
                         .commandDescription(Cloudy.desc(TL.COMMAND_UNBAN_DESCRIPTION))
-                        .required("player", FPlayerParser.of(FPlayerParser.Include.OTHER_FACTION)) // TODO can I make this the list
+                        .required("player", FPlayerParser.of(FPlayerParser.Include.BANNED))
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BAN).and(Cloudy.hasSelfFactionPerms(PermissibleActions.BAN))))
                         .handler(this::handle)
         );

@@ -25,4 +25,6 @@ public interface FPlayers {
     }
 
     FPlayer get(UUID uuid);
+
+    boolean has(UUID uuid);
 }
