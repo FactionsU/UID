@@ -83,6 +83,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jspecify.annotations.NonNull;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -98,7 +99,8 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -227,9 +229,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         UpdateCheck update = new UpdateCheck("FactionsUUID", this.getDescription().getVersion(), this.getServer().getName(), this.getServer().getVersion());
         update.meow = this.getClass().getDeclaredMethods().length;
-        // Ensure basefolder exists!
-        //noinspection ResultOfMethodCallIgnored
-        this.getDataFolder().mkdirs();
 
         byte[] m = Bukkit.getMotd().getBytes(StandardCharsets.UTF_8);
         if (m.length == 0) {
@@ -264,6 +263,40 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
             this.getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", GameProfile.class);
         } catch (Exception e) {
             this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", e);
+        }
+
+        // Migration from older FUUID
+        Path dataPath = this.getDataFolder().toPath();
+        if (!Files.exists(dataPath)) {
+            try {
+                Files.createDirectories(dataPath);
+            } catch (IOException e) {
+                throw new RuntimeException("Could not create FactionsUUID directory", e);
+            }
+            Path oldPath = dataPath.getParent().resolve("Factions");
+            if (Files.exists(oldPath)) {
+                this.getLogger().info("No FUUID data folder exists, but found older Factions folder. Migrating...");
+                try {
+                    Files.walkFileTree(oldPath, new SimpleFileVisitor<>() {
+                        @Override
+                        public @NonNull FileVisitResult preVisitDirectory(@NonNull Path dir, @NonNull BasicFileAttributes attrs)
+                                throws IOException {
+                            Files.createDirectories(dataPath.resolve(oldPath.relativize(dir).toString()));
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                        @Override
+                        public @NonNull FileVisitResult visitFile(@NonNull Path file, @NonNull BasicFileAttributes attrs)
+                                throws IOException {
+                            Files.copy(file, dataPath.resolve(oldPath.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
+                            return FileVisitResult.CONTINUE;
+                        }
+                    });
+                } catch (IOException e) {
+                    this.getServer().shutdown();
+                    throw new RuntimeException("Failed to migrate files, bailing out before potentially ruining data. To manually migrate, copy Factions folder to FactionsUUID. To not migrate, rename the Factions folder or move it out.", e);
+                }
+            }
         }
 
         loadLang();
