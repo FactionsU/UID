@@ -95,7 +95,7 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
 
         Player sendingPlayer = context.sender() instanceof Sender.Player player ? player.player() : null;
         for (Player player : AbstractFactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
-            if (sendingPlayer != null && !player.canSee(player)) {
+            if (sendingPlayer != null && !sendingPlayer.canSee(player)) {
                 continue;
             }
             Faction f = FPlayers.fPlayers().get(player).faction();
@@ -109,14 +109,13 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
         Collections.sort(secondary);
 
         if (this.includeFactions.contains(Include.PLAYERS)) {
-            boolean isPlayer = context.sender().isPlayer();
             int count = output.size();
 
             for (FPlayer player : FPlayers.fPlayers().online()) {
                 if (count > SANE_SUGGESTION_LIMIT) {
                     break;
                 }
-                if (isPlayer && !((Sender.Player) context.sender()).player().canSee(player.asPlayer())) {
+                if (sendingPlayer != null && !sendingPlayer.canSee(player.asPlayer())) {
                     continue;
                 }
                 output.add(player.name());

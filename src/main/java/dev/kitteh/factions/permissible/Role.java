@@ -24,8 +24,8 @@ public enum Role implements Permissible {
     public final int value;
     public final String nicename;
     public final TL translation;
-    private Set<String> roleNamesAtOrBelow;
-    private Set<String> roleNamesAtOrAbove;
+    private @Nullable Set<String> roleNamesAtOrBelow;
+    private @Nullable Set<String> roleNamesAtOrAbove;
 
     Role(final int value, final TL translation) {
         this.value = value;
