@@ -143,7 +143,9 @@ public class CmdRole implements Cmd {
         Bukkit.getServer().getPluginManager().callEvent(new FactionNewAdminEvent(target, sender.faction()));
 
         // promote target player, and demote existing admin
-        sender.role(Role.COLEADER); // TODO check limit here
+        boolean allowMultipleColeaders = FactionsPlugin.instance().conf().factions().other().isAllowMultipleColeaders();
+        boolean noColeaders = sender.faction().members(Role.COLEADER).isEmpty();
+        sender.role((allowMultipleColeaders || noColeaders) ? Role.COLEADER : Role.MODERATOR);
         target.role(Role.ADMIN);
         if (sender.asPlayer() instanceof Player player) {
             player.updateCommands();

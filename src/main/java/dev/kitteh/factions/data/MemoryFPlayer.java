@@ -904,7 +904,6 @@ public abstract class MemoryFPlayer implements FPlayer {
                 denyReason = plugin.txt().parse(TL.CLAIM_PEACEFULTARGET.toString(), currentFaction.tagString(this));
             } else if (!currentFaction.hasLandInflation()) {
                 // Cannot claim other faction (perhaps based on power/land ratio)
-                // TODO more messages WARN current faction most importantly
                 denyReason = plugin.txt().parse(TL.CLAIM_THISISSPARTA.toString(), currentFaction.tagString(this));
             } else if (currentFaction.hasLandInflation() && !plugin.conf().factions().claims().isAllowOverClaim()) {
                 // deny over claim when it normally would be allowed.
