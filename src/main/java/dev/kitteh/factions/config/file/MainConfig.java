@@ -2486,8 +2486,15 @@ public class MainConfig {
                 "Set to false to keep the balance in an empty permanent faction")
         private boolean bankPermanentFactionSendBalanceToLastLeaver = true;
 
+        @Comment("Locale, language_country, two characters each, must contain both or be rejected")
+        private String locale = "en_US";
+
         public boolean isEnabled() {
             return enabled;
+        }
+
+        public String getLocale() {
+            return locale;
         }
 
         public String getDefaultWorld() {

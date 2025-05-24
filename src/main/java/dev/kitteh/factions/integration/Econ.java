@@ -19,7 +19,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -31,20 +33,24 @@ public class Econ {
     private static final Pattern FACTION_PATTERN = Pattern.compile("^faction-(\\d+)$");
 
     static {
-        DecimalFormat f;
-        try {
-            f = new DecimalFormat(TL.ECON_FORMAT.toString());
-        } catch (Exception e) {
-            AbstractFactionsPlugin.getInstance().getLogger().warning("Fell over on invalid default econ format '" + TL.ECON_FORMAT + "'");
-            f = new DecimalFormat("###,###.###"); // TODO better defaulting
-        }
-        format = f;
+
     }
 
     public static void setup() {
         if (isSetup()) {
             return;
         }
+
+        String localeString = FactionsPlugin.instance().conf().economy().getLocale();
+        DecimalFormat f;
+        try {
+            String[] split = localeString.split("_");
+            f = new DecimalFormat(TL.ECON_FORMAT.toString(), DecimalFormatSymbols.getInstance(Locale.of(split[0], split[1])));
+        } catch (Exception e) {
+            AbstractFactionsPlugin.getInstance().getLogger().warning("Fell over on invalid default econ format '" + TL.ECON_FORMAT + "' with locale '" + localeString + "'");
+            f = new DecimalFormat("###,###.###");
+        }
+        format = f;
 
         String integrationFail = "Economy integration is " + (FactionsPlugin.instance().conf().economy().isEnabled() ? "enabled, but" : "disabled, and") + " the plugin \"Vault\" ";
 
@@ -410,7 +416,7 @@ public class Econ {
         return econ.has(checkStatus(op), getWorld(op), amount);
     }
 
-    private static final DecimalFormat format;
+    private static DecimalFormat format;
 
     public static String getFriendlyBalance(FPlayer player) {
         OfflinePlayer p;
