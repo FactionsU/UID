@@ -17,7 +17,13 @@ import org.bukkit.ExplosionResult;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.WindCharge;
+import org.bukkit.entity.Wither;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Listener;
@@ -120,19 +126,8 @@ public abstract class AbstractListener implements Listener {
                 targets.add(center.getRelative(1, 0, 0));
                 targets.add(center.getRelative(-1, 0, 0));
                 for (Block target : targets) {
-                    // TODO get resistance value via NMS for future-proofing
                     Material type = target.getType();
-                    if (type == Material.AIR ||
-                            type == Material.BEDROCK ||
-                            type == Material.WATER ||
-                            type == Material.LAVA ||
-                            type == Material.OBSIDIAN ||
-                            type == Material.NETHER_PORTAL ||
-                            type == Material.ENCHANTING_TABLE ||
-                            type.name().contains("ANVIL") ||
-                            type == Material.END_PORTAL ||
-                            type == Material.END_PORTAL_FRAME ||
-                            type == Material.ENDER_CHEST) {
+                    if (type.isBlock() && type.getBlastResistance() >= 100F) {
                         continue;
                     }
                     if (!explosionDisallowed(boomer, new FLocation(target.getLocation()))) {
