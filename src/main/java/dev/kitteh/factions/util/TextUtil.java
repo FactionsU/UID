@@ -24,8 +24,26 @@ public class TextUtil {
     }
 
     public static String getString(TextColor color) {
-        if (color instanceof NamedTextColor) {
-            return getClosest(color).toString();
+        if (color instanceof NamedTextColor namedTextColor) {
+            ChatColor col = switch (namedTextColor.toString()) {
+                case "black" -> ChatColor.BLACK;
+                case "dark_blue" -> ChatColor.DARK_BLUE;
+                case "dark_green" -> ChatColor.DARK_GREEN;
+                case "dark_aqua" -> ChatColor.DARK_AQUA;
+                case "dark_red" -> ChatColor.DARK_RED;
+                case "dark_purple" -> ChatColor.DARK_PURPLE;
+                case "gold" -> ChatColor.GOLD;
+                case "gray" -> ChatColor.GRAY;
+                case "dark_gray" -> ChatColor.DARK_GRAY;
+                case "blue" -> ChatColor.BLUE;
+                case "green" -> ChatColor.GREEN;
+                case "aqua" -> ChatColor.AQUA;
+                case "red" -> ChatColor.RED;
+                case "light_purple" -> ChatColor.LIGHT_PURPLE;
+                case "yellow" -> ChatColor.YELLOW;
+                default -> ChatColor.WHITE;
+            };
+            return col.toString();
         }
         String hexed = String.format("%06x", color.value());
         final StringBuilder builder = new StringBuilder(ChatColor.COLOR_CHAR + "x");
@@ -33,33 +51,6 @@ public class TextUtil {
             builder.append(ChatColor.COLOR_CHAR).append(hexed.charAt(x));
         }
         return builder.toString();
-    }
-
-    public static ChatColor getClosest(TextColor color) {
-        NamedTextColor namedTextColor;
-        if (color instanceof NamedTextColor) {
-            namedTextColor = (NamedTextColor) color;
-        } else {
-            namedTextColor = NamedTextColor.nearestTo(color);
-        }
-        return switch (namedTextColor.toString()) {
-            case "black" -> ChatColor.BLACK;
-            case "dark_blue" -> ChatColor.DARK_BLUE;
-            case "dark_green" -> ChatColor.DARK_GREEN;
-            case "dark_aqua" -> ChatColor.DARK_AQUA;
-            case "dark_red" -> ChatColor.DARK_RED;
-            case "dark_purple" -> ChatColor.DARK_PURPLE;
-            case "gold" -> ChatColor.GOLD;
-            case "gray" -> ChatColor.GRAY;
-            case "dark_gray" -> ChatColor.DARK_GRAY;
-            case "blue" -> ChatColor.BLUE;
-            case "green" -> ChatColor.GREEN;
-            case "aqua" -> ChatColor.AQUA;
-            case "red" -> ChatColor.RED;
-            case "light_purple" -> ChatColor.LIGHT_PURPLE;
-            case "yellow" -> ChatColor.YELLOW;
-            default -> ChatColor.WHITE;
-        };
     }
 
     // -------------------------------------------- //
@@ -130,17 +121,6 @@ public class TextUtil {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 
-    public static String implode(List<String> list, String glue) {
-        StringBuilder ret = new StringBuilder();
-        for (int i = 0; i < list.size(); i++) {
-            if (i != 0) {
-                ret.append(glue);
-            }
-            ret.append(list.get(i));
-        }
-        return ret.toString();
-    }
-
     public static String repeat(String s, int times) {
         if (times <= 0) {
             return "";
@@ -191,32 +171,5 @@ public class TextUtil {
         } else {
             return Mini.parse("<gold>" + center);
         }
-    }
-
-    public ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title) {
-        ArrayList<String> ret = new ArrayList<>();
-        int pageZeroBased = pageHumanBased - 1;
-        int pageheight = 9;
-        int pagecount = (lines.size() / pageheight) + 1;
-
-        ret.add(this.titleize(title + " " + pageHumanBased + "/" + pagecount));
-
-        if (pagecount == 0) {
-            ret.add(this.parseTags(TL.NOPAGES.toString()));
-            return ret;
-        } else if (pageZeroBased < 0 || pageHumanBased > pagecount) {
-            ret.add(this.parseTags(TL.INVALIDPAGE.format(pagecount)));
-            return ret;
-        }
-
-        int from = pageZeroBased * pageheight;
-        int to = from + pageheight;
-        if (to > lines.size()) {
-            to = lines.size();
-        }
-
-        ret.addAll(lines.subList(from, to));
-
-        return ret;
     }
 }

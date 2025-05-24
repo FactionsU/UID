@@ -5,8 +5,10 @@ import com.earth2me.essentials.Trade;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.listener.EssentialsListener;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.util.ComponentDispatcher;
 import net.ess3.api.IEssentials;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -43,7 +45,7 @@ public class Essentials {
         Trade trade = new Trade(BigDecimal.valueOf(FactionsPlugin.instance().conf().economy().getCostHome()), essentials);
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         future.exceptionally(e -> {
-            player.sendMessage(ChatColor.RED + e.getMessage());
+            ComponentDispatcher.send(player, Component.text().color(NamedTextColor.RED).content(e.getMessage()));
             return false;
         });
         teleport.teleport(loc, trade, PlayerTeleportEvent.TeleportCause.PLUGIN, future);

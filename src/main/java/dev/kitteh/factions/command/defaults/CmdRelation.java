@@ -13,6 +13,8 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
@@ -80,7 +82,8 @@ public class CmdRelation implements Cmd {
         // try to set the new relation
         faction.relationWish(them, targetRelation);
         Relation currentRelation = faction.relationTo(them, true);
-        ChatColor currentRelationColor = currentRelation.chatColor();
+        String currentRelationColor = TextUtil.getString(currentRelation.color());
+        String targetRelationColor = TextUtil.getString(targetRelation.color());
 
         // if the relation change was successful
         if (targetRelation.value == currentRelation.value) {
@@ -92,9 +95,9 @@ public class CmdRelation implements Cmd {
             faction.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + them.tag());
         } else {
             // inform the other faction of your request
-            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + faction.tag(), targetRelation.chatColor() + targetRelation.translation());
+            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + faction.tag(), targetRelationColor + targetRelation.translation());
             them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, FactionsPlugin.instance().conf().getCommandBase().getFirst(), targetRelation, faction.tag());
-            faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.tag(), "" + targetRelation.chatColor() + targetRelation);
+            faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.tag(), targetRelationColor + targetRelation);
         }
 
         if (!targetRelation.isNeutral() && them.peaceful()) {

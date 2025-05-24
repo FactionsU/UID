@@ -511,7 +511,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     // Colored Chat Tag
     @Override
     public String chatTag(@Nullable Participator participator) {
-        return this.hasFaction() ? this.relationTo(participator).chatColor() + chatTag() : TL.NOFACTION_PREFIX.toString();
+        return this.hasFaction() ? TextUtil.getString(this.relationTo(participator).color()) + this.chatTag() : TL.NOFACTION_PREFIX.toString();
     }
 
     @Override

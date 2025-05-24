@@ -5,7 +5,8 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.TL;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -23,6 +24,6 @@ public class CmdVersion implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        context.sender().sender().sendMessage(ChatColor.GREEN + AbstractFactionsPlugin.getInstance().getDescription().getFullName());
+        context.sender().sendMessage(Component.text().content(AbstractFactionsPlugin.getInstance().getDescription().getFullName()).color(NamedTextColor.GREEN));
     }
 }
