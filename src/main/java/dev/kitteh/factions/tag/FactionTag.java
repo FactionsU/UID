@@ -63,7 +63,7 @@ public enum FactionTag implements Tag {
     PERMANENT("permanent", (fac) -> fac.permanent() ? "permanent" : "{notPermanent}"), // no braces needed
     LAND_VALUE("land-value", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(fac.claimCount())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("value")),
     DESCRIPTION("description", fac -> fac.description()),
-    CREATE_DATE("create-date", (fac) -> TL.sdf.format(fac.founded())),
+    CREATE_DATE("create-date", (fac) -> TL.sdf.format(fac.founded().toEpochMilli())),
     LAND_REFUND("land-refund", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(fac.claimCount())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("refund")),
     BANK_BALANCE("faction-balance", (fac) -> {
         if (Econ.shouldBeUsed()) {
