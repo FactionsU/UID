@@ -30,8 +30,6 @@ public class Sentinel extends SentinelIntegration {
         }
         AbstractFactionsPlugin.getInstance().getLogger().info("Loaded Sentinel integration!");
         AbstractFactionsPlugin.getInstance().getLogger().info("");
-        AbstractFactionsPlugin.getInstance().getLogger().info("You may safely ignore the Sentinel message warning you about compatibility, as we run our own integration.");
-        AbstractFactionsPlugin.getInstance().getLogger().info("");
         return true;
     }
 
