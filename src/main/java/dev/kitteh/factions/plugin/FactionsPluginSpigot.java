@@ -9,4 +9,9 @@ public class FactionsPluginSpigot extends AbstractFactionsPlugin {
 
         super.onLoad();
     }
+
+    @Override
+    protected String pluginType() {
+        return "Spigot";
+    }
 }

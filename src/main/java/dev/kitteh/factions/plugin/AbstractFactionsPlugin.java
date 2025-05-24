@@ -49,6 +49,7 @@ import dev.kitteh.factions.util.AutoLeaveTask;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.FlightUtil;
 import dev.kitteh.factions.util.LazyLocation;
+import dev.kitteh.factions.util.MaterialDb;
 import dev.kitteh.factions.util.Metrics;
 import dev.kitteh.factions.util.SeeChunkUtil;
 import dev.kitteh.factions.util.TL;
@@ -65,7 +66,6 @@ import dev.kitteh.factions.util.adapter.SelectorPermsAdapter;
 import dev.kitteh.factions.util.adapter.UpgradeTypeAdapter;
 import dev.kitteh.factions.util.adapter.UpgradeVariableTypeAdapter;
 import dev.kitteh.factions.util.adapter.WorldTrackerTypeAdapter;
-import dev.kitteh.factions.util.MaterialDb;
 import io.papermc.lib.PaperLib;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
@@ -260,6 +260,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         getLogger().info("");
         getLogger().info("Factions UUID!");
         getLogger().info("Version " + this.getDescription().getVersion());
+        getLogger().info("Loading as a " + this.pluginType() + "plugin");
         getLogger().info("");
         getLogger().info("Need support? https://factions.support/help/");
         getLogger().info("");
@@ -948,4 +949,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     public IntegrationManager integrationManager() {
         return this.integrationManager;
     }
+
+    protected abstract String pluginType();
 }
