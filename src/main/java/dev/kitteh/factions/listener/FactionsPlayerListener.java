@@ -166,7 +166,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }.runTaskLater(this.plugin, 33L); // Don't ask me why.
 
         if (this.plugin.conf().scoreboard().constant().isEnabled()) {
-            FScoreboard.init(me);
+            FScoreboard.init(player, me);
             FScoreboard.get(me).setDefaultSidebar(new FDefaultSidebar());
             FScoreboard.get(me).setSidebarVisibility(me.showScoreboard());
         }

@@ -23,8 +23,8 @@ public class FScoreboard {
     private FSidebarProvider temporaryProvider;
     private boolean removed = false;
 
-    public static void init(FPlayer fplayer) {
-        FScoreboard fboard = new FScoreboard(fplayer);
+    public static void init(Player player, FPlayer fplayer) {
+        FScoreboard fboard = new FScoreboard(player, fplayer);
         fscoreboards.put(fplayer, fboard);
 
         if (fplayer.hasFaction()) {
@@ -53,13 +53,13 @@ public class FScoreboard {
         return fscoreboards.get(FPlayers.fPlayers().get(player));
     }
 
-    private FScoreboard(FPlayer fplayer) {
+    private FScoreboard(Player player, FPlayer fplayer) {
         this.fplayer = fplayer;
 
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.bufferedObjective = new BufferedObjective(scoreboard);
 
-        fplayer.asPlayer().setScoreboard(scoreboard);
+        player.setScoreboard(scoreboard);
     }
 
     protected FPlayer getFPlayer() {
