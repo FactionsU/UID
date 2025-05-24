@@ -123,8 +123,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     // Our single plugin instance.
     // Single 4 life.
     private static AbstractFactionsPlugin instance;
-    private static final int OLDEST_MODERN_SUPPORTED = 2104;
-    private static final String OLDEST_MODERN_SUPPORTED_STRING = "1.21.4";
 
     public static AbstractFactionsPlugin getInstance() {
         return instance;
@@ -213,12 +211,10 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
             @Override
             public void flush() {
-
             }
 
             @Override
             public void close() throws SecurityException {
-
             }
         };
         getLogger().addHandler(handler);
@@ -253,10 +249,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         }
         this.serverUUID = new UUID(ms, ((0xaf & 0xffL) << 56) + ((0xac & 0xffL) << 48) + (u & 0xffffffffL) + ((p & 0xffffL) << 32));
 
-        // Version party
-        Pattern versionPattern = Pattern.compile("1\\.(\\d{1,2})(?:\\.(\\d{1,2}))?");
-        Matcher versionMatcher = versionPattern.matcher(this.getServer().getVersion());
-
         getLogger().info("");
         getLogger().info("Factions UUID!");
         getLogger().info("Version " + this.getDescription().getVersion());
@@ -264,30 +256,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         getLogger().info("");
         getLogger().info("Need support? https://factions.support/help/");
         getLogger().info("");
-        Integer versionInteger = null;
-        if (versionMatcher.find()) {
-            try {
-                int minor = Integer.parseInt(versionMatcher.group(1));
-                String patchS = versionMatcher.group(2);
-                int patch = (patchS == null || patchS.isEmpty()) ? 0 : Integer.parseInt(patchS);
-                versionInteger = (minor * 100) + patch;
-                this.mcVersionString = "1." + minor + (patchS == null ? "" : ('.' + patchS));
-                getLogger().info("Detected Minecraft " + versionMatcher.group());
-            } catch (NumberFormatException ignored) {
-            }
-        }
-        if (versionInteger == null) {
-            getLogger().warning("");
-            getLogger().warning("Could not identify version. Going with least supported version, " + OLDEST_MODERN_SUPPORTED_STRING + ".");
-            getLogger().warning("Please visit our support live chat for help - https://factions.support/help/");
-            getLogger().warning("");
-            versionInteger = OLDEST_MODERN_SUPPORTED;
-            this.mcVersionString = this.getServer().getVersion();
-        }
-        if (versionInteger < OLDEST_MODERN_SUPPORTED) {
-            getLogger().info("");
-            getLogger().warning("FactionsUUID expects at least " + OLDEST_MODERN_SUPPORTED_STRING + " and may not work on your version.");
-        }
         getLogger().info("");
 
         this.getLogger().info("Server UUID " + this.serverUUID);
