@@ -17,12 +17,15 @@ import dev.kitteh.factions.integration.Graves;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
-import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.scoreboard.sidebar.FDefaultSidebar;
-import dev.kitteh.factions.util.*;
+import dev.kitteh.factions.util.ComponentDispatcher;
+import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
+import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -46,7 +49,6 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -792,23 +794,6 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (event.getInventory().getHolder() instanceof GUI) {
             event.setCancelled(true);
-        }
-    }
-
-
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerKick(PlayerKickEvent event) {
-        FPlayer badGuy = FPlayers.fPlayers().get(event.getPlayer());
-
-        // if player was banned (not just kicked), get rid of their stored info
-        // TODO fix this nonsense
-        if (this.plugin.conf().factions().other().isRemovePlayerDataWhenBanned() && event.getReason().equals("Banned by admin.")) {
-            if (badGuy.role() == Role.ADMIN) {
-                badGuy.faction().promoteNewLeader();
-            }
-
-            badGuy.leave(false);
-            badGuy.eraseData();
         }
     }
 

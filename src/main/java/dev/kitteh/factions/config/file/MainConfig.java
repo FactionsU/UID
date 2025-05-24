@@ -2062,7 +2062,6 @@ public class MainConfig {
             private boolean autoLeaveOnlyEntireFactionInactive = false;
             private double autoLeaveRoutineRunsEveryXMinutes = 5.0;
             private int autoLeaveRoutineMaxMillisecondsPerTick = 5;  // 1 server tick is roughly 50ms, so default max 10% of a tick
-            private boolean removePlayerDataWhenBanned = true;
             private boolean autoLeaveDeleteFPlayerData = true; // Let them just remove player from Faction.
             private double considerFactionsReallyOfflineAfterXMinutes = 0.0;
             private int actionDeniedPainAmount = 1;
@@ -2204,10 +2203,6 @@ public class MainConfig {
 
             public int getAutoLeaveRoutineMaxMillisecondsPerTick() {
                 return autoLeaveRoutineMaxMillisecondsPerTick;
-            }
-
-            public boolean isRemovePlayerDataWhenBanned() {
-                return removePlayerDataWhenBanned;
             }
 
             public boolean isAutoLeaveDeleteFPlayerData() {
