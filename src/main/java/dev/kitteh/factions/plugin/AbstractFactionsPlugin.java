@@ -248,7 +248,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         getLogger().info("");
         getLogger().info("Factions UUID!");
         getLogger().info("Version " + this.getDescription().getVersion());
-        getLogger().info("Loading as a " + this.pluginType() + "plugin");
+        getLogger().info("Loading as a " + this.pluginType() + " plugin");
         getLogger().info("");
         getLogger().info("Need support? https://factions.support/help/");
         getLogger().info("");
