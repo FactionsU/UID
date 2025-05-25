@@ -237,15 +237,11 @@ public enum TL {
 
     COMMAND_GRACE_DESCRIPTION("View the current grace status"),
     COMMAND_GRACE_NOT_SET("&eGrace is not active"),
-    COMMAND_GRACE_REMAINING_MESSAGE("&eGrace active! No explosions for %s"),
-    COMMAND_GRACE_REMAINING_DAYS("%d days"),
-    COMMAND_GRACE_REMAINING_HOURS("%d hours"),
-    COMMAND_GRACE_REMAINING_MINUTES("%d minutes"),
-    COMMAND_GRACE_REMAINING_SECONDS("%d seconds"),
+    COMMAND_GRACE_ACTIVE("&eGrace active! No explosions for %s"),
 
     COMMAND_SET_GRACE_DESCRIPTION("Set grace status"),
     COMMAND_SET_GRACE_OFF("&eGrace disabled!"),
-    COMMAND_SET_GRACE_REMAINING_MESSAGE("&eGrace active! No explosions for %s"),
+    COMMAND_SET_GRACE_ACTIVE("&eGrace active! No explosions for %s"),
 
     COMMAND_HOME_DENIED("&cSorry, you cannot teleport to the home of %s"),
     COMMAND_HOME_DISABLED("&cSorry, Faction homes are disabled on this server."),
@@ -494,7 +490,11 @@ public enum TL {
     COMMAND_SETMAXVAULTS_SUCCESS("&aSet max vaults for &e%s &ato &b%d"),
 
     COMMAND_SHIELD_DESCRIPTION("View and manage shields."),
-
+    COMMAND_SHIELD_NOT_SET("&eShield is not active"),
+    COMMAND_SHIELD_AVAILABLE("&eShield available: %s"),
+    COMMAND_SHIELD_COOLDOWN("&cShield on cooldown for %s"),
+    COMMAND_SHIELD_ACTIVATED("&eShield activated by %s&e! No explosions for %s"),
+    COMMAND_SHIELD_ACTIVE("&eShield active! No explosions for %s"),
 
     COMMAND_TNT_TERRITORYONLY("&cCommand can only be run from your faction's territory!"),
     COMMAND_TNT_DEPOSIT_DESCRIPTION("Add to your faction's TNT bank"),
@@ -693,6 +693,16 @@ public enum TL {
     CLAIM_OUTSIDEBORDERBUFFER("&eYour claim is outside the border. %d chunks away world edge required."),
     CLAIM_CLICK_TO_CLAIM("Click to try to claim &2(%1$d, %2$d)"),
     CLAIM_YOUAREHERE("You are here"),
+
+    DURATION_DAYS("%d days"),
+    DURATION_DAY("%d day"),
+    DURATION_HOURS("%d hours"),
+    DURATION_HOUR("%d hour"),
+    DURATION_MINUTES("%d minutes"),
+    DURATION_MINUTE("%d minute"),
+    DURATION_SECONDS("%d seconds"),
+    DURATION_SECOND("%d second"),
+    DURATION_AND("and"),
 
     /**
      * More generic, or less easily categorisable translations, which may apply to more than one class

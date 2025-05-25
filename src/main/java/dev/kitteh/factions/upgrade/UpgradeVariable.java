@@ -1,11 +1,16 @@
 package dev.kitteh.factions.upgrade;
 
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.util.MiscUtil;
+import dev.kitteh.factions.util.TL;
 import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 @NullMarked
@@ -28,6 +33,15 @@ public record UpgradeVariable(String name, BigDecimal min, BigDecimal max, Funct
 
     public static UpgradeVariable ofPercent(String name, BigDecimal min, BigDecimal max) {
         return new UpgradeVariable(name, min, max, b -> b.movePointRight(2).setScale(2, RoundingMode.HALF_UP).toPlainString());
+    }
+
+    public static UpgradeVariable ofDuration(String name) {
+        return new UpgradeVariable(name, BigDecimal.ONE, BigDecimal.valueOf(Integer.MAX_VALUE), b -> {
+            BigInteger bigInteger = b.toBigInteger();
+            Duration duration = Duration.ofSeconds(bigInteger.longValue());
+
+            return MiscUtil.durationString(duration);
+        });
     }
 
     public BigDecimal get(BigDecimal value) {

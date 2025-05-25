@@ -14,12 +14,23 @@ import dev.kitteh.factions.event.FactionNewAdminEvent;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.landraidcontrol.LandRaidControl;
-import dev.kitteh.factions.permissible.*;
+import dev.kitteh.factions.permissible.PermSelector;
+import dev.kitteh.factions.permissible.PermState;
+import dev.kitteh.factions.permissible.PermissibleAction;
+import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
-import dev.kitteh.factions.util.*;
+import dev.kitteh.factions.util.BanInfo;
+import dev.kitteh.factions.util.LazyLocation;
+import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
+import dev.kitteh.factions.util.WorldTracker;
+import dev.kitteh.factions.util.WorldUtil;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -33,6 +44,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -349,11 +361,9 @@ public abstract class MemoryFaction implements Faction {
     protected @Nullable Integer permanentPower;
     protected @Nullable LazyLocation home;
     protected long foundedDate;
-    protected transient long lastPlayerLoggedOffTime;
     protected double powerBoost;
     protected Map<Integer, Relation> relationWish = new HashMap<>();
     protected @Nullable Map<FLocation, Set<UUID>> claimOwnership; // Leaving for now, for people who want to look back at it
-    protected transient Set<FPlayer> fplayers = new HashSet<>();
     protected Set<UUID> invites = new HashSet<>();
     protected HashMap<UUID, List<String>> announcements = new HashMap<>();
     protected ConcurrentHashMap<String, LazyLocation> warps = new ConcurrentHashMap<>();
@@ -367,10 +377,15 @@ public abstract class MemoryFaction implements Faction {
     protected long lastDTRUpdateTime;
     protected long frozenDTRUntilTime;
     protected int tntBank;
+    protected long shieldEnd;
+    protected long shieldCooldownEnd;
     protected Object2IntOpenHashMap<String> upgrades = new Object2IntOpenHashMap<>();
-    protected transient @Nullable OfflinePlayer offlinePlayer;
     protected MemoryFaction.Permissions perms = new MemoryFaction.Permissions();
     protected Zones zones = new Zones(this);
+
+    protected transient long lastPlayerLoggedOffTime;
+    protected transient Set<FPlayer> fplayers = new HashSet<>();
+    protected transient @Nullable OfflinePlayer offlinePlayer;
 
     @SuppressWarnings("ConstantValue")
     public void cleanupDeserialization() {
@@ -939,8 +954,27 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public boolean isShielded() {
-        return false; // TODO
+    public Duration shieldCooldownRemaining() {
+        long currentTime = System.currentTimeMillis();
+        if (this.shieldCooldownEnd < currentTime) {
+            this.shieldCooldownEnd = 0L;
+        }
+        return this.shieldCooldownEnd == 0L ? Duration.ZERO : Duration.ofMillis(this.shieldCooldownEnd - currentTime);
+    }
+
+    @Override
+    public Duration shieldRemaining() {
+        long currentTime = System.currentTimeMillis();
+        if (this.shieldEnd < currentTime) {
+            this.shieldEnd = 0L;
+        }
+        return this.shieldEnd == 0L ? Duration.ZERO : Duration.ofMillis(this.shieldEnd - currentTime);
+    }
+
+    @Override
+    public void shield(Duration duration, Duration cooldown) {
+        this.shieldEnd = System.currentTimeMillis() + duration.toMillis();
+        this.shieldCooldownEnd = this.shieldEnd + cooldown.toMillis();
     }
 
     @Override

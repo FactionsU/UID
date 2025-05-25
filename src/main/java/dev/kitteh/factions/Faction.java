@@ -18,6 +18,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
@@ -321,7 +322,7 @@ public interface Faction extends Participator, Selectable {
     boolean peacefulExplosionsEnabled();
 
     default boolean noExplosionsInTerritory() {
-        return this.isShielded() || (this.peaceful() && !this.peacefulExplosionsEnabled());
+        return this.shieldActive() || (this.peaceful() && !this.peacefulExplosionsEnabled());
     }
 
     boolean permanent();
@@ -411,7 +412,15 @@ public interface Faction extends Participator, Selectable {
 
     void tntBank(int amount);
 
-    boolean isShielded();
+    default boolean shieldActive() {
+        return this.shieldRemaining().isPositive();
+    }
+
+    Duration shieldCooldownRemaining();
+
+    Duration shieldRemaining();
+
+    void shield(Duration duration, Duration cooldown);
 
     int upgradeLevel(Upgrade upgrade);
 

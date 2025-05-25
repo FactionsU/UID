@@ -10,6 +10,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -105,6 +106,50 @@ public class MiscUtil {
         }
 
         return errors;
+    }
+
+    public static String durationString(long seconds) {
+        return durationString(Duration.ofSeconds(seconds));
+    }
+
+    public static String durationString(Duration duration) {
+        long days = duration.toDays();
+        long hours = duration.toHoursPart();
+        long minutes = duration.toMinutesPart();
+        long seconds = duration.toSecondsPart();
+
+        List<String> items = new ArrayList<>();
+        if (days > 0) {
+            items.add((days == 1 ? TL.DURATION_DAY : TL.DURATION_DAYS).format(days));
+        }
+        if (hours > 0) {
+            items.add((hours == 1 ? TL.DURATION_HOUR : TL.DURATION_HOURS).format(hours));
+        }
+        if (minutes > 0) {
+            items.add((minutes == 1 ? TL.DURATION_MINUTE : TL.DURATION_MINUTES).format(minutes));
+        }
+        if (seconds > 0) {
+            items.add((seconds == 1 ? TL.DURATION_SECOND : TL.DURATION_SECONDS).format(seconds));
+        }
+        if (items.size() == 1) {
+            return items.getFirst();
+        } else if (items.size() == 2) {
+            String and = TL.DURATION_AND.toString();
+            and = and.isBlank() ? " " : " " + and + " ";
+            return items.getFirst() + and + items.getLast();
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < items.size(); i++) {
+            builder.append(items.get(i));
+            if (i < items.size() - 1) {
+                builder.append(", ");
+            } else if (i == items.size() - 1) {
+                String and = TL.DURATION_AND.toString();
+                and = and.isBlank() ? "" : and + " ";
+                builder.append(", ").append(and);
+            }
+        }
+        return builder.toString();
     }
 
     public static Iterable<FPlayer> rankOrder(Iterable<FPlayer> players) {

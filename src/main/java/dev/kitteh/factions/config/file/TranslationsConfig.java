@@ -761,6 +761,8 @@ public class TranslationsConfig {
 
         private UpgradeDetail redstoneAntiFlood = new UpgradeDetail("<green>Redstone Anti-Flood", "<green>Protect circuits from flooding", "");
 
+        private UpgradeDetail shield = new UpgradeDetail("<green>Shield", "<green>Protect territory from explosions", "<green><duration> shield, cooldown <cooldown>");
+
         private UpgradeDetail zones = new UpgradeDetail("<green>Zones", "<green>Assign your faction claims to zones to label or grant different permissions", "<green>Grants <increase> zones");
 
         public UpgradeDetail dtrClaimLimit() {
@@ -789,6 +791,10 @@ public class TranslationsConfig {
 
         public UpgradeDetail redstoneAntiFlood() {
             return this.redstoneAntiFlood;
+        }
+
+        public UpgradeDetail shield() {
+            return this.shield;
         }
 
         public UpgradeDetail zones() {

@@ -4,7 +4,7 @@ import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
-import dev.kitteh.factions.command.defaults.CmdGrace;
+import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.incendo.cloud.Command;
@@ -43,6 +43,6 @@ public class CmdSetGrace implements Cmd {
             return;
         }
         Universe.universe().graceRemaining(duration);
-        context.sender().msg(TL.COMMAND_SET_GRACE_REMAINING_MESSAGE, CmdGrace.getGraceRemaining(duration));
+        context.sender().msg(TL.COMMAND_SET_GRACE_ACTIVE, MiscUtil.durationString(duration));
     }
 }

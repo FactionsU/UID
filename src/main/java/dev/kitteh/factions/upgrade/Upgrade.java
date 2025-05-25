@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
@@ -50,6 +51,12 @@ public interface Upgrade {
 
     @FunctionalInterface
     interface Reactor {
+        Reactor UPDATE_COMMANDS = (faction, oldLevel, newLevel) -> {
+            if (oldLevel == 0) {
+                faction.membersOnlineAsPlayers().forEach(Player::updateCommands);
+            }
+        };
+
         void onChange(Faction faction, int oldLevel, int newLevel);
     }
 

@@ -5,6 +5,7 @@ import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.incendo.cloud.Command;
@@ -34,30 +35,7 @@ public class CmdGrace implements Cmd {
         if (remaining.isZero()) {
             context.sender().msg(TL.COMMAND_GRACE_NOT_SET);
         } else {
-            context.sender().msg(TL.COMMAND_GRACE_REMAINING_MESSAGE, getGraceRemaining(remaining));
+            context.sender().msg(TL.COMMAND_GRACE_ACTIVE, MiscUtil.durationString(remaining));
         }
-    }
-
-    public static String getGraceRemaining(Duration remaining) {
-        long days = remaining.toDays();
-        long hours = remaining.toHoursPart();
-        long minutes = remaining.toMinutesPart();
-        long seconds = remaining.toSecondsPart();
-
-        StringBuilder builder = new StringBuilder();
-        if (days > 0) {
-            builder.append(TL.COMMAND_GRACE_REMAINING_DAYS.format(days)).append(", ");
-        }
-        if (hours > 0) {
-            builder.append(TL.COMMAND_GRACE_REMAINING_HOURS.format(hours)).append(", ");
-        }
-        if (minutes > 0) {
-            builder.append(TL.COMMAND_GRACE_REMAINING_MINUTES.format(minutes)).append(", ");
-        }
-        if (!builder.isEmpty()) {
-            builder.append("and ");
-        }
-        builder.append(TL.COMMAND_GRACE_REMAINING_SECONDS.format(seconds));
-        return builder.toString();
     }
 }

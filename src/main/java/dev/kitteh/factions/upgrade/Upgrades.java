@@ -1,7 +1,6 @@
 package dev.kitteh.factions.upgrade;
 
 import dev.kitteh.factions.config.file.TranslationsConfig;
-import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
@@ -22,6 +21,10 @@ public final class Upgrades {
 
         public static final UpgradeVariable GROWTH_BOOST = UpgradeVariable.ofInteger("boost", BigDecimal.ONE, BigDecimal.valueOf(100));
 
+        public static final UpgradeVariable DURATION = UpgradeVariable.ofDuration("duration");
+
+        public static final UpgradeVariable COOLDOWN = UpgradeVariable.ofDuration("cooldown");
+
         public static final UpgradeVariable POSITIVE_INCREASE = UpgradeVariable.ofInteger("increase", BigDecimal.ONE, BigDecimal.valueOf(Integer.MAX_VALUE));
     }
 
@@ -29,12 +32,7 @@ public final class Upgrades {
 
     public static final Upgrade FALL_DAMAGE_REDUCTION = new Upgrade.Simple("fall_damage_reduction", TranslationsConfig.Upgrades::fallDamage, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
-    public static final Upgrade FLIGHT = new Upgrade.Reactive("flight", TranslationsConfig.Upgrades::flight, 1, Set.of(),
-            (f, o, n) -> {
-                if (o == 0) {
-                    f.membersOnlineAsPlayers().forEach(Player::updateCommands);
-                }
-            });
+    public static final Upgrade FLIGHT = new Upgrade.Reactive("flight", TranslationsConfig.Upgrades::flight, 1, Set.of(), Upgrade.Reactor.UPDATE_COMMANDS);
 
     public static final Upgrade GROWTH = new Upgrade.Simple("growth", TranslationsConfig.Upgrades::growth, Integer.MAX_VALUE, Set.of(Variables.CHANCE, Variables.GROWTH_BOOST));
 
@@ -44,12 +42,9 @@ public final class Upgrades {
 
     public static final Upgrade REDSTONE_PROTECT = new Upgrade.Simple("redstone_anti_flood", TranslationsConfig.Upgrades::redstoneAntiFlood, 1, Set.of());
 
-    public static final Upgrade ZONES = new Upgrade.Reactive("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE),
-            (f, o, n) -> {
-                if (o == 0) {
-                    f.membersOnlineAsPlayers().forEach(Player::updateCommands);
-                }
-            });
+    public static final Upgrade SHIELD = new Upgrade.Reactive("shield", TranslationsConfig.Upgrades::shield, Integer.MAX_VALUE, Set.of(Variables.DURATION, Variables.COOLDOWN), Upgrade.Reactor.UPDATE_COMMANDS);
+
+    public static final Upgrade ZONES = new Upgrade.Reactive("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE), Upgrade.Reactor.UPDATE_COMMANDS);
 
     static final List<Upgrade> UPGRADES = new ArrayList<>();
     static final List<UpgradeVariable> VARIABLES = new ArrayList<>();
@@ -141,6 +136,24 @@ public final class Upgrades {
                     1,
                     0,
                     LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(10000))
+            ),
+            new UpgradeSettings(
+                    Upgrades.SHIELD,
+                    Map.of(
+                            Variables.DURATION, LeveledValueProvider.LevelMap.of(
+                                    1, BigDecimal.valueOf(21600),
+                                    2, BigDecimal.valueOf(36000),
+                                    3, BigDecimal.valueOf(36000)
+                            ),
+                            Variables.COOLDOWN, LeveledValueProvider.LevelMap.of(
+                                    1, BigDecimal.valueOf(172800),
+                                    2, BigDecimal.valueOf(172800),
+                                    3, BigDecimal.valueOf(86400)
+                            )
+                    ),
+                    3,
+                    0,
+                    LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(50000), 2, BigDecimal.valueOf(100000), 3, BigDecimal.valueOf(1000000))
             ),
             new UpgradeSettings(
                     Upgrades.ZONES,
