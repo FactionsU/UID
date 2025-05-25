@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 import java.util.logging.Level;
 
 
-public class MyLocationTypeAdapter implements JsonDeserializer<LazyLocation>, JsonSerializer<LazyLocation> {
+public class LazyLocationAdapter implements JsonDeserializer<LazyLocation>, JsonSerializer<LazyLocation> {
 
     private static final String WORLD = "world";
     private static final String X = "x";

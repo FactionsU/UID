@@ -56,16 +56,16 @@ import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldTracker;
 import dev.kitteh.factions.util.WorldUtil;
-import dev.kitteh.factions.util.adapter.ChatTargetTypeAdapter;
+import dev.kitteh.factions.util.adapter.ChatTargetAdapter;
 import dev.kitteh.factions.util.adapter.LeveledValueProviderDeserializer;
 import dev.kitteh.factions.util.adapter.LeveledValueProviderEquationSerializer;
-import dev.kitteh.factions.util.adapter.MapFLocToStringSetTypeAdapter;
-import dev.kitteh.factions.util.adapter.MyLocationTypeAdapter;
-import dev.kitteh.factions.util.adapter.PermSelectorTypeAdapter;
+import dev.kitteh.factions.util.adapter.MapFLocToStringSetAdapter;
+import dev.kitteh.factions.util.adapter.LazyLocationAdapter;
+import dev.kitteh.factions.util.adapter.PermSelectorAdapter;
 import dev.kitteh.factions.util.adapter.SelectorPermsAdapter;
-import dev.kitteh.factions.util.adapter.UpgradeTypeAdapter;
-import dev.kitteh.factions.util.adapter.UpgradeVariableTypeAdapter;
-import dev.kitteh.factions.util.adapter.WorldTrackerTypeAdapter;
+import dev.kitteh.factions.util.adapter.UpgradeAdapter;
+import dev.kitteh.factions.util.adapter.UpgradeVariableAdapter;
+import dev.kitteh.factions.util.adapter.WorldTrackerAdapter;
 import io.papermc.lib.PaperLib;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
@@ -815,15 +815,15 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
                 .disableHtmlEscaping()
                 .enableComplexMapKeySerialization()
                 .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
-                .registerTypeAdapter(PermSelector.class, new PermSelectorTypeAdapter())
-                .registerTypeAdapter(LazyLocation.class, new MyLocationTypeAdapter())
-                .registerTypeAdapter(mapFLocToStringSetType, new MapFLocToStringSetTypeAdapter())
-                .registerTypeAdapter(ChatTarget.class, new ChatTargetTypeAdapter())
-                .registerTypeAdapter(UpgradeVariable.class, new UpgradeVariableTypeAdapter())
-                .registerTypeAdapter(Upgrade.class, new UpgradeTypeAdapter())
+                .registerTypeAdapter(PermSelector.class, new PermSelectorAdapter())
+                .registerTypeAdapter(LazyLocation.class, new LazyLocationAdapter())
+                .registerTypeAdapter(mapFLocToStringSetType, new MapFLocToStringSetAdapter())
+                .registerTypeAdapter(ChatTarget.class, new ChatTargetAdapter())
+                .registerTypeAdapter(UpgradeVariable.class, new UpgradeVariableAdapter())
+                .registerTypeAdapter(Upgrade.class, new UpgradeAdapter())
                 .registerTypeAdapter(LeveledValueProvider.class, new LeveledValueProviderDeserializer())
                 .registerTypeAdapter(LeveledValueProvider.Equation.class, new LeveledValueProviderEquationSerializer())
-                .registerTypeAdapter(worldTrackerMapType, new WorldTrackerTypeAdapter())
+                .registerTypeAdapter(worldTrackerMapType, new WorldTrackerAdapter())
                 .registerTypeAdapter(MemoryFaction.Permissions.SelectorPerms.class, new SelectorPermsAdapter());
     }
 

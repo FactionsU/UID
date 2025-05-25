@@ -2,7 +2,7 @@ package dev.kitteh.factions.config.transition;
 
 import dev.kitteh.factions.config.Loader;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.util.adapter.PermSelectorTypeAdapter;
+import dev.kitteh.factions.util.adapter.PermSelectorAdapter;
 import dev.kitteh.factions.util.TL;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -172,7 +172,7 @@ public class Transitioner {
         this.plugin.getLogger().info("              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         this.plugin.getLogger().info("");
 
-        PermSelectorTypeAdapter.setLegacy();
+        PermSelectorAdapter.setLegacy();
     }
 
     private void migrateV6(CommentedConfigurationNode node) {

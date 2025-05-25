@@ -11,7 +11,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import java.io.IOException;
 
-public class WorldTrackerTypeAdapter extends TypeAdapter<Object2ObjectOpenHashMap<String, WorldTracker>> {
+public class WorldTrackerAdapter extends TypeAdapter<Object2ObjectOpenHashMap<String, WorldTracker>> {
     @Override
     public void write(JsonWriter out, Object2ObjectOpenHashMap<String, WorldTracker> value) throws IOException {
         FormattingStyle style = out.getFormattingStyle();

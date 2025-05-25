@@ -10,7 +10,7 @@ import dev.kitteh.factions.upgrade.UpgradeVariable;
 
 import java.io.IOException;
 
-public class UpgradeVariableTypeAdapter extends TypeAdapter<UpgradeVariable> {
+public class UpgradeVariableAdapter extends TypeAdapter<UpgradeVariable> {
     @Override
     public void write(JsonWriter out, UpgradeVariable value) throws IOException {
         out.value(value.name());

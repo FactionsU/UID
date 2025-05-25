@@ -17,7 +17,7 @@ import dev.kitteh.factions.permissible.selector.UnknownSelector;
 import java.io.IOException;
 import java.util.UUID;
 
-public class PermSelectorTypeAdapter extends TypeAdapter<PermSelector> {
+public class PermSelectorAdapter extends TypeAdapter<PermSelector> {
     private static boolean legacy = false;
 
     public static boolean isLegacy() {

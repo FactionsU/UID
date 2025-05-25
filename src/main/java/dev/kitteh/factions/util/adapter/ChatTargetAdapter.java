@@ -11,7 +11,7 @@ import dev.kitteh.factions.chat.ChatTarget;
 
 import java.lang.reflect.Type;
 
-public class ChatTargetTypeAdapter implements JsonSerializer<ChatTarget>, JsonDeserializer<ChatTarget> {
+public class ChatTargetAdapter implements JsonSerializer<ChatTarget>, JsonDeserializer<ChatTarget> {
     @Override
     public ChatTarget deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         if (jsonElement instanceof JsonPrimitive p && p.isString()) {
