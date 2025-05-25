@@ -7,8 +7,8 @@ import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.permissible.Relation;
-import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.util.function.BiFunction;
@@ -21,7 +21,7 @@ public enum FactionTag implements Tag {
     HOME_Z("z", (fac) -> fac.hasHome() ? String.valueOf(fac.home().getBlockZ()) : Tag.isMinimalShow() ? null : "{ig}"),
     CHUNKS("chunks", (fac) -> String.valueOf(fac.claimCount())),
     WARPS("warps", (fac) -> String.valueOf(fac.warps().size())),
-    HEADER("header", (fac, fp) -> AbstractFactionsPlugin.getInstance().txt().titleize(fac.tagString(fp))),
+    HEADER("header", (fac, fp) -> TextUtil.titleize(fac.tagString(fp))),
     POWER("power", (fac) -> String.valueOf(fac.power())),
     MAX_POWER("maxPower", (fac) -> String.valueOf(fac.powerMax())),
     POWER_BOOST("power-boost", (fac) -> {

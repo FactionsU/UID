@@ -8,19 +8,8 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class TextUtil {
-
-    public final Map<String, String> tags;
-
-    public TextUtil() {
-        this.tags = new HashMap<>();
+    private TextUtil() {
     }
 
     public static String getString(TextColor color) {
@@ -57,34 +46,12 @@ public class TextUtil {
     // Top-level parsing functions.
     // -------------------------------------------- //
 
-    public String parse(String str, Object... args) {
-        return String.format(this.parse(str), args);
+    public static String parse(String str, Object... args) {
+        return String.format(parse(str), args);
     }
 
-    public String parse(String str) {
-        return this.parseTags(parseColor(str));
-    }
-
-    // -------------------------------------------- //
-    // Tag parsing
-    // -------------------------------------------- //
-
-    public String parseTags(String str) {
-        return replaceTags(str, this.tags);
-    }
-
-    public static final Pattern patternTag = Pattern.compile("<([a-zA-Z0-9_]*)>");
-
-    public static String replaceTags(String str, Map<String, String> tags) {
-        StringBuilder ret = new StringBuilder();
-        Matcher matcher = patternTag.matcher(str);
-        while (matcher.find()) {
-            String tag = matcher.group(1);
-            String repl = tags.get(tag);
-            matcher.appendReplacement(ret, repl != null ? repl : "<" + tag + ">");
-        }
-        matcher.appendTail(ret);
-        return ret.toString();
+    public static String parse(String str) {
+        return parseColor(str);
     }
 
     // -------------------------------------------- //
@@ -92,25 +59,7 @@ public class TextUtil {
     // -------------------------------------------- //
 
     public static String parseColor(String string) {
-        string = parseColorAmp(string);
-        string = parseColorAcc(string);
-        string = parseColorTags(string);
         return ChatColor.translateAlternateColorCodes('&', string);
-    }
-
-    public static String parseColorAmp(String string) {
-        string = string.replaceAll("(§([a-z0-9]))", "§$2");
-        string = string.replaceAll("(&([a-z0-9]))", "§$2");
-        string = string.replace("&&", "&");
-        return string;
-    }
-
-    public static String parseColorAcc(String string) {
-        return string.replace("`e", "").replace("`r", ChatColor.RED.toString()).replace("`R", ChatColor.DARK_RED.toString()).replace("`y", ChatColor.YELLOW.toString()).replace("`Y", ChatColor.GOLD.toString()).replace("`g", ChatColor.GREEN.toString()).replace("`G", ChatColor.DARK_GREEN.toString()).replace("`a", ChatColor.AQUA.toString()).replace("`A", ChatColor.DARK_AQUA.toString()).replace("`b", ChatColor.BLUE.toString()).replace("`B", ChatColor.DARK_BLUE.toString()).replace("`p", ChatColor.LIGHT_PURPLE.toString()).replace("`P", ChatColor.DARK_PURPLE.toString()).replace("`k", ChatColor.BLACK.toString()).replace("`s", ChatColor.GRAY.toString()).replace("`S", ChatColor.DARK_GRAY.toString()).replace("`w", ChatColor.WHITE.toString());
-    }
-
-    public static String parseColorTags(String string) {
-        return string.replace("<empty>", "").replace("<black>", "§0").replace("<navy>", "§1").replace("<green>", "§2").replace("<teal>", "§3").replace("<red>", "§4").replace("<purple>", "§5").replace("<gold>", "§6").replace("<silver>", "§7").replace("<gray>", "§8").replace("<blue>", "§9").replace("<lime>", "§a").replace("<aqua>", "§b").replace("<rose>", "§c").replace("<pink>", "§d").replace("<yellow>", "§e").replace("<white>", "§f");
     }
 
     // -------------------------------------------- //
@@ -129,32 +78,24 @@ public class TextUtil {
         }
     }
 
-    // -------------------------------------------- //
-    // Material name tools
-    // -------------------------------------------- //
-
     public static String getMaterialName(Material material) {
         return material.toString().replace('_', ' ').toLowerCase();
     }
 
-    // -------------------------------------------- //
-    // Paging and chrome-tools like titleize
-    // -------------------------------------------- //
-
     private final static String titleizeLine = repeat("_", 52);
     private final static int titleizeBalance = -1;
 
-    public String titleize(String str) {
-        String center = ".[ " + parseTags("<l>") + str + parseTags("<a>") + " ].";
+    public static String titleize(String str) {
+        String center = ".[ " + ChatColor.DARK_GREEN + str + ChatColor.GOLD + " ].";
         int centerlen = ChatColor.stripColor(center).length();
         int pivot = titleizeLine.length() / 2;
         int eatLeft = (centerlen / 2) - titleizeBalance;
         int eatRight = (centerlen - eatLeft) + titleizeBalance;
 
         if (eatLeft < pivot) {
-            return parseTags("<a>") + titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
+            return ChatColor.GOLD + titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
         } else {
-            return parseTags("<a>") + center;
+            return ChatColor.GOLD + center;
         }
     }
 

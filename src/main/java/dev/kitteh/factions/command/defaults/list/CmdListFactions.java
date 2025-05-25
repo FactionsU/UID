@@ -11,6 +11,7 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -93,20 +94,20 @@ public class CmdListFactions implements Cmd {
 
         if (!header.isEmpty()) {
             header = header.replace("{pagenumber}", String.valueOf(pagenumber)).replace("{pagecount}", String.valueOf(pagecount));
-            lines.add(plugin.txt().parse(header));
+            lines.add(TextUtil.parse(header));
         }
 
         for (Faction faction : factionList.subList(start, end)) {
             if (faction.isWilderness()) {
-                lines.add(plugin.txt().parse(Tag.parsePlain(faction, plugin.conf().commands().list().getFactionlessEntry())));
+                lines.add(TextUtil.parse(Tag.parsePlain(faction, plugin.conf().commands().list().getFactionlessEntry())));
                 continue;
             }
-            lines.add(plugin.txt().parse(Tag.parsePlain(faction, fPlayer, plugin.conf().commands().list().getEntry())));
+            lines.add(TextUtil.parse(Tag.parsePlain(faction, fPlayer, plugin.conf().commands().list().getEntry())));
         }
 
         if (!footer.isEmpty()) {
             footer = footer.replace("{pagenumber}", String.valueOf(pagenumber)).replace("{pagecount}", String.valueOf(pagecount));
-            lines.add(plugin.txt().parse(footer));
+            lines.add(TextUtil.parse(footer));
         }
 
         lines.forEach(context.sender().sender()::sendMessage);

@@ -17,6 +17,7 @@ import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
@@ -54,18 +55,18 @@ public class CmdShow implements Cmd {
     public CmdShow() {
         // add defaults to /f show in case config doesn't have it
         defaults.add("{header}");
-        defaults.add("<a>Description: <i>{description}");
-        defaults.add("<a>Joining: <i>{joining}    {peaceful}");
-        defaults.add("<a>Land / Power / Maxpower: <i> {chunks} / {power} / {maxPower}");
-        defaults.add("<a>Raidable: {raidable}");
-        defaults.add("<a>Founded: <i>{create-date}");
-        defaults.add("<a>This faction is permanent, remaining even with no members.");
-        defaults.add("<a>Land value: <i>{land-value} {land-refund}");
-        defaults.add("<a>Balance: <i>{faction-balance}");
-        defaults.add("<a>Bans: <i>{faction-bancount}");
-        defaults.add("<a>Allies(<i>{allies}<a>/<i>{max-allies}<a>): {allies-list}");
-        defaults.add("<a>Online: (<i>{online}<a>/<i>{members}<a>): {online-list}");
-        defaults.add("<a>Offline: (<i>{offline}<a>/<i>{members}<a>): {offline-list}");
+        defaults.add("&6Description: &e{description}");
+        defaults.add("&6Joining: &e{joining}    {peaceful}");
+        defaults.add("&6Land / Power / Maxpower: &e {chunks} / {power} / {maxPower}");
+        defaults.add("&6Raidable: {raidable}");
+        defaults.add("&6Founded: &e{create-date}");
+        defaults.add("&6This faction is permanent, remaining even with no members.");
+        defaults.add("&6Land value: &e{land-value} {land-refund}");
+        defaults.add("&6Balance: &e{faction-balance}");
+        defaults.add("&6Bans: &e{faction-bancount}");
+        defaults.add("&6Allies(&e{allies}&6/&e{max-allies}&6): {allies-list}");
+        defaults.add("&6Online: (&e{online}&6/&e{members}&6): {online-list}");
+        defaults.add("&6Offline: (&e{offline}&6/&e{members}&6): {offline-list}");
     }
 
     private void handle(CommandContext<Sender> context) {
@@ -98,11 +99,11 @@ public class CmdShow implements Cmd {
             // send header and that's all
             String header = show.getFirst();
             if (FactionTag.HEADER.foundInString(header)) {
-                context.sender().sender().sendMessage(AbstractFactionsPlugin.getInstance().txt().titleize(tag));
+                context.sender().sender().sendMessage(TextUtil.titleize(tag));
             } else {
                 String message = header.replace(FactionTag.FACTION.getTag(), tag);
                 message = Tag.parsePlain(faction, fPlayer, message);
-                context.sender().sender().sendMessage(AbstractFactionsPlugin.getInstance().txt().parse(message));
+                context.sender().sender().sendMessage(TextUtil.parse(message));
             }
             return; // we only show header for non-normal factions
         }
@@ -173,7 +174,7 @@ public class CmdShow implements Cmd {
                     }
                 }
             } else {
-                ComponentDispatcher.send(recipient, LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(parsed)));
+                ComponentDispatcher.send(recipient, LegacyComponentSerializer.legacySection().deserialize(TextUtil.parse(parsed)));
             }
         }
     }
@@ -185,7 +186,7 @@ public class CmdShow implements Cmd {
             builder.append(first ? name : ", " + name);
             first = false;
         }
-        recipient.sendMessage(AbstractFactionsPlugin.getInstance().txt().parse(builder.toString()));
+        recipient.sendMessage(TextUtil.parse(builder.toString()));
     }
 
     private void relationMessage(StringBuilder builder, CommandSender recipient, Faction faction, Relation relation) {
@@ -197,7 +198,7 @@ public class CmdShow implements Cmd {
                 first = false;
             }
         }
-        recipient.sendMessage(AbstractFactionsPlugin.getInstance().txt().parse(builder.toString()));
+        recipient.sendMessage(TextUtil.parse(builder.toString()));
     }
 
     private boolean groupPresent() {

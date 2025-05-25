@@ -10,9 +10,9 @@ import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
-import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
 import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -72,7 +72,7 @@ public class CmdMoneySend implements Cmd {
         boolean success = Econ.transferMoney(sender, from, to, amount);
 
         if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
-            FactionsPlugin.instance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYTRANSFERFF_TRANSFER.toString(), context.sender().sender().getName(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
+            FactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYTRANSFERFF_TRANSFER.toString(), context.sender().sender().getName(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
         }
     }
 
@@ -90,7 +90,7 @@ public class CmdMoneySend implements Cmd {
         boolean success = Econ.transferMoney(sender, from, to, amount);
 
         if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
-            FactionsPlugin.instance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYTRANSFERFP_TRANSFER.toString(), sender.name(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
+            FactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYTRANSFERFP_TRANSFER.toString(), sender.name(), Econ.moneyString(amount), from.describeTo(null), to.describeTo(null))));
         }
     }
 }

@@ -3,7 +3,6 @@ package dev.kitteh.factions.util;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
-import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -78,17 +77,17 @@ public class MiscUtil {
 
         for (String blacklistItem : FactionsPlugin.instance().conf().factions().other().getNameBlacklist()) {
             if (str.toLowerCase().contains(blacklistItem.toLowerCase())) {
-                errors.add(AbstractFactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_BLACKLIST.toString()));
+                errors.add(TextUtil.parse(TL.GENERIC_FACTIONTAG_BLACKLIST.toString()));
                 break;
             }
         }
 
         if (getComparisonString(str).length() < FactionsPlugin.instance().conf().factions().other().getTagLengthMin()) {
-            errors.add(AbstractFactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), FactionsPlugin.instance().conf().factions().other().getTagLengthMin()));
+            errors.add(TextUtil.parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), FactionsPlugin.instance().conf().factions().other().getTagLengthMin()));
         }
 
         if (str.length() > FactionsPlugin.instance().conf().factions().other().getTagLengthMax()) {
-            errors.add(AbstractFactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), FactionsPlugin.instance().conf().factions().other().getTagLengthMax()));
+            errors.add(TextUtil.parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), FactionsPlugin.instance().conf().factions().other().getTagLengthMax()));
         }
 
         MainConfig.Factions.Other conf = FactionsPlugin.instance().conf().factions().other();
@@ -102,7 +101,7 @@ public class MiscUtil {
             }
         }
         if (badChars != null) {
-            errors.add(AbstractFactionsPlugin.getInstance().txt().parse(TL.GENERIC_FACTIONTAG_ALPHANUMERIC.toString(), String.join("", badChars)));
+            errors.add(TextUtil.parse(TL.GENERIC_FACTIONTAG_ALPHANUMERIC.toString(), String.join("", badChars)));
         }
 
         return errors;

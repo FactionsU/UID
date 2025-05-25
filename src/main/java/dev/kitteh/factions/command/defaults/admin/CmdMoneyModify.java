@@ -7,9 +7,9 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.integration.Econ;
-import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
 import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -56,11 +56,11 @@ public class CmdMoneyModify implements Cmd {
         if (Econ.modifyBalance(faction, amount)) {
             context.sender().msg(TL.COMMAND_MONEYMODIFY_MODIFIED, faction.describeTo(context.sender().fPlayerOrNull()), Econ.moneyString(amount));
             if (notify) {
-                faction.msg(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYMODIFY_NOTIFY.toString(), faction.describeTo(null), Econ.moneyString(amount)));
+                faction.msg(TextUtil.parse(TL.COMMAND_MONEYMODIFY_NOTIFY.toString(), faction.describeTo(null), Econ.moneyString(amount)));
             }
 
             if (FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
-                FactionsPlugin.instance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYMODIFY_MODIFIED.toString(), faction.describeTo(null), Econ.moneyString(amount))));
+                FactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYMODIFY_MODIFIED.toString(), faction.describeTo(null), Econ.moneyString(amount))));
             }
         }
     }

@@ -8,9 +8,9 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.integration.Econ;
-import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
 import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -55,7 +55,7 @@ public class CmdMoneyDeposit implements Cmd {
         boolean success = Econ.transferMoney(sender, sender, faction, amount);
 
         if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
-            FactionsPlugin.instance().log(ChatColor.stripColor(AbstractFactionsPlugin.getInstance().txt().parse(TL.COMMAND_MONEYDEPOSIT_DEPOSITED.toString(), sender.name(), Econ.moneyString(amount), faction.describeTo(null))));
+            FactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYDEPOSIT_DEPOSITED.toString(), sender.name(), Econ.moneyString(amount), faction.describeTo(null))));
         }
     }
 }

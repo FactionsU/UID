@@ -7,10 +7,10 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Role;
-import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.command.CommandSender;
 import org.jspecify.annotations.NullMarked;
@@ -40,7 +40,7 @@ public interface Sender {
     }
 
     default void msg(TL translation, Object... args) {
-        sender().sendMessage(AbstractFactionsPlugin.getInstance().txt().parse(translation.toString(), args));
+        sender().sendMessage(TextUtil.parse(translation.toString(), args));
     }
 
     default boolean hasPermission(Permission perm) {

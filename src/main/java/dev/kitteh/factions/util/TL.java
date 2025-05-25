@@ -764,9 +764,9 @@ public enum TL {
     ECON_OVER_BAL_CAP("&4The amount &e%s &4is over Essentials' balance cap."),
     ECON_BALANCE("&6%s's&e balance is &d%s&e."),
     ECON_NOPERM("&d%s&e lacks permission to control &d%s's&e money."),
-    ECON_CANTAFFORD_TRANSFER("&d%s<b> can't afford to transfer &d%s<b> to %s<b>."),
+    ECON_CANTAFFORD_TRANSFER("&d%s&c can't afford to transfer &d%s&c to %s&c."),
     ECON_CANTAFFORD_AMOUNT("&d%s&e can't afford &d%s&e %s."),
-    ECON_TRANSFER_UNABLE("Unable to transfer %s<b> to &d%s<b> from &d%s<b>."),
+    ECON_TRANSFER_UNABLE("Unable to transfer %s&c to &d%s&c from &d%s&c."),
     ECON_TRANSFER_NOINVOKER("&d%s&e was transferred from &d%s&e to &d%s&e."),
     ECON_TRANSFER_GAVE("&d%s&e &dgave %s&e to &d%s&e."),
     ECON_TRANSFER_TOOK("&d%s&e &dtook %s&e from &d%s&e."),
@@ -946,7 +946,6 @@ public enum TL {
     /**
      * The ones here before I started messing around with this
      */
-    TITLE("title", "&bFactions &0|&r"),
     WILDERNESS("wilderness", "&2Wilderness"),
     WILDERNESS_DESCRIPTION("wilderness-description", ""),
     WARZONE("warzone", "&4Warzone"),
@@ -1035,7 +1034,7 @@ public enum TL {
 
     @Override
     public String toString() {
-        return this == TITLE ? ChatColor.translateAlternateColorCodes('&', LANG.getString(this.path, def)) + " " : ChatColor.translateAlternateColorCodes('&', LANG.getString(this.path, def));
+        return ChatColor.translateAlternateColorCodes('&', LANG.getString(this.path, def));
     }
 
     public String format(Object... args) {

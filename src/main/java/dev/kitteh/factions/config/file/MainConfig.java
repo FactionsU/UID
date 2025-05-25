@@ -334,9 +334,9 @@ public class MainConfig {
                     "Blank entry results in nothing being displayed.")
             private String footer = "";
             @Comment("You can use any variables here")
-            private String factionlessEntry = "<i>Factionless<i> {factionless} online";
+            private String factionlessEntry = "&eFactionless&e {factionless} online";
             @Comment("You can use any variable here")
-            private String entry = "<a>{faction-relation-color}{faction} <i>{online} / {members} online, <a>Land / Power / Maxpower: <i>{chunks}/{power}/{maxPower}";
+            private String entry = "&6{faction-relation-color}{faction} &e{online} / {members} online, &6Land / Power / Maxpower: &e{chunks}/{power}/{maxPower}";
 
             public String getHeader() {
                 return header;
@@ -413,18 +413,18 @@ public class MainConfig {
             private List<String> format = new ArrayList<>() {
                 {
                     this.add("{header}");
-                    this.add("<a>Description: <i>{description}");
-                    this.add("<a>Joining: <i>{joining}    {peaceful}");
-                    this.add("<a>Land / Power / Maxpower: <i> {chunks}/{power}/{maxPower}");
-                    this.add("<a>Raidable: {raidable}");
-                    this.add("<a>Founded: <i>{create-date}");
-                    this.add("<a>This faction is permanent, remaining even with no members.");
-                    this.add("<a>Land value: <i>{land-value} {land-refund}");
-                    this.add("<a>Balance: <i>{faction-balance}");
-                    this.add("<a>Bans: <i>{faction-bancount}");
-                    this.add("<a>Allies(<i>{allies}<a>/<i>{max-allies}<a>): {allies-list} ");
-                    this.add("<a>Online: (<i>{online}<a>/<i>{members}<a>): {online-list}");
-                    this.add("<a>Offline: (<i>{offline}<a>/<i>{members}<a>): {offline-list}");
+                    this.add("&6Description: &e{description}");
+                    this.add("&6Joining: &e{joining}    {peaceful}");
+                    this.add("&6Land / Power / Maxpower: &e {chunks}/{power}/{maxPower}");
+                    this.add("&6Raidable: {raidable}");
+                    this.add("&6Founded: &e{create-date}");
+                    this.add("&6This faction is permanent, remaining even with no members.");
+                    this.add("&6Land value: &e{land-value} {land-refund}");
+                    this.add("&6Balance: &e{faction-balance}");
+                    this.add("&6Bans: &e{faction-bancount}");
+                    this.add("&6Allies(&e{allies}&6/&e{max-allies}&6): {allies-list} ");
+                    this.add("&6Online: (&e{online}&6/&e{members}&6): {online-list}");
+                    this.add("&6Offline: (&e{offline}&6/&e{members}&6): {offline-list}");
                 }
             };
             @Comment("Set true to not display empty fancy messages")

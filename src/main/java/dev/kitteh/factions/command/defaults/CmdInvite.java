@@ -73,7 +73,6 @@ public class CmdInvite implements Cmd {
             target.sendMessage(component);
         }
 
-        //you.msg("%s<i> invited you to %s",context.fPlayer.describeTo(you, true), context.faction.describeTo(you));
         faction.msg(TL.COMMAND_INVITE_INVITED, sender.describeTo(faction), target.describeTo(faction));
     }
 }

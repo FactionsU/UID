@@ -55,6 +55,6 @@ public class CmdSetDescription implements Cmd {
         }
 
         sender.msg(TL.COMMAND_DESCRIPTION_CHANGES, faction.describeTo(sender));
-        sender.sendMessage(faction.description());  // players can inject "&" or "`" or "<i>" or whatever in their description; &k is particularly interesting looking
+        sender.sendMessage(faction.description());
     }
 }

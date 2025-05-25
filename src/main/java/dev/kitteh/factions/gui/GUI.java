@@ -114,7 +114,7 @@ public abstract class GUI<Type> implements InventoryHolder {
     }
 
     protected String parseDefault(String toParse) {
-        toParse = TextUtil.parseColor(toParse);
+        toParse = TextUtil.parse(toParse);
         toParse = Tag.parsePlain(user, toParse);
         toParse = Tag.parsePlain(user.faction(), toParse);
         toParse = Tag.parsePlaceholders(user.asPlayer(), toParse);

@@ -1153,7 +1153,7 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public void msg(String message, Object... args) {
-        message = AbstractFactionsPlugin.getInstance().txt().parse(message, args);
+        message = TextUtil.parse(message, args);
 
         for (FPlayer fplayer : this.membersOnline(true)) {
             fplayer.sendMessage(message);

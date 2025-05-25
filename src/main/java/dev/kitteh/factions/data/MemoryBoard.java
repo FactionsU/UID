@@ -10,7 +10,6 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
-import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.AsciiCompass;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
@@ -241,7 +240,7 @@ public abstract class MemoryBoard implements Board {
             }
             for (int dx = (dz < 3 ? 6 : 3); dx < width; dx++) {
                 if (dx == halfWidth && dz == halfHeight) {
-                    builder.append(Component.text().content("+").color(FactionsPlugin.instance().conf().map().getSelfColor()).hoverEvent(HoverEvent.showText(LegacyComponentSerializer.legacySection().deserialize(AbstractFactionsPlugin.getInstance().txt().parse(TL.CLAIM_YOUAREHERE.toString())))));
+                    builder.append(Component.text().content("+").color(FactionsPlugin.instance().conf().map().getSelfColor()).hoverEvent(HoverEvent.showText(LegacyComponentSerializer.legacySection().deserialize(TextUtil.parse(TL.CLAIM_YOUAREHERE.toString())))));
                 } else {
                     FLocation flocationHere = topLeft.relative(dx, dz);
                     Faction factionHere = factionAt(flocationHere);
