@@ -40,8 +40,7 @@ public class CmdJoin implements Cmd {
         }
 
         if (faction == sender.faction()) {
-            //TODO:TL
-            sender.msg(TL.COMMAND_JOIN_ALREADYMEMBER, sender.describeTo(sender, false), "is", faction.tagString(sender));
+            sender.msg(TL.COMMAND_JOIN_ALREADYMEMBERFIXED, faction.tagString(sender));
             return;
         }
 
@@ -52,8 +51,7 @@ public class CmdJoin implements Cmd {
         }
 
         if (sender.hasFaction()) {
-            //TODO:TL
-            sender.msg(TL.COMMAND_JOIN_INOTHERFACTION, sender.describeTo(sender, true), "your");
+            sender.msg(TL.COMMAND_JOIN_INOTHERFACTIONFIXED);
             return;
         }
 

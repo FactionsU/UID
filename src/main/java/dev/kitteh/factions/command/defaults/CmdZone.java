@@ -9,6 +9,7 @@ import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Mini;
+import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.SpiralTask;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -73,7 +74,7 @@ public class CmdZone implements Cmd {
                             .handler(this::claim)
             );
 
-            new CmdSetPerm((ctx) -> '/' + FactionsPlugin.instance().conf().getCommandBase().getFirst() + ' ' + tl.getFirstAlias() +
+            new CmdSetPerm((ctx) -> '/' + MiscUtil.commandRoot() + ' ' + tl.getFirstAlias() +
                     ' ' + tl.set().getFirstAlias() + ' ' + ctx.get("zone") + ' ' + FactionsPlugin.instance().tl().commands().permissions().getFirstAlias() + ' ', context -> {
                 FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
                 Faction faction = sender.faction();
@@ -291,7 +292,7 @@ public class CmdZone implements Cmd {
 
         sender.sendMessage(Mini.parse(tl.getConfirm(),
                 Placeholder.unparsed("name", name),
-                Placeholder.unparsed("command", "/f confirm " + conf) // TODO
+                Placeholder.unparsed("command", conf)
         ));
     }
 

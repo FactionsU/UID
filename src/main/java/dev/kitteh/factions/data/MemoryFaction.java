@@ -267,7 +267,7 @@ public abstract class MemoryFaction implements Faction {
                 this.main = this.zones.get(0);
                 if (this.main == null) {
                     this.main = new Zone(0, "main", this.faction);
-                    main.greeting = "<tag> welcomes you!"; // TODO default in config
+                    main.greeting = FactionsPlugin.instance().conf().factions().other().getDefaultGreeting();
                     this.zones.put(0, this.main);
                 }
                 this.zones.defaultReturnValue(this.main);

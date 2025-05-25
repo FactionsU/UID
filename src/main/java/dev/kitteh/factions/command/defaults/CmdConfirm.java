@@ -3,6 +3,7 @@ package dev.kitteh.factions.command.defaults;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import dev.kitteh.factions.FPlayer;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
@@ -34,17 +35,24 @@ public class CmdConfirm implements Cmd {
     public static String add(FPlayer fPlayer, Consumer<FPlayer> consumer) {
         String code = decimalFormat.format(random.nextInt(100000));
         cache.put(fPlayer.uniqueId(), new Conf(code, consumer));
-        return code;
+        return FactionsPlugin.instance().tl().commands().generic().getCommandRoot().getFirstAlias() +
+                " " +
+                FactionsPlugin.instance().tl().commands().confirm().getFirstAlias() +
+                " " +
+                code;
     }
 
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> manager.command(
-                builder.literal("confirm")
-                        .permission(builder.commandPermission().and(Cloudy.hasFaction().or(Cloudy.predicate(s -> !s.isPlayer()))))
-                        .required("confirmation-string", StringParser.stringParser())
-                        .handler(this::handle)
-        );
+        return (manager, builder) -> {
+            var confirm = FactionsPlugin.instance().tl().commands().confirm();
+            manager.command(
+                    builder.literal(confirm.getFirstAlias(), confirm.getSecondaryAliases())
+                            .permission(builder.commandPermission().and(Cloudy.hasFaction().or(Cloudy.predicate(s -> !s.isPlayer()))))
+                            .required("confirmation-string", StringParser.stringParser())
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
@@ -52,17 +60,16 @@ public class CmdConfirm implements Cmd {
 
         String string = context.get("confirmation-string");
 
-        // TODO TL
         Conf conf = cache.getIfPresent(sender.uniqueId());
         if (conf == null) {
-            sender.sendMessage("No confirmation found.");
+            sender.sendMessage(FactionsPlugin.instance().tl().commands().confirm().getNotFound());
             return;
         }
 
         if (conf.code.equals(string)) {
             conf.consumer.accept(sender);
         } else {
-            sender.sendMessage("Invalid confirmation code.");
+            sender.sendMessage(FactionsPlugin.instance().tl().commands().confirm().getInvalid());
         }
     }
 }

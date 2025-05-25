@@ -33,6 +33,47 @@ public class TranslationsConfig {
     }
 
     public static class Commands {
+        public static class Generic {
+            private AbsCommand commandRoot = new AbsCommand("f");
+            private AbsCommand commandAdminRoot = new AbsCommand("fa");
+
+            private String noFactionFound = "No faction found for input '<input>'";
+            private String noPlayerFound = "No player found for input '<input>'";
+
+            public String getNoFactionFound() {
+                return noFactionFound;
+            }
+
+            public String getNoPlayerFound() {
+                return noPlayerFound;
+            }
+
+            public AbsCommand getCommandRoot() {
+                return commandRoot;
+            }
+
+            public AbsCommand getCommandAdminRoot() {
+                return commandAdminRoot;
+            }
+        }
+
+        public static class Confirm extends AbsCommand {
+            public Confirm() {
+                super("confirm");
+            }
+
+            private String invalid = "Invalid confirmation code.";
+            private String notFound = "No confirmation found.";
+
+            public String getInvalid() {
+                return invalid;
+            }
+
+            public String getNotFound() {
+                return notFound;
+            }
+        }
+
         public static class Set extends AbsCommand {
             public Set() {
                 super("set");
@@ -426,7 +467,7 @@ public class TranslationsConfig {
             public static class Delete extends AbsCommand {
                 private String zoneNotFound = "<red>Zone named '<name>' not found</red>";
                 private String success = "<yellow>Deleted zone '<name>'";
-                private String confirm = "Are you sure you want to delete zone '<name>'? If so, run <command>";
+                private String confirm = "Are you sure you want to delete zone '<name>'? If so, run /<command>";
 
                 public Delete() {
                     super("delete");
@@ -541,9 +582,20 @@ public class TranslationsConfig {
             }
         }
 
+        private Generic generic = new Generic();
+
+        private Confirm confirm = new Confirm();
         private Set set = new Set();
         private Permissions permissions = new Permissions();
         private Zone zone = new Zone();
+
+        public Generic generic() {
+            return generic;
+        }
+
+        public Confirm confirm() {
+            return confirm;
+        }
 
         public Set set() {
             return set;

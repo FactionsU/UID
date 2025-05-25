@@ -12,6 +12,7 @@ import dev.kitteh.factions.event.FactionRelationWishEvent;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
+import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import org.bukkit.Bukkit;
@@ -94,7 +95,7 @@ public class CmdRelation implements Cmd {
         } else {
             // inform the other faction of your request
             them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + faction.tag(), targetRelationColor + targetRelation.translation());
-            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, FactionsPlugin.instance().conf().getCommandBase().getFirst(), targetRelation, faction.tag());
+            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, MiscUtil.commandRoot(), targetRelation, faction.tag());
             faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.tag(), targetRelationColor + targetRelation);
         }
 

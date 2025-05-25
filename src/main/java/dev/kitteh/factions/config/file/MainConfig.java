@@ -2102,6 +2102,13 @@ public class MainConfig {
             @Comment("Minimum time, in seconds, to display in last seen placeholder (such as in the tooltip).")
             private int minimumLastSeenTime = 3600;
 
+            @Comment("Default greeting for zones. The <tag> tag auto-updates the faction tag.")
+            private String defaultGreeting = "<tag> welcomes you!";
+
+            public String getDefaultGreeting() {
+                return defaultGreeting;
+            }
+
             public int getMinimumLastSeenTime() {
                 return minimumLastSeenTime;
             }
@@ -3033,13 +3040,6 @@ public class MainConfig {
         }
     }
 
-    @Comment("The command base (by default f, making the command /f)")
-    private List<String> commandBase = new ArrayList<>() {
-        {
-            this.add("f");
-        }
-    };
-
     @Comment("""
             Support and documentation https://factions.support
             Updates https://www.spigotmc.org/resources/factionsuuid.1035/
@@ -3080,10 +3080,6 @@ public class MainConfig {
             "Note that flag stuff only works on WG 7")
     private WorldGuard worldGuard = new WorldGuard();
     private WorldBorder worldBorder = new WorldBorder();
-
-    public List<String> getCommandBase() {
-        return commandBase == null ? (commandBase = Collections.singletonList("f")) : commandBase;
-    }
 
     public AVeryFriendlyFactionsConfig getaVeryFriendlyFactionsConfig() {
         return aVeryFriendlyFactionsConfig;

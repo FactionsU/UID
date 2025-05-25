@@ -8,6 +8,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
@@ -68,8 +69,9 @@ public class CmdInvite implements Cmd {
             Component component = legacy.deserialize(sender.describeTo(target))
                     .append(legacy.deserialize(TL.COMMAND_INVITE_INVITEDYOU.toString()).color(NamedTextColor.YELLOW))
                     .append(legacy.deserialize(faction.describeTo(target)));
+
             component = component.hoverEvent(legacy.deserialize(TL.COMMAND_INVITE_CLICKTOJOIN.toString()).asHoverEvent())
-                    .clickEvent(ClickEvent.runCommand("/" + FactionsPlugin.instance().conf().getCommandBase().getFirst() + " join " + ChatColor.stripColor(faction.tag())));
+                    .clickEvent(ClickEvent.runCommand("/" + MiscUtil.commandRoot() + " join " + ChatColor.stripColor(faction.tag())));
             target.sendMessage(component);
         }
 

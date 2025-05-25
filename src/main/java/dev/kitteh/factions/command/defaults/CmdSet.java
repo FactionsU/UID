@@ -26,8 +26,8 @@ public class CmdSet implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
         return (manager, builder) -> {
-            List<String> aliases = new ArrayList<>(FactionsPlugin.instance().tl().commands().set().getAliases());
-            Command.Builder<Sender> setBuilder = builder.literal(aliases.removeFirst(), aliases.toArray(new String[0])).permission(builder.commandPermission().and(Cloudy.hasFaction()));
+            var setConf = FactionsPlugin.instance().tl().commands().set();
+            Command.Builder<Sender> setBuilder = builder.literal(setConf.getFirstAlias(), setConf.getSecondaryAliases()).permission(builder.commandPermission().and(Cloudy.hasFaction()));
 
             new CmdSetBoom().consumer().accept(manager, setBuilder);
             new CmdSetDefaultRole().consumer().accept(manager, setBuilder);

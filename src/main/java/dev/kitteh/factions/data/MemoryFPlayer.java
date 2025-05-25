@@ -758,7 +758,6 @@ public abstract class MemoryFPlayer implements FPlayer {
                     if (amount > 0.0) {
                         String amountString = Econ.moneyString(amount);
                         this.msg(TL.COMMAND_DISBAND_HOLDINGS, amountString);
-                        //TODO: Format this correctly and translate
                         FactionsPlugin.instance().log(this.name() + " has been given bank holdings of " + amountString + " from disbanding " + myFaction.tag() + ".");
                     }
                 }
@@ -800,7 +799,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             Faction faction = this.faction();
             Faction.Zone zone = faction.zones().get(this.autoSetZone);
             if (zone == null) {
-                this.autoSetZone = null; // TODO should we warn about this?
+                this.autoSetZone = null;
                 return;
             }
             Faction.Zone currentZone = faction.zones().get(flocation);
@@ -912,7 +911,6 @@ public abstract class MemoryFPlayer implements FPlayer {
                 denyReason = TextUtil.parse(TL.CLAIM_BORDER.toString());
             }
         }
-        // TODO: Add more else if statements.
 
         if (notifyFailure && denyReason != null) {
             msg(denyReason);

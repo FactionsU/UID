@@ -16,6 +16,7 @@ import dev.kitteh.factions.permissible.PermissibleActionRegistry;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.selector.UnknownSelector;
 import dev.kitteh.factions.upgrade.Upgrade;
+import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
@@ -53,7 +54,7 @@ public class CmdSetPerm implements Cmd {
     }
 
     public CmdSetPerm() {
-        this.firstCmdBit = (ctx) -> '/' + FactionsPlugin.instance().conf().getCommandBase().getFirst() + ' ' +
+        this.firstCmdBit = (ctx) -> '/' + MiscUtil.commandRoot() + ' ' +
                 FactionsPlugin.instance().tl().commands().set().getFirstAlias() + ' ' +
                 FactionsPlugin.instance().tl().commands().permissions().getFirstAlias() + ' ';
         this.permissionsGetter = context -> ((Sender.Player) context.sender()).faction().permissions();

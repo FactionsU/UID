@@ -27,7 +27,6 @@ public class CmdSetWarp implements Cmd {
                         .commandDescription(Cloudy.desc(TL.COMMAND_SETFWARP_DESCRIPTION))
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SETWARP).and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETWARP))))
                         .required("name", StringParser.stringParser())
-                        // TODO more flags, translatable password string
                         .flag(manager.flagBuilder("password").withComponent(StringParser.stringParser()))
                         .flag(manager.flagBuilder("delete"))
                         .handler(this::handle)

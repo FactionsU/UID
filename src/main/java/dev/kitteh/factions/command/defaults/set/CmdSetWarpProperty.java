@@ -23,7 +23,7 @@ public class CmdSetWarpProperty implements Cmd {
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SETWARP).and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETWARP))))
                         .required("name", StringParser.stringParser())
                         .flag(manager.flagBuilder("password").withComponent(StringParser.stringParser()))
-                        .flag(manager.flagBuilder("remove-password"))// TODO more flags, translatable password string
+                        .flag(manager.flagBuilder("remove-password"))
                         .handler(this::handle)
         );
     }

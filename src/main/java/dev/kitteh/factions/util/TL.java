@@ -199,6 +199,7 @@ public enum TL {
     COMMAND_DISBAND_BROADCAST_YOURS("&d%1$s&e disbanded your faction."),
     COMMAND_DISBAND_BROADCAST_NOTYOURS("&d%1$s&e disbanded the faction %2$s."),
     COMMAND_DISBAND_HOLDINGS("&eYou have been given the disbanded faction's bank, totaling %1$s."),
+    COMMAND_DISBAND_CONFIRM("&eAre you sure you want to disband %s? If so, run /%s"),
     COMMAND_DISBAND_DESCRIPTION("Disband a faction"),
 
     COMMAND_DTR_TOSHOW("to show faction DTR info"),
@@ -266,9 +267,9 @@ public enum TL {
 
     COMMAND_JOIN_CANNOTFORCE("&cYou do not have permission to move other players into a faction."),
     COMMAND_JOIN_SYSTEMFACTION("&cPlayers may only join normal factions. This is a system faction."),
-    COMMAND_JOIN_ALREADYMEMBER("&c%1$s %2$s already a member of %3$s"),
+    COMMAND_JOIN_ALREADYMEMBERFIXED("&You are already a member of %s"),
     COMMAND_JOIN_ATLIMIT(" &c!&f The faction %1$s is at the limit of %2$d members, so %3$s cannot currently join."),
-    COMMAND_JOIN_INOTHERFACTION("&c%1$s must leave %2$s current faction first."),
+    COMMAND_JOIN_INOTHERFACTIONFIXED("&cYou must leave your current faction first."),
     COMMAND_JOIN_NEGATIVEPOWER("&c%1$s cannot join a faction with a negative power level."),
     COMMAND_JOIN_REQUIRESINVITATION("&eThis faction requires invitation."),
     COMMAND_JOIN_ATTEMPTEDJOIN("%1$s&e tried to join your faction."),
@@ -623,6 +624,7 @@ public enum TL {
     COMMAND_UNCLAIMALL_FORUNCLAIM("for unclaiming all faction land"),
     COMMAND_UNCLAIMALL_UNCLAIMED("%1$s&e unclaimed ALL of your faction's land."),
     COMMAND_UNCLAIMALL_LOG("%1$s unclaimed everything for the faction: %2$s"),
+    COMMAND_UNCLAIMALL_CONFIRM("&eAre you sure you want to unclaim ALL %s territory? If so, run /%s"),
     COMMAND_UNCLAIMALL_DESCRIPTION("Unclaim all of your factions land"),
 
     COMMAND_UNCLAIMFILL_DESCRIPTION("Unclaim contiguous land"),

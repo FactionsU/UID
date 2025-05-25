@@ -17,7 +17,6 @@ import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -50,8 +49,7 @@ public class CmdForceDisband implements Cmd {
 
         if (!confirmed) {
             String conf = CmdConfirm.add(sender, s -> this.doIt(s, faction, true));
-            // TODO TL
-            sender.sendMessage(ChatColor.YELLOW + "Are you sure you want to disband " + faction.tag() + "? If so, run /f confirm " + conf);
+            sender.msg(TL.COMMAND_DISBAND_CONFIRM, faction.tag(), conf);
             return;
         }
 

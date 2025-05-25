@@ -1,5 +1,6 @@
 package dev.kitteh.factions.command;
 
+import dev.kitteh.factions.FactionsPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.caption.Caption;
 import org.incendo.cloud.caption.CaptionProvider;
@@ -10,8 +11,8 @@ public final class Captioner extends DelegatingCaptionProvider<Sender> {
     public static final Caption NO_PLAYER_FOUND = Caption.of("argument.parse.failure.fplayer");
 
     private static final CaptionProvider<Sender> PROVIDER = CaptionProvider.<Sender>constantProvider()
-            .putCaption(NO_FACTION_FOUND, "No faction found for input '<input>'") // TODO TL.GENERIC_NOFACTIONFOUND
-            .putCaption(NO_PLAYER_FOUND, "No player found for input '<input>'") // TODO TL.GENERIC_NOPLAYERFOUND
+            .putCaption(NO_FACTION_FOUND, FactionsPlugin.instance().tl().commands().generic().getNoFactionFound())
+            .putCaption(NO_PLAYER_FOUND, FactionsPlugin.instance().tl().commands().generic().getNoPlayerFound())
             .build();
 
     @Override

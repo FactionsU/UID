@@ -290,8 +290,7 @@ public class CmdUnclaim implements Cmd {
 
         if (!confirmed) {
             String conf = CmdConfirm.add(sender, s -> this.unclaimAll(s, faction, true));
-            // TODO TL
-            sender.sendMessage(ChatColor.YELLOW + "Are you sure you want to unclaim ALL " + faction.tag() + " territory? If so, run /f confirm " + conf);
+            sender.msg(TL.COMMAND_UNCLAIMALL_CONFIRM, faction.tag(), conf);
             return;
         }
 

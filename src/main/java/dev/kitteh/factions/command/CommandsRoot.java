@@ -102,9 +102,8 @@ public class CommandsRoot {
 
         manager.captionRegistry().registerProvider(new Captioner());
 
-        List<String> aliases = new ArrayList<>(plugin.conf().getCommandBase());
-        String main = aliases.removeFirst();
-        Command.Builder<Sender> builder = manager.commandBuilder(main, aliases.toArray(new String[0]))
+        var main = plugin.tl().commands().generic().getCommandRoot();
+        Command.Builder<Sender> builder = manager.commandBuilder(main.getFirstAlias(), main.getSecondaryAliases())
                 .permission(Cloudy.predicate(sender -> WorldUtil.isEnabled(sender.sender())));
         registry.values().forEach(reg -> {
             try {
@@ -114,7 +113,8 @@ public class CommandsRoot {
             }
         });
 
-        Command.Builder<Sender> builderAdmin = manager.commandBuilder("fa")
+        var admin = plugin.tl().commands().generic().getCommandAdminRoot();
+        Command.Builder<Sender> builderAdmin = manager.commandBuilder(admin.getFirstAlias(), admin.getSecondaryAliases())
                 .permission(Cloudy.predicate(sender -> WorldUtil.isEnabled(sender.sender())));
         adminRegistry.values().forEach(reg -> {
             try {

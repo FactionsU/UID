@@ -58,8 +58,7 @@ public class CmdDisband implements Cmd {
 
         if (!confirmed) {
             String conf = CmdConfirm.add(sender, s -> this.doIt(s, true));
-            // TODO TL
-            sender.sendMessage(ChatColor.YELLOW + "Are you sure you want to disband the faction? If so, run /f confirm " + conf);
+            sender.msg(TL.COMMAND_DISBAND_CONFIRM, faction.tag(), conf);
             return;
         }
 

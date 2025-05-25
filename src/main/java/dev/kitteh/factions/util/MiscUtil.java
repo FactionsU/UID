@@ -191,4 +191,8 @@ public class MiscUtil {
         ret.addAll(recruit);
         return ret;
     }
+
+    public static String commandRoot() {
+        return FactionsPlugin.instance().tl().commands().generic().getCommandRoot().getFirstAlias();
+    }
 }
