@@ -42,6 +42,11 @@ public class CmdDisband implements Cmd {
     private void doIt(FPlayer sender, boolean confirmed) {
         Faction faction = sender.faction();
 
+        if (!faction.isNormal()) {
+            sender.msgLegacy(TL.COMMAND_DISBAND_IMMUTABLE);
+            return;
+        }
+
         if (!faction.hasAccess(sender, PermissibleActions.DISBAND, sender.lastStoodAt())) {
             sender.msgLegacy(TL.GENERIC_NOPERMISSION, PermissibleActions.DISBAND.shortDescription());
             return;

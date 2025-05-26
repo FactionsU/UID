@@ -2,6 +2,7 @@ package dev.kitteh.factions.command.defaults.top;
 
 import dev.kitteh.factions.Faction;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public final class FTopFacValPair implements Comparable<FTopFacValPair> {
     public final Faction faction;
     public final FTopValue value;

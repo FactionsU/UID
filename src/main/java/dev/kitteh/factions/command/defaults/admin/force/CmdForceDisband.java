@@ -43,6 +43,11 @@ public class CmdForceDisband implements Cmd {
     }
 
     private void doIt(FPlayer sender, Faction faction, boolean confirmed) {
+        if (!faction.isNormal()) {
+            sender.msgLegacy(TL.COMMAND_DISBAND_IMMUTABLE);
+            return;
+        }
+
         if (faction.permanent()) {
             sender.msgLegacy(TL.COMMAND_DISBAND_MARKEDPERMANENT);
             return;

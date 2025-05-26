@@ -54,7 +54,6 @@ public enum TL {
     COMMAND_ADMIN_NOTADMIN("&cYou are not the faction admin."),
     COMMAND_ADMIN_TARGETSELF("&cThe target player mustn't be yourself."),
     COMMAND_ADMIN_PROMOTED("%1$s&e gave %2$s&e the leadership of %3$s&e."),
-    COMMAND_ADMIN_DESCRIPTION("Hand over your admin rights"),
 
     COMMAND_AHOME_DESCRIPTION("Send a player to their f home no matter what."),
     COMMAND_AHOME_NOHOME("%1$s doesn't have an f home."),
@@ -67,14 +66,10 @@ public enum TL {
     COMMAND_AUTOCLAIM_ENABLED("&eNow auto-claiming land for &d%1$s&e."),
     COMMAND_AUTOCLAIM_DISABLED("&eAuto-claiming of land disabled."),
     COMMAND_AUTOCLAIM_OTHERFACTION("&cYou can't claim land for &d%1$s&c."),
-    COMMAND_AUTOCLAIM_DESCRIPTION("Auto-claim land as you walk around"),
 
     COMMAND_AUTOUNCLAIM_ENABLED("&eNow auto-unclaiming land for &d%1$s&e."),
     COMMAND_AUTOUNCLAIM_DISABLED("&eAuto-unclaiming of land disabled."),
     COMMAND_AUTOUNCLAIM_OTHERFACTION("&cYou can't unclaim land for &d%1$s&c."),
-    COMMAND_AUTOUNCLAIM_DESCRIPTION("Auto-unclaim land as you walk around"),
-
-    COMMAND_AUTOHELP_HELPFOR("Help for command \""),
 
     COMMAND_BAN_DESCRIPTION("Ban players from joining your Faction."),
     COMMAND_BAN_TARGET("&cYou were banned from &7%1$s"), // banned player perspective
@@ -87,7 +82,6 @@ public enum TL {
     COMMAND_BANLIST_HEADER("&6There are &c%d&6 bans for %s"),
     COMMAND_BANLIST_ENTRY("&7%d. &c%s &r- &a%s &r- &e%s"),
     COMMAND_BANLIST_NOFACTION("&4You are not in a Faction."),
-    COMMAND_BANLIST_INVALID("We couldn't find a Faction by the name %s"),
 
     COMMAND_BOOM_PEACEFULONLY("&cThis command is only usable by factions which are specifically designated as peaceful."),
     COMMAND_BOOM_TOTOGGLE("to toggle explosions"),
@@ -101,9 +95,6 @@ public enum TL {
     COMMAND_BYPASS_DISABLELOG(" has DISABLED admin bypass mode."),
     COMMAND_BYPASS_DESCRIPTION("Enable admin bypass mode"),
 
-    COMMAND_CHAT_DISABLED("&cThe built in chat channels are disabled on this server."),
-    COMMAND_CHAT_INVALIDMODE("&cUnrecognised chat mode. &ePlease enter either 'a','f','m','t' or 'p'"),
-    COMMAND_CHAT_INSUFFICIENTRANK("&cYou must be at least moderator to enter this chat."),
     COMMAND_CHAT_DESCRIPTION("Change chat mode"),
 
     COMMAND_CHAT_MODE_PUBLIC("&ePublic chat mode."),
@@ -120,11 +111,9 @@ public enum TL {
     COMMAND_CHATSPY_DISABLELOG(" has DISABLED chat spying mode."),
     COMMAND_CHATSPY_DESCRIPTION("Enable admin chat spy mode"),
 
-    COMMAND_CLAIM_INVALIDRADIUS("&cIf you specify a radius, it must be at least 1."),
     COMMAND_CLAIM_DENIED("&cYou do not have permission to claim in a radius."),
     COMMAND_CLAIM_DESCRIPTION("Claim land from where you are standing"),
 
-    COMMAND_CLAIMFILL_DESCRIPTION("Claim land filling in a gap in claims"),
     COMMAND_CLAIMFILL_ABOVEMAX("&cThe maximum limit for claim fill is %s."),
     COMMAND_CLAIMFILL_ALREADYCLAIMED("&cCannot claim fill using already claimed land!"),
     COMMAND_CLAIMFILL_TOOFAR("&cThis fill would exceed the maximum distance of %.2f"),
@@ -132,28 +121,7 @@ public enum TL {
     COMMAND_CLAIMFILL_NOTENOUGHLANDLEFT("%s &cdoes not have enough land left to make %d claims"),
     COMMAND_CLAIMFILL_TOOMUCHFAIL("&cAborting claim fill after %d failures"),
 
-    COMMAND_CLAIMLINE_INVALIDRADIUS("&cIf you specify a distance, it must be at least 1."),
-    COMMAND_CLAIMLINE_DENIED("&cYou do not have permission to claim in a line."),
-    COMMAND_CLAIMLINE_DESCRIPTION("Claim land in a straight line."),
-    COMMAND_CLAIMLINE_ABOVEMAX("&cThe maximum limit for claim line is &c%s&c."),
-    COMMAND_CLAIMLINE_NOTVALID("%s&c is not a cardinal direction. You may use &dnorth&c, &deast&c, &dsouth &cor &dwest&c."),
-
-    COMMAND_COLEADER_CANDIDATES("Players you can promote: "),
-    COMMAND_COLEADER_CLICKTOPROMOTE("Click to promote "),
-    COMMAND_COLEADER_NOTMEMBER("%1$s&c is not a member in your faction."),
-    COMMAND_COLEADER_NOTADMIN("&cYou are not the faction admin."),
-    COMMAND_COLEADER_SELF("&cThe target player musn't be yourself."),
-    COMMAND_COLEADER_TARGETISADMIN("&cThe target player is a faction admin. Demote them first."),
-    COMMAND_COLEADER_REVOKES("&eYou have removed coleader status from %1$s&e."),
-    COMMAND_COLEADER_REVOKED("%1$s&e is no longer coleader in your faction."),
-    COMMAND_COLEADER_PROMOTES("%1$s&e was promoted to coleader in your faction."),
-    COMMAND_COLEADER_PROMOTED("&eYou have promoted %1$s&e to coleader."),
-    COMMAND_COLEADER_DESCRIPTION("Give or revoke coleader rights"),
     COMMAND_COLEADER_ALREADY_COLEADER("The faction already has a coleader. There can only be 1."),
-
-    COMMAND_CONVERT_BACKEND_RUNNING("Already running that backend."),
-    COMMAND_CONVERT_BACKEND_INVALID("Invalid backend"),
-    COMMAND_CONVERT_DESCRIPTION("Convert the plugin backend"),
 
     COMMAND_COORDS_MESSAGE("&e%s's location: &6%d&e, &6%d&e, &6%d&e in &6%s&e"),
     COMMAND_COORDS_DESCRIPTION("Broadcast your current position to your faction"),
@@ -162,28 +130,19 @@ public enum TL {
     COMMAND_CREATE_INUSE("&cThat tag is already in use."),
     COMMAND_CREATE_TOCREATE("to create a new faction"),
     COMMAND_CREATE_FORCREATE("for creating a new faction"),
-    COMMAND_CREATE_ERROR("&cThere was an internal error while trying to create your faction. Please try again."),
     COMMAND_CREATE_CREATED("%1$s&e created a new faction %2$s"),
-    COMMAND_CREATE_YOUSHOULD("&eYou should now: %1$s"),
     COMMAND_CREATE_CREATEDLOG(" created a new faction: "),
     COMMAND_CREATE_DESCRIPTION("Create a new faction"),
 
-    COMMAND_DEINVITE_CANDEINVITE("Players you can deinvite: "),
-    COMMAND_DEINVITE_CLICKTODEINVITE("Click to revoke invite for %1$s"),
-    COMMAND_DEINVITE_ALREADYMEMBER("%1$s&e is already a member of %2$s"),
-    COMMAND_DEINVITE_MIGHTWANT("&eYou might want to: %1$s"),
     COMMAND_DEINVITE_REVOKED("%1$s&e revoked your invitation to &d%2$s&e."),
     COMMAND_DEINVITE_REVOKES("%1$s&e revoked %2$s's&e invitation."),
-    COMMAND_DEINVITE_DESCRIPTION("Remove a pending invitation"),
 
     COMMAND_DELFWARP_DELETED("&eDeleted warp &6%1$s"),
     COMMAND_DELFWARP_INVALID("&eCouldn't find warp &6%1$s"),
     COMMAND_DELFWARP_TODELETE("to delete warp"),
     COMMAND_DELFWARP_FORDELETE("for deleting warp"),
-    COMMAND_DELFWARP_DESCRIPTION("Delete a faction warp"),
 
     COMMAND_DELHOME_DEL("%1$s&e unset the home for your faction."),
-    COMMAND_DELHOME_DESCRIPTION("Unset the faction home"),
     COMMAND_DELHOME_TOSET("to unset the faction home"),
     COMMAND_DELHOME_FORSET("for unsetting the faction home"),
 
@@ -217,19 +176,15 @@ public enum TL {
     COMMAND_FLY_ENEMY_NEARBY("&cCannot enable fly, enemy nearby"),
     COMMAND_FLY_ENEMY_DISABLE("&cEnemy nearby, disabling fly"),
 
-    COMMAND_FLYTRAILS_DESCRIPTION("Enabled or change fly trails"),
     COMMAND_FLYTRAILS_PARTICLE_INVALID("&cInvalid particle effect"),
     COMMAND_FLYTRAILS_PARTICLE_PERMS("&cInsufficient permission to use &d%1s"),
     COMMAND_FLYTRAILS_PARTICLE_CHANGE("&eFaction flight trail effect set to &d%1s"),
     COMMAND_FLYTRAILS_CHANGE("&eFaction flight trail &d%1s"),
 
-    COMMAND_FWARP_CLICKTOWARP("Click to warp!"),
-    COMMAND_FWARP_COMMANDFORMAT("&e/f warp <warpname> [password]"),
     COMMAND_FWARP_WARPED("&eWarped to &6%1$s"),
     COMMAND_FWARP_INVALID_WARP("&eCouldn't find warp &6%1$s"),
     COMMAND_FWARP_TOWARP("to warp"),
     COMMAND_FWARP_FORWARPING("for warping"),
-    COMMAND_FWARP_WARPS("Warps: "),
     COMMAND_FWARP_DESCRIPTION("Teleport to a faction warp"),
     COMMAND_FWARP_INVALID_PASSWORD("&4Invalid password!"),
     COMMAND_FWARP_PASSWORD_REQUIRED("&aPlease enter warp password. This will not be visible to anyone else"),
@@ -245,8 +200,6 @@ public enum TL {
     COMMAND_SET_GRACE_ACTIVE("&eGrace active! No explosions for %s"),
 
     COMMAND_HOME_DENIED("&cSorry, you cannot teleport to the home of %s"),
-    COMMAND_HOME_DISABLED("&cSorry, Faction homes are disabled on this server."),
-    COMMAND_HOME_TELEPORTDISABLED("&cSorry, the ability to teleport to Faction homes is disabled on this server."),
     COMMAND_HOME_NOHOME("&cYour faction does not have a home. "),
     COMMAND_HOME_INENEMY("&cYou cannot teleport to your faction home while in the territory of an enemy faction."),
     COMMAND_HOME_WRONGWORLD("&cYou cannot teleport to your faction home while in a different world."),
@@ -265,7 +218,6 @@ public enum TL {
     COMMAND_INVITE_DESCRIPTION("Invite a player to your faction"),
     COMMAND_INVITE_BANNED("&7%1$s &cis banned from your Faction. Not sending an invite."),
 
-    COMMAND_JOIN_CANNOTFORCE("&cYou do not have permission to move other players into a faction."),
     COMMAND_JOIN_SYSTEMFACTION("&cPlayers may only join normal factions. This is a system faction."),
     COMMAND_JOIN_ALREADYMEMBERFIXED("&You are already a member of %s"),
     COMMAND_JOIN_ATLIMIT(" &c!&f The faction %1$s is at the limit of %2$d members, so %3$s cannot currently join."),
@@ -276,10 +228,8 @@ public enum TL {
     COMMAND_JOIN_TOJOIN("to join a faction"),
     COMMAND_JOIN_FORJOIN("for joining a faction"),
     COMMAND_JOIN_SUCCESS("&e%1$s successfully joined %2$s."),
-    COMMAND_JOIN_MOVED("&e%1$s moved you into the faction %2$s."),
     COMMAND_JOIN_JOINED("&e%1$s joined your faction."),
     COMMAND_JOIN_JOINEDLOG("%1$s joined the faction %2$s."),
-    COMMAND_JOIN_MOVEDLOG("%1$s moved the player %2$s into the faction %3$s."),
     COMMAND_JOIN_DESCRIPTION("Join a faction"),
     COMMAND_JOIN_BANNED("&cYou are banned from %1$s &c:("),
 
@@ -294,21 +244,16 @@ public enum TL {
     COMMAND_KICK_TOKICK("to kick someone from the faction"),
     COMMAND_KICK_FORKICK("for kicking someone from the faction"),
     COMMAND_KICK_FACTION("%1$s&e kicked %2$s&e from the faction! :O"), //message given to faction members
-    COMMAND_KICK_KICKS("&eYou kicked %1$s&e from the faction %2$s&e!"), //kicker perspective
     COMMAND_KICK_KICKED("%1$s&e kicked you from %2$s&e! :O"), //kicked player perspective
     COMMAND_KICK_DESCRIPTION("Kick a player from the faction"),
 
     COMMAND_LINK_CHANGED("%s&e changed their link to:"),
     COMMAND_LINK_INVALIDURL("&cInvalid URL!"),
-    COMMAND_LINK_TOCHANGE("to change faction link"),
-    COMMAND_LINK_FORCHANGE("for changing faction link"),
     COMMAND_LINK_SHOW("%sFaction link: &e%s"),
     COMMAND_LINK_DESCRIPTION("Change the faction link"),
 
-    COMMAND_LIST_FACTIONLIST("Faction List "),
     COMMAND_LIST_TOLIST("to list the factions"),
     COMMAND_LIST_FORLIST("for listing the factions"),
-    COMMAND_LIST_ONLINEFACTIONLESS("Online factionless: "),
     COMMAND_LIST_DESCRIPTION("See a list of the factions"),
 
     COMMAND_LISTCLAIMS_MESSAGE("&eClaims by %s&e in %s:"),
@@ -329,33 +274,12 @@ public enum TL {
     COMMAND_MAP_UPDATE_DISABLED("&eMap auto update &4DISABLED."),
     COMMAND_MAP_DESCRIPTION("Show the territory map, and set optional auto update"),
 
-    COMMAND_MAPHEIGHT_DESCRIPTION("&eUpdate the lines that /f map sends"),
     COMMAND_MAPHEIGHT_SET("&eSet /f map lines to &a%1$d"),
-    COMMAND_MAPHEIGHT_CURRENT("&eCurrent mapheight: &a%1$d"),
-
-    COMMAND_MOD_CANDIDATES("Players you can promote: "),
-    COMMAND_MOD_CLICKTOPROMOTE("Click to promote "),
-    COMMAND_MOD_NOTMEMBER("%1$s&c is not a member in your faction."),
-    COMMAND_MOD_NOTADMIN("&cYou are not the faction admin."),
-    COMMAND_MOD_SELF("&cThe target player musn't be yourself."),
-    COMMAND_MOD_TARGETISADMIN("&cThe target player is a faction admin. Demote them first."),
-    COMMAND_MOD_REVOKES("&eYou have removed moderator status from %1$s&e."),
-    COMMAND_MOD_REVOKED("%1$s&e is no longer moderator in your faction."),
-    COMMAND_MOD_PROMOTES("%1$s&e was promoted to moderator in your faction."),
-    COMMAND_MOD_PROMOTED("&eYou have promoted %1$s&e to moderator."),
-    COMMAND_MOD_DESCRIPTION("Give or revoke moderator rights"),
 
     COMMAND_MODIFYPOWER_ADDED("&eAdded &6%1$f &epower to &6%2$s. &eNew total rounded power: &6%3$d"),
     COMMAND_MODIFYPOWER_SET("&eSet &6%1$f &epower to &6%2$s."),
     COMMAND_MODIFYPOWER_DESCRIPTION("Modify the power of a faction/player"),
 
-    COMMAND_MONEY_LONG("&eThe faction money commands."),
-    COMMAND_MONEY_DESCRIPTION("Faction money commands"),
-
-    COMMAND_MONEYBALANCE_SHORT("show faction balance"),
-    COMMAND_MONEYBALANCE_DESCRIPTION("Show your factions current money balance"),
-
-    COMMAND_MONEYDEPOSIT_DESCRIPTION("Deposit money"),
     COMMAND_MONEYDEPOSIT_DEPOSITED("%1$s deposited %2$s in the faction bank: %3$s"),
     COMMAND_MONEYMODIFY_DESCRIPTION("Modify faction bank money."),
     COMMAND_MONEYMODIFY_MODIFIED("&eModified %1$s bank by %2$s"),
@@ -364,16 +288,10 @@ public enum TL {
     COMMAND_MONEYMODIFY_SETNOTIFY("&eModified %1$s bank by %2$s"),
     COMMAND_MONEYMODIFY_FAIL("&cFailed to modify!"),
 
-    COMMAND_MONEYTRANSFERFF_DESCRIPTION("Transfer f -> f"),
     COMMAND_MONEYTRANSFERFF_TRANSFER("%1$s transferred %2$s from the faction \"%3$s\" to the faction \"%4$s\""),
 
-    COMMAND_MONEYTRANSFERFP_DESCRIPTION("Transfer f -> p"),
     COMMAND_MONEYTRANSFERFP_TRANSFER("%1$s transferred %2$s from the faction \"%3$s\" to the player \"%4$s\""),
 
-    COMMAND_MONEYTRANSFERPF_DESCRIPTION("Transfer p -> f"),
-    COMMAND_MONEYTRANSFERPF_TRANSFER("%1$s transferred %2$s from the player \"%3$s\" to the faction \"%4$s\""),
-
-    COMMAND_MONEYWITHDRAW_DESCRIPTION("Withdraw money"),
     COMMAND_MONEYWITHDRAW_WITHDRAW("%1$s withdrew %2$s from the faction bank: %3$s"),
 
     COMMAND_NEAR_DESCRIPTION("Show nearby faction members"),
@@ -395,8 +313,6 @@ public enum TL {
     COMMAND_PEACEFUL_GRANT("granted peaceful status to"),
     COMMAND_PEACEFUL_REVOKE("removed peaceful status from"),
 
-    COMMAND_PERM_SET("&aSet permission &e%1$s &ato &b%2$s &afor relation &c%3$s"),
-
     COMMAND_PERMS_DESCRIPTION("&6Edit or list your Faction's permissions."),
 
     COMMAND_PERMANENT_DESCRIPTION("Toggles a faction's permanence"),
@@ -411,9 +327,6 @@ public enum TL {
     COMMAND_PERMANENTPOWER_SUCCESS("&eYou %s &d%s&e."),
     COMMAND_PERMANENTPOWER_FACTION("%s&e %s your faction"),
 
-    COMMAND_PROMOTE_DESCRIPTION("/f promote <name>"),
-    COMMAND_NOACCESS("You don't have access to that."),
-
     COMMAND_ROLE_DESCRIPTION("Modify a faction member's role."),
     COMMAND_ROLE_NOT_ALLOWED("&cYou can't change that player's role."),
     COMMAND_ROLE_WRONGFACTION("&cThat player is not part of your faction."),
@@ -426,15 +339,8 @@ public enum TL {
     COMMAND_POWER_PENALTY(" (penalty: "),
     COMMAND_POWER_DESCRIPTION("Show player power info"),
 
-    COMMAND_POWERBOOST_HELP_1("&cYou must specify \"p\" or \"player\" to target a player or \"f\" or \"faction\" to target a faction."),
-    COMMAND_POWERBOOST_HELP_2("&cex. /f powerboost p SomePlayer 0.5  -or-  /f powerboost f SomeFaction -5"),
-    COMMAND_POWERBOOST_INVALIDNUM("&cYou must specify a valid numeric value for the power bonus/penalty amount."),
-    COMMAND_POWERBOOST_PLAYER("Player \"%1$s\""),
-    COMMAND_POWERBOOST_FACTION("Faction \"%1$s\""),
     COMMAND_POWERBOOST_BOOST("&e%1$s now has a power bonus/penalty of %2$d to min and max power levels."),
-    COMMAND_POWERBOOST_BOOSTLOG("%1$s has set the power bonus/penalty for %2$s to %3$d."),
     COMMAND_POWERBOOST_DESCRIPTION("Apply permanent power bonus/penalty to specified player or faction"),
-    COMMAND_POWERBOOST_UNKNOWN_SUBCOMMAND("&cUnknown subcommand &d%1$s&c, You can only use&d set&c or&d add"),
 
     COMMAND_RELATIONS_ALLTHENOPE("&cNope! You can't."),
     COMMAND_RELATIONS_MORENOPE("&cNope! You can't declare a relation to yourself :)"),
@@ -454,10 +360,6 @@ public enum TL {
 
     COMMAND_RELOAD_TIME("&eReloaded &dall configuration files &efrom disk, took &d%1$d ms&e."),
     COMMAND_RELOAD_DESCRIPTION("Reload data file(s) from disk"),
-
-    COMMAND_SAFEUNCLAIMALL_DESCRIPTION("Unclaim all safe zone land"),
-    COMMAND_SAFEUNCLAIMALL_UNCLAIMED("&eYou unclaimed ALL safe zone land."),
-    COMMAND_SAFEUNCLAIMALL_UNCLAIMEDLOG("%1$s unclaimed all safe zones."),
 
     COMMAND_SAVEALL_SUCCESS("&eFactions saved to disk!"),
     COMMAND_SAVEALL_DESCRIPTION("Save all data to disk"),
@@ -482,12 +384,10 @@ public enum TL {
     COMMAND_SETFWARPPROPERTY_REMOVEPASSWORD("&aPassword removed for warp %s"),
     COMMAND_SETFWARPPROPERTY_SETPASSWORD("&aPassword set for warp %s"),
 
-    COMMAND_SETHOME_DISABLED("&cSorry, Faction homes are disabled on this server."),
     COMMAND_SETHOME_NOTCLAIMED("&cSorry, your faction home can only be set inside your own claimed territory."),
     COMMAND_SETHOME_TOSET("to set the faction home"),
     COMMAND_SETHOME_FORSET("for setting the faction home"),
     COMMAND_SETHOME_SET("%1$s&e set the home for your faction. You can now use:"),
-    COMMAND_SETHOME_SETOTHER("&cYou have set the home for the %1$s&e faction."),
     COMMAND_SETHOME_DESCRIPTION("Set the faction home"),
 
     COMMAND_SETMAXVAULTS_DESCRIPTION("Set max vaults for a Faction."),
@@ -529,30 +429,18 @@ public enum TL {
     COMMAND_SEECHUNK_DESCRIPTION("Show chunk boundaries"),
     COMMAND_SEECHUNK_TOGGLE("&eSeechunk &d%1$s"),
 
-    COMMAND_SHOW_NOFACTION_SELF("You are not in a faction"),
     COMMAND_SHOW_NOFACTION_OTHER("That's not a faction"),
     COMMAND_SHOW_TOSHOW("to show faction information"),
     COMMAND_SHOW_FORSHOW("for showing faction information"),
-    COMMAND_SHOW_DESCRIPTION("&6Description: &e%1$s"),
     COMMAND_SHOW_PEACEFUL("This faction is Peaceful"),
-    COMMAND_SHOW_PERMANENT("&6This faction is permanent, remaining even with no members."),
-    COMMAND_SHOW_JOINING("&6Joining: &e%1$s "),
     COMMAND_SHOW_INVITATION("invitation is required"),
     COMMAND_SHOW_UNINVITED("no invitation is needed"),
     COMMAND_SHOW_NOHOME("n/a"),
-    COMMAND_SHOW_POWER("&6Land / Power / Maxpower: &e %1$d/%2$d/%3$d %4$s."),
     COMMAND_SHOW_BONUS(" (bonus: "),
     COMMAND_SHOW_PENALTY(" (penalty: "),
-    COMMAND_SHOW_DEPRECIATED("(%1$s depreciated)"), //This is spelled correctly.
-    COMMAND_SHOW_LANDVALUE("&6Total land value: &e%1$s %2$s"),
-    COMMAND_SHOW_BANKCONTAINS("&6Bank contains: &e%1$s"),
-    COMMAND_SHOW_ALLIES("Allies: "),
-    COMMAND_SHOW_ENEMIES("Enemies: "),
-    COMMAND_SHOW_MEMBERSONLINE("Members online: "),
-    COMMAND_SHOW_MEMBERSOFFLINE("Members offline: "),
     COMMAND_SHOW_COMMANDDESCRIPTION("Show faction information"),
     COMMAND_SHOW_DEATHS_TIL_RAIDABLE("&eDTR: %1$d"),
-    COMMAND_SHOW_EXEMPT("&cThis faction is exempt and cannot be seen."),
+    COMMAND_SHOW_EXEMPT("&cThis faction cannot be seen."),
 
     COMMAND_SHOWINVITES_PENDING("Players with pending invites: "),
     COMMAND_SHOWINVITES_CLICKTOREVOKE("Click to revoke invite for %1$s"),
@@ -628,9 +516,7 @@ public enum TL {
     COMMAND_UNCLAIMALL_UNCLAIMED("%1$s&e unclaimed ALL of your faction's land."),
     COMMAND_UNCLAIMALL_LOG("%1$s unclaimed everything for the faction: %2$s"),
     COMMAND_UNCLAIMALL_CONFIRM("&eAre you sure you want to unclaim ALL %s territory? If so, run /%s"),
-    COMMAND_UNCLAIMALL_DESCRIPTION("Unclaim all of your factions land"),
 
-    COMMAND_UNCLAIMFILL_DESCRIPTION("Unclaim contiguous land"),
     COMMAND_UNCLAIMFILL_ABOVEMAX("&cThe maximum limit for unclaim fill is %s."),
     COMMAND_UNCLAIMFILL_NOTCLAIMED("&cCannot unclaim fill using non-claimed land!"),
     COMMAND_UNCLAIMFILL_TOOFAR("&cThis unclaim would exceed the maximum distance of %.2f"),
@@ -639,16 +525,11 @@ public enum TL {
     COMMAND_UNCLAIMFILL_UNCLAIMED("%s&e unclaimed %d claims of your faction's land around %s."),
     COMMAND_UNCLAIMFILL_BYPASSCOMPLETE("&eUnclaimed %d claims."),
 
-    COMMAND_VERSION_VERSION("&eYou are running %1$s"),
     COMMAND_VERSION_DESCRIPTION("Show plugin and translation version information"),
 
     COMMAND_UPGRADES_DESCRIPTION("Show faction upgrades"),
     COMMAND_UPGRADES_TOUPGRADE("to buy an upgrade"),
     COMMAND_UPGRADES_FORUPGRADE("for buying an upgrade"),
-
-    COMMAND_WARUNCLAIMALL_DESCRIPTION("Unclaim all war zone land"),
-    COMMAND_WARUNCLAIMALL_SUCCESS("&eYou unclaimed ALL war zone land."),
-    COMMAND_WARUNCLAIMALL_LOG("%1$s unclaimed all war zones."),
 
     COMMAND_ZONE_DESCRIPTION("Manage zones"),
 
@@ -672,7 +553,6 @@ public enum TL {
     CLAIM_CANTCLAIM("&cYou can't claim land for &d%s&c."),
     CLAIM_CANTUNCLAIM("&cYou can't unclaim land for &d%s&c."),
     CLAIM_ALREADYOWN("%s&e already own this land."),
-    CLAIM_MUSTBE("&cYou must be &d%s&c to claim land."),
     CLAIM_MEMBERS("Factions must have at least &d%s&c members to claim land."),
     CLAIM_SAFEZONE("&cYou can not claim a safe zone."),
     CLAIM_WARZONE("&cYou can not claim a war zone."),
@@ -696,7 +576,6 @@ public enum TL {
     CLAIM_TOOCLOSETOOTHERFACTION("&eYour claim is too close to another Faction. Buffer required is %d"),
     CLAIM_OUTSIDEWORLDBORDER("&eYour claim is outside the border."),
     CLAIM_OUTSIDEBORDERBUFFER("&eYour claim is outside the border. %d chunks away world edge required."),
-    CLAIM_CLICK_TO_CLAIM("Click to try to claim &2(%1$d, %2$d)"),
     CLAIM_YOUAREHERE("You are here"),
 
     DURATION_DAYS("%d days"),
@@ -715,35 +594,18 @@ public enum TL {
     GENERIC_YOU("you"),
     GENERIC_YOURFACTION("your faction"),
     GENERIC_NOPERMISSION("&cYou don't have permission to %1$s."),
-    GENERIC_DOTHAT("do that"),  //Ugh nuke this from high orbit
-    GENERIC_NOPLAYERMATCH("&cNo player match found for \"&3%1$s&c\"."),
-    GENERIC_NOPLAYERFOUND("&cNo player \"&3%1$s&c\" could not be found."),
-    GENERIC_NOFACTIONMATCH("&cNo faction match found for \"&3%1$s&c\"."),
-    GENERIC_ARGS_TOOFEW("&cToo few arguments. &eUse like this:"),
-    GENERIC_ARGS_TOOMANY("&cStrange argument \"&3%1$s&c\". &eUse the command like this:"),
     GENERIC_DEFAULTDESCRIPTION("Default faction description :("),
-    GENERIC_PUBLICLAND("Public faction land."),
     GENERIC_FACTIONLESS("factionless"),
     GENERIC_SERVERADMIN("A server admin"),
     GENERIC_DISABLED("disabled"),
     GENERIC_ENABLED("enabled"),
     GENERIC_INFINITY("∞"),
-    GENERIC_CONSOLEONLY("This command cannot be run as a player."),
-    GENERIC_PLAYERONLY("&cThis command can only be used by ingame players."),
     GENERIC_MEMBERONLY("&cYou are not member of any faction."),
-    GENERIC_ASKYOURLEADER("&e Ask your leader to:"),
-    GENERIC_YOUSHOULD("&eYou should:"),
-    GENERIC_YOUMAYWANT("&eYou may want to: "),
-    GENERIC_DISABLEDWORLD("&cFactions is disabled in this world."),
     GENERIC_YOUMUSTBE("&cYou must be &d%s&c."),
-    GENERIC_TRANSLATION_VERSION("Translation: %1$s(%2$s,%3$s) State: %4$s"),
-    GENERIC_TRANSLATION_CONTRIBUTORS("Translation contributors: %1$s"),
-    GENERIC_TRANSLATION_RESPONSIBLE("Responsible for translation: %1$s"),
     GENERIC_FACTIONTAG_BLACKLIST("&eThat faction tag is blacklisted."),
     GENERIC_FACTIONTAG_TOOSHORT("&eThe faction tag can't be shorter than &d%1$s&e chars."),
     GENERIC_FACTIONTAG_TOOLONG("&eThe faction tag can't be longer than &d%s&e chars."),
     GENERIC_FACTIONTAG_ALPHANUMERIC("&eFaction tag must be alphanumeric. \"&d%s&e\" is not allowed."),
-    GENERIC_PLACEHOLDER("<This is a placeholder for a message you should not see>"),
     GENERIC_ATTACK("attack"),
 
     /**
@@ -759,15 +621,6 @@ public enum TL {
     COMPASS_SHORT_EAST("E"),
     COMPASS_SHORT_SOUTH("S"),
     COMPASS_SHORT_WEST("W"),
-
-    /**
-     * Chat modes
-     */
-    CHAT_MOD("mod chat"),
-    CHAT_FACTION("faction chat"),
-    CHAT_ALLIANCE("alliance chat"),
-    CHAT_TRUCE("truce chat"),
-    CHAT_PUBLIC("public chat"),
 
     /**
      * Economy stuff
@@ -818,8 +671,6 @@ public enum TL {
      * Region types.
      */
     REGION_SAFEZONE("safezone"),
-    REGION_WARZONE("warzone"),
-    REGION_WILDERNESS("wilderness"),
 
     REGION_PEACEFUL("peaceful territory"),
     /**
@@ -831,7 +682,6 @@ public enum TL {
     PLAYER_USE_SAFEZONE("&cYou can't use &d%s&c in a safe zone."),
     PLAYER_USE_WARZONE("&cYou can't use &d%s&c in a war zone."),
     PLAYER_USE_TERRITORY("&cYou can't &d%s&c in the territory of &d%s&c."),
-    PLAYER_USE_OWNED("&cYou can't use &d%s&c in this territory, it is owned by: %s&c."),
     PLAYER_COMMAND_WARZONE("&cYou can't use the command '%s' in war zone."),
     PLAYER_COMMAND_NEUTRAL("&cYou can't use the command '%s' in neutral territory."),
     PLAYER_COMMAND_ENEMY("&cYou can't use the command '%s' in enemy territory."),
@@ -926,37 +776,14 @@ public enum TL {
     PERM_DENIED_WARZONE("&cYou can't %s in a war zone"),
     PERM_DENIED_TERRITORY("&cYou can't %s in the territory of %s"),
     PERM_DENIED_PAINTERRITORY("&cIt is painful to %s in the territory of %s"),
-    PERM_DENIED_OWNED("&cYou can't %s in this territory, it is owned by: %s"),
-    PERM_DENIED_PAINOWNED("&cIt is painful to try to %s in this territory, it is owned by: %s"),
 
     GUI_WARPS_ONE_PAGE("%s warps"),
     GUI_WARPS_PAGE("%1$s warps (page %2$d)"),
 
-    GUI_PERMS_RELATION_NAME("Choose a relation%s:"),
-    GUI_PERMS_RELATION_ONLINEOFFLINEBIT(" (%s)"),
-
-    GUI_PERMS_ACTION_NAME("Permissions: %1$s%2$s"),
-    GUI_PERMS_ACTION_ONLINEOFFLINEBIT(" (%s)"),
-
-    GUI_PERMS_TOGGLE("Toggle online/offline"),
-    GUI_PERMS_ONLINE("online"),
-    GUI_PERMS_OFFLINE("offline"),
-
-    GUI_PERMS_ACTION_LOCKED("(Locked)"),
-    GUI_PERMS_ACTION_ALLOW("Allow"),
-    GUI_PERMS_ACTION_DENY("Deny"),
-
     GUI_BUTTON_NEXT("NEXT"),
     GUI_BUTTON_PREV("PREVIOUS"),
-    GUI_BUTTON_BACK("BACK"),
 
     TAG_LEADER_OWNERLESS("Server"),
-
-    /**
-     * Strings lying around in other bits of the plugins
-     */
-    NOPAGES("&eSorry. No Pages available."),
-    INVALIDPAGE("&eInvalid page. Must be between 1 and %1$d"),
 
     /**
      * The ones here before I started messing around with this
