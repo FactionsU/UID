@@ -64,7 +64,7 @@ public abstract class AbstractRoleSelector extends AbstractSelector {
 
     @Override
     public Component displayValue(Faction context) {
-        return LegacyComponentSerializer.legacySection().deserialize(this.role.chatColor() + this.role.translation());
+        return LegacyComponentSerializer.legacySection().deserialize(this.role.translation()).color(this.role.color());
     }
 
     @Override

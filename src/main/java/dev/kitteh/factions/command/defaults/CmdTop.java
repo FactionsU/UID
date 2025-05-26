@@ -107,7 +107,7 @@ public class CmdTop implements Cmd {
         for (FTopFacValPair fvpair : sortedFactions.subList(start, end)) {
             // Get the relation color if player is executing this.
             Faction faction = fvpair.faction;
-            String fac = context.sender().isPlayer() ? faction.relationTo(context.sender().fPlayerOrNull()).chatColor() + faction.tag() : faction.tag();
+            String fac = context.sender().isPlayer() ? faction.colorStringTo(context.sender().fPlayerOrNull()) + faction.tag() : faction.tag();
             lines.add(TL.COMMAND_TOP_LINE.format(rank, fac, fvpair.value.getDisplayString()));
             rank++;
         }

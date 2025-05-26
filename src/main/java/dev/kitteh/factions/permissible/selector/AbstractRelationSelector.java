@@ -63,7 +63,7 @@ public abstract class AbstractRelationSelector extends AbstractSelector {
 
     @Override
     public Component displayValue(Faction context) {
-        return LegacyComponentSerializer.legacySection().deserialize(this.relation.chatColor() + this.relation.translation());
+        return LegacyComponentSerializer.legacySection().deserialize(this.relation.translation()).color(this.relation.color());
     }
 
     @Override
