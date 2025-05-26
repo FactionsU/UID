@@ -44,7 +44,7 @@ public class CmdVault implements Cmd {
 
         int max = faction.maxVaults();
         if (number > max) {
-            sender.sendMessage(TL.COMMAND_VAULT_TOOHIGH.format(number, max));
+            sender.sendMessageLegacy(TL.COMMAND_VAULT_TOOHIGH.format(number, max));
             return;
         }
 

@@ -59,7 +59,7 @@ public class CmdListClaims implements Cmd {
             String worldName = context.flags().get("world");
             world = Bukkit.getWorld(worldName);
             if (world == null) {
-                sender.msg(TL.COMMAND_LISTCLAIMS_INVALIDWORLD, worldName);
+                sender.msgLegacy(TL.COMMAND_LISTCLAIMS_INVALIDWORLD, worldName);
                 return;
             }
         }
@@ -71,7 +71,7 @@ public class CmdListClaims implements Cmd {
             }
         }
         if (worldClaims.isEmpty()) {
-            sender.msg(TL.COMMAND_LISTCLAIMS_NOCLAIMS, faction.tag(), world.getName());
+            sender.msgLegacy(TL.COMMAND_LISTCLAIMS_NOCLAIMS, faction.tag(), world.getName());
             return;
         }
         Set<FLoc> set;
@@ -109,14 +109,14 @@ public class CmdListClaims implements Cmd {
             }
         }
 
-        sender.msg(TL.COMMAND_LISTCLAIMS_MESSAGE, faction.tag(), world.getName());
+        sender.msgLegacy(TL.COMMAND_LISTCLAIMS_MESSAGE, faction.tag(), world.getName());
         StringBuilder builder = new StringBuilder();
         String str;
         final String separator = "   ";
         for (FLoc loc : displayList) {
             str = (loc.x << 4 | 8) + "," + (loc.z << 4 | 8) + (loc.total > 1 ? (" (" + loc.total + ")") : "");
             if (builder.length() + separator.length() + str.length() > 75) {
-                sender.msg(builder.toString());
+                sender.msgLegacy(builder.toString());
                 builder.setLength(0);
             } else if (!builder.isEmpty()) {
                 builder.append(separator);
@@ -124,7 +124,7 @@ public class CmdListClaims implements Cmd {
             builder.append(str);
         }
         if (!builder.isEmpty()) {
-            sender.msg(builder.toString());
+            sender.msgLegacy(builder.toString());
         }
     }
 

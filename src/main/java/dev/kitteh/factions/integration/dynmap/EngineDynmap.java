@@ -60,7 +60,7 @@ public class EngineDynmap {
     public final static String FACTIONS_HOME = FACTIONS_ + "home";
     public final static String FACTIONS_HOME_ = FACTIONS_HOME + "_";
     public final static String FACTIONS_WARP = FACTIONS_ + "warp";
-    public final static String FACTIONS_WARP_ = FACTIONS_HOME + "_";
+    public final static String FACTIONS_WARP_ = FACTIONS_WARP + "_";
 
     public final static String FACTIONS_PLAYERSET = FACTIONS_ + "playerset";
     public final static String FACTIONS_PLAYERSET_ = FACTIONS_PLAYERSET + "_";

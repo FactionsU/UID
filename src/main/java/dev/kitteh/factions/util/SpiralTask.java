@@ -1,7 +1,6 @@
 package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.FLocation;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -80,19 +79,6 @@ public abstract class SpiralTask implements Runnable {
     public final Location currentLocation() {
         return new Location(world, FLocation.chunkToBlock(x), 65.0, FLocation.chunkToBlock(z));
     }
-
-    /*
-     * Returns current chunk X and Z values.
-     */
-    public final int getX() {
-        return x;
-    }
-
-    public final int getZ() {
-        return z;
-    }
-
-
 
     /*
      * Below are the guts of the class, which you normally wouldn't need to mess with.

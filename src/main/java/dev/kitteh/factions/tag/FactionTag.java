@@ -106,7 +106,6 @@ public enum FactionTag implements Tag {
     FACTION_KILLS("faction-kills", (fac) -> String.valueOf(fac.kills())),
     FACTION_DEATHS("faction-deaths", (fac) -> String.valueOf(fac.deaths())),
     FACTION_BANCOUNT("faction-bancount", (fac) -> String.valueOf(fac.bans().size())),
-    @SuppressWarnings("Convert2MethodRef")
     FACTION_LINK("faction-link", (fac) -> fac.link()),
     ;
 

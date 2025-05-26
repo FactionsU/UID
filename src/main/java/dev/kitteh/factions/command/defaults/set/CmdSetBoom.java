@@ -32,7 +32,7 @@ public class CmdSetBoom implements Cmd {
         Faction faction = sender.faction();
 
         if (!faction.peaceful()) {
-            sender.msg(TL.COMMAND_BOOM_PEACEFULONLY);
+            sender.msgLegacy(TL.COMMAND_BOOM_PEACEFULONLY);
             return;
         }
 
@@ -45,6 +45,6 @@ public class CmdSetBoom implements Cmd {
 
         String enabled = faction.noExplosionsInTerritory() ? TL.GENERIC_DISABLED.toString() : TL.GENERIC_ENABLED.toString();
 
-        faction.msg(TL.COMMAND_BOOM_ENABLED, sender.describeToLegacy(faction), enabled);
+        faction.msgLegacy(TL.COMMAND_BOOM_ENABLED, sender.describeToLegacy(faction), enabled);
     }
 }

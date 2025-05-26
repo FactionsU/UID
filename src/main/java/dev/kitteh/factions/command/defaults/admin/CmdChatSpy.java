@@ -1,7 +1,6 @@
 package dev.kitteh.factions.command.defaults.admin;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
@@ -31,10 +30,10 @@ public class CmdChatSpy implements Cmd {
         sender.spyingChat(!sender.spyingChat());
 
         if (sender.spyingChat()) {
-            sender.msg(TL.COMMAND_CHATSPY_ENABLE);
+            sender.msgLegacy(TL.COMMAND_CHATSPY_ENABLE);
             AbstractFactionsPlugin.instance().log(sender.name() + TL.COMMAND_CHATSPY_ENABLELOG);
         } else {
-            sender.msg(TL.COMMAND_CHATSPY_DISABLE);
+            sender.msgLegacy(TL.COMMAND_CHATSPY_DISABLE);
             AbstractFactionsPlugin.instance().log(sender.name() + TL.COMMAND_CHATSPY_DISABLELOG);
         }
     }

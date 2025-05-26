@@ -46,7 +46,7 @@ public class CmdWarp implements Cmd {
         Faction faction = context.flags().get("faction") instanceof Faction fac ? fac : sender.faction();
 
         if (!context.sender().isBypass() && !faction.hasAccess(sender, PermissibleActions.WARP, sender.lastStoodAt())) {
-            sender.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagLegacy(sender));
+            sender.msgLegacy(TL.COMMAND_FWARP_NOACCESS, faction.tagLegacy(sender));
             return;
         }
 
@@ -60,7 +60,7 @@ public class CmdWarp implements Cmd {
             LazyLocation destination = faction.warp(warpName);
             if (destination != null) {
                 if (!sender.adminBypass() && faction.hasWarpPassword(warpName) && !faction.isWarpPassword(warpName, passwordAttempt)) {
-                    sender.msg(TL.COMMAND_FWARP_INVALID_PASSWORD);
+                    sender.msgLegacy(TL.COMMAND_FWARP_INVALID_PASSWORD);
                     return;
                 }
 
@@ -81,13 +81,13 @@ public class CmdWarp implements Cmd {
                     if (destination == faction.warp(warpName) && player != null) {
                         AbstractFactionsPlugin.instance().teleport(player, destination.asLocation()).thenAccept(success -> {
                             if (success) {
-                                fPlayer.msg(TL.COMMAND_FWARP_WARPED, warpName);
+                                fPlayer.msgLegacy(TL.COMMAND_FWARP_WARPED, warpName);
                             }
                         });
                     }
                 }, FactionsPlugin.instance().conf().commands().warp().getDelay());
             } else {
-                sender.msg(TL.COMMAND_FWARP_INVALID_WARP, warpName);
+                sender.msgLegacy(TL.COMMAND_FWARP_INVALID_WARP, warpName);
             }
         }
     }

@@ -34,20 +34,20 @@ public class CmdSetWarpProperty implements Cmd {
 
         String warp = context.get("name");
         if (faction.warp(warp) == null) {
-            sender.msg(TL.COMMAND_SETFWARPPROPERTY_NOWARP, warp);
+            sender.msgLegacy(TL.COMMAND_SETFWARPPROPERTY_NOWARP, warp);
             return;
         }
 
         if (context.flags().hasFlag("remove-password")) {
             faction.removeWarpPassword(warp);
-            sender.msg(TL.COMMAND_SETFWARPPROPERTY_REMOVEPASSWORD, warp);
+            sender.msgLegacy(TL.COMMAND_SETFWARPPROPERTY_REMOVEPASSWORD, warp);
         }
 
         String password = context.flags().get("password");
 
         if (password != null) {
             faction.setWarpPassword(warp, password);
-            sender.msg(TL.COMMAND_SETFWARPPROPERTY_SETPASSWORD, warp);
+            sender.msgLegacy(TL.COMMAND_SETFWARPPROPERTY_SETPASSWORD, warp);
         }
     }
 }

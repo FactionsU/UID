@@ -43,18 +43,18 @@ public class CmdSetDescription implements Cmd {
         desc = desc.replaceAll("%", "").replaceAll("(&([a-f0-9klmnor]))", "& $2");
         int limit = FactionsPlugin.instance().conf().commands().description().getMaxLength();
         if (limit > 0 && desc.length() > limit) {
-            sender.msg(TL.COMMAND_DESCRIPTION_TOOLONG, String.valueOf(limit));
+            sender.msgLegacy(TL.COMMAND_DESCRIPTION_TOOLONG, String.valueOf(limit));
             return;
         }
         faction.description(desc);
 
         if (!FactionsPlugin.instance().conf().factions().chat().isBroadcastDescriptionChanges()) {
-            sender.msg(TL.COMMAND_DESCRIPTION_CHANGED, faction.describeToLegacy(sender));
-            sender.sendMessage(faction.description());
+            sender.msgLegacy(TL.COMMAND_DESCRIPTION_CHANGED, faction.describeToLegacy(sender));
+            sender.sendMessageLegacy(faction.description());
             return;
         }
 
-        sender.msg(TL.COMMAND_DESCRIPTION_CHANGES, faction.describeToLegacy(sender));
-        sender.sendMessage(faction.description());
+        sender.msgLegacy(TL.COMMAND_DESCRIPTION_CHANGES, faction.describeToLegacy(sender));
+        sender.sendMessageLegacy(faction.description());
     }
 }

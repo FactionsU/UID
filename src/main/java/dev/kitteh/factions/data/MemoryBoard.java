@@ -98,7 +98,7 @@ public abstract class MemoryBoard implements Board {
                     }
                     if (fPlayer.warmingUp()) {
                         fPlayer.cancelWarmup();
-                        fPlayer.msg(TL.WARMUPS_CANCELLED);
+                        fPlayer.msgLegacy(TL.WARMUPS_CANCELLED);
                     }
                 }
             }
@@ -153,7 +153,7 @@ public abstract class MemoryBoard implements Board {
                 }
                 if (fPlayer.warmingUp()) {
                     fPlayer.cancelWarmup();
-                    fPlayer.msg(TL.WARMUPS_CANCELLED);
+                    fPlayer.msgLegacy(TL.WARMUPS_CANCELLED);
                 }
             }
         }

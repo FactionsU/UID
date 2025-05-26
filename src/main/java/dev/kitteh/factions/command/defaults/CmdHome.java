@@ -63,28 +63,28 @@ public class CmdHome implements Cmd {
             if (targetFaction.hasHome()) {
                 AbstractFactionsPlugin.instance().teleport(player, fac.home());
             } else {
-                sender.msg(TL.COMMAND_HOME_NOHOME);
+                sender.msgLegacy(TL.COMMAND_HOME_NOHOME);
             }
             return;
         }
 
         if (!targetFaction.hasHome()) {
-            sender.msg(TL.COMMAND_HOME_NOHOME);
+            sender.msgLegacy(TL.COMMAND_HOME_NOHOME);
             return;
         }
 
         if (!targetFaction.hasAccess(sender, PermissibleActions.HOME, sender.lastStoodAt())) {
-            sender.msg(TL.COMMAND_HOME_DENIED, targetFaction.tagLegacy(sender));
+            sender.msgLegacy(TL.COMMAND_HOME_DENIED, targetFaction.tagLegacy(sender));
             return;
         }
 
         if (!FactionsPlugin.instance().conf().factions().homes().isTeleportAllowedFromEnemyTerritory() && sender.isInEnemyTerritory()) {
-            sender.msg(TL.COMMAND_HOME_INENEMY);
+            sender.msgLegacy(TL.COMMAND_HOME_INENEMY);
             return;
         }
 
         if (!FactionsPlugin.instance().conf().factions().homes().isTeleportAllowedFromDifferentWorld() && player.getWorld().getUID() != targetFaction.home().getWorld().getUID()) {
-            sender.msg(TL.COMMAND_HOME_WRONGWORLD);
+            sender.msgLegacy(TL.COMMAND_HOME_WRONGWORLD);
             return;
         }
 
@@ -121,7 +121,7 @@ public class CmdHome implements Cmd {
                     continue;
                 }
 
-                sender.msg(TL.COMMAND_HOME_ENEMYNEAR, String.valueOf(FactionsPlugin.instance().conf().factions().homes().getTeleportAllowedEnemyDistance()));
+                sender.msgLegacy(TL.COMMAND_HOME_ENEMYNEAR, String.valueOf(FactionsPlugin.instance().conf().factions().homes().getTeleportAllowedEnemyDistance()));
                 return;
             }
         }

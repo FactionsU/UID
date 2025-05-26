@@ -44,9 +44,9 @@ public class CmdSetPeaceful implements Cmd {
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             String blame = (fPlayer == null ? TL.GENERIC_SERVERADMIN.toString() : fPlayer.describeToLegacy(fplayer, true));
             if (fplayer.faction() == faction) {
-                fplayer.msg(TL.COMMAND_PEACEFUL_YOURS, blame, change);
+                fplayer.msgLegacy(TL.COMMAND_PEACEFUL_YOURS, blame, change);
             } else {
-                fplayer.msg(TL.COMMAND_PEACEFUL_OTHER, blame, change, faction.tagLegacy(fplayer));
+                fplayer.msgLegacy(TL.COMMAND_PEACEFUL_OTHER, blame, change, faction.tagLegacy(fplayer));
             }
         }
     }

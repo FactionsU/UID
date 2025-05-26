@@ -27,7 +27,7 @@ public interface Participator {
      * @param str string
      * @param args args
      */
-    void msg(String str, Object... args);
+    void msgLegacy(String str, Object... args);
 
     /**
      * Sends a String.format-able message.
@@ -35,8 +35,8 @@ public interface Participator {
      * @param translation translatable
      * @param args args
      */
-    default void msg(TL translation, Object... args) {
-        this.msg(translation.toString(), args);
+    default void msgLegacy(TL translation, Object... args) {
+        this.msgLegacy(translation.toString(), args);
     }
 
     /**

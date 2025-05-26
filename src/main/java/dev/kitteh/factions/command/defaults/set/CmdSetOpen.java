@@ -44,10 +44,10 @@ public class CmdSetOpen implements Cmd {
         // Inform
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             if (fplayer.faction() == faction) {
-                fplayer.msg(TL.COMMAND_OPEN_CHANGES, sender.name(), open);
+                fplayer.msgLegacy(TL.COMMAND_OPEN_CHANGES, sender.name(), open);
                 continue;
             }
-            fplayer.msg(TL.COMMAND_OPEN_CHANGED, faction.tagLegacy(fplayer.faction()), open);
+            fplayer.msgLegacy(TL.COMMAND_OPEN_CHANGED, faction.tagLegacy(fplayer.faction()), open);
         }
     }
 }

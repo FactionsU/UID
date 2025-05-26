@@ -1,7 +1,6 @@
 package dev.kitteh.factions.integration.depenizen;
 
 import com.denizenscript.denizen.objects.LocationTag;
-import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
@@ -42,11 +41,6 @@ public class FactionsLocationProperties implements Property {
     @Override
     public String getPropertyId() {
         return "FactionsLocation";
-    }
-
-    @Override
-    public void adjust(Mechanism mechanism) {
-        // None
     }
 
     public static boolean describes(ObjectTag object) {

@@ -46,26 +46,26 @@ public class CmdSetWarp implements Cmd {
                     return;
                 }
                 faction.removeWarp(warp);
-                sender.msg(TL.COMMAND_DELFWARP_DELETED, warp);
+                sender.msgLegacy(TL.COMMAND_DELFWARP_DELETED, warp);
             } else {
-                sender.msg(TL.COMMAND_DELFWARP_INVALID, warp);
+                sender.msgLegacy(TL.COMMAND_DELFWARP_INVALID, warp);
             }
             return;
         }
 
         if (Board.board().factionAt(new FLocation(player)) != faction) {
-            sender.msg(TL.COMMAND_SETFWARP_NOTCLAIMED);
+            sender.msgLegacy(TL.COMMAND_SETFWARP_NOTCLAIMED);
             return;
         }
 
         int maxWarps = FactionsPlugin.instance().conf().commands().warp().getMaxWarps();
         if (maxWarps <= faction.warps().size()) {
-            sender.msg(TL.COMMAND_SETFWARP_LIMIT, maxWarps);
+            sender.msgLegacy(TL.COMMAND_SETFWARP_LIMIT, maxWarps);
             return;
         }
 
         if (FactionsPlugin.instance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.hasHome()) {
-            sender.msg(TL.COMMAND_SETFWARP_HOMEREQUIRED);
+            sender.msgLegacy(TL.COMMAND_SETFWARP_HOMEREQUIRED);
         }
 
         if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostSetWarp(), TL.COMMAND_SETFWARP_TOSET, TL.COMMAND_SETFWARP_FORSET)) {
@@ -79,6 +79,6 @@ public class CmdSetWarp implements Cmd {
         if (password != null) {
             faction.setWarpPassword(warp, password);
         }
-        sender.msg(TL.COMMAND_SETFWARP_SET, warp, password != null ? password : "");
+        sender.msgLegacy(TL.COMMAND_SETFWARP_SET, warp, password != null ? password : "");
     }
 }

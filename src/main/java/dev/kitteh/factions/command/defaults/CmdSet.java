@@ -18,8 +18,6 @@ import dev.kitteh.factions.command.defaults.set.CmdSetWarpProperty;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BiConsumer;
 
 public class CmdSet implements Cmd {

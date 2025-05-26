@@ -3,7 +3,6 @@ package dev.kitteh.factions.util;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;

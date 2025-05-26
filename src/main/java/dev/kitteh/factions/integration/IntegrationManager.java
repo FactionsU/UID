@@ -1,6 +1,5 @@
 package dev.kitteh.factions.integration;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.dynmap.EngineDynmap;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.event.EventHandler;
@@ -83,7 +82,7 @@ public class IntegrationManager implements Listener {
             return STARTUP_MAP.getOrDefault(pluginName, Integration::omNomNom);
         }
 
-        private static boolean omNomNom(Plugin plugin) {
+        private static boolean omNomNom(Plugin ignored) {
             return false;
         }
 

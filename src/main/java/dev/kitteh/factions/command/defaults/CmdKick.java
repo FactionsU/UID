@@ -86,24 +86,24 @@ public class CmdKick implements Cmd {
         }
 
         if (sender == toKick) {
-            sender.msg(TL.COMMAND_KICK_SELF);
+            sender.msgLegacy(TL.COMMAND_KICK_SELF);
             return;
         }
 
         Faction toKickFaction = toKick.faction();
 
         if (toKickFaction.isWilderness()) {
-            sender.sendMessage(TL.COMMAND_KICK_NONE.toString());
+            sender.sendMessageLegacy(TL.COMMAND_KICK_NONE.toString());
             return;
         }
 
         if (toKickFaction != faction) {
-            sender.msg(TL.COMMAND_KICK_NOTMEMBER, toKick.describeToLegacy(sender, true), faction.describeToLegacy(sender));
+            sender.msgLegacy(TL.COMMAND_KICK_NOTMEMBER, toKick.describeToLegacy(sender, true), faction.describeToLegacy(sender));
             return;
         }
 
         if (toKick.role().isAtLeast(sender.role())) {
-            sender.msg(TL.COMMAND_KICK_INSUFFICIENTRANK);
+            sender.msgLegacy(TL.COMMAND_KICK_INSUFFICIENTRANK);
             return;
         }
 
@@ -128,8 +128,8 @@ public class CmdKick implements Cmd {
             return;
         }
 
-        toKickFaction.msg(TL.COMMAND_KICK_FACTION, sender.describeToLegacy(toKickFaction, true), toKick.describeToLegacy(toKickFaction, true));
-        toKick.msg(TL.COMMAND_KICK_KICKED, sender.describeToLegacy(toKick, true), toKickFaction.describeToLegacy(toKick));
+        toKickFaction.msgLegacy(TL.COMMAND_KICK_FACTION, sender.describeToLegacy(toKickFaction, true), toKick.describeToLegacy(toKickFaction, true));
+        toKick.msgLegacy(TL.COMMAND_KICK_KICKED, sender.describeToLegacy(toKick, true), toKickFaction.describeToLegacy(toKick));
 
         if (FactionsPlugin.instance().conf().logging().isFactionKick()) {
             AbstractFactionsPlugin.instance().log(sender.name() + " kicked " + toKick.name() + " from the faction: " + toKickFaction.tag());

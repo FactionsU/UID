@@ -5,7 +5,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
-import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.RelationUtil;
@@ -28,13 +28,10 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public class Econ {
     private static Economy econ = null;
     private static final Pattern FACTION_PATTERN = Pattern.compile("^faction-(\\d+)$");
-
-    static {
-
-    }
 
     public static void setup() {
         if (isSetup()) {
@@ -99,11 +96,12 @@ public class Econ {
         if (universeAccount == null || universeAccount.isEmpty()) {
             return;
         }
-        if (!hasAccount(getUniverseOfflinePlayer())) {
+        OfflinePlayer universe = getUniverseOfflinePlayer();
+        if (needsAccount(universe)) {
             return;
         }
 
-        modifyBalance(getOfflinePlayerForName(FactionsPlugin.instance().conf().economy().getUniverseAccount()), delta);
+        modifyBalance(universe, delta);
     }
 
     private static OfflinePlayer getUniverseOfflinePlayer() {
@@ -121,7 +119,7 @@ public class Econ {
             AbstractFactionsPlugin.instance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
-        to.msg(TL.ECON_BALANCE, about.describeToLegacy(to, true), Econ.moneyString(getBalance(about)));
+        to.msgLegacy(TL.ECON_BALANCE, about.describeToLegacy(to, true), Econ.moneyString(getBalance(about)));
     }
 
     public static void sendBalanceInfo(CommandSender to, Faction about) {
@@ -147,7 +145,7 @@ public class Econ {
         }
 
         // Players with the any-withdraw can do.
-        if (i instanceof FPlayer fPlayer && Permission.MONEY_WITHDRAW_ANY.has(fPlayer.asPlayer())) {
+        if (i instanceof FPlayer fPlayer && fPlayer.asPlayer() instanceof Player plr && Permission.MONEY_WITHDRAW_ANY.has(plr)) {
             return true;
         }
 
@@ -163,13 +161,13 @@ public class Econ {
             return true;
         }
 
-        // Factions can be controlled by members that are moderators... or any member if any member can withdraw.
-        if (you instanceof Faction && fI == fYou && (FactionsPlugin.instance().conf().economy().isBankMembersCanWithdraw() || ((FPlayer) i).role().value >= Role.MODERATOR.value)) {
+        // Factions can be controlled by members with the permissible action.
+        if (you instanceof Faction faction && fI == fYou && i instanceof FPlayer fpI && faction.hasAccess(fpI, PermissibleActions.ECONOMY, fpI.lastStoodAt())) {
             return true;
         }
 
         // Otherwise you may not! ;,,;
-        i.msg(TL.ECON_NOPERM, i.describeToLegacy(i, true), you.describeToLegacy(i));
+        i.msgLegacy(TL.ECON_NOPERM, i.describeToLegacy(i, true), you.describeToLegacy(i));
         return false;
     }
 
@@ -179,7 +177,7 @@ public class Econ {
 
     public static boolean transferMoney(Participator invoker, Participator from, Participator to, double amount, boolean notify) {
         if (!shouldBeUsed()) {
-            invoker.msg(TL.ECON_DISABLED);
+            invoker.msgLegacy(TL.ECON_DISABLED);
             return false;
         }
 
@@ -204,7 +202,7 @@ public class Econ {
         if (!has(fromAcc, amount)) {
             // There was not enough money to pay
             if (invoker != null && notify) {
-                invoker.msg(TL.ECON_CANTAFFORD_TRANSFER, from.describeToLegacy(invoker, true), moneyString(amount), to.describeToLegacy(invoker));
+                invoker.msgLegacy(TL.ECON_CANTAFFORD_TRANSFER, from.describeToLegacy(invoker, true), moneyString(amount), to.describeToLegacy(invoker));
             }
 
             return false;
@@ -212,7 +210,7 @@ public class Econ {
 
         // Check if the new balance is over Essential's money cap.
         if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isOverBalCap(getBalance(toAcc) + amount)) {
-            invoker.msg(TL.ECON_OVER_BAL_CAP, amount);
+            invoker.msgLegacy(TL.ECON_OVER_BAL_CAP, amount);
             return false;
         }
 
@@ -232,7 +230,7 @@ public class Econ {
 
         // if we get here something with the transaction failed
         if (notify) {
-            invoker.msg(TL.ECON_TRANSFER_UNABLE, moneyString(amount), to.describeToLegacy(invoker), from.describeToLegacy(invoker, true));
+            invoker.msgLegacy(TL.ECON_TRANSFER_UNABLE, moneyString(amount), to.describeToLegacy(invoker), from.describeToLegacy(invoker, true));
         }
 
         return false;
@@ -254,19 +252,19 @@ public class Econ {
 
         if (invoker == null) {
             for (FPlayer recipient : recipients) {
-                recipient.msg(TL.ECON_TRANSFER_NOINVOKER, moneyString(amount), from.describeToLegacy(recipient), to.describeToLegacy(recipient));
+                recipient.msgLegacy(TL.ECON_TRANSFER_NOINVOKER, moneyString(amount), from.describeToLegacy(recipient), to.describeToLegacy(recipient));
             }
         } else if (invoker == from) {
             for (FPlayer recipient : recipients) {
-                recipient.msg(TL.ECON_TRANSFER_GAVE, from.describeToLegacy(recipient, true), moneyString(amount), to.describeToLegacy(recipient));
+                recipient.msgLegacy(TL.ECON_TRANSFER_GAVE, from.describeToLegacy(recipient, true), moneyString(amount), to.describeToLegacy(recipient));
             }
         } else if (invoker == to) {
             for (FPlayer recipient : recipients) {
-                recipient.msg(TL.ECON_TRANSFER_TOOK, to.describeToLegacy(recipient, true), moneyString(amount), from.describeToLegacy(recipient));
+                recipient.msgLegacy(TL.ECON_TRANSFER_TOOK, to.describeToLegacy(recipient, true), moneyString(amount), from.describeToLegacy(recipient));
             }
         } else {
             for (FPlayer recipient : recipients) {
-                recipient.msg(TL.ECON_TRANSFER_TRANSFER, invoker.describeToLegacy(recipient, true), moneyString(amount), from.describeToLegacy(recipient), to.describeToLegacy(recipient));
+                recipient.msgLegacy(TL.ECON_TRANSFER_TRANSFER, invoker.describeToLegacy(recipient, true), moneyString(amount), from.describeToLegacy(recipient), to.describeToLegacy(recipient));
             }
         }
     }
@@ -285,7 +283,7 @@ public class Econ {
 
         if (!affordable) {
             if (toDoThis != null && !toDoThis.isEmpty()) {
-                ep.msg(TL.ECON_CANTAFFORD_AMOUNT, ep.describeToLegacy(ep, true), moneyString(delta), toDoThis);
+                ep.msgLegacy(TL.ECON_CANTAFFORD_AMOUNT, ep.describeToLegacy(ep, true), moneyString(delta), toDoThis);
             }
             return false;
         }
@@ -311,13 +309,13 @@ public class Econ {
             if (deposit(acc, delta)) {
                 modifyUniverseMoney(-delta);
                 if (forDoingThis != null && !forDoingThis.isEmpty()) {
-                    ep.msg(TL.ECON_GAIN_SUCCESS, You, moneyString(delta), forDoingThis);
+                    ep.msgLegacy(TL.ECON_GAIN_SUCCESS, You, moneyString(delta), forDoingThis);
                 }
                 return true;
             } else {
                 // transfer to account failed
                 if (forDoingThis != null && !forDoingThis.isEmpty()) {
-                    ep.msg(TL.ECON_GAIN_FAILURE, You, moneyString(delta), forDoingThis);
+                    ep.msgLegacy(TL.ECON_GAIN_FAILURE, You, moneyString(delta), forDoingThis);
                 }
                 return false;
             }
@@ -329,13 +327,13 @@ public class Econ {
                 // There is enough money to pay
                 modifyUniverseMoney(-delta);
                 if (forDoingThis != null && !forDoingThis.isEmpty()) {
-                    ep.msg(TL.ECON_LOST_SUCCESS, You, moneyString(-delta), forDoingThis);
+                    ep.msgLegacy(TL.ECON_LOST_SUCCESS, You, moneyString(-delta), forDoingThis);
                 }
                 return true;
             } else {
                 // There was not enough money to pay
                 if (toDoThis != null && !toDoThis.isEmpty()) {
-                    ep.msg(TL.ECON_LOST_FAILURE, You, moneyString(-delta), toDoThis);
+                    ep.msgLegacy(TL.ECON_LOST_FAILURE, You, moneyString(-delta), toDoThis);
                 }
                 return false;
             }
@@ -380,6 +378,7 @@ public class Econ {
     // Standard account management methods
     // -------------------------------------------- //
 
+    @SuppressWarnings({"DataFlowIssue", "deprecation"})
     private static OfflinePlayer getOfflinePlayerForName(String name) {
         try {
             Matcher matcher = FACTION_PATTERN.matcher(name);
@@ -392,12 +391,8 @@ public class Econ {
         }
     }
 
-    public static boolean hasAccount(Participator ep) {
-        return hasAccount(ep.asOfflinePlayer());
-    }
-
-    private static boolean hasAccount(OfflinePlayer op) {
-        return econ.hasAccount(op, getWorld(op));
+    private static boolean needsAccount(OfflinePlayer op) {
+        return !econ.hasAccount(op, getWorld(op));
     }
 
     public static double getBalance(Participator ep) {
@@ -467,10 +462,6 @@ public class Econ {
         return econ.withdrawPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
     }
 
-    public static void createAccount(Participator ep) {
-        createAccount(ep.asOfflinePlayer());
-    }
-
     private static void createAccount(OfflinePlayer op) {
         if (!econ.createPlayerAccount(op, getWorld(op))) {
             AbstractFactionsPlugin.instance().getLogger().warning("FAILED TO CREATE ECONOMY ACCOUNT " + op.getName() + '/' + op.getUniqueId());
@@ -482,8 +473,7 @@ public class Econ {
             return op;
         }
         // We need to override the default money given to players.
-        String world = getWorld(op);
-        if (!hasAccount(op)) {
+        if (needsAccount(op)) {
             createAccount(op);
             setBalance(op, 0);
         }

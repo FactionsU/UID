@@ -61,19 +61,19 @@ public abstract class AbstractListener implements Listener {
             if (!protection.isWildernessDenyUsage() || protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) {
                 return true; // This is not faction territory. Use whatever you like here.
             }
-            me.msg(TL.PLAYER_USE_WILDERNESS, "this");
+            me.msgLegacy(TL.PLAYER_USE_WILDERNESS, "this");
             return false;
         } else if (otherFaction.isSafeZone()) {
             if (!protection.isSafeZoneDenyUsage() || Permission.MANAGE_SAFE_ZONE.has(player)) {
                 return true;
             }
-            me.msg(TL.PLAYER_USE_SAFEZONE, "this");
+            me.msgLegacy(TL.PLAYER_USE_SAFEZONE, "this");
             return false;
         } else if (otherFaction.isWarZone()) {
             if (!protection.isWarZoneDenyUsage() || Permission.MANAGE_WAR_ZONE.has(player)) {
                 return true;
             }
-            me.msg(TL.PLAYER_USE_WARZONE, "this");
+            me.msgLegacy(TL.PLAYER_USE_WARZONE, "this");
 
             return false;
         }
@@ -82,7 +82,7 @@ public abstract class AbstractListener implements Listener {
 
         // Cancel if we are not in our own territory
         if (!access) {
-            me.msg(TL.PLAYER_USE_TERRITORY, "this", otherFaction.tagLegacy(me.faction()));
+            me.msgLegacy(TL.PLAYER_USE_TERRITORY, "this", otherFaction.tagLegacy(me.faction()));
             return false;
         }
 
@@ -272,16 +272,12 @@ public abstract class AbstractListener implements Listener {
 
         // F PERM check runs through before other checks.
         if (!otherFaction.hasAccess(me, action, loc)) {
-            if (action != PermissibleActions.PLATE) {
-                me.msg(TL.GENERIC_NOPERMISSION, action.shortDescription());
+            if (action != PermissibleActions.PLATE && !justCheck) {
+                me.msgLegacy(TL.GENERIC_NOPERMISSION, action.shortDescription());
             }
             return false;
         }
 
         return true;
-    }
-
-    private static boolean isDupeMaterial(Material material) {
-        return material.name().contains("SIGN") || material.name().contains("DOOR") || material.name().contains("CHEST");
     }
 }

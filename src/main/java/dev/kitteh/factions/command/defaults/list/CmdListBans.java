@@ -36,7 +36,7 @@ public class CmdListBans implements Cmd {
         Faction target = context.getOrDefault("faction", sender.faction());
 
         if (!target.isNormal()) {
-            sender.msg(TL.COMMAND_BANLIST_NOFACTION);
+            sender.msgLegacy(TL.COMMAND_BANLIST_NOFACTION);
             return;
         }
 
@@ -54,7 +54,7 @@ public class CmdListBans implements Cmd {
         }
 
         for (String s : lines) {
-            sender.sendMessage(s);
+            sender.sendMessageLegacy(s);
         }
     }
 }

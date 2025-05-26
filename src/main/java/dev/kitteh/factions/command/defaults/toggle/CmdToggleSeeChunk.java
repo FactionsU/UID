@@ -28,6 +28,6 @@ public class CmdToggleSeeChunk implements Cmd {
 
         boolean toggle = !sender.seeChunk();
         sender.seeChunk(toggle);
-        sender.msg(TL.COMMAND_SEECHUNK_TOGGLE, toggle ? "enabled" : "disabled");
+        sender.msgLegacy(TL.COMMAND_SEECHUNK_TOGGLE, toggle ? "enabled" : "disabled");
     }
 }

@@ -3,7 +3,6 @@ package dev.kitteh.factions.command.defaults.admin.set;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
@@ -49,9 +48,9 @@ public class CmdSetPermanent implements Cmd {
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             String blame = (fPlayer == null ? TL.GENERIC_SERVERADMIN.toString() : fPlayer.describeToLegacy(fplayer));
             if (fplayer.faction() == faction) {
-                fplayer.msg(TL.COMMAND_PERMANENT_YOURS, blame, change);
+                fplayer.msgLegacy(TL.COMMAND_PERMANENT_YOURS, blame, change);
             } else {
-                fplayer.msg(TL.COMMAND_PERMANENT_OTHER, blame, change, faction.tagLegacy(fplayer));
+                fplayer.msgLegacy(TL.COMMAND_PERMANENT_OTHER, blame, change, faction.tagLegacy(fplayer));
             }
         }
     }

@@ -58,14 +58,14 @@ public class CmdFly implements Cmd {
         if (context.flags().get("particle") instanceof String effectName) {
             Particle particleEffect = ParticleProvider.effectFromString(effectName);
             if (particleEffect == null) {
-                sender.msg(TL.COMMAND_FLYTRAILS_PARTICLE_INVALID);
+                sender.msgLegacy(TL.COMMAND_FLYTRAILS_PARTICLE_INVALID);
                 return;
             }
 
             if (context.sender().sender().hasPermission(Permission.FLY_TRAILS.node + "." + effectName)) {
                 sender.flyTrailEffect(effectName);
             } else {
-                sender.msg(TL.COMMAND_FLYTRAILS_PARTICLE_PERMS, effectName);
+                sender.msgLegacy(TL.COMMAND_FLYTRAILS_PARTICLE_PERMS, effectName);
             }
             unhandled = false;
         }
@@ -96,12 +96,12 @@ public class CmdFly implements Cmd {
         if (!fPlayer.canFlyAtLocation()) {
             if (notify) {
                 Faction factionAtLocation = Board.board().factionAt(fPlayer.lastStoodAt());
-                fPlayer.msg(TL.COMMAND_FLY_NO_ACCESS, factionAtLocation.tagLegacy(fPlayer));
+                fPlayer.msgLegacy(TL.COMMAND_FLY_NO_ACCESS, factionAtLocation.tagLegacy(fPlayer));
             }
             return false;
         } else if (FlightUtil.instance().enemiesNearby(fPlayer, FactionsPlugin.instance().conf().commands().fly().getEnemyRadius())) {
             if (notify) {
-                fPlayer.msg(TL.COMMAND_FLY_ENEMY_NEARBY);
+                fPlayer.msgLegacy(TL.COMMAND_FLY_ENEMY_NEARBY);
             }
             return false;
         }

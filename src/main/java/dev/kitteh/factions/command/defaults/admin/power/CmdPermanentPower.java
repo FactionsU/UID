@@ -51,7 +51,7 @@ public class CmdPermanentPower implements Cmd {
                 continue;
             }
             String blame = (fPlayer == null ? TL.GENERIC_SERVERADMIN.toString() : fPlayer.describeToLegacy(fplayer, true));
-            fplayer.msg(TL.COMMAND_PERMANENTPOWER_FACTION, blame, change);
+            fplayer.msgLegacy(TL.COMMAND_PERMANENTPOWER_FACTION, blame, change);
         }
     }
 }

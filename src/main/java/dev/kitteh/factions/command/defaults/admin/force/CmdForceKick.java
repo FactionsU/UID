@@ -39,7 +39,7 @@ public class CmdForceKick implements Cmd {
         Faction toKickFaction = toKick.faction();
 
         if (toKickFaction.isWilderness()) {
-            sender.sendMessage(TL.COMMAND_KICK_NONE.toString());
+            sender.sendMessageLegacy(TL.COMMAND_KICK_NONE.toString());
             return;
         }
 
@@ -50,8 +50,8 @@ public class CmdForceKick implements Cmd {
             return;
         }
 
-        toKickFaction.msg(TL.COMMAND_KICK_FACTION, sender.describeToLegacy(toKickFaction, true), toKick.describeToLegacy(toKickFaction, true));
-        toKick.msg(TL.COMMAND_KICK_KICKED, sender.describeToLegacy(toKick, true), toKickFaction.describeToLegacy(toKick));
+        toKickFaction.msgLegacy(TL.COMMAND_KICK_FACTION, sender.describeToLegacy(toKickFaction, true), toKick.describeToLegacy(toKickFaction, true));
+        toKick.msgLegacy(TL.COMMAND_KICK_KICKED, sender.describeToLegacy(toKick, true), toKickFaction.describeToLegacy(toKick));
 
         if (FactionsPlugin.instance().conf().logging().isFactionKick()) {
             AbstractFactionsPlugin.instance().log(sender.name() + " kicked " + toKick.name() + " from the faction: " + toKickFaction.tag());

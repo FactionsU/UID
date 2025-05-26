@@ -1,7 +1,6 @@
 package dev.kitteh.factions.command.defaults.admin;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
@@ -31,10 +30,10 @@ public class CmdBypass implements Cmd {
         sender.adminBypass(!sender.adminBypass());
 
         if (sender.adminBypass()) {
-            sender.msg(TL.COMMAND_BYPASS_ENABLE);
+            sender.msgLegacy(TL.COMMAND_BYPASS_ENABLE);
             AbstractFactionsPlugin.instance().log(sender.name() + TL.COMMAND_BYPASS_ENABLELOG);
         } else {
-            sender.msg(TL.COMMAND_BYPASS_DISABLE);
+            sender.msgLegacy(TL.COMMAND_BYPASS_DISABLE);
             AbstractFactionsPlugin.instance().log(sender.name() + TL.COMMAND_BYPASS_DISABLELOG);
         }
     }

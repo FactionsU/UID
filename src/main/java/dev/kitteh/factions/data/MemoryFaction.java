@@ -363,6 +363,7 @@ public abstract class MemoryFaction implements Faction {
     protected long foundedDate;
     protected double powerBoost;
     protected Map<Integer, Relation> relationWish = new HashMap<>();
+    @SuppressWarnings("unused")
     protected @Nullable Map<FLocation, Set<UUID>> claimOwnership; // Leaving for now, for people who want to look back at it
     protected Set<UUID> invites = new HashSet<>();
     protected HashMap<UUID, List<String>> announcements = new HashMap<>();
@@ -423,11 +424,11 @@ public abstract class MemoryFaction implements Faction {
         if (ann == null) {
             return;
         }
-        fPlayer.msg(TL.FACTIONS_ANNOUNCEMENT_TOP);
+        fPlayer.msgLegacy(TL.FACTIONS_ANNOUNCEMENT_TOP);
         for (String s : ann) {
-            fPlayer.sendMessage(s);
+            fPlayer.sendMessageLegacy(s);
         }
-        fPlayer.msg(TL.FACTIONS_ANNOUNCEMENT_BOTTOM);
+        fPlayer.msgLegacy(TL.FACTIONS_ANNOUNCEMENT_BOTTOM);
     }
 
     @Override
@@ -664,7 +665,7 @@ public abstract class MemoryFaction implements Faction {
             return;
         }
 
-        msg(TL.FACTION_HOME_UNSET);
+        msgLegacy(TL.FACTION_HOME_UNSET);
         this.home = null;
     }
 
@@ -1165,7 +1166,7 @@ public abstract class MemoryFaction implements Faction {
             }
 
             for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-                fplayer.msg(TL.LEAVE_DISBANDED, this.tagLegacy(fplayer));
+                fplayer.msgLegacy(TL.LEAVE_DISBANDED, this.tagLegacy(fplayer));
             }
 
             AbstractFactionsPlugin.instance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(this));
@@ -1178,17 +1179,17 @@ public abstract class MemoryFaction implements Faction {
                 oldLeader.role(Role.COLEADER);
             }
             replacements.getFirst().role(Role.ADMIN);
-            this.msg(TL.FACTION_NEWLEADER, oldLeader == null ? "" : oldLeader.name(), replacements.getFirst().name());
+            this.msgLegacy(TL.FACTION_NEWLEADER, oldLeader == null ? "" : oldLeader.name(), replacements.getFirst().name());
             AbstractFactionsPlugin.instance().log("Faction " + this.tag() + " (" + this.id() + ") admin was removed. Replacement admin: " + replacements.getFirst().name());
         }
     }
 
     @Override
-    public void msg(String message, Object... args) {
+    public void msgLegacy(String message, Object... args) {
         message = TextUtil.parse(message, args);
 
         for (FPlayer fplayer : this.membersOnline(true)) {
-            fplayer.sendMessage(message);
+            fplayer.sendMessageLegacy(message);
         }
     }
 

@@ -1,7 +1,6 @@
 package dev.kitteh.factions.scoreboard;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Bukkit;
@@ -47,10 +46,6 @@ public class FScoreboard {
 
     public static FScoreboard get(FPlayer fplayer) {
         return fscoreboards.get(fplayer);
-    }
-
-    public static FScoreboard get(Player player) {
-        return fscoreboards.get(FPlayers.fPlayers().get(player));
     }
 
     private FScoreboard(Player player, FPlayer fplayer) {

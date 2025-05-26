@@ -547,15 +547,9 @@ public interface Faction extends Participator, Selectable {
         }
     }
 
-    default void sendMessage(String message) {
+    default void sendMessageLegacy(String message) {
         for (FPlayer fplayer : this.membersOnline(true)) {
-            fplayer.sendMessage(message);
-        }
-    }
-
-    default void sendMessage(List<String> messages) {
-        for (FPlayer fplayer : this.membersOnline(true)) {
-            fplayer.sendMessage(messages);
+            fplayer.sendMessageLegacy(message);
         }
     }
 

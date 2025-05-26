@@ -36,23 +36,23 @@ public class CmdJoin implements Cmd {
         Faction faction = context.get("faction");
 
         if (!faction.isNormal()) {
-            sender.msg(TL.COMMAND_JOIN_SYSTEMFACTION);
+            sender.msgLegacy(TL.COMMAND_JOIN_SYSTEMFACTION);
             return;
         }
 
         if (faction == sender.faction()) {
-            sender.msg(TL.COMMAND_JOIN_ALREADYMEMBERFIXED, faction.tagLegacy(sender));
+            sender.msgLegacy(TL.COMMAND_JOIN_ALREADYMEMBERFIXED, faction.tagLegacy(sender));
             return;
         }
 
         int max = faction.memberLimit();
         if (faction.size() > max) {
-            sender.msg(TL.COMMAND_JOIN_ATLIMIT, faction.tagLegacy(sender), max, sender.describeToLegacy(sender, false));
+            sender.msgLegacy(TL.COMMAND_JOIN_ATLIMIT, faction.tagLegacy(sender), max, sender.describeToLegacy(sender, false));
             return;
         }
 
         if (sender.hasFaction()) {
-            sender.msg(TL.COMMAND_JOIN_INOTHERFACTIONFIXED);
+            sender.msgLegacy(TL.COMMAND_JOIN_INOTHERFACTIONFIXED);
             return;
         }
 
@@ -61,9 +61,9 @@ public class CmdJoin implements Cmd {
         }
 
         if (!(faction.open() || faction.hasInvite(sender))) {
-            sender.msg(TL.COMMAND_JOIN_REQUIRESINVITATION);
+            sender.msgLegacy(TL.COMMAND_JOIN_REQUIRESINVITATION);
             if (!faction.isBanned(sender)) {
-                faction.msg(TL.COMMAND_JOIN_ATTEMPTEDJOIN, sender.describeToLegacy(faction, true));
+                faction.msgLegacy(TL.COMMAND_JOIN_ATTEMPTEDJOIN, sender.describeToLegacy(faction, true));
             }
             return;
         }
@@ -75,7 +75,7 @@ public class CmdJoin implements Cmd {
 
         // Check for ban
         if (faction.isBanned(sender)) {
-            sender.msg(TL.COMMAND_JOIN_BANNED, faction.tagLegacy(sender));
+            sender.msgLegacy(TL.COMMAND_JOIN_BANNED, faction.tagLegacy(sender));
             return;
         }
 
@@ -91,9 +91,9 @@ public class CmdJoin implements Cmd {
             return;
         }
 
-        sender.msg(TL.COMMAND_JOIN_SUCCESS, sender.describeToLegacy(sender, true), faction.tagLegacy(sender));
+        sender.msgLegacy(TL.COMMAND_JOIN_SUCCESS, sender.describeToLegacy(sender, true), faction.tagLegacy(sender));
 
-        faction.msg(TL.COMMAND_JOIN_JOINED, sender.describeToLegacy(faction, true));
+        faction.msgLegacy(TL.COMMAND_JOIN_JOINED, sender.describeToLegacy(faction, true));
 
         sender.resetFactionData();
         sender.faction(faction);

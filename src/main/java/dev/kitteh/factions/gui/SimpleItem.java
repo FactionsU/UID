@@ -89,22 +89,6 @@ public class SimpleItem {
         this.lore = lore;
     }
 
-    public Material getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(Material material) {
-        this.material = material;
-    }
-
-    public boolean isEnchant() {
-        return enchant;
-    }
-
-    public void setEnchant(boolean enchant) {
-        this.enchant = enchant;
-    }
-
     public static Builder builder() {
         return new Builder();
     }

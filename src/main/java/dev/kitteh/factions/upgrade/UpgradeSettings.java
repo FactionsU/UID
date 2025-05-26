@@ -53,7 +53,7 @@ public final class UpgradeSettings {
     }
 
     public BigDecimal valueAt(UpgradeVariable variable, int level) {
-        return Objects.requireNonNull(this.variableSettings.get(variable)).get(level);
+        return variable.get(Objects.requireNonNull(this.variableSettings.get(variable)).get(level));
     }
 
     public int maxLevel() {

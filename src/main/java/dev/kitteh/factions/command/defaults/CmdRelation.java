@@ -48,17 +48,17 @@ public class CmdRelation implements Cmd {
 
 
         if (!them.isNormal()) {
-            sender.msg(TL.COMMAND_RELATIONS_ALLTHENOPE);
+            sender.msgLegacy(TL.COMMAND_RELATIONS_ALLTHENOPE);
             return;
         }
 
         if (them == faction) {
-            sender.msg(TL.COMMAND_RELATIONS_MORENOPE);
+            sender.msgLegacy(TL.COMMAND_RELATIONS_MORENOPE);
             return;
         }
 
         if (faction.relationWish(them) == targetRelation) {
-            sender.msg(TL.COMMAND_RELATIONS_ALREADYINRELATIONSHIP, them.tag());
+            sender.msgLegacy(TL.COMMAND_RELATIONS_ALREADYINRELATIONSHIP, them.tag());
             return;
         }
 
@@ -90,23 +90,23 @@ public class CmdRelation implements Cmd {
             FactionRelationEvent relationEvent = new FactionRelationEvent(faction, them, oldRelation, currentRelation);
             Bukkit.getServer().getPluginManager().callEvent(relationEvent);
 
-            them.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + faction.tag());
-            faction.msg(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + them.tag());
+            them.msgLegacy(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + faction.tag());
+            faction.msgLegacy(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + them.tag());
         } else {
             // inform the other faction of your request
-            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + faction.tag(), targetRelationColor + targetRelation.translation());
-            them.msg(TL.COMMAND_RELATIONS_PROPOSAL_2, MiscUtil.commandRoot(), targetRelation, faction.tag());
-            faction.msg(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.tag(), targetRelationColor + targetRelation);
+            them.msgLegacy(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + faction.tag(), targetRelationColor + targetRelation.translation());
+            them.msgLegacy(TL.COMMAND_RELATIONS_PROPOSAL_2, MiscUtil.commandRoot(), targetRelation, faction.tag());
+            faction.msgLegacy(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.tag(), targetRelationColor + targetRelation);
         }
 
         if (!targetRelation.isNeutral() && them.peaceful()) {
-            them.msg(TL.COMMAND_RELATIONS_PEACEFUL);
-            faction.msg(TL.COMMAND_RELATIONS_PEACEFULOTHER);
+            them.msgLegacy(TL.COMMAND_RELATIONS_PEACEFUL);
+            faction.msgLegacy(TL.COMMAND_RELATIONS_PEACEFULOTHER);
         }
 
         if (!targetRelation.isNeutral() && faction.peaceful()) {
-            them.msg(TL.COMMAND_RELATIONS_PEACEFULOTHER);
-            faction.msg(TL.COMMAND_RELATIONS_PEACEFUL);
+            them.msgLegacy(TL.COMMAND_RELATIONS_PEACEFULOTHER);
+            faction.msgLegacy(TL.COMMAND_RELATIONS_PEACEFUL);
         }
 
         FTeamWrapper.updatePrefixes(faction);
@@ -118,11 +118,11 @@ public class CmdRelation implements Cmd {
             int max = targetRelation.getMax();
             if (max != -1) {
                 if (us.relationCount(targetRelation) >= max) {
-                    sender.msg(TL.COMMAND_RELATIONS_EXCEEDS_ME, max, targetRelation.getPluralTranslation());
+                    sender.msgLegacy(TL.COMMAND_RELATIONS_EXCEEDS_ME, max, targetRelation.getPluralTranslation());
                     return true;
                 }
                 if (them.relationCount(targetRelation) >= max) {
-                    sender.msg(TL.COMMAND_RELATIONS_EXCEEDS_THEY, max, targetRelation.getPluralTranslation());
+                    sender.msgLegacy(TL.COMMAND_RELATIONS_EXCEEDS_THEY, max, targetRelation.getPluralTranslation());
                     return true;
                 }
             }

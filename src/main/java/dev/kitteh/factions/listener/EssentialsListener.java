@@ -5,7 +5,6 @@ import com.earth2me.essentials.User;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Location;

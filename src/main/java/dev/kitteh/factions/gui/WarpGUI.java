@@ -19,7 +19,6 @@ import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -93,9 +92,9 @@ public class WarpGUI extends GUI<Integer> {
     }
 
     @Override
-    protected void onClick(Integer index, ClickType clickType) {
+    protected void onClick(Integer index) {
         if (!faction.hasAccess(this.user, PermissibleActions.WARP, this.user.lastStoodAt())) {
-            user.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagLegacy(user));
+            user.msgLegacy(TL.COMMAND_FWARP_NOACCESS, faction.tagLegacy(user));
             this.user.asPlayer().closeInventory();
             return;
         }
@@ -209,7 +208,7 @@ public class WarpGUI extends GUI<Integer> {
                 }
             } else {
                 // Invalid Password
-                user.msg(TL.COMMAND_FWARP_INVALID_PASSWORD);
+                user.msgLegacy(TL.COMMAND_FWARP_INVALID_PASSWORD);
             }
             return END_OF_CONVERSATION;
         }
@@ -218,7 +217,7 @@ public class WarpGUI extends GUI<Integer> {
         public void conversationAbandoned(ConversationAbandonedEvent abandonedEvent) {
             if (abandonedEvent.getCanceller() instanceof ManuallyAbandonedConversationCanceller ||
                     abandonedEvent.getCanceller() instanceof InactivityConversationCanceller) {
-                user.msg(TL.COMMAND_FWARP_PASSWORD_CANCEL);
+                user.msgLegacy(TL.COMMAND_FWARP_PASSWORD_CANCEL);
                 open();
             }
         }
@@ -229,12 +228,12 @@ public class WarpGUI extends GUI<Integer> {
             Player player = Bukkit.getPlayer(user.asPlayer().getUniqueId());
             if (player != null) {
                 if (!faction.hasAccess(this.user, PermissibleActions.WARP, this.user.lastStoodAt())) {
-                    user.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagLegacy(user));
+                    user.msgLegacy(TL.COMMAND_FWARP_NOACCESS, faction.tagLegacy(user));
                     return;
                 }
                 AbstractFactionsPlugin.instance().teleport(player, faction.warp(warp).asLocation()).thenAccept(success -> {
                     if (success) {
-                        user.msg(TL.COMMAND_FWARP_WARPED, warp);
+                        user.msgLegacy(TL.COMMAND_FWARP_WARPED, warp);
                     }
                 });
             }

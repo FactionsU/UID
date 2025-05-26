@@ -2,7 +2,6 @@ package dev.kitteh.factions.command.defaults;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
@@ -41,17 +40,17 @@ public class CmdBan implements Cmd {
 
         if (sender == target) {
             // You may not ban yourself
-            sender.msg(TL.COMMAND_BAN_SELF);
+            sender.msgLegacy(TL.COMMAND_BAN_SELF);
             return;
         } else if (target.faction() == faction && target.role().isAtLeast(sender.role())) {
             // You may not ban someone that has same or higher faction rank
-            sender.msg(TL.COMMAND_BAN_INSUFFICIENTRANK, target.name());
+            sender.msgLegacy(TL.COMMAND_BAN_INSUFFICIENTRANK, target.name());
             return;
         }
 
         // Check if the user is already banned
         if (faction.bans().stream().map(BanInfo::banned).anyMatch(u -> u.equals(target.uniqueId()))) {
-            sender.msg(TL.COMMAND_BAN_ALREADYBANNED, target.name());
+            sender.msgLegacy(TL.COMMAND_BAN_ALREADYBANNED, target.name());
             return;
         }
 
@@ -74,7 +73,7 @@ public class CmdBan implements Cmd {
         faction.ban(target, sender);
         faction.deInvite(target);
 
-        target.msg(TL.COMMAND_BAN_TARGET, faction.tagLegacy(target.faction()));
-        faction.msg(TL.COMMAND_BAN_BANNED, sender.name(), target.name());
+        target.msgLegacy(TL.COMMAND_BAN_TARGET, faction.tagLegacy(target.faction()));
+        faction.msgLegacy(TL.COMMAND_BAN_BANNED, sender.name(), target.name());
     }
 }

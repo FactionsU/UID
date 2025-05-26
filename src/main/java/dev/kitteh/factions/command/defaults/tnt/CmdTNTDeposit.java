@@ -44,23 +44,23 @@ public class CmdTNTDeposit implements Cmd {
         Faction faction = sender.faction();
 
         if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
-            sender.msg(TL.COMMAND_TNT_TERRITORYONLY);
+            sender.msgLegacy(TL.COMMAND_TNT_TERRITORYONLY);
             return;
         }
         int amount = context.get("amount");
         if (amount <= 0) {
-            sender.msg(TL.COMMAND_TNT_DEPOSIT_FAIL_POSITIVE, amount);
+            sender.msgLegacy(TL.COMMAND_TNT_DEPOSIT_FAIL_POSITIVE, amount);
             return;
         }
 
         if (!player.getInventory().containsAtLeast(new ItemStack(Material.TNT), amount)) {
-            sender.msg(TL.COMMAND_TNT_DEPOSIT_FAIL_NOTENOUGH, amount);
+            sender.msgLegacy(TL.COMMAND_TNT_DEPOSIT_FAIL_NOTENOUGH, amount);
             return;
         }
 
         if (FactionsPlugin.instance().conf().commands().tnt().isAboveMaxStorage(faction.tntBank() + amount)) {
             if (FactionsPlugin.instance().conf().commands().tnt().getMaxStorage() == faction.tntBank()) {
-                sender.msg(TL.COMMAND_TNT_DEPOSIT_FAIL_FULL, FactionsPlugin.instance().conf().commands().tnt().getMaxStorage());
+                sender.msgLegacy(TL.COMMAND_TNT_DEPOSIT_FAIL_FULL, FactionsPlugin.instance().conf().commands().tnt().getMaxStorage());
                 return;
             }
             amount = FactionsPlugin.instance().conf().commands().tnt().getMaxStorage() - faction.tntBank();
@@ -81,6 +81,6 @@ public class CmdTNTDeposit implements Cmd {
             }
         }
         faction.tntBank(faction.tntBank() + amount);
-        sender.msg(TL.COMMAND_TNT_DEPOSIT_SUCCESS, faction.tntBank());
+        sender.msgLegacy(TL.COMMAND_TNT_DEPOSIT_SUCCESS, faction.tntBank());
     }
 }

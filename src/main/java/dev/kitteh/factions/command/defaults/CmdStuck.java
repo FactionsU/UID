@@ -51,7 +51,7 @@ public class CmdStuck implements Cmd {
         if (FactionsPlugin.instance().stuckMap().containsKey(player.getUniqueId())) {
             long wait = FactionsPlugin.instance().timers().get(player.getUniqueId()) - System.currentTimeMillis();
             String time = DurationFormatUtils.formatDuration(wait, TL.COMMAND_STUCK_TIMEFORMAT.toString(), true);
-            sender.msg(TL.COMMAND_STUCK_EXISTS, time);
+            sender.msgLegacy(TL.COMMAND_STUCK_EXISTS, time);
         } else {
 
             FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, null, FPlayerTeleportEvent.Reason.STUCK);
@@ -76,7 +76,7 @@ public class CmdStuck implements Cmd {
                     // check for world difference or radius exceeding
                     final World world = chunk.world();
                     if (world.getUID() != player.getWorld().getUID() || sentAt.distance(player.getLocation()) > radius) {
-                        sender.msg(TL.COMMAND_STUCK_OUTSIDE, radius);
+                        sender.msgLegacy(TL.COMMAND_STUCK_OUTSIDE, radius);
                         FactionsPlugin.instance().timers().remove(player.getUniqueId());
                         FactionsPlugin.instance().stuckMap().remove(player.getUniqueId());
                         return;
@@ -101,7 +101,7 @@ public class CmdStuck implements Cmd {
                                 int cz = FLocation.chunkToBlock(chunk.z());
                                 int y = world.getHighestBlockYAt(cx, cz);
                                 Location tp = new Location(world, cx, y, cz);
-                                sender.msg(TL.COMMAND_STUCK_TELEPORT, tp.getBlockX(), tp.getBlockY(), tp.getBlockZ());
+                                sender.msgLegacy(TL.COMMAND_STUCK_TELEPORT, tp.getBlockX(), tp.getBlockY(), tp.getBlockZ());
                                 FactionsPlugin.instance().timers().remove(player.getUniqueId());
                                 FactionsPlugin.instance().stuckMap().remove(player.getUniqueId());
                                 if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) && !Essentials.handleTeleport(player, tp)) {
@@ -116,7 +116,7 @@ public class CmdStuck implements Cmd {
 
                         @Override
                         public void finish() {
-                            sender.msg(TL.COMMAND_STUCK_FAILED);
+                            sender.msgLegacy(TL.COMMAND_STUCK_FAILED);
                         }
                     };
                 }
@@ -125,7 +125,7 @@ public class CmdStuck implements Cmd {
             FactionsPlugin.instance().timers().put(player.getUniqueId(), System.currentTimeMillis() + (delay * 1000));
             long wait = FactionsPlugin.instance().timers().get(player.getUniqueId()) - System.currentTimeMillis();
             String time = DurationFormatUtils.formatDuration(wait, TL.COMMAND_STUCK_TIMEFORMAT.toString(), true);
-            sender.msg(TL.COMMAND_STUCK_START, time);
+            sender.msgLegacy(TL.COMMAND_STUCK_START, time);
             FactionsPlugin.instance().stuckMap().put(player.getUniqueId(), id);
         }
     }

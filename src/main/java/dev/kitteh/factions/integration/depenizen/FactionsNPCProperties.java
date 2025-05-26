@@ -1,7 +1,6 @@
 package dev.kitteh.factions.integration.depenizen;
 
 import com.denizenscript.denizen.objects.NPCTag;
-import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
@@ -43,11 +42,6 @@ public class FactionsNPCProperties implements Property {
     @Override
     public String getPropertyId() {
         return "FactionsNPC";
-    }
-
-    @Override
-    public void adjust(Mechanism mechanism) {
-        // None
     }
 
     public static boolean describes(ObjectTag object) {

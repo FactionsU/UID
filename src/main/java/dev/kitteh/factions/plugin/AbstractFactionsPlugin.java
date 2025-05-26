@@ -57,10 +57,10 @@ import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldTracker;
 import dev.kitteh.factions.util.WorldUtil;
 import dev.kitteh.factions.util.adapter.ChatTargetAdapter;
+import dev.kitteh.factions.util.adapter.LazyLocationAdapter;
 import dev.kitteh.factions.util.adapter.LeveledValueProviderDeserializer;
 import dev.kitteh.factions.util.adapter.LeveledValueProviderEquationSerializer;
 import dev.kitteh.factions.util.adapter.MapFLocToStringSetAdapter;
-import dev.kitteh.factions.util.adapter.LazyLocationAdapter;
 import dev.kitteh.factions.util.adapter.PermSelectorAdapter;
 import dev.kitteh.factions.util.adapter.SelectorPermsAdapter;
 import dev.kitteh.factions.util.adapter.UpgradeAdapter;
@@ -245,13 +245,21 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         }
         this.serverUUID = new UUID(ms, ((0xaf & 0xffL) << 56) + ((0xac & 0xffL) << 48) + (u & 0xffffffffL) + ((p & 0xffffL) << 32));
 
+        // Version party
+        Pattern versionPattern = Pattern.compile("1\\.(\\d{1,2})(?:\\.(\\d{1,2}))?");
+        Matcher versionMatcher = versionPattern.matcher(this.getServer().getVersion());
+        if (versionMatcher.find()) {
+            String minor = versionMatcher.group(1);
+            String patchS = versionMatcher.group(2);
+            this.mcVersionString = "1." + minor + (patchS == null ? "" : ('.' + patchS));
+        }
+
         getLogger().info("");
         getLogger().info("Factions UUID!");
         getLogger().info("Version " + this.getDescription().getVersion());
         getLogger().info("Loading as a " + this.pluginType() + " plugin");
         getLogger().info("");
         getLogger().info("Need support? https://factions.support/help/");
-        getLogger().info("");
         getLogger().info("");
 
         this.getLogger().info("Server UUID " + this.serverUUID);
@@ -648,7 +656,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
                         fullFile = replace(fullFile, rawTags);
                         Files.writeString(mainConfPath, fullFile);
                     }
-                }catch (IOException e) {
+                } catch (IOException e) {
                     this.getLogger().log(Level.WARNING, "Failed to convert old main.conf file!", e);
                 }
             }
@@ -761,6 +769,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         this.getLogger().log(level, msg);
     }
 
+    @Override
     public boolean autoSave() {
         return this.autoSave;
     }

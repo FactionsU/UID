@@ -51,12 +51,6 @@ public class Loader {
         loader.save(newNode);
     }
 
-    public static void load(HoconConfigurationLoader loader, Object config) throws IOException, IllegalAccessException {
-        CommentedConfigurationNode node = loader.load();
-
-        loadNode(node, loader.createEmptyNode(), config);
-    }
-
     private static final Set<Class<?>> types = new HashSet<>();
 
     static {

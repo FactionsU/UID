@@ -47,7 +47,7 @@ public class CmdForceHome implements Cmd {
                 AbstractFactionsPlugin.instance().teleport(target.asPlayer(), destination).thenAccept(success -> {
                     if (success) {
                         sender.msg(TL.COMMAND_AHOME_SUCCESS, target.name());
-                        target.msg(TL.COMMAND_AHOME_TARGET);
+                        target.msgLegacy(TL.COMMAND_AHOME_TARGET);
                     }
                 });
 

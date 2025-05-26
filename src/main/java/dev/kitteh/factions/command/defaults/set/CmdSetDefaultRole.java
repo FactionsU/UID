@@ -32,16 +32,16 @@ public class CmdSetDefaultRole implements Cmd {
         String roleString = context.get("role");
         Role target = Role.fromString(roleString.toUpperCase());
         if (target == null) {
-            sender.msg(TL.COMMAND_SETDEFAULTROLE_INVALIDROLE, roleString);
+            sender.msgLegacy(TL.COMMAND_SETDEFAULTROLE_INVALIDROLE, roleString);
             return;
         }
 
         if (target == Role.ADMIN) {
-            sender.msg(TL.COMMAND_SETDEFAULTROLE_NOTTHATROLE);
+            sender.msgLegacy(TL.COMMAND_SETDEFAULTROLE_NOTTHATROLE);
             return;
         }
 
         sender.faction().defaultRole(target);
-        sender.msg(TL.COMMAND_SETDEFAULTROLE_SUCCESS, target.nicename);
+        sender.msgLegacy(TL.COMMAND_SETDEFAULTROLE_SUCCESS, target.nicename);
     }
 }

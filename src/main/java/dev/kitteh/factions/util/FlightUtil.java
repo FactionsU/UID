@@ -57,7 +57,7 @@ public class FlightUtil {
                 FPlayer pilot = FPlayers.fPlayers().get(player);
                 if (pilot.flying() && !pilot.adminBypass()) {
                     if (enemiesNearby(pilot, FactionsPlugin.instance().conf().commands().fly().getEnemyRadius(), players)) {
-                        pilot.msg(TL.COMMAND_FLY_ENEMY_DISABLE);
+                        pilot.msgLegacy(TL.COMMAND_FLY_ENEMY_DISABLE);
                         pilot.flying(false);
                         if (pilot.autoFlying()) {
                             pilot.autoFlying(false);

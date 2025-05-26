@@ -45,24 +45,24 @@ public class CmdTNTSiphon implements Cmd {
         Faction faction = sender.faction();
 
         if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
-            sender.msg(TL.COMMAND_TNT_TERRITORYONLY);
+            sender.msgLegacy(TL.COMMAND_TNT_TERRITORYONLY);
             return;
         }
         final int radius = context.get("radius");
         final int amount = context.getOrDefault("amount", -1);
 
         if (radius <= 0) {
-            sender.msg(TL.COMMAND_TNT_SIPHON_FAIL_POSITIVE);
+            sender.msgLegacy(TL.COMMAND_TNT_SIPHON_FAIL_POSITIVE);
             return;
         }
 
         if (FactionsPlugin.instance().conf().commands().tnt().isAboveMaxStorage(faction.tntBank() + 1)) {
-            sender.msg(TL.COMMAND_TNT_SIPHON_FAIL_FULL);
+            sender.msgLegacy(TL.COMMAND_TNT_SIPHON_FAIL_FULL);
             return;
         }
 
         if (radius > FactionsPlugin.instance().conf().commands().tnt().getMaxRadius()) {
-            sender.msg(TL.COMMAND_TNT_SIPHON_FAIL_MAXRADIUS, radius, FactionsPlugin.instance().conf().commands().tnt().getMaxRadius());
+            sender.msgLegacy(TL.COMMAND_TNT_SIPHON_FAIL_MAXRADIUS, radius, FactionsPlugin.instance().conf().commands().tnt().getMaxRadius());
             return;
         }
 
@@ -99,6 +99,6 @@ public class CmdTNTSiphon implements Cmd {
 
         faction.tntBank(faction.tntBank() + acquired);
 
-        sender.msg(TL.COMMAND_TNT_SIPHON_MESSAGE, acquired, faction.tntBank());
+        sender.msgLegacy(TL.COMMAND_TNT_SIPHON_MESSAGE, acquired, faction.tntBank());
     }
 }

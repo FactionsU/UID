@@ -28,10 +28,6 @@ public final class JSONFactions extends MemoryFactions {
         }
     }
 
-    public Gson getGson() {
-        return FactionsPlugin.instance().gson();
-    }
-
     private final Path factionsPath;
     private final Path nextIdPath;
 

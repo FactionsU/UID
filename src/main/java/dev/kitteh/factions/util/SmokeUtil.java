@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import java.util.Collection;
 import java.util.Random;
 
-// http://mc.kev009.com/Protocol
 // -----------------------------
 // Smoke Directions 
 // -----------------------------
@@ -26,11 +25,6 @@ public class SmokeUtil {
 
     public static final Random random = new Random();
 
-    // -------------------------------------------- //
-    // Spawn once
-    // -------------------------------------------- //
-
-    // Single ========
     public static void spawnSingle(Location location, int direction) {
         if (location == null) {
             return;
@@ -42,20 +36,6 @@ public class SmokeUtil {
         spawnSingle(location, random.nextInt(9));
     }
 
-    // Simple Cloud ========
-    public static void spawnCloudSimple(Location location) {
-        for (int i = 0; i <= 8; i++) {
-            spawnSingle(location, i);
-        }
-    }
-
-    public static void spawnCloudSimple(Collection<Location> locations) {
-        for (Location location : locations) {
-            spawnCloudSimple(location);
-        }
-    }
-
-    // Random Cloud ========
     public static void spawnCloudRandom(Location location, float thickness) {
         int singles = (int) Math.floor(thickness * 9);
         for (int i = 0; i < singles; i++) {

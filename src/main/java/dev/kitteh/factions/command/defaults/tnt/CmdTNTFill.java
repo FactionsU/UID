@@ -55,24 +55,24 @@ public class CmdTNTFill implements Cmd {
         Faction faction = sender.faction();
 
         if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
-            sender.msg(TL.COMMAND_TNT_TERRITORYONLY);
+            sender.msgLegacy(TL.COMMAND_TNT_TERRITORYONLY);
             return;
         }
         final int radius = context.get("radius");
         final int amount = context.get("amount");
 
         if (radius <= 0 || amount <= 0) {
-            sender.msg(TL.COMMAND_TNT_FILL_FAIL_POSITIVE);
+            sender.msgLegacy(TL.COMMAND_TNT_FILL_FAIL_POSITIVE);
             return;
         }
 
         if (amount > faction.tntBank()) {
-            sender.msg(TL.COMMAND_TNT_FILL_FAIL_NOTENOUGH, amount);
+            sender.msgLegacy(TL.COMMAND_TNT_FILL_FAIL_NOTENOUGH, amount);
             return;
         }
 
         if (radius > FactionsPlugin.instance().conf().commands().tnt().getMaxRadius()) {
-            sender.msg(TL.COMMAND_TNT_FILL_FAIL_MAXRADIUS, radius, FactionsPlugin.instance().conf().commands().tnt().getMaxRadius());
+            sender.msgLegacy(TL.COMMAND_TNT_FILL_FAIL_MAXRADIUS, radius, FactionsPlugin.instance().conf().commands().tnt().getMaxRadius());
             return;
         }
 
@@ -101,7 +101,7 @@ public class CmdTNTFill implements Cmd {
 
         faction.tntBank(faction.tntBank() - amount + remaining);
 
-        sender.msg(TL.COMMAND_TNT_FILL_MESSAGE, amount - remaining, dispenserCount, faction.tntBank());
+        sender.msgLegacy(TL.COMMAND_TNT_FILL_MESSAGE, amount - remaining, dispenserCount, faction.tntBank());
     }
 
     static ItemStack[] getStacks(int count) {

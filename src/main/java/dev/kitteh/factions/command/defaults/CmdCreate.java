@@ -42,18 +42,18 @@ public class CmdCreate implements Cmd {
         String tag = context.get("tag");
 
         if (sender.hasFaction()) {
-            sender.msg(TL.COMMAND_CREATE_MUSTLEAVE);
+            sender.msgLegacy(TL.COMMAND_CREATE_MUSTLEAVE);
             return;
         }
 
         if (Factions.factions().get(tag) != null) {
-            sender.msg(TL.COMMAND_CREATE_INUSE);
+            sender.msgLegacy(TL.COMMAND_CREATE_INUSE);
             return;
         }
 
         List<String> tagValidationErrors = MiscUtil.validateTag(tag);
         if (!tagValidationErrors.isEmpty()) {
-            sender.sendMessage(tagValidationErrors);
+            sender.sendMessageLegacy(tagValidationErrors);
             return;
         }
 
@@ -86,7 +86,7 @@ public class CmdCreate implements Cmd {
         sender.asPlayer().updateCommands();
 
         for (FPlayer follower : FPlayers.fPlayers().online()) {
-            follower.msg(TL.COMMAND_CREATE_CREATED, sender.describeToLegacy(follower, true), faction.tagLegacy(follower));
+            follower.msgLegacy(TL.COMMAND_CREATE_CREATED, sender.describeToLegacy(follower, true), faction.tagLegacy(follower));
         }
 
         if (FactionsPlugin.instance().conf().logging().isFactionCreate()) {

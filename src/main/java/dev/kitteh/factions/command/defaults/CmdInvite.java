@@ -42,14 +42,14 @@ public class CmdInvite implements Cmd {
         FPlayer target = context.get("player");
 
         if (target.faction() == faction) {
-            sender.msg(TL.COMMAND_INVITE_ALREADYMEMBER, target.name(), faction.tag());
+            sender.msgLegacy(TL.COMMAND_INVITE_ALREADYMEMBER, target.name(), faction.tag());
             return;
         }
 
         if (context.flags().hasFlag("delete")) {
             faction.deInvite(target);
-            target.msg(TL.COMMAND_DEINVITE_REVOKED, sender.describeToLegacy(target), faction.describeToLegacy(target));
-            faction.msg(TL.COMMAND_DEINVITE_REVOKES, sender.describeToLegacy(faction), target.describeToLegacy(faction));
+            target.msgLegacy(TL.COMMAND_DEINVITE_REVOKED, sender.describeToLegacy(target), faction.describeToLegacy(target));
+            faction.msgLegacy(TL.COMMAND_DEINVITE_REVOKES, sender.describeToLegacy(faction), target.describeToLegacy(faction));
             return;
         }
 
@@ -59,7 +59,7 @@ public class CmdInvite implements Cmd {
         }
 
         if (faction.isBanned(target)) {
-            sender.msg(TL.COMMAND_INVITE_BANNED, target.name());
+            sender.msgLegacy(TL.COMMAND_INVITE_BANNED, target.name());
             return;
         }
 
@@ -75,6 +75,6 @@ public class CmdInvite implements Cmd {
             target.sendMessage(component);
         }
 
-        faction.msg(TL.COMMAND_INVITE_INVITED, sender.describeToLegacy(faction), target.describeToLegacy(faction));
+        faction.msgLegacy(TL.COMMAND_INVITE_INVITED, sender.describeToLegacy(faction), target.describeToLegacy(faction));
     }
 }

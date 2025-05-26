@@ -40,12 +40,12 @@ public class CmdMap implements Cmd {
 
         if (context.flags().get("setheight") instanceof Integer height) {
             sender.mapHeight(height);
-            sender.sendMessage(TL.COMMAND_MAPHEIGHT_SET.format(sender.mapHeight()));
+            sender.sendMessageLegacy(TL.COMMAND_MAPHEIGHT_SET.format(sender.mapHeight()));
         }
 
         if (context.flags().hasFlag("auto-off")) {
             sender.mapAutoUpdating(false);
-            sender.msg(TL.COMMAND_MAP_UPDATE_DISABLED);
+            sender.msgLegacy(TL.COMMAND_MAP_UPDATE_DISABLED);
             return;
         }
 
@@ -55,7 +55,7 @@ public class CmdMap implements Cmd {
 
         if (context.flags().hasFlag("auto-on")) {
             sender.mapAutoUpdating(true);
-            sender.msg(TL.COMMAND_MAP_UPDATE_ENABLED);
+            sender.msgLegacy(TL.COMMAND_MAP_UPDATE_ENABLED);
         }
 
         for (Component component : ((MemoryBoard) Board.board()).getMap(sender, new FLocation(player), player.getLocation().getYaw())) {

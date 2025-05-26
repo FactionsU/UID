@@ -62,14 +62,14 @@ public class CmdConfirm implements Cmd {
 
         Conf conf = cache.getIfPresent(sender.uniqueId());
         if (conf == null) {
-            sender.sendMessage(FactionsPlugin.instance().tl().commands().confirm().getNotFound());
+            sender.sendMessageLegacy(FactionsPlugin.instance().tl().commands().confirm().getNotFound());
             return;
         }
 
         if (conf.code.equals(string)) {
             conf.consumer.accept(sender);
         } else {
-            sender.sendMessage(FactionsPlugin.instance().tl().commands().confirm().getInvalid());
+            sender.sendMessageLegacy(FactionsPlugin.instance().tl().commands().confirm().getInvalid());
         }
     }
 }

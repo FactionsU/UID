@@ -3,7 +3,6 @@ package dev.kitteh.factions.listener;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.integration.Essentials;
@@ -26,9 +25,9 @@ import java.util.logging.Level;
 
 public class FactionsChatListener implements Listener {
 
-    public final FactionsPlugin plugin;
+    public final AbstractFactionsPlugin plugin;
 
-    public FactionsChatListener(FactionsPlugin plugin) {
+    public FactionsChatListener(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -43,7 +42,7 @@ public class FactionsChatListener implements Listener {
         String msg = event.getMessage();
         FPlayer me = FPlayers.fPlayers().get(talkingPlayer);
         Faction faction = me.faction();
-        MainConfig.Factions.Chat.InternalChat chatConf = FactionsPlugin.instance().conf().factions().chat().internalChat();
+        MainConfig.Factions.Chat.InternalChat chatConf = this.plugin.conf().factions().chat().internalChat();
 
         ChatTarget chatTarget = me.chatTarget();
 
@@ -106,7 +105,7 @@ public class FactionsChatListener implements Listener {
 
         // Are we to insert the Faction tag into the format?
         // If we are not to insert it - we are done.
-        if (FactionsPlugin.instance().conf().factions().chat().isTagHandledByAnotherPlugin()) {
+        if (this.plugin.conf().factions().chat().isTagHandledByAnotherPlugin()) {
             return;
         }
 
@@ -114,7 +113,7 @@ public class FactionsChatListener implements Listener {
         String msg = event.getMessage();
         String eventFormat = event.getFormat();
         FPlayer me = FPlayers.fPlayers().get(talkingPlayer);
-        MainConfig.Factions.Chat chatConf = FactionsPlugin.instance().conf().factions().chat();
+        MainConfig.Factions.Chat chatConf = this.plugin.conf().factions().chat();
         int InsertIndex = chatConf.getTagInsertIndex();
 
         boolean padBefore = chatConf.isTagPadBefore();
@@ -147,7 +146,7 @@ public class FactionsChatListener implements Listener {
         // Relation Colored?
         if (chatConf.isTagRelationColored()) {
             for (Player listeningPlayer : event.getRecipients()) {
-                if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isIgnored(listeningPlayer, talkingPlayer)) {
+                if (this.plugin.integrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isIgnored(listeningPlayer, talkingPlayer)) {
                     continue;
                 }
                 FPlayer you = FPlayers.fPlayers().get(listeningPlayer);
@@ -156,8 +155,8 @@ public class FactionsChatListener implements Listener {
                     listeningPlayer.sendMessage(String.format(yourFormat, talkingPlayer.getDisplayName(), msg));
                 } catch (UnknownFormatConversionException ex) {
 
-                    AbstractFactionsPlugin.instance().log(Level.SEVERE, "Critical error in chat message formatting!");
-                    AbstractFactionsPlugin.instance().log(Level.SEVERE, "NOTE: This can be fixed right now by setting chat tagInsertIndex to 0.");
+                    this.plugin.log(Level.SEVERE, "Critical error in chat message formatting!");
+                    this.plugin.log(Level.SEVERE, "NOTE: This can be fixed right now by setting chat tagInsertIndex to 0.");
                     return;
                 }
             }

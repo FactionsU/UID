@@ -55,7 +55,7 @@ public class CmdSetHome implements Cmd {
         // Can the player set the faction home HERE?
         if (FactionsPlugin.instance().conf().factions().homes().isMustBeInClaimedTerritory() &&
                 Board.board().factionAt(new FLocation(player)) != faction) {
-            sender.msg(TL.COMMAND_SETHOME_NOTCLAIMED);
+            sender.msgLegacy(TL.COMMAND_SETHOME_NOTCLAIMED);
             return;
         }
 
@@ -76,17 +76,17 @@ public class CmdSetHome implements Cmd {
 
         faction.home(player.getLocation());
 
-        faction.msg(TL.COMMAND_SETHOME_SET, sender.describeToLegacy(faction, true));
+        faction.msgLegacy(TL.COMMAND_SETHOME_SET, sender.describeToLegacy(faction, true));
     }
 
     private void handleDel(CommandContext<Sender> context, FPlayer sender, Faction faction) {
         if (!faction.hasHome()) {
-            sender.msg(TL.COMMAND_HOME_NOHOME);
+            sender.msgLegacy(TL.COMMAND_HOME_NOHOME);
             return;
         }
 
         if (FactionsPlugin.instance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.warps().isEmpty()) {
-            sender.msg(TL.COMMAND_HOME_WARPSREMAIN);
+            sender.msgLegacy(TL.COMMAND_HOME_WARPSREMAIN);
             return;
         }
 
@@ -96,6 +96,6 @@ public class CmdSetHome implements Cmd {
 
         faction.delHome();
 
-        faction.msg(TL.COMMAND_DELHOME_DEL, sender.describeToLegacy(faction, true));
+        faction.msgLegacy(TL.COMMAND_DELHOME_DEL, sender.describeToLegacy(faction, true));
     }
 }

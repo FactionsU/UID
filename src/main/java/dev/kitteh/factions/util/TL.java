@@ -358,8 +358,11 @@ public enum TL {
     COMMAND_MONEYDEPOSIT_DESCRIPTION("Deposit money"),
     COMMAND_MONEYDEPOSIT_DEPOSITED("%1$s deposited %2$s in the faction bank: %3$s"),
     COMMAND_MONEYMODIFY_DESCRIPTION("Modify faction bank money."),
-    COMMAND_MONEYMODIFY_MODIFIED("Modified %1$s bank by %2$s"),
-    COMMAND_MONEYMODIFY_NOTIFY("Modified %1$s bank by %2$s"),
+    COMMAND_MONEYMODIFY_MODIFIED("&eModified %1$s bank by %2$s"),
+    COMMAND_MONEYMODIFY_NOTIFY("&eModified %1$s bank by %2$s"),
+    COMMAND_MONEYMODIFY_SET("&eSet %1$s bank to %2$s"),
+    COMMAND_MONEYMODIFY_SETNOTIFY("&eModified %1$s bank by %2$s"),
+    COMMAND_MONEYMODIFY_FAIL("&cFailed to modify!"),
 
     COMMAND_MONEYTRANSFERFF_DESCRIPTION("Transfer f -> f"),
     COMMAND_MONEYTRANSFERFF_TRANSFER("%1$s transferred %2$s from the faction \"%3$s\" to the faction \"%4$s\""),

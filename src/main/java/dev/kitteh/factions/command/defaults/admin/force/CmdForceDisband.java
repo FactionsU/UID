@@ -44,13 +44,13 @@ public class CmdForceDisband implements Cmd {
 
     private void doIt(FPlayer sender, Faction faction, boolean confirmed) {
         if (faction.permanent()) {
-            sender.msg(TL.COMMAND_DISBAND_MARKEDPERMANENT);
+            sender.msgLegacy(TL.COMMAND_DISBAND_MARKEDPERMANENT);
             return;
         }
 
         if (!confirmed) {
             String conf = CmdConfirm.add(sender, s -> this.doIt(s, faction, true));
-            sender.msg(TL.COMMAND_DISBAND_CONFIRM, faction.tag(), conf);
+            sender.msgLegacy(TL.COMMAND_DISBAND_CONFIRM, faction.tag(), conf);
             return;
         }
 
@@ -69,9 +69,9 @@ public class CmdForceDisband implements Cmd {
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             String who = sender.describeToLegacy(fplayer);
             if (fplayer.faction() == faction) {
-                fplayer.msg(TL.COMMAND_DISBAND_BROADCAST_YOURS, who);
+                fplayer.msgLegacy(TL.COMMAND_DISBAND_BROADCAST_YOURS, who);
             } else {
-                fplayer.msg(TL.COMMAND_DISBAND_BROADCAST_NOTYOURS, who, faction.tagLegacy(fplayer));
+                fplayer.msgLegacy(TL.COMMAND_DISBAND_BROADCAST_NOTYOURS, who, faction.tagLegacy(fplayer));
             }
         }
         if (FactionsPlugin.instance().conf().logging().isFactionDisband()) {
@@ -85,7 +85,7 @@ public class CmdForceDisband implements Cmd {
             if (amount > 0.0) {
                 Econ.transferMoney(sender, faction, sender, amount, false);
                 String amountString = Econ.moneyString(amount);
-                sender.msg(TL.COMMAND_DISBAND_HOLDINGS, amountString);
+                sender.msgLegacy(TL.COMMAND_DISBAND_HOLDINGS, amountString);
                 AbstractFactionsPlugin.instance().log(sender.name() + " has been given bank holdings of " + amountString + " from disbanding " + faction.tag() + ".");
             }
         }

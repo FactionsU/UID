@@ -62,7 +62,7 @@ public class FactionsBlockListener extends AbstractListener {
         }
 
         Faction targetFaction = Board.board().factionAt(new FLocation(event.getBlock().getLocation()));
-        if (targetFaction.isNormal() && !targetFaction.peaceful() && FactionsPlugin.instance().conf().factions().specialCase().getIgnoreBuildMaterials().contains(event.getBlock().getType())) {
+        if (targetFaction.isNormal() && !targetFaction.peaceful() && this.plugin.conf().factions().specialCase().getIgnoreBuildMaterials().contains(event.getBlock().getType())) {
             return;
         }
 
@@ -89,11 +89,11 @@ public class FactionsBlockListener extends AbstractListener {
         if (startFaction == endFaction) {
             return;
         }
-        if (FactionsPlugin.instance().landRaidControl().isRaidable(endFaction)) {
+        if (this.plugin.landRaidControl().isRaidable(endFaction)) {
             return;
         }
 
-        MainConfig.Factions.Protection protConf = FactionsPlugin.instance().conf().factions().protection();
+        MainConfig.Factions.Protection protConf = this.plugin.conf().factions().protection();
 
         if (endFaction.hasMembersOnline()) {
             if (!protConf.getTerritoryDenyUsageMaterials().contains(material)) {
@@ -123,7 +123,7 @@ public class FactionsBlockListener extends AbstractListener {
         event.setCancelled(true);
     }
 
-    private static Set<Material> waterBreakable = Set.of(Material.REDSTONE_WIRE, Material.REDSTONE_TORCH, Material.REDSTONE_WALL_TORCH, Material.COMPARATOR, Material.REPEATER);
+    private static final Set<Material> waterBreakable = Set.of(Material.REDSTONE_WIRE, Material.REDSTONE_TORCH, Material.REDSTONE_WALL_TORCH, Material.COMPARATOR, Material.REPEATER);
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockFromTo(BlockFromToEvent event) {
@@ -131,9 +131,9 @@ public class FactionsBlockListener extends AbstractListener {
             return;
         }
 
-        boolean exp = FactionsPlugin.instance().conf().exploits().isLiquidFlow();
-        boolean safe = FactionsPlugin.instance().conf().factions().protection().isSafeZonePreventLiquidFlowIn();
-        boolean war = FactionsPlugin.instance().conf().factions().protection().isWarZonePreventLiquidFlowIn();
+        boolean exp = this.plugin.conf().exploits().isLiquidFlow();
+        boolean safe = this.plugin.conf().factions().protection().isSafeZonePreventLiquidFlowIn();
+        boolean war = this.plugin.conf().factions().protection().isWarZonePreventLiquidFlowIn();
 
         if ((exp || safe || war) && event.getBlock().isLiquid() && event.getToBlock().isEmpty()) {
             Faction from = Board.board().factionAt(new FLocation(event.getBlock()));
@@ -166,7 +166,7 @@ public class FactionsBlockListener extends AbstractListener {
         }
 
         if (event.getBlock().getType() == Material.ICE &&
-                FactionsPlugin.instance().conf().factions().protection().isTerritoryDenyIceFormation() &&
+                this.plugin.conf().factions().protection().isTerritoryDenyIceFormation() &&
                 Board.board().factionAt(new FLocation(event.getBlock())).isNormal()) {
             event.setCancelled(true);
         }
@@ -178,7 +178,7 @@ public class FactionsBlockListener extends AbstractListener {
             return;
         }
 
-        if (FactionsPlugin.instance().conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
+        if (this.plugin.conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
                 Board.board().factionAt(new FLocation(event.getBlock().getLocation())).isNormal()) {
             return;
         }
@@ -194,7 +194,7 @@ public class FactionsBlockListener extends AbstractListener {
             return;
         }
 
-        if (FactionsPlugin.instance().conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
+        if (this.plugin.conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
                 Board.board().factionAt(new FLocation(event.getBlock().getLocation())).isNormal()) {
             return;
         }
@@ -216,7 +216,7 @@ public class FactionsBlockListener extends AbstractListener {
             return;
         }
 
-        if (!FactionsPlugin.instance().conf().factions().protection().isPistonProtectionThroughDenyBuild()) {
+        if (!this.plugin.conf().factions().protection().isPistonProtectionThroughDenyBuild()) {
             return;
         }
 
@@ -239,7 +239,7 @@ public class FactionsBlockListener extends AbstractListener {
         }
 
         // if not a sticky piston, retraction should be fine
-        if (!event.isSticky() || !FactionsPlugin.instance().conf().factions().protection().isPistonProtectionThroughDenyBuild()) {
+        if (!event.isSticky() || !this.plugin.conf().factions().protection().isPistonProtectionThroughDenyBuild()) {
             return;
         }
 
@@ -265,7 +265,7 @@ public class FactionsBlockListener extends AbstractListener {
                 .distinct()
                 .toList();
 
-        boolean disableOverall = FactionsPlugin.instance().conf().factions().other().isDisablePistonsInTerritory();
+        boolean disableOverall = this.plugin.conf().factions().other().isDisablePistonsInTerritory();
         for (FLocation location : locations) {
             Faction otherFaction = Board.board().factionAt(location);
             if (pistonFaction == otherFaction) {
@@ -275,11 +275,11 @@ public class FactionsBlockListener extends AbstractListener {
             if (disableOverall && otherFaction.isNormal()) {
                 return false;
             }
-            if (otherFaction.isWilderness() && FactionsPlugin.instance().conf().factions().protection().isWildernessDenyBuild() && !FactionsPlugin.instance().conf().factions().protection().getWorldsNoWildernessProtection().contains(world)) {
+            if (otherFaction.isWilderness() && this.plugin.conf().factions().protection().isWildernessDenyBuild() && !this.plugin.conf().factions().protection().getWorldsNoWildernessProtection().contains(world)) {
                 return false;
-            } else if (otherFaction.isSafeZone() && FactionsPlugin.instance().conf().factions().protection().isSafeZoneDenyBuild()) {
+            } else if (otherFaction.isSafeZone() && this.plugin.conf().factions().protection().isSafeZoneDenyBuild()) {
                 return false;
-            } else if (otherFaction.isWarZone() && FactionsPlugin.instance().conf().factions().protection().isWarZoneDenyBuild()) {
+            } else if (otherFaction.isWarZone() && this.plugin.conf().factions().protection().isWarZoneDenyBuild()) {
                 return false;
             }
             Relation rel = pistonFaction.relationTo(otherFaction);
@@ -341,7 +341,7 @@ public class FactionsBlockListener extends AbstractListener {
             }
 
             if (!justCheck) {
-                me.msg(TL.PERM_DENIED_WILDERNESS, permissibleAction.shortDescription());
+                me.msgLegacy(TL.PERM_DENIED_WILDERNESS, permissibleAction.shortDescription());
             }
 
             return false;
@@ -355,7 +355,7 @@ public class FactionsBlockListener extends AbstractListener {
             }
 
             if (!justCheck) {
-                me.msg(TL.PERM_DENIED_SAFEZONE, permissibleAction.shortDescription());
+                me.msgLegacy(TL.PERM_DENIED_SAFEZONE, permissibleAction.shortDescription());
             }
 
             return false;
@@ -369,7 +369,7 @@ public class FactionsBlockListener extends AbstractListener {
             }
 
             if (!justCheck) {
-                me.msg(TL.PERM_DENIED_WARZONE, permissibleAction.shortDescription());
+                me.msgLegacy(TL.PERM_DENIED_WARZONE, permissibleAction.shortDescription());
             }
 
             return false;
@@ -385,10 +385,10 @@ public class FactionsBlockListener extends AbstractListener {
         if (!otherFaction.hasAccess(me, permissibleAction, loc)) {
             if (pain && permissibleAction != PermissibleActions.FROSTWALK) {
                 player.damage(conf.factions().other().getActionDeniedPainAmount());
-                me.msg(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.shortDescription(), otherFaction.tagLegacy(myFaction));
+                me.msgLegacy(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.shortDescription(), otherFaction.tagLegacy(myFaction));
                 return true;
             } else if (!justCheck) {
-                me.msg(TL.PERM_DENIED_TERRITORY, permissibleAction.shortDescription(), otherFaction.tagLegacy(myFaction));
+                me.msgLegacy(TL.PERM_DENIED_TERRITORY, permissibleAction.shortDescription(), otherFaction.tagLegacy(myFaction));
             }
             return false;
         }

@@ -192,9 +192,9 @@ public interface FPlayer extends Participator, Selectable {
 
     boolean isOnline();
 
-    void sendMessage(String message);
+    void sendMessageLegacy(String message);
 
-    void sendMessage(List<String> messages);
+    void sendMessageLegacy(List<String> messages);
 
     int mapHeight();
 

@@ -96,11 +96,11 @@ public class CmdRole implements Cmd {
 
     private void handle(FPlayer sender, FPlayer target, Role targetNewRole) {
         if (!target.faction().equals(sender.faction())) {
-            sender.msg(TL.COMMAND_ROLE_WRONGFACTION);
+            sender.msgLegacy(TL.COMMAND_ROLE_WRONGFACTION);
             return;
         }
         if (targetNewRole == null || targetNewRole == Role.ADMIN || targetNewRole.isAtLeast(sender.role())) {
-            sender.msg(TL.COMMAND_ROLE_NOT_ALLOWED);
+            sender.msgLegacy(TL.COMMAND_ROLE_NOT_ALLOWED);
             return;
         }
 
@@ -108,7 +108,7 @@ public class CmdRole implements Cmd {
                 !FactionsPlugin.instance().conf().factions().other().isAllowMultipleColeaders() &&
                 !target.faction().members(Role.COLEADER).isEmpty()
         ) {
-            sender.msg(TL.COMMAND_COLEADER_ALREADY_COLEADER);
+            sender.msgLegacy(TL.COMMAND_COLEADER_ALREADY_COLEADER);
             return;
         }
 
@@ -117,8 +117,8 @@ public class CmdRole implements Cmd {
             player.updateCommands();
         }
 
-        target.msg(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
-        sender.msg(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
+        target.msgLegacy(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
+        sender.msgLegacy(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
     }
 
     private void handleAdmin(CommandContext<Sender> context) {
@@ -126,17 +126,17 @@ public class CmdRole implements Cmd {
         FPlayer target = context.get("member");
 
         if (!sender.hasFaction() || sender.role() != Role.ADMIN) {
-            sender.msg(TL.COMMAND_ADMIN_NOTADMIN);
+            sender.msgLegacy(TL.COMMAND_ADMIN_NOTADMIN);
             return;
         }
 
         if (sender == target) {
-            sender.msg(TL.COMMAND_ADMIN_TARGETSELF);
+            sender.msgLegacy(TL.COMMAND_ADMIN_TARGETSELF);
             return;
         }
 
         if (sender.faction() != target.faction()) {
-            sender.msg(TL.COMMAND_ADMIN_NOTMEMBER);
+            sender.msgLegacy(TL.COMMAND_ADMIN_NOTMEMBER);
             return;
         }
 
@@ -155,6 +155,6 @@ public class CmdRole implements Cmd {
         }
 
         // Inform all players
-        sender.faction().msg(TL.COMMAND_ADMIN_PROMOTED, sender.describeToLegacy(target), target.describeToLegacy(sender), sender.faction().describeToLegacy(sender));
+        sender.faction().msgLegacy(TL.COMMAND_ADMIN_PROMOTED, sender.describeToLegacy(target), target.describeToLegacy(sender), sender.faction().describeToLegacy(sender));
     }
 }

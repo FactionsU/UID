@@ -34,18 +34,18 @@ public class CmdSetLink implements Cmd {
         String link = context.get("link");
 
         if (!sender.role().isAtLeast(Role.MODERATOR)) {
-            sender.msg(TL.GENERIC_YOUMUSTBE, Role.MODERATOR.translation);
+            sender.msgLegacy(TL.GENERIC_YOUMUSTBE, Role.MODERATOR.translation);
             return;
         }
 
         if (!link.matches("^https?://.+")) {
-            sender.msg(TL.COMMAND_LINK_INVALIDURL);
+            sender.msgLegacy(TL.COMMAND_LINK_INVALIDURL);
             return;
         }
 
         faction.link(link);
 
-        faction.msg(TL.COMMAND_LINK_CHANGED, sender);
-        faction.sendMessage(link);
+        faction.msgLegacy(TL.COMMAND_LINK_CHANGED, sender);
+        faction.sendMessageLegacy(link);
     }
 }

@@ -2,15 +2,12 @@ package dev.kitteh.factions.upgrade;
 
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.util.MiscUtil;
-import dev.kitteh.factions.util.TL;
 import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
 @NullMarked

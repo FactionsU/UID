@@ -62,7 +62,7 @@ public class CmdNear implements Cmd {
             playerMessageBuilder.append(TL.COMMAND_NEAR_NONE);
         }
 
-        sender.msg(TL.COMMAND_NEAR_PLAYERLIST.toString().replace("{players-nearby}", playerMessageBuilder.toString()));
+        sender.msgLegacy(TL.COMMAND_NEAR_PLAYERLIST.toString().replace("{players-nearby}", playerMessageBuilder.toString()));
     }
 
     private String parsePlaceholders(FPlayer user, FPlayer target, String string) {

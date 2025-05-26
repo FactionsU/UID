@@ -35,7 +35,7 @@ public class CmdAnnounce implements Cmd {
         String prefix = ChatColor.GREEN + faction.tag() + ChatColor.YELLOW + " [" + ChatColor.GRAY + sender.name() + ChatColor.YELLOW + "] " + ChatColor.RESET;
         String message = context.get("message");
 
-        faction.sendMessage(prefix + message);
+        faction.sendMessageLegacy(prefix + message);
 
         // Add for offline players.
         for (FPlayer fp : faction.membersOnline(false)) {

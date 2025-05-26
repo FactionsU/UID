@@ -43,6 +43,6 @@ public class CmdStatus implements Cmd {
             }
             ret.add(String.format(TL.COMMAND_STATUS_FORMAT.toString(), ChatColor.GOLD + fp.role().getPrefix() + fp.name() + ChatColor.RESET, power, last).trim());
         }
-        sender.sendMessage(ret);
+        sender.sendMessageLegacy(ret);
     }
 }

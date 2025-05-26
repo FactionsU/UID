@@ -76,14 +76,14 @@ public class CmdClaim implements Cmd {
                 if (sender.canClaimForFaction(forFaction)) {
                     sender.autoClaim(forFaction);
 
-                    sender.msg(TL.COMMAND_AUTOCLAIM_ENABLED, forFaction.describeToLegacy(sender));
+                    sender.msgLegacy(TL.COMMAND_AUTOCLAIM_ENABLED, forFaction.describeToLegacy(sender));
                     sender.attemptClaim(forFaction, claimLocation, true);
                 } else {
-                    sender.msg(TL.COMMAND_AUTOCLAIM_OTHERFACTION, forFaction.describeToLegacy(sender));
+                    sender.msgLegacy(TL.COMMAND_AUTOCLAIM_OTHERFACTION, forFaction.describeToLegacy(sender));
                 }
             } else {
                 sender.autoClaim(null);
-                sender.msg(TL.COMMAND_AUTOCLAIM_DISABLED);
+                sender.msgLegacy(TL.COMMAND_AUTOCLAIM_DISABLED);
             }
 
             return;
@@ -99,7 +99,7 @@ public class CmdClaim implements Cmd {
 
         if (context.flags().get("radius") instanceof Integer radius && radius > 1) {
             if (!Permission.CLAIM_RADIUS.has(player)) {
-                sender.msg(TL.COMMAND_CLAIM_DENIED);
+                sender.msgLegacy(TL.COMMAND_CLAIM_DENIED);
                 return;
             }
 
@@ -129,7 +129,7 @@ public class CmdClaim implements Cmd {
 
     private void fill(FPlayer sender, FLocation loc, Faction forFaction, int limit) {
         if (limit > FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims()) {
-            sender.msg(TL.COMMAND_CLAIMFILL_ABOVEMAX, FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims());
+            sender.msgLegacy(TL.COMMAND_CLAIMFILL_ABOVEMAX, FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims());
             return;
         }
 
@@ -138,12 +138,12 @@ public class CmdClaim implements Cmd {
         Faction currentFaction = Board.board().factionAt(loc);
 
         if (currentFaction.equals(forFaction)) {
-            sender.msg(TL.CLAIM_ALREADYOWN, forFaction.describeToLegacy(sender, true));
+            sender.msgLegacy(TL.CLAIM_ALREADYOWN, forFaction.describeToLegacy(sender, true));
             return;
         }
 
         if (!bypass && !currentFaction.isWilderness()) {
-            sender.msg(TL.COMMAND_CLAIMFILL_ALREADYCLAIMED);
+            sender.msgLegacy(TL.COMMAND_CLAIMFILL_ALREADYCLAIMED);
             return;
         }
 
@@ -156,7 +156,7 @@ public class CmdClaim implements Cmd {
                                 (forFaction.isSafeZone() && !Permission.MANAGE_SAFE_ZONE.has(sender.asPlayer()))
                 )
         ) {
-            sender.msg(TL.CLAIM_CANTCLAIM, forFaction.describeToLegacy(sender));
+            sender.msgLegacy(TL.CLAIM_CANTCLAIM, forFaction.describeToLegacy(sender));
             return;
         }
 
@@ -173,7 +173,7 @@ public class CmdClaim implements Cmd {
             currentHead = queue.poll();
 
             if (Math.abs(currentHead.x() - startX) > distance || Math.abs(currentHead.z() - startZ) > distance) {
-                sender.msg(TL.COMMAND_CLAIMFILL_TOOFAR, distance);
+                sender.msgLegacy(TL.COMMAND_CLAIMFILL_TOOFAR, distance);
                 return;
             }
 
@@ -184,12 +184,12 @@ public class CmdClaim implements Cmd {
         }
 
         if (toClaim.size() > limit) {
-            sender.msg(TL.COMMAND_CLAIMFILL_PASTLIMIT);
+            sender.msgLegacy(TL.COMMAND_CLAIMFILL_PASTLIMIT);
             return;
         }
 
         if (forFaction.isNormal() && toClaim.size() > FactionsPlugin.instance().landRaidControl().possibleClaimCount(forFaction)) {
-            sender.msg(TL.COMMAND_CLAIMFILL_NOTENOUGHLANDLEFT, forFaction.describeToLegacy(sender), toClaim.size());
+            sender.msgLegacy(TL.COMMAND_CLAIMFILL_NOTENOUGHLANDLEFT, forFaction.describeToLegacy(sender), toClaim.size());
             return;
         }
 
@@ -200,7 +200,7 @@ public class CmdClaim implements Cmd {
                 fails++;
             }
             if (fails >= limFail) {
-                sender.msg(TL.COMMAND_CLAIMFILL_TOOMUCHFAIL, fails);
+                sender.msgLegacy(TL.COMMAND_CLAIMFILL_TOOMUCHFAIL, fails);
                 return;
             }
         }

@@ -20,10 +20,6 @@ import java.util.UUID;
 public class PermSelectorAdapter extends TypeAdapter<PermSelector> {
     private static boolean legacy = false;
 
-    public static boolean isLegacy() {
-        return legacy;
-    }
-
     @Override
     public void write(JsonWriter out, PermSelector value) throws IOException {
         out.value(value.serialize());

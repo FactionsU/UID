@@ -43,7 +43,7 @@ public class PowerControl implements LandRaidControl {
     @Override
     public boolean canJoinFaction(Faction faction, FPlayer player) {
         if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
-            player.msg(TL.COMMAND_JOIN_NEGATIVEPOWER, player.describeToLegacy(player, true));
+            player.msgLegacy(TL.COMMAND_JOIN_NEGATIVEPOWER, player.describeToLegacy(player, true));
             return false;
         }
         return true;
@@ -52,7 +52,7 @@ public class PowerControl implements LandRaidControl {
     @Override
     public boolean canLeaveFaction(FPlayer player) {
         if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
-            player.msg(TL.LEAVE_NEGATIVEPOWER);
+            player.msgLegacy(TL.LEAVE_NEGATIVEPOWER);
             return false;
         }
         return true;
@@ -66,12 +66,12 @@ public class PowerControl implements LandRaidControl {
     @Override
     public boolean canKick(FPlayer toKick, FPlayer playerAttempting) {
         if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.power() < 0) {
-            playerAttempting.msg(TL.COMMAND_KICK_NEGATIVEPOWER);
+            playerAttempting.msgLegacy(TL.COMMAND_KICK_NEGATIVEPOWER);
             return false;
         }
         if (toKick.isOnline() && !FactionsPlugin.instance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
                 Board.board().factionAt(toKick.lastStoodAt()).relationTo(toKick.faction()) == Relation.ENEMY) {
-            playerAttempting.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
+            playerAttempting.msgLegacy(TL.COMMAND_KICK_ENEMYTERRITORY);
             return false;
         }
         return true;
@@ -144,13 +144,13 @@ public class PowerControl implements LandRaidControl {
                 double powerChange = vamp * powerDiff;
                 FPlayer fKiller = FPlayers.fPlayers().get(killer);
                 fKiller.alterPower(powerChange);
-                fKiller.msg(TL.PLAYER_POWER_VAMPIRISM_GAIN, powerChange, fplayer.describeToLegacy(fKiller), fKiller.powerRounded(), fKiller.powerMaxRounded());
+                fKiller.msgLegacy(TL.PLAYER_POWER_VAMPIRISM_GAIN, powerChange, fplayer.describeToLegacy(fKiller), fKiller.powerRounded(), fKiller.powerMaxRounded());
             }
         }
         // Send the message from the powerLossEvent
         final String msg = powerLossEvent.getMessage();
         if (msg != null && !msg.isEmpty()) {
-            fplayer.msg(msg, fplayer.powerRounded(), fplayer.powerMaxRounded());
+            fplayer.msgLegacy(msg, fplayer.powerRounded(), fplayer.powerMaxRounded());
         }
     }
 

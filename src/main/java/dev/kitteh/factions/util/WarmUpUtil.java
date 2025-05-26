@@ -24,9 +24,9 @@ public class WarmUpUtil {
         }
         if (delay > 0) {
             if (player.warmingUp()) {
-                player.msg(TL.WARMUPS_ALREADY);
+                player.msgLegacy(TL.WARMUPS_ALREADY);
             } else {
-                player.msg(translationKey.format(action, delay));
+                player.msgLegacy(translationKey.format(action, delay));
                 int id = new BukkitRunnable() {
                     @Override
                     public void run() {

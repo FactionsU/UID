@@ -128,7 +128,7 @@ public class FactionsPlayerListener extends AbstractListener {
                     }
                     this.plugin.teleport(player, target).thenAccept(success -> {
                         if (success) {
-                            me.msg(TL.PLAYER_TELEPORTEDONJOIN, relation.nicename);
+                            me.msgLegacy(TL.PLAYER_TELEPORTEDONJOIN, relation.nicename);
                         }
                     });
                 }
@@ -175,7 +175,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (!myFaction.isWilderness()) {
             for (FPlayer other : myFaction.membersOnline(true)) {
                 if (other != me && other.monitorJoins()) {
-                    other.msg(TL.FACTION_LOGIN, me.name());
+                    other.msgLegacy(TL.FACTION_LOGIN, me.name());
                 }
             }
         }
@@ -203,7 +203,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         // if player is waiting for fstuck teleport but leaves, remove
         if (this.plugin.stuckMap().containsKey(player.getUniqueId())) {
-            FPlayers.fPlayers().get(player).msg(TL.COMMAND_STUCK_CANCELLED);
+            FPlayers.fPlayers().get(player).msgLegacy(TL.COMMAND_STUCK_CANCELLED);
             this.plugin.stuckMap().remove(player.getUniqueId());
             this.plugin.timers().remove(player.getUniqueId());
         }
@@ -216,7 +216,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (!myFaction.isWilderness()) {
             for (FPlayer fPlayer : myFaction.membersOnline(true)) {
                 if (fPlayer != me && fPlayer.monitorJoins()) {
-                    fPlayer.msg(TL.FACTION_LOGOUT, me.name());
+                    fPlayer.msgLegacy(TL.FACTION_LOGOUT, me.name());
                 }
             }
         }
@@ -272,7 +272,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (fromLoc.getBlockX() != toLoc.getBlockX() || fromLoc.getBlockY() != toLoc.getBlockY() || fromLoc.getBlockZ() != toLoc.getBlockZ() || fromLoc.getWorld() != toLoc.getWorld()) {
             if (me.warmingUp()) {
                 me.cancelWarmup();
-                me.msg(TL.WARMUPS_CANCELLED);
+                me.msgLegacy(TL.WARMUPS_CANCELLED);
             }
         }
 
@@ -426,7 +426,7 @@ public class FactionsPlayerListener extends AbstractListener {
                 int count = attempt.increment();
                 if (count >= 10) {
                     FPlayer me = FPlayers.fPlayers().get(player);
-                    me.msg(TL.PLAYER_OUCH);
+                    me.msgLegacy(TL.PLAYER_OUCH);
                     player.damage(NumberConversions.floor((double) count / 10));
                 }
             }
@@ -528,7 +528,7 @@ public class FactionsPlayerListener extends AbstractListener {
             }
 
             if (!justCheck) {
-                me.msg(TL.PLAYER_USE_WILDERNESS, TextUtil.getMaterialName(material));
+                me.msgLegacy(TL.PLAYER_USE_WILDERNESS, TextUtil.getMaterialName(material));
             }
 
             return false;
@@ -538,7 +538,7 @@ public class FactionsPlayerListener extends AbstractListener {
             }
 
             if (!justCheck) {
-                me.msg(TL.PLAYER_USE_SAFEZONE, TextUtil.getMaterialName(material));
+                me.msgLegacy(TL.PLAYER_USE_SAFEZONE, TextUtil.getMaterialName(material));
             }
 
             return false;
@@ -548,7 +548,7 @@ public class FactionsPlayerListener extends AbstractListener {
             }
 
             if (!justCheck) {
-                me.msg(TL.PLAYER_USE_WARZONE, TextUtil.getMaterialName(material));
+                me.msgLegacy(TL.PLAYER_USE_WARZONE, TextUtil.getMaterialName(material));
             }
 
             return false;
@@ -556,7 +556,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (!otherFaction.hasAccess(me, PermissibleActions.ITEM, loc)) {
             if (!justCheck) {
-                me.msg(TL.PLAYER_USE_TERRITORY, TextUtil.getMaterialName(material), otherFaction.tagLegacy(me.faction()));
+                me.msgLegacy(TL.PLAYER_USE_TERRITORY, TextUtil.getMaterialName(material), otherFaction.tagLegacy(me.faction()));
             }
             return false;
         }
@@ -660,7 +660,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         PermissibleAction action = PermissibleActions.CONTAINER;
         if (!otherFaction.hasAccess(me, action, location)) {
-            me.msg(TL.GENERIC_NOPERMISSION, action.shortDescription());
+            me.msgLegacy(TL.GENERIC_NOPERMISSION, action.shortDescription());
             event.setCancelled(true);
         }
     }
@@ -705,39 +705,39 @@ public class FactionsPlayerListener extends AbstractListener {
                 !protection.getPermanentFactionMemberDenyCommands().isEmpty() &&
                 me.faction().permanent() &&
                 isCommandInSet(fullCmd, shortCmd, protection.getPermanentFactionMemberDenyCommands())) {
-            me.msg(TL.PLAYER_COMMAND_PERMANENT, fullCmd);
+            me.msgLegacy(TL.PLAYER_COMMAND_PERMANENT, fullCmd);
             return true;
         }
 
         Faction at = Board.board().factionAt(new FLocation(player.getLocation()));
         if (at.isWilderness() && !protection.getWildernessDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getWildernessDenyCommands())) {
-            me.msg(TL.PLAYER_COMMAND_WILDERNESS, fullCmd);
+            me.msgLegacy(TL.PLAYER_COMMAND_WILDERNESS, fullCmd);
             return true;
         }
 
         Relation rel = at.relationTo(me);
         if (at.isNormal() && rel.isAlly() && !protection.getTerritoryAllyDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryAllyDenyCommands())) {
-            me.msg(TL.PLAYER_COMMAND_ALLY, fullCmd);
+            me.msgLegacy(TL.PLAYER_COMMAND_ALLY, fullCmd);
             return true;
         }
 
         if (at.isNormal() && rel.isTruce() && !protection.getTerritoryTruceDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryTruceDenyCommands())) {
-            me.msg(TL.PLAYER_COMMAND_TRUCE, fullCmd);
+            me.msgLegacy(TL.PLAYER_COMMAND_TRUCE, fullCmd);
             return true;
         }
 
         if (at.isNormal() && rel.isNeutral() && !protection.getTerritoryNeutralDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryNeutralDenyCommands())) {
-            me.msg(TL.PLAYER_COMMAND_NEUTRAL, fullCmd);
+            me.msgLegacy(TL.PLAYER_COMMAND_NEUTRAL, fullCmd);
             return true;
         }
 
         if (at.isNormal() && rel.isEnemy() && !protection.getTerritoryEnemyDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryEnemyDenyCommands())) {
-            me.msg(TL.PLAYER_COMMAND_ENEMY, fullCmd);
+            me.msgLegacy(TL.PLAYER_COMMAND_ENEMY, fullCmd);
             return true;
         }
 
         if (at.isWarZone() && !protection.getWarzoneDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getWarzoneDenyCommands())) {
-            me.msg(TL.PLAYER_COMMAND_WARZONE, fullCmd);
+            me.msgLegacy(TL.PLAYER_COMMAND_WARZONE, fullCmd);
             return true;
         }
 
@@ -769,7 +769,7 @@ public class FactionsPlayerListener extends AbstractListener {
         }
         if (clickedInventory.getHolder() instanceof GUI<?> ui) {
             event.setCancelled(true);
-            ui.click(event.getRawSlot(), event.getClick());
+            ui.click(event.getRawSlot());
         }
     }
 
@@ -818,7 +818,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (this.plugin.conf().factions().chat().isTriggerPublicChat(cmd.startsWith("/") ? cmd.substring(1) : cmd)) {
             FPlayer p = FPlayers.fPlayers().get(event.getPlayer());
             p.chatTarget(ChatTarget.PUBLIC);
-            p.msg(TL.COMMAND_CHAT_MODE_PUBLIC);
+            p.msgLegacy(TL.COMMAND_CHAT_MODE_PUBLIC);
         }
 
         if (FactionsPlayerListener.preventCommand(event.getMessage(), event.getPlayer())) {

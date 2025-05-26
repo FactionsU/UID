@@ -4,7 +4,6 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.TextUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
@@ -34,12 +33,12 @@ public abstract class GUI<Type> implements InventoryHolder {
     // Parse all the placeholder values in this String, will be injected into the SimpleItem and return it
     protected abstract String parse(String toParse, Type type);
 
-    protected abstract void onClick(Type action, ClickType clickType);
+    protected abstract void onClick(Type action);
 
     // Should only be called by the InventoryListener
-    public void click(int slot, ClickType clickType) {
+    public void click(int slot) {
         if (slotMap.containsKey(slot)) {
-            onClick(slotMap.get(slot), clickType);
+            onClick(slotMap.get(slot));
         } else if (this instanceof Backable && back == slot) {
             ((Backable) this).onBack();
         }
@@ -62,14 +61,6 @@ public abstract class GUI<Type> implements InventoryHolder {
     protected void buildItems() {
         for (Map.Entry<Integer, Type> entry : slotMap.entrySet()) {
             setItemAtSlot(entry.getKey(), entry.getValue());
-        }
-    }
-
-    protected void buildItem(Type type) {
-        for (Map.Entry<Integer, Type> entry : slotMap.entrySet()) {
-            if (entry.getValue().equals(type)) {
-                setItemAtSlot(entry.getKey(), entry.getValue());
-            }
         }
     }
 

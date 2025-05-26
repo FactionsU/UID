@@ -49,23 +49,23 @@ public class CmdShield implements Cmd {
 
             faction.shield(Duration.ofSeconds(duration.longValue()), Duration.ofSeconds(cooldown.longValue()));
 
-            faction.msg(TL.COMMAND_SHIELD_ACTIVATED, sender.describeToLegacy(faction), MiscUtil.durationString(faction.shieldRemaining()));
+            faction.msgLegacy(TL.COMMAND_SHIELD_ACTIVATED, sender.describeToLegacy(faction), MiscUtil.durationString(faction.shieldRemaining()));
 
             return;
         }
 
         if (faction.shieldActive()) {
-            sender.msg(TL.COMMAND_SHIELD_ACTIVE, MiscUtil.durationString(faction.shieldRemaining()));
+            sender.msgLegacy(TL.COMMAND_SHIELD_ACTIVE, MiscUtil.durationString(faction.shieldRemaining()));
         } else {
-            sender.msg(TL.COMMAND_SHIELD_NOT_SET);
+            sender.msgLegacy(TL.COMMAND_SHIELD_NOT_SET);
             if (lvl > 0) {
                 UpgradeSettings settings = Universe.universe().upgradeSettings(Upgrades.SHIELD);
                 if (faction.shieldCooldownRemaining().isZero()) {
                     BigDecimal duration = settings.valueAt(Upgrades.Variables.DURATION, lvl);
                     BigDecimal cooldown = settings.valueAt(Upgrades.Variables.COOLDOWN, lvl);
-                    sender.msg(TL.COMMAND_SHIELD_AVAILABLE, MiscUtil.durationString(duration.longValue()), MiscUtil.durationString(cooldown.longValue()));
+                    sender.msgLegacy(TL.COMMAND_SHIELD_AVAILABLE, MiscUtil.durationString(duration.longValue()), MiscUtil.durationString(cooldown.longValue()));
                 } else {
-                    sender.msg(TL.COMMAND_SHIELD_COOLDOWN, MiscUtil.durationString(faction.shieldCooldownRemaining()));
+                    sender.msgLegacy(TL.COMMAND_SHIELD_COOLDOWN, MiscUtil.durationString(faction.shieldCooldownRemaining()));
                 }
             }
         }

@@ -30,9 +30,9 @@ public class CmdToggleScoreboard implements Cmd {
         boolean toggleTo = !sender.showScoreboard();
         FScoreboard board = FScoreboard.get(sender);
         if (board == null) {
-            sender.msg(TL.COMMAND_TOGGLESB_DISABLED);
+            sender.msgLegacy(TL.COMMAND_TOGGLESB_DISABLED);
         } else {
-            sender.sendMessage(TL.TOGGLE_SB.toString().replace("{value}", String.valueOf(toggleTo)));
+            sender.sendMessageLegacy(TL.TOGGLE_SB.toString().replace("{value}", String.valueOf(toggleTo)));
             board.setSidebarVisibility(toggleTo);
         }
         sender.showScoreboard(toggleTo);

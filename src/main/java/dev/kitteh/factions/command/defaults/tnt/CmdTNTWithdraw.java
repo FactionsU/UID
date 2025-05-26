@@ -45,17 +45,17 @@ public class CmdTNTWithdraw implements Cmd {
         Faction faction = sender.faction();
 
         if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
-            sender.msg(TL.COMMAND_TNT_TERRITORYONLY);
+            sender.msgLegacy(TL.COMMAND_TNT_TERRITORYONLY);
             return;
         }
         int amount = context.get("amount");
         if (amount <= 0) {
-            sender.msg(TL.COMMAND_TNT_WITHDRAW_FAIL_POSITIVE, amount);
+            sender.msgLegacy(TL.COMMAND_TNT_WITHDRAW_FAIL_POSITIVE, amount);
             return;
         }
 
         if (faction.tntBank() < amount) {
-            sender.msg(TL.COMMAND_TNT_WITHDRAW_FAIL_NOTENOUGH, amount);
+            sender.msgLegacy(TL.COMMAND_TNT_WITHDRAW_FAIL_NOTENOUGH, amount);
             return;
         }
 
@@ -75,6 +75,6 @@ public class CmdTNTWithdraw implements Cmd {
         }
 
         faction.tntBank(faction.tntBank() - amount + notTaken);
-        sender.msg(TL.COMMAND_TNT_WITHDRAW_MESSAGE, (amount - notTaken), faction.tntBank());
+        sender.msgLegacy(TL.COMMAND_TNT_WITHDRAW_MESSAGE, (amount - notTaken), faction.tntBank());
     }
 }

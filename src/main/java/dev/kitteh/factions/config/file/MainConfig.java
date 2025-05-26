@@ -5,8 +5,8 @@ import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
-import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.MaterialDb;
+import dev.kitteh.factions.util.MiscUtil;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
@@ -15,7 +15,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +25,7 @@ import java.util.Set;
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "InnerClassMayBeStatic", "BooleanMethodIsAlwaysInverted", "MismatchedQueryAndUpdateOfCollection"})
 public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
+        @SuppressWarnings("unused")
         @Comment("This is the config version, used for migrating on plugin updates. Don't change this value yourself, unless you WANT a broken config!")
         private int version = 7;
 
@@ -256,55 +256,6 @@ public class MainConfig {
 
             public Particles particles() {
                 return particles;
-            }
-        }
-
-        public class Help {
-            @Comment("You can change the page name to whatever you like\n" +
-                    "We use '1' to preserve default functionality of /f help 1")
-            private Map<String, List<String>> entries = new HashMap<>() {
-                {
-                    this.put("1", Arrays.asList(
-                            "&e&m----------------------------------------------",
-                            "                  &c&lFactions Help               ",
-                            "&e&m----------------------------------------------",
-                            "&3/f create  &e>>  &7Create your own faction",
-                            "&3/f who      &e>>  &7Show factions info",
-                            "&3/f tag      &e>>  &7Change faction tag",
-                            "&3/f join     &e>>  &7Join faction",
-                            "&3/f list      &e>>  &7List all factions",
-                            "&e&m--------------&r &2/f help 2 for more &e&m--------------"));
-                    this.put("2", Arrays.asList(
-                            "&e&m------------------&r&c&l Page 2 &e&m--------------------",
-                            "&3/f home     &e>>  &7Teleport to faction home",
-                            "&3/f sethome &e>>  &7Set your faction home",
-                            "&3/f leave    &e>>  &7Leave your faction",
-                            "&3/f invite    &e>>  &7Invite a player to your faction",
-                            "&3/f deinvite &e>>  &7Revoke invitation to player",
-                            "&e&m--------------&r &2/f help 3 for more &e&m--------------"));
-                    this.put("3", Arrays.asList(
-                            "&e&m------------------&r&c&l Page 3 &e&m--------------------",
-                            "&3/f claim     &e>>  &7Claim land",
-                            "&3/f unclaim  &e>>  &7Unclaim land",
-                            "&3/f kick      &e>>  &7Kick player from your faction",
-                            "&3/f mod      &e>>  &7Set player role in faction",
-                            "&3/f chat     &e>>  &7Switch to faction chat",
-                            "&e&m--------------&r &2/f help 4 for more &e&m--------------"));
-                    this.put("4", Arrays.asList(
-                            "&e&m------------------&r&c&l Page 4 &e&m--------------------",
-                            "&3/f version &e>>  &7Display version information",
-                            "&e&m--------------&r&2 End of /f help &e&m-----------------"));
-                }
-            };
-            @Comment("set to true to use legacy factions help")
-            private boolean useOldHelp = true;
-
-            public Map<String, List<String>> getEntries() {
-                return entries != null ? Collections.unmodifiableMap(entries) : Collections.emptyMap();
-            }
-
-            public boolean isUseOldHelp() {
-                return useOldHelp;
             }
         }
 
@@ -549,7 +500,6 @@ public class MainConfig {
         private Description description = new Description();
         private Kick kick = new Kick();
         private Fly fly = new Fly();
-        private Help help = new Help();
         private Home home = new Home();
         private Link link = new Link();
         private ListCmd list = new ListCmd();
@@ -573,10 +523,6 @@ public class MainConfig {
 
         public Fly fly() {
             return fly;
-        }
-
-        public Help help() {
-            return help;
         }
 
         public Home home() {
@@ -987,10 +933,6 @@ public class MainConfig {
             private boolean tagPadAfter = true;
             private String tagFormat = "%s§f";
             private boolean alwaysShowChatTag = true;
-            private String factionChatFormat = "%s:§f %s";
-            private String allianceChatFormat = "§d%s:§f %s";
-            private String truceChatFormat = "§5%s:§f %s";
-            private String modChatFormat = "§c%s:§f %s";
             private boolean broadcastDescriptionChanges = false;
             private boolean broadcastTagChanges = false;
             @Comment("Add items here (comma-separated) for commands to listen to that will auto-return the user to public chat")
@@ -1040,22 +982,6 @@ public class MainConfig {
 
             public boolean isAlwaysShowChatTag() {
                 return alwaysShowChatTag;
-            }
-
-            public String getFactionChatFormat() {
-                return factionChatFormat;
-            }
-
-            public String getAllianceChatFormat() {
-                return allianceChatFormat;
-            }
-
-            public String getTruceChatFormat() {
-                return truceChatFormat;
-            }
-
-            public String getModChatFormat() {
-                return modChatFormat;
             }
 
             public boolean isBroadcastDescriptionChanges() {
@@ -1275,7 +1201,6 @@ public class MainConfig {
             private boolean canBeUnconnectedIfOwnedByOtherFaction = true;
             private int requireMinFactionMembers = 1;
             private int landsMax = 0;
-            private int lineClaimLimit = 5;
             private int fillUnClaimMaxClaims = 25;
             private int fillUnClaimMaxDistance = 5;
             private int fillClaimMaxClaims = 25;
@@ -1346,10 +1271,6 @@ public class MainConfig {
 
             public int getFillClaimMaxDistance() {
                 return fillClaimMaxDistance;
-            }
-
-            public int getLineClaimLimit() {
-                return lineClaimLimit;
             }
 
             public int getRadiusClaimFailureLimit() {
@@ -1433,10 +1354,7 @@ public class MainConfig {
                     if (relations == null) {
                         relations = new HashSet<>();
                         for (String rel : relationsToTeleportOut) {
-                            Relation r = Relation.fromString(rel);
-                            if (r != null) {
-                                relations.add(r);
-                            }
+                            relations.add(Relation.fromString(rel));
                         }
                     }
                     return relations.contains(relation);
@@ -1447,10 +1365,7 @@ public class MainConfig {
                     if (relations == null) {
                         relations = new HashSet<>();
                         for (String rel : relationsToTeleportOut) {
-                            Relation r = Relation.fromString(rel);
-                            if (r != null) {
-                                relations.add(r);
-                            }
+                            relations.add(Relation.fromString(rel));
                         }
                     }
                     return relations.contains(relation);
@@ -2117,6 +2032,7 @@ public class MainConfig {
                 return nameBlacklist == null ? Collections.emptyList() : Collections.unmodifiableList(this.nameBlacklist);
             }
 
+            @SuppressWarnings("unused")
             public List<Character> getTagValidCharacters() {
                 if (tagValidCharactersList == null) {
                     List<Character> list = new ArrayList<>();
@@ -2452,7 +2368,6 @@ public class MainConfig {
         private double claimRefundMultiplier = 0.7;
         private double claimUnconnectedFee = 0.0;
         private double costCreate = 100.0;
-        private double costOwner = 15.0;
         private double costSethome = 30.0;
         private double costDelhome = 30.0;
         private double costJoin = 0.0;
@@ -2483,8 +2398,6 @@ public class MainConfig {
         @Comment("Faction banks, to pay for land claiming and other costs instead of individuals paying for them\n" +
                 "This IS NOT the setting for enabling economy features overall. That setting is just named \"enabled\"")
         private boolean bankEnabled = true;
-        @Comment("Have to be at least moderator to withdraw or pay money to another faction")
-        private boolean bankMembersCanWithdraw = false;
         @Comment("The faction pays for faction command costs, such as sethome")
         private boolean bankFactionPaysCosts = true;
         @Comment("The faction pays for land claiming costs.")
@@ -2546,10 +2459,6 @@ public class MainConfig {
 
         public double getCostCreate() {
             return costCreate;
-        }
-
-        public double getCostOwner() {
-            return costOwner;
         }
 
         public double getCostSethome() {
@@ -2650,10 +2559,6 @@ public class MainConfig {
 
         public boolean isBankEnabled() {
             return bankEnabled;
-        }
-
-        public boolean isBankMembersCanWithdraw() {
-            return bankMembersCanWithdraw;
         }
 
         public boolean isBankFactionPaysCosts() {

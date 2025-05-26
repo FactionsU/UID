@@ -61,7 +61,7 @@ public class CmdTicketInfo implements Cmd {
         );
     }
 
-    @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "MismatchedQueryAndUpdateOfCollection", "unused"})
+    @SuppressWarnings({"FieldCanBeLocal", "MismatchedQueryAndUpdateOfCollection", "unused"})
     private static class TicketInfo {
         private final String type = "FUUID";
         private UUID uuid;

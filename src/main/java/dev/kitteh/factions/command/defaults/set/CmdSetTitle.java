@@ -40,7 +40,7 @@ public class CmdSetTitle implements Cmd {
         Faction faction = sender.faction();
 
         if (sender.faction() != target.faction() || sender.role().value <= target.role().value) {
-            sender.msg(TL.COMMAND_TITLE_CANNOTPLAYER);
+            sender.msgLegacy(TL.COMMAND_TITLE_CANNOTPLAYER);
             return;
         }
 
@@ -62,7 +62,7 @@ public class CmdSetTitle implements Cmd {
         target.title(title);
 
         // Inform
-        faction.msg(TL.COMMAND_TITLE_CHANGED, sender.describeToLegacy(faction), target.describeToLegacy(faction));
+        faction.msgLegacy(TL.COMMAND_TITLE_CHANGED, sender.describeToLegacy(faction), target.describeToLegacy(faction));
     }
 
 }

@@ -65,7 +65,7 @@ public class DTRControl implements LandRaidControl {
     @Override
     public boolean canJoinFaction(Faction faction, FPlayer player) {
         if (faction.dtrFrozen() && conf().isFreezePreventsJoin()) {
-            player.msg(TL.DTR_CANNOT_FROZEN);
+            player.msgLegacy(TL.DTR_CANNOT_FROZEN);
             return false;
         }
         return true;
@@ -74,7 +74,7 @@ public class DTRControl implements LandRaidControl {
     @Override
     public boolean canLeaveFaction(FPlayer player) {
         if (player.faction().dtrFrozen() && conf().isFreezePreventsLeave()) {
-            player.msg(TL.DTR_CANNOT_FROZEN);
+            player.msgLegacy(TL.DTR_CANNOT_FROZEN);
             return false;
         }
         return true;
@@ -83,7 +83,7 @@ public class DTRControl implements LandRaidControl {
     @Override
     public boolean canDisbandFaction(Faction faction, FPlayer playerAttempting) {
         if (faction.dtrFrozen() && conf().isFreezePreventsDisband()) {
-            playerAttempting.msg(TL.DTR_CANNOT_FROZEN);
+            playerAttempting.msgLegacy(TL.DTR_CANNOT_FROZEN);
             return false;
         }
         return true;
@@ -95,12 +95,12 @@ public class DTRControl implements LandRaidControl {
             Faction faction = toKick.faction();
             if (!FactionsPlugin.instance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
                     Board.board().factionAt(toKick.lastStoodAt()).relationTo(faction) == Relation.ENEMY) {
-                playerAttempting.msg(TL.COMMAND_KICK_ENEMYTERRITORY);
+                playerAttempting.msgLegacy(TL.COMMAND_KICK_ENEMYTERRITORY);
                 return false;
             }
             if (faction.dtrFrozen() && conf().getFreezeKickPenalty() > 0) {
                 faction.dtr(Math.max(conf().getMinDTR(), faction.dtr() - conf().getFreezeKickPenalty()));
-                playerAttempting.msg(TL.DTR_KICK_PENALTY);
+                playerAttempting.msgLegacy(TL.DTR_KICK_PENALTY);
             }
         }
         return true;
@@ -146,7 +146,7 @@ public class DTRControl implements LandRaidControl {
                     double startingOther = fKiller.faction().dtr();
                     fKiller.faction().dtr(Math.min(conf().getMaxDTR(), faction.dtr() + change));
                     double killDiff = fKiller.faction().dtr() - startingOther;
-                    fKiller.msg(TL.DTR_VAMPIRISM_GAIN, killDiff, fplayer.describeToLegacy(fKiller), fKiller.faction().dtr());
+                    fKiller.msgLegacy(TL.DTR_VAMPIRISM_GAIN, killDiff, fplayer.describeToLegacy(fKiller), fKiller.faction().dtr());
                 }
             }
             faction.dtrFrozenUntil(System.currentTimeMillis() + (conf().getFreezeTime() * 1000L));
