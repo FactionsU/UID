@@ -93,6 +93,7 @@ public class Metrics {
      *
      * @param plugin The plugin which stats should be submitted.
      */
+    @SuppressWarnings("this-escape")
     public Metrics(AbstractFactionsPlugin plugin) {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null!");

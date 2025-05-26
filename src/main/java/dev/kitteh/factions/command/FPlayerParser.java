@@ -177,6 +177,7 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
                         temp1.add(player.name());
                         count++;
                     }
+                    break;
                 case ALL:
                     for (FPlayer player : FPlayers.fPlayers().online()) {
                         if (count > SANE_SUGGESTION_LIMIT) {
@@ -217,21 +218,8 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
     }
 
     public static final class FPlayerParseException extends ParserException {
-        private final String input;
-        private final CommandContext<Sender> context;
-
         public FPlayerParseException(final String input, final CommandContext<Sender> context) {
             super(FPlayerParser.class, context, Captioner.NO_PLAYER_FOUND, CaptionVariable.of("input", input));
-            this.context = context;
-            this.input = input;
-        }
-
-        public CommandContext<Sender> getContext() {
-            return this.context;
-        }
-
-        public String getInput() {
-            return this.input;
         }
     }
 }

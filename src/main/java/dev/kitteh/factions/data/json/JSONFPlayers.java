@@ -8,6 +8,7 @@ import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.data.MemoryFPlayers;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.adapter.OldJSONFPlayerDeserializer;
+import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -91,7 +92,11 @@ public final class JSONFPlayers extends MemoryFPlayers {
 
     @Override
     public FPlayer constructNewFPlayer(UUID id) {
-        return new JSONFPlayer(Objects.requireNonNull(id));
+        FPlayer fp = new JSONFPlayer(Objects.requireNonNull(id));
+        if (fp.asPlayer() instanceof Player player) {
+            player.updateCommands();
+        }
+        return fp;
     }
 
     @Override

@@ -326,7 +326,11 @@ public abstract class MemoryFPlayer implements FPlayer {
     public MemoryFPlayer(UUID id) {
         this.id = id;
         this.name = id.toString();
-        this.resetFactionData();
+        this.role = Role.NORMAL;
+        this.title = "";
+        this.autoClaimFor = null;
+        this.autoUnclaimFor = null;
+        this.autoSetZone = null;
         this.power = FactionsPlugin.instance().conf().factions().landRaidControl().power().getPlayerStarting();
         this.lastPowerUpdateTime = System.currentTimeMillis();
         this.lastLoginTime = System.currentTimeMillis();

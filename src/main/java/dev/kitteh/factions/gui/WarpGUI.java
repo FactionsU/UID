@@ -52,6 +52,7 @@ public class WarpGUI extends GUI<Integer> {
         this(user, -1, faction);
     }
 
+    @SuppressWarnings("this-escape")
     private WarpGUI(FPlayer user, int page, Faction faction) {
         super(user, getRows(faction));
         this.faction = faction;

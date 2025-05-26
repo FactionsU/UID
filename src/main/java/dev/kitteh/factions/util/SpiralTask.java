@@ -38,7 +38,7 @@ public abstract class SpiralTask implements Runnable {
     private int length = -1;
     private int current = 0;
 
-    @SuppressWarnings("LeakingThisInConstructor")
+    @SuppressWarnings("this-escape")
     public SpiralTask(FLocation fLocation, int radius) {
         // limit is determined based on spiral leg length for given radius; see insideRadius()
         this.limit = (radius - 1) * 2;

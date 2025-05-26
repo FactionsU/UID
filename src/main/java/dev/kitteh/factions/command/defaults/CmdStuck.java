@@ -44,7 +44,6 @@ public class CmdStuck implements Cmd {
 
         final Location sentAt = player.getLocation();
         final FLocation chunk = new FLocation(sentAt);
-        // TODO handle delay 0
         final long delay = Math.max(1, FactionsPlugin.instance().conf().commands().stuck().getDelay());
         final int radius = FactionsPlugin.instance().conf().commands().stuck().getRadius();
         final int searchRadius = FactionsPlugin.instance().conf().commands().stuck().getSearchRadius();

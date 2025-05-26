@@ -145,21 +145,8 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
     }
 
     public static final class FactionParseException extends ParserException {
-        private final String input;
-        private final CommandContext<Sender> context;
-
         public FactionParseException(final String input, final CommandContext<Sender> context) {
             super(FactionParser.class, context, Captioner.NO_FACTION_FOUND, CaptionVariable.of("input", input));
-            this.context = context;
-            this.input = input;
-        }
-
-        public CommandContext<Sender> getContext() {
-            return this.context;
-        }
-
-        public String getInput() {
-            return this.input;
         }
     }
 }

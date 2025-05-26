@@ -74,6 +74,7 @@ public class Loader {
         types.add(String.class);
     }
 
+    @SuppressWarnings("unchecked")
     private static void loadNode(CommentedConfigurationNode current, CommentedConfigurationNode newNode, Object object) throws IllegalAccessException {
         for (Field field : getFields(object.getClass())) {
             if (field.isSynthetic()) {
@@ -106,7 +107,6 @@ public class Loader {
                         try {
                             Field tokenField = field.getDeclaringClass().getDeclaredField(field.getName() + "Token");
                             tokenField.setAccessible(true);
-                            //noinspection unchecked
                             newNewNode.setValue((TypeToken<Object>) tokenField.get(object), defaultValue);
                         } catch (ObjectMappingException | NoSuchFieldException e) {
                             AbstractFactionsPlugin.instance().getLogger().severe("Failed horrifically to handle " + confName);
