@@ -27,6 +27,7 @@ import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.LazyLocation;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldTracker;
@@ -35,7 +36,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -204,8 +204,7 @@ public abstract class MemoryFaction implements Faction {
                         this.greetingComponent = Component.text("");
                     }
                 } else {
-                    this.greetingComponent = MiniMessage.miniMessage().deserialize(this.greeting,
-                            Placeholder.unparsed("tag", this.faction.tag));
+                    this.greetingComponent = Mini.parseLimited(this.greeting, Placeholder.unparsed("tag", this.faction.tag));
                 }
             }
             return this.greetingComponent;
@@ -990,7 +989,7 @@ public abstract class MemoryFaction implements Faction {
         int newLevel = Math.min(upgrade.maxLevel(), level);
         int oldLevel = this.upgradeLevel(upgrade);
         this.upgrades.put(upgrade.name(), newLevel);
-        this.sendMessage(MiniMessage.miniMessage().deserialize("<green>Upgraded <upgrade> to level " + newLevel + "!", Placeholder.component("upgrade", upgrade.nameComponent())));
+        this.sendRichMessage("<green>Upgraded <upgrade> to level " + newLevel + "!", Placeholder.component("upgrade", upgrade.nameComponent()));
         upgrade.onChange(this, oldLevel, newLevel);
     }
 

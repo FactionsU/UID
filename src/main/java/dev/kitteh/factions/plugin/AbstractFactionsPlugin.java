@@ -51,6 +51,7 @@ import dev.kitteh.factions.util.FlightUtil;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.MaterialDb;
 import dev.kitteh.factions.util.Metrics;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.SeeChunkUtil;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
@@ -70,7 +71,6 @@ import io.papermc.lib.PaperLib;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -963,7 +963,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         public Component getComponent() {
             if (component == null) {
-                component = message == null ? null : MiniMessage.miniMessage().deserialize(message);
+                component = message == null ? null : Mini.parse(message);
             }
             return component;
         }

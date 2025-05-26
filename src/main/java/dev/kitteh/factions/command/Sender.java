@@ -8,10 +8,12 @@ import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.ComponentDispatcher;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -65,6 +67,10 @@ public interface Sender {
 
     default void sendMessage(ComponentLike component) {
         ComponentDispatcher.send(sender(), component);
+    }
+
+    default void sendRichMessage(String miniMessage, TagResolver... resolvers) {
+        this.sendMessage(Mini.parse(miniMessage, resolvers));
     }
 
     default boolean payForCommand(double cost, TL toDoThis, TL forDoingThis) {

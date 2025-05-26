@@ -81,7 +81,7 @@ public class CmdZone implements Cmd {
                 String name = context.get("zone");
                 Faction.Zone zone = faction.zones().get(name);
                 if (zone == null) {
-                    sender.sendMessage(Mini.parse(tl.perms().getZoneNotFound(), Placeholder.unparsed("name", name)));
+                    sender.sendRichMessage(tl.perms().getZoneNotFound(), Placeholder.unparsed("name", name));
                     return null;
                 }
                 return zone.id() == 0 ? faction.permissions() : zone.permissions();
@@ -91,7 +91,7 @@ public class CmdZone implements Cmd {
                 String name = context.get("zone");
                 Faction.Zone zone = faction.zones().get(name);
                 if (zone == null) {
-                    sender.sendMessage(Mini.parse(tl.perms().getZoneNotFound(), Placeholder.unparsed("name", name)));
+                    sender.sendRichMessage(tl.perms().getZoneNotFound(), Placeholder.unparsed("name", name));
                     return false;
                 }
                 zone.permissions().clear();
@@ -115,12 +115,12 @@ public class CmdZone implements Cmd {
         var tl = FactionsPlugin.instance().tl().commands().zone().create();
 
         if (faction.zones().get(name) != null) {
-            sender.sendMessage(Mini.parse(tl.getNameAlreadyInUse(), Placeholder.unparsed("name", name)));
+            sender.sendRichMessage(tl.getNameAlreadyInUse(), Placeholder.unparsed("name", name));
             return;
         }
 
         faction.zones().create(name);
-        sender.sendMessage(Mini.parse(tl.getSuccess(), Placeholder.unparsed("name", name)));
+        sender.sendRichMessage(tl.getSuccess(), Placeholder.unparsed("name", name));
     }
 
     private void setName(CommandContext<Sender> context) {
@@ -134,23 +134,23 @@ public class CmdZone implements Cmd {
         Faction.Zone zone = faction.zones().get(name);
 
         if (zone == null) {
-            sender.sendMessage(Mini.parse(tl.getZoneNotFound(), Placeholder.unparsed("name", name)));
+            sender.sendRichMessage(tl.getZoneNotFound(), Placeholder.unparsed("name", name));
             return;
         }
 
         String newName = context.get("newName");
 
         if (faction.zones().get(newName) != null) {
-            sender.sendMessage(Mini.parse(tl.getNameAlreadyInUse(), Placeholder.unparsed("name", name)));
+            sender.sendRichMessage(tl.getNameAlreadyInUse(), Placeholder.unparsed("name", name));
             return;
         }
 
         zone.name(newName);
 
-        sender.sendMessage(Mini.parse(tl.getSuccess(),
+        sender.sendRichMessage(tl.getSuccess(),
                 Placeholder.unparsed("oldname", name),
                 Placeholder.unparsed("newname", newName)
-        ));
+        );
     }
 
     private void setGreeting(CommandContext<Sender> context) {
@@ -164,7 +164,7 @@ public class CmdZone implements Cmd {
         Faction.Zone zone = faction.zones().get(name);
 
         if (zone == null) {
-            sender.sendMessage(Mini.parse(tl.getZoneNotFound(), Placeholder.unparsed("name", name)));
+            sender.sendRichMessage(tl.getZoneNotFound(), Placeholder.unparsed("name", name));
             return;
         }
 
@@ -172,10 +172,10 @@ public class CmdZone implements Cmd {
 
         zone.greeting(greeting);
 
-        sender.sendMessage(Mini.parse(tl.getSuccess(),
+        sender.sendRichMessage(tl.getSuccess(),
                 Placeholder.unparsed("name", name),
                 Placeholder.component("greeting", Mini.parse(greeting, Placeholder.unparsed("tag", faction.tag())))
-        ));
+        );
     }
 
     private void claim(CommandContext<Sender> context) {
@@ -190,17 +190,17 @@ public class CmdZone implements Cmd {
         Faction.Zone zone = faction.zones().get(name);
 
         if (zone == null) {
-            sender.sendMessage(Mini.parse(tl.getZoneNotFound(), Placeholder.unparsed("name", name)));
+            sender.sendRichMessage(tl.getZoneNotFound(), Placeholder.unparsed("name", name));
             return;
         }
 
         if (context.flags().hasFlag("auto")) {
             if (sender.autoSetZone() == null) {
                 sender.autoSetZone(zone.name());
-                sender.sendMessage(Mini.parse(tl.getAutoSetOn(), Placeholder.unparsed("zone", zone.name())));
+                sender.sendRichMessage(tl.getAutoSetOn(), Placeholder.unparsed("zone", zone.name()));
             } else {
                 sender.autoSetZone(null);
-                sender.sendMessage(Mini.parse(tl.getAutoSetOff()));
+                sender.sendRichMessage(tl.getAutoSetOff());
             }
 
             return;
@@ -210,7 +210,7 @@ public class CmdZone implements Cmd {
 
         if (context.flags().get("radius") instanceof Integer radius) {
             var claims = Board.board().allClaims(faction);
-            sender.sendMessage(Mini.parse(tl.getAttemptingRadius(), Placeholder.unparsed("zone", zone.name())));
+            sender.sendRichMessage(tl.getAttemptingRadius(), Placeholder.unparsed("zone", zone.name()));
 
             new SpiralTask(standing, radius) {
                 @Override
@@ -238,7 +238,7 @@ public class CmdZone implements Cmd {
     private static boolean claim(FPlayer sender, Faction faction, FLocation location, Faction.Zone zone, TranslationsConfig.Commands.Zone.Claim tl, boolean msg) {
         if (location.faction() != faction) {
             if (msg) {
-                sender.sendMessage(Mini.parse(tl.getNotInTerritory()));
+                sender.sendRichMessage(tl.getNotInTerritory());
             }
             return false;
         }
@@ -247,28 +247,28 @@ public class CmdZone implements Cmd {
 
         if (!currentZone.canPlayerManage(sender)) {
             if (msg) {
-                sender.sendMessage(Mini.parse(tl.getCannotManage(), Placeholder.unparsed("zone", currentZone.name())));
+                sender.sendRichMessage(tl.getCannotManage(), Placeholder.unparsed("zone", currentZone.name()));
             }
             return false;
         }
 
         if (currentZone == zone) {
             if (msg) {
-                sender.sendMessage(Mini.parse(tl.getAlreadyZone(), Placeholder.unparsed("zone", zone.name())));
+                sender.sendRichMessage(tl.getAlreadyZone(), Placeholder.unparsed("zone", zone.name()));
             }
             return false;
         }
 
         if ((currentZone != faction.zones().main()) && !zone.canPlayerManage(sender)) {
             if (msg) {
-                sender.sendMessage(Mini.parse(tl.getCannotManage(), Placeholder.unparsed("zone", zone.name())));
+                sender.sendRichMessage(tl.getCannotManage(), Placeholder.unparsed("zone", zone.name()));
             }
             return false;
         }
 
         faction.zones().set(zone, location);
         if (msg) {
-            sender.sendMessage(Mini.parse(tl.getSuccess(), Placeholder.unparsed("oldzone", currentZone.name()), Placeholder.unparsed("newzone", zone.name())));
+            sender.sendRichMessage(tl.getSuccess(), Placeholder.unparsed("oldzone", currentZone.name()), Placeholder.unparsed("newzone", zone.name()));
         }
         return true;
     }
@@ -284,16 +284,16 @@ public class CmdZone implements Cmd {
         Faction.Zone zone = faction.zones().get(name);
 
         if (zone == null) {
-            sender.sendMessage(Mini.parse(tl.getZoneNotFound(), Placeholder.unparsed("name", name)));
+            sender.sendRichMessage(tl.getZoneNotFound(), Placeholder.unparsed("name", name));
             return;
         }
 
         String conf = CmdConfirm.add(sender, s -> this.delete(sender, name));
 
-        sender.sendMessage(Mini.parse(tl.getConfirm(),
+        sender.sendRichMessage(tl.getConfirm(),
                 Placeholder.unparsed("name", name),
                 Placeholder.unparsed("command", conf)
-        ));
+        );
     }
 
     private void delete(FPlayer sender, String name) {
@@ -308,12 +308,12 @@ public class CmdZone implements Cmd {
         Faction.Zone zone = faction.zones().get(name);
 
         if (zone == null) {
-            sender.sendMessage(Mini.parse(tl.getZoneNotFound(), Placeholder.unparsed("name", name)));
+            sender.sendRichMessage(tl.getZoneNotFound(), Placeholder.unparsed("name", name));
             return;
         }
 
         faction.zones().delete(name);
 
-        sender.sendMessage(Mini.parse(tl.getSuccess(), Placeholder.unparsed("name", name)));
+        sender.sendRichMessage(tl.getSuccess(), Placeholder.unparsed("name", name));
     }
 }

@@ -811,7 +811,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 return;
             }
             if (CmdZone.claim(this, faction, flocation, zone, false)) {
-                this.sendMessage(Mini.parse(FactionsPlugin.instance().tl().commands().zone().claim().getSuccess(), Placeholder.unparsed("oldzone", currentZone.name()), Placeholder.unparsed("newzone", zone.name())));
+                this.sendRichMessage(FactionsPlugin.instance().tl().commands().zone().claim().getSuccess(), Placeholder.unparsed("oldzone", currentZone.name()), Placeholder.unparsed("newzone", zone.name()));
             }
         }
     }

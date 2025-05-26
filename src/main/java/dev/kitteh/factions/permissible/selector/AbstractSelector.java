@@ -1,8 +1,8 @@
 package dev.kitteh.factions.permissible.selector;
 
 import dev.kitteh.factions.permissible.PermSelector;
+import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -41,7 +41,7 @@ public abstract class AbstractSelector implements PermSelector {
 
         @Override
         public Component displayName() {
-            return MiniMessage.miniMessage().deserialize(this.displayName.get());
+            return Mini.parse(this.displayName.get());
         }
 
         public BasicDescriptor acceptEmpty() {

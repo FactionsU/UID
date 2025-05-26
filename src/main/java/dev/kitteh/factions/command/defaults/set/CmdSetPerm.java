@@ -16,13 +16,13 @@ import dev.kitteh.factions.permissible.PermissibleActionRegistry;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.selector.UnknownSelector;
 import dev.kitteh.factions.upgrade.Upgrade;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
@@ -166,9 +166,9 @@ public class CmdSetPerm implements Cmd {
         } else if (argAction.isEmpty()) {
             this.handleAddSelector(context, argSelector.get(), context.sender(), faction, permissions, tl);
         } else if (argAllowDeny.isEmpty()) {
-            context.sender().sendMessage(MiniMessage.miniMessage().deserialize(tl.add().getActionAllowDenyOptions(),
+            context.sender().sendRichMessage(tl.add().getActionAllowDenyOptions(),
                     Placeholder.unparsed("allow", tl.add().getActionAllowAlias().getFirst()),
-                    Placeholder.unparsed("deny", tl.add().getActionDenyAlias().getFirst())));
+                    Placeholder.unparsed("deny", tl.add().getActionDenyAlias().getFirst()));
         } else {
             this.handleAddPerm(context, argSelector.get(), argAction.get(), argAllowDeny.get(), context.sender(), faction, permissions, tl);
         }
@@ -179,14 +179,14 @@ public class CmdSetPerm implements Cmd {
         Collections.sort(selectors);
 
         ComponentBuilder<TextComponent, TextComponent.Builder> build = Component.text();
-        build.append(MiniMessage.miniMessage().deserialize(tl.add().getAvailableSelectorsIntro()));
+        build.append(Mini.parse(tl.add().getAvailableSelectorsIntro()));
         ChatColor.stripColor(LegacyComponentSerializer.legacySection().serialize(build.build()));
         int x = length(build);
 
         String commandPiece = this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + ' ';
 
         for (String selector : selectors) {
-            build.append(MiniMessage.miniMessage().deserialize(tl.add().getAvailableSelectorsSelector(),
+            build.append(Mini.parse(tl.add().getAvailableSelectorsSelector(),
                     Placeholder.parsed("command", commandPiece + "\"" + selector + "\""),
                     Placeholder.unparsed("selector", selector)
             ));
@@ -215,10 +215,10 @@ public class CmdSetPerm implements Cmd {
             PermSelector.Descriptor descriptor = PermSelectorRegistry.getDescriptor(target);
             if (descriptor == null) {
                 if (target.contains(":")) {
-                    sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.add().getSelectorCreateFail(),
-                            Placeholder.unparsed("error", ex == null ? "???" : ex)));
+                    sender.sendRichMessage(tl.add().getSelectorCreateFail(),
+                            Placeholder.unparsed("error", ex == null ? "???" : ex));
                 } else {
-                    sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.add().getSelectorNotFound()));
+                    sender.sendRichMessage(tl.add().getSelectorNotFound());
                 }
             } else {
                 if (descriptor.acceptsEmpty()) {
@@ -228,17 +228,17 @@ public class CmdSetPerm implements Cmd {
                 Map<String, String> options = descriptor.options(faction);
                 if (descriptor.instructions() != null) {
                     sender.sendMessage(Component.text(descriptor.instructions()));
-                    sender.sendMessage(MiniMessage.miniMessage().deserialize(this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + " \"" + descriptor.name() + ':' + tl.add().getSelectorOptionHere() + "\""));
+                    sender.sendRichMessage(this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + " \"" + descriptor.name() + ':' + tl.add().getSelectorOptionHere() + "\"");
                 }
                 if (options != null) {
                     ComponentBuilder<TextComponent, TextComponent.Builder> build = Component.text();
-                    build.append(MiniMessage.miniMessage().deserialize(tl.add().getSelectorOptionsIntro()));
+                    build.append(Mini.parse(tl.add().getSelectorOptionsIntro()));
                     int x = length(build);
 
                     String commandPiece = this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + ' ';
 
                     for (Map.Entry<String, String> entry : options.entrySet()) {
-                        build.append(MiniMessage.miniMessage().deserialize(tl.add().getSelectorOptionsItem(),
+                        build.append(Mini.parse(tl.add().getSelectorOptionsItem(),
                                 Placeholder.parsed("command", commandPiece + '"' + entry.getKey() + '"'),
                                 Placeholder.unparsed("display", entry.getValue())));
                         x = length(build);
@@ -267,13 +267,13 @@ public class CmdSetPerm implements Cmd {
             Collections.sort(actions);
 
             ComponentBuilder<TextComponent, TextComponent.Builder> build = Component.text();
-            build.append(MiniMessage.miniMessage().deserialize(tl.add().getActionOptionsIntro()));
+            build.append(Mini.parse(tl.add().getActionOptionsIntro()));
             int x = length(build);
 
             String commandPiece = this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + " \"" + selector.serialize() + "\" ";
 
             for (String action : actions) {
-                build.append(MiniMessage.miniMessage().deserialize(tl.add().getActionOptionsItem(),
+                build.append(Mini.parse(tl.add().getActionOptionsItem(),
                         Placeholder.unparsed("description", PermissibleActionRegistry.get(action) instanceof PermissibleAction a ? a.description() : "???"),
                         Placeholder.unparsed("action", action),
                         Placeholder.parsed("commandtrue", commandPiece + action + ' ' + tl.add().getActionAllowAlias().getFirst()),
@@ -297,13 +297,13 @@ public class CmdSetPerm implements Cmd {
     private void handleAddPerm(CommandContext<Sender> context, String argSelector, String argAction, String choice, Sender sender, Faction faction, Faction.Permissions permissions, TranslationsConfig.Commands.Permissions tl) {
         PermSelector selector = PermSelectorRegistry.create(argSelector, false);
         if (selector instanceof UnknownSelector) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.add().getSelectorNotFound()));
+            sender.sendRichMessage(tl.add().getSelectorNotFound());
         } else if (!permissions.has(selector)) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.add().getSelectorNotFound()));
+            sender.sendRichMessage(tl.add().getSelectorNotFound());
         } else {
             PermissibleAction action = PermissibleActionRegistry.get(argAction);
             if (action == null || FactionsPlugin.instance().configManager().permissionsConfig().getHiddenActions().contains(action.name())) {
-                sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.add().getActionNotFound()));
+                sender.sendRichMessage(tl.add().getActionNotFound());
             } else {
                 Boolean allow = null;
                 if (tl.add().getActionAllowAlias().stream().anyMatch(i -> i.equalsIgnoreCase(choice))) {
@@ -312,9 +312,9 @@ public class CmdSetPerm implements Cmd {
                     allow = false;
                 }
                 if (allow == null) {
-                    sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.add().getActionAllowDenyOptions(),
+                    sender.sendRichMessage(tl.add().getActionAllowDenyOptions(),
                             Placeholder.unparsed("allow", tl.add().getActionAllowAlias().getFirst()),
-                            Placeholder.unparsed("deny", tl.add().getActionDenyAlias().getFirst())));
+                            Placeholder.unparsed("deny", tl.add().getActionDenyAlias().getFirst()));
                     return;
                 }
                 permissions.add(selector).set(action, PermState.of(allow));
@@ -336,7 +336,7 @@ public class CmdSetPerm implements Cmd {
         String direction = context.get("direction");
         boolean up = false;
         if (position < 0 || position >= permissions.selectors().size()) {
-            context.sender().sendMessage(MiniMessage.miniMessage().deserialize(tl.move().getErrorInvalidPosition()));
+            context.sender().sendRichMessage(tl.move().getErrorInvalidPosition());
             return;
         }
         PermSelector selector = permissions.selectors().get(position);
@@ -348,15 +348,15 @@ public class CmdSetPerm implements Cmd {
         } else if (tl.move().getAliasDown().stream().anyMatch(i -> i.equalsIgnoreCase(direction))) {
             newPos = position + 1;
         } else {
-            context.sender().sendMessage(MiniMessage.miniMessage().deserialize(tl.move().getErrorOptions(),
+            context.sender().sendRichMessage(tl.move().getErrorOptions(),
                     Placeholder.unparsed("up", tl.move().getAliasUp().getFirst()),
-                    Placeholder.unparsed("down", tl.move().getAliasDown().getFirst())));
+                    Placeholder.unparsed("down", tl.move().getAliasDown().getFirst()));
             return;
         }
         if (newPos < 0) {
-            context.sender().sendMessage(MiniMessage.miniMessage().deserialize(tl.move().getErrorHighest()));
+            context.sender().sendRichMessage(tl.move().getErrorHighest());
         } else if (newPos > permissions.selectors().size() - 1) {
-            context.sender().sendMessage(MiniMessage.miniMessage().deserialize(tl.move().getErrorLowest()));
+            context.sender().sendRichMessage(tl.move().getErrorLowest());
         } else {
             if (up) {
                 permissions.moveSelectorUp(selector);
@@ -398,12 +398,12 @@ public class CmdSetPerm implements Cmd {
 
         if (confirm.isPresent() && confirm.get().equalsIgnoreCase(tl.reset().getConfirmWord())) {
             if (this.resetter.reset(context)) {
-                context.sender().sendMessage(MiniMessage.miniMessage().deserialize(tl.reset().getResetComplete()));
+                context.sender().sendRichMessage(tl.reset().getResetComplete());
             }
         } else {
             String cmd = this.firstCmdBit.apply(context) + tl.reset().getAliases().getFirst() + ' ' + tl.reset().getConfirmWord();
-            context.sender().sendMessage(MiniMessage.miniMessage().deserialize(tl.reset().getWarning(),
-                    Placeholder.parsed("command", cmd)));
+            context.sender().sendRichMessage(tl.reset().getWarning(),
+                    Placeholder.parsed("command", cmd));
         }
     }
 
@@ -460,13 +460,13 @@ public class CmdSetPerm implements Cmd {
         String removePiece = tl.remove().getAliases().getFirst() + ' ';
         String showPiece = tl.show().getAliases().getFirst() + ' ';
         if (!tl.list().getHeader().isEmpty()) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.list().getHeader(),
+            sender.sendRichMessage(tl.list().getHeader(),
                     Placeholder.parsed("commandadd", commandPiece + tl.add().getAliases().getFirst()),
-                    Placeholder.parsed("commandoverride", commandPiece + tl.listOverride().getAliases().getFirst())));
+                    Placeholder.parsed("commandoverride", commandPiece + tl.listOverride().getAliases().getFirst()));
         }
         for (PermSelector selector : permissions.selectors()) {
             x++;
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(
+            sender.sendRichMessage(
                     tl.list().getItem(),
                     Placeholder.component("name", selector.displayName()),
                     Placeholder.component("value", selector.displayValue(faction)),
@@ -474,12 +474,12 @@ public class CmdSetPerm implements Cmd {
                     Placeholder.parsed("commandmovedown", commandPiece + movePiece + x + ' ' + tl.move().getAliasDown().getFirst()),
                     Placeholder.parsed("commandremove", commandPiece + removePiece + "\"" + selector.serialize() + "\""),
                     Placeholder.parsed("commandshow", commandPiece + showPiece + x),
-                    Placeholder.parsed("rownumber", Integer.toString(x))));
+                    Placeholder.parsed("rownumber", Integer.toString(x)));
         }
         if (!tl.list().getFooter().isEmpty()) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.list().getFooter(),
+            sender.sendRichMessage(tl.list().getFooter(),
                     Placeholder.parsed("commandadd", commandPiece + tl.add().getAliases().getFirst()),
-                    Placeholder.parsed("commandoverride", commandPiece + tl.listOverride().getAliases().getFirst())));
+                    Placeholder.parsed("commandoverride", commandPiece + tl.listOverride().getAliases().getFirst()));
         }
     }
 
@@ -490,7 +490,7 @@ public class CmdSetPerm implements Cmd {
         int x = 0;
         String commandPiece = this.firstCmdBit.apply(context) + tl.showOverride().getAliases().getFirst() + ' ';
         if (!tl.listOverride().getHeader().isEmpty()) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.listOverride().getHeader()));
+            sender.sendRichMessage(tl.listOverride().getHeader());
         }
         for (PermSelector selector : order) {
             Set<String> actions = new HashSet<>(permissions.get(selector).keySet());
@@ -499,15 +499,15 @@ public class CmdSetPerm implements Cmd {
                 continue;
             }
             x++;
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(
+            sender.sendRichMessage(
                     tl.listOverride().getItem(),
                     Placeholder.component("name", selector.displayName()),
                     Placeholder.component("value", selector.displayValue(faction)),
                     Placeholder.parsed("commandshow", commandPiece + x),
-                    Placeholder.unparsed("rownumber", Integer.toString(x))));
+                    Placeholder.unparsed("rownumber", Integer.toString(x)));
         }
         if (!tl.listOverride().getFooter().isEmpty()) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.listOverride().getFooter()));
+            sender.sendRichMessage(tl.listOverride().getFooter());
         }
     }
 
@@ -520,11 +520,11 @@ public class CmdSetPerm implements Cmd {
             if (++x == index || sel.equals(selector)) {
                 notShown = false;
                 if (!tl.show().getHeader().isEmpty()) {
-                    sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.show().getHeader(),
+                    sender.sendRichMessage(tl.show().getHeader(),
                             Placeholder.component("name", sel.displayName()),
                             Placeholder.component("value", sel.displayValue(faction)),
                             Placeholder.unparsed("rownumber", Integer.toString(x)),
-                            Placeholder.parsed("command", commandPiece + tl.add().getAliases().getFirst() + " \"" + sel.serialize() + "\"")));
+                            Placeholder.parsed("command", commandPiece + tl.add().getAliases().getFirst() + " \"" + sel.serialize() + "\""));
                 }
                 Faction.Permissions.SelectorPerms perms = permissions.get(sel);
                 for (String actionName : permissions.get(sel).actions()) {
@@ -532,23 +532,23 @@ public class CmdSetPerm implements Cmd {
                         continue;
                     }
                     PermissibleAction action = PermissibleActionRegistry.get(actionName);
-                    sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.show().getItem(),
+                    sender.sendRichMessage(tl.show().getItem(),
                             Placeholder.unparsed("shortdesc", action == null ? "???" : action.shortDescription()),
                             Placeholder.unparsed("desc", action == null ? "???" : action.description()),
                             Placeholder.unparsed("state", perms.get(actionName).toString()),
-                            Placeholder.parsed("commandremove", commandPiece + tl.remove().getAliases().getFirst() + " \"" + sel.serialize() + "\" " + actionName)));
+                            Placeholder.parsed("commandremove", commandPiece + tl.remove().getAliases().getFirst() + " \"" + sel.serialize() + "\" " + actionName));
                 }
                 if (!tl.show().getFooter().isEmpty()) {
-                    sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.show().getFooter(),
+                    sender.sendRichMessage(tl.show().getFooter(),
                             Placeholder.component("name", sel.displayName()),
                             Placeholder.component("value", sel.displayValue(faction)),
                             Placeholder.unparsed("rownumber", Integer.toString(x)),
-                            Placeholder.parsed("command", commandPiece + tl.add().getAliases().getFirst() + " \"" + sel.serialize() + "\"")));
+                            Placeholder.parsed("command", commandPiece + tl.add().getAliases().getFirst() + " \"" + sel.serialize() + "\""));
                 }
             }
         }
         if (notShown) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.show().getSelectorNotFound()));
+            sender.sendRichMessage(tl.show().getSelectorNotFound());
         }
     }
 
@@ -583,31 +583,31 @@ public class CmdSetPerm implements Cmd {
             }
         }
         if (selector == null) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.showOverride().getSelectorNotFound()));
+            sender.sendRichMessage(tl.showOverride().getSelectorNotFound());
             return;
         }
 
         if (!tl.showOverride().getHeader().isEmpty()) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.showOverride().getHeader(),
+            sender.sendRichMessage(tl.showOverride().getHeader(),
                     Placeholder.component("name", selector.displayName()),
                     Placeholder.component("value", selector.displayValue(faction)),
-                    Placeholder.unparsed("rownumber", Integer.toString(x))));
+                    Placeholder.unparsed("rownumber", Integer.toString(x)));
         }
         for (Map.Entry<String, Boolean> e : permissions.get(selector).entrySet()) {
             if (FactionsPlugin.instance().configManager().permissionsConfig().getHiddenActions().contains(e.getKey())) {
                 continue;
             }
             PermissibleAction action = PermissibleActionRegistry.get(e.getKey());
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.showOverride().getItem(),
+            sender.sendRichMessage(tl.showOverride().getItem(),
                     Placeholder.unparsed("shortdesc", action == null ? "???" : action.shortDescription()),
                     Placeholder.unparsed("desc", action == null ? "???" : action.description()),
-                    Placeholder.unparsed("state", e.getValue().toString())));
+                    Placeholder.unparsed("state", e.getValue().toString()));
         }
         if (!tl.showOverride().getFooter().isEmpty()) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(tl.showOverride().getFooter(),
+            sender.sendRichMessage(tl.showOverride().getFooter(),
                     Placeholder.component("name", selector.displayName()),
                     Placeholder.component("value", selector.displayValue(faction)),
-                    Placeholder.unparsed("rownumber", Integer.toString(x))));
+                    Placeholder.unparsed("rownumber", Integer.toString(x)));
         }
     }
 }

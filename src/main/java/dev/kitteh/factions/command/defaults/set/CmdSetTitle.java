@@ -8,11 +8,9 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -54,10 +52,7 @@ public class CmdSetTitle implements Cmd {
         }
 
         if (context.sender().hasPermission(Permission.TITLE_COLOR)) {
-            title = LegacyComponentSerializer.legacySection().serialize(MiniMessage.builder()
-                    .tags(TagResolver.resolver(StandardTags.color(), StandardTags.decorations(), StandardTags.rainbow(), StandardTags.pride()))
-                    .build()
-                    .deserialize(title));
+            title = LegacyComponentSerializer.legacySection().serialize(Mini.parseLimited(title));
         }
         target.title(title);
 

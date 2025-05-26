@@ -11,7 +11,6 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.WorldUtil;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
@@ -52,19 +51,19 @@ public class FactionsChatListener implements Listener {
             String format = role == Role.RECRUIT ? chatConf.getFactionMemberAllChatFormat() : chatConf.getFactionMemberChatFormat();
             for (FPlayer fPlayer : faction.membersOnline(true)) {
                 if (fPlayer.role().isAtLeast(role)) {
-                    fPlayer.sendMessage(MiniMessage.miniMessage().deserialize(format,
+                    fPlayer.sendRichMessage(format,
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.unparsed("role", role.nicename),
                             Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
-                    ));
+                    );
                 } else if (fPlayer.spyingChat()) {
-                    fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("[MCspy] " + format,
+                    fPlayer.sendRichMessage("[MCspy] " + format,
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.unparsed("role", role.nicename),
                             Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
-                    ));
+                    );
                 }
             }
             event.setCancelled(true);
@@ -77,19 +76,19 @@ public class FactionsChatListener implements Listener {
                                 (relation == Relation.ALLY && !fPlayer.ignoreAllianceChat()) ||
                                         (relation == Relation.TRUCE && !fPlayer.ignoreTruceChat())
                         ))) {
-                    fPlayer.sendMessage(MiniMessage.miniMessage().deserialize(format,
+                    fPlayer.sendRichMessage(format,
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.unparsed("relation", relation.nicename),
                             Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
-                    ));
+                    );
                 } else if (fPlayer.spyingChat()) {
-                    fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("[MCspy] " + format,
+                    fPlayer.sendRichMessage("[MCspy] " + format,
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.unparsed("relation", relation.nicename),
                             Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
-                    ));
+                    );
                 }
             }
             event.setCancelled(true);

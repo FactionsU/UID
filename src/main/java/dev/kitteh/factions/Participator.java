@@ -1,10 +1,12 @@
 package dev.kitteh.factions;
 
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.RelationUtil;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -45,6 +47,10 @@ public interface Participator {
      * @param component component
      */
     void sendMessage(Component component);
+
+    default void sendRichMessage(String miniMessage, TagResolver... resolvers) {
+        this.sendMessage(Mini.parse(miniMessage, resolvers));
+    }
 
     default String describeToLegacy(@Nullable Participator that) {
         return RelationUtil.describeThatToMeLegacy(this, that);

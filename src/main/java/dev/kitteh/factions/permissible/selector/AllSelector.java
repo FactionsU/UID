@@ -3,8 +3,8 @@ package dev.kitteh.factions.permissible.selector;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Selectable;
+import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -28,6 +28,6 @@ public class AllSelector extends AbstractSelector {
 
     @Override
     public Component displayValue(Faction context) {
-        return MiniMessage.miniMessage().deserialize(FactionsPlugin.instance().tl().permissions().selectors().all().getDisplayValue());
+        return Mini.parse(FactionsPlugin.instance().tl().permissions().selectors().all().getDisplayValue());
     }
 }

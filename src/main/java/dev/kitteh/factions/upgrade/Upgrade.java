@@ -3,8 +3,8 @@ package dev.kitteh.factions.upgrade;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.TranslationsConfig;
+import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
@@ -30,17 +30,17 @@ public interface Upgrade {
     interface Impl extends Upgrade {
         @Override
         default Component nameComponent() {
-            return MiniMessage.miniMessage().deserialize(tl().apply(FactionsPlugin.instance().tl().upgrades()).getName());
+            return Mini.parse(tl().apply(FactionsPlugin.instance().tl().upgrades()).getName());
         }
 
         @Override
         default Component description() {
-            return MiniMessage.miniMessage().deserialize(tl().apply(FactionsPlugin.instance().tl().upgrades()).getDescription());
+            return Mini.parse(tl().apply(FactionsPlugin.instance().tl().upgrades()).getDescription());
         }
 
         @Override
         default Component details(UpgradeSettings settings, int level) {
-            return MiniMessage.miniMessage().deserialize(
+            return Mini.parse(
                     tl().apply(FactionsPlugin.instance().tl().upgrades()).getDetail(),
                     TagResolver.resolver(this.variables().stream().map(up -> Placeholder.unparsed(up.name(), up.formatter().apply(settings.valueAt(up, level)))).toList())
             );

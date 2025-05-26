@@ -62,8 +62,8 @@ public class TranslationsConfig {
                 super("confirm");
             }
 
-            private String invalid = "Invalid confirmation code.";
-            private String notFound = "No confirmation found.";
+            private String invalid = "<red>Invalid confirmation code.";
+            private String notFound = "<red>No confirmation found.";
 
             public String getInvalid() {
                 return invalid;

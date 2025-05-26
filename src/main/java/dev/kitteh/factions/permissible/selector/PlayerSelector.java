@@ -5,8 +5,8 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Selectable;
+import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jspecify.annotations.NullMarked;
@@ -59,7 +59,7 @@ public class PlayerSelector extends AbstractSelector {
     public Component displayValue(Faction context) {
         FPlayer player = FPlayers.fPlayers().get(this.uuid);
         return player.name().equals(player.uniqueId().toString()) ?
-                MiniMessage.miniMessage().deserialize(FactionsPlugin.instance().tl().permissions().selectors().player().getUuidValue(), Placeholder.unparsed("uuid", this.uuid.toString()))
+                Mini.parse(FactionsPlugin.instance().tl().permissions().selectors().player().getUuidValue(), Placeholder.unparsed("uuid", this.uuid.toString()))
                 : LegacyComponentSerializer.legacySection().deserialize(player.colorLegacyStringTo(context) + player.name());
     }
 }
