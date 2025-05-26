@@ -43,7 +43,7 @@ public class CmdForceDisband implements Cmd {
 
     private void doIt(FPlayer sender, Faction faction, boolean confirmed) {
         if (faction.permanent()) {
-            sender.msg(TL.COMMAND_DISBAND_MARKEDPERMANENT.toString());
+            sender.msg(TL.COMMAND_DISBAND_MARKEDPERMANENT);
             return;
         }
 

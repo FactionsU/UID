@@ -56,7 +56,7 @@ public class CmdMoneyModify implements Cmd {
         if (Econ.modifyBalance(faction, amount)) {
             context.sender().msg(TL.COMMAND_MONEYMODIFY_MODIFIED, faction.describeTo(context.sender().fPlayerOrNull()), Econ.moneyString(amount));
             if (notify) {
-                faction.msg(TextUtil.parse(TL.COMMAND_MONEYMODIFY_NOTIFY.toString(), faction.describeTo(null), Econ.moneyString(amount)));
+                faction.msg(TL.COMMAND_MONEYMODIFY_NOTIFY, faction.describeTo(null), Econ.moneyString(amount));
             }
 
             if (FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {

@@ -42,29 +42,13 @@ public class TextUtil {
         return builder.toString();
     }
 
-    // -------------------------------------------- //
-    // Top-level parsing functions.
-    // -------------------------------------------- //
-
     public static String parse(String str, Object... args) {
         return String.format(parse(str), args);
     }
 
     public static String parse(String str) {
-        return parseColor(str);
+        return ChatColor.translateAlternateColorCodes('&', str);
     }
-
-    // -------------------------------------------- //
-    // Color parsing
-    // -------------------------------------------- //
-
-    public static String parseColor(String string) {
-        return ChatColor.translateAlternateColorCodes('&', string);
-    }
-
-    // -------------------------------------------- //
-    // Standard utils like UCFirst, implode and repeat.
-    // -------------------------------------------- //
 
     public static String upperCaseFirst(String string) {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
