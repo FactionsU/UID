@@ -46,7 +46,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
     // Return the plugin version since this expansion is bundled with the dependency
     @Override
     public String getVersion() {
-        return AbstractFactionsPlugin.getInstance().getDescription().getVersion();
+        return AbstractFactionsPlugin.instance().getDescription().getVersion();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
 
         return switch (placeholder) {
             case "relation" -> fp1.relationTo(fp2).nicename;
-            case "relation_color" -> fp1.colorStringTo(fp2);
+            case "relation_color" -> fp1.colorLegacyStringTo(fp2);
             default -> null;
         };
     }
@@ -112,7 +112,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
                 String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fPlayer.lastLogin(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
                 yield fPlayer.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fPlayer.lastLogin() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
             }
-            case "player_group" -> AbstractFactionsPlugin.getInstance().getPrimaryGroup(Bukkit.getOfflinePlayer(fPlayer.uniqueId()));
+            case "player_group" -> AbstractFactionsPlugin.instance().getPrimaryGroup(Bukkit.getOfflinePlayer(fPlayer.uniqueId()));
             case "player_balance" -> Econ.isSetup() ? Econ.getFriendlyBalance(fPlayer) : TL.ECON_OFF.format("balance");
             case "player_power" -> String.valueOf(fPlayer.powerRounded());
             case "player_maxpower" -> String.valueOf(fPlayer.powerMaxRounded());
@@ -193,7 +193,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_kills" -> String.valueOf(faction.kills());
             case "faction_deaths" -> String.valueOf(faction.deaths());
             case "faction_maxvaults" -> String.valueOf(faction.maxVaults());
-            case "faction_relation_color" -> fPlayer.colorStringTo(faction);
+            case "faction_relation_color" -> fPlayer.colorLegacyStringTo(faction);
             default -> null;
         };
     }

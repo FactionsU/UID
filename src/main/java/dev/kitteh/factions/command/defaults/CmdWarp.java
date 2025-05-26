@@ -46,7 +46,7 @@ public class CmdWarp implements Cmd {
         Faction faction = context.flags().get("faction") instanceof Faction fac ? fac : sender.faction();
 
         if (!context.sender().isBypass() && !faction.hasAccess(sender, PermissibleActions.WARP, sender.lastStoodAt())) {
-            sender.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagString(sender));
+            sender.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagLegacy(sender));
             return;
         }
 
@@ -79,7 +79,7 @@ public class CmdWarp implements Cmd {
                 WarmUpUtil.process(sender, WarmUpUtil.Warmup.WARP, TL.WARMUPS_NOTIFY_TELEPORT, warpName, () -> {
                     Player player = Bukkit.getPlayer(uuid);
                     if (destination == faction.warp(warpName) && player != null) {
-                        AbstractFactionsPlugin.getInstance().teleport(player, destination.asLocation()).thenAccept(success -> {
+                        AbstractFactionsPlugin.instance().teleport(player, destination.asLocation()).thenAccept(success -> {
                             if (success) {
                                 fPlayer.msg(TL.COMMAND_FWARP_WARPED, warpName);
                             }

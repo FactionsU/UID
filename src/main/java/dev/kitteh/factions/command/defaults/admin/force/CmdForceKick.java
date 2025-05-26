@@ -9,6 +9,7 @@ import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
@@ -49,11 +50,11 @@ public class CmdForceKick implements Cmd {
             return;
         }
 
-        toKickFaction.msg(TL.COMMAND_KICK_FACTION, sender.describeTo(toKickFaction, true), toKick.describeTo(toKickFaction, true));
-        toKick.msg(TL.COMMAND_KICK_KICKED, sender.describeTo(toKick, true), toKickFaction.describeTo(toKick));
+        toKickFaction.msg(TL.COMMAND_KICK_FACTION, sender.describeToLegacy(toKickFaction, true), toKick.describeToLegacy(toKickFaction, true));
+        toKick.msg(TL.COMMAND_KICK_KICKED, sender.describeToLegacy(toKick, true), toKickFaction.describeToLegacy(toKick));
 
         if (FactionsPlugin.instance().conf().logging().isFactionKick()) {
-            FactionsPlugin.instance().log(sender.name() + " kicked " + toKick.name() + " from the faction: " + toKickFaction.tag());
+            AbstractFactionsPlugin.instance().log(sender.name() + " kicked " + toKick.name() + " from the faction: " + toKickFaction.tag());
         }
 
         if (toKick.role() == Role.ADMIN) {

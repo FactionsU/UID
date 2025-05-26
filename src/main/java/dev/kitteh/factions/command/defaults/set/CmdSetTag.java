@@ -74,14 +74,14 @@ public class CmdSetTag implements Cmd {
         // Inform
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             if (fplayer.faction() == faction) {
-                fplayer.msg(TL.COMMAND_TAG_FACTION, sender.describeTo(faction, true), faction.tagString(faction));
+                fplayer.msg(TL.COMMAND_TAG_FACTION, sender.describeToLegacy(faction, true), faction.tagLegacy(faction));
                 continue;
             }
 
             // Broadcast the tag change (if applicable)
             if (FactionsPlugin.instance().conf().factions().chat().isBroadcastTagChanges()) {
                 Faction fac = fplayer.faction();
-                fplayer.msg(TL.COMMAND_TAG_CHANGED, sender.colorStringTo(fac) + oldTag, faction.tagString(fac));
+                fplayer.msg(TL.COMMAND_TAG_CHANGED, sender.colorLegacyStringTo(fac) + oldTag, faction.tagLegacy(fac));
             }
         }
 

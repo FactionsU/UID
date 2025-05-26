@@ -66,7 +66,7 @@ public class FactionSelector extends AbstractSelector {
         Faction faction = Factions.factions().get(this.id);
         return faction == null ?
                 MiniMessage.miniMessage().deserialize(FactionsPlugin.instance().tl().permissions().selectors().faction().getDisbandedValue(), Placeholder.unparsed("lastknown", this.lastKnown)) :
-                LegacyComponentSerializer.legacySection().deserialize(faction.tagString(context));
+                LegacyComponentSerializer.legacySection().deserialize(faction.tagLegacy(context));
     }
 
     @Override

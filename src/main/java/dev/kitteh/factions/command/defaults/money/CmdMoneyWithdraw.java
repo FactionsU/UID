@@ -9,6 +9,7 @@ import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
@@ -65,7 +66,7 @@ public class CmdMoneyWithdraw implements Cmd {
         boolean success = Econ.transferMoney(sender, faction, sender, amount);
 
         if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
-            FactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYWITHDRAW_WITHDRAW.toString(), sender.name(), Econ.moneyString(amount), faction.describeTo(null))));
+            AbstractFactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYWITHDRAW_WITHDRAW.toString(), sender.name(), Econ.moneyString(amount), faction.describeToLegacy(null))));
         }
     }
 }

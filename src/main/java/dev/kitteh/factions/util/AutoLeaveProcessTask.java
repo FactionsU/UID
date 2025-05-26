@@ -6,6 +6,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -21,11 +22,11 @@ public class AutoLeaveProcessTask extends AutoLeaveTask.AutoLeaveProcessor<FPlay
 
         if (!fplayer.isOnline() && now - fplayer.lastLogin() > toleranceMillis) {
             if (fplayer.autoLeaveExempt()) {
-                FactionsPlugin.instance().debug(Level.INFO, fplayer.name() + " was going to be auto-removed but was set not to.");
+                AbstractFactionsPlugin.instance().debug(Level.INFO, fplayer.name() + " was going to be auto-removed but was set not to.");
                 return;
             }
             if ((conf.logging().isFactionLeave() || conf.logging().isFactionKick()) && (fplayer.hasFaction() || conf.factions().other().isAutoLeaveDeleteFPlayerData())) {
-                FactionsPlugin.instance().log("Player " + fplayer.name() + " was auto-removed due to inactivity.");
+                AbstractFactionsPlugin.instance().log("Player " + fplayer.name() + " was auto-removed due to inactivity.");
             }
 
             // if player is faction admin, sort out the faction since he's going away

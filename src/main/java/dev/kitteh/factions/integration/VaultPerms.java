@@ -19,7 +19,7 @@ public class VaultPerms {
             return;
         }
         if (perms != null) {
-            AbstractFactionsPlugin.getInstance().getLogger().info("Using Vault with permissions plugin " + perms.getName());
+            AbstractFactionsPlugin.instance().getLogger().info("Using Vault with permissions plugin " + perms.getName());
         }
     }
 

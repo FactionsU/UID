@@ -9,7 +9,7 @@ import net.kyori.adventure.text.format.TextColor;
 
 public class RelationUtil {
 
-    public static String describeThatToMe(Participator that, Participator me, boolean ucfirst) {
+    public static String describeThatToMeLegacy(Participator that, Participator me, boolean ucfirst) {
         String ret = "";
 
         Faction thatFaction = getFaction(that);
@@ -30,9 +30,9 @@ public class RelationUtil {
             if (that == me) {
                 ret = TL.GENERIC_YOU.toString();
             } else if (thatFaction == myFaction) {
-                ret = fplayerthat.nameWithTitle();
+                ret = fplayerthat.nameWithTitleLegacy();
             } else {
-                ret = fplayerthat.nameWithTag();
+                ret = fplayerthat.nameWithTagLegacy();
             }
         }
 
@@ -40,11 +40,11 @@ public class RelationUtil {
             ret = TextUtil.upperCaseFirst(ret);
         }
 
-        return getColorStringOfThatToMe(that, me) + ret;
+        return getLegacyColorStringOfThatToMe(that, me) + ret;
     }
 
-    public static String describeThatToMe(Participator that, Participator me) {
-        return describeThatToMe(that, me, false);
+    public static String describeThatToMeLegacy(Participator that, Participator me) {
+        return describeThatToMeLegacy(that, me, false);
     }
 
     public static Relation getRelationTo(Participator me, Participator that) {
@@ -94,7 +94,7 @@ public class RelationUtil {
         return null;
     }
 
-    public static String getColorStringOfThatToMe(Participator that, Participator me) {
+    public static String getLegacyColorStringOfThatToMe(Participator that, Participator me) {
         return TextUtil.getString(getTextColorOfThatToMe(that, me));
     }
 

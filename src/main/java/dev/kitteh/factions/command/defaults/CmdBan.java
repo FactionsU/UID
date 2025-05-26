@@ -10,6 +10,7 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
@@ -61,7 +62,7 @@ public class CmdBan implements Cmd {
 
             if (event.isCancelled()) {
                 // if someone cancels a ban, we'll get people complaining here. So lets log it.
-                FactionsPlugin.instance().log(Level.WARNING, "Attempted to ban {0} but a plugin cancelled the kick event.", target.name());
+                AbstractFactionsPlugin.instance().log(Level.WARNING, "Attempted to ban {0} but a plugin cancelled the kick event.", target.name());
                 return;
             }
 
@@ -73,7 +74,7 @@ public class CmdBan implements Cmd {
         faction.ban(target, sender);
         faction.deInvite(target);
 
-        target.msg(TL.COMMAND_BAN_TARGET, faction.tagString(target.faction()));
+        target.msg(TL.COMMAND_BAN_TARGET, faction.tagLegacy(target.faction()));
         faction.msg(TL.COMMAND_BAN_BANNED, sender.name(), target.name());
     }
 }

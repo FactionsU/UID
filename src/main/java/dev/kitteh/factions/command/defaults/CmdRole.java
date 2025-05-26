@@ -155,6 +155,6 @@ public class CmdRole implements Cmd {
         }
 
         // Inform all players
-        sender.faction().msg(TL.COMMAND_ADMIN_PROMOTED, sender.describeTo(target), target.describeTo(sender), sender.faction().describeTo(sender));
+        sender.faction().msg(TL.COMMAND_ADMIN_PROMOTED, sender.describeToLegacy(target), target.describeToLegacy(sender), sender.faction().describeToLegacy(sender));
     }
 }

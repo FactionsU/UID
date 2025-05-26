@@ -333,9 +333,9 @@ public interface Faction extends Participator, Selectable {
 
     void tag(String str);
 
-    String tagString(@Nullable Faction otherFaction);
+    String tagLegacy(@Nullable Faction otherFaction);
 
-    String tagString(@Nullable FPlayer otherFplayer);
+    String tagLegacy(@Nullable FPlayer otherFplayer);
 
     String description();
 

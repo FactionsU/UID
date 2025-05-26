@@ -10,6 +10,7 @@ import dev.kitteh.factions.integration.Essentials;
 import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -54,16 +55,16 @@ public class FactionsChatListener implements Listener {
                 if (fPlayer.role().isAtLeast(role)) {
                     fPlayer.sendMessage(MiniMessage.miniMessage().deserialize(format,
                             Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagString(fPlayer))),
+                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.unparsed("role", role.nicename),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTag(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
                     ));
                 } else if (fPlayer.spyingChat()) {
                     fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("[MCspy] " + format,
                             Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagString(fPlayer))),
+                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.unparsed("role", role.nicename),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTag(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
                     ));
                 }
             }
@@ -79,16 +80,16 @@ public class FactionsChatListener implements Listener {
                         ))) {
                     fPlayer.sendMessage(MiniMessage.miniMessage().deserialize(format,
                             Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagString(fPlayer))),
+                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.unparsed("relation", relation.nicename),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTag(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
                     ));
                 } else if (fPlayer.spyingChat()) {
                     fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("[MCspy] " + format,
                             Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagString(fPlayer))),
+                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.unparsed("relation", relation.nicename),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTag(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
                     ));
                 }
             }
@@ -122,7 +123,7 @@ public class FactionsChatListener implements Listener {
         if (!chatConf.getTagReplaceString().isEmpty() && eventFormat.contains(chatConf.getTagReplaceString())) {
             // we're using the "replace" method of inserting the faction tags
             if (eventFormat.contains("[FACTION_TITLE]")) {
-                eventFormat = eventFormat.replace("[FACTION_TITLE]", me.title());
+                eventFormat = eventFormat.replace("[FACTION_TITLE]", me.titleLegacy());
             }
             InsertIndex = eventFormat.indexOf(chatConf.getTagReplaceString());
             eventFormat = eventFormat.replace(chatConf.getTagReplaceString(), "");
@@ -138,10 +139,10 @@ public class FactionsChatListener implements Listener {
             return;
         }
 
-        String formatStart = eventFormat.substring(0, InsertIndex) + ((padBefore && !me.chatTag().isEmpty()) ? " " : "");
-        String formatEnd = ((padAfter && !me.chatTag().isEmpty()) ? " " : "") + eventFormat.substring(InsertIndex);
+        String formatStart = eventFormat.substring(0, InsertIndex) + ((padBefore && !me.chatTagLegacy().isEmpty()) ? " " : "");
+        String formatEnd = ((padAfter && !me.chatTagLegacy().isEmpty()) ? " " : "") + eventFormat.substring(InsertIndex);
 
-        String nonColoredMsgFormat = formatStart + me.chatTag().trim() + formatEnd;
+        String nonColoredMsgFormat = formatStart + me.chatTagLegacy().trim() + formatEnd;
 
         // Relation Colored?
         if (chatConf.isTagRelationColored()) {
@@ -150,13 +151,13 @@ public class FactionsChatListener implements Listener {
                     continue;
                 }
                 FPlayer you = FPlayers.fPlayers().get(listeningPlayer);
-                String yourFormat = formatStart + me.chatTag(you).trim() + formatEnd;
+                String yourFormat = formatStart + me.chatTagLegacy(you).trim() + formatEnd;
                 try {
                     listeningPlayer.sendMessage(String.format(yourFormat, talkingPlayer.getDisplayName(), msg));
                 } catch (UnknownFormatConversionException ex) {
 
-                    FactionsPlugin.instance().log(Level.SEVERE, "Critical error in chat message formatting!");
-                    FactionsPlugin.instance().log(Level.SEVERE, "NOTE: This can be fixed right now by setting chat tagInsertIndex to 0.");
+                    AbstractFactionsPlugin.instance().log(Level.SEVERE, "Critical error in chat message formatting!");
+                    AbstractFactionsPlugin.instance().log(Level.SEVERE, "NOTE: This can be fixed right now by setting chat tagInsertIndex to 0.");
                     return;
                 }
             }

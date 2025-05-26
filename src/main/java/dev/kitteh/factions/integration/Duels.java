@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin;
 public class Duels implements Listener {
     public static boolean init(Plugin plugin) {
         if (plugin instanceof com.meteordevelopments.duels.api.Duels duels) {
-            AbstractFactionsPlugin fuuid = AbstractFactionsPlugin.getInstance();
+            AbstractFactionsPlugin fuuid = AbstractFactionsPlugin.instance();
             fuuid.getServer().getPluginManager().registerEvents(new Duels(duels), fuuid);
             boolean noPowerLoss = duels.getConfig().getBoolean("supported-plugins.FactionsUUID.no-power-loss-in-duel", false);
             fuuid.getLogger().info("Found Duels plugin. Currently configured to " + (noPowerLoss ? "not " : "") + "lose power/dtr in a duel.");

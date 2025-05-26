@@ -94,7 +94,7 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
         List<String> secondary = Factions.factions().all().stream().map(Faction::tag).collect(Collectors.toCollection(ArrayList::new));
 
         Player sendingPlayer = context.sender() instanceof Sender.Player player ? player.player() : null;
-        for (Player player : AbstractFactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
+        for (Player player : AbstractFactionsPlugin.instance().getServer().getOnlinePlayers()) {
             if (sendingPlayer != null && !sendingPlayer.canSee(player)) {
                 continue;
             }

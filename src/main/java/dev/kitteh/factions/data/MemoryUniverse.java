@@ -66,7 +66,7 @@ public abstract class MemoryUniverse implements Universe {
             UpgradeSettings settings = this.data.upgrades.settings.get(name);
             if (settings != null) {
                 if (settings.findFlaw() instanceof String issue) {
-                    AbstractFactionsPlugin.getInstance().getLogger().warning("Could not load upgrade setting for " + name + ": " + issue);
+                    AbstractFactionsPlugin.instance().getLogger().warning("Could not load upgrade setting for " + name + ": " + issue);
                     this.data.upgrades.settings.remove(name);
                 }
             }

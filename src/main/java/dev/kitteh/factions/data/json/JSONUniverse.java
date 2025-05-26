@@ -11,9 +11,9 @@ import java.util.logging.Level;
 
 @NullMarked
 public final class JSONUniverse extends MemoryUniverse {
-    private final Path path = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("data/universe.json");
+    private final Path path = AbstractFactionsPlugin.instance().getDataFolder().toPath().resolve("data/universe.json");
 
-    private final Gson gson = AbstractFactionsPlugin.getInstance().getGsonBuilder(false).setPrettyPrinting().create();
+    private final Gson gson = AbstractFactionsPlugin.instance().getGsonBuilder(false).setPrettyPrinting().create();
 
     @Override
     public void forceSave(boolean sync) {
@@ -24,14 +24,14 @@ public final class JSONUniverse extends MemoryUniverse {
     @Override
     public void loadData() {
         if (!Files.exists(path)) {
-            AbstractFactionsPlugin.getInstance().getLogger().info("No universe to load from disk. Creating new file.");
+            AbstractFactionsPlugin.instance().getLogger().info("No universe to load from disk. Creating new file.");
             forceSave(true);
         }
 
         try {
             this.data = this.gson.fromJson(Files.newBufferedReader(path), MemoryUniverse.Data.class);
         } catch (Exception e) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load the universe from disk.", e);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to load the universe from disk.", e);
         }
     }
 }

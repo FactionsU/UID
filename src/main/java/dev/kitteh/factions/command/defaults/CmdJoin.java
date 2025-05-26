@@ -8,6 +8,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerJoinEvent;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
@@ -40,13 +41,13 @@ public class CmdJoin implements Cmd {
         }
 
         if (faction == sender.faction()) {
-            sender.msg(TL.COMMAND_JOIN_ALREADYMEMBERFIXED, faction.tagString(sender));
+            sender.msg(TL.COMMAND_JOIN_ALREADYMEMBERFIXED, faction.tagLegacy(sender));
             return;
         }
 
         int max = faction.memberLimit();
         if (faction.size() > max) {
-            sender.msg(TL.COMMAND_JOIN_ATLIMIT, faction.tagString(sender), max, sender.describeTo(sender, false));
+            sender.msg(TL.COMMAND_JOIN_ATLIMIT, faction.tagLegacy(sender), max, sender.describeToLegacy(sender, false));
             return;
         }
 
@@ -62,7 +63,7 @@ public class CmdJoin implements Cmd {
         if (!(faction.open() || faction.hasInvite(sender))) {
             sender.msg(TL.COMMAND_JOIN_REQUIRESINVITATION);
             if (!faction.isBanned(sender)) {
-                faction.msg(TL.COMMAND_JOIN_ATTEMPTEDJOIN, sender.describeTo(faction, true));
+                faction.msg(TL.COMMAND_JOIN_ATTEMPTEDJOIN, sender.describeToLegacy(faction, true));
             }
             return;
         }
@@ -74,7 +75,7 @@ public class CmdJoin implements Cmd {
 
         // Check for ban
         if (faction.isBanned(sender)) {
-            sender.msg(TL.COMMAND_JOIN_BANNED, faction.tagString(sender));
+            sender.msg(TL.COMMAND_JOIN_BANNED, faction.tagLegacy(sender));
             return;
         }
 
@@ -90,9 +91,9 @@ public class CmdJoin implements Cmd {
             return;
         }
 
-        sender.msg(TL.COMMAND_JOIN_SUCCESS, sender.describeTo(sender, true), faction.tagString(sender));
+        sender.msg(TL.COMMAND_JOIN_SUCCESS, sender.describeToLegacy(sender, true), faction.tagLegacy(sender));
 
-        faction.msg(TL.COMMAND_JOIN_JOINED, sender.describeTo(faction, true));
+        faction.msg(TL.COMMAND_JOIN_JOINED, sender.describeToLegacy(faction, true));
 
         sender.resetFactionData();
         sender.faction(faction);
@@ -101,7 +102,7 @@ public class CmdJoin implements Cmd {
         sender.asPlayer().updateCommands();
 
         if (FactionsPlugin.instance().conf().logging().isFactionJoin()) {
-            FactionsPlugin.instance().log(TL.COMMAND_JOIN_JOINEDLOG.toString(), sender.name(), faction.tag());
+            AbstractFactionsPlugin.instance().log(TL.COMMAND_JOIN_JOINEDLOG.toString(), sender.name(), faction.tag());
         }
     }
 }

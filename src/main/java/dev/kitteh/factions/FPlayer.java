@@ -109,21 +109,21 @@ public interface FPlayer extends Participator, Selectable {
 
     void lastStoodAt(FLocation flocation);
 
-    String title();
+    String titleLegacy();
 
     void title(String title);
 
-    String nameWithTitle();
+    String nameWithTitleLegacy();
 
-    String nameWithTag();
+    String nameWithTagLegacy();
 
     // Chat Tag:
     // These are injected into the format of global chat messages.
 
-    String chatTag();
+    String chatTagLegacy();
 
     // Colored Chat Tag
-    String chatTag(@Nullable Participator participator);
+    String chatTagLegacy(@Nullable Participator participator);
 
     int kills();
 

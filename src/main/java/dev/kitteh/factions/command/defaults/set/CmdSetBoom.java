@@ -45,6 +45,6 @@ public class CmdSetBoom implements Cmd {
 
         String enabled = faction.noExplosionsInTerritory() ? TL.GENERIC_DISABLED.toString() : TL.GENERIC_ENABLED.toString();
 
-        faction.msg(TL.COMMAND_BOOM_ENABLED, sender.describeTo(faction), enabled);
+        faction.msg(TL.COMMAND_BOOM_ENABLED, sender.describeToLegacy(faction), enabled);
     }
 }

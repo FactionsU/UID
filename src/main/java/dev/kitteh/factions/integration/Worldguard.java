@@ -56,7 +56,7 @@ public class Worldguard {
     }
 
     private static void status(boolean success, String name) {
-        AbstractFactionsPlugin.getInstance().getLogger().info((success ? "Registered" : "Failed to register") + " flag '" + name + "' with WorldGuard.");
+        AbstractFactionsPlugin.instance().getLogger().info((success ? "Registered" : "Failed to register") + " flag '" + name + "' with WorldGuard.");
     }
 
     public boolean isNoLossFlag(Player player) {
@@ -76,7 +76,7 @@ public class Worldguard {
         RegionQuery query = container.createQuery();
 
         boolean q = query.testState(localPlayer.getLocation(), localPlayer, flag);
-        FactionsPlugin.instance().debug("Testing " + name + " flag for player " + player.getName() + ": " + q);
+        AbstractFactionsPlugin.instance().debug("Testing " + name + " flag for player " + player.getName() + ": " + q);
         return q;
     }
 

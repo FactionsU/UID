@@ -122,7 +122,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     public Faction faction() {
         Faction faction = Factions.factions().get(this.factionId);
         if (faction == null) {
-            AbstractFactionsPlugin.getInstance().getLogger().warning("Found null faction (id " + this.factionId + ") for player " + this.name());
+            AbstractFactionsPlugin.instance().getLogger().warning("Found null faction (id " + this.factionId + ") for player " + this.name());
             this.resetFactionData(true);
             faction = Factions.factions().wilderness();
         }
@@ -313,7 +313,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (this.offlinePlayer == null) {
             this.offlinePlayer = Bukkit.getPlayer(this.id);
             if (this.offlinePlayer == null) {
-                this.offlinePlayer = AbstractFactionsPlugin.getInstance().getOfflinePlayer(this.name, this.id);
+                this.offlinePlayer = AbstractFactionsPlugin.instance().getOfflinePlayer(this.name, this.id);
             }
         }
         return this.offlinePlayer;
@@ -413,7 +413,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     // Base:
 
     @Override
-    public String title() {
+    public String titleLegacy() {
         return this.hasFaction() ? title : TL.NOFACTION_PREFIX.toString();
     }
 
@@ -464,11 +464,11 @@ public abstract class MemoryFPlayer implements FPlayer {
                                             ((MemoryFPlayer) fplayer).setName(newName);
                                         }
                                     }
-                                }.runTask(AbstractFactionsPlugin.getInstance());
+                                }.runTask(AbstractFactionsPlugin.instance());
                             } catch (Exception ignored) {
                             }
                         }
-                    }.runTaskAsynchronously(AbstractFactionsPlugin.getInstance());
+                    }.runTaskAsynchronously(AbstractFactionsPlugin.instance());
                 }
             }
         }
@@ -491,12 +491,12 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public String nameWithTitle() {
-        return this.nameAndSomething(this.title());
+    public String nameWithTitleLegacy() {
+        return this.nameAndSomething(this.titleLegacy());
     }
 
     @Override
-    public String nameWithTag() {
+    public String nameWithTagLegacy() {
         return this.nameAndSomething(this.tagOrEmpty());
     }
 
@@ -504,14 +504,14 @@ public abstract class MemoryFPlayer implements FPlayer {
     // These are injected into the format of global chat messages.
 
     @Override
-    public String chatTag() {
+    public String chatTagLegacy() {
         return this.hasFaction() ? String.format(FactionsPlugin.instance().conf().factions().chat().getTagFormat(), this.role().getPrefix() + this.tagOrEmpty()) : TL.NOFACTION_PREFIX.toString();
     }
 
     // Colored Chat Tag
     @Override
-    public String chatTag(@Nullable Participator participator) {
-        return this.hasFaction() ? TextUtil.getString(this.relationTo(participator).color()) + this.chatTag() : TL.NOFACTION_PREFIX.toString();
+    public String chatTagLegacy(@Nullable Participator participator) {
+        return this.hasFaction() ? TextUtil.getString(this.relationTo(participator).color()) + this.chatTagLegacy() : TL.NOFACTION_PREFIX.toString();
     }
 
     @Override
@@ -690,7 +690,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             showChat = FactionsPlugin.instance().conf().scoreboard().info().isAlsoSendChat();
         }
         if (showChat) {
-            this.sendMessage(TextUtil.parse(TL.FACTION_LEAVE.format(from.tagString(this), toShow.tagString(this))));
+            this.sendMessage(TextUtil.parse(TL.FACTION_LEAVE.format(from.tagLegacy(this), toShow.tagLegacy(this))));
         }
     }
 
@@ -758,7 +758,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                     if (amount > 0.0) {
                         String amountString = Econ.moneyString(amount);
                         this.msg(TL.COMMAND_DISBAND_HOLDINGS, amountString);
-                        FactionsPlugin.instance().log(this.name() + " has been given bank holdings of " + amountString + " from disbanding " + myFaction.tag() + ".");
+                        AbstractFactionsPlugin.instance().log(this.name() + " has been given bank holdings of " + amountString + " from disbanding " + myFaction.tag() + ".");
                     }
                 }
             }
@@ -766,11 +766,11 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         if (myFaction.isNormal()) {
             for (FPlayer fplayer : myFaction.membersOnline(true)) {
-                fplayer.msg(TL.LEAVE_LEFT, this.describeTo(fplayer, true), myFaction.describeTo(fplayer));
+                fplayer.msg(TL.LEAVE_LEFT, this.describeToLegacy(fplayer, true), myFaction.describeToLegacy(fplayer));
             }
 
             if (FactionsPlugin.instance().conf().logging().isFactionLeave()) {
-                FactionsPlugin.instance().log(TL.LEAVE_LEFT.format(this.name(), myFaction.tag()));
+                AbstractFactionsPlugin.instance().log(TL.LEAVE_LEFT.format(this.name(), myFaction.tag()));
             }
         }
 
@@ -782,13 +782,13 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (myFaction.isNormal() && !perm && myFaction.members().isEmpty()) {
             // Remove this faction
             for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-                fplayer.msg(TL.LEAVE_DISBANDED, myFaction.describeTo(fplayer, true));
+                fplayer.msg(TL.LEAVE_DISBANDED, myFaction.describeToLegacy(fplayer, true));
             }
 
-            AbstractFactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(myFaction));
+            AbstractFactionsPlugin.instance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(myFaction));
             Factions.factions().remove(myFaction);
             if (FactionsPlugin.instance().conf().logging().isFactionDisband()) {
-                FactionsPlugin.instance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.tag(), "" + myFaction.id(), this.name()));
+                AbstractFactionsPlugin.instance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.tag(), "" + myFaction.id(), this.name()));
             }
         }
     }
@@ -827,7 +827,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (player == null) {
             return false;
         }
-        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
         String denyReason = null;
         Faction myFaction = faction();
         Faction currentFaction = Board.board().factionAt(flocation);
@@ -852,10 +852,10 @@ public abstract class MemoryFPlayer implements FPlayer {
             return true;
         } else if (!forFaction.hasAccess(this, PermissibleActions.TERRITORY, null)) {
             // Lacking perms to territory claim
-            denyReason = TextUtil.parse(TL.CLAIM_CANTCLAIM.toString(), forFaction.describeTo(this));
+            denyReason = TextUtil.parse(TL.CLAIM_CANTCLAIM.toString(), forFaction.describeToLegacy(this));
         } else if (forFaction == currentFaction) {
             // Already owned by this faction, nitwit
-            denyReason = TextUtil.parse(TL.CLAIM_ALREADYOWN.toString(), forFaction.describeTo(this, true));
+            denyReason = TextUtil.parse(TL.CLAIM_ALREADYOWN.toString(), forFaction.describeToLegacy(this, true));
         } else if (forFaction.members().size() < plugin.conf().factions().claims().getRequireMinFactionMembers()) {
             // Need more members in order to claim land
             denyReason = TextUtil.parse(TL.CLAIM_MEMBERS.toString(), plugin.conf().factions().claims().getRequireMinFactionMembers());
@@ -897,13 +897,13 @@ public abstract class MemoryFPlayer implements FPlayer {
         } else if (currentFaction.isNormal()) {
             if (myFaction.peaceful()) {
                 // Cannot claim as peaceful
-                denyReason = TextUtil.parse(TL.CLAIM_PEACEFUL.toString(), currentFaction.tagString(this));
+                denyReason = TextUtil.parse(TL.CLAIM_PEACEFUL.toString(), currentFaction.tagLegacy(this));
             } else if (currentFaction.peaceful()) {
                 // Cannot claim from peaceful
-                denyReason = TextUtil.parse(TL.CLAIM_PEACEFULTARGET.toString(), currentFaction.tagString(this));
+                denyReason = TextUtil.parse(TL.CLAIM_PEACEFULTARGET.toString(), currentFaction.tagLegacy(this));
             } else if (!currentFaction.hasLandInflation()) {
                 // Cannot claim other faction (perhaps based on power/land ratio)
-                denyReason = TextUtil.parse(TL.CLAIM_THISISSPARTA.toString(), currentFaction.tagString(this));
+                denyReason = TextUtil.parse(TL.CLAIM_THISISSPARTA.toString(), currentFaction.tagLegacy(this));
             } else if (currentFaction.hasLandInflation() && !plugin.conf().factions().claims().isAllowOverClaim()) {
                 // deny over claim when it normally would be allowed.
                 denyReason = TextUtil.parse(TL.CLAIM_OVERCLAIM_DISABLED.toString());
@@ -980,13 +980,13 @@ public abstract class MemoryFPlayer implements FPlayer {
         informTheseFPlayers.add(this);
         informTheseFPlayers.addAll(forFaction.membersOnline(true));
         for (FPlayer fp : informTheseFPlayers) {
-            fp.msg(TL.CLAIM_CLAIMED, this.describeTo(fp, true), forFaction.describeTo(fp), currentFaction.describeTo(fp));
+            fp.msg(TL.CLAIM_CLAIMED, this.describeToLegacy(fp, true), forFaction.describeToLegacy(fp), currentFaction.describeToLegacy(fp));
         }
 
         Board.board().claim(flocation, forFaction);
 
         if (FactionsPlugin.instance().conf().logging().isLandClaims()) {
-            FactionsPlugin.instance().log(TL.CLAIM_CLAIMEDLOG.toString(), this.name(), flocation.asCoordString(), forFaction.tag());
+            AbstractFactionsPlugin.instance().log(TL.CLAIM_CLAIMEDLOG.toString(), this.name(), flocation.asCoordString(), forFaction.tag());
         }
 
         return true;
@@ -1012,7 +1012,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 this.msg(TL.COMMAND_UNCLAIM_SAFEZONE_SUCCESS);
 
                 if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                    FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
+                    AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
                 }
                 return true;
             } else {
@@ -1027,7 +1027,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 this.msg(TL.COMMAND_UNCLAIM_WARZONE_SUCCESS);
 
                 if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                    FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
+                    AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
                 }
                 return true;
             } else {
@@ -1047,11 +1047,11 @@ public abstract class MemoryFPlayer implements FPlayer {
 
             Board.board().unclaim(flocation);
 
-            targetFaction.msg(TL.COMMAND_UNCLAIM_UNCLAIMED, this.describeTo(targetFaction, true));
+            targetFaction.msg(TL.COMMAND_UNCLAIM_UNCLAIMED, this.describeToLegacy(targetFaction, true));
             this.msg(TL.COMMAND_UNCLAIM_UNCLAIMS);
 
             if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
+                AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
             }
 
             return true;
@@ -1066,7 +1066,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         if (!targetFaction.hasAccess(this, PermissibleActions.TERRITORY, flocation)) {
             if (notifyFailure) {
-                this.msg(TL.CLAIM_CANTUNCLAIM, targetFaction.describeTo(this));
+                this.msg(TL.CLAIM_CANTUNCLAIM, targetFaction.describeToLegacy(this));
             }
             return false;
         }
@@ -1099,10 +1099,10 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         Board.board().unclaim(flocation);
-        this.faction().msg(TL.COMMAND_UNCLAIM_FACTIONUNCLAIMED, this.describeTo(this.faction(), true));
+        this.faction().msg(TL.COMMAND_UNCLAIM_FACTIONUNCLAIMED, this.describeToLegacy(this.faction(), true));
 
         if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-            FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
+            AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
         }
 
         return true;
@@ -1181,7 +1181,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                     public void run() {
                         takeFallDamage(true);
                     }
-                }.runTaskLater(AbstractFactionsPlugin.getInstance(), 20L * cooldown);
+                }.runTaskLater(AbstractFactionsPlugin.instance(), 20L * cooldown);
             }
         }
 

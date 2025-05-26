@@ -96,7 +96,7 @@ public class CmdFly implements Cmd {
         if (!fPlayer.canFlyAtLocation()) {
             if (notify) {
                 Faction factionAtLocation = Board.board().factionAt(fPlayer.lastStoodAt());
-                fPlayer.msg(TL.COMMAND_FLY_NO_ACCESS, factionAtLocation.tagString(fPlayer));
+                fPlayer.msg(TL.COMMAND_FLY_NO_ACCESS, factionAtLocation.tagLegacy(fPlayer));
             }
             return false;
         } else if (FlightUtil.instance().enemiesNearby(fPlayer, FactionsPlugin.instance().conf().commands().fly().getEnemyRadius())) {

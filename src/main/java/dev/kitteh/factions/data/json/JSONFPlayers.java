@@ -24,11 +24,11 @@ import java.util.logging.Level;
 
 @NullMarked
 public final class JSONFPlayers extends MemoryFPlayers {
-    private final Path playersPath = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("data/players.json");
+    private final Path playersPath = AbstractFactionsPlugin.instance().getDataFolder().toPath().resolve("data/players.json");
 
     public JSONFPlayers() {
-        if (AbstractFactionsPlugin.getInstance().getServerUUID() == null) {
-            AbstractFactionsPlugin.getInstance().grumpException(new RuntimeException());
+        if (AbstractFactionsPlugin.instance().getServerUUID() == null) {
+            AbstractFactionsPlugin.instance().grumpException(new RuntimeException());
         }
     }
 
@@ -67,12 +67,12 @@ public final class JSONFPlayers extends MemoryFPlayers {
             bufferedReader.mark(len + 1);
             int read = bufferedReader.read(chars, 0, len);
             if (read < 40) {
-                AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "JSON players were less than 40 chars in length???");
+                AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "JSON players were less than 40 chars in length???");
                 return null;
             }
             bufferedReader.reset();
             if (new String(chars).trim().startsWith("{")) {
-                Gson gson = AbstractFactionsPlugin.getInstance().getGsonBuilder(false)
+                Gson gson = AbstractFactionsPlugin.instance().getGsonBuilder(false)
                         .registerTypeAdapter(JSONFaction.class, new OldJSONFPlayerDeserializer())
                         .create();
 
@@ -84,7 +84,7 @@ public final class JSONFPlayers extends MemoryFPlayers {
                 }.getType());
             }
         } catch (IOException e) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load JSON players", e);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to load JSON players", e);
             return null;
         }
     }

@@ -20,7 +20,7 @@ public class Graves {
 
     public static boolean init(Plugin graves) {
         plugin = (com.ranull.graves.Graves) graves;
-        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
         plugin.getLogger().info("Found Graves plugin");
         MainConfig.Plugins.Graves g = plugin.conf().plugins().graves();
         if (g.isAllowAnyoneToOpenGraves()) {
@@ -47,7 +47,7 @@ public class Graves {
                 return plugin.getBlockManager().getGraveFromBlock(block) != null;
             }
         } catch (Exception oops) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.WARNING, "A Grave(s) error occurred!", oops);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "A Grave(s) error occurred!", oops);
         }
         return false;
     }

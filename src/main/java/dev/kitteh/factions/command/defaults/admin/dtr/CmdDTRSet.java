@@ -36,6 +36,6 @@ public class CmdDTRSet implements Cmd {
 
         DTRControl dtr = (DTRControl) FactionsPlugin.instance().landRaidControl();
         target.dtr(Math.max(Math.min(amount, dtr.getMaxDTR(target)), FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getMinDTR()));
-        context.sender().msg(TL.COMMAND_DTR_MODIFY_DONE, target.describeTo(context.sender().fPlayerOrNull(), false), DTRControl.round(target.dtr()));
+        context.sender().msg(TL.COMMAND_DTR_MODIFY_DONE, target.describeToLegacy(context.sender().fPlayerOrNull(), false), DTRControl.round(target.dtr()));
     }
 }

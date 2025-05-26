@@ -33,7 +33,7 @@ public class WarmUpUtil {
                         player.cancelWarmup();
                         runnable.run();
                     }
-                }.runTaskLater(AbstractFactionsPlugin.getInstance(), delay * 20).getTaskId();
+                }.runTaskLater(AbstractFactionsPlugin.instance(), delay * 20).getTaskId();
                 player.addWarmup(warmup, id);
             }
         } else {

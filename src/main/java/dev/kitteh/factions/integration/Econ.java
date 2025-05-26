@@ -47,7 +47,7 @@ public class Econ {
             String[] split = localeString.split("_");
             f = new DecimalFormat(TL.ECON_FORMAT.toString(), DecimalFormatSymbols.getInstance(Locale.of(split[0], split[1])));
         } catch (Exception e) {
-            AbstractFactionsPlugin.getInstance().getLogger().warning("Fell over on invalid default econ format '" + TL.ECON_FORMAT + "' with locale '" + localeString + "'");
+            AbstractFactionsPlugin.instance().getLogger().warning("Fell over on invalid default econ format '" + TL.ECON_FORMAT + "' with locale '" + localeString + "'");
             f = new DecimalFormat("###,###.###");
         }
         format = f;
@@ -55,21 +55,21 @@ public class Econ {
         String integrationFail = "Economy integration is " + (FactionsPlugin.instance().conf().economy().isEnabled() ? "enabled, but" : "disabled, and") + " the plugin \"Vault\" ";
 
         if (Bukkit.getServer().getPluginManager().getPlugin("Vault") == null) {
-            AbstractFactionsPlugin.getInstance().getLogger().info(integrationFail + "is not installed.");
+            AbstractFactionsPlugin.instance().getLogger().info(integrationFail + "is not installed.");
             return;
         }
 
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-            AbstractFactionsPlugin.getInstance().getLogger().info(integrationFail + "is not hooked into an economy plugin.");
+            AbstractFactionsPlugin.instance().getLogger().info(integrationFail + "is not hooked into an economy plugin.");
             return;
         }
         econ = rsp.getProvider();
 
-        AbstractFactionsPlugin.getInstance().getLogger().info("Found economy plugin through Vault: " + econ.getName());
+        AbstractFactionsPlugin.instance().getLogger().info("Found economy plugin through Vault: " + econ.getName());
 
         if (!FactionsPlugin.instance().conf().economy().isEnabled()) {
-            AbstractFactionsPlugin.getInstance().getLogger().info("NOTE: Economy is disabled. You can enable it in config/main.conf");
+            AbstractFactionsPlugin.instance().getLogger().info("NOTE: Economy is disabled. You can enable it in config/main.conf");
         }
     }
 
@@ -113,20 +113,20 @@ public class Econ {
         if (universeUUID == null) {
             return getOfflinePlayerForName(universeAccount);
         }
-        return AbstractFactionsPlugin.getInstance().getOfflinePlayer(universeAccount, UUID.fromString(universeUUID));
+        return AbstractFactionsPlugin.instance().getOfflinePlayer(universeAccount, UUID.fromString(universeUUID));
     }
 
     public static void sendBalanceInfo(FPlayer to, Participator about) {
         if (!shouldBeUsed()) {
-            FactionsPlugin.instance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
+            AbstractFactionsPlugin.instance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
-        to.msg(TL.ECON_BALANCE, about.describeTo(to, true), Econ.moneyString(getBalance(about)));
+        to.msg(TL.ECON_BALANCE, about.describeToLegacy(to, true), Econ.moneyString(getBalance(about)));
     }
 
     public static void sendBalanceInfo(CommandSender to, Faction about) {
         if (!shouldBeUsed()) {
-            FactionsPlugin.instance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
+            AbstractFactionsPlugin.instance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
         to.sendMessage(ChatColor.stripColor(String.format(TL.ECON_BALANCE.toString(), about.tag(), Econ.moneyString(getBalance(about)))));
@@ -169,7 +169,7 @@ public class Econ {
         }
 
         // Otherwise you may not! ;,,;
-        i.msg(TL.ECON_NOPERM, i.describeTo(i, true), you.describeTo(i));
+        i.msg(TL.ECON_NOPERM, i.describeToLegacy(i, true), you.describeToLegacy(i));
         return false;
     }
 
@@ -204,7 +204,7 @@ public class Econ {
         if (!has(fromAcc, amount)) {
             // There was not enough money to pay
             if (invoker != null && notify) {
-                invoker.msg(TL.ECON_CANTAFFORD_TRANSFER, from.describeTo(invoker, true), moneyString(amount), to.describeTo(invoker));
+                invoker.msg(TL.ECON_CANTAFFORD_TRANSFER, from.describeToLegacy(invoker, true), moneyString(amount), to.describeToLegacy(invoker));
             }
 
             return false;
@@ -232,7 +232,7 @@ public class Econ {
 
         // if we get here something with the transaction failed
         if (notify) {
-            invoker.msg(TL.ECON_TRANSFER_UNABLE, moneyString(amount), to.describeTo(invoker), from.describeTo(invoker, true));
+            invoker.msg(TL.ECON_TRANSFER_UNABLE, moneyString(amount), to.describeToLegacy(invoker), from.describeToLegacy(invoker, true));
         }
 
         return false;
@@ -254,19 +254,19 @@ public class Econ {
 
         if (invoker == null) {
             for (FPlayer recipient : recipients) {
-                recipient.msg(TL.ECON_TRANSFER_NOINVOKER, moneyString(amount), from.describeTo(recipient), to.describeTo(recipient));
+                recipient.msg(TL.ECON_TRANSFER_NOINVOKER, moneyString(amount), from.describeToLegacy(recipient), to.describeToLegacy(recipient));
             }
         } else if (invoker == from) {
             for (FPlayer recipient : recipients) {
-                recipient.msg(TL.ECON_TRANSFER_GAVE, from.describeTo(recipient, true), moneyString(amount), to.describeTo(recipient));
+                recipient.msg(TL.ECON_TRANSFER_GAVE, from.describeToLegacy(recipient, true), moneyString(amount), to.describeToLegacy(recipient));
             }
         } else if (invoker == to) {
             for (FPlayer recipient : recipients) {
-                recipient.msg(TL.ECON_TRANSFER_TOOK, to.describeTo(recipient, true), moneyString(amount), from.describeTo(recipient));
+                recipient.msg(TL.ECON_TRANSFER_TOOK, to.describeToLegacy(recipient, true), moneyString(amount), from.describeToLegacy(recipient));
             }
         } else {
             for (FPlayer recipient : recipients) {
-                recipient.msg(TL.ECON_TRANSFER_TRANSFER, invoker.describeTo(recipient, true), moneyString(amount), from.describeTo(recipient), to.describeTo(recipient));
+                recipient.msg(TL.ECON_TRANSFER_TRANSFER, invoker.describeToLegacy(recipient, true), moneyString(amount), from.describeToLegacy(recipient), to.describeToLegacy(recipient));
             }
         }
     }
@@ -285,7 +285,7 @@ public class Econ {
 
         if (!affordable) {
             if (toDoThis != null && !toDoThis.isEmpty()) {
-                ep.msg(TL.ECON_CANTAFFORD_AMOUNT, ep.describeTo(ep, true), moneyString(delta), toDoThis);
+                ep.msg(TL.ECON_CANTAFFORD_AMOUNT, ep.describeToLegacy(ep, true), moneyString(delta), toDoThis);
             }
             return false;
         }
@@ -303,7 +303,7 @@ public class Econ {
 
         OfflinePlayer acc = checkStatus(ep.asOfflinePlayer());
 
-        String You = ep.describeTo(ep, true);
+        String You = ep.describeToLegacy(ep, true);
 
         if (delta > 0) {
             // The player should gain money
@@ -473,7 +473,7 @@ public class Econ {
 
     private static void createAccount(OfflinePlayer op) {
         if (!econ.createPlayerAccount(op, getWorld(op))) {
-            AbstractFactionsPlugin.getInstance().getLogger().warning("FAILED TO CREATE ECONOMY ACCOUNT " + op.getName() + '/' + op.getUniqueId());
+            AbstractFactionsPlugin.instance().getLogger().warning("FAILED TO CREATE ECONOMY ACCOUNT " + op.getName() + '/' + op.getUniqueId());
         }
     }
 

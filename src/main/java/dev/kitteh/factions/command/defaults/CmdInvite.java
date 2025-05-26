@@ -48,8 +48,8 @@ public class CmdInvite implements Cmd {
 
         if (context.flags().hasFlag("delete")) {
             faction.deInvite(target);
-            target.msg(TL.COMMAND_DEINVITE_REVOKED, sender.describeTo(target), faction.describeTo(target));
-            faction.msg(TL.COMMAND_DEINVITE_REVOKES, sender.describeTo(faction), target.describeTo(faction));
+            target.msg(TL.COMMAND_DEINVITE_REVOKED, sender.describeToLegacy(target), faction.describeToLegacy(target));
+            faction.msg(TL.COMMAND_DEINVITE_REVOKES, sender.describeToLegacy(faction), target.describeToLegacy(faction));
             return;
         }
 
@@ -66,15 +66,15 @@ public class CmdInvite implements Cmd {
         faction.invite(target);
         if (target.isOnline()) {
             LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
-            Component component = legacy.deserialize(sender.describeTo(target))
+            Component component = legacy.deserialize(sender.describeToLegacy(target))
                     .append(legacy.deserialize(TL.COMMAND_INVITE_INVITEDYOU.toString()).color(NamedTextColor.YELLOW))
-                    .append(legacy.deserialize(faction.describeTo(target)));
+                    .append(legacy.deserialize(faction.describeToLegacy(target)));
 
             component = component.hoverEvent(legacy.deserialize(TL.COMMAND_INVITE_CLICKTOJOIN.toString()).asHoverEvent())
                     .clickEvent(ClickEvent.runCommand("/" + MiscUtil.commandRoot() + " join " + ChatColor.stripColor(faction.tag())));
             target.sendMessage(component);
         }
 
-        faction.msg(TL.COMMAND_INVITE_INVITED, sender.describeTo(faction), target.describeTo(faction));
+        faction.msg(TL.COMMAND_INVITE_INVITED, sender.describeToLegacy(faction), target.describeToLegacy(faction));
     }
 }

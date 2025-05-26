@@ -18,10 +18,10 @@ public class LuckPerms {
             net.luckperms.api.LuckPerms api = LuckPermsProvider.get();
             api.getContextManager().registerCalculator(calculator);
         } catch (Exception e) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to connect to LuckPerms!", e);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to connect to LuckPerms!", e);
             return false;
         }
-        AbstractFactionsPlugin.getInstance().log("Successfully hooked into LuckPerms for permission contexts!");
+        AbstractFactionsPlugin.instance().log("Successfully hooked into LuckPerms for permission contexts!");
         return true;
     }
 

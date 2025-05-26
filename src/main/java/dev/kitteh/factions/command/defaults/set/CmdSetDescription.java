@@ -49,12 +49,12 @@ public class CmdSetDescription implements Cmd {
         faction.description(desc);
 
         if (!FactionsPlugin.instance().conf().factions().chat().isBroadcastDescriptionChanges()) {
-            sender.msg(TL.COMMAND_DESCRIPTION_CHANGED, faction.describeTo(sender));
+            sender.msg(TL.COMMAND_DESCRIPTION_CHANGED, faction.describeToLegacy(sender));
             sender.sendMessage(faction.description());
             return;
         }
 
-        sender.msg(TL.COMMAND_DESCRIPTION_CHANGES, faction.describeTo(sender));
+        sender.msg(TL.COMMAND_DESCRIPTION_CHANGES, faction.describeToLegacy(sender));
         sender.sendMessage(faction.description());
     }
 }

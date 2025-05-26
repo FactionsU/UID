@@ -49,7 +49,7 @@ public class CmdShield implements Cmd {
 
             faction.shield(Duration.ofSeconds(duration.longValue()), Duration.ofSeconds(cooldown.longValue()));
 
-            faction.msg(TL.COMMAND_SHIELD_ACTIVATED, sender.describeTo(faction), MiscUtil.durationString(faction.shieldRemaining()));
+            faction.msg(TL.COMMAND_SHIELD_ACTIVATED, sender.describeToLegacy(faction), MiscUtil.durationString(faction.shieldRemaining()));
 
             return;
         }

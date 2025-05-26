@@ -25,12 +25,12 @@ public class AutoLeaveTask implements Runnable {
         }
 
         task = this.factions ? new AutoLeaveProcessFactionTask() : new AutoLeaveProcessTask();
-        task.runTaskTimer(AbstractFactionsPlugin.getInstance(), 1, 1);
+        task.runTaskTimer(AbstractFactionsPlugin.instance(), 1, 1);
 
         // maybe setting has been changed? if so, restart this task at new rate
         if (this.rate != FactionsPlugin.instance().conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes() ||
                 this.factions != FactionsPlugin.instance().conf().factions().other().isAutoLeaveOnlyEntireFactionInactive()) {
-            AbstractFactionsPlugin.getInstance().startAutoLeaveTask(true);
+            AbstractFactionsPlugin.instance().startAutoLeaveTask(true);
         }
     }
 

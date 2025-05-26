@@ -53,10 +53,10 @@ public class Depenizen extends Bridge {
                 depenizen.registerBridge("Factions", Depenizen::new);
             }
         } catch (Exception e) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.WARNING, "Could not load Depenizen integration", e);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "Could not load Depenizen integration", e);
             return false;
         }
-        AbstractFactionsPlugin.getInstance().getLogger().info("Loaded Depenizen integration!");
+        AbstractFactionsPlugin.instance().getLogger().info("Loaded Depenizen integration!");
         return true;
     }
 

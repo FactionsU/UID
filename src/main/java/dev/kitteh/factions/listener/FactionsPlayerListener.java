@@ -556,7 +556,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (!otherFaction.hasAccess(me, PermissibleActions.ITEM, loc)) {
             if (!justCheck) {
-                me.msg(TL.PLAYER_USE_TERRITORY, TextUtil.getMaterialName(material), otherFaction.tagString(me.faction()));
+                me.msg(TL.PLAYER_USE_TERRITORY, TextUtil.getMaterialName(material), otherFaction.tagLegacy(me.faction()));
             }
             return false;
         }

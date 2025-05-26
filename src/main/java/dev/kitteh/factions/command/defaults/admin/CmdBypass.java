@@ -5,6 +5,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.incendo.cloud.Command;
@@ -31,10 +32,10 @@ public class CmdBypass implements Cmd {
 
         if (sender.adminBypass()) {
             sender.msg(TL.COMMAND_BYPASS_ENABLE);
-            FactionsPlugin.instance().log(sender.name() + TL.COMMAND_BYPASS_ENABLELOG);
+            AbstractFactionsPlugin.instance().log(sender.name() + TL.COMMAND_BYPASS_ENABLELOG);
         } else {
             sender.msg(TL.COMMAND_BYPASS_DISABLE);
-            FactionsPlugin.instance().log(sender.name() + TL.COMMAND_BYPASS_DISABLELOG);
+            AbstractFactionsPlugin.instance().log(sender.name() + TL.COMMAND_BYPASS_DISABLELOG);
         }
     }
 }

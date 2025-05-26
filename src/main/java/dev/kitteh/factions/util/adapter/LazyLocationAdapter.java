@@ -38,7 +38,7 @@ public class LazyLocationAdapter implements JsonDeserializer<LazyLocation>, Json
             return new LazyLocation(worldName, x, y, z, pitch, yaw);
 
         } catch (Exception ex) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while deserializing a LazyLocation.", ex);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Error encountered while deserializing a LazyLocation.", ex);
             return null;
         }
     }
@@ -57,7 +57,7 @@ public class LazyLocationAdapter implements JsonDeserializer<LazyLocation>, Json
 
             return obj;
         } catch (Exception ex) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Error encountered while serializing a LazyLocation.", ex);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Error encountered while serializing a LazyLocation.", ex);
             return obj;
         }
     }

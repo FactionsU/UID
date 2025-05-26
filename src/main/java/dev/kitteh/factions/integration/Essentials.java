@@ -23,7 +23,7 @@ public class Essentials {
 
     public static boolean setup(Plugin ess) {
         essentials = (IEssentials) ess;
-        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
         plugin.getLogger().info("Found and connected to Essentials");
         if (plugin.conf().factions().other().isDeleteEssentialsHomes()) {
             plugin.getLogger().info("Based on main.conf will delete Essentials player homes in their old faction when they leave");

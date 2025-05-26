@@ -76,10 +76,10 @@ public class CmdClaim implements Cmd {
                 if (sender.canClaimForFaction(forFaction)) {
                     sender.autoClaim(forFaction);
 
-                    sender.msg(TL.COMMAND_AUTOCLAIM_ENABLED, forFaction.describeTo(sender));
+                    sender.msg(TL.COMMAND_AUTOCLAIM_ENABLED, forFaction.describeToLegacy(sender));
                     sender.attemptClaim(forFaction, claimLocation, true);
                 } else {
-                    sender.msg(TL.COMMAND_AUTOCLAIM_OTHERFACTION, forFaction.describeTo(sender));
+                    sender.msg(TL.COMMAND_AUTOCLAIM_OTHERFACTION, forFaction.describeToLegacy(sender));
                 }
             } else {
                 sender.autoClaim(null);
@@ -138,7 +138,7 @@ public class CmdClaim implements Cmd {
         Faction currentFaction = Board.board().factionAt(loc);
 
         if (currentFaction.equals(forFaction)) {
-            sender.msg(TL.CLAIM_ALREADYOWN, forFaction.describeTo(sender, true));
+            sender.msg(TL.CLAIM_ALREADYOWN, forFaction.describeToLegacy(sender, true));
             return;
         }
 
@@ -156,7 +156,7 @@ public class CmdClaim implements Cmd {
                                 (forFaction.isSafeZone() && !Permission.MANAGE_SAFE_ZONE.has(sender.asPlayer()))
                 )
         ) {
-            sender.msg(TL.CLAIM_CANTCLAIM, forFaction.describeTo(sender));
+            sender.msg(TL.CLAIM_CANTCLAIM, forFaction.describeToLegacy(sender));
             return;
         }
 
@@ -189,7 +189,7 @@ public class CmdClaim implements Cmd {
         }
 
         if (forFaction.isNormal() && toClaim.size() > FactionsPlugin.instance().landRaidControl().possibleClaimCount(forFaction)) {
-            sender.msg(TL.COMMAND_CLAIMFILL_NOTENOUGHLANDLEFT, forFaction.describeTo(sender), toClaim.size());
+            sender.msg(TL.COMMAND_CLAIMFILL_NOTENOUGHLANDLEFT, forFaction.describeToLegacy(sender), toClaim.size());
             return;
         }
 

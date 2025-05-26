@@ -10,6 +10,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.AsciiCompass;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
@@ -168,7 +169,7 @@ public abstract class MemoryBoard implements Board {
             for (int factionId : tracker.ids()) {
                 if (Factions.factions().get(factionId) == null) {
                     this.worldTrackers.values().stream().flatMap(wt -> wt.allClaims(factionId).stream())
-                            .forEach(loc -> FactionsPlugin.instance().log("Board cleaner removed id " + factionId + " from " + loc));
+                            .forEach(loc -> AbstractFactionsPlugin.instance().log("Board cleaner removed id " + factionId + " from " + loc));
                     this.worldTrackers.values().forEach(wt -> wt.removeAllClaims(factionId));
                 }
             }
@@ -211,7 +212,7 @@ public abstract class MemoryBoard implements Board {
         Faction faction = fplayer.faction();
         ArrayList<Component> ret = new ArrayList<>();
         Faction factionLoc = factionAt(flocation);
-        ret.add(TextUtil.titleizeC("(" + flocation.asCoordString() + ") " + factionLoc.tagString(fplayer)));
+        ret.add(TextUtil.titleizeC("(" + flocation.asCoordString() + ") " + factionLoc.tagLegacy(fplayer)));
 
         // Get the compass
         List<Component> asciiCompass = AsciiCompass.of(inDegrees, "<red>", "<gold>");

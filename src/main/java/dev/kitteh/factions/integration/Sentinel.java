@@ -21,15 +21,15 @@ public class Sentinel extends SentinelIntegration {
     public static final List<String> TARGETS = List.of(TARGET_FACTIONS, TARGET_FACTIONS_ALLY, TARGET_FACTIONS_ENEMY);
 
     public static boolean init(Plugin plugin) {
-        AbstractFactionsPlugin.getInstance().getLogger().info("Attempting to integrate with Sentinel!");
+        AbstractFactionsPlugin.instance().getLogger().info("Attempting to integrate with Sentinel!");
         try {
             ((SentinelPlugin) plugin).registerIntegration(new Sentinel());
         } catch (Exception e) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.WARNING, "Could not load Sentinel integration", e);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "Could not load Sentinel integration", e);
             return false;
         }
-        AbstractFactionsPlugin.getInstance().getLogger().info("Loaded Sentinel integration!");
-        AbstractFactionsPlugin.getInstance().getLogger().info("");
+        AbstractFactionsPlugin.instance().getLogger().info("Loaded Sentinel integration!");
+        AbstractFactionsPlugin.instance().getLogger().info("");
         return true;
     }
 

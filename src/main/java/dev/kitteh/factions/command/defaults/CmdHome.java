@@ -61,7 +61,7 @@ public class CmdHome implements Cmd {
 
         if (sender.adminBypass() && context.flags().get("faction") instanceof Faction fac) {
             if (targetFaction.hasHome()) {
-                AbstractFactionsPlugin.getInstance().teleport(player, fac.home());
+                AbstractFactionsPlugin.instance().teleport(player, fac.home());
             } else {
                 sender.msg(TL.COMMAND_HOME_NOHOME);
             }
@@ -74,7 +74,7 @@ public class CmdHome implements Cmd {
         }
 
         if (!targetFaction.hasAccess(sender, PermissibleActions.HOME, sender.lastStoodAt())) {
-            sender.msg(TL.COMMAND_HOME_DENIED, targetFaction.tagString(sender));
+            sender.msg(TL.COMMAND_HOME_DENIED, targetFaction.tagLegacy(sender));
             return;
         }
 
@@ -157,7 +157,7 @@ public class CmdHome implements Cmd {
                 SmokeUtil.spawnCloudRandom(smokeLocations, FactionsPlugin.instance().conf().factions().homes().getTeleportCommandSmokeEffectThickness());
             }
 
-            AbstractFactionsPlugin.getInstance().teleport(plr, destination);
+            AbstractFactionsPlugin.instance().teleport(plr, destination);
         }, FactionsPlugin.instance().conf().commands().home().getDelay());
     }
 }

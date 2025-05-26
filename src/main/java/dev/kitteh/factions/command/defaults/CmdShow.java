@@ -95,7 +95,7 @@ public class CmdShow implements Cmd {
         }
 
         if (!faction.isNormal()) {
-            String tag = faction.tagString(fPlayer);
+            String tag = faction.tagLegacy(fPlayer);
             // send header and that's all
             String header = show.getFirst();
             if (FactionTag.HEADER.foundInString(header)) {
@@ -129,7 +129,7 @@ public class CmdShow implements Cmd {
             }
         }
         if (fPlayer != null && this.groupPresent()) {
-            new GroupGetter(messageList, fPlayer, faction).runTaskAsynchronously(AbstractFactionsPlugin.getInstance());
+            new GroupGetter(messageList, fPlayer, faction).runTaskAsynchronously(AbstractFactionsPlugin.instance());
         } else {
             this.sendMessages(messageList, context.sender().sender(), faction, fPlayer);
         }
@@ -182,7 +182,7 @@ public class CmdShow implements Cmd {
     private void onOffLineMessage(StringBuilder builder, CommandSender recipient, Faction faction, boolean online) {
         boolean first = true;
         for (FPlayer p : MiscUtil.rankOrder(faction.membersOnline(online))) {
-            String name = p.nameWithTitle();
+            String name = p.nameWithTitleLegacy();
             builder.append(first ? name : ", " + name);
             first = false;
         }
@@ -220,16 +220,16 @@ public class CmdShow implements Cmd {
             this.messageList = messageList;
             this.sender = sender;
             this.faction = faction;
-            this.players = faction.members().stream().map(fp -> AbstractFactionsPlugin.getInstance().getOfflinePlayer(fp.name(), fp.uniqueId())).collect(Collectors.toSet());
+            this.players = faction.members().stream().map(fp -> AbstractFactionsPlugin.instance().getOfflinePlayer(fp.name(), fp.uniqueId())).collect(Collectors.toSet());
         }
 
         @Override
         public void run() {
             Map<UUID, String> map = new HashMap<>();
             for (OfflinePlayer player : this.players) {
-                map.put(player.getUniqueId(), AbstractFactionsPlugin.getInstance().getPrimaryGroup(player));
+                map.put(player.getUniqueId(), AbstractFactionsPlugin.instance().getPrimaryGroup(player));
             }
-            new SenderRunner(this.messageList, this.sender, this.faction, map).runTask(AbstractFactionsPlugin.getInstance());
+            new SenderRunner(this.messageList, this.sender, this.faction, map).runTask(AbstractFactionsPlugin.instance());
         }
     }
 

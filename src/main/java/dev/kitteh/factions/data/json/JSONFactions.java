@@ -36,11 +36,11 @@ public final class JSONFactions extends MemoryFactions {
     private final Path nextIdPath;
 
     public JSONFactions() {
-        if (AbstractFactionsPlugin.getInstance().getServerUUID() == null) {
-            AbstractFactionsPlugin.getInstance().grumpException(new RuntimeException());
+        if (AbstractFactionsPlugin.instance().getServerUUID() == null) {
+            AbstractFactionsPlugin.instance().grumpException(new RuntimeException());
         }
-        this.factionsPath = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("data/factions.json");
-        this.nextIdPath = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("data/nextFactionId.json");
+        this.factionsPath = AbstractFactionsPlugin.instance().getDataFolder().toPath().resolve("data/factions.json");
+        this.nextIdPath = AbstractFactionsPlugin.instance().getDataFolder().toPath().resolve("data/nextFactionId.json");
         this.nextId = 1;
     }
 
@@ -86,7 +86,7 @@ public final class JSONFactions extends MemoryFactions {
         try {
             content = Files.readString(this.factionsPath);
         } catch (IOException e) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to read file " + this.factionsPath, e);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to read file " + this.factionsPath, e);
             return null;
         }
         if (content.trim().isEmpty()) {
@@ -96,7 +96,7 @@ public final class JSONFactions extends MemoryFactions {
         this.nextId = 1;
 
         if (content.startsWith("{")) {
-            Gson gson = AbstractFactionsPlugin.getInstance().getGsonBuilder(false)
+            Gson gson = AbstractFactionsPlugin.instance().getGsonBuilder(false)
                     .registerTypeAdapter(JSONFaction.class, new OldJSONFactionDeserializer())
                     .create();
             Map<String, JSONFaction> data = gson.fromJson(content, new TypeToken<Map<String, JSONFaction>>() {

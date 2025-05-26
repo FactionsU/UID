@@ -43,7 +43,7 @@ public class PowerControl implements LandRaidControl {
     @Override
     public boolean canJoinFaction(Faction faction, FPlayer player) {
         if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
-            player.msg(TL.COMMAND_JOIN_NEGATIVEPOWER, player.describeTo(player, true));
+            player.msg(TL.COMMAND_JOIN_NEGATIVEPOWER, player.describeToLegacy(player, true));
             return false;
         }
         return true;
@@ -105,7 +105,7 @@ public class PowerControl implements LandRaidControl {
         MainConfig.Factions.LandRaidControl.Power powerConf = FactionsPlugin.instance().conf().factions().landRaidControl().power();
         PowerLossEvent powerLossEvent = new PowerLossEvent(faction, fplayer);
         // Check for no power loss conditions
-        if (AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().isNoLossFlag(player)) {
+        if (AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().isNoLossFlag(player)) {
             powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_REGION.toString());
             powerLossEvent.setCancelled(true);
         } else if (faction.isWarZone()) {
@@ -144,7 +144,7 @@ public class PowerControl implements LandRaidControl {
                 double powerChange = vamp * powerDiff;
                 FPlayer fKiller = FPlayers.fPlayers().get(killer);
                 fKiller.alterPower(powerChange);
-                fKiller.msg(TL.PLAYER_POWER_VAMPIRISM_GAIN, powerChange, fplayer.describeTo(fKiller), fKiller.powerRounded(), fKiller.powerMaxRounded());
+                fKiller.msg(TL.PLAYER_POWER_VAMPIRISM_GAIN, powerChange, fplayer.describeToLegacy(fKiller), fKiller.powerRounded(), fKiller.powerMaxRounded());
             }
         }
         // Send the message from the powerLossEvent

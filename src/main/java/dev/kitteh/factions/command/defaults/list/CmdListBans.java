@@ -41,7 +41,7 @@ public class CmdListBans implements Cmd {
         }
 
         List<String> lines = new ArrayList<>();
-        lines.add(TL.COMMAND_BANLIST_HEADER.format(target.bans().size(), target.tagString(sender)));
+        lines.add(TL.COMMAND_BANLIST_HEADER.format(target.bans().size(), target.tagLegacy(sender)));
         int i = 1;
 
         for (BanInfo info : target.bans()) {

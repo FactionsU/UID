@@ -87,7 +87,7 @@ public class CmdListFactions implements Cmd {
             end = factionList.size();
         }
 
-        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
 
         String header = plugin.conf().commands().list().getHeader();
         String footer = plugin.conf().commands().list().getFooter();

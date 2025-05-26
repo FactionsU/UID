@@ -82,7 +82,7 @@ public abstract class AbstractListener implements Listener {
 
         // Cancel if we are not in our own territory
         if (!access) {
-            me.msg(TL.PLAYER_USE_TERRITORY, "this", otherFaction.tagString(me.faction()));
+            me.msg(TL.PLAYER_USE_TERRITORY, "this", otherFaction.tagLegacy(me.faction()));
             return false;
         }
 

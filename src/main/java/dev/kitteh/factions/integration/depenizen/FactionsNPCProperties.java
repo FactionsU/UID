@@ -119,8 +119,8 @@ public class FactionsNPCProperties implements Property {
                 // Returns the NPC's title.
                 // -->
                 else if (attribute.startsWith("title")) {
-                    if (getFPlayer().title() != null) {
-                        return new ElementTag(getFPlayer().title()).getObjectAttribute(attribute.fulfill(1));
+                    if (getFPlayer().titleLegacy() != null) {
+                        return new ElementTag(getFPlayer().titleLegacy()).getObjectAttribute(attribute.fulfill(1));
                     }
                 }
             }

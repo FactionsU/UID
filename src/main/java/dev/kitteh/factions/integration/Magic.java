@@ -31,14 +31,14 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
             try {
                 int v = Integer.parseInt(plugin.getDescription().getVersion().split("\\.")[0]);
                 if (v < 8) {
-                    AbstractFactionsPlugin.getInstance().getLogger().info("Found Magic, but only supporting version 8+");
+                    AbstractFactionsPlugin.instance().getLogger().info("Found Magic, but only supporting version 8+");
                     return false;
                 }
             } catch (NumberFormatException ignored) {
-                AbstractFactionsPlugin.getInstance().getLogger().info("Found Magic, but could not determine version");
+                AbstractFactionsPlugin.instance().getLogger().info("Found Magic, but could not determine version");
                 return false;
             }
-            AbstractFactionsPlugin.getInstance().getLogger().info("Integrating with Magic!");
+            AbstractFactionsPlugin.instance().getLogger().info("Integrating with Magic!");
             ((MagicAPI) plugin).getController().register(new Magic());
             return true;
         }

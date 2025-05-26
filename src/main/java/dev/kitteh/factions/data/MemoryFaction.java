@@ -594,19 +594,19 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public String tagString(@Nullable Faction otherFaction) {
+    public String tagLegacy(@Nullable Faction otherFaction) {
         if (otherFaction == null) {
             return tag();
         }
-        return this.colorStringTo(otherFaction) + this.tag();
+        return this.colorLegacyStringTo(otherFaction) + this.tag();
     }
 
     @Override
-    public String tagString(@Nullable FPlayer otherFplayer) {
+    public String tagLegacy(@Nullable FPlayer otherFplayer) {
         if (otherFplayer == null) {
             return tag();
         }
-        return this.colorStringTo(otherFplayer) + this.tag();
+        return this.colorLegacyStringTo(otherFplayer) + this.tag();
     }
 
     @Override
@@ -1092,7 +1092,7 @@ public abstract class MemoryFaction implements Faction {
             return ret;
         }
 
-        for (Player player : AbstractFactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
+        for (Player player : AbstractFactionsPlugin.instance().getServer().getOnlinePlayers()) {
             FPlayer fplayer = FPlayers.fPlayers().get(player);
             if (fplayer.faction() == this) {
                 ret.add(player);
@@ -1111,7 +1111,7 @@ public abstract class MemoryFaction implements Faction {
             return false;
         }
 
-        for (Player player : AbstractFactionsPlugin.getInstance().getServer().getOnlinePlayers()) {
+        for (Player player : AbstractFactionsPlugin.instance().getServer().getOnlinePlayers()) {
             FPlayer fplayer = FPlayers.fPlayers().get(player);
             if (fplayer.faction() == this) {
                 return true;
@@ -1163,14 +1163,14 @@ public abstract class MemoryFaction implements Faction {
 
             // no members left and faction isn't permanent, so disband it
             if (FactionsPlugin.instance().conf().logging().isFactionDisband()) {
-                FactionsPlugin.instance().log("The faction " + this.tag() + " (" + this.id() + ") has been disbanded since it has no members left.");
+                AbstractFactionsPlugin.instance().log("The faction " + this.tag() + " (" + this.id() + ") has been disbanded since it has no members left.");
             }
 
             for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-                fplayer.msg(TL.LEAVE_DISBANDED, this.tagString(fplayer));
+                fplayer.msg(TL.LEAVE_DISBANDED, this.tagLegacy(fplayer));
             }
 
-            AbstractFactionsPlugin.getInstance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(this));
+            AbstractFactionsPlugin.instance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(this));
 
             Factions.factions().remove(this);
         } else { // promote new faction admin
@@ -1181,7 +1181,7 @@ public abstract class MemoryFaction implements Faction {
             }
             replacements.getFirst().role(Role.ADMIN);
             this.msg(TL.FACTION_NEWLEADER, oldLeader == null ? "" : oldLeader.name(), replacements.getFirst().name());
-            FactionsPlugin.instance().log("Faction " + this.tag() + " (" + this.id() + ") admin was removed. Replacement admin: " + replacements.getFirst().name());
+            AbstractFactionsPlugin.instance().log("Faction " + this.tag() + " (" + this.id() + ") admin was removed. Replacement admin: " + replacements.getFirst().name());
         }
     }
 

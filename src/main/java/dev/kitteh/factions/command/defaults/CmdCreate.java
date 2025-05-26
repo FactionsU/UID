@@ -11,6 +11,7 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerJoinEvent;
 import dev.kitteh.factions.event.FactionAttemptCreateEvent;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
@@ -85,11 +86,11 @@ public class CmdCreate implements Cmd {
         sender.asPlayer().updateCommands();
 
         for (FPlayer follower : FPlayers.fPlayers().online()) {
-            follower.msg(TL.COMMAND_CREATE_CREATED, sender.describeTo(follower, true), faction.tagString(follower));
+            follower.msg(TL.COMMAND_CREATE_CREATED, sender.describeToLegacy(follower, true), faction.tagLegacy(follower));
         }
 
         if (FactionsPlugin.instance().conf().logging().isFactionCreate()) {
-            FactionsPlugin.instance().log(sender.name() + TL.COMMAND_CREATE_CREATEDLOG + tag);
+            AbstractFactionsPlugin.instance().log(sender.name() + TL.COMMAND_CREATE_CREATEDLOG + tag);
         }
     }
 }

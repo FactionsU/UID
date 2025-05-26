@@ -22,7 +22,7 @@ public final class JSONBoard extends MemoryBoard {
     private final Path boardPath;
 
     public JSONBoard() {
-        this.boardPath = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("data/board.json");
+        this.boardPath = AbstractFactionsPlugin.instance().getDataFolder().toPath().resolve("data/board.json");
     }
 
     private Map<String, Map<String, String>> dumpAsSaveFormat() {
@@ -59,7 +59,7 @@ public final class JSONBoard extends MemoryBoard {
                 try {
                     factionId = Integer.parseInt(entry2.getValue().trim());
                 } catch (NumberFormatException ex) {
-                    AbstractFactionsPlugin.getInstance().getLogger().warning("Found invalid faction ID '" + entry2.getValue() + "' in " + worldName + " at " + entry2.getKey());
+                    AbstractFactionsPlugin.instance().getLogger().warning("Found invalid faction ID '" + entry2.getValue() + "' in " + worldName + " at " + entry2.getKey());
                     continue; // NOPE
                 }
 
@@ -77,7 +77,7 @@ public final class JSONBoard extends MemoryBoard {
     @Override
     public int load() {
         if (!Files.exists(boardPath)) {
-            AbstractFactionsPlugin.getInstance().getLogger().info("No board to load from disk. Creating new file.");
+            AbstractFactionsPlugin.instance().getLogger().info("No board to load from disk. Creating new file.");
             forceSave(true);
             return 0;
         }
@@ -88,7 +88,7 @@ public final class JSONBoard extends MemoryBoard {
             Map<String, Map<String, String>> worldCoordIds = FactionsPlugin.instance().gson().fromJson(Files.newBufferedReader(boardPath), type);
             loadFromSaveFormat(worldCoordIds);
         } catch (Exception e) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load the board from disk.", e);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to load the board from disk.", e);
             return 0;
         }
 

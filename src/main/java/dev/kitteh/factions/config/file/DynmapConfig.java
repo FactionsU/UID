@@ -199,7 +199,7 @@ public class DynmapConfig {
                         }
                         styles.put(faction, style);
                     } else {
-                        AbstractFactionsPlugin.getInstance().getLogger().severe("Found broken Dynmap style entry for faction '" + faction + '\'');
+                        AbstractFactionsPlugin.instance().getLogger().severe("Found broken Dynmap style entry for faction '" + faction + '\'');
                     }
                 }
             }

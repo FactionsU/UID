@@ -31,8 +31,6 @@ import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,10 +70,10 @@ public class CommandsRoot {
             return;
         }
         if (registry.containsKey(command)) {
-            AbstractFactionsPlugin.getInstance().getLogger().info("Skipping internal '" + command + "' command because it is already registered.");
+            AbstractFactionsPlugin.instance().getLogger().info("Skipping internal '" + command + "' command because it is already registered.");
             return;
         }
-        registry.put(command, new Register(cmd.consumer(), AbstractFactionsPlugin.getInstance(), command));
+        registry.put(command, new Register(cmd.consumer(), AbstractFactionsPlugin.instance(), command));
     }
 
     private void registerAdminInternal(String command, Cmd cmd) {
@@ -83,10 +81,10 @@ public class CommandsRoot {
             return;
         }
         if (adminRegistry.containsKey(command)) {
-            AbstractFactionsPlugin.getInstance().getLogger().info("Skipping internal admin '" + command + "' command because it is already registered.");
+            AbstractFactionsPlugin.instance().getLogger().info("Skipping internal admin '" + command + "' command because it is already registered.");
             return;
         }
-        adminRegistry.put(command, new Register(cmd.consumer(), AbstractFactionsPlugin.getInstance(), command));
+        adminRegistry.put(command, new Register(cmd.consumer(), AbstractFactionsPlugin.instance(), command));
     }
 
     public CommandsRoot(AbstractFactionsPlugin plugin) {

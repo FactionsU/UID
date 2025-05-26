@@ -130,7 +130,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     // Single 4 life.
     private static AbstractFactionsPlugin instance;
 
-    public static AbstractFactionsPlugin getInstance() {
+    public static AbstractFactionsPlugin instance() {
         return instance;
     }
 
@@ -344,7 +344,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         int loadedClaims = Instances.BOARD.load();
         Instances.BOARD.clean();
         Instances.UNIVERSE.load();
-        AbstractFactionsPlugin.getInstance().getLogger().info("Loaded " + loadedPlayers + " players in " + loadedFactions + " factions with " + loadedClaims + " claims");
+        AbstractFactionsPlugin.instance().getLogger().info("Loaded " + loadedPlayers + " players in " + loadedFactions + " factions with " + loadedClaims + " claims");
 
         ContextManager.init(this);
         if (getServer().getPluginManager().getPlugin("PermissionsEx") != null) {
@@ -666,7 +666,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         try {
             conf.save(langPath.toFile());
         } catch (IOException e) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to save lang.yml", e);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to save lang.yml", e);
         }
     }
 
@@ -745,34 +745,29 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     // -------------------------------------------- //
     // LOGGING
     // -------------------------------------------- //
-    @Override
     public void log(String msg) {
         log(Level.INFO, msg);
     }
 
-    @Override
     public void log(String str, Object... args) {
         log(Level.INFO, TextUtil.parse(str, args));
     }
 
-    @Override
     public void log(Level level, String str, Object... args) {
         log(level, TextUtil.parse(str, args));
     }
 
-    @Override
     public void log(Level level, String msg) {
         this.getLogger().log(level, msg);
     }
 
-    @Override
     public boolean autoSave() {
         return this.autoSave;
     }
 
     @Override
-    public void autoSave(boolean val) {
-        this.autoSave = val;
+    public void autoSave(boolean enabled) {
+        this.autoSave = enabled;
     }
 
     @Override
@@ -870,14 +865,12 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         return this.vaultPerms.getPrimaryGroup(player);
     }
 
-    @Override
     public void debug(Level level, String s) {
         if (conf().getaVeryFriendlyFactionsConfig().isDebug()) {
             getLogger().log(level, s);
         }
     }
 
-    @Override
     public void debug(String s) {
         debug(Level.INFO, s);
     }

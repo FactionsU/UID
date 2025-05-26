@@ -38,7 +38,7 @@ public enum FancyTag implements Tag {
                 message.append(Component.text(", "));
             }
             Component tip = tip(tipPlayer(p, gm));
-            message.append(LegacyComponentSerializer.legacySection().deserialize(p.nameWithTitle()).color(fme.textColorTo(p)).hoverEvent(HoverEvent.showText(tip)));
+            message.append(LegacyComponentSerializer.legacySection().deserialize(p.nameWithTitleLegacy()).color(fme.textColorTo(p)).hoverEvent(HoverEvent.showText(tip)));
             first = false;
             Component current = message.build();
             if (GsonComponentSerializer.gson().serialize(current).length() > ARBITRARY_LIMIT) {
@@ -60,7 +60,7 @@ public enum FancyTag implements Tag {
                     message.append(Component.text(", "));
                 }
                 Component tip = tip(tipPlayer(p, gm));
-                message.append(LegacyComponentSerializer.legacySection().deserialize(p.nameWithTitle()).color(fme.textColorTo(p)).hoverEvent(HoverEvent.showText(tip)));
+                message.append(LegacyComponentSerializer.legacySection().deserialize(p.nameWithTitleLegacy()).color(fme.textColorTo(p)).hoverEvent(HoverEvent.showText(tip)));
                 first = false;
                 Component current = message.build();
                 if (GsonComponentSerializer.gson().serialize(current).length() > ARBITRARY_LIMIT) {
@@ -90,7 +90,7 @@ public enum FancyTag implements Tag {
                     message.append(Component.text(", "));
                 }
                 Component tip = tip(tipFaction(otherFaction, fPlayer));
-                message.append(LegacyComponentSerializer.legacySection().deserialize(otherFaction.tagString(fPlayer)).color(fPlayer.textColorTo(otherFaction)).hoverEvent(HoverEvent.showText(tip)));
+                message.append(LegacyComponentSerializer.legacySection().deserialize(otherFaction.tagLegacy(fPlayer)).color(fPlayer.textColorTo(otherFaction)).hoverEvent(HoverEvent.showText(tip)));
                 first = false;
                 Component current = message.build();
                 if (GsonComponentSerializer.gson().serialize(current).length() > ARBITRARY_LIMIT) {

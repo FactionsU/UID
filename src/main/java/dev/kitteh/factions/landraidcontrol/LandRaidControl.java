@@ -54,7 +54,7 @@ public interface LandRaidControl {
             if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
                 stream = stream.filter(fp -> fp.faction() == faction || fp.relationTo(faction) == Relation.ENEMY);
             }
-            stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOWRAIDABLE.format(faction.tagString(fp))));
+            stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOWRAIDABLE.format(faction.tagLegacy(fp))));
         }
     }
 
@@ -64,7 +64,7 @@ public interface LandRaidControl {
             if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
                 stream = stream.filter(fp -> fp.faction() == faction || fp.relationTo(faction) == Relation.ENEMY);
             }
-            stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOLONGERRAIDABLE.format(faction.tagString(fp))));
+            stream.forEach(fp -> fp.sendMessage(TL.RAIDABLE_NOLONGERRAIDABLE.format(faction.tagLegacy(fp))));
         }
     }
 }

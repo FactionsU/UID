@@ -29,7 +29,7 @@ public class EssentialsListener implements Listener {
         Faction faction = event.getFaction();
         User user = ess.getUser(event.getFPlayer().uniqueId());
         if (user == null) {
-            FactionsPlugin.instance().log(Level.WARNING, "Attempted to remove Essentials homes for " + event.getFPlayer().name() + " " +
+            AbstractFactionsPlugin.instance().log(Level.WARNING, "Attempted to remove Essentials homes for " + event.getFPlayer().name() + " " +
                     "but no Essentials data at all was found for this user. " +
                     "This may be a bug in Essentials, or may be that the player only played prior to adding Essentials to the server");
             return;
@@ -45,7 +45,7 @@ public class EssentialsListener implements Listener {
 
             Location loc = user.getHome(homeName);
             if (loc == null) { // Newer EssX just returns null on invalid world
-                AbstractFactionsPlugin.getInstance().getLogger().warning("Tried to check on home \"" + homeName + "\" for user \"" + event.getFPlayer().name() + "\" but Essentials could not load that home (invalid world?). Skipping it.");
+                AbstractFactionsPlugin.instance().getLogger().warning("Tried to check on home \"" + homeName + "\" for user \"" + event.getFPlayer().name() + "\" but Essentials could not load that home (invalid world?). Skipping it.");
                 continue;
             }
             FLocation floc = new FLocation(loc);
@@ -54,7 +54,7 @@ public class EssentialsListener implements Listener {
             // We're only going to remove homes in territory that belongs to THEIR faction.
             if (factionAt.equals(faction) && factionAt.isNormal()) {
                 user.delHome(homeName);
-                FactionsPlugin.instance().log(Level.INFO, "FactionLeaveEvent: Removing home %s, player %s, in territory of %s",
+                AbstractFactionsPlugin.instance().log(Level.INFO, "FactionLeaveEvent: Removing home %s, player %s, in territory of %s",
                         homeName, event.getFPlayer().name(), faction.tag());
             }
         }

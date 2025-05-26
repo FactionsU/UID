@@ -50,7 +50,7 @@ public interface Tag {
             return line;
         }
 
-        if (AbstractFactionsPlugin.getInstance().integrationManager().isEnabled(IntegrationManager.Integration.PLACEHOLDERAPI) && player.isOnline()) {
+        if (AbstractFactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.PLACEHOLDERAPI) && player.isOnline()) {
             line = PlaceholderAPI.setPlaceholders(player, line);
         }
 

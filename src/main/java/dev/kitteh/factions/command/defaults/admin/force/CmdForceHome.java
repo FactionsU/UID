@@ -44,7 +44,7 @@ public class CmdForceHome implements Cmd {
                 if (tpEvent.isCancelled()) {
                     return;
                 }
-                AbstractFactionsPlugin.getInstance().teleport(target.asPlayer(), destination).thenAccept(success -> {
+                AbstractFactionsPlugin.instance().teleport(target.asPlayer(), destination).thenAccept(success -> {
                     if (success) {
                         sender.msg(TL.COMMAND_AHOME_SUCCESS, target.name());
                         target.msg(TL.COMMAND_AHOME_TARGET);

@@ -26,7 +26,7 @@ public class JsonSaver {
                 public void run() {
                     write(lock, path, content);
                 }
-            }.runTaskAsynchronously(AbstractFactionsPlugin.getInstance());
+            }.runTaskAsynchronously(AbstractFactionsPlugin.instance());
         }
     }
 
@@ -35,7 +35,7 @@ public class JsonSaver {
         try {
             Files.writeString(path, content.get());
         } catch (IOException e) {
-            AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to write file " + path.toAbsolutePath(), e);
+            AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to write file " + path.toAbsolutePath(), e);
         } finally {
             lock.unlock();
         }

@@ -47,7 +47,7 @@ public class CmdSetOpen implements Cmd {
                 fplayer.msg(TL.COMMAND_OPEN_CHANGES, sender.name(), open);
                 continue;
             }
-            fplayer.msg(TL.COMMAND_OPEN_CHANGED, faction.tagString(fplayer.faction()), open);
+            fplayer.msg(TL.COMMAND_OPEN_CHANGED, faction.tagLegacy(fplayer.faction()), open);
         }
     }
 }

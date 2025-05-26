@@ -28,7 +28,7 @@ public class CmdCoords implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         Location location = ((Sender.Player) context.sender()).player().getLocation();
-        String message = TL.COMMAND_COORDS_MESSAGE.format(sender.describeTo(sender.faction()), location.getBlockX(), location.getBlockY(), location.getBlockZ(), location.getWorld().getName());
+        String message = TL.COMMAND_COORDS_MESSAGE.format(sender.describeToLegacy(sender.faction()), location.getBlockX(), location.getBlockY(), location.getBlockZ(), location.getWorld().getName());
         for (FPlayer fPlayer : sender.faction().members()) {
             fPlayer.sendMessage(message);
         }

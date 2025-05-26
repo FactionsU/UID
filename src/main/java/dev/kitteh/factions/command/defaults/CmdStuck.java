@@ -106,8 +106,8 @@ public class CmdStuck implements Cmd {
                                 FactionsPlugin.instance().timers().remove(player.getUniqueId());
                                 FactionsPlugin.instance().stuckMap().remove(player.getUniqueId());
                                 if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) && !Essentials.handleTeleport(player, tp)) {
-                                    AbstractFactionsPlugin.getInstance().teleport(player, tp);
-                                    FactionsPlugin.instance().debug("/f stuck used regular teleport, not essentials!");
+                                    AbstractFactionsPlugin.instance().teleport(player, tp);
+                                    AbstractFactionsPlugin.instance().debug("/f stuck used regular teleport, not essentials!");
                                 }
                                 this.stop();
                                 return false;
@@ -121,7 +121,7 @@ public class CmdStuck implements Cmd {
                         }
                     };
                 }
-            }.runTaskLater(AbstractFactionsPlugin.getInstance(), delay * 20).getTaskId();
+            }.runTaskLater(AbstractFactionsPlugin.instance(), delay * 20).getTaskId();
 
             FactionsPlugin.instance().timers().put(player.getUniqueId(), System.currentTimeMillis() + (delay * 1000));
             long wait = FactionsPlugin.instance().timers().get(player.getUniqueId()) - System.currentTimeMillis();

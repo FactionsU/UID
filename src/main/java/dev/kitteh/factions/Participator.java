@@ -46,12 +46,12 @@ public interface Participator {
      */
     void sendMessage(Component component);
 
-    default String describeTo(@Nullable Participator that) {
-        return RelationUtil.describeThatToMe(this, that);
+    default String describeToLegacy(@Nullable Participator that) {
+        return RelationUtil.describeThatToMeLegacy(this, that);
     }
 
-    default String describeTo(@Nullable Participator that, boolean uppercaseFirst) {
-        return RelationUtil.describeThatToMe(this, that, uppercaseFirst);
+    default String describeToLegacy(@Nullable Participator that, boolean uppercaseFirst) {
+        return RelationUtil.describeThatToMeLegacy(this, that, uppercaseFirst);
     }
 
     default Relation relationTo(@Nullable Participator that) {
@@ -66,7 +66,7 @@ public interface Participator {
         return RelationUtil.getTextColorOfThatToMe(this, that);
     }
 
-    default String colorStringTo(@Nullable Participator that) {
-        return RelationUtil.getColorStringOfThatToMe(this, that);
+    default String colorLegacyStringTo(@Nullable Participator that) {
+        return RelationUtil.getLegacyColorStringOfThatToMe(this, that);
     }
 }

@@ -15,7 +15,7 @@ import java.util.function.Function;
 public enum PlayerTag implements Tag {
     GROUP("group", (fp) -> {
         if (fp.isOnline()) {
-            return AbstractFactionsPlugin.getInstance().getPrimaryGroup(fp.asPlayer());
+            return AbstractFactionsPlugin.instance().getPrimaryGroup(fp.asPlayer());
         } else {
             return "";
         }

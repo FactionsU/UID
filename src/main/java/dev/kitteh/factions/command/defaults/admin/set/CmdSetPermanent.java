@@ -8,6 +8,7 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.incendo.cloud.Command;
@@ -42,15 +43,15 @@ public class CmdSetPermanent implements Cmd {
 
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
-        FactionsPlugin.instance().log((fPlayer == null ? "A server admin" : fPlayer.name()) + " " + change + " the faction \"" + faction.tag() + "\".");
+        AbstractFactionsPlugin.instance().log((fPlayer == null ? "A server admin" : fPlayer.name()) + " " + change + " the faction \"" + faction.tag() + "\".");
 
         // Inform all players
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-            String blame = (fPlayer == null ? TL.GENERIC_SERVERADMIN.toString() : fPlayer.describeTo(fplayer));
+            String blame = (fPlayer == null ? TL.GENERIC_SERVERADMIN.toString() : fPlayer.describeToLegacy(fplayer));
             if (fplayer.faction() == faction) {
                 fplayer.msg(TL.COMMAND_PERMANENT_YOURS, blame, change);
             } else {
-                fplayer.msg(TL.COMMAND_PERMANENT_OTHER, blame, change, faction.tagString(fplayer));
+                fplayer.msg(TL.COMMAND_PERMANENT_OTHER, blame, change, faction.tagLegacy(fplayer));
             }
         }
     }

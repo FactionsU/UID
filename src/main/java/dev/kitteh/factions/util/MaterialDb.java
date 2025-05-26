@@ -23,7 +23,7 @@ public class MaterialDb {
 
     public static Material get(String name, Material defaultMaterial) {
         if (name == null) {
-            FactionsPlugin.instance().log("Null material name found");
+            AbstractFactionsPlugin.instance().log("Null material name found");
             return defaultMaterial;
         }
 
@@ -33,7 +33,7 @@ public class MaterialDb {
         }
 
         if (material == null) {
-            FactionsPlugin.instance().log(Level.INFO, "Material does not exist: " + name.toUpperCase());
+            AbstractFactionsPlugin.instance().log(Level.INFO, "Material does not exist: " + name.toUpperCase());
             return defaultMaterial;
         }
 
@@ -41,7 +41,7 @@ public class MaterialDb {
     }
 
     public static void load() {
-        InputStreamReader reader = new InputStreamReader(AbstractFactionsPlugin.getInstance().getResource("materials.json"));
+        InputStreamReader reader = new InputStreamReader(AbstractFactionsPlugin.instance().getResource("materials.json"));
         Type typeToken = new TypeToken<HashMap<String, String>>() {
         }.getType();
         HashMap<String, String> materialData = FactionsPlugin.instance().gson().fromJson(reader, typeToken);
@@ -58,6 +58,6 @@ public class MaterialDb {
             }
             map.put(nNull ? n : l, nNull ? matL : matN);
         });
-        AbstractFactionsPlugin.getInstance().getLogger().info(String.format("Loaded %s material mappings.", map.size()));
+        AbstractFactionsPlugin.instance().getLogger().info(String.format("Loaded %s material mappings.", map.size()));
     }
 }

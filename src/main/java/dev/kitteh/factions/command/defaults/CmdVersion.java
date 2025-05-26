@@ -24,6 +24,6 @@ public class CmdVersion implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        context.sender().sendMessage(Component.text().content(AbstractFactionsPlugin.getInstance().getDescription().getFullName()).color(NamedTextColor.GREEN));
+        context.sender().sendMessage(Component.text().content(AbstractFactionsPlugin.instance().getDescription().getFullName()).color(NamedTextColor.GREEN));
     }
 }

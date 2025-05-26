@@ -13,6 +13,7 @@ import dev.kitteh.factions.command.defaults.CmdConfirm;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.event.FactionDisbandEvent;
 import dev.kitteh.factions.integration.Econ;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
@@ -66,15 +67,15 @@ public class CmdForceDisband implements Cmd {
 
         // Inform all players
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-            String who = sender.describeTo(fplayer);
+            String who = sender.describeToLegacy(fplayer);
             if (fplayer.faction() == faction) {
                 fplayer.msg(TL.COMMAND_DISBAND_BROADCAST_YOURS, who);
             } else {
-                fplayer.msg(TL.COMMAND_DISBAND_BROADCAST_NOTYOURS, who, faction.tagString(fplayer));
+                fplayer.msg(TL.COMMAND_DISBAND_BROADCAST_NOTYOURS, who, faction.tagLegacy(fplayer));
             }
         }
         if (FactionsPlugin.instance().conf().logging().isFactionDisband()) {
-            FactionsPlugin.instance().log("The faction " + faction.tag() + " (" + faction.id() + ") was disbanded by " + sender.name() + ".");
+            AbstractFactionsPlugin.instance().log("The faction " + faction.tag() + " (" + faction.id() + ") was disbanded by " + sender.name() + ".");
         }
 
         if (Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled()) {
@@ -85,7 +86,7 @@ public class CmdForceDisband implements Cmd {
                 Econ.transferMoney(sender, faction, sender, amount, false);
                 String amountString = Econ.moneyString(amount);
                 sender.msg(TL.COMMAND_DISBAND_HOLDINGS, amountString);
-                FactionsPlugin.instance().log(sender.name() + " has been given bank holdings of " + amountString + " from disbanding " + faction.tag() + ".");
+                AbstractFactionsPlugin.instance().log(sender.name() + " has been given bank holdings of " + amountString + " from disbanding " + faction.tag() + ".");
             }
         }
 

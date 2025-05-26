@@ -19,7 +19,7 @@ public class OldJSONFactionDeserializer implements JsonDeserializer<JSONFaction>
         try {
             Integer.parseInt(id);
         } catch (NumberFormatException e) {
-            AbstractFactionsPlugin.getInstance().getLogger().warning("Invalid faction id found: " + id);
+            AbstractFactionsPlugin.instance().getLogger().warning("Invalid faction id found: " + id);
         }
         JsonElement relationWish = jsonElement.getAsJsonObject().get("relationWish").getAsJsonObject();
 

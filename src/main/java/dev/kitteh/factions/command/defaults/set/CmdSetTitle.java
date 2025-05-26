@@ -62,7 +62,7 @@ public class CmdSetTitle implements Cmd {
         target.title(title);
 
         // Inform
-        faction.msg(TL.COMMAND_TITLE_CHANGED, sender.describeTo(faction), target.describeTo(faction));
+        faction.msg(TL.COMMAND_TITLE_CHANGED, sender.describeToLegacy(faction), target.describeToLegacy(faction));
     }
 
 }

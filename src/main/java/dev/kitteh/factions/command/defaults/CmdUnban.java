@@ -41,6 +41,6 @@ public class CmdUnban implements Cmd {
         faction.unban(target);
 
         faction.msg(TL.COMMAND_UNBAN_UNBANNED, sender.name(), target.name());
-        target.msg(TL.COMMAND_UNBAN_TARGET, faction.tagString(target));
+        target.msg(TL.COMMAND_UNBAN_TARGET, faction.tagLegacy(target));
     }
 }

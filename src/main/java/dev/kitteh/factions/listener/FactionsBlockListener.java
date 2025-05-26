@@ -332,7 +332,7 @@ public class FactionsBlockListener extends AbstractListener {
         Faction otherFaction = Board.board().factionAt(loc);
 
         if (otherFaction.isWilderness()) {
-            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().playerCanBuild(player, location)) {
+            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().playerCanBuild(player, location)) {
                 return true;
             }
 
@@ -346,7 +346,7 @@ public class FactionsBlockListener extends AbstractListener {
 
             return false;
         } else if (otherFaction.isSafeZone()) {
-            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().playerCanBuild(player, location)) {
+            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().playerCanBuild(player, location)) {
                 return true;
             }
 
@@ -360,7 +360,7 @@ public class FactionsBlockListener extends AbstractListener {
 
             return false;
         } else if (otherFaction.isWarZone()) {
-            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().playerCanBuild(player, location)) {
+            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().playerCanBuild(player, location)) {
                 return true;
             }
 
@@ -385,10 +385,10 @@ public class FactionsBlockListener extends AbstractListener {
         if (!otherFaction.hasAccess(me, permissibleAction, loc)) {
             if (pain && permissibleAction != PermissibleActions.FROSTWALK) {
                 player.damage(conf.factions().other().getActionDeniedPainAmount());
-                me.msg(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.shortDescription(), otherFaction.tagString(myFaction));
+                me.msg(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.shortDescription(), otherFaction.tagLegacy(myFaction));
                 return true;
             } else if (!justCheck) {
-                me.msg(TL.PERM_DENIED_TERRITORY, permissibleAction.shortDescription(), otherFaction.tagString(myFaction));
+                me.msg(TL.PERM_DENIED_TERRITORY, permissibleAction.shortDescription(), otherFaction.tagLegacy(myFaction));
             }
             return false;
         }

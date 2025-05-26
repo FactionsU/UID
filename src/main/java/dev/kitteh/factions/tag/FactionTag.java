@@ -21,7 +21,7 @@ public enum FactionTag implements Tag {
     HOME_Z("z", (fac) -> fac.hasHome() ? String.valueOf(fac.home().getBlockZ()) : Tag.isMinimalShow() ? null : "{ig}"),
     CHUNKS("chunks", (fac) -> String.valueOf(fac.claimCount())),
     WARPS("warps", (fac) -> String.valueOf(fac.warps().size())),
-    HEADER("header", (fac, fp) -> TextUtil.titleize(fac.tagString(fp))),
+    HEADER("header", (fac, fp) -> TextUtil.titleize(fac.tagLegacy(fp))),
     POWER("power", (fac) -> String.valueOf(fac.power())),
     MAX_POWER("maxPower", (fac) -> String.valueOf(fac.powerMax())),
     POWER_BOOST("power-boost", (fac) -> {
@@ -34,7 +34,7 @@ public enum FactionTag implements Tag {
     }),
     JOINING("joining", (fac) -> (fac.open() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString())),
     FACTION("faction", (fac) -> fac.tag()),
-    FACTION_RELATION_COLOR("faction-relation-color", (fac, fp) -> fp == null ? "" : fp.colorStringTo(fac)),
+    FACTION_RELATION_COLOR("faction-relation-color", (fac, fp) -> fp == null ? "" : fp.colorLegacyStringTo(fac)),
     HOME_WORLD("world", (fac) -> fac.hasHome() ? fac.home().getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
     RAIDABLE("raidable", (fac) -> {
         boolean raid = FactionsPlugin.instance().landRaidControl().isRaidable(fac);

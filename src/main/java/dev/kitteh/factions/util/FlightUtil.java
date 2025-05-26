@@ -23,12 +23,12 @@ public class FlightUtil {
         double enemyCheck = FactionsPlugin.instance().conf().commands().fly().getRadiusCheck() * 20;
         if (enemyCheck > 0) {
             enemiesTask = new EnemiesTask();
-            enemiesTask.runTaskTimer(AbstractFactionsPlugin.getInstance(), 0, (long) enemyCheck);
+            enemiesTask.runTaskTimer(AbstractFactionsPlugin.instance(), 0, (long) enemyCheck);
         }
 
         double spawnRate = FactionsPlugin.instance().conf().commands().fly().particles().getSpawnRate() * 20;
         if (spawnRate > 0) {
-            new ParticleTrailsTask().runTaskTimer(AbstractFactionsPlugin.getInstance(), 0, (long) spawnRate);
+            new ParticleTrailsTask().runTaskTimer(AbstractFactionsPlugin.instance(), 0, (long) spawnRate);
         }
     }
 

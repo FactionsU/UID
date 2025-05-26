@@ -76,7 +76,7 @@ public class CmdSetHome implements Cmd {
 
         faction.home(player.getLocation());
 
-        faction.msg(TL.COMMAND_SETHOME_SET, sender.describeTo(faction, true));
+        faction.msg(TL.COMMAND_SETHOME_SET, sender.describeToLegacy(faction, true));
     }
 
     private void handleDel(CommandContext<Sender> context, FPlayer sender, Faction faction) {
@@ -96,6 +96,6 @@ public class CmdSetHome implements Cmd {
 
         faction.delHome();
 
-        faction.msg(TL.COMMAND_DELHOME_DEL, sender.describeTo(faction, true));
+        faction.msg(TL.COMMAND_DELHOME_DEL, sender.describeToLegacy(faction, true));
     }
 }

@@ -94,7 +94,7 @@ public class WarpGUI extends GUI<Integer> {
     @Override
     protected void onClick(Integer index, ClickType clickType) {
         if (!faction.hasAccess(this.user, PermissibleActions.WARP, this.user.lastStoodAt())) {
-            user.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagString(user));
+            user.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagLegacy(user));
             this.user.asPlayer().closeInventory();
             return;
         }
@@ -119,7 +119,7 @@ public class WarpGUI extends GUI<Integer> {
                 HashMap<Object, Object> sessionData = new HashMap<>();
                 sessionData.put("warp", warp);
                 PasswordPrompt passwordPrompt = new PasswordPrompt();
-                ConversationFactory inputFactory = new ConversationFactory(AbstractFactionsPlugin.getInstance())
+                ConversationFactory inputFactory = new ConversationFactory(AbstractFactionsPlugin.instance())
                         .withModality(false)
                         .withLocalEcho(false)
                         .withInitialSessionData(sessionData)
@@ -228,10 +228,10 @@ public class WarpGUI extends GUI<Integer> {
             Player player = Bukkit.getPlayer(user.asPlayer().getUniqueId());
             if (player != null) {
                 if (!faction.hasAccess(this.user, PermissibleActions.WARP, this.user.lastStoodAt())) {
-                    user.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagString(user));
+                    user.msg(TL.COMMAND_FWARP_NOACCESS, faction.tagLegacy(user));
                     return;
                 }
-                AbstractFactionsPlugin.getInstance().teleport(player, faction.warp(warp).asLocation()).thenAccept(success -> {
+                AbstractFactionsPlugin.instance().teleport(player, faction.warp(warp).asLocation()).thenAccept(success -> {
                     if (success) {
                         user.msg(TL.COMMAND_FWARP_WARPED, warp);
                     }

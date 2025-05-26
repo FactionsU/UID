@@ -14,11 +14,11 @@ import dev.kitteh.factions.event.LandUnclaimEvent;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.SpiralTask;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -91,10 +91,10 @@ public class CmdUnclaim implements Cmd {
                 if (sender.canClaimForFaction(forFaction)) {
                     sender.autoUnclaim(forFaction);
 
-                    sender.msg(TL.COMMAND_AUTOUNCLAIM_ENABLED, forFaction.describeTo(sender));
+                    sender.msg(TL.COMMAND_AUTOUNCLAIM_ENABLED, forFaction.describeToLegacy(sender));
                     sender.attemptUnclaim(forFaction, claimLocation, true);
                 } else {
-                    sender.msg(TL.COMMAND_AUTOUNCLAIM_OTHERFACTION, forFaction.describeTo(sender));
+                    sender.msg(TL.COMMAND_AUTOUNCLAIM_OTHERFACTION, forFaction.describeToLegacy(sender));
                 }
             } else {
                 sender.autoUnclaim(null);
@@ -166,7 +166,7 @@ public class CmdUnclaim implements Cmd {
                                 (forFaction.isSafeZone() && !Permission.MANAGE_SAFE_ZONE.has(sender.asPlayer()))
                 )
         ) {
-            sender.msg(TL.CLAIM_CANTUNCLAIM, forFaction.describeTo(sender));
+            sender.msg(TL.CLAIM_CANTUNCLAIM, forFaction.describeToLegacy(sender));
             return;
         }
 
@@ -231,7 +231,7 @@ public class CmdUnclaim implements Cmd {
                     Econ.modifyMoney(sender, tracker.refund, TL.COMMAND_UNCLAIM_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIM_FORUNCLAIM.toString());
                 }
             }
-            currentFaction.msg(TL.COMMAND_UNCLAIMFILL_UNCLAIMED, sender.describeTo(currentFaction, true), tracker.count(), x + "," + z);
+            currentFaction.msg(TL.COMMAND_UNCLAIMFILL_UNCLAIMED, sender.describeToLegacy(currentFaction, true), tracker.count(), x + "," + z);
         }
     }
 
@@ -256,12 +256,12 @@ public class CmdUnclaim implements Cmd {
         if (targetFaction.isSafeZone() || targetFaction.isWarZone()) {
             Board.board().unclaim(target);
             if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.asCoordString(), targetFaction.tag()));
+                AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.asCoordString(), targetFaction.tag()));
             }
             return true;
         }
         if (!fPlayer.adminBypass() && !targetFaction.hasAccess(fPlayer, PermissibleActions.TERRITORY, target)) {
-            fPlayer.msg(TL.CLAIM_CANTUNCLAIM, targetFaction.describeTo(fPlayer));
+            fPlayer.msg(TL.CLAIM_CANTUNCLAIM, targetFaction.describeToLegacy(fPlayer));
             return false;
         }
         LandUnclaimEvent unclaimEvent = new LandUnclaimEvent(target, targetFaction, fPlayer);
@@ -277,14 +277,14 @@ public class CmdUnclaim implements Cmd {
         Board.board().unclaim(target);
 
         if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-            FactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.asCoordString(), targetFaction.tag()));
+            AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.asCoordString(), targetFaction.tag()));
         }
         return true;
     }
 
     private void unclaimAll(FPlayer sender, Faction faction, boolean confirmed) {
         if (sender.role() != Role.ADMIN && !sender.adminBypass()) {
-            sender.msg(TL.CLAIM_CANTUNCLAIM, faction.describeTo(sender));
+            sender.msg(TL.CLAIM_CANTUNCLAIM, faction.describeToLegacy(sender));
             return;
         }
 
@@ -314,10 +314,10 @@ public class CmdUnclaim implements Cmd {
         }
 
         Board.board().unclaimAll(faction);
-        faction.msg(TL.COMMAND_UNCLAIMALL_UNCLAIMED, sender.describeTo(faction, true));
+        faction.msg(TL.COMMAND_UNCLAIMALL_UNCLAIMED, sender.describeToLegacy(faction, true));
 
         if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-            FactionsPlugin.instance().log(TL.COMMAND_UNCLAIMALL_LOG.format(sender.name(), faction.tag()));
+            AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIMALL_LOG.format(sender.name(), faction.tag()));
         }
     }
 }

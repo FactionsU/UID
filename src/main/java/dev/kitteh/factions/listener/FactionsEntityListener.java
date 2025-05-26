@@ -305,7 +305,7 @@ public class FactionsEntityListener extends AbstractListener {
             }
             if (FactionsPlugin.instance().conf().factions().protection().isPeacefulBlockAllEntityDamage() && defLocFaction.peaceful()) {
                 if (damager instanceof Player && notify) {
-                    FPlayers.fPlayers().get((Player) damager).msg(TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.tagString(FPlayers.fPlayers().get((Player) damager))));
+                    FPlayers.fPlayers().get((Player) damager).msg(TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.tagLegacy(FPlayers.fPlayers().get((Player) damager))));
                 }
                 return false;
             }
@@ -313,7 +313,7 @@ public class FactionsEntityListener extends AbstractListener {
                 FPlayer fPlayer = FPlayers.fPlayers().get((Player) damager);
                 if (!defLocFaction.hasAccess(fPlayer, PermissibleActions.DESTROY, defLoc)) {
                     if (notify) {
-                        fPlayer.msg(TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.tagString(FPlayers.fPlayers().get((Player) damager))));
+                        fPlayer.msg(TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.tagLegacy(FPlayers.fPlayers().get((Player) damager))));
                     }
                     return false;
                 }
@@ -333,7 +333,7 @@ public class FactionsEntityListener extends AbstractListener {
             return true;
         }
 
-        if (FactionsPlugin.instance().conf().worldGuard().isPVPPriority() && AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().isCustomPVPFlag((Player) damagee)) {
+        if (FactionsPlugin.instance().conf().worldGuard().isPVPPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().isCustomPVPFlag((Player) damagee)) {
             return true;
         }
 
@@ -442,7 +442,7 @@ public class FactionsEntityListener extends AbstractListener {
         // You can never hurt faction members or allies
         if (relation.isMember() || relation.isAlly() || relation.isTruce()) {
             if (notify) {
-                attacker.msg(TL.PLAYER_PVP_CANTHURT, defender.describeTo(attacker));
+                attacker.msg(TL.PLAYER_PVP_CANTHURT, defender.describeToLegacy(attacker));
             }
             return false;
         }
@@ -452,8 +452,8 @@ public class FactionsEntityListener extends AbstractListener {
         // You can not hurt neutrals in their own territory.
         if (ownTerritory && relation.isNeutral()) {
             if (notify) {
-                attacker.msg(TL.PLAYER_PVP_NEUTRALFAIL, defender.describeTo(attacker));
-                defender.msg(TL.PLAYER_PVP_TRIED, attacker.describeTo(defender, true));
+                attacker.msg(TL.PLAYER_PVP_NEUTRALFAIL, defender.describeToLegacy(attacker));
+                defender.msg(TL.PLAYER_PVP_TRIED, attacker.describeToLegacy(defender, true));
             }
             return false;
         }

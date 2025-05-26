@@ -105,7 +105,7 @@ public class EngineDynmap {
         }
 
         // Schedule non thread safe sync at the end!
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(AbstractFactionsPlugin.getInstance(), () -> {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(AbstractFactionsPlugin.instance(), () -> {
 
             if (!updateCore()) {
                 return;
@@ -115,7 +115,7 @@ public class EngineDynmap {
 
             updatePlayersets(playerSets);
         }, 101L, 100L);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(AbstractFactionsPlugin.getInstance(), () -> {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(AbstractFactionsPlugin.instance(), () -> {
             boolean doIt = true;
             if (FactionsPlugin.instance().configManager().dynmapConfig().dynmap().isOnlyUpdateWorldOnce()) {
                 if (this.stillNeedsToRunOnce) {
@@ -143,7 +143,7 @@ public class EngineDynmap {
                 worldFactionChunks.values().stream().flatMapToInt(m -> m.keySet().intStream()).distinct().forEach(factionId -> {
                     Faction faction = Factions.factions().get(factionId);
                     if (faction == null) { // why :(
-                        AbstractFactionsPlugin.getInstance().getLogger().warning("Found invalid faction ID " + factionId);
+                        AbstractFactionsPlugin.instance().getLogger().warning("Found invalid faction ID " + factionId);
                         invalidFactionsWat.add(factionId);
                         return;
                     }
@@ -168,9 +168,9 @@ public class EngineDynmap {
                             public void run() {
                                 updateAreas(areas);
                             }
-                        }.runTask(AbstractFactionsPlugin.getInstance());
+                        }.runTask(AbstractFactionsPlugin.instance());
                     }
-                }.runTaskAsynchronously(AbstractFactionsPlugin.getInstance());
+                }.runTaskAsynchronously(AbstractFactionsPlugin.instance());
 
             }
 
@@ -178,7 +178,7 @@ public class EngineDynmap {
         }, 100L, Math.max(1, dynmapConf.dynmap().getClaimUpdatePeriod()) * 20L);
 
         this.enabled = true;
-        AbstractFactionsPlugin.getInstance().getLogger().info("Enabled Dynmap integration");
+        AbstractFactionsPlugin.instance().getLogger().info("Enabled Dynmap integration");
         return true;
     }
 
@@ -846,7 +846,7 @@ public class EngineDynmap {
     // Thread Safe / Asynchronous: Yes
     static void severe(String msg) {
         String message = DYNMAP_INTEGRATION + ChatColor.RED + msg;
-        AbstractFactionsPlugin.getInstance().getLogger().severe(message);
+        AbstractFactionsPlugin.instance().getLogger().severe(message);
     }
 
     enum Direction {

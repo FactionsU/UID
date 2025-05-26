@@ -50,7 +50,7 @@ public class PermSelectorRegistry {
             return createOrThrow(input);
         } catch (Exception e) {
             if (log) {
-                AbstractFactionsPlugin.getInstance().getLogger().log(Level.WARNING, "Could not parse perm selector: " + input, e);
+                AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "Could not parse perm selector: " + input, e);
             }
             return new UnknownSelector(input);
         }

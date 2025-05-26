@@ -12,11 +12,10 @@ import org.bukkit.OfflinePlayer;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 
 public interface FactionsPlugin {
     static FactionsPlugin instance() {
-        return AbstractFactionsPlugin.getInstance();
+        return AbstractFactionsPlugin.instance();
     }
 
     Gson gson();
@@ -27,17 +26,9 @@ public interface FactionsPlugin {
 
     Map<UUID, Long> timers();
 
-    void log(String msg);
-
-    void log(String str, Object... args);
-
-    void log(Level level, String str, Object... args);
-
-    void log(Level level, String msg);
-
     boolean autoSave();
 
-    void autoSave(boolean val);
+    void autoSave(boolean enabled);
 
     ConfigManager configManager();
 
@@ -46,10 +37,6 @@ public interface FactionsPlugin {
     TranslationsConfig tl();
 
     LandRaidControl landRaidControl();
-
-    void debug(Level level, String s);
-
-    void debug(String s);
 
     OfflinePlayer factionOfflinePlayer(String name);
 

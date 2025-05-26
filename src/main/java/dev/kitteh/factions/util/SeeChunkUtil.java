@@ -31,7 +31,7 @@ public class SeeChunkUtil extends BukkitRunnable {
         this.effect = ParticleProvider.effectFromString(effectName);
         this.useColor = FactionsPlugin.instance().conf().commands().seeChunk().isRelationalColor();
 
-        AbstractFactionsPlugin.getInstance().getLogger().info(TextUtil.parse("Using %s as the ParticleEffect for /f sc", effect.name()));
+        AbstractFactionsPlugin.instance().getLogger().info(TextUtil.parse("Using %s as the ParticleEffect for /f sc", effect.name()));
     }
 
     @Override

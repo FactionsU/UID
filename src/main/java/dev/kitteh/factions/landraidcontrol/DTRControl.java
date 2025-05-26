@@ -127,7 +127,7 @@ public class DTRControl implements LandRaidControl {
         }
 
         DTRLossEvent dtrLossEvent = new DTRLossEvent(faction, fplayer);
-        if (AbstractFactionsPlugin.getInstance().getWorldguard() != null && AbstractFactionsPlugin.getInstance().getWorldguard().isNoLossFlag(player)) {
+        if (AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().isNoLossFlag(player)) {
             dtrLossEvent.setCancelled(true);
         }
 
@@ -146,7 +146,7 @@ public class DTRControl implements LandRaidControl {
                     double startingOther = fKiller.faction().dtr();
                     fKiller.faction().dtr(Math.min(conf().getMaxDTR(), faction.dtr() + change));
                     double killDiff = fKiller.faction().dtr() - startingOther;
-                    fKiller.msg(TL.DTR_VAMPIRISM_GAIN, killDiff, fplayer.describeTo(fKiller), fKiller.faction().dtr());
+                    fKiller.msg(TL.DTR_VAMPIRISM_GAIN, killDiff, fplayer.describeToLegacy(fKiller), fKiller.faction().dtr());
                 }
             }
             faction.dtrFrozenUntil(System.currentTimeMillis() + (conf().getFreezeTime() * 1000L));

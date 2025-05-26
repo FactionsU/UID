@@ -30,7 +30,7 @@ public class Loader {
     }
 
     public static HoconConfigurationLoader getLoader(String file) {
-        Path configFolder = AbstractFactionsPlugin.getInstance().getDataFolder().toPath().resolve("config");
+        Path configFolder = AbstractFactionsPlugin.instance().getDataFolder().toPath().resolve("config");
         if (!configFolder.toFile().exists()) {
             configFolder.toFile().mkdir();
         }
@@ -109,7 +109,7 @@ public class Loader {
                             //noinspection unchecked
                             newNewNode.setValue((TypeToken<Object>) tokenField.get(object), defaultValue);
                         } catch (ObjectMappingException | NoSuchFieldException e) {
-                            AbstractFactionsPlugin.getInstance().getLogger().severe("Failed horrifically to handle " + confName);
+                            AbstractFactionsPlugin.instance().getLogger().severe("Failed horrifically to handle " + confName);
                         }
                     }
                 } else {
@@ -121,7 +121,7 @@ public class Loader {
                         }
                         newNewNode.setValue(curNode.getValue());
                     } catch (IllegalArgumentException ex) {
-                        AbstractFactionsPlugin.getInstance().getLogger().severe("Found incorrect type for " + getNodeName(curNode.getPath()) + ": Expected " + field.getType() + ", found " + curNode.getValue().getClass());
+                        AbstractFactionsPlugin.instance().getLogger().severe("Found incorrect type for " + getNodeName(curNode.getPath()) + ": Expected " + field.getType() + ", found " + curNode.getValue().getClass());
                         field.set(object, defaultValue);
                     }
                 }

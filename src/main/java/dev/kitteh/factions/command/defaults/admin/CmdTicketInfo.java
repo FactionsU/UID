@@ -128,7 +128,7 @@ public class CmdTicketInfo implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.getInstance();
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
         TicketInfo info = new TicketInfo();
         info.uuid = plugin.getServerUUID();
         info.pluginVersion = plugin.getDescription().getVersion();
@@ -174,7 +174,7 @@ public class CmdTicketInfo implements Cmd {
             @Override
             public void run() {
                 try {
-                    Path dataPath = AbstractFactionsPlugin.getInstance().getDataFolder().toPath();
+                    Path dataPath = AbstractFactionsPlugin.instance().getDataFolder().toPath();
                     String spigotConf = getFile(Paths.get("spigot.yml"));
                     info.online = Boolean.toString(Bukkit.getOnlineMode());
                     if (!Bukkit.getOnlineMode()) {
@@ -230,25 +230,25 @@ public class CmdTicketInfo implements Cmd {
                                 String url = response.message;
                                 context.sender().sendMessage(Component.text().color(NamedTextColor.YELLOW).content("Share this URL: " + url).clickEvent(ClickEvent.openUrl(url)));
                                 if (context.sender().isPlayer()) {
-                                    AbstractFactionsPlugin.getInstance().getLogger().info("Share this URL: " + url);
+                                    AbstractFactionsPlugin.instance().getLogger().info("Share this URL: " + url);
                                 }
                             } else {
                                 context.sender().sendMessage(Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
-                                AbstractFactionsPlugin.getInstance().getLogger().warning("Received: " + response.message);
+                                AbstractFactionsPlugin.instance().getLogger().warning("Received: " + response.message);
                             }
                         }
-                    }.runTask(AbstractFactionsPlugin.getInstance());
+                    }.runTask(AbstractFactionsPlugin.instance());
                 } catch (Exception e) {
-                    AbstractFactionsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to execute ticketinfo command", e);
+                    AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to execute ticketinfo command", e);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             context.sender().sendMessage(Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
                         }
-                    }.runTask(AbstractFactionsPlugin.getInstance());
+                    }.runTask(AbstractFactionsPlugin.instance());
                 }
             }
-        }.runTaskAsynchronously(AbstractFactionsPlugin.getInstance());
+        }.runTaskAsynchronously(AbstractFactionsPlugin.instance());
         context.sender().sendMessage(Component.text().color(NamedTextColor.YELLOW).content("Now running..."));
     }
 }

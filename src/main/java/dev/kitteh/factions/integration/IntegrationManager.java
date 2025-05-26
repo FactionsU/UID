@@ -38,10 +38,10 @@ public class IntegrationManager implements Listener {
             } catch (NumberFormatException ignored) {
             }
             if (notSupported) {
-                FactionsPlugin.instance().log("Found an outdated LuckPerms. With LuckPerms 5.1.0 and above, FactionsUUID supports permission contexts!");
+                AbstractFactionsPlugin.instance().log("Found an outdated LuckPerms. With LuckPerms 5.1.0 and above, FactionsUUID supports permission contexts!");
             } else {
                 if (LuckPerms.init(plugin)) {
-                    AbstractFactionsPlugin.getInstance().luckpermsEnabled();
+                    AbstractFactionsPlugin.instance().luckpermsEnabled();
                 }
             }
             return true;
@@ -50,14 +50,14 @@ public class IntegrationManager implements Listener {
         PLACEHOLDERAPI("PlaceholderAPI", p -> {
             PapiExpansion papi = new PapiExpansion();
             if (papi.register()) {
-                AbstractFactionsPlugin.getInstance().getLogger().info("Successfully registered placeholders with PlaceholderAPI.");
+                AbstractFactionsPlugin.instance().getLogger().info("Successfully registered placeholders with PlaceholderAPI.");
                 return true;
             }
             return false;
         }),
         SENTINEL("Sentinel", p -> Sentinel.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         WORLDGUARD("WorldGuard", plugin -> {
-            AbstractFactionsPlugin f = AbstractFactionsPlugin.getInstance();
+            AbstractFactionsPlugin f = AbstractFactionsPlugin.instance();
             String version = plugin.getDescription().getVersion();
             if (version.startsWith("7")) {
                 f.setWorldGuard(new Worldguard());
