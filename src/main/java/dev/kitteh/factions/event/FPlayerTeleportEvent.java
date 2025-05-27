@@ -11,7 +11,7 @@ import java.util.Objects;
 @NullMarked
 public class FPlayerTeleportEvent extends FactionPlayerEvent implements Cancellable {
     public enum Reason {
-        HOME, AHOME, WARP, STUCK
+        HOME, FORCED_HOME, WARP, STUCK
     }
 
     private final Reason reason;

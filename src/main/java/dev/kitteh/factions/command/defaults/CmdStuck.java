@@ -104,7 +104,7 @@ public class CmdStuck implements Cmd {
                                 sender.msgLegacy(TL.COMMAND_STUCK_TELEPORT, tp.getBlockX(), tp.getBlockY(), tp.getBlockZ());
                                 FactionsPlugin.instance().timers().remove(player.getUniqueId());
                                 FactionsPlugin.instance().stuckMap().remove(player.getUniqueId());
-                                if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) && !Essentials.handleTeleport(player, tp)) {
+                                if (!FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) || !Essentials.handleTeleport(player, tp)) {
                                     AbstractFactionsPlugin.instance().teleport(player, tp);
                                     AbstractFactionsPlugin.instance().debug("/f stuck used regular teleport, not essentials!");
                                 }

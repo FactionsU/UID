@@ -100,6 +100,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected transient boolean loginPvpDisabled;
     protected transient long lastFrostwalkerMessage;
     protected transient boolean shouldTakeFallDamage = true;
+    protected transient long stuckWarmup;
     protected transient @Nullable OfflinePlayer offlinePlayer;
 
     public void cleanupDeserialization() {

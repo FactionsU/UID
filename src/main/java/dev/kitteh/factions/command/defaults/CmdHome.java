@@ -138,15 +138,15 @@ public class CmdHome implements Cmd {
             return;
         }
 
-        // if Essentials teleport handling is enabled and available, pass the teleport off to it (for delay and cooldown)
-        if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.handleTeleport(player, destination)) {
-            return;
-        }
-
         WarmUpUtil.process(sender, WarmUpUtil.Warmup.HOME, TL.WARMUPS_NOTIFY_TELEPORT, "Home", () -> {
             Player plr = sender.asPlayer();
 
             if (plr == null) return;
+
+            if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.handleTeleport(plr, destination)) {
+                return;
+            }
+
             // Create a smoke effect
             if (FactionsPlugin.instance().conf().factions().homes().isTeleportCommandSmokeEffectEnabled()) {
                 List<Location> smokeLocations = new ArrayList<>();

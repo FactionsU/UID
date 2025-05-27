@@ -42,13 +42,12 @@ public class Essentials {
         }
 
         AsyncTeleport teleport = essentials.getUser(player).getAsyncTeleport();
-        Trade trade = new Trade(BigDecimal.valueOf(FactionsPlugin.instance().conf().economy().getCostHome()), essentials);
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         future.exceptionally(e -> {
             ComponentDispatcher.send(player, Component.text().color(NamedTextColor.RED).content(e.getMessage()));
             return false;
         });
-        teleport.teleport(loc, trade, PlayerTeleportEvent.TeleportCause.PLUGIN, future);
+        teleport.teleport(loc, null, PlayerTeleportEvent.TeleportCause.PLUGIN, future);
 
         return true;
     }
