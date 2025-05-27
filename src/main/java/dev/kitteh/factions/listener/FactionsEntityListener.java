@@ -124,13 +124,13 @@ public class FactionsEntityListener extends AbstractListener {
             }
 
             if (playerHurt) {
-                cancelFStuckTeleport((Player) damagee);
+                cancelWarmup((Player) damagee);
                 if ((damager instanceof Player) || plugin.conf().commands().fly().isDisableOnHurtByMobs()) {
                     cancelFFly((Player) damagee);
                 }
             }
             if (damager instanceof Player) {
-                cancelFStuckTeleport((Player) damager);
+                cancelWarmup((Player) damager);
                 if ((playerHurt && plugin.conf().commands().fly().isDisableOnHurtingPlayers()) ||
                         (!playerHurt && plugin.conf().commands().fly().isDisableOnHurtingMobs())) {
                     cancelFFly((Player) damager);
@@ -141,14 +141,9 @@ public class FactionsEntityListener extends AbstractListener {
         // entity took generic damage?
         if (playerHurt) {
             Player player = (Player) damagee;
-            FPlayer me = FPlayers.fPlayers().get(player);
-            cancelFStuckTeleport(player);
+            cancelWarmup(player);
             if (plugin.conf().commands().fly().isDisableOnGenericDamage()) {
                 cancelFFly(player);
-            }
-            if (me.warmingUp()) {
-                me.cancelWarmup();
-                me.msgLegacy(TL.WARMUPS_CANCELLED);
             }
         }
     }
@@ -167,14 +162,14 @@ public class FactionsEntityListener extends AbstractListener {
         }
     }
 
-    public void cancelFStuckTeleport(Player player) {
+    public void cancelWarmup(Player player) {
         if (player == null) {
             return;
         }
-        UUID uuid = player.getUniqueId();
-        if (FactionsPlugin.instance().stuckMap().containsKey(uuid)) {
-            FPlayers.fPlayers().get(player).msgLegacy(TL.COMMAND_STUCK_CANCELLED);
-            FactionsPlugin.instance().stuckMap().remove(uuid);
+        FPlayer me = FPlayers.fPlayers().get(player);
+        if (me.warmingUp()) {
+            me.cancelWarmup();
+            me.msgLegacy(TL.WARMUPS_NOTIFY_CANCELLED);
         }
     }
 

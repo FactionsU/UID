@@ -147,12 +147,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     // Persist related
     private Gson gson;
 
-    // holds f stuck start times
-    private final Map<UUID, Long> timers = new HashMap<>();
-
-    //holds f stuck taskids
-    private final Map<UUID, Integer> stuckMap = new HashMap<>();
-
     private Integer autoLeaveTask = null;
 
     private SeeChunkUtil seeChunkUtil;
@@ -740,19 +734,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         return seeChunkUtil;
     }
 
-    @Override
-    public Map<UUID, Integer> stuckMap() {
-        return this.stuckMap;
-    }
-
-    @Override
-    public Map<UUID, Long> timers() {
-        return this.timers;
-    }
-
-    // -------------------------------------------- //
-    // LOGGING
-    // -------------------------------------------- //
     public void log(String msg) {
         log(Level.INFO, msg);
     }
@@ -774,7 +755,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         return this.autoSave;
     }
 
-    @Override
     public void autoSave(boolean enabled) {
         this.autoSave = enabled;
     }
@@ -896,7 +876,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         }
     }
 
-    @Override
     public OfflinePlayer factionOfflinePlayer(String name) {
         return this.getOfflinePlayer(name, UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
     }

@@ -25,6 +25,7 @@ import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
+import dev.kitteh.factions.util.WarmUpUtil;
 import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
@@ -201,13 +202,6 @@ public class FactionsPlayerListener extends AbstractListener {
 
         ((MemoryFPlayer) me).onLogInOut();
 
-        // if player is waiting for fstuck teleport but leaves, remove
-        if (this.plugin.stuckMap().containsKey(player.getUniqueId())) {
-            FPlayers.fPlayers().get(player).msgLegacy(TL.COMMAND_STUCK_CANCELLED);
-            this.plugin.stuckMap().remove(player.getUniqueId());
-            this.plugin.timers().remove(player.getUniqueId());
-        }
-
         Faction myFaction = me.faction();
         if (!myFaction.isWilderness()) {
             myFaction.trackMemberLoggedOff();
@@ -270,9 +264,9 @@ public class FactionsPlayerListener extends AbstractListener {
 
         // clear visualization
         if (fromLoc.getBlockX() != toLoc.getBlockX() || fromLoc.getBlockY() != toLoc.getBlockY() || fromLoc.getBlockZ() != toLoc.getBlockZ() || fromLoc.getWorld() != toLoc.getWorld()) {
-            if (me.warmingUp()) {
+            if (me.warmup() instanceof WarmUpUtil.Warmup warmup && warmup != WarmUpUtil.Warmup.STUCK) {
                 me.cancelWarmup();
-                me.msgLegacy(TL.WARMUPS_CANCELLED);
+                me.msgLegacy(TL.WARMUPS_NOTIFY_CANCELLED);
             }
         }
 

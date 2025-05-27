@@ -22,13 +22,7 @@ public interface FactionsPlugin {
 
     SeeChunkUtil seeChunkUtil();
 
-    Map<UUID, Integer> stuckMap();
-
-    Map<UUID, Long> timers();
-
     boolean autoSave();
-
-    void autoSave(boolean enabled);
 
     ConfigManager configManager();
 
@@ -37,8 +31,6 @@ public interface FactionsPlugin {
     TranslationsConfig tl();
 
     LandRaidControl landRaidControl();
-
-    OfflinePlayer factionOfflinePlayer(String name);
 
     IntegrationManager integrationManager();
 }

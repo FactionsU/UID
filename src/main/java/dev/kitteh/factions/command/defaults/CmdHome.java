@@ -138,7 +138,8 @@ public class CmdHome implements Cmd {
             return;
         }
 
-        WarmUpUtil.process(sender, WarmUpUtil.Warmup.HOME, TL.WARMUPS_NOTIFY_TELEPORT, "Home", () -> {
+        int delay = FactionsPlugin.instance().conf().commands().home().getDelay();
+        WarmUpUtil.process(sender, WarmUpUtil.Warmup.HOME, TL.WARMUPS_NOTIFY_HOME.format(delay), () -> {
             Player plr = sender.asPlayer();
 
             if (plr == null) return;
@@ -158,6 +159,6 @@ public class CmdHome implements Cmd {
             }
 
             AbstractFactionsPlugin.instance().teleport(plr, destination);
-        }, FactionsPlugin.instance().conf().commands().home().getDelay());
+        }, delay);
     }
 }

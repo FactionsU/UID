@@ -451,11 +451,8 @@ public enum TL {
     COMMAND_STATUS_AGOSUFFIX(" ago."),
     COMMAND_STATUS_DESCRIPTION("Show the status of a player"),
 
-    COMMAND_STUCK_TIMEFORMAT("m 'minutes', s 'seconds.'"),
-    COMMAND_STUCK_CANCELLED("&6Teleport cancelled because you were damaged"),
     COMMAND_STUCK_OUTSIDE("&6Teleport cancelled because you left &e%1$d &6block radius"),
-    COMMAND_STUCK_EXISTS("&6You are already teleporting, you must wait &e%1$s"),
-    COMMAND_STUCK_START("&6Teleport will commence in &e%s&6. Don't take or deal damage. "),
+    COMMAND_STUCK_ALREADYEXISTS("&6You are already teleporting, you must wait!"),
     COMMAND_STUCK_TELEPORT("&6Teleported safely to %1$d, %2$d, %3$d."),
     COMMAND_STUCK_FAILED("&cFailed to find a safe place to get you out."),
     COMMAND_STUCK_TOSTUCK2("to safely teleport out"),
@@ -812,10 +809,11 @@ public enum TL {
     /**
      * Warmups
      */
-    WARMUPS_NOTIFY_FLIGHT("&eFlight will enable in &d%2$d &eseconds."),
-    WARMUPS_NOTIFY_TELEPORT("&eYou will teleport to &d%1$s &ein &d%2$d &eseconds."),
-    WARMUPS_ALREADY("&cYou are already warming up."),
-    WARMUPS_CANCELLED("&cYou have cancelled your warmup."),
+    WARMUPS_NOTIFY_FLY("&eFlight will enable in &d%d &eseconds."),
+    WARMUPS_NOTIFY_HOME("&eYou will teleport home in &d%d &eseconds."),
+    WARMUPS_NOTIFY_WARP("&eYou will teleport to &d%1$s &ein &d%2$d &eseconds."),
+    WARMUPS_NOTIFY_STUCK("&eYou will find a safe place to become unstuck in &d%d &eseconds."),
+    WARMUPS_NOTIFY_CANCELLED("&cYou have cancelled your pending action!"),
     /**
      * DTR
      */

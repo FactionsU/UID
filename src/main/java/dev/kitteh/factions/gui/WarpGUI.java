@@ -224,11 +224,16 @@ public class WarpGUI extends GUI<Integer> {
     }
 
     private void doWarmup(final String warp) {
-        WarmUpUtil.process(user, WarmUpUtil.Warmup.WARP, TL.WARMUPS_NOTIFY_TELEPORT, warp, () -> {
-            Player player = Bukkit.getPlayer(user.asPlayer().getUniqueId());
+        int delay = FactionsPlugin.instance().conf().commands().warp().getDelay();
+        WarmUpUtil.process(user, WarmUpUtil.Warmup.WARP, TL.WARMUPS_NOTIFY_WARP.format(warp, delay), () -> {
+            Player player = Bukkit.getPlayer(user.uniqueId());
             if (player != null) {
                 if (!faction.hasAccess(this.user, PermissibleActions.WARP, this.user.lastStoodAt())) {
                     user.msgLegacy(TL.COMMAND_FWARP_NOACCESS, faction.tagLegacy(user));
+                    return;
+                }
+                if (faction.warp(warp) == null) {
+                    user.msgLegacy(TL.COMMAND_FWARP_INVALID_WARP);
                     return;
                 }
                 AbstractFactionsPlugin.instance().teleport(player, faction.warp(warp).asLocation()).thenAccept(success -> {
@@ -237,7 +242,7 @@ public class WarpGUI extends GUI<Integer> {
                     }
                 });
             }
-        }, FactionsPlugin.instance().conf().commands().warp().getDelay());
+        }, delay);
     }
 
     private boolean transact() {

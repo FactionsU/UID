@@ -85,11 +85,12 @@ public class CmdFly implements Cmd {
             return;
         }
 
-        WarmUpUtil.process(fPlayer, WarmUpUtil.Warmup.FLIGHT, TL.WARMUPS_NOTIFY_FLIGHT, "Fly", () -> {
+        int delay = FactionsPlugin.instance().conf().commands().fly().getDelay();
+        WarmUpUtil.process(fPlayer, WarmUpUtil.Warmup.FLIGHT, TL.WARMUPS_NOTIFY_FLY.format(delay), () -> {
             if (flyTest(fPlayer, notify)) {
                 fPlayer.flying(true);
             }
-        }, FactionsPlugin.instance().conf().commands().fly().getDelay());
+        }, delay);
     }
 
     private boolean flyTest(FPlayer fPlayer, boolean notify) {

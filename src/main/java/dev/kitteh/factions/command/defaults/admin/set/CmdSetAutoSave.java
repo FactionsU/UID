@@ -1,9 +1,9 @@
 package dev.kitteh.factions.command.defaults.admin.set;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.incendo.cloud.Command;
@@ -27,7 +27,7 @@ public class CmdSetAutoSave implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         boolean state = context.get("state");
-        FactionsPlugin.instance().autoSave(state);
+        AbstractFactionsPlugin.instance().autoSave(state);
         context.sender().msg(state ? TL.COMMAND_SETAUTOSAVE_ENABLED : TL.COMMAND_SETAUTOSAVE_DISABLED);
     }
 }

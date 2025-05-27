@@ -15,19 +15,23 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.SpiralTask;
 import dev.kitteh.factions.util.TL;
-import org.apache.commons.lang3.time.DurationFormatUtils;
+import dev.kitteh.factions.util.WarmUpUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 
 public class CmdStuck implements Cmd {
+    private final Set<UUID> waiting = new HashSet<>();
+
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
         return (manager, builder) -> manager.command(
@@ -48,12 +52,9 @@ public class CmdStuck implements Cmd {
         final int radius = FactionsPlugin.instance().conf().commands().stuck().getRadius();
         final int searchRadius = FactionsPlugin.instance().conf().commands().stuck().getSearchRadius();
 
-        if (FactionsPlugin.instance().stuckMap().containsKey(player.getUniqueId())) {
-            long wait = FactionsPlugin.instance().timers().get(player.getUniqueId()) - System.currentTimeMillis();
-            String time = DurationFormatUtils.formatDuration(wait, TL.COMMAND_STUCK_TIMEFORMAT.toString(), true);
-            sender.msgLegacy(TL.COMMAND_STUCK_EXISTS, time);
+        if (waiting.contains(sender.uniqueId()) || (sender.warmup() instanceof WarmUpUtil.Warmup warmup && warmup == WarmUpUtil.Warmup.STUCK)) {
+            sender.msgLegacy(TL.COMMAND_STUCK_ALREADYEXISTS);
         } else {
-
             FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, null, FPlayerTeleportEvent.Reason.STUCK);
             Bukkit.getServer().getPluginManager().callEvent(tpEvent);
             if (tpEvent.isCancelled()) {
@@ -65,68 +66,53 @@ public class CmdStuck implements Cmd {
                 return;
             }
 
-            final int id = new BukkitRunnable() {
+            WarmUpUtil.process(sender, WarmUpUtil.Warmup.STUCK, TL.WARMUPS_NOTIFY_STUCK.format(delay), () -> {
+                // check for world difference or radius exceeding
+                final World world = chunk.world();
+                if (world.getUID() != player.getWorld().getUID() || sentAt.distance(player.getLocation()) > radius) {
+                    sender.msgLegacy(TL.COMMAND_STUCK_OUTSIDE, radius);
+                    return;
+                }
 
-                @Override
-                public void run() {
-                    if (!FactionsPlugin.instance().stuckMap().containsKey(player.getUniqueId())) {
-                        return;
-                    }
+                waiting.add(sender.uniqueId());
 
-                    // check for world difference or radius exceeding
-                    final World world = chunk.world();
-                    if (world.getUID() != player.getWorld().getUID() || sentAt.distance(player.getLocation()) > radius) {
-                        sender.msgLegacy(TL.COMMAND_STUCK_OUTSIDE, radius);
-                        FactionsPlugin.instance().timers().remove(player.getUniqueId());
-                        FactionsPlugin.instance().stuckMap().remove(player.getUniqueId());
-                        return;
-                    }
+                final Board board = Board.board();
+                // spiral task to find nearest wilderness chunk
+                new SpiralTask(new FLocation(player), searchRadius) {
+                    final int buffer = FactionsPlugin.instance().conf().worldBorder().getBuffer();
 
-                    final Board board = Board.board();
-                    // spiral task to find nearest wilderness chunk
-                    new SpiralTask(new FLocation(player), searchRadius) {
-
-                        final int buffer = FactionsPlugin.instance().conf().worldBorder().getBuffer();
-
-                        @Override
-                        public boolean work() {
-                            FLocation chunk = currentFLocation();
-                            if (chunk.isOutsideWorldBorder(buffer)) {
-                                return true;
-                            }
-
-                            Faction faction = board.factionAt(chunk);
-                            if (faction.isWilderness()) {
-                                int cx = FLocation.chunkToBlock(chunk.x());
-                                int cz = FLocation.chunkToBlock(chunk.z());
-                                int y = world.getHighestBlockYAt(cx, cz);
-                                Location tp = new Location(world, cx, y, cz);
-                                sender.msgLegacy(TL.COMMAND_STUCK_TELEPORT, tp.getBlockX(), tp.getBlockY(), tp.getBlockZ());
-                                FactionsPlugin.instance().timers().remove(player.getUniqueId());
-                                FactionsPlugin.instance().stuckMap().remove(player.getUniqueId());
-                                if (!FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) || !Essentials.handleTeleport(player, tp)) {
-                                    AbstractFactionsPlugin.instance().teleport(player, tp);
-                                    AbstractFactionsPlugin.instance().debug("/f stuck used regular teleport, not essentials!");
-                                }
-                                this.stop();
-                                return false;
-                            }
+                    @Override
+                    public boolean work() {
+                        FLocation chunk = currentFLocation();
+                        if (chunk.isOutsideWorldBorder(buffer)) {
                             return true;
                         }
 
-                        @Override
-                        public void finish() {
-                            sender.msgLegacy(TL.COMMAND_STUCK_FAILED);
+                        Faction faction = board.factionAt(chunk);
+                        if (faction.isWilderness()) {
+                            int cx = FLocation.chunkToBlock(chunk.x());
+                            int cz = FLocation.chunkToBlock(chunk.z());
+                            int y = world.getHighestBlockYAt(cx, cz);
+                            Location tp = new Location(world, cx, y, cz);
+                            sender.msgLegacy(TL.COMMAND_STUCK_TELEPORT, tp.getBlockX(), tp.getBlockY(), tp.getBlockZ());
+                            if (!FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) || !Essentials.handleTeleport(player, tp)) {
+                                AbstractFactionsPlugin.instance().teleport(player, tp);
+                                AbstractFactionsPlugin.instance().debug("/f stuck used regular teleport, not essentials!");
+                            }
+                            this.stop();
+                            waiting.remove(sender.uniqueId());
+                            return false;
                         }
-                    };
-                }
-            }.runTaskLater(AbstractFactionsPlugin.instance(), delay * 20).getTaskId();
+                        return true;
+                    }
 
-            FactionsPlugin.instance().timers().put(player.getUniqueId(), System.currentTimeMillis() + (delay * 1000));
-            long wait = FactionsPlugin.instance().timers().get(player.getUniqueId()) - System.currentTimeMillis();
-            String time = DurationFormatUtils.formatDuration(wait, TL.COMMAND_STUCK_TIMEFORMAT.toString(), true);
-            sender.msgLegacy(TL.COMMAND_STUCK_START, time);
-            FactionsPlugin.instance().stuckMap().put(player.getUniqueId(), id);
+                    @Override
+                    public void finish() {
+                        waiting.remove(sender.uniqueId());
+                        sender.msgLegacy(TL.COMMAND_STUCK_FAILED);
+                    }
+                };
+            }, delay);
         }
     }
 }

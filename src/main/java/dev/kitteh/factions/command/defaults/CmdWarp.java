@@ -74,9 +74,10 @@ public class CmdWarp implements Cmd {
                     return;
                 }
                 final FPlayer fPlayer = sender;
-                final UUID uuid = sender.asPlayer().getUniqueId();
+                final UUID uuid = sender.uniqueId();
 
-                WarmUpUtil.process(sender, WarmUpUtil.Warmup.WARP, TL.WARMUPS_NOTIFY_TELEPORT, warpName, () -> {
+                int delay = FactionsPlugin.instance().conf().commands().warp().getDelay();
+                WarmUpUtil.process(sender, WarmUpUtil.Warmup.WARP, TL.WARMUPS_NOTIFY_WARP.format(warpName, delay), () -> {
                     Player player = Bukkit.getPlayer(uuid);
                     if (destination == faction.warp(warpName) && player != null) {
                         AbstractFactionsPlugin.instance().teleport(player, destination.asLocation()).thenAccept(success -> {
@@ -85,7 +86,7 @@ public class CmdWarp implements Cmd {
                             }
                         });
                     }
-                }, FactionsPlugin.instance().conf().commands().warp().getDelay());
+                }, delay);
             } else {
                 sender.msgLegacy(TL.COMMAND_FWARP_INVALID_WARP, warpName);
             }
