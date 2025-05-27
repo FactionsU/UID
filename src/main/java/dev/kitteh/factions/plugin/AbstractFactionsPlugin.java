@@ -125,9 +125,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public abstract class AbstractFactionsPlugin extends JavaPlugin implements FactionsPlugin {
-
-    // Our single plugin instance.
-    // Single 4 life.
     private static AbstractFactionsPlugin instance;
 
     public static AbstractFactionsPlugin instance() {

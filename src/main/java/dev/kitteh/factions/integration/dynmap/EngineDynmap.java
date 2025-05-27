@@ -44,10 +44,6 @@ import java.util.stream.Stream;
 
 // This source code is a heavily modified version of mikeprimms plugin Dynmap-Factions.
 public class EngineDynmap {
-    // -------------------------------------------- //
-    // CONSTANTS
-    // -------------------------------------------- //
-
     public final static int BLOCKS_PER_CHUNK = 16;
 
     public final static String DYNMAP_INTEGRATION = "§dDynmap Integration: §e";
@@ -64,10 +60,6 @@ public class EngineDynmap {
 
     public final static String FACTIONS_PLAYERSET = FACTIONS_ + "playerset";
     public final static String FACTIONS_PLAYERSET_ = FACTIONS_PLAYERSET + "_";
-
-    // -------------------------------------------- //
-    // INSTANCE & CONSTRUCT
-    // -------------------------------------------- //
 
     private static final EngineDynmap instance = new EngineDynmap();
     private DynmapConfig dynmapConf;
@@ -226,10 +218,6 @@ public class EngineDynmap {
         return true;
     }
 
-    // -------------------------------------------- //
-    // UPDATE: HOMES
-    // -------------------------------------------- //
-
     // Thread Safe / Asynchronous: No
     public Map<String, TempMarker> createHomes() {
         Map<String, TempMarker> ret = new HashMap<>();
@@ -299,10 +287,6 @@ public class EngineDynmap {
         }
     }
 
-    // -------------------------------------------- //
-    // UPDATE: WARPS
-    // -------------------------------------------- //
-
     // Thread Safe / Asynchronous: No
     public Map<String, TempMarker> createWarps() {
         Map<String, TempMarker> ret = new HashMap<>();
@@ -336,10 +320,6 @@ public class EngineDynmap {
 
         return ret;
     }
-
-    // -------------------------------------------- //
-    // UPDATE: AREAS
-    // -------------------------------------------- //
 
     // Thread Safe: NO
     public Map<String, Int2ObjectMap<LongList>> createWorldFactionChunks() {
@@ -587,10 +567,6 @@ public class EngineDynmap {
         }
     }
 
-    // -------------------------------------------- //
-    // UPDATE: PLAYERSET
-    // -------------------------------------------- //
-
     // Thread Safe / Asynchronous: Yes
     public String createPlayersetId(Faction faction) {
         if (faction == null) {
@@ -689,10 +665,6 @@ public class EngineDynmap {
             set.setPlayers(playerIds);
         }
     }
-
-    // -------------------------------------------- //
-    // UTIL & SHARED
-    // -------------------------------------------- //
 
     // Thread Safe / Asynchronous: Yes
     private String getDescription(Faction faction) {

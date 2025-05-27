@@ -117,21 +117,14 @@ public interface FPlayer extends Participator, Selectable {
 
     String nameWithTagLegacy();
 
-    // Chat Tag:
-    // These are injected into the format of global chat messages.
-
     String chatTagLegacy();
 
-    // Colored Chat Tag
     String chatTagLegacy(@Nullable Participator participator);
 
     int kills();
 
     int deaths();
 
-    //----------------------------------------------//
-    // Power
-    //----------------------------------------------//
     double power();
 
     void power(double power);
@@ -158,9 +151,6 @@ public interface FPlayer extends Participator, Selectable {
 
     void onDeath();
 
-    //----------------------------------------------//
-    // Territory
-    //----------------------------------------------//
     boolean isInOwnTerritory();
 
     boolean isInOthersTerritory();

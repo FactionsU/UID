@@ -7,10 +7,6 @@ import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
 
 public class TempMarker {
-    // -------------------------------------------- //
-    // FIELDS
-    // -------------------------------------------- //
-
     public String label;
     public String world;
     public double x;
@@ -18,10 +14,6 @@ public class TempMarker {
     public double z;
     public String iconName;
     public String description;
-
-    // -------------------------------------------- //
-    // CREATE
-    // -------------------------------------------- //
 
     public Marker create(MarkerAPI markerApi, MarkerSet markerset, String markerId) {
         Marker ret = markerset.createMarker(markerId, this.label, this.world, this.x, this.y, this.z, getMarkerIcon(markerApi, this.iconName), false // not persistent
@@ -35,10 +27,6 @@ public class TempMarker {
 
         return ret;
     }
-
-    // -------------------------------------------- //
-    // UPDATE
-    // -------------------------------------------- //
 
     public void update(MarkerAPI markerApi, Marker marker) {
         if (!this.world.equals(marker.getWorld()) || this.x != marker.getX() || this.y != marker.getY() || this.z != marker.getZ()) {
@@ -58,10 +46,6 @@ public class TempMarker {
             marker.setDescription(this.description);
         }
     }
-
-    // -------------------------------------------- //
-    // UTIL
-    // -------------------------------------------- //
 
     public static MarkerIcon getMarkerIcon(MarkerAPI markerApi, String name) {
         MarkerIcon ret = markerApi.getMarkerIcon(name);

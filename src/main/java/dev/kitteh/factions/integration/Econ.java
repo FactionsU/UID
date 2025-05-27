@@ -374,10 +374,6 @@ public class Econ {
     }
 
 
-    // -------------------------------------------- //
-    // Standard account management methods
-    // -------------------------------------------- //
-
     @SuppressWarnings({"DataFlowIssue", "deprecation"})
     private static OfflinePlayer getOfflinePlayerForName(String name) {
         try {

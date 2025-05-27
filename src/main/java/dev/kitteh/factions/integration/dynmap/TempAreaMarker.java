@@ -4,10 +4,6 @@ import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.MarkerSet;
 
 public class TempAreaMarker {
-    // -------------------------------------------- //
-    // FIELDS
-    // -------------------------------------------- //
-
     public String label;
     public String world;
     public double[] x;
@@ -22,10 +18,6 @@ public class TempAreaMarker {
     public double fillOpacity;
 
     public boolean boost;
-
-    // -------------------------------------------- //
-    // CREATE
-    // -------------------------------------------- //
 
     public AreaMarker create(MarkerSet markerset, String markerId) {
         AreaMarker ret = markerset.createAreaMarker(markerId, this.label, false, this.world, this.x, this.z, false // not persistent
@@ -49,10 +41,6 @@ public class TempAreaMarker {
 
         return ret;
     }
-
-    // -------------------------------------------- //
-    // UPDATE
-    // -------------------------------------------- //
 
     public void update(AreaMarker marker) {
         // Corner Locations
@@ -87,10 +75,6 @@ public class TempAreaMarker {
         }
     }
 
-    // -------------------------------------------- //
-    // UTIL
-    // -------------------------------------------- //
-
     public static boolean equals(AreaMarker marker, double[] x, double[] z) {
         int length = marker.getCornerCount();
 
@@ -112,5 +96,4 @@ public class TempAreaMarker {
 
         return true;
     }
-
 }

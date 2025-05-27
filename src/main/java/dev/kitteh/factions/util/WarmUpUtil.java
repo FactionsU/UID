@@ -23,7 +23,6 @@ public class WarmUpUtil {
                 }
             }.runTaskLater(AbstractFactionsPlugin.instance(), delay * 20).getTaskId();
             player.addWarmup(warmup, id);
-
         } else {
             runnable.run();
         }

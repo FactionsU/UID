@@ -15,10 +15,6 @@ import java.util.Objects;
 
 @NullMarked
 public record FLocation(String worldName, int x, int z) {
-    //----------------------------------------------//
-    // Constructors
-    //----------------------------------------------//
-
     public FLocation() {
         this("world", 0, 0);
     }
@@ -42,10 +38,6 @@ public record FLocation(String worldName, int x, int z) {
     public FLocation(Block block) {
         this(block.getChunk());
     }
-
-    //----------------------------------------------//
-    // Getters and Setters
-    //----------------------------------------------//
 
     public World world() {
         return Bukkit.getWorld(worldName);
@@ -72,10 +64,6 @@ public record FLocation(String worldName, int x, int z) {
         return world().getChunkAt(x, z);
     }
 
-    //----------------------------------------------//
-    // Block/Chunk/Region Value Transformation
-    //----------------------------------------------//
-
     // bit-shifting is used because it's much faster than standard division and multiplication
     public static int blockToChunk(int blockVal) {    // 1 chunk is 16x16 blocks
         return blockVal >> 4;   // ">> 4" == "/ 16"
@@ -84,10 +72,6 @@ public record FLocation(String worldName, int x, int z) {
     public static int chunkToBlock(int chunkVal) {
         return chunkVal << 4;   // "<< 4" == "* 16"
     }
-
-    //----------------------------------------------//
-    // Misc Geometry
-    //----------------------------------------------//
 
     public FLocation relative(int dx, int dz) {
         return new FLocation(this.worldName, this.x + dx, this.z + dz);
@@ -127,10 +111,6 @@ public record FLocation(String worldName, int x, int z) {
 
         return (chunkMinX >= borderMaxX) || (chunkMinZ >= borderMaxZ) || (chunkMaxX <= borderMinX) || (chunkMaxZ <= borderMinZ);
     }
-
-    //----------------------------------------------//
-    // Comparison
-    //----------------------------------------------//
 
     @Override
     public int hashCode() {

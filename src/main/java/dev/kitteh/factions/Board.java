@@ -78,10 +78,6 @@ public interface Board {
         return false;
     }
 
-    //----------------------------------------------//
-    // Coord count
-    //----------------------------------------------//
-
     int claimCount(Faction faction);
 
     int claimCount(Faction faction, World world);

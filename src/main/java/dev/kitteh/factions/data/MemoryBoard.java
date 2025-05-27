@@ -51,9 +51,6 @@ public abstract class MemoryBoard implements Board {
         return this.worldTrackers.computeIfAbsent(world, k -> new WorldTracker(world));
     }
 
-    //----------------------------------------------//
-    // Get and Set
-    //----------------------------------------------//
     private int getIdAt(FLocation flocation) {
         WorldTracker tracker = worldTrackers.get(flocation.worldName());
         //noinspection ConstantValue
@@ -160,10 +157,6 @@ public abstract class MemoryBoard implements Board {
         this.worldTrackers.values().forEach(wt -> wt.removeAllClaims(faction.id()));
     }
 
-    //----------------------------------------------//
-    // Cleaner. Remove orphaned foreign keys
-    //----------------------------------------------//
-
     public void clean() {
         for (WorldTracker tracker : worldTrackers.values()) {
             for (int factionId : tracker.ids()) {
@@ -175,10 +168,6 @@ public abstract class MemoryBoard implements Board {
             }
         }
     }
-
-    //----------------------------------------------//
-    // Coord count
-    //----------------------------------------------//
 
     public int getFactionCoordCount(int factionId) {
         return this.worldTrackers.values().stream().mapToInt(wt -> wt.countClaims(factionId)).sum();
@@ -199,10 +188,6 @@ public abstract class MemoryBoard implements Board {
     public int getTotalCount() {
         return this.worldTrackers.values().stream().mapToInt(WorldTracker::countClaims).sum();
     }
-
-    //----------------------------------------------//
-    // Map generation
-    //----------------------------------------------//
 
     /**
      * The map is relative to a coord and a faction north is in the direction of decreasing x east is in the direction

@@ -36,9 +36,6 @@ public class DynmapStyle {
         return FactionsPlugin.instance().configManager().dynmapConfig().style();
     }
 
-    // -------------------------------------------- //
-    // FIELDS
-    // -------------------------------------------- //
     private String lineColor = null;
 
     public int getLineColor() {
@@ -126,10 +123,6 @@ public class DynmapStyle {
         this.boost = boost;
         return this;
     }
-
-    // -------------------------------------------- //
-    // UTIL
-    // -------------------------------------------- //
 
     private static <T> T coalesce(T first, T second, T defaultItem) {
         return first != null ? first : (second != null ? second : defaultItem);

@@ -410,12 +410,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         this.lastStoodAt = flocation;
     }
 
-    //----------------------------------------------//
-    // Title, Name, Faction Tag and Chat
-    //----------------------------------------------//
-
-    // Base:
-
     @Override
     public String titleLegacy() {
         return this.hasFaction() ? title : TL.NOFACTION_PREFIX.toString();
@@ -534,9 +528,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         return this.deaths;
     }
 
-    //----------------------------------------------//
-    // Power
-    //----------------------------------------------//
     @Override
     public double power() {
         this.updatePower();
@@ -635,9 +626,6 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
     }
 
-    //----------------------------------------------//
-    // Territory
-    //----------------------------------------------//
     @Override
     public boolean isInOwnTerritory() {
         return getStandingInFaction() == this.faction();
