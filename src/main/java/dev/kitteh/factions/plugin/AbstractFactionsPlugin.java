@@ -765,16 +765,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     }
 
     @Override
-    public MainConfig conf() {
-        return this.configManager.mainConfig();
-    }
-
-    @Override
-    public TranslationsConfig tl() {
-        return this.configManager.translationsConfig();
-    }
-
-    @Override
     public LandRaidControl landRaidControl() {
         return this.landRaidControl;
     }

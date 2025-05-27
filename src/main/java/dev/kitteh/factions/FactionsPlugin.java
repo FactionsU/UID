@@ -26,9 +26,13 @@ public interface FactionsPlugin {
 
     ConfigManager configManager();
 
-    MainConfig conf();
+    default MainConfig conf() {
+        return this.configManager().mainConfig();
+    }
 
-    TranslationsConfig tl();
+    default TranslationsConfig tl() {
+        return this.configManager().translationsConfig();
+    }
 
     LandRaidControl landRaidControl();
 
