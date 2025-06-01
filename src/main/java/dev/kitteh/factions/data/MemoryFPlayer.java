@@ -402,6 +402,10 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public FLocation lastStoodAt() {
+        //noinspection ConstantValue
+        if (this.lastStoodAt == null) {
+            this.lastStoodAt = new FLocation(Bukkit.getWorlds().getFirst().getName(), 0, 0);
+        }
         return this.lastStoodAt;
     }
 
@@ -436,9 +440,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     public void setName(String name) {
         if (!name.equalsIgnoreCase(this.name)) {
             for (FPlayer fplayer : FPlayers.fPlayers().all()) {
-                if (fplayer.name() == null) {
-                    continue;
-                }
                 if (fplayer.name().equalsIgnoreCase(name)) {
                     UUID u = fplayer.uniqueId();
                     String uuidName = u.toString();

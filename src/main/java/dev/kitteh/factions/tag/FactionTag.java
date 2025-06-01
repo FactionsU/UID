@@ -49,8 +49,8 @@ public enum FactionTag implements Tag {
         }
     }),
     MAX_DTR("max-dtr", (fac) -> {
-        if (FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
-            return DTRControl.round(((DTRControl) FactionsPlugin.instance().landRaidControl()).getMaxDTR(fac));
+        if (FactionsPlugin.instance().landRaidControl() instanceof DTRControl dtrControl) {
+            return DTRControl.round(dtrControl.getMaxDTR(fac));
         }
         return Tag.isMinimalShow() ? null : "{ig}";
     }),
@@ -79,7 +79,7 @@ public enum FactionTag implements Tag {
     }),
     TNT_MAX("tnt-max-balance", (fac) -> {
         if (FactionsPlugin.instance().conf().commands().tnt().isEnable()) {
-            return String.valueOf(FactionsPlugin.instance().conf().commands().tnt().getMaxStorage());
+            return String.valueOf(fac.tntBankMax());
         }
         return Tag.isMinimalShow() ? null : "";
     }),

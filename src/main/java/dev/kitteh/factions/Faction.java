@@ -410,6 +410,8 @@ public interface Faction extends Participator, Selectable {
 
     int tntBank();
 
+    int tntBankMax();
+
     void tntBank(int amount);
 
     default boolean shieldActive() {
