@@ -24,7 +24,14 @@ public class IntegrationManager implements Listener {
         ESS("Essentials", (p) -> Essentials.setup(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         @SuppressWarnings("Convert2MethodRef")
         DEPENIZEN("Depenizen", (p) -> Depenizen.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
-        GRAVES("Graves", Graves::init),
+        GRAVES("Graves", plugin -> {
+            try {
+                Class.forName("com.ranull.graves.Graves");
+                return Graves.init(plugin);
+            } catch (Exception ignored) {
+            }
+            return false;
+        }),
         LUCKPERMS("LuckPerms", (plugin) -> {
             String[] version = plugin.getDescription().getVersion().split("\\.");
             boolean notSupported = true;
