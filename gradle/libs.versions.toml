@@ -1,4 +1,5 @@
 [versions]
+minecraft = "1.21.4-R0.1-SNAPSHOT"
 adventure = "4.19.0"
 cloud = "2.0.0-beta.10"
 essentialsx = "2.20.1"
@@ -8,7 +9,7 @@ worldguard = "7.0.9"
 
 [plugins]
 indra = { id = "net.kyori.indra", version.ref = "indra" }
-runPaper = { id = "xyz.jpenilla.run-paper", version = "2.3.0" }
+runPaper = { id = "xyz.jpenilla.run-paper", version = "2.3.1" }
 shadow = { id = "io.github.goooler.shadow", version = "8.1.7" }
 
 [libraries]
@@ -34,11 +35,12 @@ ifchestonly = { module = "dev.kitteh.forkedproject:IF-ChestOnly", version = "0.1
 jspecify = { module = "org.jspecify:jspecify", version = "0.3.0" }
 luckperms-api = { module = "net.luckperms:api", version = "5.0" }
 magic-api = { module = "com.elmakers.mine.bukkit:MagicAPI", version = "10.2" }
+paper = { module = "io.papermc.paper:paper-api", version.ref = "minecraft"}
 paper-lib = { module = "io.papermc:paperlib", version = "1.0.4" }
 placeholderapi = { module = "me.clip:placeholderapi", version = "2.11.6" }
 playervaultsx = { module = "com.drtshock:PlayerVaultsX", version = "4.2.15" }
 sentinel = { module = "org.mcmonkey:sentinel", version = "2.7.0-SNAPSHOT" }
-spigot = { module = "org.spigotmc:spigot-api", version = "1.21.4-R0.1-SNAPSHOT" }
+spigot = { module = "org.spigotmc:spigot-api", version.ref = "minecraft" }
 vault-api = { module = "com.github.MilkBowl:VaultAPI", version = "1.7" }
 worldedit-bukkit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
 worldedit-core = { module = "com.sk89q.worldedit:worldedit-core", version.ref = "worldedit" }

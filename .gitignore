@@ -1,6 +1,8 @@
 # Gradle
 /.gradle/
 /build/
+/bukkit/build/
+/paper/build/
 
 # Eclipse stuff
 .classpath

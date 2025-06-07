@@ -1,20 +1,13 @@
 package dev.kitteh.factions.tagresolver;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.integration.IntegrationManager;
-import dev.kitteh.factions.landraidcontrol.DTRControl;
-import dev.kitteh.factions.permissible.Relation;
-import dev.kitteh.factions.util.TL;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

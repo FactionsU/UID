@@ -14,8 +14,6 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.command.CommandsRoot;
 import dev.kitteh.factions.config.ConfigManager;
-import dev.kitteh.factions.config.file.MainConfig;
-import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.data.SaveTask;

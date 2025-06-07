@@ -3,3 +3,6 @@ plugins {
 }
 
 rootProject.name = "factionsuuid"
+
+include("bukkit")
+include("paper")

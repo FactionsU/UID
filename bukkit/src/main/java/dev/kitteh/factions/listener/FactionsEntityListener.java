@@ -45,7 +45,6 @@ import org.bukkit.projectiles.ProjectileSource;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.UUID;
 
 
 public class FactionsEntityListener extends AbstractListener {

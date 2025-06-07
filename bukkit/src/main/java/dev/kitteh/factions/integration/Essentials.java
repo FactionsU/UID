@@ -1,7 +1,6 @@
 package dev.kitteh.factions.integration;
 
 import com.earth2me.essentials.AsyncTeleport;
-import com.earth2me.essentials.Trade;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.listener.EssentialsListener;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
@@ -14,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
 
-import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 
 public class Essentials {

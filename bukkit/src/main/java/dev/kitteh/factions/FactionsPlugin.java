@@ -8,10 +8,6 @@ import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.landraidcontrol.LandRaidControl;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.SeeChunkUtil;
-import org.bukkit.OfflinePlayer;
-
-import java.util.Map;
-import java.util.UUID;
 
 public interface FactionsPlugin {
     static FactionsPlugin instance() {

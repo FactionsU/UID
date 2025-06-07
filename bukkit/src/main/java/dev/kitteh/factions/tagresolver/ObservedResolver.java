@@ -16,10 +16,6 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Map;
-
 @NullMarked
 public abstract class ObservedResolver implements TagResolver {
     protected final String name;
