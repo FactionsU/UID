@@ -241,7 +241,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public boolean isVanished() {
         Player player = this.asPlayer();
-        if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isVanished(player)) {
+        if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.isVanished(player)) {
             return true;
         }
         if (player != null) {

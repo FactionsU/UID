@@ -209,7 +209,7 @@ public class Econ {
         }
 
         // Check if the new balance is over Essential's money cap.
-        if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isOverBalCap(getBalance(toAcc) + amount)) {
+        if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.isOverBalCap(getBalance(toAcc) + amount)) {
             invoker.msgLegacy(TL.ECON_OVER_BAL_CAP, amount);
             return false;
         }

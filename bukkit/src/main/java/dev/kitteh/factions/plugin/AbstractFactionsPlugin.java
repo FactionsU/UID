@@ -148,7 +148,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     private Worldguard worldguard;
     private LandRaidControl landRaidControl;
     private boolean luckPermsSetup;
-    private IntegrationManager integrationManager;
+    private final IntegrationManager integrationManager = new IntegrationManager(this);
 
     private Metrics metrics;
     private UUID serverUUID;
@@ -385,7 +385,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         new CommandsRoot(this);
 
         // Integration time
-        getServer().getPluginManager().registerEvents(integrationManager = new IntegrationManager(this), this);
+        getServer().getPluginManager().registerEvents(this.integrationManager, this);
 
         new BukkitRunnable() {
             @Override

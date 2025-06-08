@@ -144,7 +144,7 @@ public class CmdHome implements Cmd {
 
             if (plr == null) return;
 
-            if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.handleTeleport(plr, destination)) {
+            if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.handleTeleport(plr, destination)) {
                 return;
             }
 

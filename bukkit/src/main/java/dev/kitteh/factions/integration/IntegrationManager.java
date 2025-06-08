@@ -4,12 +4,9 @@ import dev.kitteh.factions.integration.dynmap.EngineDynmap;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.SimplePluginManager;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,13 +15,27 @@ import java.util.function.Function;
 import java.util.logging.Level;
 
 public class IntegrationManager implements Listener {
+
+    public interface Integration {
+        String pluginName();
+
+        Function<Plugin, Boolean> startup();
+    }
+
     @SuppressWarnings("Convert2MethodRef")
-    public enum Integration {
-        DYNMAP("dynmap", EngineDynmap.getInstance()::init),
+    public enum Integrations implements Integration {
+        DYNMAP("dynmap", p -> EngineDynmap.getInstance().init(p)),
         ESS("Essentials", p -> Essentials.setup(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         DEPENIZEN("Depenizen", p -> Depenizen.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
         DUELS("Duels", p -> Duels.init(p)),
-        GRAVES("Graves", Graves::init),
+        GRAVES("Graves", p -> {
+            try {
+                Class.forName("com.ranull.graves.Graves");
+                return Graves.init(p);
+            } catch (Exception ignored) {
+            }
+            return false;
+        }),
         LUCKPERMS("LuckPerms", (plugin) -> {
             String[] version = plugin.getDescription().getVersion().split("\\.");
             boolean notSupported = true;
@@ -68,72 +79,64 @@ public class IntegrationManager implements Listener {
             return false;
         });
 
-        private static final Map<String, Function<Plugin, Boolean>> STARTUP_MAP = new HashMap<>();
-        private static final Map<String, Integration> INT_MAP = new HashMap<>();
-
-        static {
-            for (Integration integration : values()) {
-                STARTUP_MAP.put(integration.pluginName, integration.startup);
-                INT_MAP.put(integration.pluginName, integration);
-            }
-        }
-
-        static Function<Plugin, Boolean> getStartup(String pluginName) {
-            return STARTUP_MAP.getOrDefault(pluginName, Integration::omNomNom);
-        }
-
-        private static boolean omNomNom(Plugin ignored) {
-            return false;
-        }
-
         private final String pluginName;
         private final Function<Plugin, Boolean> startup;
 
-        Integration(String pluginName, Function<Plugin, Boolean> startup) {
+        Integrations(String pluginName, Function<Plugin, Boolean> startup) {
             this.pluginName = pluginName;
             this.startup = startup;
         }
-    }
 
-    private final Set<Integration> integrations = new HashSet<>();
+        @Override
+        public String pluginName() {
+            return this.pluginName;
+        }
 
-    public static void onLoadFixSpigot(AbstractFactionsPlugin plugin) {
-        try {
-            Field depGraph = SimplePluginManager.class.getDeclaredField("dependencyGraph");
-            depGraph.setAccessible(true);
-            Object graph = depGraph.get(plugin.getServer().getPluginManager());
-            Method putEdge = graph.getClass().getDeclaredMethod("putEdge", Object.class, Object.class);
-            putEdge.setAccessible(true);
-            for (String depend : Integration.STARTUP_MAP.keySet()) {
-                putEdge.invoke(graph, plugin.getDescription().getName(), depend);
-            }
-        } catch (Exception ignored) {
+        @Override
+        public Function<Plugin, Boolean> startup() {
+            return this.startup;
         }
     }
 
+    private final AbstractFactionsPlugin plugin;
+
+    private final Map<String, Integration> integrations = new HashMap<>();
+
+    private final Set<Integration> integrationsEnabled = new HashSet<>();
+
     public IntegrationManager(AbstractFactionsPlugin plugin) {
-        for (Integration integration : Integration.values()) {
-            Plugin plug = plugin.getServer().getPluginManager().getPlugin(integration.pluginName);
+        this.plugin = plugin;
+        for (Integrations integration : Integrations.values()) {
+            this.add(integration);
+        }
+    }
+
+    public void add(Integration integration) {
+        this.integrations.put(integration.pluginName(), integration);
+    }
+
+    @EventHandler
+    public void onPluginEnabled(ServerLoadEvent event) {
+        for (Integration integration : this.integrations.values()) {
+            Plugin plug = this.plugin.getServer().getPluginManager().getPlugin(integration.pluginName());
+
             if (plug != null && plug.isEnabled()) {
                 try {
-                    if (integration.startup.apply(plug)) {
-                        this.integrations.add(integration);
+                    if (integration.startup().apply(plug)) {
+                        this.integrationsEnabled.add(integration);
                     }
                 } catch (Exception e) {
-                    plugin.getLogger().log(Level.WARNING, "Failed to start " + integration.pluginName + " integration", e);
+                    this.plugin.getLogger().log(Level.WARNING, "Failed to start " + integration.pluginName() + " integration", e);
                 }
             }
         }
     }
 
-    @EventHandler
-    public void onPluginEnabled(PluginEnableEvent event) {
-        if (Integration.getStartup(event.getPlugin().getName()).apply(event.getPlugin())) {
-            this.integrations.add(Integration.INT_MAP.get(event.getPlugin().getName()));
-        }
+    public boolean isEnabled(Integrations integration) {
+        return this.integrationsEnabled.contains(integration);
     }
 
-    public boolean isEnabled(Integration integration) {
-        return this.integrations.contains(integration);
+    public Set<String> integrationNames() {
+        return new HashSet<>(this.integrations.keySet());
     }
 }

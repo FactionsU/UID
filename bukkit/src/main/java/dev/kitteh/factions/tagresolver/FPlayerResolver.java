@@ -63,7 +63,7 @@ public class FPlayerResolver extends ObservedResolver {
             case "space_if_faction" -> tag(observed.hasFaction() ? " " : "");
 
             case "papi" -> {
-                if (!arguments.hasNext() || !FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.PLACEHOLDERAPI)) {
+                if (!arguments.hasNext() || !FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.PLACEHOLDERAPI)) {
                     yield tag(Component.empty());
                 }
                 String papi = arguments.pop().value();

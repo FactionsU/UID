@@ -16,10 +16,12 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class Worldguard {
     public static final String FLAG_CLAIM_NAME = "fuuid-claim";

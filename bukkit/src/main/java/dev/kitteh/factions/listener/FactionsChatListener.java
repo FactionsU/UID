@@ -145,7 +145,7 @@ public class FactionsChatListener implements Listener {
         // Relation Colored?
         if (chatConf.isTagRelationColored()) {
             for (Player listeningPlayer : event.getRecipients()) {
-                if (this.plugin.integrationManager().isEnabled(IntegrationManager.Integration.ESS) && Essentials.isIgnored(listeningPlayer, talkingPlayer)) {
+                if (this.plugin.integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.isIgnored(listeningPlayer, talkingPlayer)) {
                     continue;
                 }
                 FPlayer you = FPlayers.fPlayers().get(listeningPlayer);

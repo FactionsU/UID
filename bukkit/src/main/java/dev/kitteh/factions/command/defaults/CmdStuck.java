@@ -95,7 +95,7 @@ public class CmdStuck implements Cmd {
                             int y = world.getHighestBlockYAt(cx, cz);
                             Location tp = new Location(world, cx, y, cz);
                             sender.msgLegacy(TL.COMMAND_STUCK_TELEPORT, tp.getBlockX(), tp.getBlockY(), tp.getBlockZ());
-                            if (!FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integration.ESS) || !Essentials.handleTeleport(player, tp)) {
+                            if (!FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) || !Essentials.handleTeleport(player, tp)) {
                                 AbstractFactionsPlugin.instance().teleport(player, tp);
                                 AbstractFactionsPlugin.instance().debug("/f stuck used regular teleport, not essentials!");
                             }
