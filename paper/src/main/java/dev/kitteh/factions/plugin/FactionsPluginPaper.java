@@ -12,7 +12,7 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     }
 
     @Override
-    public void onLoad() {
+    public void onPluginLoad() {
         ComponentDispatcher.setSenders(
                 (commandSender, component) -> {
                     commandSender.sendMessage(getComponent(component));
@@ -21,7 +21,6 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
                     player.sendActionBar(getComponent(component));
                 }
         );
-        super.onLoad();
     }
 
     private Component getComponent(ComponentLike component) {

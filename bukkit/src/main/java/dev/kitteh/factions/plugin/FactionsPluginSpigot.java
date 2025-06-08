@@ -4,10 +4,8 @@ import dev.kitteh.factions.integration.IntegrationManager;
 
 public class FactionsPluginSpigot extends AbstractFactionsPlugin {
     @Override
-    public void onLoad() {
+    public void onPluginLoad() {
         IntegrationManager.onLoadFixSpigot(this);
-
-        super.onLoad();
     }
 
     @Override

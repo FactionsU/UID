@@ -168,6 +168,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
     @Override
     public void onLoad() {
+        this.onPluginLoad();
         try {
             Class.forName("com.sk89q.worldguard.WorldGuard");
             Worldguard.onLoad();
@@ -961,4 +962,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     }
 
     protected abstract String pluginType();
+
+    protected abstract void onPluginLoad();
 }
