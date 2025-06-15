@@ -1,9 +1,7 @@
 package dev.kitteh.factions.plugin;
 
 import dev.kitteh.factions.util.ComponentDispatcher;
-import moss.factions.shade.net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.audience.Audience;
 
 public class FactionsPluginPaper extends AbstractFactionsPlugin {
     @Override
@@ -14,16 +12,8 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     @Override
     public void onPluginLoad() {
         ComponentDispatcher.setSenders(
-                (commandSender, component) -> {
-                    commandSender.sendMessage(getComponent(component));
-                },
-                (player, component) -> {
-                    player.sendActionBar(getComponent(component));
-                }
+                (commandSender, component) -> commandSender.sendMessage(component),
+                Audience::sendActionBar
         );
-    }
-
-    private Component getComponent(ComponentLike component) {
-        return GsonComponentSerializer.gson().deserializeFromTree(moss.factions.shade.net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().serializeToTree(component.asComponent()));
     }
 }

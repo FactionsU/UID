@@ -11,7 +11,7 @@ indra {
 }
 
 dependencies {
-  implementation(project(":bukkit", "shadow")) {
+  implementation(project(":bukkit")) {
     exclude("org.spigotmc")
   }
   implementation(libs.paper)

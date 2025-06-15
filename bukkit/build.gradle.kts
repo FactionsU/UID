@@ -77,7 +77,8 @@ dependencies {
 tasks.processResources {
   filesMatching("plugin.yml") {
     expand(mapOf(
-      "version" to project.version
+      "version" to project.version,
+      "adv" to libs.versions.adventure.get()
     ))
   }
 }
@@ -89,25 +90,6 @@ tasks.shadowJar {
     include(dependency("me.lucko:commodore"))
     include(dependency("org.spongepowered:configurate-core"))
     include(dependency("org.spongepowered:configurate-hocon"))
-    include(dependency("net.kyori:adventure-api"))
-    include(dependency("net.kyori:adventure-key"))
-    include(dependency("net.kyori:adventure-nbt"))
-    include(dependency("net.kyori:adventure-platform-api"))
-    include(dependency("net.kyori:adventure-platform-facet"))
-    include(dependency("net.kyori:adventure-platform-bukkit"))
-    include(dependency("net.kyori:adventure-text-logger-slf4j"))
-    include(dependency("net.kyori:adventure-text-minimessage"))
-    include(dependency("net.kyori:adventure-text-serializer-ansi"))
-    include(dependency("net.kyori:adventure-text-serializer-bungeecord"))
-    include(dependency("net.kyori:adventure-text-serializer-gson"))
-    include(dependency("net.kyori:adventure-text-serializer-gson-legacy-impl"))
-    include(dependency("net.kyori:adventure-text-serializer-json"))
-    include(dependency("net.kyori:adventure-text-serializer-json-legacy-impl"))
-    include(dependency("net.kyori:adventure-text-serializer-legacy"))
-    include(dependency("net.kyori:adventure-text-serializer-plain"))
-    include(dependency("net.kyori:examination-api"))
-    include(dependency("net.kyori:examination-string"))
-    include(dependency("net.kyori:option"))
     include(dependency("org.incendo:cloud-paper"))
     include(dependency("org.incendo:cloud-minecraft-extras"))
     include(dependency("org.incendo:cloud-bukkit"))
@@ -128,7 +110,6 @@ tasks.shadowJar {
   relocate("com.github.stefvanschie.inventoryframework", "moss.factions.shade.stefvanschie.if")
   relocate("com.ezylang", "moss.factions.shade.com.ezylang")
 
-  relocate("net.kyori", "moss.factions.shade.net.kyori")
   relocate("org.apache.commons.codec", "moss.factions.shade.org.apache.commons.codec")
   relocate("org.apache.commons.logging", "moss.factions.shade.org.apache.commons.logging")
   relocate("org.apache.http", "moss.factions.shade.org.apache.http")
