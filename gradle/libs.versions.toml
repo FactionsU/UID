@@ -2,10 +2,10 @@
 minecraft = "1.21.4-R0.1-SNAPSHOT"
 adventure = "4.19.0"
 cloud = "2.0.0-beta.10"
-essentialsx = "2.20.1"
+essentialsx = "2.21.1"
 indra = "3.1.3"
-worldedit = "7.3.3"
-worldguard = "7.0.9"
+worldedit = "7.3.14"
+worldguard = "7.0.13"
 
 [plugins]
 indra = { id = "net.kyori.indra", version.ref = "indra" }
@@ -17,14 +17,14 @@ adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", 
 adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure" }
 adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure" }
 authlib = { module = "com.mojang:authlib", version = "6.0.54" }
-citizens = { module = "net.citizensnpcs:citizens-main", version = "2.0.30-SNAPSHOT" }
+citizens = { module = "net.citizensnpcs:citizens-main", version = "2.0.38-SNAPSHOT" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud" }
 cloud-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud" }
 commons-lang3 = { module = "org.apache.commons:commons-lang3", version = "3.14.0" }
 configurate-hocon = { module = "org.spongepowered:configurate-hocon", version = "3.7.3" }
 denizen = { module = "com.denizenscript:denizen", version = "1.3.1-SNAPSHOT" }
 depenizen = { module = "com.denizenscript:depenizen", version = "2.0.0" }
-duels = { module = "com.github.dumbo-the-developer.Duels:duels-api", version = "2.8" }
+duels = { module = "com.github.dumbo-the-developer.Duels:duels-api", version = "3.9" }
 dynmap = { module = "org.dynmap:dynmap", version = "2.0" }
 evalex = { module = "com.ezylang:EvalEx", version = "3.5.0" }
 essentialsx = { module = "net.essentialsx:EssentialsX", version.ref = "essentialsx" }
@@ -38,7 +38,7 @@ paper = { module = "io.papermc.paper:paper-api", version.ref = "minecraft"}
 paper-lib = { module = "io.papermc:paperlib", version = "1.0.4" }
 placeholderapi = { module = "me.clip:placeholderapi", version = "2.11.6" }
 playervaultsx = { module = "com.drtshock:PlayerVaultsX", version = "4.2.15" }
-sentinel = { module = "org.mcmonkey:sentinel", version = "2.7.0-SNAPSHOT" }
+sentinel = { module = "org.mcmonkey:sentinel", version = "2.9.2-SNAPSHOT" }
 spigot = { module = "org.spigotmc:spigot-api", version.ref = "minecraft" }
 vault-api = { module = "com.github.MilkBowl:VaultAPI", version = "1.7" }
 worldedit-bukkit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
