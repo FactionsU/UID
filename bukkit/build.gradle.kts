@@ -20,7 +20,6 @@ dependencies {
   implementation(libs.cloud.paper)
   implementation(libs.cloud.extras)
   implementation(libs.commons.lang3)
-  implementation(libs.commodore)
   implementation(libs.configurate.hocon) {
     exclude("com.google.inject", "guice")
     exclude("org.checkerframework", "checker-qual")
@@ -87,7 +86,6 @@ tasks.shadowJar {
   dependencies {
     include(dependency("com.typesafe:config"))
     include(dependency("io.papermc:paperlib"))
-    include(dependency("me.lucko:commodore"))
     include(dependency("org.spongepowered:configurate-core"))
     include(dependency("org.spongepowered:configurate-hocon"))
     include(dependency("org.incendo:cloud-paper"))
@@ -103,7 +101,6 @@ tasks.shadowJar {
 
   relocate("com.typesafe", "moss.factions.shade.com.typesafe")
   relocate("io.papermc.lib", "moss.factions.shade.io.papermc.lib")
-  relocate("me.lucko.commodore", "moss.factions.shade.me.lucko.commodore")
   relocate("ninja.leaping", "moss.factions.shade.ninja.leaping")
   relocate("org.incendo", "moss.factions.shade.org.incendo")
   relocate("io.leangen", "moss.factions.shade.io.leangen")

@@ -13,10 +13,6 @@ MIT License
 https://github.com/incendo/cloud
 https://github.com/Incendo/cloud-minecraft
 
-commodore
-MIT License
-https://github.com/lucko/commodore
-
 Configurate
 Apache License, Version 2.0
 https://github.com/SpongePowered/Configurate
