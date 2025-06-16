@@ -34,8 +34,8 @@ public enum PlayerTag implements Tag {
     PLAYER_KILLS("player-kills", (fp) -> String.valueOf(fp.kills())),
     PLAYER_DEATHS("player-deaths", (fp) -> String.valueOf(fp.deaths())),
     PLAYER_DISPLAYNAME("player-displayname", (fp) -> {
-        if (fp.isOnline()) {
-            return fp.asPlayer().getDisplayName();
+        if (fp.asPlayer() instanceof Player player) {
+            return player.getDisplayName();
         } else {
             return fp.name();
         }

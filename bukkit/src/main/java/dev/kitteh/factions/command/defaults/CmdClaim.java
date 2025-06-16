@@ -34,6 +34,7 @@ public class CmdClaim implements Cmd {
                         .permission(
                                 builder.commandPermission()
                                         .and(Cloudy.hasPermission(Permission.CLAIM)
+                                                .and(Cloudy.isPlayer())
                                                 .and(
                                                         Cloudy.hasFaction()
                                                                 .or(Cloudy.hasPermission(Permission.MANAGE_SAFE_ZONE).or(Cloudy.hasPermission(Permission.MANAGE_WAR_ZONE)))

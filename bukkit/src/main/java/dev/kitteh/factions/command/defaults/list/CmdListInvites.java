@@ -37,7 +37,7 @@ public class CmdListInvites implements Cmd {
         Component component = legacy.deserialize(TL.COMMAND_SHOWINVITES_PENDING.toString()).color(NamedTextColor.GOLD);
         for (UUID id : sender.faction().invites()) {
             FPlayer fp = FPlayers.fPlayers().get(id);
-            String name = fp != null ? fp.name() : id.toString();
+            String name = fp.name();
             component = component.append(Component.text().color(NamedTextColor.WHITE).content(name + " ")
                     .hoverEvent(legacy.deserialize(TL.COMMAND_SHOWINVITES_CLICKTOREVOKE.format(name)).asHoverEvent())
                     .clickEvent(ClickEvent.runCommand("/" + MiscUtil.commandRoot() + " deinvite " + name))

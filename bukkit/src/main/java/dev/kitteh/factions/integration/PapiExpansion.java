@@ -167,9 +167,9 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
                 yield raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
             }
             case "faction_home_world" -> faction.home() instanceof Location home ? home.getWorld().getName() : "";
-            case "faction_home_x" -> faction.hasHome() ? String.valueOf(faction.home().getBlockX()) : "";
-            case "faction_home_y" -> faction.hasHome() ? String.valueOf(faction.home().getBlockY()) : "";
-            case "faction_home_z" -> faction.hasHome() ? String.valueOf(faction.home().getBlockZ()) : "";
+            case "faction_home_x" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockX()) : "";
+            case "faction_home_y" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockY()) : "";
+            case "faction_home_z" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockZ()) : "";
             case "faction_land_value" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(faction.claimCount())) : TL.ECON_OFF.format("value");
             case "faction_land_refund" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.claimCount())) : TL.ECON_OFF.format("refund");
             case "faction_bank_balance" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.getBalance(faction)) : TL.ECON_OFF.format("balance");

@@ -100,7 +100,7 @@ public class CmdZone implements Cmd {
         };
     }
 
-    static BlockingSuggestionProvider.@NonNull Strings<Sender> zoneSuggester = (c, i) ->
+    static final BlockingSuggestionProvider.@NonNull Strings<Sender> zoneSuggester = (c, i) ->
             c.sender().fPlayerOrNull().faction().zones().get().stream()
                     .map(Faction.Zone::name)
                     .filter(s -> s.toLowerCase().startsWith(i.peekString().toLowerCase()))

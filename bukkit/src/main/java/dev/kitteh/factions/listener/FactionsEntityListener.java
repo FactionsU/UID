@@ -98,7 +98,7 @@ public class FactionsEntityListener extends AbstractListener {
             event.setCancelled(true);
         } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && event.getEntity() instanceof Player player) {
             FPlayer fPlayer = FPlayers.fPlayers().get(player);
-            if (fPlayer != null && !fPlayer.takeFallDamage()) {
+            if (!fPlayer.takeFallDamage()) {
                 event.setCancelled(true); // Falling after /f fly
             }
         }
@@ -346,7 +346,7 @@ public class FactionsEntityListener extends AbstractListener {
         FPlayer attacker = FPlayers.fPlayers().get(damagerPlayer);
         notify = notify && damagerPlayer.canSee((Player) damagee);
 
-        if (attacker == null || attacker.asPlayer() == null) {
+        if (attacker.asPlayer() == null) {
             return true;
         }
 
@@ -454,10 +454,6 @@ public class FactionsEntityListener extends AbstractListener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         if (!WorldUtil.isEnabled(event.getEntity().getWorld())) {
-            return;
-        }
-
-        if (event.getLocation() == null) { // Just in case
             return;
         }
 

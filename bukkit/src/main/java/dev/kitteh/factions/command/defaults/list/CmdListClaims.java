@@ -50,13 +50,12 @@ public class CmdListClaims implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         Faction faction = sender.faction();
-        if (context.flags().hasFlag("faction") && context.sender().hasPermission(Permission.LISTCLAIMS_OTHER)) {
-            faction = context.flags().get("faction");
+        if (context.flags().get("faction") instanceof Faction fac && context.sender().hasPermission(Permission.LISTCLAIMS_OTHER)) {
+            faction = fac;
         }
 
         World world = ((Sender.Player) context.sender()).player().getWorld();
-        if (context.flags().hasFlag("world")) {
-            String worldName = context.flags().get("world");
+        if (context.flags().get("world") instanceof String worldName) {
             world = Bukkit.getWorld(worldName);
             if (world == null) {
                 sender.msgLegacy(TL.COMMAND_LISTCLAIMS_INVALIDWORLD, worldName);

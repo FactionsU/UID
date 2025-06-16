@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 @NullMarked
 public abstract class MemoryFPlayers implements FPlayers {
-    protected Map<UUID, FPlayer> fPlayers = new ConcurrentSkipListMap<>();
+    protected final Map<UUID, FPlayer> fPlayers = new ConcurrentSkipListMap<>();
 
     @Override
     public List<FPlayer> all() {

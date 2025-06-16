@@ -41,11 +41,11 @@ public enum Role implements Permissible {
         return this.value <= role.value;
     }
 
-    public static Role getRelative(Role role, int relative) {
+    public static @Nullable Role getRelative(Role role, int relative) {
         return Role.getByValue(role.value + relative);
     }
 
-    public static Role getByValue(int value) {
+    public static @Nullable Role getByValue(int value) {
         return switch (value) {
             case 0 -> RECRUIT;
             case 1 -> NORMAL;

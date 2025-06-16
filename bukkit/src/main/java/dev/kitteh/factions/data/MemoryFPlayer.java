@@ -326,7 +326,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     public MemoryFPlayer(UUID id) {
         this.id = id;
         this.name = id.toString();
-        this.role = Role.NORMAL;
         this.title = "";
         this.autoClaimFor = null;
         this.autoUnclaimFor = null;

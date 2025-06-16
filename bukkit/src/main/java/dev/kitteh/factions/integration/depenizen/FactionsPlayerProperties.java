@@ -101,9 +101,7 @@ public class FactionsPlayerProperties implements Property {
                 // Note: In modern Factions these are called ranks instead of roles.
                 // -->
                 if (attribute.startsWith("role")) {
-                    if (getFPlayer().role() != null) {
-                        return new ElementTag(getFPlayer().role().toString()).getObjectAttribute(attribute.fulfill(1));
-                    }
+                    return new ElementTag(getFPlayer().role().toString()).getObjectAttribute(attribute.fulfill(1));
                 }
 
                 // <--[tag]
@@ -114,9 +112,7 @@ public class FactionsPlayerProperties implements Property {
                 // Returns the player's title.
                 // -->
                 else if (attribute.startsWith("title")) {
-                    if (getFPlayer().titleLegacy() != null) {
-                        return new ElementTag(getFPlayer().titleLegacy()).getObjectAttribute(attribute.fulfill(1));
-                    }
+                    return new ElementTag(getFPlayer().titleLegacy()).getObjectAttribute(attribute.fulfill(1));
                 }
             }
 

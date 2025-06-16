@@ -115,7 +115,7 @@ public record FLocation(String worldName, int x, int z) {
     @Override
     public int hashCode() {
         // should be fast, with good range and few hash collisions: (x * 512) + z + worldName.hashCode
-        return (this.x << 9) + this.z + (this.worldName != null ? this.worldName.hashCode() : 0);
+        return (this.x << 9) + this.z + this.worldName.hashCode();
     }
 
     @Override

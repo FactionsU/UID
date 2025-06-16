@@ -30,10 +30,7 @@ public class AutoLeaveProcessTask extends AutoLeaveTask.AutoLeaveProcessor<FPlay
 
             // if player is faction admin, sort out the faction since he's going away
             if (fplayer.role() == Role.ADMIN) {
-                Faction faction = fplayer.faction();
-                if (faction != null) {
-                    fplayer.faction().promoteNewLeader();
-                }
+                fplayer.faction().promoteNewLeader();
             }
 
             fplayer.leave(false);

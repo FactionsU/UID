@@ -52,7 +52,7 @@ public interface Upgrade {
     @FunctionalInterface
     interface Reactor {
         Reactor UPDATE_COMMANDS = (faction, oldLevel, newLevel) -> {
-            if (oldLevel == 0) {
+            if (oldLevel == 0 || newLevel == 0) {
                 faction.membersOnlineAsPlayers().forEach(Player::updateCommands);
             }
         };

@@ -16,6 +16,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.util.LazyLocation;
+import org.bukkit.Location;
 
 /*
 This code is from the Depenizen plugin, modified to work with this plugin.
@@ -146,8 +147,8 @@ public class FactionTag implements ObjectTag {
                         .getObjectAttribute(attribute.fulfill(1));
             }
         } else if (attribute.startsWith("home")) { // Legacy sorta-compat
-            if (faction.hasHome()) {
-                return new LocationTag(faction.home())
+            if (faction.home() instanceof Location loc) {
+                return new LocationTag(loc)
                         .getObjectAttribute(attribute.fulfill(1));
             }
         }
@@ -207,8 +208,8 @@ public class FactionTag implements ObjectTag {
         // Returns the faction's leader as a PlayerTag.
         // -->
         else if (attribute.startsWith("leader")) {
-            if (faction.admin() != null) {
-                return new PlayerTag(faction.admin().uniqueId())
+            if (faction.admin() instanceof FPlayer fp) {
+                return new PlayerTag(fp.uniqueId())
                         .getObjectAttribute(attribute.fulfill(1));
             }
         }

@@ -233,9 +233,9 @@ public class FactionsPlayerListener extends AbstractListener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (me.flying() && me.asPlayer() != null) {
-                        me.asPlayer().setAllowFlight(true);
-                        me.asPlayer().setFlying(true);
+                    if (me.flying() && me.asPlayer() instanceof Player player) {
+                        player.setAllowFlight(true);
+                        player.setFlying(true);
                     }
                     me.flightCheck();
                 }
@@ -293,10 +293,10 @@ public class FactionsPlayerListener extends AbstractListener {
 
         boolean canFlyPreClaim = me.canFlyAtLocation();
 
-        if (me.autoClaim() != null) {
-            me.attemptClaim(me.autoClaim(), to, true);
-        } else if (me.autoUnclaim() != null) {
-            me.attemptUnclaim(me.autoUnclaim(), to, true);
+        if (me.autoClaim() instanceof Faction faction) {
+            me.attemptClaim(faction, to, true);
+        } else if (me.autoUnclaim()  instanceof Faction faction) {
+            me.attemptUnclaim(faction, to, true);
         }
 
         // Did we change "host"(faction)?

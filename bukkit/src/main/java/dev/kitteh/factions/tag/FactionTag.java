@@ -10,15 +10,16 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import org.apache.commons.lang3.time.DurationFormatUtils;
+import org.bukkit.Location;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public enum FactionTag implements Tag {
     INTERNAL_ID("faction-internal-id", (fac) -> String.valueOf(fac.id())),
-    HOME_X("x", (fac) -> fac.hasHome() ? String.valueOf(fac.home().getBlockX()) : Tag.isMinimalShow() ? null : "{ig}"),
-    HOME_Y("y", (fac) -> fac.hasHome() ? String.valueOf(fac.home().getBlockY()) : Tag.isMinimalShow() ? null : "{ig}"),
-    HOME_Z("z", (fac) -> fac.hasHome() ? String.valueOf(fac.home().getBlockZ()) : Tag.isMinimalShow() ? null : "{ig}"),
+    HOME_X("x", (fac) -> fac.home() instanceof Location loc ? String.valueOf(loc.getBlockX()) : Tag.isMinimalShow() ? null : "{ig}"),
+    HOME_Y("y", (fac) -> fac.home() instanceof Location loc ? String.valueOf(loc.getBlockY()) : Tag.isMinimalShow() ? null : "{ig}"),
+    HOME_Z("z", (fac) -> fac.home() instanceof Location loc ? String.valueOf(loc.getBlockZ()) : Tag.isMinimalShow() ? null : "{ig}"),
     CHUNKS("chunks", (fac) -> String.valueOf(fac.claimCount())),
     WARPS("warps", (fac) -> String.valueOf(fac.warps().size())),
     HEADER("header", (fac, fp) -> TextUtil.titleize(fac.tagLegacy(fp))),
@@ -35,7 +36,7 @@ public enum FactionTag implements Tag {
     JOINING("joining", (fac) -> (fac.open() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString())),
     FACTION("faction", (fac) -> fac.tag()),
     FACTION_RELATION_COLOR("faction-relation-color", (fac, fp) -> fp == null ? "" : fp.colorLegacyStringTo(fac)),
-    HOME_WORLD("world", (fac) -> fac.hasHome() ? fac.home().getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
+    HOME_WORLD("world", (fac) -> fac.home() instanceof Location loc ? loc.getWorld().getName() : Tag.isMinimalShow() ? null : "{ig}"),
     RAIDABLE("raidable", (fac) -> {
         boolean raid = FactionsPlugin.instance().landRaidControl().isRaidable(fac);
         return raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();

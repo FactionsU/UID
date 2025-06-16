@@ -17,7 +17,7 @@ public abstract class GUI<Type> implements InventoryHolder {
     protected Inventory inventory;
 
     protected final int size;
-    protected int back = -1;
+    protected final int back = -1;
 
     private Map<Integer, Type> slotMap = new HashMap<>();
 

@@ -226,8 +226,8 @@ public class CmdSetPerm implements Cmd {
                     break glass;
                 }
                 Map<String, String> options = descriptor.options(faction);
-                if (descriptor.instructions() != null) {
-                    sender.sendMessage(Component.text(descriptor.instructions()));
+                if (descriptor.instructions() instanceof String instructions) {
+                    sender.sendMessage(Component.text(instructions));
                     sender.sendRichMessage(this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + " \"" + descriptor.name() + ':' + tl.add().getSelectorOptionHere() + "\"");
                 }
                 if (options != null) {

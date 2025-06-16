@@ -53,7 +53,7 @@ public class AutoLeaveProcessFactionTask extends AutoLeaveTask.AutoLeaveProcesso
 
         // Every single one of them is inactive and removable!
 
-        Role role = Role.getByValue(0);
+        Role role = Role.RECRUIT;
         for (int i = 0; role != null; role = Role.getByValue(++i)) {
             for (FPlayer fplayer : faction.members(role)) {
                 if ((conf.logging().isFactionLeave() || conf.logging().isFactionKick()) && (fplayer.hasFaction() || conf.factions().other().isAutoLeaveDeleteFPlayerData())) {
