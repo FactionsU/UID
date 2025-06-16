@@ -40,6 +40,7 @@ tasks.shadowJar {
   }
 
   archiveClassifier = ""
+  archiveVersion = ""
   archiveBaseName = "factionsuuid"
 }
 
