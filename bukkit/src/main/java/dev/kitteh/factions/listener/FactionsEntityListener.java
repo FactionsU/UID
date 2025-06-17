@@ -286,7 +286,7 @@ public class FactionsEntityListener extends AbstractListener {
             }
         }
 
-        if (!(damagee instanceof Player)) {
+        if (!(damagee instanceof Player damagedPlayer)) {
             if (FactionsPlugin.instance().conf().factions().protection().isSafeZoneBlockAllEntityDamage() && defLocFaction.isSafeZone()) {
                 if (damager instanceof Player && notify) {
                     FPlayers.fPlayers().get((Player) damager).msgLegacy(TL.PERM_DENIED_SAFEZONE.format(TL.GENERIC_ATTACK.toString()));
@@ -311,11 +311,7 @@ public class FactionsEntityListener extends AbstractListener {
             return true;
         }
 
-        FPlayer defender = FPlayers.fPlayers().get((Player) damagee);
-
-        if (defender.asPlayer() == null) {
-            return true;
-        }
+        FPlayer defender = FPlayers.fPlayers().get(damagedPlayer);
 
         Location defenderLoc = defender.asPlayer().getLocation();
 
@@ -329,9 +325,9 @@ public class FactionsEntityListener extends AbstractListener {
 
         // Players can not take attack damage in a SafeZone, or possibly peaceful territory
         if (defLocFaction.noPvPInTerritory()) {
-            if (damager instanceof Player) {
+            if (damager instanceof Player plr && plr.canSee(damagedPlayer)) {
                 if (notify) {
-                    FPlayer attacker = FPlayers.fPlayers().get((Player) damager);
+                    FPlayer attacker = FPlayers.fPlayers().get(plr);
                     attacker.msgLegacy(TL.PLAYER_CANTHURT, (defLocFaction.isSafeZone() ? TL.REGION_SAFEZONE.toString() : TL.REGION_PEACEFUL.toString()));
                 }
                 return false;
