@@ -3,7 +3,7 @@ version: 1.6.9.5-U${project.version}
 main: com.massivecraft.factions.FactionsPlugin
 authors: [Olof Larsson, Brett Flannigan, drtshock, dariasc, CmdrKittens, mbaxter]
 softdepend: [LuckPerms, WorldGuard]
-api-version: '1.21.5'
+api-version: '1.21.6'
 website: https://www.spigotmc.org/resources/factionsuuid.1035/
 commands:
   factions:

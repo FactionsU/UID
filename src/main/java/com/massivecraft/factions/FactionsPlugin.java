@@ -111,8 +111,8 @@ public class FactionsPlugin extends JavaPlugin implements FactionsAPI {
     // Single 4 life.
     private static FactionsPlugin instance;
     private static int mcVersion;
-    private static final int OLDEST_MODERN_SUPPORTED = 2004; // 1.20.4
-    private static final String OLDEST_MODERN_SUPPORTED_STRING = "1.20.4";
+    private static final int OLDEST_MODERN_SUPPORTED = 2106;
+    private static final String OLDEST_MODERN_SUPPORTED_STRING = "1.21.6";
 
     public static FactionsPlugin getInstance() {
         return instance;
