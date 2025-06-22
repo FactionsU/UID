@@ -77,7 +77,8 @@ tasks.processResources {
   filesMatching("plugin.yml") {
     expand(mapOf(
       "version" to project.version,
-      "adv" to libs.versions.adventure.get()
+      "adv" to libs.versions.adventure.get(),
+      "apiversion" to libs.versions.apiversion.get()
     ))
   }
 }

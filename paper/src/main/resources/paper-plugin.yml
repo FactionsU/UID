@@ -2,7 +2,7 @@ name: FactionsUUID
 version: ${version}
 main: dev.kitteh.factions.plugin.FactionsPluginPaper
 authors: [mbaxter, drtshock, dariasc, Brett Flannigan, Olof Larsson]
-api-version: '1.21.4'
+api-version: '${apiversion}'
 website: https://www.spigotmc.org/resources/factionsuuid.1035/
 
 dependencies:

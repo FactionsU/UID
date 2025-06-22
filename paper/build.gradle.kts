@@ -24,7 +24,8 @@ tasks.runServer {
 tasks.processResources {
   filesMatching("paper-plugin.yml") {
     expand(mapOf(
-      "version" to project.version
+      "version" to project.version,
+      "apiversion" to libs.versions.apiversion.get()
     ))
   }
 }

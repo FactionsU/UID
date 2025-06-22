@@ -3,7 +3,7 @@ version: ${version}
 main: dev.kitteh.factions.plugin.FactionsPluginSpigot
 authors: [mbaxter, drtshock, dariasc, Brett Flannigan, Olof Larsson]
 softdepend: [LuckPerms, WorldGuard]
-api-version: '1.21.4'
+api-version: '${apiversion}'
 website: https://www.spigotmc.org/resources/factionsuuid.1035/
 libraries:
   - "net.kyori:adventure-text-minimessage:${adv}"

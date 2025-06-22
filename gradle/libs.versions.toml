@@ -1,4 +1,5 @@
 [versions]
+apiversion = "1.21.4"
 minecraft = "1.21.4-R0.1-SNAPSHOT"
 adventure = "4.19.0"
 cloud = "2.0.0-beta.10"
