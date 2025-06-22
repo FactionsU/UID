@@ -4,6 +4,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.upgrade.Upgrade;
+import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
 import org.jspecify.annotations.NullMarked;
@@ -49,7 +50,7 @@ public abstract class MemoryUniverse implements Universe {
 
     @Override
     public boolean isUpgradeEnabled(Upgrade upgrade) {
-        return !this.data.upgrades.disabled.contains(upgrade.name());
+        return this.data.upgrades.settings.containsKey(upgrade.name()) && !this.data.upgrades.disabled.contains(upgrade.name());
     }
 
     @Override
@@ -77,6 +78,19 @@ public abstract class MemoryUniverse implements Universe {
                 }
             }
         });
+    }
+
+    public void addSettings(UpgradeSettings settings, boolean defaultDisabled) {
+        if (UpgradeRegistry.getUpgrade(settings.upgrade().name()) != settings.upgrade()) {
+            throw new IllegalArgumentException("Upgrade not registered");
+        }
+        if (settings.findFlaw() instanceof String issue) {
+            throw new IllegalArgumentException(issue);
+        }
+        this.data.upgrades.settings.put(settings.upgrade().name(), settings);
+        if (defaultDisabled) {
+            this.data.upgrades.disabled.add(settings.upgrade().name());
+        }
     }
 
     protected abstract void loadData();

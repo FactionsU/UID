@@ -1,5 +1,7 @@
 package dev.kitteh.factions.upgrade;
 
+import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.data.MemoryUniverse;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -16,11 +18,11 @@ public class UpgradeRegistry {
 
     static {
         for (UpgradeVariable variable : Upgrades.VARIABLES) {
-            registerVariable(variable);
+            variableRegistry.put(variable.name().toLowerCase(), variable);
         }
 
         for (Upgrade upgrade : Upgrades.UPGRADES) {
-            registerUpgrade(upgrade);
+            upgradeRegistry.put(upgrade.name().toLowerCase(), upgrade);
         }
     }
 
@@ -41,23 +43,36 @@ public class UpgradeRegistry {
         return new HashSet<>(upgradeRegistry.values());
     }
 
-    public static void registerUpgrade(Upgrade action) {
+    public static void registerUpgrade(Upgrade upgrade, UpgradeSettings settings, boolean defaultDisabled) {
         if (closed) {
             throw new IllegalStateException("Cannot register upgrade. Must be done during onLoad().");
         }
-        if (upgradeRegistry.containsKey(action.name().toLowerCase())) {
-            throw new IllegalArgumentException("Upgrade with name " + action.name() + " already registered");
+        if (upgradeRegistry.containsKey(upgrade.name().toLowerCase())) {
+            throw new IllegalArgumentException("Upgrade with name '" + upgrade.name() + "' already registered");
         }
-        upgradeRegistry.put(action.name().toLowerCase(), action);
+        if (upgrade != settings.upgrade()) {
+            throw new IllegalArgumentException("Upgrade settings does not contain same Upgrade");
+        }
+        for (UpgradeVariable variable : upgrade.variables()) {
+            UpgradeVariable var = getVariable(variable.name());
+            if (var == null) {
+                throw new IllegalArgumentException("Variable '" + variable.name() + "' not found");
+            }
+            if (var != variable) {
+                throw new IllegalArgumentException("Variable with name '" + variable.name() + "' already registered but does not match this upgrade's variable");
+            }
+        }
+        upgradeRegistry.put(upgrade.name().toLowerCase(), upgrade);
+        ((MemoryUniverse) Universe.universe()).addSettings(settings, defaultDisabled);
     }
 
-    public static void registerVariable(UpgradeVariable action) {
+    public static void registerVariable(UpgradeVariable variable) {
         if (closed) {
             throw new IllegalStateException("Cannot register upgrade variable. Must be done during onLoad().");
         }
-        if (variableRegistry.containsKey(action.name().toLowerCase())) {
-            throw new IllegalArgumentException("Upgrade variable with name " + action.name() + " already registered");
+        if (variableRegistry.containsKey(variable.name().toLowerCase())) {
+            throw new IllegalArgumentException("Upgrade variable with name '" + variable.name() + "' already registered");
         }
-        variableRegistry.put(action.name().toLowerCase(), action);
+        variableRegistry.put(variable.name().toLowerCase(), variable);
     }
 }
