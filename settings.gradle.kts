@@ -6,3 +6,4 @@ rootProject.name = "factionsuuid"
 
 include("bukkit")
 include("paper")
+include("example-plugin")

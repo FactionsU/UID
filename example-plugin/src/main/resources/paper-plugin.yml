@@ -1,0 +1,5 @@
+name: FUUIDExamplePlugin
+version: ${version}
+main: dev.kitteh.example.fuuid.ExamplePlugin
+api-version: '${apiversion}'
+authors: [mbaxter]

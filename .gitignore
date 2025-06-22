@@ -3,6 +3,7 @@
 /build/
 /bukkit/build/
 /paper/build/
+/example-plugin/build/
 
 # Eclipse stuff
 .classpath
