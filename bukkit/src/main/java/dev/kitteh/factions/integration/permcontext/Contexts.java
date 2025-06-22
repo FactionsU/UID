@@ -27,11 +27,11 @@ public enum Contexts implements Context {
     }, Set.of(String.valueOf(Factions.ID_WILDERNESS))),
     IS_PEACEFUL((player) -> {
         FPlayer p = FPlayers.fPlayers().get(player);
-        return Set.of(p.hasFaction() && p.faction().peaceful() ? "true" : "false");
+        return Set.of(p.hasFaction() && p.faction().isPeaceful() ? "true" : "false");
     }, Set.of("true", "false")),
     IS_PERMANENT((player) -> {
         FPlayer p = FPlayers.fPlayers().get(player);
-        return Set.of(p.hasFaction() && p.faction().permanent() ? "true" : "false");
+        return Set.of(p.hasFaction() && p.faction().isPermanent() ? "true" : "false");
     }, Set.of("true", "false")),
     TERRITORY_RELATION((player) ->
             FPlayers.fPlayers().get(player).relationTo(Board.board().factionAt(new FLocation(player.getLocation()))).getNameInASet(),

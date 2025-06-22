@@ -313,7 +313,7 @@ public interface Faction extends Participator, Selectable {
 
     void open(boolean isOpen);
 
-    boolean peaceful();
+    boolean isPeaceful();
 
     void peaceful(boolean isPeaceful);
 
@@ -322,10 +322,10 @@ public interface Faction extends Participator, Selectable {
     boolean peacefulExplosionsEnabled();
 
     default boolean noExplosionsInTerritory() {
-        return this.shieldActive() || (this.peaceful() && !this.peacefulExplosionsEnabled());
+        return this.shieldActive() || (this.isPeaceful() && !this.peacefulExplosionsEnabled());
     }
 
-    boolean permanent();
+    boolean isPermanent();
 
     void permanent(boolean isPermanent);
 
@@ -347,7 +347,7 @@ public interface Faction extends Participator, Selectable {
 
     void home(Location home);
 
-    void delHome();
+    void removeHome();
 
     default boolean hasHome() {
         return this.home() != null;
@@ -361,11 +361,11 @@ public interface Faction extends Participator, Selectable {
     void founded(Instant when);
 
     default boolean noPvPInTerritory() {
-        return isSafeZone() || (peaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisablePVP());
+        return isSafeZone() || (isPeaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisablePVP());
     }
 
     default boolean noMonstersInTerritory() {
-        return isSafeZone() || (peaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters());
+        return isSafeZone() || (isPeaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters());
     }
 
     default boolean isNormal() {

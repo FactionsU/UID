@@ -697,7 +697,7 @@ public class FactionsPlayerListener extends AbstractListener {
         if (me.hasFaction() &&
                 !me.adminBypass() &&
                 !protection.getPermanentFactionMemberDenyCommands().isEmpty() &&
-                me.faction().permanent() &&
+                me.faction().isPermanent() &&
                 isCommandInSet(fullCmd, shortCmd, protection.getPermanentFactionMemberDenyCommands())) {
             me.msgLegacy(TL.PLAYER_COMMAND_PERMANENT, fullCmd);
             return true;

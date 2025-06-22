@@ -111,7 +111,7 @@ public interface FPlayer extends Participator, Selectable {
 
     String titleLegacy();
 
-    void title(String title);
+    void titleLegacy(String title);
 
     String nameWithTitleLegacy();
 

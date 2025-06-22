@@ -70,7 +70,7 @@ public class RelationUtil {
             return Relation.MEMBER;
         }
 
-        if (!ignorePeaceful && (fme.peaceful() || fthat.peaceful())) {
+        if (!ignorePeaceful && (fme.isPeaceful() || fthat.isPeaceful())) {
             return Relation.NEUTRAL;
         }
 
@@ -101,7 +101,7 @@ public class RelationUtil {
     public static TextColor getTextColorOfThatToMe(Participator that, Participator me) {
         Faction thatFaction = getFaction(that);
         if (thatFaction != null) {
-            if (thatFaction.peaceful() && thatFaction != getFaction(me)) {
+            if (thatFaction.isPeaceful() && thatFaction != getFaction(me)) {
                 return FactionsPlugin.instance().conf().colors().relations().getPeaceful();
             }
 

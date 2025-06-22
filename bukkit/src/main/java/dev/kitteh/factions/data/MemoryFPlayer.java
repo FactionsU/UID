@@ -419,7 +419,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public void title(String title) {
+    public void titleLegacy(String title) {
         this.title = title;
     }
 
@@ -711,7 +711,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         Faction myFaction = this.faction();
         boolean econMakePay = makePay && Econ.shouldBeUsed() && !this.adminBypass();
 
-        boolean perm = myFaction.permanent();
+        boolean perm = myFaction.isPermanent();
 
         if (!perm && this.role() == Role.ADMIN && myFaction.members().size() > 1) {
             msgLegacy(TL.LEAVE_PASSADMIN);
@@ -887,10 +887,10 @@ public abstract class MemoryFPlayer implements FPlayer {
                 denyReason = TextUtil.parse(TL.CLAIM_OUTSIDEWORLDBORDER.toString());
             }
         } else if (currentFaction.isNormal()) {
-            if (myFaction.peaceful()) {
+            if (myFaction.isPeaceful()) {
                 // Cannot claim as peaceful
                 denyReason = TextUtil.parse(TL.CLAIM_PEACEFUL.toString(), currentFaction.tagLegacy(this));
-            } else if (currentFaction.peaceful()) {
+            } else if (currentFaction.isPeaceful()) {
                 // Cannot claim from peaceful
                 denyReason = TextUtil.parse(TL.CLAIM_PEACEFULTARGET.toString(), currentFaction.tagLegacy(this));
             } else if (!currentFaction.hasLandInflation()) {

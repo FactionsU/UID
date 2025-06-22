@@ -99,12 +99,12 @@ public class CmdRelation implements Cmd {
             faction.msgLegacy(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.tag(), targetRelationColor + targetRelation);
         }
 
-        if (!targetRelation.isNeutral() && them.peaceful()) {
+        if (!targetRelation.isNeutral() && them.isPeaceful()) {
             them.msgLegacy(TL.COMMAND_RELATIONS_PEACEFUL);
             faction.msgLegacy(TL.COMMAND_RELATIONS_PEACEFULOTHER);
         }
 
-        if (!targetRelation.isNeutral() && faction.peaceful()) {
+        if (!targetRelation.isNeutral() && faction.isPeaceful()) {
             them.msgLegacy(TL.COMMAND_RELATIONS_PEACEFULOTHER);
             faction.msgLegacy(TL.COMMAND_RELATIONS_PEACEFUL);
         }

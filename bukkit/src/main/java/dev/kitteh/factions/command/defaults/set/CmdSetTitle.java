@@ -54,7 +54,7 @@ public class CmdSetTitle implements Cmd {
         if (context.sender().hasPermission(Permission.TITLE_COLOR)) {
             title = LegacyComponentSerializer.legacySection().serialize(Mini.parseLimited(title));
         }
-        target.title(title);
+        target.titleLegacy(title);
 
         // Inform
         faction.msgLegacy(TL.COMMAND_TITLE_CHANGED, sender.describeToLegacy(faction), target.describeToLegacy(faction));

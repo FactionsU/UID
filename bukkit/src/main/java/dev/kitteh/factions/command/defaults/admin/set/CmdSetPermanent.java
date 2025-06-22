@@ -32,7 +32,7 @@ public class CmdSetPermanent implements Cmd {
         Faction faction = context.get("faction");
 
         String change;
-        if (faction.permanent()) {
+        if (faction.isPermanent()) {
             change = TL.COMMAND_PERMANENT_REVOKE.toString();
             faction.permanent(false);
         } else {

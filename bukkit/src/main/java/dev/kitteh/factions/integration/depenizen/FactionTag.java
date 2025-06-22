@@ -184,7 +184,7 @@ public class FactionTag implements ObjectTag {
         // Returns true if the faction is peaceful.
         // -->
         else if (attribute.startsWith("ispeaceful") || attribute.startsWith("is_peaceful")) {
-            return new ElementTag(faction.peaceful())
+            return new ElementTag(faction.isPeaceful())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -196,7 +196,7 @@ public class FactionTag implements ObjectTag {
         // Returns true if the faction is permanent.
         // -->
         else if (attribute.startsWith("ispermanent") || attribute.startsWith("is_permanent")) {
-            return new ElementTag(faction.permanent())
+            return new ElementTag(faction.isPermanent())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 

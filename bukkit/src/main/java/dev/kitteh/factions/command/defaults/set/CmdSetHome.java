@@ -94,7 +94,7 @@ public class CmdSetHome implements Cmd {
             return;
         }
 
-        faction.delHome();
+        faction.removeHome();
 
         faction.msgLegacy(TL.COMMAND_DELHOME_DEL, sender.describeToLegacy(faction, true));
     }

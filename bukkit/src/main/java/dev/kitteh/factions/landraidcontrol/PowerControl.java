@@ -23,7 +23,7 @@ public class PowerControl implements LandRaidControl {
     }
 
     public boolean isRaidable(Faction faction, int power) {
-        return FactionsPlugin.instance().conf().factions().landRaidControl().power().isRaidability() && faction.isNormal() && !faction.peaceful() &&
+        return FactionsPlugin.instance().conf().factions().landRaidControl().power().isRaidability() && faction.isNormal() && !faction.isPeaceful() &&
                 (FactionsPlugin.instance().conf().factions().landRaidControl().power().isRaidabilityOnEqualLandAndPower() ?
                         (faction.claimCount() >= power) :
                         (faction.claimCount() > power)
@@ -32,7 +32,7 @@ public class PowerControl implements LandRaidControl {
 
     @Override
     public boolean hasLandInflation(Faction faction) {
-        return !faction.peaceful() && faction.claimCount() > faction.power();
+        return !faction.isPeaceful() && faction.claimCount() > faction.power();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class PowerControl implements LandRaidControl {
         } else if (powerConf.getWorldsNoPowerLoss().contains(player.getWorld().getName())) {
             powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WORLD.toString());
             powerLossEvent.setCancelled(true);
-        } else if (powerConf.isPeacefulMembersDisablePowerLoss() && fplayer.hasFaction() && fplayer.faction().peaceful()) {
+        } else if (powerConf.isPeacefulMembersDisablePowerLoss() && fplayer.hasFaction() && fplayer.faction().isPeaceful()) {
             powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_PEACEFUL.toString());
             powerLossEvent.setCancelled(true);
         } else {

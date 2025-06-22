@@ -217,7 +217,7 @@ public class FactionsEntityListener extends AbstractListener {
 
         if (thrower instanceof Player player) {
             FPlayer fPlayer = FPlayers.fPlayers().get(player);
-            if (fPlayer.faction().peaceful()) {
+            if (fPlayer.faction().isPeaceful()) {
                 if (event.getPotion().getEffects().stream().allMatch(e -> e.getType().equals(PotionEffectType.WEAKNESS))) {
                     for (LivingEntity target : event.getAffectedEntities()) {
                         if (target.getType() != EntityType.ZOMBIE_VILLAGER) {
@@ -293,7 +293,7 @@ public class FactionsEntityListener extends AbstractListener {
                 }
                 return false;
             }
-            if (FactionsPlugin.instance().conf().factions().protection().isPeacefulBlockAllEntityDamage() && defLocFaction.peaceful()) {
+            if (FactionsPlugin.instance().conf().factions().protection().isPeacefulBlockAllEntityDamage() && defLocFaction.isPeaceful()) {
                 if (damager instanceof Player && notify) {
                     FPlayers.fPlayers().get((Player) damager).msgLegacy(TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.tagLegacy(FPlayers.fPlayers().get((Player) damager))));
                 }
@@ -397,12 +397,12 @@ public class FactionsEntityListener extends AbstractListener {
         }
 
         if (!defLocFaction.isWarZone() || facConf.pvp().isDisablePeacefulPVPInWarzone()) {
-            if (defendFaction.peaceful()) {
+            if (defendFaction.isPeaceful()) {
                 if (notify) {
                     attacker.msgLegacy(TL.PLAYER_PVP_PEACEFUL);
                 }
                 return false;
-            } else if (attackFaction.peaceful()) {
+            } else if (attackFaction.isPeaceful()) {
                 if (notify) {
                     attacker.msgLegacy(TL.PLAYER_PVP_PEACEFUL);
                 }
@@ -459,7 +459,7 @@ public class FactionsEntityListener extends AbstractListener {
         MainConfig.Factions.Spawning spawning = FactionsPlugin.instance().conf().factions().spawning();
 
         if (faction.isNormal()) {
-            if (faction.peaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters()) {
+            if (faction.isPeaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters()) {
                 if (event.getEntity() instanceof Monster) {
                     event.setCancelled(true);
                 }
@@ -570,7 +570,7 @@ public class FactionsEntityListener extends AbstractListener {
             }
             case Silverfish ignored -> {
                 Faction faction = Board.board().factionAt(new FLocation(loc));
-                if (faction.isSafeZone() || faction.isWarZone() || faction.peaceful()) {
+                if (faction.isSafeZone() || faction.isWarZone() || faction.isPeaceful()) {
                     event.setCancelled(true);
                 }
             }

@@ -31,7 +31,7 @@ public class CmdSetBoom implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
 
-        if (!faction.peaceful()) {
+        if (!faction.isPeaceful()) {
             sender.msgLegacy(TL.COMMAND_BOOM_PEACEFULONLY);
             return;
         }

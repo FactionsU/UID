@@ -52,7 +52,7 @@ public class CmdDisband implements Cmd {
             return;
         }
 
-        if (faction.permanent()) {
+        if (faction.isPermanent()) {
             sender.msgLegacy(TL.COMMAND_DISBAND_MARKEDPERMANENT);
             return;
         }

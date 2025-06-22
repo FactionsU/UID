@@ -62,7 +62,7 @@ public class FactionsBlockListener extends AbstractListener {
         }
 
         Faction targetFaction = Board.board().factionAt(new FLocation(event.getBlock().getLocation()));
-        if (targetFaction.isNormal() && !targetFaction.peaceful() && this.plugin.conf().factions().specialCase().getIgnoreBuildMaterials().contains(event.getBlock().getType())) {
+        if (targetFaction.isNormal() && !targetFaction.isPeaceful() && this.plugin.conf().factions().specialCase().getIgnoreBuildMaterials().contains(event.getBlock().getType())) {
             return;
         }
 

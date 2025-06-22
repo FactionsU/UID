@@ -32,7 +32,7 @@ public class CmdSetPeaceful implements Cmd {
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
         String change;
-        if (faction.peaceful()) {
+        if (faction.isPeaceful()) {
             change = TL.COMMAND_PEACEFUL_REVOKE.toString();
             faction.peaceful(false);
         } else {

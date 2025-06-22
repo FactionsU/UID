@@ -559,7 +559,7 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public boolean peaceful() {
+    public boolean isPeaceful() {
         return this.peaceful;
     }
 
@@ -579,7 +579,7 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public boolean permanent() {
+    public boolean isPermanent() {
         return permanent || !this.isNormal();
     }
 
@@ -649,7 +649,7 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public void delHome() {
+    public void removeHome() {
         this.home = null;
     }
 
@@ -1140,7 +1140,7 @@ public abstract class MemoryFaction implements Faction {
         if (!this.isNormal()) {
             return;
         }
-        if (this.permanent() && FactionsPlugin.instance().conf().factions().specialCase().isPermanentFactionsDisableLeaderPromotion()) {
+        if (this.isPermanent() && FactionsPlugin.instance().conf().factions().specialCase().isPermanentFactionsDisableLeaderPromotion()) {
             return;
         }
 
@@ -1157,7 +1157,7 @@ public abstract class MemoryFaction implements Faction {
         }
 
         if (replacements.isEmpty()) { // faction admin  is the only  member; one-man  faction
-            if (this.permanent()) {
+            if (this.isPermanent()) {
                 if (oldLeader != null) {
                     oldLeader.role(Role.NORMAL);
                 }
