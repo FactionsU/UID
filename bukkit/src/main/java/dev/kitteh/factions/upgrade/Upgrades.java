@@ -28,23 +28,23 @@ public final class Upgrades {
         public static final UpgradeVariable POSITIVE_INCREASE = UpgradeVariable.ofInteger("increase", BigDecimal.ONE, BigDecimal.valueOf(Integer.MAX_VALUE));
     }
 
-    public static final Upgrade DTR_CLAIM_LIMIT = new Upgrade.Simple("dtr_claim_limit", TranslationsConfig.Upgrades::dtrClaimLimit, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
+    public static final Upgrade DTR_CLAIM_LIMIT = new Upgrade.SimpleImpl("dtr_claim_limit", TranslationsConfig.Upgrades::dtrClaimLimit, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
-    public static final Upgrade FALL_DAMAGE_REDUCTION = new Upgrade.Simple("fall_damage_reduction", TranslationsConfig.Upgrades::fallDamage, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
+    public static final Upgrade FALL_DAMAGE_REDUCTION = new Upgrade.SimpleImpl("fall_damage_reduction", TranslationsConfig.Upgrades::fallDamage, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
-    public static final Upgrade FLIGHT = new Upgrade.Reactive("flight", TranslationsConfig.Upgrades::flight, 1, Set.of(), Upgrade.Reactor.UPDATE_COMMANDS);
+    public static final Upgrade FLIGHT = new Upgrade.ReactiveImpl("flight", TranslationsConfig.Upgrades::flight, 1, Set.of(), Upgrade.Reactor.UPDATE_COMMANDS);
 
-    public static final Upgrade GROWTH = new Upgrade.Simple("growth", TranslationsConfig.Upgrades::growth, Integer.MAX_VALUE, Set.of(Variables.CHANCE, Variables.GROWTH_BOOST));
+    public static final Upgrade GROWTH = new Upgrade.SimpleImpl("growth", TranslationsConfig.Upgrades::growth, Integer.MAX_VALUE, Set.of(Variables.CHANCE, Variables.GROWTH_BOOST));
 
-    public static final Upgrade MAX_MEMBERS = new Upgrade.Simple("max_members", TranslationsConfig.Upgrades::maxMembers, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
+    public static final Upgrade MAX_MEMBERS = new Upgrade.SimpleImpl("max_members", TranslationsConfig.Upgrades::maxMembers, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
-    public static final Upgrade POWER_MAX = new Upgrade.Simple("power_max", TranslationsConfig.Upgrades::powerMax, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
+    public static final Upgrade POWER_MAX = new Upgrade.SimpleImpl("power_max", TranslationsConfig.Upgrades::powerMax, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
-    public static final Upgrade REDSTONE_PROTECT = new Upgrade.Simple("redstone_anti_flood", TranslationsConfig.Upgrades::redstoneAntiFlood, 1, Set.of());
+    public static final Upgrade REDSTONE_PROTECT = new Upgrade.SimpleImpl("redstone_anti_flood", TranslationsConfig.Upgrades::redstoneAntiFlood, 1, Set.of());
 
-    public static final Upgrade SHIELD = new Upgrade.Reactive("shield", TranslationsConfig.Upgrades::shield, Integer.MAX_VALUE, Set.of(Variables.DURATION, Variables.COOLDOWN), Upgrade.Reactor.UPDATE_COMMANDS);
+    public static final Upgrade SHIELD = new Upgrade.ReactiveImpl("shield", TranslationsConfig.Upgrades::shield, Integer.MAX_VALUE, Set.of(Variables.DURATION, Variables.COOLDOWN), Upgrade.Reactor.UPDATE_COMMANDS);
 
-    public static final Upgrade ZONES = new Upgrade.Reactive("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE), Upgrade.Reactor.UPDATE_COMMANDS);
+    public static final Upgrade ZONES = new Upgrade.ReactiveImpl("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE), Upgrade.Reactor.UPDATE_COMMANDS);
 
     static final List<Upgrade> UPGRADES = new ArrayList<>();
     static final List<UpgradeVariable> VARIABLES = new ArrayList<>();

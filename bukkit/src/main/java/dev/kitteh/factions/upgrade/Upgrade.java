@@ -11,19 +11,41 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @NullMarked
 public interface Upgrade {
-    record Simple(String name, Function<TranslationsConfig.Upgrades, TranslationsConfig.Upgrades.UpgradeDetail> tl, int maxLevel,
-                  Set<UpgradeVariable> variables) implements Upgrade.Impl {
+    record SimpleImpl(String name, Function<TranslationsConfig.Upgrades, TranslationsConfig.Upgrades.UpgradeDetail> tl, int maxLevel,
+                      Set<UpgradeVariable> variables) implements Upgrade.Impl {
     }
 
-    record Reactive(String name, Function<TranslationsConfig.Upgrades, TranslationsConfig.Upgrades.UpgradeDetail> tl, int maxLevel,
-                    Set<UpgradeVariable> variables, Reactor reactor) implements Upgrade.Impl {
+    record ReactiveImpl(String name, Function<TranslationsConfig.Upgrades, TranslationsConfig.Upgrades.UpgradeDetail> tl, int maxLevel,
+                        Set<UpgradeVariable> variables, Reactor reactor) implements Upgrade.Impl {
         @Override
         public void onChange(Faction faction, int oldLevel, int newLevel) {
-            reactor.onChange(faction, oldLevel, newLevel);
+            this.reactor.onChange(faction, oldLevel, newLevel);
+        }
+    }
+
+    record Simple(String name, Component nameComponent, Component description, BiFunction<UpgradeSettings, Integer, Component> detailsFunction, int maxLevel,
+                  Set<UpgradeVariable> variables) implements Upgrade {
+        @Override
+        public Component details(UpgradeSettings settings, int level) {
+            return this.detailsFunction.apply(settings, level);
+        }
+    }
+
+    record Reactive(String name, Component nameComponent, Component description, BiFunction<UpgradeSettings, Integer, Component> detailsFunction, int maxLevel,
+                    Set<UpgradeVariable> variables, Reactor reactor) implements Upgrade {
+        @Override
+        public Component details(UpgradeSettings settings, int level) {
+            return this.detailsFunction.apply(settings, level);
+        }
+
+        @Override
+        public void onChange(Faction faction, int oldLevel, int newLevel) {
+            this.reactor.onChange(faction, oldLevel, newLevel);
         }
     }
 

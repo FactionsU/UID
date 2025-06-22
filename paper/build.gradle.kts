@@ -14,7 +14,7 @@ dependencies {
   implementation(project(":bukkit")) {
     exclude("org.spigotmc")
   }
-  implementation(libs.paper)
+  compileOnly(libs.paper)
 }
 
 tasks.runServer {

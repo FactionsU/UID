@@ -26,7 +26,7 @@ public final class ThirdPartyCommands {
      * @throws IllegalArgumentException for not using your plugin
      * @throws IllegalStateException    if attempting after registration has closed
      */
-    static void register(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
+    public static void register(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
         CommandsRoot.register(providingPlugin, command, consumer);
     }
 
@@ -40,7 +40,7 @@ public final class ThirdPartyCommands {
      * @throws IllegalArgumentException for not using your plugin
      * @throws IllegalStateException    if attempting after registration has closed
      */
-    static void registerAdmin(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
+    public static void registerAdmin(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
         CommandsRoot.registerAdmin(providingPlugin, command, consumer);
     }
 }

@@ -80,9 +80,12 @@ public abstract class MemoryUniverse implements Universe {
         });
     }
 
-    public void addSettings(UpgradeSettings settings, boolean defaultDisabled) {
+    public void addDefaultsIfNotPresent(UpgradeSettings settings, boolean defaultDisabled) {
         if (UpgradeRegistry.getUpgrade(settings.upgrade().name()) != settings.upgrade()) {
             throw new IllegalArgumentException("Upgrade not registered");
+        }
+        if (this.data.upgrades.settings.containsKey(settings.upgrade().name())) {
+            return;
         }
         if (settings.findFlaw() instanceof String issue) {
             throw new IllegalArgumentException(issue);

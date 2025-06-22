@@ -10,6 +10,33 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public interface PermissibleAction {
     /**
+     * Simple little record for your convenience.
+     *
+     * @param name             name
+     * @param description      description
+     * @param shortDescription shortDescription
+     * @see PermissibleAction
+     */
+    record Simple(String name, String description, String shortDescription) implements PermissibleAction {
+        @Override
+        public @Nullable Upgrade prerequisite() {
+            return null;
+        }
+    }
+
+    /**
+     * Simple little record for your convenience.
+     *
+     * @param name             name
+     * @param description      description
+     * @param shortDescription shortDescription
+     * @param prerequisite     prerequisite
+     * @see PermissibleAction
+     */
+    record WithPrerequisite(String name, String description, String shortDescription, @Nullable Upgrade prerequisite) implements PermissibleAction {
+    }
+
+    /**
      * Name of this permissible action.
      *
      * @return name

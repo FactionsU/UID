@@ -63,7 +63,7 @@ public class UpgradeRegistry {
             }
         }
         upgradeRegistry.put(upgrade.name().toLowerCase(), upgrade);
-        ((MemoryUniverse) Universe.universe()).addSettings(settings, defaultDisabled);
+        ((MemoryUniverse) Universe.universe()).addDefaultsIfNotPresent(settings, defaultDisabled);
     }
 
     public static void registerVariable(UpgradeVariable variable) {
