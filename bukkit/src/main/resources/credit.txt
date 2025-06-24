@@ -4,10 +4,6 @@ and can be found at https://github.com/FactionsU/UID
 
 Shaded libraries into the jar include:
 
-Adventure API, Adventure Text (Gson/Legacy) Serializers, and MiniMessage
-MIT License
-https://github.com/KyoriPowered/adventure
-
 cloud command framework
 MIT License
 https://github.com/incendo/cloud
