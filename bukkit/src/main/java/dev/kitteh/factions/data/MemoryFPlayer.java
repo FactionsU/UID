@@ -16,6 +16,7 @@ import dev.kitteh.factions.event.LandClaimEvent;
 import dev.kitteh.factions.event.LandUnclaimEvent;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.integration.Essentials;
+import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
@@ -241,7 +242,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public boolean isVanished() {
         Player player = this.asPlayer();
-        if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.isVanished(player)) {
+        if (ExternalChecks.isVanished(player)) {
             return true;
         }
         if (player != null) {
@@ -588,7 +589,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             }
         } else if (hasFaction() && faction().isPowerFrozen()) {
             return; // Don't let power regen if faction power is frozen.
-        } else if (FactionsPlugin.instance().conf().plugins().essentialsX().isPreventRegenWhileAfk() && Essentials.isAfk(this.asPlayer())) {
+        } else if (FactionsPlugin.instance().conf().plugins().general().isPreventRegenWhileAfk() && ExternalChecks.isAfk(this.asPlayer())) {
             return;
         }
         long now = System.currentTimeMillis();

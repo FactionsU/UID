@@ -9,6 +9,7 @@ import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.event.DTRLossEvent;
 import dev.kitteh.factions.integration.Essentials;
+import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.upgrade.Upgrades;
@@ -177,8 +178,8 @@ public class DTRControl implements LandRaidControl {
         }
         long millisPassed = now - Math.max(faction.dtrLastUpdated(), faction.dtrFrozenUntil());
         Stream<Player> stream = faction.membersOnlineAsPlayers().stream().filter(p -> WorldUtil.isEnabled(p.getWorld()));
-        if (FactionsPlugin.instance().conf().plugins().essentialsX().isPreventRegenWhileAfk()) {
-            stream = stream.filter(Essentials::isAfk);
+        if (FactionsPlugin.instance().conf().plugins().general().isPreventRegenWhileAfk()) {
+            stream = stream.filter(ExternalChecks::isAfk);
         }
         long onlineInEnabledWorlds = stream.count();
         double rate = Math.min(conf().getRegainPerMinuteMaxRate(), Math.max(0, onlineInEnabledWorlds - minusPlayer) * conf().getRegainPerMinutePerPlayer());

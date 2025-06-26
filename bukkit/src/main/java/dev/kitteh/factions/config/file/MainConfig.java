@@ -2842,8 +2842,10 @@ public class MainConfig {
     }
 
     public class Plugins {
-        public class EssentialsX {
-            @Comment("If true, prevents regeneration of dtr/power while marked as AFK")
+        public class General {
+            @Comment("If true, prevents regeneration of dtr/power while marked as AFK.\n" +
+                    "By default, EssX support is added, but other plugins can add support for this.\n" +
+                    "Reach out if you have a plugin you want support added for!")
             private boolean preventRegenWhileAfk = false;
 
             public boolean isPreventRegenWhileAfk() {
@@ -2870,14 +2872,14 @@ public class MainConfig {
             }
         }
 
-        @Comment("EssentialsX")
-        private EssentialsX essentialsX = new EssentialsX();
+        @Comment("General plugin support")
+        private General general = new General();
 
         @Comment("Ranull's Graves plugin")
         private Graves graves = new Graves();
 
-        public EssentialsX essentialsX() {
-            return essentialsX;
+        public General general() {
+            return general;
         }
 
         public Graves graves() {

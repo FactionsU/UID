@@ -23,6 +23,9 @@ public class Essentials {
         essentials = (IEssentials) ess;
         AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
         plugin.getLogger().info("Found and connected to Essentials");
+        ExternalChecks.registerAfk(ess, player -> essentials.getUser(player).isAfk());
+        ExternalChecks.registerIgnored(ess, (viewer, chatter) -> essentials.getUser(viewer).isIgnoredPlayer(essentials.getUser(chatter)));
+        ExternalChecks.registerVanished(ess, player -> essentials.getUser(player).isVanished());
         if (plugin.conf().factions().other().isDeleteEssentialsHomes()) {
             plugin.getLogger().info("Based on main.conf will delete Essentials player homes in their old faction when they leave");
             plugin.getServer().getPluginManager().registerEvents(new EssentialsListener(essentials), plugin);
@@ -48,18 +51,6 @@ public class Essentials {
         teleport.teleport(loc, null, PlayerTeleportEvent.TeleportCause.PLUGIN, future);
 
         return true;
-    }
-
-    public static boolean isVanished(Player player) {
-        return essentials != null && player != null && essentials.getUser(player).isVanished();
-    }
-
-    public static boolean isIgnored(Player viewer, Player chatter) {
-        return essentials != null && essentials.getUser(viewer).isIgnoredPlayer(essentials.getUser(chatter));
-    }
-
-    public static boolean isAfk(Player player) {
-        return essentials != null && player != null && essentials.getUser(player).isAfk();
     }
 
     public static boolean isOverBalCap(double amount) {

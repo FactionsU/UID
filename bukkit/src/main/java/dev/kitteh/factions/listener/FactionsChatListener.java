@@ -5,8 +5,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.config.file.MainConfig;
-import dev.kitteh.factions.integration.Essentials;
-import dev.kitteh.factions.integration.IntegrationManager;
+import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
@@ -145,7 +144,7 @@ public class FactionsChatListener implements Listener {
         // Relation Colored?
         if (chatConf.isTagRelationColored()) {
             for (Player listeningPlayer : event.getRecipients()) {
-                if (this.plugin.integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.isIgnored(listeningPlayer, talkingPlayer)) {
+                if (ExternalChecks.isIgnored(listeningPlayer, talkingPlayer)) {
                     continue;
                 }
                 FPlayer you = FPlayers.fPlayers().get(listeningPlayer);
