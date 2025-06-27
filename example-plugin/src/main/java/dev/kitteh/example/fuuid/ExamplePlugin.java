@@ -7,6 +7,7 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.ThirdPartyCommands;
 import dev.kitteh.factions.event.FPlayerJoinEvent;
+import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActionRegistry;
 import dev.kitteh.factions.upgrade.*;
@@ -17,6 +18,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Pose;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -147,6 +149,10 @@ public final class ExamplePlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         this.getServer().getPluginManager().registerEvents(this, this);
+
+        // Register a custom AFK detector, where sleeping players are considered AFK for... some reason?
+        // I dunno, needed some way to demo it.
+        ExternalChecks.registerAfk(this, player -> player.getPose() == Pose.SLEEPING);
     }
 
     @EventHandler(ignoreCancelled = true)
