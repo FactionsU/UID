@@ -3,12 +3,15 @@ package dev.kitteh.factions.listener;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -54,14 +57,14 @@ public class FactionsLegacyChatListener implements Listener {
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.component("role", legacy.deserialize(role.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(chatTagLegacy(me, fPlayer)))
                     );
                 } else if (fPlayer.spyingChat()) {
                     fPlayer.sendRichMessage("[MCspy] " + format,
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.component("role", legacy.deserialize(role.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(chatTagLegacy(me, fPlayer)))
                     );
                 }
             }
@@ -79,14 +82,14 @@ public class FactionsLegacyChatListener implements Listener {
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.component("relation", legacy.deserialize(relation.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(chatTagLegacy(me, fPlayer)))
                     );
                 } else if (fPlayer.spyingChat()) {
                     fPlayer.sendRichMessage("[MCspy] " + format,
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.component("relation", legacy.deserialize(relation.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
+                            Placeholder.component("sender", legacy.deserialize(chatTagLegacy(me, fPlayer)))
                     );
                 }
             }
@@ -136,10 +139,10 @@ public class FactionsLegacyChatListener implements Listener {
             return;
         }
 
-        String formatStart = eventFormat.substring(0, InsertIndex) + ((padBefore && !me.chatTagLegacy().isEmpty()) ? " " : "");
-        String formatEnd = ((padAfter && !me.chatTagLegacy().isEmpty()) ? " " : "") + eventFormat.substring(InsertIndex);
+        String formatStart = eventFormat.substring(0, InsertIndex) + ((padBefore && !chatTagLegacy(me).isEmpty()) ? " " : "");
+        String formatEnd = ((padAfter && !chatTagLegacy(me).isEmpty()) ? " " : "") + eventFormat.substring(InsertIndex);
 
-        String nonColoredMsgFormat = formatStart + me.chatTagLegacy().trim() + formatEnd;
+        String nonColoredMsgFormat = formatStart + chatTagLegacy(me).trim() + formatEnd;
 
         // Relation Colored?
         if (chatConf.isTagRelationColored()) {
@@ -148,7 +151,7 @@ public class FactionsLegacyChatListener implements Listener {
                     continue;
                 }
                 FPlayer you = FPlayers.fPlayers().get(listeningPlayer);
-                String yourFormat = formatStart + me.chatTagLegacy(you).trim() + formatEnd;
+                String yourFormat = formatStart + chatTagLegacy(me, you).trim() + formatEnd;
                 try {
                     listeningPlayer.sendMessage(String.format(yourFormat, talkingPlayer.getDisplayName(), msg));
                 } catch (UnknownFormatConversionException ex) {
@@ -167,4 +170,11 @@ public class FactionsLegacyChatListener implements Listener {
         event.setFormat(nonColoredMsgFormat);
     }
 
+    private String chatTagLegacy(FPlayer me) {
+        return me.hasFaction() ? String.format(FactionsPlugin.instance().conf().factions().chat().spigot().getTagFormat(), me.role().getPrefix() + (me.hasFaction() ? me.faction().tag() : "")) : TL.NOFACTION_PREFIX.toString();
+    }
+    
+    private String chatTagLegacy(FPlayer me, FPlayer participator) {
+        return me.hasFaction() ? TextUtil.getString(me.relationTo(participator).color()) + chatTagLegacy(me) : TL.NOFACTION_PREFIX.toString();
+    }
 }

@@ -887,13 +887,13 @@ public class MainConfig {
                 @Comment("Chatting with faction members")
                 private boolean factionMemberChatEnabled = true;
                 @Comment("Chatting with all members at or above a role")
-                private String factionMemberChatFormat = "[<role>+] <sender>: <message>";
+                private String factionMemberChatFormat = "[<role>+] <sender:relation_color><sender:role_prefix><sender:faction:name></sender:relation_color> <<sender:name>>: <message>";
                 @Comment("Chatting with all faction members")
-                private String factionMemberAllChatFormat = "[faction-only] <sender>: <message>";
+                private String factionMemberAllChatFormat = "[faction-only] <sender:relation_color><sender:role_prefix><sender:faction:name></sender:relation_color> <<sender:name>>: <message>";
 
                 @Comment("Chatting with faction members")
                 private boolean relationChatEnabled = true;
-                private String relationChatFormat = "[<relation>-only] <sender>: <message>";
+                private String relationChatFormat = "[<relation>-only] <sender:relation_color><sender:role_prefix><sender:faction:name></sender:relation_color> <<sender:name>>: <message>";
 
                 @Comment("Add items here (comma-separated) for commands to listen to that will auto-return the user to public chat")
                 private List<String> triggerPublicChatOnCommand = new ArrayList<>();
@@ -943,9 +943,9 @@ public class MainConfig {
 
                 @Comment("MiniMessage representation of chat format.\n\n" +
                         "<message> is the player-sent message content\n" +
-                        "<player> is the player")
-                private String formatHasFaction = "<player:relation_color><player:role_prefix><player:faction:name></player:relation_color> <<player:name>> <message>";
-                private String formatNoFaction = "<<player:name>> <message>";
+                        "<sender> is the player")
+                private String formatHasFaction = "<sender:relation_color><sender:role_prefix><sender:faction:name></sender:relation_color> <<sender:name>> <message>";
+                private String formatNoFaction = "<<sender:name>> <message>";
 
                 public boolean isEnabled() {
                     return enabled;

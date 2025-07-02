@@ -9,9 +9,11 @@ import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.WorldUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
@@ -47,16 +49,16 @@ public class FactionsPaperChatListener implements Listener {
                 if (fPlayer.role().isAtLeast(role)) {
                     fPlayer.sendRichMessage(format,
                             Placeholder.component("message", event.message()),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.component("role", legacy.deserialize(role.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
+                            FPlayerResolver.of("sender", fPlayer, me),
+                            FactionResolver.of(fPlayer, faction)
                     );
                 } else if (fPlayer.spyingChat()) {
                     fPlayer.sendRichMessage("[MCspy] " + format,
                             Placeholder.component("message", event.message()),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.component("role", legacy.deserialize(role.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
+                            FPlayerResolver.of("sender", fPlayer, me),
+                            FactionResolver.of(fPlayer, faction)
                     );
                 }
             }
@@ -72,16 +74,16 @@ public class FactionsPaperChatListener implements Listener {
                         ))) {
                     fPlayer.sendRichMessage(format,
                             Placeholder.component("message", event.message()),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.component("relation", legacy.deserialize(relation.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
+                            FPlayerResolver.of("sender", fPlayer, me),
+                            FactionResolver.of(fPlayer, faction)
                     );
                 } else if (fPlayer.spyingChat()) {
                     fPlayer.sendRichMessage("[MCspy] " + format,
                             Placeholder.component("message", event.message()),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
                             Placeholder.component("relation", legacy.deserialize(relation.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
+                            FPlayerResolver.of("sender", fPlayer, me),
+                            FactionResolver.of(fPlayer, faction)
                     );
                 }
             }
@@ -104,7 +106,7 @@ public class FactionsPaperChatListener implements Listener {
                 Player observer = viewer instanceof Player player ? player : null;
                 return Mini.parse(format,
                         Placeholder.component("message", message),
-                        FPlayerResolver.of("player", observer, fPlayer)
+                        FPlayerResolver.of("sender", observer, fPlayer)
                 );
             });
         }

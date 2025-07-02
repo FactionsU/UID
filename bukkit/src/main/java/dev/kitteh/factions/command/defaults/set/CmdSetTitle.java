@@ -11,6 +11,7 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -44,17 +45,18 @@ public class CmdSetTitle implements Cmd {
 
         String title = context.getOrDefault("title", "").trim();
 
-        title = title.replaceAll(",", "");
-
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
         if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostTitle(), TL.COMMAND_TITLE_TOCHANGE, TL.COMMAND_TITLE_FORCHANGE)) {
             return;
         }
 
+        Component titleComponent;
         if (context.sender().hasPermission(Permission.TITLE_COLOR)) {
-            title = LegacyComponentSerializer.legacySection().serialize(Mini.parseLimited(title));
+            titleComponent = Mini.parseLimited(title);
+        } else {
+            titleComponent = Component.text(title);
         }
-        target.titleLegacy(title);
+        target.title(titleComponent);
 
         // Inform
         faction.msgLegacy(TL.COMMAND_TITLE_CHANGED, sender.describeToLegacy(faction), target.describeToLegacy(faction));

@@ -15,9 +15,7 @@ import dev.kitteh.factions.event.FactionAutoDisbandEvent;
 import dev.kitteh.factions.event.LandClaimEvent;
 import dev.kitteh.factions.event.LandUnclaimEvent;
 import dev.kitteh.factions.integration.Econ;
-import dev.kitteh.factions.integration.Essentials;
 import dev.kitteh.factions.integration.ExternalChecks;
-import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.permissible.PermissibleActions;
@@ -27,9 +25,17 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.scoreboard.sidebar.FInfoSidebar;
 import dev.kitteh.factions.tag.Tag;
-import dev.kitteh.factions.util.*;
+import dev.kitteh.factions.util.ComponentDispatcher;
+import dev.kitteh.factions.util.Mini;
+import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
+import dev.kitteh.factions.util.WarmUpUtil;
+import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -67,7 +73,10 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     protected int factionId;
     protected Role role = Role.NORMAL;
-    protected String title = "";
+    protected String titleMM = "";
+    protected @Nullable
+    transient Component titleComponent;
+    protected @Nullable String title; // Keeping for now for conversion
     protected double power;
     protected double powerBoost;
     protected long lastPowerUpdateTime;
@@ -105,6 +114,10 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public void cleanupDeserialization() {
         this.shouldTakeFallDamage = true;
+        if (this.title != null) {
+            this.titleComponent = LegacyComponentSerializer.legacySection().deserialize(this.title);
+            this.titleMM = MiniMessage.miniMessage().serialize(this.titleComponent);
+        }
     }
 
     public void onLogInOut() {
@@ -327,7 +340,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     public MemoryFPlayer(UUID id) {
         this.id = id;
         this.name = id.toString();
-        this.title = "";
         this.autoClaimFor = null;
         this.autoUnclaimFor = null;
         this.autoSetZone = null;
@@ -363,7 +375,8 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         this.factionId = Factions.ID_WILDERNESS; // The default neutral faction
         this.role = Role.NORMAL;
-        this.title = "";
+        this.titleMM = "";
+        this.titleComponent = null;
         this.autoClaimFor = null;
         this.autoUnclaimFor = null;
         this.autoSetZone = null;
@@ -415,13 +428,20 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public String titleLegacy() {
-        return this.hasFaction() ? title : TL.NOFACTION_PREFIX.toString();
+    public Component title() {
+        if (this.hasFaction()) {
+            if (this.titleComponent == null) {
+                this.titleComponent = this.titleMM.isEmpty() ? Component.empty() : Mini.parseLimited(this.titleMM);
+            }
+            return this.titleComponent;
+        }
+        return Component.empty();
     }
 
     @Override
-    public void titleLegacy(String title) {
-        this.title = title;
+    public void title(Component title) {
+        this.titleComponent = title;
+        this.titleMM = MiniMessage.miniMessage().serialize(title);
     }
 
     @Override
@@ -478,39 +498,22 @@ public abstract class MemoryFPlayer implements FPlayer {
         return this.hasFaction() ? this.faction().tag() : "";
     }
 
-    // Base concatenations:
-
-    public String nameAndSomething(String something) {
-        String ret = this.role.getPrefix();
-        if (!something.isEmpty()) {
-            ret += something + " ";
+    @Override
+    public Component nameWithTitle() {
+        Component title = this.title();
+        if (title.equals(Component.empty())) {
+            return Component.text(this.role.getPrefix() + this.name);
         }
-        ret += this.name();
-        return ret;
+        return Component.text().append(Component.text(this.role.getPrefix())).append(title).append(Component.text(" " + this.name)).build();
     }
 
     @Override
-    public String nameWithTitleLegacy() {
-        return this.nameAndSomething(this.titleLegacy());
-    }
-
-    @Override
-    public String nameWithTagLegacy() {
-        return this.nameAndSomething(this.tagOrEmpty());
-    }
-
-    // Chat Tag:
-    // These are injected into the format of global chat messages.
-
-    @Override
-    public String chatTagLegacy() {
-        return this.hasFaction() ? String.format(FactionsPlugin.instance().conf().factions().chat().spigot().getTagFormat(), this.role().getPrefix() + this.tagOrEmpty()) : TL.NOFACTION_PREFIX.toString();
-    }
-
-    // Colored Chat Tag
-    @Override
-    public String chatTagLegacy(@Nullable Participator participator) {
-        return this.hasFaction() ? TextUtil.getString(this.relationTo(participator).color()) + this.chatTagLegacy() : TL.NOFACTION_PREFIX.toString();
+    public Component nameWithTag() {
+        String tag = this.tagOrEmpty();
+        if (tag.isEmpty()) {
+            return Component.text(this.role.getPrefix() + this.name);
+        }
+        return Component.text(this.role.getPrefix() + tag + " " + this.name);
     }
 
     @Override
