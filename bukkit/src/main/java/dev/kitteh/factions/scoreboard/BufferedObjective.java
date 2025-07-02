@@ -13,10 +13,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BufferedObjective {
+    public static Consumer<Objective> objectiveConsumer = c -> {
+    };
     private static final int MAX_LINE_LENGTH = 48;
     private static final Pattern PATTERN = Pattern.compile("(§[0-9a-fk-r])|(.)");
 
@@ -40,6 +43,7 @@ public class BufferedObjective {
 
         String name = getNextObjectiveName();
         current = scoreboard.registerNewObjective(name, Criteria.DUMMY, name);
+        objectiveConsumer.accept(current);
     }
 
     private String createBaseName() {
@@ -99,6 +103,7 @@ public class BufferedObjective {
 
         String objectiveName = getNextObjectiveName();
         Objective buffer = scoreboard.registerNewObjective(objectiveName, Criteria.DUMMY, objectiveName);
+        objectiveConsumer.accept(buffer);
         buffer.setDisplayName(title);
 
         List<Team> bufferTeams = new ArrayList<>();
