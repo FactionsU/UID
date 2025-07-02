@@ -50,7 +50,6 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -295,7 +294,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         if (me.autoClaim() instanceof Faction faction) {
             me.attemptClaim(faction, to, true);
-        } else if (me.autoUnclaim()  instanceof Faction faction) {
+        } else if (me.autoUnclaim() instanceof Faction faction) {
             me.attemptUnclaim(faction, to, true);
         }
 
@@ -809,7 +808,7 @@ public class FactionsPlayerListener extends AbstractListener {
 
         String cmd = event.getMessage().split(" ")[0];
 
-        if (this.plugin.conf().factions().chat().isTriggerPublicChat(cmd.startsWith("/") ? cmd.substring(1) : cmd)) {
+        if (this.plugin.conf().factions().chat().internalChat().isTriggerPublicChat(cmd.startsWith("/") ? cmd.substring(1) : cmd)) {
             FPlayer p = FPlayers.fPlayers().get(event.getPlayer());
             p.chatTarget(ChatTarget.PUBLIC);
             p.msgLegacy(TL.COMMAND_CHAT_MODE_PUBLIC);
@@ -821,10 +820,5 @@ public class FactionsPlayerListener extends AbstractListener {
             }
             event.setCancelled(true);
         }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerPreLogin(PlayerLoginEvent event) {
-        FPlayers.fPlayers().get(event.getPlayer());
     }
 }

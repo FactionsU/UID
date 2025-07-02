@@ -2,8 +2,8 @@ package dev.kitteh.factions.config.transition;
 
 import dev.kitteh.factions.config.Loader;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.util.adapter.PermSelectorAdapter;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.adapter.PermSelectorAdapter;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
@@ -29,17 +29,17 @@ public class Transitioner {
         HoconConfigurationLoader loader = Loader.getLoader("main");
         try {
             CommentedConfigurationNode rootNode = loader.load();
-            CommentedConfigurationNode versionNode = rootNode.getNode("aVeryFriendlyFactionsConfig").getNode("version");
+            CommentedConfigurationNode versionNode = rootNode.getNode("aVeryFriendlyFactionsConfig", "version");
 
             if (versionNode.isVirtual()) {
                 rootNode = loader.load();
-                versionNode = rootNode.getNode("aVeryFriendlyFactionsConfig").getNode("version");
+                versionNode = rootNode.getNode("aVeryFriendlyFactionsConfig", "version");
                 if (versionNode.isVirtual()) {
                     return; // Failure!
                 }
             }
 
-            int version = rootNode.getNode("aVeryFriendlyFactionsConfig").getNode("version").getInt();
+            int version = rootNode.getNode("aVeryFriendlyFactionsConfig", "version").getInt();
             if (version < 3) {
                 transitioner.migrateV2(rootNode);
             }
@@ -55,9 +55,12 @@ public class Transitioner {
             if (version < 7) {
                 transitioner.migrateV6(rootNode);
             }
+            if (version < 8) {
+                transitioner.migrateV7(rootNode);
+            }
 
             // Update the below when bumping version!
-            rootNode.getNode("aVeryFriendlyFactionsConfig").getNode("version").setValue(7);
+            rootNode.getNode("aVeryFriendlyFactionsConfig", "version").setValue(7);
 
             loader.save(rootNode);
         } catch (IOException e) {
@@ -76,9 +79,9 @@ public class Transitioner {
     }
 
     private void migrateV2(CommentedConfigurationNode node) {
-        node.getNode("factions").getNode("enterTitles").getNode("title").setValue("");
-        node.getNode("factions").getNode("enterTitles").getNode("subtitle").setValue("{faction-relation-color}{faction}");
-        node.getNode("scoreboard").getNode("constant").getNode("factionlessTitle").setValue(node.getNode("scoreboard").getNode("constant").getNode("title").getString());
+        node.getNode("factions", "enterTitles", "title").setValue("");
+        node.getNode("factions", "enterTitles", "subtitle").setValue("{faction-relation-color}{faction}");
+        node.getNode("scoreboard", "constant", "factionlessTitle").setValue(node.getNode("scoreboard", "constant", "title").getString());
 
         this.plugin.getLogger().info("Detected a config from before 0.5.7");
         this.plugin.getLogger().info("  Setting default enterTitles settings based on old style. Visit main.conf to edit.");
@@ -86,7 +89,7 @@ public class Transitioner {
     }
 
     private void migrateV3(CommentedConfigurationNode node) {
-        node.getNode("scoreboard").getNode("constant").getNode("prefixTemplate").setValue(TL.DEFAULT_PREFIX.toString());
+        node.getNode("scoreboard", "constant", "prefixTemplate").setValue(TL.DEFAULT_PREFIX.toString());
 
         this.plugin.getLogger().info("Detected a config from before 0.5.14");
         this.plugin.getLogger().info("  1. Setting default scoreboard prefixTemplate based on lang.yml default-prefix setting.");
@@ -97,18 +100,18 @@ public class Transitioner {
     }
 
     private void migrateV4(CommentedConfigurationNode node) {
-        boolean update = node.getNode("factions").getNode("spawning").getNode("updateAutomatically").getBoolean(true);
+        boolean update = node.getNode("factions", "spawning", "updateAutomatically").getBoolean(true);
 
         out:
         if (update) {
-            CommentedConfigurationNode exNode = node.getNode("factions").getNode("spawning").getNode("preventSpawningInSafezoneExceptions");
+            CommentedConfigurationNode exNode = node.getNode("factions", "spawning", "preventSpawningInSafezoneExceptions");
             if (exNode.isVirtual()) {
                 break out;
             }
             List<String> list = new ArrayList<>(exNode.getList(Object::toString));
             list.add("AXOLOTL");
             list.add("GLOW_SQUID");
-            node.getNode("factions").getNode("spawning").getNode("preventSpawningInSafezoneExceptions").setValue(list);
+            node.getNode("factions", "spawning", "preventSpawningInSafezoneExceptions").setValue(list);
         }
 
         this.plugin.getLogger().info("Detected a config from before 0.5.24 (which adds 1.17 entities)");
@@ -176,7 +179,7 @@ public class Transitioner {
     }
 
     private void migrateV6(CommentedConfigurationNode node) {
-        CommentedConfigurationNode factId = node.getNode("factions").getNode("other").getNode("newPlayerStartingFactionID");
+        CommentedConfigurationNode factId = node.getNode("factions", "other", "newPlayerStartingFactionID");
         if (!factId.isVirtual()) {
             if (factId.getValue() instanceof String facIdS) {
                 try {
@@ -187,9 +190,32 @@ public class Transitioner {
             }
         }
 
-        boolean startingChat = node.getNode("factions").getNode("chat").getNode("factionOnlyChat").getBoolean(true);
-        CommentedConfigurationNode internalChat = node.getNode("factions").getNode("chat").getNode("internalChat");
+        boolean startingChat = node.getNode("factions", "chat", "factionOnlyChat").getBoolean(true);
+        CommentedConfigurationNode internalChat = node.getNode("factions", "chat", "internalChat");
         internalChat.getNode("factionMemberChatEnabled").setValue(startingChat);
         internalChat.getNode("relationChatEnabled").setValue(startingChat);
+    }
+
+    private void migrateV7(CommentedConfigurationNode node) {
+        CommentedConfigurationNode chat = node.getNode("factions", "chat");
+        CommentedConfigurationNode spigot = node.getNode("factions", "chat", "spigot");
+
+        shift(chat, spigot, "tagHandledByAnotherPlugin");
+        shift(chat, spigot, "tagRelationColored");
+        shift(chat, spigot, "tagReplaceString");
+        shift(chat, spigot, "tagInsertAfterString");
+        shift(chat, spigot, "tagInsertBeforeString");
+        shift(chat, spigot, "tagInsertIndex");
+        shift(chat, spigot, "tagPadBefore");
+        shift(chat, spigot, "tagPadAfter");
+        shift(chat, spigot, "tagFormat");
+        shift(chat, spigot, "alwaysShowChatTag");
+
+        shift(chat, node.getNode("factions", "chat", "internalChat"), "triggerPublicChatOnCommand");
+        shift(node.getNode("plugins", "essentialsX"), node.getNode("plugins", "general"), "preventRegenWhileAfk");
+    }
+
+    private void shift(CommentedConfigurationNode from, CommentedConfigurationNode to, String name) {
+        to.getNode(name).setValue(from.getNode(name).getValue());
     }
 }

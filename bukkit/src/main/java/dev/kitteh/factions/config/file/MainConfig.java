@@ -27,13 +27,11 @@ public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @SuppressWarnings("unused")
         @Comment("This is the config version, used for migrating on plugin updates. Don't change this value yourself, unless you WANT a broken config!")
-        private int version = 7;
+        private int version = 8;
 
         @Comment("""
                 Debug
-                Turn this on if you are having issues with something and working on resolving them.
-                This will spam your console with information that is useful if you know how to read the source.
-                It's suggested that you only turn this on at the direction of a developer.""")
+                Enables some specific extra messages to the log. Typically not useful.""")
         private boolean debug = false;
 
         public boolean isDebug() {
@@ -897,6 +895,9 @@ public class MainConfig {
                 private boolean relationChatEnabled = true;
                 private String relationChatFormat = "[<relation>-only] <sender>: <message>";
 
+                @Comment("Add items here (comma-separated) for commands to listen to that will auto-return the user to public chat")
+                private List<String> triggerPublicChatOnCommand = new ArrayList<>();
+
                 public boolean isFactionMemberChatEnabled() {
                     return factionMemberChatEnabled;
                 }
@@ -916,72 +917,123 @@ public class MainConfig {
                 public String getRelationChatFormat() {
                     return relationChatFormat;
                 }
+
+                @WipeOnReload
+                private transient List<String> triggerPublicChatLowerCased;
+
+                public List<String> getTriggerPublicChatOnCommand() {
+                    if (triggerPublicChatLowerCased == null) {
+                        triggerPublicChatLowerCased = new ArrayList<>();
+                        if (triggerPublicChatOnCommand != null) {
+                            triggerPublicChatOnCommand.forEach(c -> triggerPublicChatLowerCased.add(c.toLowerCase()));
+                        }
+                    }
+                    return triggerPublicChatLowerCased;
+                }
+
+                public boolean isTriggerPublicChat(String command) {
+                    return getTriggerPublicChatOnCommand().contains(command.toLowerCase());
+                }
+            }
+
+            public class Paper {
+                @Comment("If true, enables this plugin setting public chat formatting as specified in this section.\n" +
+                        "If false, this plugin does not touch public chat.")
+                private boolean enabled = true;
+
+                @Comment("MiniMessage representation of chat format.\n\n" +
+                        "<message> is the player-sent message content\n" +
+                        "<player> is the player")
+                private String formatHasFaction = "<player:relation_color><player:role_prefix><player:faction:name></player:relation_color> <<player:name>> <message>";
+                private String formatNoFaction = "<<player:name>> <message>";
+
+                public boolean isEnabled() {
+                    return enabled;
+                }
+
+                public String getFormatHasFaction() {
+                    return formatHasFaction;
+                }
+
+                public String getFormatNoFaction() {
+                    return formatNoFaction;
+                }
+            }
+
+            public class Spigot {
+                @Comment("If true, disables adding of faction tag so another plugin can manage this")
+                private boolean tagHandledByAnotherPlugin = false;
+                private boolean tagRelationColored = true;
+                private String tagReplaceString = "[FACTION]";
+                private String tagInsertAfterString = "";
+                private String tagInsertBeforeString = "";
+                private int tagInsertIndex = 0;
+                private boolean tagPadBefore = false;
+                private boolean tagPadAfter = true;
+                private String tagFormat = "%s§f";
+                private boolean alwaysShowChatTag = true;
+
+                public boolean isTagHandledByAnotherPlugin() {
+                    return tagHandledByAnotherPlugin;
+                }
+
+                public boolean isTagRelationColored() {
+                    return tagRelationColored;
+                }
+
+                public String getTagReplaceString() {
+                    return tagReplaceString;
+                }
+
+                public String getTagInsertAfterString() {
+                    return tagInsertAfterString;
+                }
+
+                public String getTagInsertBeforeString() {
+                    return tagInsertBeforeString;
+                }
+
+                public int getTagInsertIndex() {
+                    return tagInsertIndex;
+                }
+
+                public boolean isTagPadBefore() {
+                    return tagPadBefore;
+                }
+
+                public boolean isTagPadAfter() {
+                    return tagPadAfter;
+                }
+
+                public String getTagFormat() {
+                    return tagFormat;
+                }
+
+                public boolean isAlwaysShowChatTag() {
+                    return alwaysShowChatTag;
+                }
             }
 
             @Comment("Allow for players to chat only within their faction, with allies, etc.")
             private InternalChat internalChat = new InternalChat();
+            @Comment("Modern chat handling on Paper servers")
+            private Paper paper = new Paper();
+            @Comment("Legacy chat handling on Spigot servers")
+            private Spigot spigot = new Spigot();
 
-            // Configuration on the Faction tag in chat messages.
-            @Comment("If true, disables adding of faction tag so another plugin can manage this")
-            private boolean tagHandledByAnotherPlugin = false;
-            private boolean tagRelationColored = true;
-            private String tagReplaceString = "[FACTION]";
-            private String tagInsertAfterString = "";
-            private String tagInsertBeforeString = "";
-            private int tagInsertIndex = 0;
-            private boolean tagPadBefore = false;
-            private boolean tagPadAfter = true;
-            private String tagFormat = "%s§f";
-            private boolean alwaysShowChatTag = true;
             private boolean broadcastDescriptionChanges = false;
             private boolean broadcastTagChanges = false;
-            @Comment("Add items here (comma-separated) for commands to listen to that will auto-return the user to public chat")
-            private List<String> triggerPublicChatOnCommand = new ArrayList<>();
-            @WipeOnReload
-            private transient List<String> triggerPublicChatLowerCased;
 
             public InternalChat internalChat() {
                 return internalChat;
             }
 
-            public boolean isTagHandledByAnotherPlugin() {
-                return tagHandledByAnotherPlugin;
+            public Paper paper() {
+                return paper;
             }
 
-            public boolean isTagRelationColored() {
-                return tagRelationColored;
-            }
-
-            public String getTagReplaceString() {
-                return tagReplaceString;
-            }
-
-            public String getTagInsertAfterString() {
-                return tagInsertAfterString;
-            }
-
-            public String getTagInsertBeforeString() {
-                return tagInsertBeforeString;
-            }
-
-            public int getTagInsertIndex() {
-                return tagInsertIndex;
-            }
-
-            public boolean isTagPadBefore() {
-                return tagPadBefore;
-            }
-
-            public boolean isTagPadAfter() {
-                return tagPadAfter;
-            }
-
-            public String getTagFormat() {
-                return tagFormat;
-            }
-
-            public boolean isAlwaysShowChatTag() {
-                return alwaysShowChatTag;
+            public Spigot spigot() {
+                return spigot;
             }
 
             public boolean isBroadcastDescriptionChanges() {
@@ -990,20 +1042,6 @@ public class MainConfig {
 
             public boolean isBroadcastTagChanges() {
                 return broadcastTagChanges;
-            }
-
-            public List<String> getTriggerPublicChatOnCommand() {
-                if (triggerPublicChatLowerCased == null) {
-                    triggerPublicChatLowerCased = new ArrayList<>();
-                    if (triggerPublicChatOnCommand != null) {
-                        triggerPublicChatOnCommand.forEach(c -> triggerPublicChatLowerCased.add(c.toLowerCase()));
-                    }
-                }
-                return triggerPublicChatLowerCased;
-            }
-
-            public boolean isTriggerPublicChat(String command) {
-                return getTriggerPublicChatOnCommand().contains(command.toLowerCase());
             }
         }
 

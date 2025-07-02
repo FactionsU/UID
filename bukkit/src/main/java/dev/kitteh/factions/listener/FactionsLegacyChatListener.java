@@ -21,11 +21,11 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.UnknownFormatConversionException;
 import java.util.logging.Level;
 
-public class FactionsChatListener implements Listener {
+public class FactionsLegacyChatListener implements Listener {
 
     public final AbstractFactionsPlugin plugin;
 
-    public FactionsChatListener(AbstractFactionsPlugin plugin) {
+    public FactionsLegacyChatListener(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -53,14 +53,14 @@ public class FactionsChatListener implements Listener {
                     fPlayer.sendRichMessage(format,
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
-                            Placeholder.unparsed("role", role.nicename),
+                            Placeholder.component("role", legacy.deserialize(role.nicename)),
                             Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
                     );
                 } else if (fPlayer.spyingChat()) {
                     fPlayer.sendRichMessage("[MCspy] " + format,
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
-                            Placeholder.unparsed("role", role.nicename),
+                            Placeholder.component("role", legacy.deserialize(role.nicename)),
                             Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
                     );
                 }
@@ -78,14 +78,14 @@ public class FactionsChatListener implements Listener {
                     fPlayer.sendRichMessage(format,
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
-                            Placeholder.unparsed("relation", relation.nicename),
+                            Placeholder.component("relation", legacy.deserialize(relation.nicename)),
                             Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
                     );
                 } else if (fPlayer.spyingChat()) {
                     fPlayer.sendRichMessage("[MCspy] " + format,
                             Placeholder.unparsed("message", msg),
                             Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
-                            Placeholder.unparsed("relation", relation.nicename),
+                            Placeholder.component("relation", legacy.deserialize(relation.nicename)),
                             Placeholder.component("sender", legacy.deserialize(me.chatTagLegacy(fPlayer)))
                     );
                 }
@@ -103,7 +103,7 @@ public class FactionsChatListener implements Listener {
 
         // Are we to insert the Faction tag into the format?
         // If we are not to insert it - we are done.
-        if (this.plugin.conf().factions().chat().isTagHandledByAnotherPlugin()) {
+        if (this.plugin.conf().factions().chat().spigot().isTagHandledByAnotherPlugin()) {
             return;
         }
 
@@ -111,7 +111,7 @@ public class FactionsChatListener implements Listener {
         String msg = event.getMessage();
         String eventFormat = event.getFormat();
         FPlayer me = FPlayers.fPlayers().get(talkingPlayer);
-        MainConfig.Factions.Chat chatConf = this.plugin.conf().factions().chat();
+        MainConfig.Factions.Chat.Spigot chatConf = this.plugin.conf().factions().chat().spigot();
         int InsertIndex = chatConf.getTagInsertIndex();
 
         boolean padBefore = chatConf.isTagPadBefore();

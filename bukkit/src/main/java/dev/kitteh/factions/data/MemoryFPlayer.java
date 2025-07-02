@@ -504,7 +504,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public String chatTagLegacy() {
-        return this.hasFaction() ? String.format(FactionsPlugin.instance().conf().factions().chat().getTagFormat(), this.role().getPrefix() + this.tagOrEmpty()) : TL.NOFACTION_PREFIX.toString();
+        return this.hasFaction() ? String.format(FactionsPlugin.instance().conf().factions().chat().spigot().getTagFormat(), this.role().getPrefix() + this.tagOrEmpty()) : TL.NOFACTION_PREFIX.toString();
     }
 
     // Colored Chat Tag

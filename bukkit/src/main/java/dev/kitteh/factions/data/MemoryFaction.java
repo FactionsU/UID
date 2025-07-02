@@ -361,7 +361,7 @@ public abstract class MemoryFaction implements Faction {
     protected @Nullable LazyLocation home;
     protected long foundedDate;
     protected double powerBoost;
-    protected Map<Integer, Relation> relationWish = new HashMap<>();
+    protected ConcurrentHashMap<Integer, Relation> relationWish = new ConcurrentHashMap<>();
     @SuppressWarnings("unused")
     protected @Nullable Map<FLocation, Set<UUID>> claimOwnership; // Leaving for now, for people who want to look back at it
     protected Set<UUID> invites = new HashSet<>();

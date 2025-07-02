@@ -30,7 +30,6 @@ import dev.kitteh.factions.integration.dynmap.EngineDynmap;
 import dev.kitteh.factions.integration.permcontext.ContextManager;
 import dev.kitteh.factions.landraidcontrol.LandRaidControl;
 import dev.kitteh.factions.listener.FactionsBlockListener;
-import dev.kitteh.factions.listener.FactionsChatListener;
 import dev.kitteh.factions.listener.FactionsEntityListener;
 import dev.kitteh.factions.listener.FactionsExploitListener;
 import dev.kitteh.factions.listener.FactionsPlayerListener;
@@ -367,12 +366,12 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         // Register Event Handlers
         getServer().getPluginManager().registerEvents(new FactionsPlayerListener(this), this);
-        getServer().getPluginManager().registerEvents(new FactionsChatListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsExploitListener(this), this);
         getServer().getPluginManager().registerEvents(new FactionsBlockListener(this), this);
         getServer().getPluginManager().registerEvents(new PortalListener(this), this);
         getServer().getPluginManager().registerEvents(new UpgradeListener(), this);
+        this.registerEvents();
 
         if (conf().commands().fly().isEnable()) {
             FlightUtil.start();
@@ -964,4 +963,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     protected abstract String pluginType();
 
     protected abstract void onPluginLoad();
+
+    protected abstract void registerEvents();
 }

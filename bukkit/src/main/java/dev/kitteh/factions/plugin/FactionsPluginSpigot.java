@@ -1,11 +1,17 @@
 package dev.kitteh.factions.plugin;
 
+import dev.kitteh.factions.listener.FactionsLegacyChatListener;
 import org.bukkit.plugin.SimplePluginManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class FactionsPluginSpigot extends AbstractFactionsPlugin {
+    @Override
+    protected String pluginType() {
+        return "Spigot";
+    }
+
     @Override
     public void onPluginLoad() {
         // Fix for legacy dependency system's grumpiness about not defining softdepends because it's a nightmare
@@ -24,7 +30,7 @@ public class FactionsPluginSpigot extends AbstractFactionsPlugin {
     }
 
     @Override
-    protected String pluginType() {
-        return "Spigot";
+    protected void registerEvents() {
+        this.getServer().getPluginManager().registerEvents(new FactionsLegacyChatListener(this), this);
     }
 }
