@@ -7,6 +7,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.config.file.PermissionsConfig;
 import dev.kitteh.factions.event.FactionAutoDisbandEvent;
@@ -594,19 +595,11 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public String tagLegacy(@Nullable Faction otherFaction) {
-        if (otherFaction == null) {
+    public String tagLegacy(@Nullable Participator other) {
+        if (other == null) {
             return tag();
         }
-        return this.colorLegacyStringTo(otherFaction) + this.tag();
-    }
-
-    @Override
-    public String tagLegacy(@Nullable FPlayer otherFplayer) {
-        if (otherFplayer == null) {
-            return tag();
-        }
-        return this.colorLegacyStringTo(otherFplayer) + this.tag();
+        return this.colorLegacyStringTo(other) + this.tag();
     }
 
     @Override
