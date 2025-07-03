@@ -10,10 +10,14 @@ import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldUtil;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,69 +36,69 @@ public class FactionsLegacyChatListener implements Listener {
         this.plugin = plugin;
     }
 
-    // this is for handling slashless command usage and faction/alliance chat, set at lowest priority so Factions gets to them first
+    public static void processFactionChat(FPlayer me, Component message) {
+        ChatTarget chatTarget = me.chatTarget();
+
+        Faction faction = me.faction();
+        MainConfig.Factions.Chat.InternalChat chatConf = FactionsPlugin.instance().conf().factions().chat().internalChat();
+        LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
+
+        TagResolver messagePlaceholder = Placeholder.component("message", message);
+
+        if (chatTarget instanceof ChatTarget.Role(Role role)) {
+            String format = role == Role.RECRUIT ? chatConf.getFactionMemberAllChatFormat() : chatConf.getFactionMemberChatFormat();
+            String spyFormat = chatConf.getSpyingPrefix() + format;
+
+            for (FPlayer fPlayer : faction.membersOnline(true)) {
+                boolean qualifies = fPlayer.role().isAtLeast(role);
+                if (qualifies || fPlayer.spyingChat()) {
+                    fPlayer.sendRichMessage((qualifies ? format : spyFormat),
+                            messagePlaceholder,
+                            Placeholder.component("role", legacy.deserialize(role.nicename)),
+                            FPlayerResolver.of("sender", fPlayer, me),
+                            FactionResolver.of(fPlayer, faction)
+                    );
+                }
+            }
+        } else if (chatTarget instanceof ChatTarget.Relation(Relation relation)) {
+            String format = chatConf.getRelationChatFormat();
+            String spyFormat = chatConf.getSpyingPrefix() + format;
+
+            for (FPlayer fPlayer : FPlayers.fPlayers().online()) {
+                boolean qualifies = fPlayer.faction() == faction || (faction.relationTo(fPlayer) == relation &&
+                        (
+                                (relation == Relation.ALLY && !fPlayer.ignoreAllianceChat()) ||
+                                        (relation == Relation.TRUCE && !fPlayer.ignoreTruceChat())
+                        ));
+                if (qualifies || fPlayer.spyingChat()) {
+                    fPlayer.sendRichMessage((qualifies ? format : spyFormat),
+                            messagePlaceholder,
+                            Placeholder.component("relation", legacy.deserialize(relation.nicename)),
+                            FPlayerResolver.of("sender", fPlayer, me),
+                            FactionResolver.of(fPlayer, faction)
+                    );
+                }
+            }
+        }
+    }
+
+    // this is for handling faction/relation chat, set at low priority so Factions gets to them first
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerEarlyChat(AsyncPlayerChatEvent event) {
         if (!WorldUtil.isEnabled(event.getPlayer().getWorld())) {
             return;
         }
 
-        Player talkingPlayer = event.getPlayer();
-        String msg = event.getMessage();
-        FPlayer me = FPlayers.fPlayers().get(talkingPlayer);
-        Faction faction = me.faction();
-        MainConfig.Factions.Chat.InternalChat chatConf = this.plugin.conf().factions().chat().internalChat();
+        Player player = event.getPlayer();
+        FPlayer me = FPlayers.fPlayers().get(player);
 
-        ChatTarget chatTarget = me.chatTarget();
-
-        LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
-
-        if (chatTarget instanceof ChatTarget.Role(Role role)) {
-            String format = role == Role.RECRUIT ? chatConf.getFactionMemberAllChatFormat() : chatConf.getFactionMemberChatFormat();
-            for (FPlayer fPlayer : faction.membersOnline(true)) {
-                if (fPlayer.role().isAtLeast(role)) {
-                    fPlayer.sendRichMessage(format,
-                            Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
-                            Placeholder.component("role", legacy.deserialize(role.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(chatTagLegacy(me, fPlayer)))
-                    );
-                } else if (fPlayer.spyingChat()) {
-                    fPlayer.sendRichMessage("[MCspy] " + format,
-                            Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
-                            Placeholder.component("role", legacy.deserialize(role.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(chatTagLegacy(me, fPlayer)))
-                    );
-                }
-            }
-            event.setCancelled(true);
-        } else if (chatTarget instanceof ChatTarget.Relation(Relation relation)) {
-            String format = chatConf.getRelationChatFormat();
-
-            for (FPlayer fPlayer : FPlayers.fPlayers().online()) {
-                if (fPlayer.faction() == faction || (faction.relationTo(fPlayer) == relation &&
-                        (
-                                (relation == Relation.ALLY && !fPlayer.ignoreAllianceChat()) ||
-                                        (relation == Relation.TRUCE && !fPlayer.ignoreTruceChat())
-                        ))) {
-                    fPlayer.sendRichMessage(format,
-                            Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
-                            Placeholder.component("relation", legacy.deserialize(relation.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(chatTagLegacy(me, fPlayer)))
-                    );
-                } else if (fPlayer.spyingChat()) {
-                    fPlayer.sendRichMessage("[MCspy] " + format,
-                            Placeholder.unparsed("message", msg),
-                            Placeholder.component("faction", legacy.deserialize(faction.tagLegacy(fPlayer))),
-                            Placeholder.component("relation", legacy.deserialize(relation.nicename)),
-                            Placeholder.component("sender", legacy.deserialize(chatTagLegacy(me, fPlayer)))
-                    );
-                }
-            }
-            event.setCancelled(true);
+        if (me.chatTarget() == ChatTarget.PUBLIC) {
+            return;
         }
+
+        event.setCancelled(true);
+
+        FactionsLegacyChatListener.processFactionChat(me, Component.text(event.getMessage()));
     }
 
     // this is for handling insertion of the player's faction tag, set at highest priority to give other plugins a chance to modify chat first
@@ -173,7 +177,7 @@ public class FactionsLegacyChatListener implements Listener {
     private String chatTagLegacy(FPlayer me) {
         return me.hasFaction() ? String.format(FactionsPlugin.instance().conf().factions().chat().spigot().getTagFormat(), me.role().getPrefix() + (me.hasFaction() ? me.faction().tag() : "")) : TL.NOFACTION_PREFIX.toString();
     }
-    
+
     private String chatTagLegacy(FPlayer me, FPlayer participator) {
         return me.hasFaction() ? TextUtil.getString(me.relationTo(participator).color()) + chatTagLegacy(me) : TL.NOFACTION_PREFIX.toString();
     }
