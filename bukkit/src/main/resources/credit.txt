@@ -13,6 +13,15 @@ Configurate
 Apache License, Version 2.0
 https://github.com/SpongePowered/Configurate
 
+EvalEx
+Apache License, Version 2.0
+https://github.com/ezylang/EvalEx
+
+IF
+(modified to remove everything but chest inventories)
+The Unlicense
+https://github.com/stefvanschie/IF
+
 GeantyRef
 Apache License, Version 2.0
 https://github.com/leangen/geantyref
