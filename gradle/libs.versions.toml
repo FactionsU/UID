@@ -1,7 +1,7 @@
 [versions]
-apiversion = "1.21.4"
-minecraft = "1.21.4-R0.1-SNAPSHOT"
-adventure = "4.19.0"
+apiversion = "1.21.7"
+minecraft = "1.21.7-R0.1-SNAPSHOT"
+adventure = "4.23.0"
 cloud = "2.0.0-beta.10"
 essentialsx = "2.21.1"
 indra = "3.1.3"
