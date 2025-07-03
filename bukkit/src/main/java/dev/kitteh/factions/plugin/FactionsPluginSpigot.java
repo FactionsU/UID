@@ -1,10 +1,14 @@
 package dev.kitteh.factions.plugin;
 
 import dev.kitteh.factions.listener.FactionsLegacyChatListener;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.SimplePluginManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.concurrent.CompletableFuture;
 
 public class FactionsPluginSpigot extends AbstractFactionsPlugin {
     @Override
@@ -32,5 +36,10 @@ public class FactionsPluginSpigot extends AbstractFactionsPlugin {
     @Override
     protected void registerEvents() {
         this.getServer().getPluginManager().registerEvents(new FactionsLegacyChatListener(this), this);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> teleport(Player player, Location location) {
+        return CompletableFuture.completedFuture(player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN));
     }
 }

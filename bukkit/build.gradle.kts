@@ -16,7 +16,6 @@ configurations.implementation {
 dependencies {
   compileOnlyApi(libs.jspecify)
 
-  implementation(libs.paper.lib)
   implementation(libs.cloud.paper)
   implementation(libs.cloud.extras)
   implementation(libs.commons.lang3)
@@ -86,7 +85,6 @@ tasks.processResources {
 tasks.shadowJar {
   dependencies {
     include(dependency("com.typesafe:config"))
-    include(dependency("io.papermc:paperlib"))
     include(dependency("org.spongepowered:configurate-core"))
     include(dependency("org.spongepowered:configurate-hocon"))
     include(dependency("org.incendo:cloud-paper"))

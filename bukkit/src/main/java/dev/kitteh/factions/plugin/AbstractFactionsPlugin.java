@@ -64,7 +64,6 @@ import dev.kitteh.factions.util.adapter.SelectorPermsAdapter;
 import dev.kitteh.factions.util.adapter.UpgradeAdapter;
 import dev.kitteh.factions.util.adapter.UpgradeVariableAdapter;
 import dev.kitteh.factions.util.adapter.WorldTrackerAdapter;
-import io.papermc.lib.PaperLib;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -75,7 +74,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -853,10 +851,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         this.luckPermsSetup = true;
     }
 
-    public CompletableFuture<Boolean> teleport(Player player, Location location) {
-        return PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN);
-    }
-
     public OfflinePlayer factionOfflinePlayer(String name) {
         return this.getOfflinePlayer(name, UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
     }
@@ -961,4 +955,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     protected abstract void onPluginLoad();
 
     protected abstract void registerEvents();
+
+    public abstract CompletableFuture<Boolean> teleport(Player player, Location location);
 }

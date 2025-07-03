@@ -17,10 +17,6 @@ GeantyRef
 Apache License, Version 2.0
 https://github.com/leangen/geantyref
 
-PaperLib
-MIT License
-https://github.com/PaperMC/PaperLib
-
 Typesafe Config
 Apache License, Version 2.0
 https://github.com/lightbend/config

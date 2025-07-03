@@ -5,6 +5,11 @@ import dev.kitteh.factions.scoreboard.BufferedObjective;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import io.papermc.paper.scoreboard.numbers.NumberFormat;
 import net.kyori.adventure.audience.Audience;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
+
+import java.util.concurrent.CompletableFuture;
 
 public class FactionsPluginPaper extends AbstractFactionsPlugin {
     @Override
@@ -25,5 +30,10 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     @Override
     protected void registerEvents() {
         this.getServer().getPluginManager().registerEvents(new FactionsPaperChatListener(), this);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> teleport(Player player, Location location) {
+        return player.teleportAsync(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
 }
