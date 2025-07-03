@@ -60,7 +60,7 @@ public class Transitioner {
             }
 
             // Update the below when bumping version!
-            rootNode.getNode("aVeryFriendlyFactionsConfig", "version").setValue(7);
+            rootNode.getNode("aVeryFriendlyFactionsConfig", "version").setValue(8);
 
             loader.save(rootNode);
         } catch (IOException e) {
