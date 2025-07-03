@@ -895,6 +895,9 @@ public class MainConfig {
                 private boolean relationChatEnabled = true;
                 private String relationChatFormat = "[<relation>-only] <sender:relation_color><sender:role_prefix><sender:faction:name></sender:relation_color> <<sender:name>>: <message>";
 
+                @Comment("Prefix to add to chat only seen because the staff member is spying on all chat")
+                private String spyingPrefix = "[MCspy] ";
+
                 @Comment("Add items here (comma-separated) for commands to listen to that will auto-return the user to public chat")
                 private List<String> triggerPublicChatOnCommand = new ArrayList<>();
 
@@ -916,6 +919,10 @@ public class MainConfig {
 
                 public String getRelationChatFormat() {
                     return relationChatFormat;
+                }
+
+                public String getSpyingPrefix() {
+                    return spyingPrefix;
                 }
 
                 @WipeOnReload

@@ -14,6 +14,7 @@ import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.WorldUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,19 +43,17 @@ public class FactionsPaperChatListener implements Listener {
         MainConfig.Factions.Chat.InternalChat chatConf = FactionsPlugin.instance().conf().factions().chat().internalChat();
         LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
 
+        TagResolver messagePlaceholder = Placeholder.component("message", event.message());
+
         if (chatTarget instanceof ChatTarget.Role(Role role)) {
             String format = role == Role.RECRUIT ? chatConf.getFactionMemberAllChatFormat() : chatConf.getFactionMemberChatFormat();
+            String spyFormat = chatConf.getSpyingPrefix() + format;
+
             for (FPlayer fPlayer : faction.membersOnline(true)) {
-                if (fPlayer.role().isAtLeast(role)) {
-                    fPlayer.sendRichMessage(format,
-                            Placeholder.component("message", event.message()),
-                            Placeholder.component("role", legacy.deserialize(role.nicename)),
-                            FPlayerResolver.of("sender", fPlayer, me),
-                            FactionResolver.of(fPlayer, faction)
-                    );
-                } else if (fPlayer.spyingChat()) {
-                    fPlayer.sendRichMessage("[MCspy] " + format,
-                            Placeholder.component("message", event.message()),
+                boolean qualifies = fPlayer.role().isAtLeast(role);
+                if (qualifies || fPlayer.spyingChat()) {
+                    fPlayer.sendRichMessage((qualifies ? format : spyFormat),
+                            messagePlaceholder,
                             Placeholder.component("role", legacy.deserialize(role.nicename)),
                             FPlayerResolver.of("sender", fPlayer, me),
                             FactionResolver.of(fPlayer, faction)
@@ -64,22 +63,17 @@ public class FactionsPaperChatListener implements Listener {
             event.setCancelled(true);
         } else if (chatTarget instanceof ChatTarget.Relation(Relation relation)) {
             String format = chatConf.getRelationChatFormat();
+            String spyFormat = chatConf.getSpyingPrefix() + format;
 
             for (FPlayer fPlayer : FPlayers.fPlayers().online()) {
-                if (fPlayer.faction() == faction || (faction.relationTo(fPlayer) == relation &&
+                boolean qualifies = fPlayer.faction() == faction || (faction.relationTo(fPlayer) == relation &&
                         (
                                 (relation == Relation.ALLY && !fPlayer.ignoreAllianceChat()) ||
                                         (relation == Relation.TRUCE && !fPlayer.ignoreTruceChat())
-                        ))) {
-                    fPlayer.sendRichMessage(format,
-                            Placeholder.component("message", event.message()),
-                            Placeholder.component("relation", legacy.deserialize(relation.nicename)),
-                            FPlayerResolver.of("sender", fPlayer, me),
-                            FactionResolver.of(fPlayer, faction)
-                    );
-                } else if (fPlayer.spyingChat()) {
-                    fPlayer.sendRichMessage("[MCspy] " + format,
-                            Placeholder.component("message", event.message()),
+                        ));
+                if (qualifies || fPlayer.spyingChat()) {
+                    fPlayer.sendRichMessage((qualifies ? format : spyFormat),
+                            messagePlaceholder,
                             Placeholder.component("relation", legacy.deserialize(relation.nicename)),
                             FPlayerResolver.of("sender", fPlayer, me),
                             FactionResolver.of(fPlayer, faction)
