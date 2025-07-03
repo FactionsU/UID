@@ -868,9 +868,4 @@ public class FactionsPlayerListener extends AbstractListener {
             event.setCancelled(true);
         }
     }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerPreLogin(PlayerLoginEvent event) {
-        FPlayers.getInstance().getByPlayer(event.getPlayer());
-    }
 }
