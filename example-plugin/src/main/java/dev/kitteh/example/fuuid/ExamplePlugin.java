@@ -40,12 +40,12 @@ public final class ExamplePlugin extends JavaPlugin implements Listener {
     // Our custom upgrade
     private final Upgrade meowUpgrade = new Upgrade.Reactive( // Upgrade.Simple doesn't have the last line
             "meow", // Simple name, for referencing in commands and storage
-            Component.text().content("Meow").color(NamedTextColor.GREEN).build(), // Name for display
-            Component.text().content("Meowpgrade").color(NamedTextColor.GREEN).build(), // Description for display
+            Component.text("Meow", NamedTextColor.GREEN), // Name for display
+            Component.text("Meowpgrade", NamedTextColor.GREEN), // Description for display
             // Details to display. Gets the user-configured settings (thus, not using the defaults defined below) and gets the variable for the level
             // Will display something like "Meows 3 times"
             // Obviously this and the other components could be set up in your plugin to have some sort of configurability!
-            (settings, level) -> Component.text().content("Meows " + settings.valueAt(meowVar, level).intValue() + " times").color(NamedTextColor.GREEN).build(),
+            (settings, level) -> Component.text("Meows " + settings.valueAt(meowVar, level).intValue() + " times", NamedTextColor.GREEN),
             10, // Max it out at ten. Especially relevant with our variable being (weird choice) limited to ten
             Set.of(this.meowVar), // The only variable tracked here is this meowVar
             Upgrade.Reactor.UPDATE_COMMANDS // Updates user command access if going to or from level 0, because this upgrade is tying into a command!
@@ -145,7 +145,7 @@ public final class ExamplePlugin extends JavaPlugin implements Listener {
 
             fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>MEOW MEOW MEOW MEOW MEOW MEOW!")); // See above note about using fPlayer
         } else {
-            fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>NO MEOW POSSIBLE RIGHT NOW :(")); // See above note about using fPlayer
+            fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>NO MEOW POSSIBLE RIGHT MEOW :(")); // See above note about using fPlayer
         }
     }
 
