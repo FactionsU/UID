@@ -13,7 +13,6 @@ import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.WorldUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;

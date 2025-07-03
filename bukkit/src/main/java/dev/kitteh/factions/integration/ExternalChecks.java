@@ -26,9 +26,9 @@ public final class ExternalChecks {
     private record DoubleCheck(Plugin plugin, BoolBiFunction function) {
     }
 
-    private static List<SingleCheck> afk = new ArrayList<>();
-    private static List<DoubleCheck> ignored = new ArrayList<>();
-    private static List<SingleCheck> vanished = new ArrayList<>();
+    private static final List<SingleCheck> afk = new ArrayList<>();
+    private static final List<DoubleCheck> ignored = new ArrayList<>();
+    private static final List<SingleCheck> vanished = new ArrayList<>();
 
     /**
      * Registers a function for testing if a player is AFK.

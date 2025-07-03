@@ -941,9 +941,11 @@ public class MainConfig {
                         "If false, this plugin does not touch public chat.")
                 private boolean enabled = true;
 
-                @Comment("MiniMessage representation of chat format.\n\n" +
-                        "<message> is the player-sent message content\n" +
-                        "<sender> is the player")
+                @Comment("""
+                        MiniMessage representation of chat format.
+                        
+                        <message> is the player-sent message content
+                        <sender> is the player""")
                 private String formatHasFaction = "<sender:relation_color><sender:role_prefix><sender:faction:name></sender:relation_color> <<sender:name>> <message>";
                 private String formatNoFaction = "<<sender:name>> <message>";
 
@@ -2863,9 +2865,10 @@ public class MainConfig {
 
     public class Plugins {
         public class General {
-            @Comment("If true, prevents regeneration of dtr/power while marked as AFK.\n" +
-                    "By default, EssX support is added, but other plugins can add support for this.\n" +
-                    "Reach out if you have a plugin you want support added for!")
+            @Comment("""
+                    If true, prevents regeneration of dtr/power while marked as AFK.
+                    By default, EssX support is added, but other plugins can add support for this.
+                    Reach out if you have a plugin you want support added for!""")
             private boolean preventRegenWhileAfk = false;
 
             public boolean isPreventRegenWhileAfk() {

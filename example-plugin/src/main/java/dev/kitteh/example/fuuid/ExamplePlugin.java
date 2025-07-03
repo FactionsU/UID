@@ -10,7 +10,11 @@ import dev.kitteh.factions.event.FPlayerJoinEvent;
 import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActionRegistry;
-import dev.kitteh.factions.upgrade.*;
+import dev.kitteh.factions.upgrade.LeveledValueProvider;
+import dev.kitteh.factions.upgrade.Upgrade;
+import dev.kitteh.factions.upgrade.UpgradeRegistry;
+import dev.kitteh.factions.upgrade.UpgradeSettings;
+import dev.kitteh.factions.upgrade.UpgradeVariable;
 import moss.factions.shade.org.incendo.cloud.context.CommandContext;
 import moss.factions.shade.org.incendo.cloud.description.Description;
 import net.kyori.adventure.text.Component;
@@ -31,10 +35,10 @@ import java.util.Set;
 public final class ExamplePlugin extends JavaPlugin implements Listener {
 
     // An upgrade variable, an int from 1 to 10
-    private UpgradeVariable meowVar = UpgradeVariable.ofInteger("meows", BigDecimal.ONE, BigDecimal.TEN);
+    private final UpgradeVariable meowVar = UpgradeVariable.ofInteger("meows", BigDecimal.ONE, BigDecimal.TEN);
 
     // Our custom upgrade
-    private Upgrade meowUpgrade = new Upgrade.Reactive( // Upgrade.Simple doesn't have the last line
+    private final Upgrade meowUpgrade = new Upgrade.Reactive( // Upgrade.Simple doesn't have the last line
             "meow", // Simple name, for referencing in commands and storage
             Component.text().content("Meow").color(NamedTextColor.GREEN).build(), // Name for display
             Component.text().content("Meowpgrade").color(NamedTextColor.GREEN).build(), // Description for display
@@ -47,7 +51,7 @@ public final class ExamplePlugin extends JavaPlugin implements Listener {
             Upgrade.Reactor.UPDATE_COMMANDS // Updates user command access if going to or from level 0, because this upgrade is tying into a command!
     );
 
-    private PermissibleAction meowAction = new PermissibleAction.WithPrerequisite(
+    private final PermissibleAction meowAction = new PermissibleAction.WithPrerequisite(
             "MEOW", // simple name for commands and display
             "Ability to meow", // description
             "Meowability", // shorter description
@@ -86,18 +90,17 @@ public final class ExamplePlugin extends JavaPlugin implements Listener {
         ThirdPartyCommands.register(
                 this, // registering plugin
                 "meow", // command name, really just used for logging issues
-                (manager, builder) -> {
-                    manager.command( // manager#command registers the command as defined below
-                            builder.literal("meow", "purr") // Actual command name and aliases
-                                    .commandDescription(Description.of("Meow meow meow")) // Command description for help command
-                                    .permission(
-                                            // We're going to break this up to explain it all
-                                            builder.commandPermission() // Highly recommend inheriting the permission from above
-                                                    .and(Cloudy.isPlayer()) // Tests if they're a player. We don't need console trying this out!
-                                    )
-                                    .handler(this::handle) // Direct to the handler method below. You could, of course, just write the code here.
-                    );
-                }
+                (manager, builder) ->
+                        manager.command( // manager#command registers the command as defined below
+                                builder.literal("meow", "purr") // Actual command name and aliases
+                                        .commandDescription(Description.of("Meow meow meow")) // Command description for help command
+                                        .permission(
+                                                // We're going to break this up to explain it all
+                                                builder.commandPermission() // Highly recommend inheriting the permission from above
+                                                        .and(Cloudy.isPlayer()) // Tests if they're a player. We don't need console trying this out!
+                                        )
+                                        .handler(this::handle) // Direct to the handler method below. You could, of course, just write the code here.
+                        )
         );
     }
 

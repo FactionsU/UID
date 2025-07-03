@@ -8,7 +8,6 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.event.DTRLossEvent;
-import dev.kitteh.factions.integration.Essentials;
 import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
