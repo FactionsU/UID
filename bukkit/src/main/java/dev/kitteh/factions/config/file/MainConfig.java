@@ -2861,16 +2861,6 @@ public class MainConfig {
         }
     }
 
-
-    public class Paper {
-        @Comment("Utilize Paper's async teleportation if available (Paper 1.9+).")
-        private boolean asyncTeleport = true;
-
-        public boolean isAsyncTeleport() {
-            return asyncTeleport;
-        }
-    }
-
     public class Plugins {
         public class General {
             @Comment("If true, prevents regeneration of dtr/power while marked as AFK.\n" +
@@ -3033,8 +3023,6 @@ public class MainConfig {
     private Data data = new Data();
     private RestrictWorlds restrictWorlds = new RestrictWorlds();
     private Scoreboard scoreboard = new Scoreboard();
-    @Comment("Paper features, when accessible.")
-    private Paper paper = new Paper();
     @Comment("Lists plugin integrations. Some other plugins (PVX, Magic, WG, WB) are currently\n" +
             " elsewhere but will migrate here in the future")
     private Plugins plugins = new Plugins();
@@ -3079,10 +3067,6 @@ public class MainConfig {
 
     public Scoreboard scoreboard() {
         return scoreboard;
-    }
-
-    public Paper paper() {
-        return paper;
     }
 
     public Plugins plugins() {

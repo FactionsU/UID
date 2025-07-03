@@ -854,11 +854,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     }
 
     public CompletableFuture<Boolean> teleport(Player player, Location location) {
-        if (this.conf().paper().isAsyncTeleport()) {
-            return PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN);
-        } else {
-            return CompletableFuture.completedFuture(player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN));
-        }
+        return PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
 
     public OfflinePlayer factionOfflinePlayer(String name) {
