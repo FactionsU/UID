@@ -113,7 +113,7 @@ public class Worldguard {
         ProtectedRegion region = new ProtectedCuboidRegion("wgregionflagcheckforfactions", min, max);
         ApplicableRegionSet set = regions.getApplicableRegions(region);
 
-        if (FactionsPlugin.instance().conf().worldGuard().isChecking()) {
+        if (FactionsPlugin.instance().conf().plugins().worldGuard().isChecking()) {
             return set.size() > 0;
         }
         if (FLAG_CLAIM == null) {

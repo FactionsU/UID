@@ -49,7 +49,7 @@ public class CmdVault implements Cmd {
         }
 
         // Something like faction-id
-        String vaultName = String.format(FactionsPlugin.instance().conf().playerVaults().getVaultPrefix(), "" + faction.id());
+        String vaultName = String.format(FactionsPlugin.instance().conf().plugins().playerVaults().getVaultPrefix(), "" + faction.id());
 
         if (number < 1) {
             // Message about which vaults that Faction has.

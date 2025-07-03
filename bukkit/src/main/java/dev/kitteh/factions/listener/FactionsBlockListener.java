@@ -332,7 +332,7 @@ public class FactionsBlockListener extends AbstractListener {
         Faction otherFaction = Board.board().factionAt(loc);
 
         if (otherFaction.isWilderness()) {
-            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().playerCanBuild(player, location)) {
+            if (conf.plugins().worldGuard().isBuildPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().playerCanBuild(player, location)) {
                 return true;
             }
 
@@ -346,7 +346,7 @@ public class FactionsBlockListener extends AbstractListener {
 
             return false;
         } else if (otherFaction.isSafeZone()) {
-            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().playerCanBuild(player, location)) {
+            if (conf.plugins().worldGuard().isBuildPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().playerCanBuild(player, location)) {
                 return true;
             }
 
@@ -360,7 +360,7 @@ public class FactionsBlockListener extends AbstractListener {
 
             return false;
         } else if (otherFaction.isWarZone()) {
-            if (conf.worldGuard().isBuildPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().playerCanBuild(player, location)) {
+            if (conf.plugins().worldGuard().isBuildPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().playerCanBuild(player, location)) {
                 return true;
             }
 

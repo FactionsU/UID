@@ -212,7 +212,18 @@ public class Transitioner {
         shift(chat, spigot, "alwaysShowChatTag");
 
         shift(chat, node.getNode("factions", "chat", "internalChat"), "triggerPublicChatOnCommand");
+
         shift(node.getNode("plugins", "essentialsX"), node.getNode("plugins", "general"), "preventRegenWhileAfk");
+
+        shift(node.getNode("magicPlugin"), node.getNode("plugins", "magic"), "usePVPSettingForMagicMobs");
+
+        shift(node.getNode("playerVaults"), node.getNode("plugins", "playerVaults"), "vaultPrefix");
+        shift(node.getNode("playerVaults"), node.getNode("plugins", "playerVaults"), "defaultMaxVaults");
+
+        shift(node.getNode("worldGuard"), node.getNode("plugins", "worldGuard"), "checking");
+        shift(node.getNode("worldGuard"), node.getNode("plugins", "worldGuard"), "checkingFlag");
+        shift(node.getNode("worldGuard"), node.getNode("plugins", "worldGuard"), "buildPriority");
+        shift(node.getNode("worldGuard"), node.getNode("plugins", "worldGuard"), "pvpPriority");
     }
 
     private void shift(CommentedConfigurationNode from, CommentedConfigurationNode to, String name) {

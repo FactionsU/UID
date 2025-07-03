@@ -2861,14 +2861,6 @@ public class MainConfig {
         }
     }
 
-    public class MagicPlugin {
-        @Comment("If true, magic mobs will follow whatever pvp allowed/disallowed setting is present for the territory they're attacking into.")
-        private boolean usePVPSettingForMagicMobs = false;
-
-        public boolean isUsePVPSettingForMagicMobs() {
-            return usePVPSettingForMagicMobs;
-        }
-    }
 
     public class Paper {
         @Comment("Utilize Paper's async teleportation if available (Paper 1.9+).")
@@ -2910,11 +2902,77 @@ public class MainConfig {
             }
         }
 
+        public class Magic {
+            @Comment("If true, magic mobs will follow whatever pvp allowed/disallowed setting is present for the territory they're attacking into.")
+            private boolean usePVPSettingForMagicMobs = false;
+
+            public boolean isUsePVPSettingForMagicMobs() {
+                return usePVPSettingForMagicMobs;
+            }
+        }
+
+        public class PlayerVaults {
+            @Comment("The %s is for the faction id")
+            private String vaultPrefix = "faction-%s";
+            private int defaultMaxVaults = 0;
+
+            public String getVaultPrefix() {
+                return vaultPrefix;
+            }
+
+            public int getDefaultMaxVaults() {
+                return defaultMaxVaults;
+            }
+        }
+
+        public class WorldGuard {
+            @Comment("If true, disallows claiming a chunk if any WG region is at least partially inside the chunk")
+            private boolean checking = false;
+            @Comment("If true, disallows claiming a chunk if any WG region with the flag 'fuuid-claim' denied for the claiming player is at least partially inside the chunk")
+            private boolean checkingFlag = false;
+            @Comment("If true, allows building in a WG region where the player has the BUILD flag")
+            private boolean buildPriority = false;
+            @Comment("If true, allows pvp in a WG region where the flag `fuuid-pvp` is allowed")
+            private boolean pvpPriority = false;
+
+            public boolean isChecking() {
+                return checking;
+            }
+
+            @SuppressWarnings("unused")
+            public boolean isCheckingFlag() {
+                return checkingFlag;
+            }
+
+            public boolean isCheckingEither() {
+                return checking || checkingFlag;
+            }
+
+            public boolean isBuildPriority() {
+                return buildPriority;
+            }
+
+            public boolean isPVPPriority() {
+                return pvpPriority;
+            }
+        }
+
         @Comment("General plugin support")
         private General general = new General();
 
         @Comment("Ranull's Graves plugin")
         private Graves graves = new Graves();
+
+        private Magic magic = new Magic();
+
+        @Comment("""
+                PlayerVaults faction vault settings.
+                Enable faction-owned vaults!
+                https://www.spigotmc.org/resources/playervaultsx.51204/""")
+        private PlayerVaults playerVaults = new PlayerVaults();
+
+        @Comment("WorldGuard settings.")
+        private WorldGuard worldGuard = new WorldGuard();
 
         public General general() {
             return general;
@@ -2923,51 +2981,17 @@ public class MainConfig {
         public Graves graves() {
             return graves;
         }
-    }
 
-    public class PlayerVaults {
-        @Comment("The %s is for the faction id")
-        private String vaultPrefix = "faction-%s";
-        private int defaultMaxVaults = 0;
-
-        public String getVaultPrefix() {
-            return vaultPrefix;
+        public Magic magic() {
+            return magic;
         }
 
-        public int getDefaultMaxVaults() {
-            return defaultMaxVaults;
-        }
-    }
-
-    public class WorldGuard {
-        @Comment("If true, disallows claiming a chunk if any WG region is at least partially inside the chunk")
-        private boolean checking = false;
-        @Comment("If true, disallows claiming a chunk if any WG region with the flag 'fuuid-claim' denied for the claiming player is at least partially inside the chunk")
-        private boolean checkingFlag = false;
-        @Comment("If true, allows building in a WG region where the player has the BUILD flag")
-        private boolean buildPriority = false;
-        @Comment("If true, allows pvp in a WG region where the flag `fuuid-pvp` is allowed")
-        private boolean pvpPriority = false;
-
-        public boolean isChecking() {
-            return checking;
+        public PlayerVaults playerVaults() {
+            return playerVaults;
         }
 
-        @SuppressWarnings("unused")
-        public boolean isCheckingFlag() {
-            return checkingFlag;
-        }
-
-        public boolean isCheckingEither() {
-            return checking || checkingFlag;
-        }
-
-        public boolean isBuildPriority() {
-            return buildPriority;
-        }
-
-        public boolean isPVPPriority() {
-            return pvpPriority;
+        public WorldGuard worldGuard() {
+            return worldGuard;
         }
     }
 
@@ -3009,21 +3033,12 @@ public class MainConfig {
     private Data data = new Data();
     private RestrictWorlds restrictWorlds = new RestrictWorlds();
     private Scoreboard scoreboard = new Scoreboard();
-    @Comment("Integration with the Magic plugin")
-    private MagicPlugin magicPlugin = new MagicPlugin();
     @Comment("Paper features, when accessible.")
     private Paper paper = new Paper();
     @Comment("Lists plugin integrations. Some other plugins (PVX, Magic, WG, WB) are currently\n" +
             " elsewhere but will migrate here in the future")
     private Plugins plugins = new Plugins();
-    @Comment("""
-            PlayerVaults faction vault settings.
-            Enable faction-owned vaults!
-            https://www.spigotmc.org/resources/playervaultsx.51204/""")
-    private PlayerVaults playerVaults = new PlayerVaults();
-    @Comment("WorldGuard settings.\n" +
-            "Note that flag stuff only works on WG 7")
-    private WorldGuard worldGuard = new WorldGuard();
+
     private WorldBorder worldBorder = new WorldBorder();
 
     public AVeryFriendlyFactionsConfig getaVeryFriendlyFactionsConfig() {
@@ -3066,24 +3081,12 @@ public class MainConfig {
         return scoreboard;
     }
 
-    public MagicPlugin magicPlugin() {
-        return magicPlugin;
-    }
-
     public Paper paper() {
         return paper;
     }
 
-    public PlayerVaults playerVaults() {
-        return playerVaults;
-    }
-
     public Plugins plugins() {
         return plugins;
-    }
-
-    public WorldGuard worldGuard() {
-        return worldGuard;
     }
 
     public WorldBorder worldBorder() {

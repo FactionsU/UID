@@ -69,7 +69,7 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
 
     @Override
     public boolean isPVPAllowed(Player player, Location location) {
-        if (player == null && !FactionsPlugin.instance().conf().magicPlugin().isUsePVPSettingForMagicMobs()) {
+        if (player == null && !FactionsPlugin.instance().conf().plugins().magic().isUsePVPSettingForMagicMobs()) {
             return true;
         }
         MainConfig.Factions facConf = FactionsPlugin.instance().conf().factions();
