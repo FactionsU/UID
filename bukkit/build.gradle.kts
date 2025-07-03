@@ -106,10 +106,6 @@ tasks.shadowJar {
   relocate("com.github.stefvanschie.inventoryframework", "moss.factions.shade.stefvanschie.if")
   relocate("com.ezylang", "moss.factions.shade.com.ezylang")
 
-  relocate("org.apache.commons.codec", "moss.factions.shade.org.apache.commons.codec")
-  relocate("org.apache.commons.logging", "moss.factions.shade.org.apache.commons.logging")
-  relocate("org.apache.http", "moss.factions.shade.org.apache.http")
-
   archiveClassifier = ""
 }
 
