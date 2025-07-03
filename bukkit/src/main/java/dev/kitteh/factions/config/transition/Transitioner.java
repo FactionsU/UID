@@ -211,6 +211,10 @@ public class Transitioner {
         shift(chat, spigot, "tagFormat");
         shift(chat, spigot, "alwaysShowChatTag");
 
+        if (chat.getNode("tagHandledByAnotherPlugin").getBoolean(false)) {
+            chat.getNode("paper").getNode("enabled").setValue(false);
+        }
+
         shift(chat, node.getNode("factions", "chat", "internalChat"), "triggerPublicChatOnCommand");
 
         shift(node.getNode("plugins", "essentialsX"), node.getNode("plugins", "general"), "preventRegenWhileAfk");
