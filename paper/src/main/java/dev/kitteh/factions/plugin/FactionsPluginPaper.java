@@ -4,7 +4,6 @@ import dev.kitteh.factions.listener.FactionsPaperChatListener;
 import dev.kitteh.factions.scoreboard.BufferedObjective;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import io.papermc.paper.scoreboard.numbers.NumberFormat;
-import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -21,7 +20,7 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     public void onPluginLoad() {
         ComponentDispatcher.setSenders(
                 (commandSender, component) -> commandSender.sendMessage(component),
-                Audience::sendActionBar
+                (commandSender, component) -> commandSender.sendActionBar(component)
         );
 
         BufferedObjective.objectiveConsumer = objective -> objective.numberFormat(NumberFormat.blank());
