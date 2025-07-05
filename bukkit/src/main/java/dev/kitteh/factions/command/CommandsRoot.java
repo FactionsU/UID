@@ -40,12 +40,18 @@ import java.util.stream.Collectors;
 
 @NullMarked
 public class CommandsRoot {
+    static {
+        registry = new ConcurrentHashMap<>();
+        adminRegistry = new ConcurrentHashMap<>();
+        register();
+    }
+
     private record Register(BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer,
                             Plugin providingPlugin, String command) {
     }
 
-    private static @Nullable Map<String, Register> registry = new ConcurrentHashMap<>();
-    private static @Nullable Map<String, Register> adminRegistry = new ConcurrentHashMap<>();
+    private static @Nullable Map<String, Register> registry;
+    private static @Nullable Map<String, Register> adminRegistry;
 
     static void register(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
         reg(providingPlugin, command, consumer, registry);
@@ -65,7 +71,7 @@ public class CommandsRoot {
         adminRegistry.put(Objects.requireNonNull(command), new Register(Objects.requireNonNull(consumer), providingPlugin, command));
     }
 
-    private void registerInternal(String command, Cmd cmd) {
+    private static void registerInternal(String command, Cmd cmd) {
         if (registry == null) {
             return;
         }
@@ -76,7 +82,7 @@ public class CommandsRoot {
         registry.put(command, new Register(cmd.consumer(), AbstractFactionsPlugin.instance(), command));
     }
 
-    private void registerAdminInternal(String command, Cmd cmd) {
+    private static void registerAdminInternal(String command, Cmd cmd) {
         if (adminRegistry == null) {
             return;
         }
@@ -91,7 +97,6 @@ public class CommandsRoot {
         if (registry == null || adminRegistry == null) {
             throw new IllegalStateException("Second attempt at creating this class!");
         }
-        this.register();
 
         LegacyPaperCommandManager<Sender> manager = new LegacyPaperCommandManager<>(plugin, ExecutionCoordinator.simpleCoordinator(), SenderMapper.create(Sender::of, Sender::sender));
         if (manager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
@@ -150,7 +155,7 @@ public class CommandsRoot {
         adminRegistry = null;
     }
 
-    private void register() {
+    private static void register() {
         registerInternal("announce", new CmdAnnounce());
         registerInternal("ban", new CmdBan());
         registerInternal("chat", new CmdChat());
