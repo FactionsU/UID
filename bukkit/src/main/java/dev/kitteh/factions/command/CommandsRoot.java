@@ -82,6 +82,7 @@ public class CommandsRoot {
         registry = new ConcurrentHashMap<>();
         adminRegistry = new ConcurrentHashMap<>();
         register();
+        AbstractFactionsPlugin.instance().addCommands(CommandsRoot::registerInternal, CommandsRoot::registerAdminInternal);
     }
 
     private record Register(BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer,
@@ -92,29 +93,29 @@ public class CommandsRoot {
     private static @Nullable Map<String, Register> adminRegistry;
 
     static void register(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
-        reg(providingPlugin, command, consumer, registry);
+        reg(providingPlugin, command, consumer, registry, false);
     }
 
     static void registerAdmin(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
-        reg(providingPlugin, command, consumer, adminRegistry);
+        reg(providingPlugin, command, consumer, adminRegistry, true);
     }
 
-    private static void reg(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer, @Nullable Map<String, Register> adminRegistry) {
+    private static void reg(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer, @Nullable Map<String, Register> adminRegistry, boolean admin) {
         if (adminRegistry == null) {
             throw new IllegalStateException("Registration closed");
         }
         if (Objects.requireNonNull(providingPlugin) == FactionsPlugin.instance()) {
-            //throw new IllegalArgumentException("Use your own plugin!");
+            throw new IllegalArgumentException("Use your own plugin!");
         }
-        adminRegistry.put(Objects.requireNonNull(command), new Register(Objects.requireNonNull(consumer), providingPlugin, command));
+        if (adminRegistry.put(Objects.requireNonNull(command), new Register(Objects.requireNonNull(consumer), providingPlugin, command)) == null) {
+            AbstractFactionsPlugin.instance().getLogger().info("New " + (admin ? "admin " : "") + "command '" + command + "' registered by " + providingPlugin.getName());
+        } else {
+            AbstractFactionsPlugin.instance().getLogger().info("Replacement " + (admin ? "admin " : "") + "command '" + command + "' registered by " + providingPlugin.getName());
+        }
     }
 
     private static void registerInternal(String command, Cmd cmd) {
         if (registry == null) {
-            return;
-        }
-        if (registry.containsKey(command)) {
-            AbstractFactionsPlugin.instance().getLogger().info("Skipping internal '" + command + "' command because it is already registered.");
             return;
         }
         registry.put(command, new Register(cmd.consumer(), AbstractFactionsPlugin.instance(), command));
@@ -122,10 +123,6 @@ public class CommandsRoot {
 
     private static void registerAdminInternal(String command, Cmd cmd) {
         if (adminRegistry == null) {
-            return;
-        }
-        if (adminRegistry.containsKey(command)) {
-            AbstractFactionsPlugin.instance().getLogger().info("Skipping internal admin '" + command + "' command because it is already registered.");
             return;
         }
         adminRegistry.put(command, new Register(cmd.consumer(), AbstractFactionsPlugin.instance(), command));

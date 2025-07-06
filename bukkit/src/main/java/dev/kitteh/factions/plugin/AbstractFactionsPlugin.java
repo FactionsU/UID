@@ -12,6 +12,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
+import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.CommandsRoot;
 import dev.kitteh.factions.config.ConfigManager;
 import dev.kitteh.factions.data.MemoryFPlayer;
@@ -111,6 +112,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -957,4 +959,8 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     protected abstract void registerEvents();
 
     public abstract CompletableFuture<Boolean> teleport(Player player, Location location);
+
+    public void addCommands(BiConsumer<String, Cmd> reg, BiConsumer<String, Cmd> adminReg) {
+        // NOOP
+    }
 }
