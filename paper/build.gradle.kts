@@ -15,10 +15,11 @@ dependencies {
     exclude("org.spigotmc")
   }
   compileOnly(libs.paper)
+  compileOnly(libs.cloud.paper)
 }
 
 tasks.runServer {
-  minecraftVersion("1.21.4")
+  minecraftVersion(libs.versions.apiversion.get())
 }
 
 tasks.processResources {
@@ -39,6 +40,14 @@ tasks.shadowJar {
   dependencies {
     include(project(":bukkit"))
   }
+
+  relocate("com.typesafe", "moss.factions.shade.com.typesafe")
+  relocate("io.papermc.lib", "moss.factions.shade.io.papermc.lib")
+  relocate("ninja.leaping", "moss.factions.shade.ninja.leaping")
+  relocate("org.incendo", "moss.factions.shade.org.incendo")
+  relocate("io.leangen", "moss.factions.shade.io.leangen")
+  relocate("com.github.stefvanschie.inventoryframework", "moss.factions.shade.stefvanschie.if")
+  relocate("com.ezylang", "moss.factions.shade.com.ezylang")
 
   archiveClassifier = ""
   archiveVersion = ""

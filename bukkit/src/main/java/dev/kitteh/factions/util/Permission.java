@@ -119,6 +119,7 @@ public enum Permission {
     UPDATES("updates"),
     DEBUG("debug"),
     UPGRADES("upgrades"),
+    UPGRADES_MANAGE("upgrades.manage"),
     WARMUP_EXEMPT("warmups.exempt");
 
     public final String node;

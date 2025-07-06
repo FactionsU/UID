@@ -17,6 +17,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.jspecify.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -290,7 +291,11 @@ public class Econ {
         return true;
     }
 
-    public static boolean modifyMoney(Participator ep, double delta, String toDoThis, String forDoingThis) {
+    public static boolean modifyMoney(Participator participator, double delta) {
+        return modifyMoney(participator, delta, null, null);
+    }
+
+    public static boolean modifyMoney(Participator ep, double delta, @Nullable String toDoThis, @Nullable String forDoingThis) {
         if (!shouldBeUsed()) {
             return false;
         }
