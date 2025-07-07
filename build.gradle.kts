@@ -21,15 +21,8 @@ allprojects {
       }
 
       filter {
-        //includeModule("io.papermc.paper", "paper-api")
-        includeModule("net.md-5", "bungeecord-chat")
-      }
-    }
-
-    maven("https://maven-prs.papermc.io/Paper/pr12671") {
-      name = "Maven for PR #12671" // https://github.com/PaperMC/Paper/pull/12671
-      mavenContent {
         includeModule("io.papermc.paper", "paper-api")
+        includeModule("net.md-5", "bungeecord-chat")
       }
     }
 
