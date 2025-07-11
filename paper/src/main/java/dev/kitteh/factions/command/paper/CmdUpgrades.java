@@ -76,7 +76,7 @@ public class CmdUpgrades implements Cmd {
                 .base(DialogBase.builder(Component.text("Faction Upgrades"))
                         .body(List.of(
                                 DialogBody.plainMessage(Component.text("Upgrades are listed below.")),
-                                DialogBody.plainMessage(Component.text("Click for details or to buy an upgrade."))
+                                DialogBody.plainMessage(Component.text("Click for details" + (Econ.shouldBeUsed() ? " or to buy an upgrade." : ".")))
                         )).build())
                 .type(DialogType.multiAction(
                         upgrades,
@@ -93,11 +93,12 @@ public class CmdUpgrades implements Cmd {
         }
 
         int lvl = faction.upgradeLevel(upgrade);
-        Component name = upgrade.nameComponent();
         UpgradeSettings settings = Universe.universe().upgradeSettings(upgrade);
         boolean econ = Econ.shouldBeUsed();
 
-        TextComponent.Builder builder = Component.text().append(upgrade.description()).appendNewline();
+        TextComponent.Builder builder = Component.text()
+                .append(upgrade.nameComponent()).appendNewline().appendNewline()
+                .append(upgrade.description()).appendNewline().appendNewline();
         if (lvl > 0 && settings.maxLevel() != 1) {
             builder.append(Component.text("Current level: " + lvl));
         } else if (lvl == 1) {
@@ -115,10 +116,12 @@ public class CmdUpgrades implements Cmd {
             if (lvl < settings.maxLevel()) {
                 builder.appendNewline().appendNewline()
                         .append(Component.text("Upgrade available!")).appendNewline()
-                        .append(Component.text("Costs " + settings.costAt(lvl + 1).toBigInteger().intValue())).appendNewline()
-                        .append(name).appendNewline()
-                        .append(Component.text("Level " + (lvl + 1))).appendNewline()
-                        .append(upgrade.details(settings, lvl + 1));
+                        .append(Component.text("Costs " + settings.costAt(lvl + 1).doubleValue())).appendNewline()
+                        .appendNewline();
+                if (settings.maxLevel() > 1) {
+                    builder.append(Component.text("Level " + (lvl + 1))).appendNewline();
+                }
+                builder.append(upgrade.details(settings, lvl + 1));
             } else if (lvl != 1) {
                 builder.appendNewline()
                         .append(Component.text("Max level!"));
@@ -138,7 +141,7 @@ public class CmdUpgrades implements Cmd {
         }
 
         return Dialog.create(b -> b.empty()
-                .base(DialogBase.builder(Component.text("Faction Upgrade: ").append(upgrade.nameComponent()))
+                .base(DialogBase.builder(Component.text("Faction Upgrade"))
                         .body(List.of(
                                 DialogBody.plainMessage(builder.build())
                         )).build())
