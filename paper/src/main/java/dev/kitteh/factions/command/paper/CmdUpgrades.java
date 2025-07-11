@@ -68,36 +68,9 @@ public class CmdUpgrades implements Cmd {
         List<ActionButton> upgrades = UpgradeRegistry.getUpgrades().stream()
                 .sorted(Comparator.comparing(Upgrade::name))
                 .filter(Universe.universe()::isUpgradeEnabled)
-                .map(upgrade -> {
-                    int lvl = faction.upgradeLevel(upgrade);
-                    UpgradeSettings settings = Universe.universe().upgradeSettings(upgrade);
-
-                    TextComponent.Builder builder = Component.text().append(this.nameAtLevel(settings, lvl));
-                    if (lvl > 1 && settings.maxLevel() != 1) {
-                        builder.append(Component.text(" " + lvl));
-                    }
-                    builder.appendNewline()
-                            .append(upgrade.description());
-                    if (lvl > 0) {
-                        builder.appendNewline()
-                                .append(upgrade.details(settings, lvl));
-                    }
-                    if (lvl < settings.maxLevel()) {
-                        builder.appendNewline()
-                                .append(Component.text("Upgrade available: Costs " + settings.costAt(lvl + 1).toBigInteger().intValue()))
-                                .appendNewline()
-                                .append(this.nameAtLevel(settings, lvl + 1))
-                                .appendNewline()
-                                .append(upgrade.details(settings, lvl + 1));
-                    } else {
-                        builder.appendNewline()
-                                .append(Component.text("Max level!"));
-                    }
-                    return ActionButton.builder(upgrade.nameComponent())
-                            .tooltip(builder.build())
-                            .action(DialogAction.customClick((r, audience) ->
-                                    audience.showDialog(this.upgradeMenu(audience, upgrade)), OPT)).build();
-                }).toList();
+                .map(upgrade -> ActionButton.builder(upgrade.nameComponent())
+                        .action(DialogAction.customClick((r, audience) ->
+                                audience.showDialog(this.upgradeMenu(audience, upgrade)), OPT)).build()).toList();
 
         return Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(Component.text("Faction Upgrades"))
@@ -112,15 +85,6 @@ public class CmdUpgrades implements Cmd {
                 )));
     }
 
-    private Component nameAtLevel(UpgradeSettings settings, int lvl) {
-        Component name = settings.upgrade().nameComponent();
-        if (lvl > 1 && settings.maxLevel() != 1) {
-            return Component.text().append(name).append(Component.text(" " + lvl)).build();
-        } else {
-            return name;
-        }
-    }
-
     private Dialog upgradeMenu(Audience audience, Upgrade upgrade) {
         FPlayer fPlayer = FPlayers.fPlayers().get((Player) audience);
         Faction faction = fPlayer.faction();
@@ -131,6 +95,7 @@ public class CmdUpgrades implements Cmd {
         int lvl = faction.upgradeLevel(upgrade);
         Component name = upgrade.nameComponent();
         UpgradeSettings settings = Universe.universe().upgradeSettings(upgrade);
+        boolean econ = Econ.shouldBeUsed();
 
         TextComponent.Builder builder = Component.text().append(upgrade.description()).appendNewline();
         if (lvl > 0 && settings.maxLevel() != 1) {
@@ -145,19 +110,23 @@ public class CmdUpgrades implements Cmd {
                     .append(upgrade.details(settings, lvl))
                     .appendNewline();
         }
-        if (lvl < settings.maxLevel()) {
-            builder.appendNewline().appendNewline()
-                    .append(Component.text("Upgrade available!")).appendNewline()
-                    .append(Component.text("Costs " + settings.costAt(lvl + 1).toBigInteger().intValue())).appendNewline()
-                    .append(name).append(Component.text(" " + (lvl + 1))).appendNewline()
-                    .append(upgrade.details(settings, lvl + 1));
-        } else if (lvl != 1) {
-            builder.appendNewline()
-                    .append(Component.text("Max level!"));
+
+        if (econ) {
+            if (lvl < settings.maxLevel()) {
+                builder.appendNewline().appendNewline()
+                        .append(Component.text("Upgrade available!")).appendNewline()
+                        .append(Component.text("Costs " + settings.costAt(lvl + 1).toBigInteger().intValue())).appendNewline()
+                        .append(name).appendNewline()
+                        .append(Component.text("Level " + (lvl + 1))).appendNewline()
+                        .append(upgrade.details(settings, lvl + 1));
+            } else if (lvl != 1) {
+                builder.appendNewline()
+                        .append(Component.text("Max level!"));
+            }
         }
 
         List<ActionButton> actions;
-        if (lvl < settings.maxLevel() && Econ.shouldBeUsed() && faction.hasAccess(fPlayer, PermissibleActions.UPGRADE, null)) {
+        if (lvl < settings.maxLevel() && econ && faction.hasAccess(fPlayer, PermissibleActions.UPGRADE, null)) {
             actions = List.of(
                     ActionButton.builder(Component.text("Purchase upgrade"))
                             .action(DialogAction.customClick((r, aud) ->
