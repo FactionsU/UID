@@ -14,6 +14,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.CommandsRoot;
+import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.config.ConfigManager;
 import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.data.MemoryFaction;
@@ -79,6 +80,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.incendo.cloud.CommandManager;
 import org.jspecify.annotations.NonNull;
 
 import java.io.BufferedReader;
@@ -113,6 +115,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -960,7 +963,5 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
     public abstract CompletableFuture<Boolean> teleport(Player player, Location location);
 
-    public void addCommands(BiConsumer<String, Cmd> reg, BiConsumer<String, Cmd> adminReg) {
-        // NOOP
-    }
+    public abstract void addCommands(BiConsumer<String, Cmd> reg, BiConsumer<String, Cmd> adminReg, Consumer<Supplier<CommandManager<Sender>>> commandManager);
 }

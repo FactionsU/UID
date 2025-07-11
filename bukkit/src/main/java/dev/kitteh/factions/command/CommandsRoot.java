@@ -56,13 +56,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
-import org.incendo.cloud.SenderMapper;
-import org.incendo.cloud.bukkit.CloudBukkitCapabilities;
 import org.incendo.cloud.component.DefaultValue;
-import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.help.result.CommandEntry;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
-import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
@@ -73,6 +69,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -82,15 +79,20 @@ public class CommandsRoot {
         registry = new ConcurrentHashMap<>();
         adminRegistry = new ConcurrentHashMap<>();
         register();
-        AbstractFactionsPlugin.instance().addCommands(CommandsRoot::registerInternal, CommandsRoot::registerAdminInternal);
+        AbstractFactionsPlugin.instance().addCommands(CommandsRoot::registerInternal, CommandsRoot::registerAdminInternal, CommandsRoot::setCommandManagerSupplier);
     }
 
     private record Register(BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer,
                             Plugin providingPlugin, String command) {
     }
 
+    private static @Nullable Supplier<CommandManager<Sender>> commandManager;
     private static @Nullable Map<String, Register> registry;
     private static @Nullable Map<String, Register> adminRegistry;
+
+    private static void setCommandManagerSupplier(Supplier<CommandManager<Sender>> commandManagerSupplier) {
+        CommandsRoot.commandManager = commandManagerSupplier;
+    }
 
     static void register(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
         reg(providingPlugin, command, consumer, registry, false);
@@ -129,14 +131,11 @@ public class CommandsRoot {
     }
 
     public CommandsRoot(AbstractFactionsPlugin plugin) {
-        if (registry == null || adminRegistry == null) {
+        if (registry == null || adminRegistry == null || commandManager == null) {
             throw new IllegalStateException("Second attempt at creating this class!");
         }
 
-        LegacyPaperCommandManager<Sender> manager = new LegacyPaperCommandManager<>(plugin, ExecutionCoordinator.simpleCoordinator(), SenderMapper.create(Sender::of, Sender::sender));
-        if (manager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
-            manager.registerBrigadier();
-        }
+        CommandManager<Sender> manager = CommandsRoot.commandManager.get();
 
         manager.captionRegistry().registerProvider(new Captioner());
 
@@ -188,6 +187,7 @@ public class CommandsRoot {
 
         registry = null; // Last step!
         adminRegistry = null;
+        commandManager = null;
     }
 
     private static void register() {

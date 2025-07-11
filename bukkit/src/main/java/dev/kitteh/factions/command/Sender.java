@@ -1,7 +1,6 @@
 package dev.kitteh.factions.command;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.Econ;
@@ -20,25 +19,26 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public interface Sender {
-    record Player(CommandSender sender, org.bukkit.entity.Player player, FPlayer fPlayer, Faction faction) implements Sender {
+    interface Player extends Sender {
+        record Impl(CommandSender sender, org.bukkit.entity.Player player, FPlayer fPlayer, Faction faction) implements Player {
+        }
+
+        org.bukkit.entity.Player player();
+
+        FPlayer fPlayer();
+
+        Faction faction();
     }
 
-    record Console(CommandSender sender) implements Sender {
-    }
-
-    static Sender of(CommandSender sender) {
-        if (sender instanceof org.bukkit.entity.Player player) {
-            FPlayer fp = FPlayers.fPlayers().get(player);
-            return new Player(sender, player, fp, fp.faction());
-        } else {
-            return new Console(sender);
+    interface Console extends Sender {
+        record Impl(CommandSender sender) implements Console {
         }
     }
 
     CommandSender sender();
 
     default @Nullable FPlayer fPlayerOrNull() {
-        return this instanceof Player p ? p.fPlayer : null;
+        return this instanceof Player p ? p.fPlayer() : null;
     }
 
     default void msg(TL translation, Object... args) {
@@ -54,15 +54,15 @@ public interface Sender {
     }
 
     default boolean hasFaction() {
-        return this instanceof Player player && player.faction.isNormal();
+        return this instanceof Player player && player.faction().isNormal();
     }
 
     default boolean isBypass() {
-        return this instanceof Console || this instanceof Player player && player.fPlayer.adminBypass();
+        return this instanceof Console || this instanceof Player player && player.fPlayer().adminBypass();
     }
 
     default boolean isAtLeastRole(Role role) {
-        return this instanceof Player player && player.faction.isNormal() && player.fPlayer.role().isAtLeast(role);
+        return this instanceof Player player && player.faction().isNormal() && player.fPlayer().role().isAtLeast(role);
     }
 
     default void sendMessage(ComponentLike component) {
@@ -78,7 +78,7 @@ public interface Sender {
             return true;
         }
         if (this instanceof Player player) {
-            FPlayer fPlayer = player.fPlayer;
+            FPlayer fPlayer = player.fPlayer();
             if (fPlayer.adminBypass()) {
                 return true;
             }
@@ -98,7 +98,7 @@ public interface Sender {
             return true;
         }
         if (this instanceof Player player) {
-            FPlayer fPlayer = player.fPlayer;
+            FPlayer fPlayer = player.fPlayer();
             if (fPlayer.adminBypass()) {
                 return true;
             }
