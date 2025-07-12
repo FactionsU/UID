@@ -7,6 +7,7 @@ import com.github.stefvanschie.inventoryframework.pane.PaginatedPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
@@ -36,8 +37,9 @@ import java.util.function.BiConsumer;
 public class CmdUpgrades implements Cmd {
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
+        var tl = FactionsPlugin.instance().tl().commands().upgrades();
         return (manager, builder) -> manager.command(
-                builder.literal("upgrades")
+                builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.UPGRADES).and(Cloudy.hasFaction())))
                         .commandDescription(Cloudy.desc(TL.COMMAND_UPGRADES_DESCRIPTION))
                         .handler(this::handle)

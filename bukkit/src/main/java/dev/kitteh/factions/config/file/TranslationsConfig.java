@@ -398,6 +398,284 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Upgrades extends AbsCommand {
+            protected Upgrades() {
+                super("upgrades");
+            }
+
+            public static class Paper {
+                public static class General {
+                    private String done = "Done";
+                    private String returnToList = "Return to Upgrade List";
+                    private String returnToInfo = "Return to Upgrade Info";
+
+                    public String getDone() {
+                        return done;
+                    }
+
+                    public String getReturnToInfo() {
+                        return returnToInfo;
+                    }
+
+                    public String getReturnToList() {
+                        return returnToList;
+                    }
+                }
+
+                public static class MainPage {
+                    private String title = "Faction Upgrades";
+                    private String clickValueIfEconEnabled = "Click for details or to buy an upgrade.";
+                    private String clickValueIfEconDisabled = "Click for details.";
+
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Upgrades are listed below.");
+                            this.add("<click>");
+                        }
+                    };
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public String getClickValueIfEconEnabled() {
+                        return clickValueIfEconEnabled;
+                    }
+
+                    public String getClickValueIfEconDisabled() {
+                        return clickValueIfEconDisabled;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+                }
+
+                public static class InfoPage {
+                    private String title = "Faction Upgrade";
+
+                    private String statusLocked = "Not unlocked";
+                    private String statusUnlocked = "Unlocked";
+                    private String statusCurrentLevel = "Current level: <level>";
+
+                    private String upgradeAvailable = "Upgrade available!";
+                    private String upgradeAvailableCosts = "Costs <cost>";
+                    private String upgradeAtMaxLevel = "Max level!";
+                    private String upgradeAvailableLevelNumberIfNotSingleLevel = "Level <level>";
+                    private String purchaseButton = "Purchase Upgrade";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public String getStatusLocked() {
+                        return statusLocked;
+                    }
+
+                    public String getStatusUnlocked() {
+                        return statusUnlocked;
+                    }
+
+                    public String getStatusCurrentLevel() {
+                        return statusCurrentLevel;
+                    }
+
+                    public String getUpgradeAvailable() {
+                        return upgradeAvailable;
+                    }
+
+                    public String getUpgradeAvailableCosts() {
+                        return upgradeAvailableCosts;
+                    }
+
+                    public String getUpgradeAtMaxLevel() {
+                        return upgradeAtMaxLevel;
+                    }
+
+                    public String getUpgradeAvailableLevelNumberIfNotSingleLevel() {
+                        return upgradeAvailableLevelNumberIfNotSingleLevel;
+                    }
+
+                    public String getPurchaseButton() {
+                        return purchaseButton;
+                    }
+                }
+
+                public static class PurchasePage {
+                    private String title = "Purchase Upgrade";
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Purchase next level of <upgrade>?");
+                            this.add("");
+                            this.add("Cost: <cost>");
+                        }
+                    };
+                    private String confirmButton = "Confirm Purchase";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+
+                    public String getConfirmButton() {
+                        return confirmButton;
+                    }
+                }
+
+                public static class PurchaseComplete {
+                    private String title = "Upgrade Purchase Complete";
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Upgrade successfully purchased!");
+                        }
+                    };
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+                }
+
+                public static class NoLongerInFaction {
+                    private String title = "Access Denied";
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("You are no longer in a faction.");
+                        }
+                    };
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+                }
+
+                public static class CannotAfford {
+                    private String title = "Cannot Purchase";
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Cannot afford next upgrade level!");
+                        }
+                    };
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+                }
+
+                public static class NoLongerSameLevel {
+                    private String title = "Error";
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Upgrade changed level while you were in the menu!");
+                        }
+                    };
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+                }
+
+                public static class AlreadyMax {
+                    private String title = "Error";
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Upgrade already maxed out!");
+                        }
+                    };
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+                }
+
+                private General general = new General();
+                private MainPage mainPage = new MainPage();
+                private InfoPage infoPage = new InfoPage();
+                private PurchasePage purchasePage = new PurchasePage();
+                private PurchaseComplete purchaseComplete = new PurchaseComplete();
+                private CannotAfford cannotAfford = new CannotAfford();
+                private AlreadyMax alreadyMax = new AlreadyMax();
+                private NoLongerInFaction noLongerInFaction = new NoLongerInFaction();
+                private NoLongerSameLevel noLongerSameLevel = new NoLongerSameLevel();
+
+                public General general() {
+                    return general;
+                }
+
+                public MainPage mainPage() {
+                    return mainPage;
+                }
+
+                public InfoPage infoPage() {
+                    return infoPage;
+                }
+
+                public PurchasePage purchasePage() {
+                    return purchasePage;
+                }
+
+                public PurchaseComplete purchaseComplete() {
+                    return purchaseComplete;
+                }
+
+                public AlreadyMax alreadyMax() {
+                    return alreadyMax;
+                }
+
+                public CannotAfford cannotAfford() {
+                    return cannotAfford;
+                }
+
+                public NoLongerInFaction noLongerInFaction() {
+                    return noLongerInFaction;
+                }
+
+                public NoLongerSameLevel noLongerSameLevel() {
+                    return noLongerSameLevel;
+                }
+            }
+
+            public static class Spigot {
+                private boolean empty = true;
+            }
+
+            @Comment("The Paper version of the command, using dialogs.\n" +
+                    "Each section represents a dialog that can appear.")
+            private Paper paper = new Paper();
+            @Comment("The Spigot version of the command will be translated at a later time")
+            private Spigot spigot = new Spigot();
+
+            public Paper paper() {
+                return paper;
+            }
+
+            public Spigot spigot() {
+                return spigot;
+            }
+        }
+
         public static class Zone extends AbsCommand {
             public static class Claim extends AbsCommand {
                 private String zoneNotFound = "<red>Zone named '<name>' not found</red>";
@@ -587,6 +865,7 @@ public class TranslationsConfig {
         private Confirm confirm = new Confirm();
         private Set set = new Set();
         private Permissions permissions = new Permissions();
+        private Upgrades upgrades = new Upgrades();
         private Zone zone = new Zone();
 
         public Generic generic() {
@@ -603,6 +882,10 @@ public class TranslationsConfig {
 
         public Permissions permissions() {
             return permissions;
+        }
+
+        public Upgrades upgrades() {
+            return upgrades;
         }
 
         public Zone zone() {

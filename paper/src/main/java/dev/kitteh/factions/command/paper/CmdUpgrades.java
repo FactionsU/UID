@@ -14,6 +14,7 @@ import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import io.papermc.paper.dialog.Dialog;
@@ -26,6 +27,8 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickCallback;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -41,8 +44,9 @@ public class CmdUpgrades implements Cmd {
 
     @Override
     public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
+        var tl = FactionsPlugin.instance().tl().commands().upgrades();
         return (manager, builder) -> manager.command(
-                builder.literal("upgrades")
+                builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.UPGRADES).and(Cloudy.hasFaction())))
                         .commandDescription(Cloudy.desc(TL.COMMAND_UPGRADES_DESCRIPTION))
                         .handler(this::handle)
@@ -65,22 +69,28 @@ public class CmdUpgrades implements Cmd {
         if (!faction.isNormal()) {
             return this.noLongerInFaction();
         }
+
+        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+
         List<ActionButton> upgrades = UpgradeRegistry.getUpgrades().stream()
                 .sorted(Comparator.comparing(Upgrade::name))
                 .filter(Universe.universe()::isUpgradeEnabled)
                 .map(upgrade -> ActionButton.builder(upgrade.nameComponent())
                         .action(DialogAction.customClick((r, audience) ->
-                                audience.showDialog(this.upgradeMenu(audience, upgrade)), OPT)).build()).toList();
+                                audience.showDialog(this.upgradeMenu(audience, upgrade)), OPT)).build())
+                .toList();
+
+        TagResolver click = Placeholder.component("click",
+                Mini.parse(Econ.shouldBeUsed()
+                        ? tl.mainPage().getClickValueIfEconEnabled()
+                        : tl.mainPage().getClickValueIfEconDisabled())
+        );
 
         return Dialog.create(b -> b.empty()
-                .base(DialogBase.builder(Component.text("Faction Upgrades"))
-                        .body(List.of(
-                                DialogBody.plainMessage(Component.text("Upgrades are listed below.")),
-                                DialogBody.plainMessage(Component.text("Click for details" + (Econ.shouldBeUsed() ? " or to buy an upgrade." : ".")))
-                        )).build())
+                .base(DialogBase.builder(Mini.parse(tl.mainPage().getTitle())).body(this.body(tl.mainPage().getBody(), click)).build())
                 .type(DialogType.multiAction(
                         upgrades,
-                        ActionButton.builder(Component.text("Done")).build(),
+                        ActionButton.builder(Mini.parse(tl.general().getDone())).build(),
                         2
                 )));
     }
@@ -92,6 +102,9 @@ public class CmdUpgrades implements Cmd {
             return this.noLongerInFaction();
         }
 
+        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+        var info = tl.infoPage();
+
         int lvl = faction.upgradeLevel(upgrade);
         UpgradeSettings settings = Universe.universe().upgradeSettings(upgrade);
         boolean econ = Econ.shouldBeUsed();
@@ -100,11 +113,11 @@ public class CmdUpgrades implements Cmd {
                 .append(upgrade.nameComponent()).appendNewline().appendNewline()
                 .append(upgrade.description()).appendNewline().appendNewline();
         if (lvl > 0 && settings.maxLevel() != 1) {
-            builder.append(Component.text("Current level: " + lvl));
+            builder.append(Mini.parse(info.getStatusCurrentLevel(), Placeholder.parsed("level", String.valueOf(lvl))));
         } else if (lvl == 1) {
-            builder.append(Component.text("Unlocked"));
+            builder.append(Mini.parse(info.getStatusUnlocked()));
         } else {
-            builder.append(Component.text("Not unlocked"));
+            builder.append(Mini.parse(info.getStatusLocked()));
         }
         if (lvl > 0) {
             builder.appendNewline().appendNewline()
@@ -115,23 +128,23 @@ public class CmdUpgrades implements Cmd {
         if (econ) {
             if (lvl < settings.maxLevel()) {
                 builder.appendNewline().appendNewline()
-                        .append(Component.text("Upgrade available!")).appendNewline()
-                        .append(Component.text("Costs " + settings.costAt(lvl + 1).doubleValue())).appendNewline()
+                        .append(Mini.parse(info.getUpgradeAvailable())).appendNewline()
+                        .append(Mini.parse(info.getUpgradeAvailableCosts(), Placeholder.parsed("cost", String.valueOf(settings.costAt(lvl + 1).doubleValue())))).appendNewline()
                         .appendNewline();
                 if (settings.maxLevel() > 1) {
-                    builder.append(Component.text("Level " + (lvl + 1))).appendNewline();
+                    builder.append(Mini.parse(info.getUpgradeAvailableLevelNumberIfNotSingleLevel(), Placeholder.parsed("level", String.valueOf(lvl + 1)))).appendNewline();
                 }
                 builder.append(upgrade.details(settings, lvl + 1));
             } else if (lvl != 1) {
                 builder.appendNewline()
-                        .append(Component.text("Max level!"));
+                        .append(Mini.parse(info.getUpgradeAtMaxLevel()));
             }
         }
 
         List<ActionButton> actions;
         if (lvl < settings.maxLevel() && econ && faction.hasAccess(fPlayer, PermissibleActions.UPGRADE, null)) {
             actions = List.of(
-                    ActionButton.builder(Component.text("Purchase upgrade"))
+                    ActionButton.builder(Mini.parse(info.getPurchaseButton()))
                             .action(DialogAction.customClick((r, aud) ->
                                     aud.showDialog(this.purchaseMenu(aud, upgrade)), OPT))
                             .build()
@@ -141,22 +154,19 @@ public class CmdUpgrades implements Cmd {
         }
 
         return Dialog.create(b -> b.empty()
-                .base(DialogBase.builder(Component.text("Faction Upgrade"))
+                .base(DialogBase.builder(Mini.parse(info.getTitle()))
                         .body(List.of(
-                                DialogBody.plainMessage(builder.build())
+                                DialogBody.plainMessage(builder.build(), 400)
                         )).build())
                 .type(actions.isEmpty() ?
-                        DialogType.notice(ActionButton.builder(Component.text("Return to upgrade list"))
+                        DialogType.notice(ActionButton.builder(Mini.parse(tl.general().getReturnToList()))
                                 .action(DialogAction.customClick((r, aud) ->
                                         aud.showDialog(this.mainMenu(aud)), OPT))
                                 .build())
                         :
                         DialogType.multiAction(
                                 actions,
-                                ActionButton.builder(Component.text("Return to upgrade list"))
-                                        .action(DialogAction.customClick((r, aud) ->
-                                                aud.showDialog(this.mainMenu(aud)), OPT))
-                                        .build(),
+                                this.returnToList(),
                                 2
                         )));
     }
@@ -171,14 +181,13 @@ public class CmdUpgrades implements Cmd {
         int lvl = faction.upgradeLevel(upgrade);
         UpgradeSettings settings = Universe.universe().upgradeSettings(upgrade);
 
+        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+
         if (lvl == settings.maxLevel()) {
             return Dialog.create(b -> b.empty()
-                    .base(DialogBase.builder(Component.text("Upgrade already maxed out!"))
-                            .body(List.of()).build())
-                    .type(DialogType.notice(ActionButton.builder(Component.text("Return to upgrade info"))
-                            .action(DialogAction.customClick((r, aud) ->
-                                    aud.showDialog(this.upgradeMenu(aud, upgrade)), OPT))
-                            .build())));
+                    .base(DialogBase.builder(Mini.parse(tl.alreadyMax().getTitle()))
+                            .body(this.body(tl.alreadyMax().getBody())).build())
+                    .type(DialogType.notice(this.returnToUpgrade(upgrade))));
         }
 
         double cost = settings.costAt(lvl + 1).doubleValue();
@@ -192,31 +201,24 @@ public class CmdUpgrades implements Cmd {
 
         if (Econ.has(purchaser, cost)) {
             return Dialog.create(b -> b.empty()
-                    .base(DialogBase.builder(Component.text("Purchase next level of ").append(upgrade.nameComponent()).append(Component.text("?")))
-                            .body(List.of(
-                                    DialogBody.plainMessage(Component.text("Cost: " + cost))
-                            )).build())
+                    .base(DialogBase.builder(Mini.parse(tl.purchasePage().getTitle()))
+                            .body(
+                                    this.body(tl.purchasePage().getBody(),
+                                            Placeholder.component("upgrade", upgrade.nameComponent()),
+                                            Placeholder.parsed("cost", String.valueOf(cost)))
+                            ).build())
                     .type(DialogType.multiAction(
                             List.of(
-                                    ActionButton.builder(Component.text("Confirm Purchase"))
+                                    ActionButton.builder(Mini.parse(tl.purchasePage().getConfirmButton()))
                                             .action(DialogAction.customClick((r, aud) ->
                                                     aud.showDialog(this.makePurchase(aud, upgrade, lvl + 1)), OPT))
                                             .build()
                             ),
-                            ActionButton.builder(Component.text("Return to upgrade info"))
-                                    .action(DialogAction.customClick((r, aud) ->
-                                            aud.showDialog(this.upgradeMenu(aud, upgrade)), OPT))
-                                    .build(),
+                            this.returnToUpgrade(upgrade),
                             2
                     )));
         } else {
-            return Dialog.create(b -> b.empty()
-                    .base(DialogBase.builder(Component.text("Cannot afford next upgrade level!"))
-                            .body(List.of()).build())
-                    .type(DialogType.notice(ActionButton.builder(Component.text("Return to upgrade info"))
-                            .action(DialogAction.customClick((r, aud) ->
-                                    aud.showDialog(this.upgradeMenu(aud, upgrade)), OPT))
-                            .build())));
+            return this.cannotAfford(upgrade);
         }
     }
 
@@ -227,14 +229,13 @@ public class CmdUpgrades implements Cmd {
             return this.noLongerInFaction();
         }
 
+        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+
         if (newLvl != (1 + faction.upgradeLevel(upgrade))) {
             return Dialog.create(b -> b.empty()
-                    .base(DialogBase.builder(Component.text("Upgrade changed level while you were in the menu!"))
-                            .body(List.of()).build())
-                    .type(DialogType.notice(ActionButton.builder(Component.text("Return to upgrade info"))
-                            .action(DialogAction.customClick((r, aud) ->
-                                    aud.showDialog(this.upgradeMenu(aud, upgrade)), OPT))
-                            .build())));
+                    .base(DialogBase.builder(Mini.parse(tl.noLongerSameLevel().getTitle()))
+                            .body(this.body(tl.noLongerSameLevel().getBody())).build())
+                    .type(DialogType.notice(this.returnToUpgrade(upgrade))));
         }
 
         UpgradeSettings settings = Universe.universe().upgradeSettings(upgrade);
@@ -251,29 +252,45 @@ public class CmdUpgrades implements Cmd {
         if (Econ.modifyMoney(purchaser, -cost)) {
             faction.upgradeLevel(upgrade, newLvl);
             return Dialog.create(b -> b.empty()
-                    .base(DialogBase.builder(Component.text("Upgrade purchased!"))
-                            .body(List.of()).build())
-                    .type(DialogType.notice(ActionButton.builder(Component.text("Return to upgrade info"))
-                            .action(DialogAction.customClick((r, aud) ->
-                                    aud.showDialog(this.upgradeMenu(aud, upgrade)), OPT))
-                            .build())));
+                    .base(DialogBase.builder(Mini.parse(tl.purchaseComplete().getTitle()))
+                            .body(this.body(tl.purchaseComplete().getBody())).build())
+                    .type(DialogType.notice(this.returnToUpgrade(upgrade))));
         } else {
-            return Dialog.create(b -> b.empty()
-                    .base(DialogBase.builder(Component.text("Cannot afford next upgrade level!"))
-                            .body(List.of()).build())
-                    .type(DialogType.notice(ActionButton.builder(Component.text("Return to upgrade info"))
-                            .action(DialogAction.customClick((r, aud) ->
-                                    aud.showDialog(this.upgradeMenu(aud, upgrade)), OPT))
-                            .build())));
+            return this.cannotAfford(upgrade);
         }
     }
 
     private Dialog noLongerInFaction() {
+        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper().noLongerInFaction();
         return Dialog.create(b -> b.empty()
-                .base(DialogBase.builder(Component.text("Access Denied"))
-                        .body(List.of(
-                                DialogBody.plainMessage(Component.text("You are no longer in a faction."))
-                        )).build())
+                .base(DialogBase.builder(Mini.parse(tl.getTitle()))
+                        .body(this.body(tl.getBody())).build())
                 .type(DialogType.notice()));
+    }
+
+    private Dialog cannotAfford(Upgrade upgrade) {
+        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+        return Dialog.create(b -> b.empty()
+                .base(DialogBase.builder(Mini.parse(tl.cannotAfford().getTitle()))
+                        .body(this.body(tl.cannotAfford().getBody())).build())
+                .type(DialogType.notice(this.returnToUpgrade(upgrade))));
+    }
+
+    private ActionButton returnToUpgrade(Upgrade upgrade) {
+        return ActionButton.builder(Mini.parse(FactionsPlugin.instance().tl().commands().upgrades().paper().general().getReturnToInfo()))
+                .action(DialogAction.customClick((r, aud) ->
+                        aud.showDialog(this.upgradeMenu(aud, upgrade)), OPT))
+                .build();
+    }
+
+    private ActionButton returnToList() {
+        return ActionButton.builder(Mini.parse(FactionsPlugin.instance().tl().commands().upgrades().paper().general().getReturnToList()))
+                .action(DialogAction.customClick((r, aud) ->
+                        aud.showDialog(this.mainMenu(aud)), OPT))
+                .build();
+    }
+
+    private List<DialogBody> body(List<String> body, TagResolver... tagResolvers) {
+        return List.of(DialogBody.plainMessage(Mini.parse(body, tagResolvers), 400));
     }
 }
