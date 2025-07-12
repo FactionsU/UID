@@ -1,14 +1,17 @@
 name: FactionsUUID
 version: ${version}
 main: dev.kitteh.factions.plugin.FactionsPluginSpigot
-authors: [mbaxter, drtshock, dariasc, Brett Flannigan, Olof Larsson]
-softdepend: [LuckPerms, WorldGuard]
+authors: [Matt Baxter, Olof Larsson, Brett Flannigan, Trent Hensler, various other contributors over more than a dozen years]
 api-version: '${apiversion}'
 website: https://www.spigotmc.org/resources/factionsuuid.1035/
+
 libraries:
   - "net.kyori:adventure-text-minimessage:${adv}"
   - "net.kyori:adventure-text-serializer-gson:${adv}"
   - "net.kyori:adventure-text-serializer-legacy:${adv}"
+
+softdepend: [LuckPerms, WorldGuard]
+
 permissions:
   factions.kit.admin:
     description: All faction permissions.
