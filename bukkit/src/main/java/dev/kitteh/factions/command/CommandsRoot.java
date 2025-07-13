@@ -185,6 +185,9 @@ public class CommandsRoot {
                         .handler(context -> help.queryCommands(context.get("query"), context.sender()))
         );
 
+        manager.command(builder.handler(context -> help.queryCommands("", context.sender())));
+        manager.command(builderAdmin.handler(context -> help.queryCommands("", context.sender())));
+
         registry = null; // Last step!
         adminRegistry = null;
         commandManager = null;
