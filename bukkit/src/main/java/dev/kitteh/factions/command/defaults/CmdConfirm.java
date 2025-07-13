@@ -17,7 +17,8 @@ import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import java.util.function.Consumer;
 
 @NullMarked
@@ -43,8 +44,8 @@ public class CmdConfirm implements Cmd {
     }
 
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             var confirm = FactionsPlugin.instance().tl().commands().confirm();
             manager.command(
                     builder.literal(confirm.getFirstAlias(), confirm.getSecondaryAliases())

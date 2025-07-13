@@ -9,18 +9,19 @@ import dev.kitteh.factions.command.defaults.list.CmdListInvites;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdList implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             Command.Builder<Sender> listBuilder = builder.literal("list");
 
-            new CmdListBans().consumer().accept(manager, listBuilder);
-            new CmdListClaims().consumer().accept(manager, listBuilder);
-            new CmdListFactions().consumer().accept(manager, listBuilder);
-            new CmdListInvites().consumer().accept(manager, listBuilder);
+            new CmdListBans().consumer().accept(manager, listBuilder, help);
+            new CmdListClaims().consumer().accept(manager, listBuilder, help);
+            new CmdListFactions().consumer().accept(manager, listBuilder, help);
+            new CmdListInvites().consumer().accept(manager, listBuilder, help);
         };
     }
 }

@@ -21,12 +21,13 @@ import org.incendo.cloud.parser.standard.IntegerParser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdTNTWithdraw implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> manager.command(
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> manager.command(
                 builder.literal("withdraw")
                         .commandDescription(Cloudy.desc(TL.COMMAND_TNT_WITHDRAW_DESCRIPTION))
                         .permission(

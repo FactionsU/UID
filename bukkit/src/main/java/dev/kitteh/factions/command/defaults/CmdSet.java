@@ -18,26 +18,27 @@ import dev.kitteh.factions.command.defaults.set.CmdSetWarpProperty;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdSet implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             var setConf = FactionsPlugin.instance().tl().commands().set();
             Command.Builder<Sender> setBuilder = builder.literal(setConf.getFirstAlias(), setConf.getSecondaryAliases()).permission(builder.commandPermission().and(Cloudy.hasFaction()));
 
-            new CmdSetBoom().consumer().accept(manager, setBuilder);
-            new CmdSetDefaultRole().consumer().accept(manager, setBuilder);
-            new CmdSetDescription().consumer().accept(manager, setBuilder);
-            new CmdSetHome().consumer().accept(manager, setBuilder);
-            new CmdSetLink().consumer().accept(manager, setBuilder);
-            new CmdSetOpen().consumer().accept(manager, setBuilder);
-            new CmdSetPerm().consumer().accept(manager, setBuilder);
-            new CmdSetTag().consumer().accept(manager, setBuilder);
-            new CmdSetTitle().consumer().accept(manager, setBuilder);
-            new CmdSetWarp().consumer().accept(manager, setBuilder);
-            new CmdSetWarpProperty().consumer().accept(manager, setBuilder);
+            new CmdSetBoom().consumer().accept(manager, setBuilder, help);
+            new CmdSetDefaultRole().consumer().accept(manager, setBuilder, help);
+            new CmdSetDescription().consumer().accept(manager, setBuilder, help);
+            new CmdSetHome().consumer().accept(manager, setBuilder, help);
+            new CmdSetLink().consumer().accept(manager, setBuilder, help);
+            new CmdSetOpen().consumer().accept(manager, setBuilder, help);
+            new CmdSetPerm().consumer().accept(manager, setBuilder, help);
+            new CmdSetTag().consumer().accept(manager, setBuilder, help);
+            new CmdSetTitle().consumer().accept(manager, setBuilder, help);
+            new CmdSetWarp().consumer().accept(manager, setBuilder, help);
+            new CmdSetWarpProperty().consumer().accept(manager, setBuilder, help);
         };
     }
 }

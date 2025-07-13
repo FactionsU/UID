@@ -23,12 +23,13 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdClaim implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> manager.command(
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> manager.command(
                 builder.literal("claim")
                         .commandDescription(Cloudy.desc(TL.COMMAND_CLAIM_DESCRIPTION))
                         .permission(

@@ -68,7 +68,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -82,7 +83,7 @@ public class CommandsRoot {
         AbstractFactionsPlugin.instance().addCommands(CommandsRoot::registerInternal, CommandsRoot::registerAdminInternal, CommandsRoot::setCommandManagerSupplier);
     }
 
-    private record Register(BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer,
+    private record Register(TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer,
                             Plugin providingPlugin, String command) {
     }
 
@@ -94,15 +95,15 @@ public class CommandsRoot {
         CommandsRoot.commandManager = commandManagerSupplier;
     }
 
-    static void register(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
+    static void register(Plugin providingPlugin, String command, TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer) {
         reg(providingPlugin, command, consumer, registry, false);
     }
 
-    static void registerAdmin(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
+    static void registerAdmin(Plugin providingPlugin, String command, TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer) {
         reg(providingPlugin, command, consumer, adminRegistry, true);
     }
 
-    private static void reg(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer, @Nullable Map<String, Register> adminRegistry, boolean admin) {
+    private static void reg(Plugin providingPlugin, String command, TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer, @Nullable Map<String, Register> adminRegistry, boolean admin) {
         if (adminRegistry == null) {
             throw new IllegalStateException("Registration closed");
         }
@@ -139,12 +140,18 @@ public class CommandsRoot {
 
         manager.captionRegistry().registerProvider(new Captioner());
 
+        MinecraftHelp<Sender> help = MinecraftHelp.<Sender>builder()
+                .commandManager(manager)
+                .audienceProvider(LilAudience::new)
+                .commandPrefix("/f help")
+                .build();
+
         var main = plugin.tl().commands().generic().getCommandRoot();
         Command.Builder<Sender> builder = manager.commandBuilder(main.getFirstAlias(), main.getSecondaryAliases())
                 .permission(Cloudy.predicate(sender -> WorldUtil.isEnabled(sender.sender())));
         registry.values().forEach(reg -> {
             try {
-                reg.consumer.accept(manager, builder);
+                reg.consumer.accept(manager, builder, help);
             } catch (Exception e) {
                 plugin.getLogger().log(Level.SEVERE, "Failed to register command '" + reg.command + "' from plugin '" + reg.providingPlugin.getName() + "'", e);
             }
@@ -155,17 +162,11 @@ public class CommandsRoot {
                 .permission(Cloudy.predicate(sender -> WorldUtil.isEnabled(sender.sender())));
         adminRegistry.values().forEach(reg -> {
             try {
-                reg.consumer.accept(manager, builderAdmin);
+                reg.consumer.accept(manager, builderAdmin, help);
             } catch (Exception e) {
                 plugin.getLogger().log(Level.SEVERE, "Failed to register admin command '" + reg.command + "' from plugin '" + reg.providingPlugin.getName() + "'", e);
             }
         });
-
-        MinecraftHelp<Sender> help = MinecraftHelp.<Sender>builder()
-                .commandManager(manager)
-                .audienceProvider(LilAudience::new)
-                .commandPrefix("/f help")
-                .build();
 
         manager.command(
                 builder.literal("help")

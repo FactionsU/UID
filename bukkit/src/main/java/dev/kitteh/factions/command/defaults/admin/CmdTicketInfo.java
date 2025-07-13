@@ -39,7 +39,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import java.util.logging.Level;
 import java.util.zip.GZIPOutputStream;
 
@@ -51,8 +52,8 @@ public class CmdTicketInfo implements Cmd {
     }
 
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> manager.command(
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> manager.command(
                 builder.literal("bypass")
                         .commandDescription(Cloudy.desc(TL.COMMAND_TICKETINFO_DESCRIPTION))
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DEBUG)))

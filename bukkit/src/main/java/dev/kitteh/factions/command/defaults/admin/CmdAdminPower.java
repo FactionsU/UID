@@ -12,19 +12,20 @@ import dev.kitteh.factions.landraidcontrol.PowerControl;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdAdminPower implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             Command.Builder<Sender> powerBuilder = builder.literal("power")
                     .permission(builder.commandPermission().and(Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof PowerControl)));
 
-            new CmdPowerBoost().consumer().accept(manager, powerBuilder);
-            new CmdModifyPower().consumer().accept(manager, powerBuilder);
-            new CmdPermanentPower().consumer().accept(manager, powerBuilder);
-            new CmdSetPower().consumer().accept(manager, powerBuilder);
+            new CmdPowerBoost().consumer().accept(manager, powerBuilder, help);
+            new CmdModifyPower().consumer().accept(manager, powerBuilder, help);
+            new CmdPermanentPower().consumer().accept(manager, powerBuilder, help);
+            new CmdSetPower().consumer().accept(manager, powerBuilder, help);
         };
     }
 }

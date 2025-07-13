@@ -18,12 +18,13 @@ import org.incendo.cloud.context.CommandContext;
 
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdShield implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             Command.Builder<Sender> shield = builder.literal("shield")
                     .commandDescription(Cloudy.desc(TL.COMMAND_SHIELD_DESCRIPTION))
                     .permission(builder.commandPermission()

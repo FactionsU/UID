@@ -8,17 +8,18 @@ import dev.kitteh.factions.command.defaults.admin.force.CmdForceKick;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdAdminForce implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             Command.Builder<Sender> forceBuilder = builder.literal("force");
 
-            new CmdForceKick().consumer().accept(manager, forceBuilder);
-            new CmdForceDisband().consumer().accept(manager, forceBuilder);
-            new CmdForceHome().consumer().accept(manager, forceBuilder);
+            new CmdForceKick().consumer().accept(manager, forceBuilder, help);
+            new CmdForceDisband().consumer().accept(manager, forceBuilder, help);
+            new CmdForceHome().consumer().accept(manager, forceBuilder, help);
         };
     }
 }

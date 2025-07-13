@@ -12,19 +12,20 @@ import dev.kitteh.factions.integration.Econ;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdMoney implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             Command.Builder<Sender> moneyBuilder = builder.literal("money")
                     .permission(builder.commandPermission().and(Cloudy.predicate(s -> Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled())));
 
-            new CmdMoneyBalance().consumer().accept(manager, moneyBuilder);
-            new CmdMoneyDeposit().consumer().accept(manager, moneyBuilder);
-            new CmdMoneySend().consumer().accept(manager, moneyBuilder);
-            new CmdMoneyWithdraw().consumer().accept(manager, moneyBuilder);
+            new CmdMoneyBalance().consumer().accept(manager, moneyBuilder, help);
+            new CmdMoneyDeposit().consumer().accept(manager, moneyBuilder, help);
+            new CmdMoneySend().consumer().accept(manager, moneyBuilder, help);
+            new CmdMoneyWithdraw().consumer().accept(manager, moneyBuilder, help);
         };
     }
 }

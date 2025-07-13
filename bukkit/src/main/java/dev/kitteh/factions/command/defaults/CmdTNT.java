@@ -14,12 +14,13 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdTNT implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             Command.Builder<Sender> tntBuilder = builder.literal("tnt")
                     .commandDescription(Cloudy.desc(TL.COMMAND_TNT_INFO_DESCRIPTION))
                     .permission(builder.commandPermission().and(Cloudy.hasFaction().and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().commands().tnt().isEnable()))));
@@ -27,10 +28,10 @@ public class CmdTNT implements Cmd {
             manager.command(tntBuilder.permission(tntBuilder.commandPermission().and(Cloudy.hasPermission(Permission.TNT_INFO))).handler(this::handle));
             manager.command(tntBuilder.literal("info").permission(tntBuilder.commandPermission().and(Cloudy.hasPermission(Permission.TNT_INFO))).handler(this::handle));
 
-            new CmdTNTDeposit().consumer().accept(manager, tntBuilder);
-            new CmdTNTFill().consumer().accept(manager, tntBuilder);
-            new CmdTNTSiphon().consumer().accept(manager, tntBuilder);
-            new CmdTNTWithdraw().consumer().accept(manager, tntBuilder);
+            new CmdTNTDeposit().consumer().accept(manager, tntBuilder, help);
+            new CmdTNTFill().consumer().accept(manager, tntBuilder, help);
+            new CmdTNTSiphon().consumer().accept(manager, tntBuilder, help);
+            new CmdTNTWithdraw().consumer().accept(manager, tntBuilder, help);
         };
     }
 

@@ -36,16 +36,17 @@ import org.incendo.cloud.context.CommandContext;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 @SuppressWarnings("UnstableApiUsage")
 public class CmdUpgrades implements Cmd {
     private static final ClickCallback.Options OPT = ClickCallback.Options.builder().build();
 
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         var tl = FactionsPlugin.instance().tl().commands().upgrades();
-        return (manager, builder) -> manager.command(
+        return (manager, builder, help) -> manager.command(
                 builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.UPGRADES).and(Cloudy.hasFaction())))
                         .commandDescription(Cloudy.desc(TL.COMMAND_UPGRADES_DESCRIPTION))

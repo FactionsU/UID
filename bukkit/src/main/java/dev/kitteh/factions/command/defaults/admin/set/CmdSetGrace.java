@@ -13,12 +13,13 @@ import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.parser.standard.DurationParser;
 
 import java.time.Duration;
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdSetGrace implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             Command.Builder<Sender> graceBuilder = builder.literal("grace")
                     .commandDescription(Cloudy.desc(TL.COMMAND_SET_GRACE_DESCRIPTION))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.GRACE_SET)));

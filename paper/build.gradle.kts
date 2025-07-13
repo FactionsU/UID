@@ -16,6 +16,7 @@ dependencies {
   }
   compileOnly(libs.paper)
   compileOnly(libs.cloud.paper)
+  compileOnly(libs.cloud.extras)
 }
 
 tasks.runServer {

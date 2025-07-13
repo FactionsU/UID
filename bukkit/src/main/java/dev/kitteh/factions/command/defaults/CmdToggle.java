@@ -10,17 +10,18 @@ import dev.kitteh.factions.command.defaults.toggle.CmdToggleSeeChunk;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdToggle implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             Command.Builder<Sender> toggleBuilder = builder.literal("toggle").permission(builder.commandPermission().and(Cloudy.hasFaction()));
-            new CmdToggleChat().consumer().accept(manager, toggleBuilder);
-            new CmdToggleSeeChunk().consumer().accept(manager, toggleBuilder);
-            new CmdToggleLogins().consumer().accept(manager, toggleBuilder);
-            new CmdToggleScoreboard().consumer().accept(manager, toggleBuilder);
+            new CmdToggleChat().consumer().accept(manager, toggleBuilder, help);
+            new CmdToggleSeeChunk().consumer().accept(manager, toggleBuilder, help);
+            new CmdToggleLogins().consumer().accept(manager, toggleBuilder, help);
+            new CmdToggleScoreboard().consumer().accept(manager, toggleBuilder, help);
         };
     }
 }

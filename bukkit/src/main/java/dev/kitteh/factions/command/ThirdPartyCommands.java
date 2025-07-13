@@ -1,11 +1,11 @@
 package dev.kitteh.factions.command;
 
+import dev.kitteh.factions.util.TriConsumer;
 import org.bukkit.plugin.Plugin;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.function.BiConsumer;
 
 /**
  * For the registry of /f and /fa commands from other plugins.
@@ -26,7 +26,7 @@ public final class ThirdPartyCommands {
      * @throws IllegalArgumentException for not using your plugin
      * @throws IllegalStateException    if attempting after registration has closed
      */
-    public static void register(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
+    public static void register(Plugin providingPlugin, String command, TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer) {
         CommandsRoot.register(providingPlugin, command, consumer);
     }
 
@@ -40,7 +40,7 @@ public final class ThirdPartyCommands {
      * @throws IllegalArgumentException for not using your plugin
      * @throws IllegalStateException    if attempting after registration has closed
      */
-    public static void registerAdmin(Plugin providingPlugin, String command, BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer) {
+    public static void registerAdmin(Plugin providingPlugin, String command, TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer) {
         CommandsRoot.registerAdmin(providingPlugin, command, consumer);
     }
 }

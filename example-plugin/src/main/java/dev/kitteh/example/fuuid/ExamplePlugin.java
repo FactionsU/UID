@@ -90,7 +90,7 @@ public final class ExamplePlugin extends JavaPlugin implements Listener {
         ThirdPartyCommands.register(
                 this, // registering plugin
                 "meow", // command name, really just used for logging issues
-                (manager, builder) ->
+                (manager, builder, help) ->
                         manager.command( // manager#command registers the command as defined below
                                 builder.literal("meow", "purr") // Actual command name and aliases
                                         .commandDescription(Description.of("Meow meow meow")) // Command description for help command

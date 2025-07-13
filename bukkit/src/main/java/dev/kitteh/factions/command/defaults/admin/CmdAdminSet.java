@@ -6,21 +6,21 @@ import dev.kitteh.factions.command.defaults.admin.set.*;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdAdminSet implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             Command.Builder<Sender> setBuilder = builder.literal("set");
 
-            new CmdSetAutoSave().consumer().accept(manager, setBuilder);
-            new CmdSetGrace().consumer().accept(manager, setBuilder);
-            new CmdSetPeaceful().consumer().accept(manager, setBuilder);
-            new CmdSetPermanent().consumer().accept(manager, setBuilder);
-            new CmdSetTag().consumer().accept(manager, setBuilder);
-
-            new CmdSetMaxVaults().consumer().accept(manager, setBuilder);
+            new CmdSetAutoSave().consumer().accept(manager, setBuilder, help);
+            new CmdSetGrace().consumer().accept(manager, setBuilder, help);
+            new CmdSetPeaceful().consumer().accept(manager, setBuilder, help);
+            new CmdSetPermanent().consumer().accept(manager, setBuilder, help);
+            new CmdSetTag().consumer().accept(manager, setBuilder, help);
+            new CmdSetMaxVaults().consumer().accept(manager, setBuilder, help);
         };
     }
 }

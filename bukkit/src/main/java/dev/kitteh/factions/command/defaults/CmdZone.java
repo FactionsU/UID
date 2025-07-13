@@ -23,12 +23,13 @@ import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.BlockingSuggestionProvider;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 
-import java.util.function.BiConsumer;
+import dev.kitteh.factions.util.TriConsumer;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdZone implements Cmd {
     @Override
-    public BiConsumer<CommandManager<Sender>, Command.Builder<Sender>> consumer() {
-        return (manager, builder) -> {
+    public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
+        return (manager, builder, help) -> {
             var tl = FactionsPlugin.instance().tl().commands().zone();
             Command.Builder<Sender> zoneBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(TL.COMMAND_ZONE_DESCRIPTION))
@@ -96,7 +97,7 @@ public class CmdZone implements Cmd {
                 }
                 zone.permissions().clear();
                 return true;
-            }).consumer().accept(manager, zoneBuilder.literal(tl.set().getFirstAlias(), tl.set().getSecondaryAliases()).required("zone", StringParser.stringParser(), SuggestionProvider.blockingStrings(zoneSuggester)));
+            }).consumer().accept(manager, zoneBuilder.literal(tl.set().getFirstAlias(), tl.set().getSecondaryAliases()).required("zone", StringParser.stringParser(), SuggestionProvider.blockingStrings(zoneSuggester)), help);
         };
     }
 
