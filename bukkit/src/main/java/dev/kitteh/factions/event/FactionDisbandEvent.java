@@ -4,6 +4,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import org.bukkit.event.Cancellable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Event called when a faction is disbanded.
@@ -11,13 +12,14 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class FactionDisbandEvent extends FactionEvent implements Cancellable {
     private boolean cancelled = false;
-    private final FPlayer sender;
+    private final @Nullable FPlayer sender;
 
-    public FactionDisbandEvent(FPlayer sender, Faction faction) {
+    public FactionDisbandEvent(@Nullable FPlayer sender, Faction faction) {
         super(faction);
         this.sender = sender;
     }
 
+    @Nullable
     public FPlayer getFPlayer() {
         return this.sender;
     }

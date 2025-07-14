@@ -37,29 +37,28 @@ public class CmdForceDisband implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = context.get("faction");
-        this.doIt(sender, faction, false);
+        this.doIt(context.sender(), faction, false);
     }
 
-    private void doIt(FPlayer sender, Faction faction, boolean confirmed) {
+    private void doIt(Sender sender, Faction faction, boolean confirmed) {
         if (!faction.isNormal()) {
-            sender.msgLegacy(TL.COMMAND_DISBAND_IMMUTABLE);
+            sender.msg(TL.COMMAND_DISBAND_IMMUTABLE);
             return;
         }
 
         if (faction.isPermanent()) {
-            sender.msgLegacy(TL.COMMAND_DISBAND_MARKEDPERMANENT);
+            sender.msg(TL.COMMAND_DISBAND_MARKEDPERMANENT);
             return;
         }
 
-        if (!confirmed) {
-            String conf = CmdConfirm.add(sender, s -> this.doIt(s, faction, true));
-            sender.msgLegacy(TL.COMMAND_DISBAND_CONFIRM, faction.tag(), conf);
+        if (!confirmed && sender.fPlayerOrNull() instanceof FPlayer fp) {
+            String conf = CmdConfirm.add(fp, s -> this.doIt(sender, faction, true));
+            sender.msg(TL.COMMAND_DISBAND_CONFIRM, faction.tag(), conf);
             return;
         }
 
-        FactionDisbandEvent disbandEvent = new FactionDisbandEvent(sender, faction);
+        FactionDisbandEvent disbandEvent = new FactionDisbandEvent(sender.fPlayerOrNull(), faction);
         Bukkit.getServer().getPluginManager().callEvent(disbandEvent);
         if (disbandEvent.isCancelled()) {
             return;
@@ -70,9 +69,11 @@ public class CmdForceDisband implements Cmd {
             Bukkit.getServer().getPluginManager().callEvent(new FPlayerLeaveEvent(fplayer, faction, FPlayerLeaveEvent.Reason.DISBAND));
         }
 
+        String nameForLog = sender.fPlayerOrNull() instanceof FPlayer fp ? fp.name() : "Console";
+
         // Inform all players
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-            String who = sender.describeToLegacy(fplayer);
+            String who = sender.fPlayerOrNull() instanceof FPlayer fp ? fp.describeToLegacy(fplayer): TL.GENERIC_SERVERADMIN.toString();
             if (fplayer.faction() == faction) {
                 fplayer.msgLegacy(TL.COMMAND_DISBAND_BROADCAST_YOURS, who);
             } else {
@@ -80,7 +81,7 @@ public class CmdForceDisband implements Cmd {
             }
         }
         if (FactionsPlugin.instance().conf().logging().isFactionDisband()) {
-            AbstractFactionsPlugin.instance().log("The faction " + faction.tag() + " (" + faction.id() + ") was disbanded by " + sender.name() + ".");
+            AbstractFactionsPlugin.instance().log("The faction " + faction.tag() + " (" + faction.id() + ") was disbanded by " + nameForLog + ".");
         }
 
         if (Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled()) {
@@ -88,10 +89,14 @@ public class CmdForceDisband implements Cmd {
             double amount = Econ.getBalance(faction);
 
             if (amount > 0.0) {
-                Econ.transferMoney(sender, faction, sender, amount, false);
-                String amountString = Econ.moneyString(amount);
-                sender.msgLegacy(TL.COMMAND_DISBAND_HOLDINGS, amountString);
-                AbstractFactionsPlugin.instance().log(sender.name() + " has been given bank holdings of " + amountString + " from disbanding " + faction.tag() + ".");
+                if (sender.fPlayerOrNull() instanceof FPlayer fp) {
+                    Econ.transferMoney(fp, faction, fp, amount, false);
+                    String amountString = Econ.moneyString(amount);
+                    fp.msgLegacy(TL.COMMAND_DISBAND_HOLDINGS, amountString);
+                    AbstractFactionsPlugin.instance().log(fp.name() + " has been given bank holdings of " + amountString + " from disbanding " + faction.tag() + ".");
+                } else {
+                    Econ.setBalance(faction, 0);
+                }
             }
         }
 
