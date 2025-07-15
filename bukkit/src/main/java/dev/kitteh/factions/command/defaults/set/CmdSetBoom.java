@@ -22,7 +22,7 @@ public class CmdSetBoom implements Cmd {
         return (manager, builder, help) -> manager.command(
                 builder.literal("explosions")
                         .commandDescription(Cloudy.desc(TL.COMMAND_BOOM_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.NO_BOOM).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.NO_BOOM).and(Cloudy.predicate(s-> s.hasFaction() && s.fPlayerOrNull().faction().isPeaceful())).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
                         .optional("state", BooleanParser.booleanParser(true))
                         .handler(this::handle)
         );

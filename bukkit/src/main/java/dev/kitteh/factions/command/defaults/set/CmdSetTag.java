@@ -27,19 +27,25 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdSetTag implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("tag")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_TAG_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TAG).and(Cloudy.isAtLeastRole(Role.ADMIN))))
-                        .required("tag", StringParser.stringParser())
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            Command.Builder<Sender> build = builder.literal("tag")
+                    .commandDescription(Cloudy.desc(TL.COMMAND_TAG_DESCRIPTION))
+                    .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TAG).and(Cloudy.isAtLeastRole(Role.ADMIN))))
+                    .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DESCRIPTION).and(Cloudy.isAtLeastRole(Role.MODERATOR))));
+
+            manager.command(
+                    build.required("new tag", StringParser.stringParser())
+                            .handler(this::handle)
+            );
+
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f set tag <new tag>", ctx.sender())));
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
-        String tag = context.get("tag");
+        String tag = context.get("new tag");
 
         if (Factions.factions().get(tag) != null) {
             sender.msgLegacy(TL.COMMAND_TAG_TAKEN);

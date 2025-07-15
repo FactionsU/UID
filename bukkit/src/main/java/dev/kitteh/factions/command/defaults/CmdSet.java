@@ -39,6 +39,8 @@ public class CmdSet implements Cmd {
             new CmdSetTitle().consumer().accept(manager, setBuilder, help);
             new CmdSetWarp().consumer().accept(manager, setBuilder, help);
             new CmdSetWarpProperty().consumer().accept(manager, setBuilder, help);
+
+            manager.command(setBuilder.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f set", ctx.sender())));
         };
     }
 }

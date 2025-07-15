@@ -20,13 +20,18 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdSetDescription implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("description")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_DESCRIPTION_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DESCRIPTION).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
-                        .required("description", StringParser.greedyStringParser())
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            Command.Builder<Sender> build = builder.literal("description")
+                    .commandDescription(Cloudy.desc(TL.COMMAND_DESCRIPTION_DESCRIPTION))
+                    .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DESCRIPTION).and(Cloudy.isAtLeastRole(Role.MODERATOR))));
+
+            manager.command(
+                    build.required("description", StringParser.greedyStringParser())
+                            .handler(this::handle)
+            );
+
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f description <description>", ctx.sender())));
+        };
     }
 
     private void handle(CommandContext<Sender> context) {

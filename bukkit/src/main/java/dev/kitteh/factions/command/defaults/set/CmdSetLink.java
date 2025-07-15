@@ -19,20 +19,24 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdSetLink implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("link")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_LINK_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LINK).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
-                        .required("link", StringParser.stringParser())
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            Command.Builder<Sender> linkBuilder = builder.literal("link")
+                    .commandDescription(Cloudy.desc(TL.COMMAND_LINK_DESCRIPTION))
+                    .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LINK).and(Cloudy.isAtLeastRole(Role.MODERATOR))));
+
+            manager.command(
+                    linkBuilder.required("url", StringParser.greedyStringParser())
+                            .handler(this::handle)
+            );
+            manager.command(linkBuilder.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f set link <url>", ctx.sender())));
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
 
-        String link = context.get("link");
+        String link = context.get("url");
 
         if (!sender.role().isAtLeast(Role.MODERATOR)) {
             sender.msgLegacy(TL.GENERIC_YOUMUSTBE, Role.MODERATOR.translation);
@@ -46,7 +50,7 @@ public class CmdSetLink implements Cmd {
 
         faction.link(link);
 
-        faction.msgLegacy(TL.COMMAND_LINK_CHANGED, sender);
+        faction.msgLegacy(TL.COMMAND_LINK_CHANGED, sender.describeToLegacy(faction));
         faction.sendMessageLegacy(link);
     }
 }

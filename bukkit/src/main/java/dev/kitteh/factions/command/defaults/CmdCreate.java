@@ -28,13 +28,18 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdCreate implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("create")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_CREATE_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.CREATE).and(Cloudy.isPlayer())))
-                        .required("tag", StringParser.stringParser())
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            Command.Builder<Sender> build = builder.literal("create")
+                    .commandDescription(Cloudy.desc(TL.COMMAND_CREATE_DESCRIPTION))
+                    .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.CREATE).and(Cloudy.isPlayer())));
+
+            manager.command(
+                    build.required("tag", StringParser.stringParser())
+                            .handler(this::handle)
+            );
+
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f create <tag>", ctx.sender())));
+        };
     }
 
     private void handle(CommandContext<Sender> context) {

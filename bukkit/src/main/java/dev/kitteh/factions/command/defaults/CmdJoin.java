@@ -8,6 +8,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerJoinEvent;
+import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
@@ -18,17 +19,23 @@ import org.incendo.cloud.context.CommandContext;
 
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.parser.standard.StringParser;
 
 public class CmdJoin implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("join")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_JOIN_DESCRIPTION))
-                        .required("faction", FactionParser.of())
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.JOIN).and(Cloudy.isPlayer())))
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            Command.Builder<Sender> build = builder.literal("join")
+                    .commandDescription(Cloudy.desc(TL.COMMAND_JOIN_DESCRIPTION))
+                    .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.JOIN).and(Cloudy.isPlayer())));
+
+            manager.command(
+                    build.required("faction", FactionParser.of())
+                            .handler(this::handle)
+            );
+
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f join <faction>", ctx.sender())));
+        };
     }
 
     private void handle(CommandContext<Sender> context) {

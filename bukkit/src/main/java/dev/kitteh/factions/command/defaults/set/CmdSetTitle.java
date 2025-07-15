@@ -23,14 +23,19 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdSetTitle implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("title")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_TITLE_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TITLE).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
-                        .required("player", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION))
-                        .optional("title", StringParser.greedyStringParser())
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            Command.Builder<Sender> build = builder.literal("title")
+                    .commandDescription(Cloudy.desc(TL.COMMAND_TITLE_DESCRIPTION))
+                    .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TITLE).and(Cloudy.isAtLeastRole(Role.MODERATOR))));
+
+            manager.command(
+                    build.required("player", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION))
+                            .optional("title", StringParser.greedyStringParser())
+                            .handler(this::handle)
+            );
+
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f set title <player> [title]", ctx.sender())));
+        };
     }
 
     private void handle(CommandContext<Sender> context) {

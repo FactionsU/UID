@@ -22,6 +22,8 @@ public class CmdToggle implements Cmd {
             new CmdToggleSeeChunk().consumer().accept(manager, toggleBuilder, help);
             new CmdToggleLogins().consumer().accept(manager, toggleBuilder, help);
             new CmdToggleScoreboard().consumer().accept(manager, toggleBuilder, help);
+
+            manager.command(toggleBuilder.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f toggle", ctx.sender())));
         };
     }
 }

@@ -144,6 +144,7 @@ public class CommandsRoot {
                 .commandManager(manager)
                 .audienceProvider(LilAudience::new)
                 .commandPrefix("/f help")
+                .commandFilter(command -> !command.commandMeta().contains(Cmd.HIDE_IN_HELP))
                 .build();
 
         var main = plugin.tl().commands().generic().getCommandRoot();
