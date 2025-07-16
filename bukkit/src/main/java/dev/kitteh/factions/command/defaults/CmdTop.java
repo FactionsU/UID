@@ -5,6 +5,7 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
+import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.defaults.top.FTopBalanceValue;
 import dev.kitteh.factions.command.defaults.top.FTopFacValPair;
@@ -13,6 +14,7 @@ import dev.kitteh.factions.command.defaults.top.FTopGTIntValue;
 import dev.kitteh.factions.command.defaults.top.FTopValue;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
+import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import org.incendo.cloud.Command;
@@ -33,14 +35,18 @@ import java.util.function.Function;
 public class CmdTop implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("top")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_TOP_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TOP)))
-                        .required("criteria", StringParser.stringParser(), SuggestionProvider.suggestingStrings(topValueGenerators.keySet()))
-                        .optional("page", IntegerParser.integerParser(1))
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            Command.Builder<Sender> build = builder.literal("top")
+                    .commandDescription(Cloudy.desc(TL.COMMAND_TOP_DESCRIPTION))
+                    .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TOP)));
+
+            manager.command(
+                    build.required("criteria", StringParser.stringParser(), SuggestionProvider.suggestingStrings(topValueGenerators.keySet()))
+                            .optional("page", IntegerParser.integerParser(1))
+                            .handler(this::handle)
+            );
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f top <criteria>", ctx.sender())));
+        };
     }
 
     private static final Map<String, Function<Faction, FTopValue<?>>> topValueGenerators = new HashMap<>();

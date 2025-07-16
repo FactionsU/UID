@@ -3,41 +3,39 @@ package dev.kitteh.factions.command.defaults;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.command.Cloudy;
-import dev.kitteh.factions.command.Cmd;
-import dev.kitteh.factions.command.FactionParser;
-import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.command.*;
 import dev.kitteh.factions.event.FactionRelationEvent;
 import dev.kitteh.factions.event.FactionRelationWishEvent;
+import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
-import dev.kitteh.factions.util.MiscUtil;
-import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.TextUtil;
+import dev.kitteh.factions.util.*;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.description.Description;
 
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdRelation implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> relationBuilder = builder
+            Command.Builder<Sender> build = builder
                     .literal("relation")
                     .commandDescription(Description.of(TL.COMMAND_RELATIONS_DESCRIPTION.toString()))
-                    .permission(builder.commandPermission().and(Cloudy.isAtLeastRole(Role.MODERATOR)))
-                    .required("faction", FactionParser.of(FactionParser.Include.PLAYERS));
+                    .permission(builder.commandPermission().and(Cloudy.isAtLeastRole(Role.MODERATOR)));
+
+            Command.Builder<Sender> relationBuilder = build.required("faction", FactionParser.of(FactionParser.Include.PLAYERS));
 
             manager.command(relationBuilder.literal("ally").handler(ctx -> this.handleRelation(ctx, Relation.ALLY)));
             manager.command(relationBuilder.literal("true").handler(ctx -> this.handleRelation(ctx, Relation.TRUCE)));
             manager.command(relationBuilder.literal("neutral").handler(ctx -> this.handleRelation(ctx, Relation.NEUTRAL)));
             manager.command(relationBuilder.literal("enemy").handler(ctx -> this.handleRelation(ctx, Relation.ENEMY)));
+
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f relation <faction>", ctx.sender())));
         };
     }
 

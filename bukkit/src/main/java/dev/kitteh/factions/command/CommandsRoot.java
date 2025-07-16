@@ -68,8 +68,10 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -188,7 +190,7 @@ public class CommandsRoot {
         );
 
         manager.command(builder.handler(context -> help.queryCommands("", context.sender())));
-        manager.command(builderAdmin.handler(context -> help.queryCommands("", context.sender())));
+        manager.command(builderAdmin.permission(Cloudy.hasPermission("factions.kit.halfmod")).handler(context -> help.queryCommands("", context.sender())));
 
         registry = null; // Last step!
         adminRegistry = null;

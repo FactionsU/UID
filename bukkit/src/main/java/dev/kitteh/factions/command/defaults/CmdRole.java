@@ -25,10 +25,11 @@ public class CmdRole implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> roleBuilder = builder
+            Command.Builder<Sender> build = builder
                     .literal("role")
-                    .commandDescription(Description.of(TL.COMMAND_ROLE_DESCRIPTION.toString()))
-                    .required("member", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION));
+                    .commandDescription(Description.of(TL.COMMAND_ROLE_DESCRIPTION.toString()));
+
+            Command.Builder<Sender> roleBuilder = build.required("member", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION));
 
             manager.command(
                     roleBuilder.literal("promote")
@@ -71,6 +72,7 @@ public class CmdRole implements Cmd {
                             .handler(this::handleAdmin)
             );
 
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f role <member>", ctx.sender())));
         };
     }
 
@@ -100,7 +102,7 @@ public class CmdRole implements Cmd {
             sender.msgLegacy(TL.COMMAND_ROLE_WRONGFACTION);
             return;
         }
-        if (targetNewRole == null || targetNewRole == Role.ADMIN || targetNewRole.isAtLeast(sender.role())) {
+        if (target.role() == Role.ADMIN || targetNewRole == null || targetNewRole == Role.ADMIN || targetNewRole.isAtLeast(sender.role())) {
             sender.msgLegacy(TL.COMMAND_ROLE_NOT_ALLOWED);
             return;
         }

@@ -57,6 +57,12 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Chat extends AbsCommand {
+            protected Chat() {
+                super("chat");
+            }
+        }
+
         public static class Confirm extends AbsCommand {
             public Confirm() {
                 super("confirm");
@@ -862,6 +868,7 @@ public class TranslationsConfig {
 
         private Generic generic = new Generic();
 
+        private Chat chat = new Chat();
         private Confirm confirm = new Confirm();
         private Set set = new Set();
         private Permissions permissions = new Permissions();
@@ -870,6 +877,10 @@ public class TranslationsConfig {
 
         public Generic generic() {
             return generic;
+        }
+
+        public Chat chat() {
+            return chat;
         }
 
         public Confirm confirm() {

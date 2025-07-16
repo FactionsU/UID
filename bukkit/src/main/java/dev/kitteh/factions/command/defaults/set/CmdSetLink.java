@@ -20,15 +20,15 @@ public class CmdSetLink implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> linkBuilder = builder.literal("link")
+            Command.Builder<Sender> build = builder.literal("link")
                     .commandDescription(Cloudy.desc(TL.COMMAND_LINK_DESCRIPTION))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LINK).and(Cloudy.isAtLeastRole(Role.MODERATOR))));
 
             manager.command(
-                    linkBuilder.required("url", StringParser.greedyStringParser())
+                    build.required("url", StringParser.greedyStringParser())
                             .handler(this::handle)
             );
-            manager.command(linkBuilder.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f set link <url>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f set link <url>", ctx.sender())));
         };
     }
 

@@ -8,6 +8,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
@@ -22,18 +23,23 @@ import org.incendo.cloud.context.CommandContext;
 
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.parser.standard.StringParser;
 
 public class CmdInvite implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("invite")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_INVITE_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.INVITE).and(Cloudy.hasSelfFactionPerms(PermissibleActions.INVITE))))
-                        .required("player", FPlayerParser.of(FPlayerParser.Include.OTHER_FACTION))
-                        .flag(manager.flagBuilder("delete"))
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            Command.Builder<Sender> build = builder.literal("invite")
+                    .commandDescription(Cloudy.desc(TL.COMMAND_INVITE_DESCRIPTION))
+                    .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.INVITE).and(Cloudy.hasSelfFactionPerms(PermissibleActions.INVITE))));
+
+            manager.command(
+                    build.required("player", FPlayerParser.of(FPlayerParser.Include.NO_FACTION, FPlayerParser.Include.OTHER_FACTION))
+                            .flag(manager.flagBuilder("delete"))
+                            .handler(this::handle)
+            );
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f invite <player> [--delete]", ctx.sender())));
+        };
     }
 
     private void handle(CommandContext<Sender> context) {

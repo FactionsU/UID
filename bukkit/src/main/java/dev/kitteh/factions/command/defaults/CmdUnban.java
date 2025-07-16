@@ -15,17 +15,24 @@ import org.incendo.cloud.context.CommandContext;
 
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.parser.standard.IntegerParser;
+import org.incendo.cloud.parser.standard.StringParser;
+import org.incendo.cloud.suggestion.SuggestionProvider;
 
 public class CmdUnban implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("unban")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_UNBAN_DESCRIPTION))
-                        .required("player", FPlayerParser.of(FPlayerParser.Include.BANNED))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BAN).and(Cloudy.hasSelfFactionPerms(PermissibleActions.BAN))))
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            Command.Builder<Sender> build = builder.literal("unban")
+                    .commandDescription(Cloudy.desc(TL.COMMAND_UNBAN_DESCRIPTION))
+                    .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BAN).and(Cloudy.hasSelfFactionPerms(PermissibleActions.BAN))));
+
+            manager.command(
+                    build.required("player", FPlayerParser.of(FPlayerParser.Include.BANNED))
+                            .handler(this::handle)
+            );
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f unban <player>", ctx.sender())));
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
