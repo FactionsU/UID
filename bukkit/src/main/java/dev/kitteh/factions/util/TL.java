@@ -121,6 +121,11 @@ public enum TL {
     COMMAND_CLAIMFILL_NOTENOUGHLANDLEFT("%s &cdoes not have enough land left to make %d claims"),
     COMMAND_CLAIMFILL_TOOMUCHFAIL("&cAborting claim fill after %d failures"),
 
+    COMMAND_CLEAR_DESCRIPTION_BANS("Unban all from faction"),
+    COMMAND_CLEAR_DESCRIPTION_CLAIMS("Unclaim all territory"),
+    COMMAND_CLEAR_DESCRIPTION_INVITES("Revoke all invites"),
+    COMMAND_CLEAR_DESCRIPTION_WARPS("Delete all warps"),
+
     COMMAND_COLEADER_ALREADY_COLEADER("The faction already has a coleader. There can only be 1."),
 
     COMMAND_COORDS_MESSAGE("&e%s's location: &6%d&e, &6%d&e, &6%d&e in &6%s&e"),
@@ -139,6 +144,8 @@ public enum TL {
 
     COMMAND_DELFWARP_DELETED("&eDeleted warp &6%1$s"),
     COMMAND_DELFWARP_INVALID("&eCouldn't find warp &6%1$s"),
+    COMMAND_DELFWARP_CLEAR_CONFIRM("&eAre you sure you want to clear all warps? If so, run /%s"),
+    COMMAND_DELFWARP_CLEAR_SUCCESS("&eDeleted all warps"),
     COMMAND_DELFWARP_TODELETE("to delete warp"),
     COMMAND_DELFWARP_FORDELETE("for deleting warp"),
 
@@ -217,6 +224,8 @@ public enum TL {
     COMMAND_INVITE_ALREADYMEMBER("%1$s&e is already a member of %2$s"),
     COMMAND_INVITE_DESCRIPTION("Invite a player to your faction"),
     COMMAND_INVITE_BANNED("&7%1$s &cis banned from your Faction. Not sending an invite."),
+    COMMAND_INVITE_CLEAR_CONFIRM("&eAre you sure you want to clear all invites? If so, run /%s"),
+    COMMAND_INVITE_CLEAR_SUCCESS("&eDeleted all invites."),
 
     COMMAND_JOIN_SYSTEMFACTION("&cPlayers may only join normal factions. This is a system faction."),
     COMMAND_JOIN_ALREADYMEMBERFIXED("&You are already a member of %s"),
@@ -492,6 +501,8 @@ public enum TL {
     COMMAND_UNBAN_NOTBANNED("&7%s &cisn't banned. Not doing anything."),
     COMMAND_UNBAN_UNBANNED("&e%1$s &cunbanned &7%2$s"),
     COMMAND_UNBAN_TARGET("&aYou were unbanned from &r%s"),
+    COMMAND_UNBAN_CLEAR_CONFIRM("&eAre you sure you want to clear all bans? If so, run /%s"),
+    COMMAND_UNBAN_CLEAR_SUCCESS("&eAll bans removed."),
 
     COMMAND_UNCLAIM_SAFEZONE_SUCCESS("&eSafe zone was unclaimed."),
     COMMAND_UNCLAIM_SAFEZONE_NOPERM("&cThis is a safe zone. You lack permissions to unclaim."),

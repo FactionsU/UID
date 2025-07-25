@@ -5,6 +5,7 @@ import dev.kitteh.factions.command.defaults.CmdAnnounce;
 import dev.kitteh.factions.command.defaults.CmdBan;
 import dev.kitteh.factions.command.defaults.CmdChat;
 import dev.kitteh.factions.command.defaults.CmdClaim;
+import dev.kitteh.factions.command.defaults.CmdClear;
 import dev.kitteh.factions.command.defaults.CmdConfirm;
 import dev.kitteh.factions.command.defaults.CmdCoords;
 import dev.kitteh.factions.command.defaults.CmdCreate;
@@ -70,7 +71,6 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -202,6 +202,7 @@ public class CommandsRoot {
         registerInternal("ban", new CmdBan());
         registerInternal("chat", new CmdChat());
         registerInternal("claim", new CmdClaim());
+        registerInternal("clear", new CmdClear());
         registerInternal("confirm", new CmdConfirm());
         registerInternal("coords", new CmdCoords());
         registerInternal("create", new CmdCreate());

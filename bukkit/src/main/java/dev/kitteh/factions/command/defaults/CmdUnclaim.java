@@ -83,7 +83,7 @@ public class CmdUnclaim implements Cmd {
         final Faction forFaction = context.flags().get("faction") instanceof Faction fac ? fac : sender.faction(); // Default to own
 
         if (context.flags().hasFlag("all-territory")) {
-            this.unclaimAll(sender, forFaction, false);
+            unclaimAll(sender, forFaction, false);
             return;
         }
 
@@ -283,14 +283,14 @@ public class CmdUnclaim implements Cmd {
         return true;
     }
 
-    private void unclaimAll(FPlayer sender, Faction faction, boolean confirmed) {
+    public static void unclaimAll(FPlayer sender, Faction faction, boolean confirmed) {
         if (sender.role() != Role.ADMIN && !sender.adminBypass()) {
             sender.msgLegacy(TL.CLAIM_CANTUNCLAIM, faction.describeToLegacy(sender));
             return;
         }
 
         if (!confirmed) {
-            String conf = CmdConfirm.add(sender, s -> this.unclaimAll(s, faction, true));
+            String conf = CmdConfirm.add(sender, s -> unclaimAll(s, faction, true));
             sender.msgLegacy(TL.COMMAND_UNCLAIMALL_CONFIRM, faction.tag(), conf);
             return;
         }
