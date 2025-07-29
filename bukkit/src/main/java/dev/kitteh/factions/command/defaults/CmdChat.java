@@ -42,7 +42,7 @@ public class CmdChat implements Cmd {
             manager.command(roleBuilder.literal("faction").handler(ctx -> this.handle(ctx, ChatTarget.Role.ALL)));
             manager.command(roleBuilder.literal("coleader").permission(roleBuilder.commandPermission().and(Cloudy.isAtLeastRole(Role.COLEADER))).handler(ctx -> this.handle(ctx, ChatTarget.Role.COLEADER)));
             manager.command(roleBuilder.literal("mod").permission(roleBuilder.commandPermission().and(Cloudy.isAtLeastRole(Role.MODERATOR))).handler(ctx -> this.handle(ctx, ChatTarget.Role.MODERATOR)));
-            manager.command(roleBuilder.literal("normal").permission(roleBuilder.commandPermission().and(Cloudy.isAtLeastRole(Role.NORMAL))).handler(ctx -> this.handle(ctx, ChatTarget.Role.NORMAL)));
+            manager.command(roleBuilder.literal("member").permission(roleBuilder.commandPermission().and(Cloudy.isAtLeastRole(Role.NORMAL))).handler(ctx -> this.handle(ctx, ChatTarget.Role.NORMAL)));
 
             Command.Builder<Sender> relationBuilder = builder.literal("chat")
                     .commandDescription(Cloudy.desc(TL.COMMAND_CHAT_DESCRIPTION))
