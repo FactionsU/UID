@@ -17,7 +17,10 @@ import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldTracker;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongArraySet;
 import it.unimi.dsi.fastutil.longs.LongList;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
@@ -116,6 +119,12 @@ public abstract class MemoryBoard implements Board {
     @Override
     public Set<FLocation> allClaims(Faction faction) {
         return worldTrackers.values().stream().flatMap(tracker -> tracker.allClaims(faction.id()).stream()).collect(Collectors.toSet());
+    }
+
+    public LongSet allClaimsAsLongs(Faction faction, World world) {
+        WorldTracker tracker = worldTrackers.get(world.getName());
+        //noinspection ConstantValue
+        return tracker == null ? new LongArraySet() : tracker.allClaimsAsLong(faction.id());
     }
 
     public Int2ObjectMap<LongList> getAllClaimsForDynmap(World world) {
