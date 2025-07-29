@@ -2408,15 +2408,15 @@ public class MainConfig {
                 
                 Note that you should set up your per-world plugin to treat all your Factions worlds as one group/world.""")
         private String defaultWorld = "world";
-        private double costClaimWilderness = 30.0;
-        private double costClaimFromFactionBonus = 30.0;
+        private double costClaimWilderness = 0.0;
+        private double costClaimFromFactionBonus = 0.0;
         private double overclaimRewardMultiplier = 0.0;
         private double claimAdditionalMultiplier = 0.5;
         private double claimRefundMultiplier = 0.7;
         private double claimUnconnectedFee = 0.0;
-        private double costCreate = 100.0;
-        private double costSethome = 30.0;
-        private double costDelhome = 30.0;
+        private double costCreate = 0.0;
+        private double costSethome = 0.0;
+        private double costDelhome = 0.0;
         private double costJoin = 0.0;
         private double costLeave = 0.0;
         private double costKick = 0.0;
@@ -2437,7 +2437,6 @@ public class MainConfig {
         private double costEnemy = 0.0;
         private double costNeutral = 0.0;
         private double costNoBoom = 0.0;
-        // Calculate if enabled
         private double costWarp = 0.0;
         private double costSetWarp = 0.0;
         private double costDelWarp = 0.0;
