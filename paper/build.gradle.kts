@@ -2,11 +2,62 @@ plugins {
   alias(libs.plugins.indra)
   alias(libs.plugins.shadow)
   alias(libs.plugins.runPaper)
+  id("maven-publish")
 }
 
 indra {
   javaVersions {
     target(21)
+  }
+}
+
+publishing {
+  publications {
+    create<MavenPublication>("factionsuuid") {
+      artifact(tasks.shadowJar)
+      groupId = "dev.kitteh"
+      artifactId = "factions"
+      version = project.version.toString()
+      pom {
+        name = "FactionsUUID"
+        description = "Best factions plugin!"
+        licenses {
+          license {
+            name = "GNU General Public License (GPL) version 3"
+            url = "https://www.gnu.org/licenses/gpl-3.0.txt"
+          }
+        }
+        developers {
+          developer {
+            id = "mbaxter"
+            name = "Matt Baxter"
+            email = "matt@kitteh.org"
+            url = "https://www.kitteh.dev/"
+            organization = "Kitteh"
+            organizationUrl = "https://www.kitteh.dev"
+            roles = setOf("Lead Developer", "Cat Wrangler")
+          }
+        }
+        issueManagement {
+          system = "GitHub"
+          url = "https://github.com/FactionsU/UID/issues"
+        }
+        scm {
+          connection = "scm:git:git://github.com/FactionsU/UID.git"
+          developerConnection = "scm:git:git://github.com/FactionsU/UID.git"
+          url = "git@github.com:FactionsU/UID.git"
+        }
+        repositories {
+          maven {
+            name = "DependencyDownload"
+            val rel = "https://dependency.download/releases"
+            val snap = "https://dependency.download/snapshots"
+            url = uri(if (version.toString().endsWith("SNAPSHOT")) snap else rel)
+            credentials(PasswordCredentials::class)
+          }
+        }
+      }
+    }
   }
 }
 
