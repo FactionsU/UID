@@ -204,7 +204,7 @@ public class CmdUnclaim implements Cmd {
         long x = 0;
         long z = 0;
         for (FLocation currentLocation : toClaim) {
-            if (this.attemptUnclaim(sender, currentLocation, currentFaction, tracker)) {
+            if (this.attemptUnclaimForFill(sender, currentLocation, currentFaction, tracker)) {
                 tracker.successes++;
                 x += currentLocation.x();
                 z += currentLocation.z();
@@ -253,7 +253,7 @@ public class CmdUnclaim implements Cmd {
         }
     }
 
-    private boolean attemptUnclaim(FPlayer fPlayer, FLocation target, Faction targetFaction, Tracker tracker) {
+    private boolean attemptUnclaimForFill(FPlayer fPlayer, FLocation target, Faction targetFaction, Tracker tracker) {
         if (targetFaction.isSafeZone() || targetFaction.isWarZone()) {
             Board.board().unclaim(target);
             if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
