@@ -14,7 +14,7 @@ import org.bukkit.event.block.BlockGrowEvent;
 public class UpgradeListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void grow(BlockGrowEvent event) {
-        if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getBlock())) {
             return;
         }
         if (!Universe.universe().isUpgradeEnabled(Upgrades.GROWTH)) {

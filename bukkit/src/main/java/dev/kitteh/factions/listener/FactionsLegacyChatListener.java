@@ -85,7 +85,7 @@ public class FactionsLegacyChatListener implements Listener {
     // this is for handling faction/relation chat, set at low priority so Factions gets to them first
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerEarlyChat(AsyncPlayerChatEvent event) {
-        if (!WorldUtil.isEnabled(event.getPlayer().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getPlayer())) {
             return;
         }
 
@@ -104,7 +104,7 @@ public class FactionsLegacyChatListener implements Listener {
     // this is for handling insertion of the player's faction tag, set at highest priority to give other plugins a chance to modify chat first
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if (!WorldUtil.isEnabled(event.getPlayer().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getPlayer())) {
             return;
         }
 

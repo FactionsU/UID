@@ -35,7 +35,7 @@ public class PortalListener implements Listener {
             return; // Don't do anything if they don't want us to.
         }
 
-        if (!(entity instanceof Player player) || !WorldUtil.isEnabled(player.getWorld())) {
+        if (!(entity instanceof Player player) || !WorldUtil.isEnabled(player)) {
             return;
         }
 

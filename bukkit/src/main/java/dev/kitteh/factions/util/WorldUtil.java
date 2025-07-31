@@ -3,7 +3,9 @@ package dev.kitteh.factions.util;
 import dev.kitteh.factions.config.file.MainConfig;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
@@ -33,6 +35,14 @@ public class WorldUtil {
 
     public static boolean isEnabled(Location location) {
         return location.getWorld() instanceof World world && isEnabled(world.getName());
+    }
+
+    public static boolean isEnabled(Entity entity) {
+        return isEnabled(entity.getWorld());
+    }
+
+    public static boolean isEnabled(Block block) {
+        return isEnabled(block.getWorld());
     }
 
     public static boolean isEnabled(World world) {

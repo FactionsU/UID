@@ -1124,7 +1124,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public boolean isOnline() {
         Player player = this.asPlayer();
-        return player != null && WorldUtil.isEnabled(player.getWorld());
+        return player != null && WorldUtil.isEnabled(player);
     }
 
     @Override

@@ -48,7 +48,7 @@ public class FactionsBlockListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getBlock())) {
             return;
         }
 
@@ -73,7 +73,7 @@ public class FactionsBlockListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onDispense(BlockDispenseEvent event) {
-        if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getBlock())) {
             return;
         }
 
@@ -127,7 +127,7 @@ public class FactionsBlockListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockFromTo(BlockFromToEvent event) {
-        if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getBlock())) {
             return;
         }
 
@@ -161,7 +161,7 @@ public class FactionsBlockListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockForm(BlockFormEvent event) {
-        if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getBlock())) {
             return;
         }
 
@@ -174,7 +174,7 @@ public class FactionsBlockListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getBlock())) {
             return;
         }
 
@@ -190,7 +190,7 @@ public class FactionsBlockListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockDamage(BlockDamageEvent event) {
-        if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getBlock())) {
             return;
         }
 
@@ -212,7 +212,7 @@ public class FactionsBlockListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
-        if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getBlock())) {
             return;
         }
 
@@ -234,7 +234,7 @@ public class FactionsBlockListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-        if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getBlock())) {
             return;
         }
 
@@ -292,7 +292,7 @@ public class FactionsBlockListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onFrostWalker(EntityBlockFormEvent event) {
-        if (!WorldUtil.isEnabled(event.getBlock().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getBlock())) {
             return;
         }
 

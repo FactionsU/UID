@@ -1042,7 +1042,7 @@ public abstract class MemoryFaction implements Faction {
 
         for (FPlayer viewed : fplayers) {
             // Add if their online status is what we want
-            boolean on = viewed.asPlayer() instanceof Player viewedPlayer && WorldUtil.isEnabled(viewedPlayer.getWorld()) && (viewerPlayer == null || viewerPlayer.canSee(viewedPlayer));
+            boolean on = viewed.asPlayer() instanceof Player viewedPlayer && WorldUtil.isEnabled(viewedPlayer) && (viewerPlayer == null || viewerPlayer.canSee(viewedPlayer));
             if (on == online) {
                 ret.add(viewed);
             }

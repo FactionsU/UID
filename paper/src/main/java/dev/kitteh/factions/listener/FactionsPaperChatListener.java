@@ -19,7 +19,7 @@ public class FactionsPaperChatListener implements Listener {
     // relation and role chats
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onChat(AsyncChatEvent event) {
-        if (!WorldUtil.isEnabled(event.getPlayer().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getPlayer())) {
             return;
         }
 
@@ -37,7 +37,7 @@ public class FactionsPaperChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerChatLater(AsyncChatEvent event) {
-        if (!WorldUtil.isEnabled(event.getPlayer().getWorld())) {
+        if (!WorldUtil.isEnabled(event.getPlayer())) {
             return;
         }
 

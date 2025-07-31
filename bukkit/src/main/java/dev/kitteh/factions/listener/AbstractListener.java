@@ -90,7 +90,7 @@ public abstract class AbstractListener implements Listener {
     }
 
     protected void handleExplosion(Location loc, Entity boomer, Cancellable event, @SuppressWarnings("UnstableApiUsage") ExplosionResult result, List<Block> blockList) {
-        if (!WorldUtil.isEnabled(loc.getWorld())) {
+        if (!WorldUtil.isEnabled(loc)) {
             return;
         }
 
