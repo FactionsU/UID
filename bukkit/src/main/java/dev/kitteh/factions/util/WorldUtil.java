@@ -1,6 +1,7 @@
 package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.config.file.MainConfig;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,6 +29,10 @@ public class WorldUtil {
             return true;
         }
         return whitelist == worlds.contains(name);
+    }
+
+    public static boolean isEnabled(Location location) {
+        return location.getWorld() instanceof World world && isEnabled(world.getName());
     }
 
     public static boolean isEnabled(World world) {

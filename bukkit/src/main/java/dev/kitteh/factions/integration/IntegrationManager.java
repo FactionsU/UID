@@ -36,6 +36,7 @@ public class IntegrationManager implements Listener {
             }
             return false;
         }),
+        GRAVESX("GravesX", p -> Graves.init(p)),
         LUCKPERMS("LuckPerms", (plugin) -> {
             String[] version = plugin.getDescription().getVersion().split("\\.");
             boolean notSupported = true;

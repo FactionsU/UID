@@ -61,7 +61,7 @@ public class Graves {
                 return;
             }
 
-            if (!WorldUtil.isEnabled(event.getGrave().getLocationDeath().getWorld())) {
+            if (!WorldUtil.isEnabled(event.getGrave().getLocationDeath())) {
                 return;
             }
             Faction faction = Board.board().factionAt(new FLocation(event.getGrave().getLocationDeath()));
