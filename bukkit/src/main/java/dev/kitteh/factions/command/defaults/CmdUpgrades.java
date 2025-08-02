@@ -16,10 +16,10 @@ import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -82,7 +82,7 @@ public class CmdUpgrades implements Cmd {
                         }
 
                         int buyHeight = 3;
-                        ChestGui buyGui = new ChestGui(buyHeight, "Purchase " + LegacyComponentSerializer.legacySection().serialize(upgrade.nameComponent()) + "?");
+                        ChestGui buyGui = new ChestGui(buyHeight, "Purchase " + Mini.toLegacy(upgrade.nameComponent()) + "?");
                         buyGui.setOnGlobalDrag(ee -> e.setCancelled(true));
                         buyGui.setOnGlobalClick(ee -> e.setCancelled(true));
 
@@ -185,13 +185,13 @@ public class CmdUpgrades implements Cmd {
 
         ItemStack stack = new ItemStack(Material.STONE);
         ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(LegacyComponentSerializer.legacySection().serialize(upgrade.nameComponent()) + " " + (lvl < 1 || settings.maxLevel() == 1 ? "" : lvl));
+        meta.setDisplayName(Mini.toLegacy(upgrade.nameComponent()) + " " + (lvl < 1 || settings.maxLevel() == 1 ? "" : lvl));
 
         List<String> lore = new ArrayList<>();
 
-        lore.add(LegacyComponentSerializer.legacySection().serialize(upgrade.description()));
+        lore.add(Mini.toLegacy(upgrade.description()));
         if (lvl > 0) {
-            lore.add(LegacyComponentSerializer.legacySection().serialize(upgrade.details(settings, lvl)));
+            lore.add(Mini.toLegacy(upgrade.details(settings, lvl)));
         }
         lore.add(" ");
         if (lvl < settings.maxLevel()) {
@@ -201,8 +201,8 @@ public class CmdUpgrades implements Cmd {
             } else {
                 lore.add("  You lack permission to purchase upgrades");
             }
-            lore.add(LegacyComponentSerializer.legacySection().serialize(upgrade.nameComponent()) + " " + (lvl + 1));
-            lore.add(LegacyComponentSerializer.legacySection().serialize(upgrade.details(settings, lvl + 1)));
+            lore.add(Mini.toLegacy(upgrade.nameComponent()) + " " + (lvl + 1));
+            lore.add(Mini.toLegacy(upgrade.details(settings, lvl + 1)));
         } else {
             lore.add("Max level!");
         }

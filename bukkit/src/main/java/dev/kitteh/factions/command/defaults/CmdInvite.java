@@ -8,7 +8,6 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.PermissibleActions;
-import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
@@ -23,7 +22,6 @@ import org.incendo.cloud.context.CommandContext;
 
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
-import org.incendo.cloud.parser.standard.StringParser;
 
 public class CmdInvite implements Cmd {
     @Override

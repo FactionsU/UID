@@ -12,11 +12,11 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tag.FactionTag;
 import dev.kitteh.factions.tag.Tag;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.TL;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -102,7 +102,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
                 return "";
             }
             row--;
-            return ChatColor.COLOR_CHAR + mapChars.substring(row, row + 1) + LegacyComponentSerializer.legacySection().serialize(list.get(row));
+            return ChatColor.COLOR_CHAR + mapChars.substring(row, row + 1) + Mini.toLegacy(list.get(row));
         }
 
         return switch (placeholder) {

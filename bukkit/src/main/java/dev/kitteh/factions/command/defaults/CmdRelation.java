@@ -6,7 +6,6 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.*;
 import dev.kitteh.factions.event.FactionRelationEvent;
 import dev.kitteh.factions.event.FactionRelationWishEvent;
-import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;

@@ -52,7 +52,7 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     }
 
     @Override
-    public void addCommands(BiConsumer<String, Cmd> reg, BiConsumer<String, Cmd> adminReg, Consumer<Supplier<CommandManager<Sender>>> commandManager) {
+    public void addCommands(BiConsumer<String, Cmd> reg, Consumer<Supplier<CommandManager<Sender>>> commandManager) {
         reg.accept("upgrades", new CmdUpgrades());
         commandManager.accept(() ->
                 PaperCommandManager.<Sender>builder(SenderMapper.create(

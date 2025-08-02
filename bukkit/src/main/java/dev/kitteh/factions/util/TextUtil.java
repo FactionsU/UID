@@ -86,7 +86,7 @@ public class TextUtil {
     public static Component titleizeC(String string) {
         String str = MiniMessage.miniMessage().serialize(LegacyComponentSerializer.legacySection().deserialize(string));
         String center = ".[ <dark_green>" + str + "<gold> ].";
-        int centerLen = ChatColor.stripColor(LegacyComponentSerializer.legacySection().serialize(Mini.parse(center))).length();
+        int centerLen = ChatColor.stripColor(Mini.toLegacy(Mini.parse(center))).length();
         int pivot = titleizeLine.length() / 2;
         int eatLeft = (centerLen / 2) - titleizeBalance;
         int eatRight = (centerLen - eatLeft) + titleizeBalance;

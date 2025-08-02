@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 public abstract class AbstractListener implements Listener {
     public boolean playerCanInteractHere(Player player, Location location) {
         return canInteractHere(player, location);
@@ -89,7 +88,7 @@ public abstract class AbstractListener implements Listener {
         return true;
     }
 
-    protected void handleExplosion(Location loc, Entity boomer, Cancellable event, @SuppressWarnings("UnstableApiUsage") ExplosionResult result, List<Block> blockList) {
+    protected void handleExplosion(Location loc, Entity boomer, Cancellable event, ExplosionResult result, List<Block> blockList) {
         if (!WorldUtil.isEnabled(loc)) {
             return;
         }
@@ -99,7 +98,6 @@ public abstract class AbstractListener implements Listener {
             return;
         }
 
-        //noinspection UnstableApiUsage
         if (result == ExplosionResult.TRIGGER_BLOCK && boomer != null &&
                 FactionsPlugin.instance().conf().factions().protection().isTerritoryBlockWindChargeInteractionMatchingPerms() &&
                 boomer instanceof WindCharge charge && charge.getShooter() instanceof Player shooter) {

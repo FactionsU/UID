@@ -5,8 +5,8 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.scoreboard.FSidebarProvider;
+import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,7 @@ public class FDefaultSidebar extends FSidebarProvider {
                 if (mapMap == null) {
                     mapMap = ((MemoryBoard) Board.board()).getScoreboardMap(fplayer);
                 }
-                String rep = mapMap.isEmpty() ? "" : LegacyComponentSerializer.legacySection().serialize(mapMap.removeFirst());
+                String rep = mapMap.isEmpty() ? "" : Mini.toLegacy(mapMap.removeFirst());
                 if (!rep.isEmpty() && !mapC.isEmpty()) {
                     rep = "§" + mapC.charAt(0) + "§r" + rep;
                     mapC = mapC.substring(1);

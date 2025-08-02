@@ -18,14 +18,12 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdLink implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
-            manager.command(
-                    builder.literal("link")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_LINK_DESCRIPTION))
-                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LINK).and(Cloudy.hasFaction())))
-                            .handler(this::handle)
-            );
-        };
+        return (manager, builder, help) -> manager.command(
+                builder.literal("link")
+                        .commandDescription(Cloudy.desc(TL.COMMAND_LINK_DESCRIPTION))
+                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LINK).and(Cloudy.hasFaction())))
+                        .handler(this::handle)
+        );
     }
 
     private void handle(CommandContext<Sender> context) {

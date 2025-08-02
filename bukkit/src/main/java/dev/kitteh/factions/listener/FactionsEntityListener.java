@@ -174,7 +174,6 @@ public class FactionsEntityListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityExplode(EntityExplodeEvent event) {
-        //noinspection UnstableApiUsage
         this.handleExplosion(event.getLocation(), event.getEntity(), event, event.getExplosionResult(), event.blockList());
     }
 

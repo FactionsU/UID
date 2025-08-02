@@ -3,9 +3,9 @@ package dev.kitteh.factions;
 import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.WarmUpUtil;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
@@ -112,7 +112,7 @@ public interface FPlayer extends Participator, Selectable {
     void lastStoodAt(FLocation flocation);
 
     default String titleLegacy() {
-        return LegacyComponentSerializer.legacySection().serialize(this.title());
+        return Mini.toLegacy(this.title());
     }
 
     Component title();
@@ -122,13 +122,13 @@ public interface FPlayer extends Participator, Selectable {
     Component nameWithTitle();
 
     default String nameWithTitleLegacy() {
-        return LegacyComponentSerializer.legacySection().serialize(this.nameWithTitle());
+        return Mini.toLegacy(this.nameWithTitle());
     }
 
     Component nameWithTag();
 
     default String nameWithTagLegacy() {
-        return LegacyComponentSerializer.legacySection().serialize(this.nameWithTag());
+        return Mini.toLegacy(this.nameWithTag());
     }
 
     int kills();

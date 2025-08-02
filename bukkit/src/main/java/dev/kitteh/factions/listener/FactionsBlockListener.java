@@ -206,7 +206,6 @@ public class FactionsBlockListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockExplode(BlockExplodeEvent event) {
-        //noinspection UnstableApiUsage
         this.handleExplosion(event.getBlock().getLocation(), null, event, event.getExplosionResult(), event.blockList());
     }
 

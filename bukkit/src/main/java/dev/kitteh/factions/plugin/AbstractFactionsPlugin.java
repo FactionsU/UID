@@ -963,5 +963,5 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
     public abstract CompletableFuture<Boolean> teleport(Player player, Location location);
 
-    public abstract void addCommands(BiConsumer<String, Cmd> reg, BiConsumer<String, Cmd> adminReg, Consumer<Supplier<CommandManager<Sender>>> commandManager);
+    public abstract void addCommands(BiConsumer<String, Cmd> reg, Consumer<Supplier<CommandManager<Sender>>> commandManager);
 }

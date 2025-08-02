@@ -24,7 +24,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -181,7 +180,7 @@ public class CmdSetPerm implements Cmd {
 
         ComponentBuilder<TextComponent, TextComponent.Builder> build = Component.text();
         build.append(Mini.parse(tl.add().getAvailableSelectorsIntro()));
-        ChatColor.stripColor(LegacyComponentSerializer.legacySection().serialize(build.build()));
+        ChatColor.stripColor(Mini.toLegacy(build.build()));
         int x = length(build);
 
         String commandPiece = this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + ' ';
@@ -451,7 +450,7 @@ public class CmdSetPerm implements Cmd {
     }
 
     private static int length(ComponentBuilder<TextComponent, TextComponent.Builder> builder) {
-        return ChatColor.stripColor(LegacyComponentSerializer.legacySection().serialize(builder.build())).length();
+        return ChatColor.stripColor(Mini.toLegacy(builder.build())).length();
     }
 
     private void listSelectors(CommandContext<Sender> context, Faction faction, Sender sender, Faction.Permissions permissions, TranslationsConfig.Commands.Permissions tl) {

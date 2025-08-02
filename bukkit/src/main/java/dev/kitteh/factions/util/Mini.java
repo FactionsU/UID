@@ -50,7 +50,7 @@ public class Mini {
         return limitedMiniMessage.deserialize(input, tagResolvers);
     }
 
-    public static String legacy(ComponentLike componentLike) {
+    public static String toLegacy(ComponentLike componentLike) {
         return LegacyComponentSerializer.legacySection().serialize(componentLike.asComponent());
     }
 }
