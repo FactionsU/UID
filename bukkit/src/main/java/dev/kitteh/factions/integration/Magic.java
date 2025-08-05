@@ -56,7 +56,7 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         if (player == null) {
             return new FLocation(block).faction().isWilderness();
         }
-        return !Protection.denyBuildOrDestroyBlock(player, block, PermissibleActions.BUILD, true);
+        return !Protection.denyBuildOrDestroyBlock(player, block, PermissibleActions.BUILD, false);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         if (player == null) {
             return new FLocation(block).faction().isWilderness();
         }
-        return !Protection.denyBuildOrDestroyBlock(player, block, PermissibleActions.DESTROY, true);
+        return !Protection.denyBuildOrDestroyBlock(player, block, PermissibleActions.DESTROY, false);
     }
 
     @Override

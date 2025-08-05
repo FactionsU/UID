@@ -63,11 +63,11 @@ public final class Protection {
         };
     }
 
-    public static boolean denyBuildOrDestroyBlock(Player player, Block block, PermissibleAction permissibleAction, boolean justCheck) {
-        return denyBuildOrDestroyBlock(player, block.getLocation(), permissibleAction, justCheck);
+    public static boolean denyBuildOrDestroyBlock(Player player, Block block, PermissibleAction permissibleAction, boolean notify) {
+        return denyBuildOrDestroyBlock(player, block.getLocation(), permissibleAction, notify);
     }
 
-    public static boolean denyBuildOrDestroyBlock(Player player, Location location, PermissibleAction permissibleAction, boolean justCheck) {
+    public static boolean denyBuildOrDestroyBlock(Player player, Location location, PermissibleAction permissibleAction, boolean notify) {
         String name = player.getName();
         MainConfig conf = FactionsPlugin.instance().conf();
         if (conf.factions().protection().getPlayersWhoBypassAllProtection().contains(name)) {
@@ -91,7 +91,7 @@ public final class Protection {
                 return false; // This is not faction territory. Use whatever you like here.
             }
 
-            if (!justCheck) {
+            if (notify) {
                 me.msgLegacy(TL.PERM_DENIED_WILDERNESS, permissibleAction.shortDescription());
             }
 
@@ -105,7 +105,7 @@ public final class Protection {
                 return false;
             }
 
-            if (!justCheck) {
+            if (notify) {
                 me.msgLegacy(TL.PERM_DENIED_SAFEZONE, permissibleAction.shortDescription());
             }
 
@@ -119,7 +119,7 @@ public final class Protection {
                 return false;
             }
 
-            if (!justCheck) {
+            if (notify) {
                 me.msgLegacy(TL.PERM_DENIED_WARZONE, permissibleAction.shortDescription());
             }
 
@@ -130,7 +130,7 @@ public final class Protection {
         }
 
         Faction myFaction = me.faction();
-        boolean pain = !justCheck && otherFaction.hasAccess(me, PermissibleActions.PAINBUILD, loc);
+        boolean pain = notify && otherFaction.hasAccess(me, PermissibleActions.PAINBUILD, loc);
 
         // If the faction hasn't: defined access or denied, fallback to config values
         if (!otherFaction.hasAccess(me, permissibleAction, loc)) {
@@ -138,7 +138,7 @@ public final class Protection {
                 player.damage(conf.factions().other().getActionDeniedPainAmount());
                 me.msgLegacy(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.shortDescription(), otherFaction.tagLegacy(myFaction));
                 return false;
-            } else if (!justCheck) {
+            } else if (notify) {
                 me.msgLegacy(TL.PERM_DENIED_TERRITORY, permissibleAction.shortDescription(), otherFaction.tagLegacy(myFaction));
             }
             return true;
@@ -233,7 +233,7 @@ public final class Protection {
         return false;
     }
 
-    public static boolean denyUseBlock(Player player, Material material, Location location, boolean justCheck) {
+    public static boolean denyUseBlock(Player player, Material material, Location location, boolean notify) {
         if (FactionsPlugin.instance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
             return false;
         }
@@ -281,13 +281,13 @@ public final class Protection {
             return false;
         }
 
-        if (action != PermissibleActions.PLATE && !justCheck) {
+        if (action != PermissibleActions.PLATE && notify) {
             me.msgLegacy(TL.GENERIC_NOPERMISSION, action.shortDescription());
         }
         return true;
     }
 
-    public static boolean denyUseItem(Player player, Location location, Material material, boolean checkDenyList, boolean justCheck) {
+    public static boolean denyUseItem(Player player, Location location, Material material, boolean checkDenyList, boolean notify) {
         String name = player.getName();
         MainConfig.Factions facConf = FactionsPlugin.instance().conf().factions();
         if (facConf.protection().getPlayersWhoBypassAllProtection().contains(name)) {
@@ -323,7 +323,7 @@ public final class Protection {
                 return false; // This is not faction territory. Use whatever you like here.
             }
 
-            if (!justCheck) {
+            if (notify) {
                 me.msgLegacy(TL.PLAYER_USE_WILDERNESS, TextUtil.getMaterialName(material));
             }
 
@@ -333,7 +333,7 @@ public final class Protection {
                 return false;
             }
 
-            if (!justCheck) {
+            if (notify) {
                 me.msgLegacy(TL.PLAYER_USE_SAFEZONE, TextUtil.getMaterialName(material));
             }
 
@@ -343,7 +343,7 @@ public final class Protection {
                 return false;
             }
 
-            if (!justCheck) {
+            if (notify) {
                 me.msgLegacy(TL.PLAYER_USE_WARZONE, TextUtil.getMaterialName(material));
             }
 
@@ -351,7 +351,7 @@ public final class Protection {
         }
 
         if (!otherFaction.hasAccess(me, PermissibleActions.ITEM, loc)) {
-            if (!justCheck) {
+            if (notify) {
                 me.msgLegacy(TL.PLAYER_USE_TERRITORY, TextUtil.getMaterialName(material), otherFaction.tagLegacy(me.faction()));
             }
             return true;
@@ -390,7 +390,7 @@ public final class Protection {
                 case ARMOR_STAND -> Material.ARMOR_STAND;
                 default -> null;
             };
-            if (material != null && Protection.denyUseBlock(player, material, damagee.getLocation(), false)) {
+            if (material != null && Protection.denyUseBlock(player, material, damagee.getLocation(), true)) {
                 return true;
             }
         }

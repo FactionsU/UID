@@ -64,7 +64,7 @@ public class ListenBlock implements Listener {
             return;
         }
 
-        if (Protection.denyBuildOrDestroyBlock(event.getPlayer(), event.getBlock(), PermissibleActions.BUILD, false)) {
+        if (Protection.denyBuildOrDestroyBlock(event.getPlayer(), event.getBlock(), PermissibleActions.BUILD, true)) {
             event.setCancelled(true);
         }
     }
@@ -80,7 +80,7 @@ public class ListenBlock implements Listener {
             return;
         }
 
-        if (Protection.denyBuildOrDestroyBlock(event.getPlayer(), event.getBlock(), PermissibleActions.DESTROY, false)) {
+        if (Protection.denyBuildOrDestroyBlock(event.getPlayer(), event.getBlock(), PermissibleActions.DESTROY, true)) {
             event.setCancelled(true);
         }
     }
@@ -96,7 +96,7 @@ public class ListenBlock implements Listener {
             return;
         }
 
-        if (event.getInstaBreak() && Protection.denyBuildOrDestroyBlock(event.getPlayer(), event.getBlock(), PermissibleActions.DESTROY, false)) {
+        if (event.getInstaBreak() && Protection.denyBuildOrDestroyBlock(event.getPlayer(), event.getBlock(), PermissibleActions.DESTROY, true)) {
             event.setCancelled(true);
         }
     }
@@ -216,13 +216,13 @@ public class ListenBlock implements Listener {
 
         // only notify every 10 seconds
         FPlayer fPlayer = FPlayers.fPlayers().get(player);
-        boolean justCheck = fPlayer.lastFrostwalkerMessageTime() + 10000 > System.currentTimeMillis();
-        if (!justCheck) {
+        boolean notify = fPlayer.lastFrostwalkerMessageTime() + 10000 < System.currentTimeMillis();
+        if (notify) {
             fPlayer.updateLastFrostwalkerMessageTime();
         }
 
         // Check if they have build permissions here. If not, block this from happening.
-        if (Protection.denyBuildOrDestroyBlock(player, event.getBlock(), PermissibleActions.FROSTWALK, justCheck)) {
+        if (Protection.denyBuildOrDestroyBlock(player, event.getBlock(), PermissibleActions.FROSTWALK, notify)) {
             event.setCancelled(true);
         }
     }
@@ -264,7 +264,7 @@ public class ListenBlock implements Listener {
             return;
         }
 
-        if (Protection.denyBuildOrDestroyBlock((Player) breaker, event.getEntity().getLocation(), PermissibleActions.DESTROY, false)) {
+        if (Protection.denyBuildOrDestroyBlock((Player) breaker, event.getEntity().getLocation(), PermissibleActions.DESTROY, true)) {
             event.setCancelled(true);
         }
     }
@@ -275,7 +275,7 @@ public class ListenBlock implements Listener {
             return;
         }
 
-        if (Protection.denyBuildOrDestroyBlock(event.getPlayer(), event.getBlock().getRelative(event.getBlockFace()), PermissibleActions.BUILD, false)) {
+        if (Protection.denyBuildOrDestroyBlock(event.getPlayer(), event.getBlock().getRelative(event.getBlockFace()), PermissibleActions.BUILD, true)) {
             event.setCancelled(true);
         }
     }

@@ -59,7 +59,7 @@ public class ListenExplode implements Listener {
         if (result == ExplosionResult.TRIGGER_BLOCK && boomer instanceof WindCharge charge &&
                 this.plugin.conf().factions().protection().isTerritoryBlockWindChargeInteractionMatchingPerms() &&
                 charge.getShooter() instanceof Player shooter) {
-            blockList.removeIf(block -> Protection.denyUseBlock(shooter, block.getType(), block.getLocation(), true));
+            blockList.removeIf(block -> Protection.denyUseBlock(shooter, block.getType(), block.getLocation(), false));
         }
 
         // For cross-border damage

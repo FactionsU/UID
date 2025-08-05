@@ -48,7 +48,7 @@ public class ListenInteract implements Listener {
         boolean check = false;
         EntityType type = event.getRightClicked().getType();
         if (type == EntityType.ITEM_FRAME || type == EntityType.GLOW_ITEM_FRAME) {
-            if (Protection.denyUseBlock(event.getPlayer(), Material.ITEM_FRAME, event.getRightClicked().getLocation(), false)) {
+            if (Protection.denyUseBlock(event.getPlayer(), Material.ITEM_FRAME, event.getRightClicked().getLocation(), true)) {
                 event.setCancelled(true);
             }
         } else if (type == EntityType.HORSE ||
@@ -95,12 +95,12 @@ public class ListenInteract implements Listener {
         }
 
         if (event.getAction() == Action.PHYSICAL && block.getType() == Material.FARMLAND) {
-            if (Protection.denyBuildOrDestroyBlock(player, block, PermissibleActions.DESTROY, false)) {
+            if (Protection.denyBuildOrDestroyBlock(player, block, PermissibleActions.DESTROY, true)) {
                 event.setCancelled(true);
             }
         }
 
-        if (Protection.denyUseBlock(player, block.getType(), block.getLocation(), false)) {
+        if (Protection.denyUseBlock(player, block.getType(), block.getLocation(), true)) {
             event.setCancelled(true);
             if (block.getType().name().endsWith("_PLATE")) {
                 return;
@@ -128,13 +128,13 @@ public class ListenInteract implements Listener {
             String materialName = item.getType().name();
             if (material == Material.ARMOR_STAND || material == Material.END_CRYSTAL || materialName.contains("MINECART")) {
                 if (!this.plugin.conf().factions().specialCase().getIgnoreBuildMaterials().contains(item.getType()) &&
-                        Protection.denyBuildOrDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()), PermissibleActions.BUILD, false)) {
+                        Protection.denyBuildOrDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()), PermissibleActions.BUILD, true)) {
                     event.setCancelled(true);
                 }
             }
         }
 
-        if (Protection.denyUseItem(player, block.getLocation(), event.getMaterial(), true, false)) {
+        if (Protection.denyUseItem(player, block.getLocation(), event.getMaterial(), true, true)) {
             event.setCancelled(true);
         }
     }
@@ -165,7 +165,7 @@ public class ListenInteract implements Listener {
             return;
         }
 
-        if (Protection.denyUseItem(event.getPlayer(), event.getBlock().getLocation(), event.getBlock().getType(), false, false)) {
+        if (Protection.denyUseItem(event.getPlayer(), event.getBlock().getLocation(), event.getBlock().getType(), false, true)) {
             event.setCancelled(true);
         }
     }
@@ -181,7 +181,7 @@ public class ListenInteract implements Listener {
         Block block = event.getBlockClicked();
         Player player = event.getPlayer();
 
-        if (Protection.denyUseItem(player, block.getRelative(event.getBlockFace()).getLocation(), event.getBucket(), true, false)) {
+        if (Protection.denyUseItem(player, block.getRelative(event.getBlockFace()).getLocation(), event.getBucket(), true, true)) {
             event.setCancelled(true);
         }
     }
@@ -195,7 +195,7 @@ public class ListenInteract implements Listener {
         Block block = event.getBlockClicked();
         Player player = event.getPlayer();
 
-        if (Protection.denyUseItem(player, block.getLocation(), event.getBucket(), true, false)) {
+        if (Protection.denyUseItem(player, block.getLocation(), event.getBucket(), true, true)) {
             event.setCancelled(true);
         }
     }
@@ -235,7 +235,7 @@ public class ListenInteract implements Listener {
             return;
         }
 
-        if (Protection.denyUseBlock(event.getPlayer(), Material.ARMOR_STAND, event.getRightClicked().getLocation(), false)) {
+        if (Protection.denyUseBlock(event.getPlayer(), Material.ARMOR_STAND, event.getRightClicked().getLocation(), true)) {
             event.setCancelled(true);
         }
     }
