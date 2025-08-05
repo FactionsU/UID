@@ -31,12 +31,20 @@ import dev.kitteh.factions.integration.Worldguard;
 import dev.kitteh.factions.integration.dynmap.EngineDynmap;
 import dev.kitteh.factions.integration.permcontext.ContextManager;
 import dev.kitteh.factions.landraidcontrol.LandRaidControl;
-import dev.kitteh.factions.listener.FactionsBlockListener;
-import dev.kitteh.factions.listener.FactionsEntityListener;
-import dev.kitteh.factions.listener.FactionsExploitListener;
-import dev.kitteh.factions.listener.FactionsPlayerListener;
-import dev.kitteh.factions.listener.PortalListener;
-import dev.kitteh.factions.listener.UpgradeListener;
+import dev.kitteh.factions.listener.ListenBlock;
+import dev.kitteh.factions.listener.ListenCommandDeny;
+import dev.kitteh.factions.listener.ListenDamage;
+import dev.kitteh.factions.listener.ListenEnderPearl;
+import dev.kitteh.factions.listener.ListenEnterExit;
+import dev.kitteh.factions.listener.ListenExplode;
+import dev.kitteh.factions.listener.ListenGUI;
+import dev.kitteh.factions.listener.ListenInteract;
+import dev.kitteh.factions.listener.ListenMove;
+import dev.kitteh.factions.listener.ListenPiston;
+import dev.kitteh.factions.listener.ListenPortal;
+import dev.kitteh.factions.listener.ListenScoreboard;
+import dev.kitteh.factions.listener.ListenSpawn;
+import dev.kitteh.factions.listener.ListenUpgrade;
 import dev.kitteh.factions.permissible.PermSelector;
 import dev.kitteh.factions.permissible.PermSelectorRegistry;
 import dev.kitteh.factions.permissible.PermissibleActionRegistry;
@@ -368,13 +376,22 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         // End run before registering event handlers.
 
         // Register Event Handlers
-        getServer().getPluginManager().registerEvents(new FactionsPlayerListener(this), this);
-        getServer().getPluginManager().registerEvents(new FactionsEntityListener(this), this);
-        getServer().getPluginManager().registerEvents(new FactionsExploitListener(this), this);
-        getServer().getPluginManager().registerEvents(new FactionsBlockListener(this), this);
-        getServer().getPluginManager().registerEvents(new PortalListener(this), this);
-        getServer().getPluginManager().registerEvents(new UpgradeListener(), this);
-        this.registerEvents();
+        this.getServer().getPluginManager().registerEvents(new ListenBlock(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenCommandDeny(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenDamage(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenEnderPearl(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenEnterExit(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenExplode(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenGUI(), this);
+        this.getServer().getPluginManager().registerEvents(new ListenInteract(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenMove(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenPiston(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenPortal(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenScoreboard(), this);
+        this.getServer().getPluginManager().registerEvents(new ListenSpawn(), this);
+        this.getServer().getPluginManager().registerEvents(new ListenUpgrade(), this);
+        this.getServer().getPluginManager().registerEvents(this.integrationManager, this);
+        this.registerServerSpecificEvents();
 
         if (conf().commands().fly().isEnable()) {
             FlightUtil.start();
@@ -385,9 +402,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         }
 
         new CommandsRoot(this);
-
-        // Integration time
-        getServer().getPluginManager().registerEvents(this.integrationManager, this);
 
         new BukkitRunnable() {
             @Override
@@ -938,11 +952,12 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
             return;
         }
         this.told.add(player.getUniqueId());
-        ComponentDispatcher.send(player, Component.text().color(TextColor.fromHexString("#e35959"))
+        ComponentDispatcher.send(player, Component.text().color(TextColor.fromHexString("#E35959"))
                 .content("FactionsUUID Update Available: " + updateResponse.getLatestVersion()));
         if (updateResponse.isUrgent()) {
             ComponentDispatcher.send(player, Component.text().color(TextColor.fromHexString("#5E0B15"))
-                    .content("This is an important update. Download and restart ASAP."));
+                    .content("This is an important update. Download and restart ASAP.").appendNewline()
+                    .append(Component.text().color(TextColor.fromHexString("#5E0B15")).content(updateResponse.getMessage())));
         }
         if (updateResponse.getComponent() != null) {
             ComponentDispatcher.send(player, updateResponse.getComponent());
@@ -959,7 +974,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
     protected abstract void onPluginLoad();
 
-    protected abstract void registerEvents();
+    protected abstract void registerServerSpecificEvents();
 
     public abstract CompletableFuture<Boolean> teleport(Player player, Location location);
 

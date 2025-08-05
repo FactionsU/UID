@@ -13,11 +13,11 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
-import dev.kitteh.factions.listener.FactionsBlockListener;
-import dev.kitteh.factions.listener.FactionsEntityListener;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.protection.Protection;
+import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -50,10 +50,13 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         if (block == null) {
             return true;
         }
-        if (player == null) {
-            return Board.board().factionAt(new FLocation(block)).isWilderness();
+        if (!WorldUtil.isEnabled(block)) {
+            return true;
         }
-        return FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleActions.BUILD, true);
+        if (player == null) {
+            return new FLocation(block).faction().isWilderness();
+        }
+        return !Protection.denyBuildOrDestroyBlock(player, block, PermissibleActions.BUILD, true);
     }
 
     @Override
@@ -61,15 +64,21 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         if (block == null) {
             return true;
         }
-        if (player == null) {
-            return Board.board().factionAt(new FLocation(block)).isWilderness();
+        if (!WorldUtil.isEnabled(block)) {
+            return true;
         }
-        return FactionsBlockListener.playerCanBuildDestroyBlock(player, block.getLocation(), PermissibleActions.DESTROY, true);
+        if (player == null) {
+            return new FLocation(block).faction().isWilderness();
+        }
+        return !Protection.denyBuildOrDestroyBlock(player, block, PermissibleActions.DESTROY, true);
     }
 
     @Override
     public boolean isPVPAllowed(Player player, Location location) {
         if (player == null && !FactionsPlugin.instance().conf().plugins().magic().isUsePVPSettingForMagicMobs()) {
+            return true;
+        }
+        if (!WorldUtil.isEnabled(location)) {
             return true;
         }
         MainConfig.Factions facConf = FactionsPlugin.instance().conf().factions();
@@ -79,27 +88,25 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
         if (player != null && facConf.protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
             return true;
         }
-        Faction defFaction = Board.board().factionAt(new FLocation(location));
-        if (defFaction.noPvPInTerritory()) {
-            return false;
-        }
         if (player != null) {
             FPlayer attacker = FPlayers.fPlayers().get(player);
             if (attacker.loginPVPDisabled()) {
                 return false;
             }
-
-            Faction locFaction = Board.board().factionAt(new FLocation(player));
-            if (locFaction.noPvPInTerritory() || locFaction.isSafeZone()) {
+        }
+        Faction defFaction = Board.board().factionAt(new FLocation(location));
+        if (defFaction.noPvPInTerritory()) {
+            return false;
+        }
+        if (player != null) {
+            Faction playerLocFaction = new FLocation(player).faction();
+            if (playerLocFaction.noPvPInTerritory() || playerLocFaction.isSafeZone()) {
                 return false;
             }
         }
 
-        Faction locFaction = Board.board().factionAt(new FLocation(location));
-        if (locFaction.noPvPInTerritory()) {
-            return false;
-        }
-        return !locFaction.isSafeZone();
+        Faction locFaction = new FLocation(location).faction();
+        return !locFaction.noPvPInTerritory() && !locFaction.isSafeZone();
     }
 
     @Override
@@ -117,6 +124,9 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
 
     @Override
     public boolean canTarget(Entity source, Entity target) {
-        return FactionsEntityListener.canDamage(source, target, false);
+        if (!WorldUtil.isEnabled(source)) {
+            return true;
+        }
+        return !Protection.denyDamage(source, target, false);
     }
 }

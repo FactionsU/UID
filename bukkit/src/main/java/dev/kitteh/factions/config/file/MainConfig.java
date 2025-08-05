@@ -1233,13 +1233,18 @@ public class MainConfig {
                     Example: put ALLY to allow ALLY and MEMBER to be able to create portals.
                     If typed incorrectly, defaults to NEUTRAL.""")
             private String minimumRelation = "MEMBER";
+            @WipeOnReload
+            private transient Relation minimumRelationRel = null;
 
             public boolean isLimit() {
                 return limit;
             }
 
-            public String getMinimumRelation() {
-                return minimumRelation;
+            public Relation getMinimumRelation() {
+                if (minimumRelationRel == null) {
+                    minimumRelationRel = Relation.fromString(minimumRelation);
+                }
+                return minimumRelationRel;
             }
         }
 
@@ -2361,7 +2366,7 @@ public class MainConfig {
 
     public class Exploits {
         private boolean enderPearlClipping = true;
-        private boolean interactionSpam = true;
+        private boolean interactionSpam = false;
         private boolean tntWaterlog = false;
         @Comment("If true, prevents water flow into claimed territory")
         private boolean liquidFlow = false;

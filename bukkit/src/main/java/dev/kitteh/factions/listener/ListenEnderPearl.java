@@ -11,10 +11,10 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.Objects;
 
-public class FactionsExploitListener implements Listener {
+public class ListenEnderPearl implements Listener {
     public final FactionsPlugin plugin;
 
-    public FactionsExploitListener(FactionsPlugin plugin) {
+    public ListenEnderPearl(FactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -46,10 +46,9 @@ public class FactionsExploitListener implements Listener {
         target.setX(target.getBlockX() + 0.5);
         target.setZ(target.getBlockZ() + 0.5);
         event.setTo(target);
-
     }
 
-    public static boolean clippingThrough(Location target, Location from, double thickness) {
+    private boolean clippingThrough(Location target, Location from, double thickness) {
         return ((from.getX() > target.getX() && (from.getX() - target.getX() < thickness)) || (target.getX() > from.getX() && (target.getX() - from.getX() < thickness)) || (from.getZ() > target.getZ() && (from.getZ() - target.getZ() < thickness)) || (target.getZ() > from.getZ() && (target.getZ() - from.getZ() < thickness)));
     }
 }

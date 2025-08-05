@@ -15,7 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-public class FactionsPaperChatListener implements Listener {
+public class ListenPaperChat implements Listener {
     // relation and role chats
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onChat(AsyncChatEvent event) {
@@ -32,7 +32,7 @@ public class FactionsPaperChatListener implements Listener {
 
         event.setCancelled(true);
 
-        FactionsLegacyChatListener.processFactionChat(me, event.message());
+        ListenSpigotChat.processFactionChat(me, event.message());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

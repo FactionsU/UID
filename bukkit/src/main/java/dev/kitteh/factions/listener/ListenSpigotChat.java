@@ -28,11 +28,11 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.UnknownFormatConversionException;
 import java.util.logging.Level;
 
-public class FactionsLegacyChatListener implements Listener {
+public class ListenSpigotChat implements Listener {
 
     public final AbstractFactionsPlugin plugin;
 
-    public FactionsLegacyChatListener(AbstractFactionsPlugin plugin) {
+    public ListenSpigotChat(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -98,7 +98,7 @@ public class FactionsLegacyChatListener implements Listener {
 
         event.setCancelled(true);
 
-        FactionsLegacyChatListener.processFactionChat(me, Component.text(event.getMessage()));
+        ListenSpigotChat.processFactionChat(me, Component.text(event.getMessage()));
     }
 
     // this is for handling insertion of the player's faction tag, set at highest priority to give other plugins a chance to modify chat first

@@ -94,7 +94,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected boolean isAdminBypassing = false;
     protected int kills, deaths;
     protected boolean willAutoLeave = true;
-    protected int mapHeight = 8; // default to old value
+    protected int mapHeight; // default to old value
     protected boolean isFlying = false;
     protected boolean isAutoFlying = false;
     protected boolean flyTrailsState = false;

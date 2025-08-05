@@ -11,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockGrowEvent;
 
-public class UpgradeListener implements Listener {
+public class ListenUpgrade implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void grow(BlockGrowEvent event) {
         if (!WorldUtil.isEnabled(event.getBlock())) {
@@ -20,8 +20,7 @@ public class UpgradeListener implements Listener {
         if (!Universe.universe().isUpgradeEnabled(Upgrades.GROWTH)) {
             return;
         }
-        FLocation loc = new FLocation(event.getBlock());
-        Faction faction = loc.faction();
+        Faction faction = new FLocation(event.getBlock()).faction();
         if (!faction.isNormal()) {
             return;
         }

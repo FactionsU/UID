@@ -4,7 +4,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
-import dev.kitteh.factions.listener.FactionsLegacyChatListener;
+import dev.kitteh.factions.listener.ListenSpigotChat;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -46,8 +46,8 @@ public class FactionsPluginSpigot extends AbstractFactionsPlugin {
     }
 
     @Override
-    protected void registerEvents() {
-        this.getServer().getPluginManager().registerEvents(new FactionsLegacyChatListener(this), this);
+    protected void registerServerSpecificEvents() {
+        this.getServer().getPluginManager().registerEvents(new ListenSpigotChat(this), this);
     }
 
     @Override
