@@ -359,7 +359,7 @@ public class TranslationsConfig {
             }
 
             protected Permissions() {
-                super("perm", "perms", "permission", "permissions");
+                super("perms", "perm", "permission", "permissions");
             }
 
             private SubCmdAdd add = new SubCmdAdd();
