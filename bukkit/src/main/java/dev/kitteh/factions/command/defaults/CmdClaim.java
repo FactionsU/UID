@@ -50,11 +50,11 @@ public class CmdClaim implements Cmd {
                         )
                         .flag(
                                 manager.flagBuilder("fill")
-                                        .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
+                                        .withPermission(Cloudy.hasPermission(Permission.CLAIM_FILL))
                         )
                         .flag(
                                 manager.flagBuilder("fill-limit")
-                                        .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
+                                        .withPermission(Cloudy.hasPermission(Permission.CLAIM_FILL))
                                         .withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims()))
                         )
                         .flag(
