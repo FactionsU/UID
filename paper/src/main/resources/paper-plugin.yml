@@ -68,12 +68,7 @@ permissions:
       factions.setpermanent: true
       factions.setpermanentpower: true
       factions.powerboost: true
-      factions.sethome.any: true
       factions.money.*: true
-      factions.join.any: true
-      factions.join.others: true
-      factions.admin.any: true
-      factions.mod.any: true
   factions.kit.halfmod:
     description: Zones, bypassing, kicking, and chatspy
     children:
@@ -115,7 +110,6 @@ permissions:
       factions.link: true
       factions.list: true
       factions.map: true
-      factions.mod: true
       factions.money.kit.standard: true
       factions.noboom: true
       factions.open: true
@@ -130,7 +124,6 @@ permissions:
       factions.stuck: true
       factions.tag: true
       factions.title: true
-      factions.version: true
       factions.unclaim: true
       factions.unclaimall: true
       factions.scoreboard: true
@@ -142,14 +135,11 @@ permissions:
       factions.mapheight: true
       factions.ban: true
       factions.fly: true
-      factions.coleader: true
       factions.near: true
       factions.permissions: true
       factions.upgrades: true
   factions.admin:
     description: hand over your admin rights
-  factions.admin.any:
-    description: give or revoke admin status for any player in any faction
   factions.announce:
     description: announce things to the peasants
   factions.autoclaim:
@@ -188,10 +178,6 @@ permissions:
     description: invite a player to your faction
   factions.join:
     description: join a faction
-  factions.join.any:
-    description: join any faction, bypassing invitation process for closed factions
-  factions.join.others:
-    description: specify another player in the join command, to move them to the specified faction
   factions.kick:
     description: kick a player from the faction
   factions.kick.any:
@@ -210,10 +196,6 @@ permissions:
     description: claim land as a war zone and build/destroy within war zones
   factions.map:
     description: show the territory map, and set optional auto update
-  factions.mod:
-    description: give or revoke moderator rights
-  factions.mod.any:
-    description: give or revoke moderator rights for any player in any faction
   factions.money.balance:
     description: show your factions current money balance
   factions.money.balance.any:
@@ -228,8 +210,6 @@ permissions:
     description: transfer money from faction to faction
   factions.money.f2p:
     description: transfer money from faction to player
-  factions.money.p2f:
-    description: transfer money from player to faction
   factions.money.kit.standard:
     children:
       factions.money.balance: true
@@ -238,7 +218,6 @@ permissions:
       factions.money.withdraw: true
       factions.money.f2f: true
       factions.money.f2p: true
-      factions.money.p2f: true
   factions.money.*:
     children:
       factions.money.kit.standard: true
@@ -248,7 +227,6 @@ permissions:
       factions.money.withdraw.any: true
       factions.money.f2f: true
       factions.money.f2p: true
-      factions.money.p2f: true
   factions.noboom:
     description: toggle explosions (peaceful factions only)
   factions.open:
@@ -279,8 +257,6 @@ permissions:
     description: set the faction home
   factions.delhome:
     description: unset the faction home
-  factions.sethome.any:
-    description: set faction home for another faction
   factions.shield:
     description: use the shield feature
   factions.show:
@@ -293,8 +269,6 @@ permissions:
     description: set or remove a players title
   factions.title.color:
     description: set yours or other player's titles to be colored.
-  factions.version:
-    description: see the version of the plugin
   factions.unclaim:
     description: unclaim the land where you are standing
   factions.unclaimall:
@@ -317,8 +291,6 @@ permissions:
     description: modify other player's power
   factions.monitorlogins:
     description: monitor join and leaves of faction members
-  factions.claim.line:
-    description: claim in a line
   factions.top:
     description: sort factions
   factions.dontlosepoweroffline:
@@ -339,8 +311,6 @@ permissions:
     description: Allow use of /f fly
   factions.fly.auto:
     description: Allow use of /f fly auto
-  factions.coleader:
-    description: Allow use of /f coleader <target>
   factions.near:
     description: Allow use of /f near to show nearby faction members
   factions.updates:
