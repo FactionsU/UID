@@ -20,7 +20,7 @@ public class CmdSetMaxVaults implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> manager.command(
-                builder.literal("maxvaults")
+                builder.literal("max-vaults")
                         .commandDescription(Cloudy.desc(TL.COMMAND_SETMAXVAULTS_DESCRIPTION))
                         .permission(builder.commandPermission().and(Cloudy.predicate(s -> Bukkit.getServer().getPluginManager().isPluginEnabled("PlayerVaults")).and(Cloudy.hasPermission(Permission.SETMAXVAULTS))))
                         .required("faction", FactionParser.of(FactionParser.Include.SELF))

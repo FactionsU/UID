@@ -54,7 +54,7 @@ public class CmdTicketInfo implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> manager.command(
-                builder.literal("ticketinfo")
+                builder.literal("ticket-info")
                         .commandDescription(Cloudy.desc(TL.COMMAND_TICKETINFO_DESCRIPTION))
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DEBUG)))
                         .flag(manager.flagBuilder("full"))
