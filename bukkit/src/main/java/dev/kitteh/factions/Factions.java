@@ -1,6 +1,7 @@
 package dev.kitteh.factions;
 
 import dev.kitteh.factions.plugin.Instances;
+import org.bukkit.Location;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -21,6 +22,14 @@ public interface Factions {
 
     @Nullable
     Faction get(String tag);
+
+    default Faction getAt(Location location) {
+        return new FLocation(location).faction();
+    }
+
+    default Faction getAt(FLocation flocation) {
+        return flocation.faction();
+    }
 
     default Faction create(String tag) {
         return this.create(null, tag);
