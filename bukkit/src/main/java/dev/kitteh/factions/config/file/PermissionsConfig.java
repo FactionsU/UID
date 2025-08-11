@@ -85,6 +85,13 @@ public class PermissionsConfig {
                 .put(PermissibleActions.SHIELD.name(), true)
                 .build());
 
+        this.defaultPermissionsOrder.add(new RoleAtLeastSelector(Role.NORMAL).serialize());
+        this.defaultPermissions.put(new RoleAtLeastSelector(Role.NORMAL).serialize(), ImmutableMap.<String, Boolean>builder()
+                .put(PermissibleActions.FROSTWALK.name(), true)
+                .put(PermissibleActions.FLY.name(), true)
+                .build()
+        );
+
         this.defaultPermissionsOrder.add(new RoleAtLeastSelector(Role.RECRUIT).serialize());
         this.defaultPermissions.put(new RoleAtLeastSelector(Role.RECRUIT).serialize(), ImmutableMap.<String, Boolean>builder()
                 .put(PermissibleActions.BUILD.name(), true)
@@ -92,8 +99,6 @@ public class PermissionsConfig {
                 .put(PermissibleActions.CONTAINER.name(), true)
                 .put(PermissibleActions.DESTROY.name(), true)
                 .put(PermissibleActions.DOOR.name(), true)
-                .put(PermissibleActions.FLY.name(), true)
-                .put(PermissibleActions.FROSTWALK.name(), true)
                 .put(PermissibleActions.HOME.name(), true)
                 .put(PermissibleActions.ITEM.name(), true)
                 .put(PermissibleActions.LEVER.name(), true)
