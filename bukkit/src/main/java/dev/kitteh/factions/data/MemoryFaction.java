@@ -387,6 +387,7 @@ public abstract class MemoryFaction implements Faction {
     protected transient long lastPlayerLoggedOffTime;
     protected transient Set<FPlayer> fplayers = new HashSet<>();
     protected transient @Nullable OfflinePlayer offlinePlayer;
+    private transient boolean removed = false;
 
     @SuppressWarnings("ConstantValue")
     public void cleanupDeserialization() {
@@ -1191,6 +1192,10 @@ public abstract class MemoryFaction implements Faction {
     }
 
     public void remove() {
+        if (this.removed) {
+            return;
+        }
+
         if (Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled()) {
             Econ.setBalance(this, 0);
         }
@@ -1201,6 +1206,9 @@ public abstract class MemoryFaction implements Faction {
         for (FPlayer fPlayer : fplayers) {
             fPlayer.resetFactionData(true);
         }
+
+        this.removed = true;
+        Factions.factions().remove(this);
     }
 
     @Override
