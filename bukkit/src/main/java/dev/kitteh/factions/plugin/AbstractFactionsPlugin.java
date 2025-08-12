@@ -486,7 +486,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         // Version
         String verString = this.getDescription().getVersion();
-        Pattern verPattern = Pattern.compile("1\\.6\\.9\\.5-U(?<version>\\d{1,2}\\.\\d{1,2}\\.\\d{1,2})(?<snap>-SNAPSHOT)?");
+        Pattern verPattern = Pattern.compile("(?<version>\\d{1,2}\\.\\d{1,2}\\.\\d{1,2})(?<snap>-SNAPSHOT)?");
         Matcher matcher = verPattern.matcher(verString);
         final String fuuidVersion;
         final String fuuidBuild;
