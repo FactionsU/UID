@@ -9,7 +9,6 @@ indra {
 }
 
 dependencies {
-  //compileOnly(project(":bukkit"))
   compileOnly(project(":paper", configuration = "shadow"))
   compileOnly(libs.paper)
 }

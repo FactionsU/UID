@@ -66,8 +66,7 @@ dependencies {
     exclude("org.spigotmc")
   }
   compileOnly(libs.paper)
-  compileOnly(libs.cloud.paper)
-  compileOnly(libs.cloud.extras)
+  compileOnly(libs.bundles.cloud)
 }
 
 tasks.runServer {

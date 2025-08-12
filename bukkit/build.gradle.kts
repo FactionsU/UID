@@ -16,23 +16,16 @@ configurations.implementation {
 dependencies {
   compileOnlyApi(libs.jspecify)
 
-  implementation(libs.cloud.paper)
-  implementation(libs.cloud.extras)
+  implementation(libs.spigot)
+  implementation(libs.bundles.cloud)
   implementation(libs.commons.lang3)
   implementation(libs.configurate.hocon) {
     exclude("com.google.inject", "guice")
     exclude("org.checkerframework", "checker-qual")
   }
-  implementation(libs.adventure.text.minimessage) {
+  implementation(libs.bundles.adventure) {
     exclude("org.jetbrains", "annotations")
   }
-  implementation(libs.adventure.text.serializer.gson) {
-    exclude("org.jetbrains", "annotations")
-  }
-  implementation(libs.adventure.text.serializer.legacy) {
-    exclude("org.jetbrains", "annotations")
-  }
-  implementation(libs.spigot)
   implementation(libs.authlib) {
     exclude("com.google.code.findbugs", "jsr305")
     exclude("com.google.code.gson", "gson")
