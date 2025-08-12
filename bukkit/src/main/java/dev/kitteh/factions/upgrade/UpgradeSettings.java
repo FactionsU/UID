@@ -1,5 +1,6 @@
 package dev.kitteh.factions.upgrade;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public final class UpgradeSettings {
     private final Upgrade upgrade;

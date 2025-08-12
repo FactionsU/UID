@@ -18,6 +18,7 @@ package dev.kitteh.factions.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.text.SimpleDateFormat;
 
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat;
  * An enum for requesting strings from the language file. The contents of this enum file may be subject to frequent
  * changes.
  */
+@ApiStatus.Obsolete
 public enum TL {
     /**
      * Translation meta

@@ -5,7 +5,11 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.caption.Caption;
 import org.incendo.cloud.caption.CaptionProvider;
 import org.incendo.cloud.caption.DelegatingCaptionProvider;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
+@ApiStatus.Internal
+@NullMarked
 public final class Captioner extends DelegatingCaptionProvider<Sender> {
     public static final Caption NO_FACTION_FOUND = Caption.of("argument.parse.failure.faction");
     public static final Caption NO_PLAYER_FOUND = Caption.of("argument.parse.failure.fplayer");
@@ -16,7 +20,7 @@ public final class Captioner extends DelegatingCaptionProvider<Sender> {
             .build();
 
     @Override
-    public @NonNull CaptionProvider<Sender> delegate() {
+    public CaptionProvider<Sender> delegate() {
         return PROVIDER;
     }
 }

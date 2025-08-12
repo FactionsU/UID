@@ -6,7 +6,9 @@ import org.incendo.cloud.key.CloudKey;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 import dev.kitteh.factions.util.TriConsumer;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 @FunctionalInterface
 public interface Cmd {
     CloudKey<Boolean> HIDE_IN_HELP = CloudKey.cloudKey("HIDE_IN_HELP", Boolean.class);

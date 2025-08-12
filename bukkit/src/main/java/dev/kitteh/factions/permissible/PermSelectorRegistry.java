@@ -11,6 +11,7 @@ import dev.kitteh.factions.permissible.selector.RoleAtMostSelector;
 import dev.kitteh.factions.permissible.selector.RoleSingleSelector;
 import dev.kitteh.factions.permissible.selector.UnknownSelector;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -19,6 +20,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class PermSelectorRegistry {
     private static boolean closed = false;

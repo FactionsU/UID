@@ -3,6 +3,7 @@ package dev.kitteh.factions;
 import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;
@@ -10,6 +11,8 @@ import java.time.Duration;
 /**
  * Information not tied to any given faction.
  */
+@ApiStatus.AvailableSince("4.0.0")
+@ApiStatus.NonExtendable
 @NullMarked
 public interface Universe {
     /**

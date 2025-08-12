@@ -14,9 +14,11 @@ import dev.kitteh.factions.util.TextUtil;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public interface Sender {
     interface Player extends Sender {

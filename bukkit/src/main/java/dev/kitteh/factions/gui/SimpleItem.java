@@ -5,6 +5,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * to a respective ItemStack, also has utility methods
  * to merge, clone, etc
  */
+@ApiStatus.Obsolete
 public class SimpleItem {
     private String name;
     private List<String> lore;

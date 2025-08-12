@@ -6,10 +6,12 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.BiConsumer;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class ComponentDispatcher {
     private static BiConsumer<CommandSender, ComponentLike> componentSender = (commandSender, component) ->

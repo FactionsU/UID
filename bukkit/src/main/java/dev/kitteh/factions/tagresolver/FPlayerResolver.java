@@ -9,9 +9,11 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FPlayerResolver extends ObservedResolver {
     public static FPlayerResolver of(String name, @Nullable FPlayer observer, FPlayer observed) {

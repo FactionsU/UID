@@ -179,6 +179,6 @@ public class ListenSpigotChat implements Listener {
     }
 
     private String chatTagLegacy(FPlayer me, FPlayer participator) {
-        return me.hasFaction() ? TextUtil.getString(me.relationTo(participator).color()) + chatTagLegacy(me) : TL.NOFACTION_PREFIX.toString();
+        return me.hasFaction() ? TextUtil.getLegacyString(me.relationTo(participator).color()) + chatTagLegacy(me) : TL.NOFACTION_PREFIX.toString();
     }
 }

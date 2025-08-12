@@ -8,12 +8,15 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
  * Describes an entity participating in Factions, i.e. a player or faction.
  */
+@ApiStatus.AvailableSince("4.0.0")
+@ApiStatus.NonExtendable
 @NullMarked
 public interface Participator {
     /**
@@ -29,6 +32,7 @@ public interface Participator {
      * @param str string
      * @param args args
      */
+    @ApiStatus.Obsolete
     void msgLegacy(String str, Object... args);
 
     /**
@@ -37,6 +41,7 @@ public interface Participator {
      * @param translation translatable
      * @param args args
      */
+    @ApiStatus.Obsolete
     default void msgLegacy(TL translation, Object... args) {
         this.msgLegacy(translation.toString(), args);
     }
@@ -52,10 +57,12 @@ public interface Participator {
         this.sendMessage(Mini.parse(miniMessage, resolvers));
     }
 
+    @ApiStatus.Obsolete
     default String describeToLegacy(@Nullable Participator that) {
         return RelationUtil.describeThatToMeLegacy(this, that);
     }
 
+    @ApiStatus.Obsolete
     default String describeToLegacy(@Nullable Participator that, boolean uppercaseFirst) {
         return RelationUtil.describeThatToMeLegacy(this, that, uppercaseFirst);
     }
@@ -72,6 +79,7 @@ public interface Participator {
         return RelationUtil.getTextColorOfThatToMe(this, that);
     }
 
+    @ApiStatus.Obsolete
     default String colorLegacyStringTo(@Nullable Participator that) {
         return RelationUtil.getLegacyColorStringOfThatToMe(this, that);
     }

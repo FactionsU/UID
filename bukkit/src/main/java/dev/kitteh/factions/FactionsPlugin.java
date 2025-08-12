@@ -8,7 +8,12 @@ import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.landraidcontrol.LandRaidControl;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.SeeChunkUtil;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
+@ApiStatus.AvailableSince("4.0.0")
+@ApiStatus.NonExtendable
+@NullMarked
 public interface FactionsPlugin {
     static FactionsPlugin instance() {
         return AbstractFactionsPlugin.instance();

@@ -3,27 +3,23 @@ package dev.kitteh.factions.integration;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 
+@ApiStatus.AvailableSince("4.0.0")
+@NullMarked
 public final class ExternalChecks {
-    @FunctionalInterface
-    public interface BoolFunction {
-        boolean apply(Player player);
+    private record SingleCheck(Plugin plugin, Predicate<Player> function) {
     }
 
-    @FunctionalInterface
-    public interface BoolBiFunction {
-        boolean apply(Player player1, Player player2);
-    }
-
-    private record SingleCheck(Plugin plugin, BoolFunction function) {
-    }
-
-    private record DoubleCheck(Plugin plugin, BoolBiFunction function) {
+    private record DoubleCheck(Plugin plugin, BiPredicate<Player, Player> function) {
     }
 
     private static final List<SingleCheck> afk = new ArrayList<>();
@@ -36,7 +32,7 @@ public final class ExternalChecks {
      * @param plugin plugin registering
      * @param function function testing the player
      */
-    public static void registerAfk(Plugin plugin, BoolFunction function) {
+    public static void registerAfk(Plugin plugin, Predicate<Player> function) {
         afk.add(new SingleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
 
@@ -46,7 +42,7 @@ public final class ExternalChecks {
      * @param plugin plugin registering
      * @param function function testing if, respectively, the viewer is ignoring the chatter
      */
-    public static void registerIgnored(Plugin plugin, BoolBiFunction function) {
+    public static void registerIgnored(Plugin plugin, BiPredicate<Player, Player> function) {
         ignored.add(new DoubleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
 
@@ -56,14 +52,14 @@ public final class ExternalChecks {
      * @param plugin plugin registering
      * @param function function testing the player
      */
-    public static void registerVanished(Plugin plugin, BoolFunction function) {
+    public static void registerVanished(Plugin plugin, Predicate<Player> function) {
         vanished.add(new SingleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
 
     public static boolean isAfk(Player player) {
         for (SingleCheck check : afk) {
             try {
-                if (check.function.apply(player)) {
+                if (check.function.test(player)) {
                     return true;
                 }
             } catch (Exception e) {
@@ -76,7 +72,7 @@ public final class ExternalChecks {
     public static boolean isIgnored(Player viewer, Player chatter) {
         for (DoubleCheck check : ignored) {
             try {
-                if (check.function.apply(viewer, chatter)) {
+                if (check.function.test(viewer, chatter)) {
                     return true;
                 }
             } catch (Exception e) {
@@ -89,7 +85,7 @@ public final class ExternalChecks {
     public static boolean isVanished(Player player) {
         for (SingleCheck check : vanished) {
             try {
-                if (check.function.apply(player)) {
+                if (check.function.test(player)) {
                     return true;
                 }
             } catch (Exception e) {

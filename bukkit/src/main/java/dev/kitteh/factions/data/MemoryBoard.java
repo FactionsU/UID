@@ -30,6 +30,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+@ApiStatus.Internal
 @NullMarked
 public abstract class MemoryBoard implements Board {
 
@@ -205,7 +207,7 @@ public abstract class MemoryBoard implements Board {
         Faction faction = fplayer.faction();
         ArrayList<Component> ret = new ArrayList<>();
         Faction factionLoc = factionAt(flocation);
-        ret.add(TextUtil.titleizeC("(" + flocation.asCoordString() + ") " + factionLoc.tagLegacy(fplayer)));
+        ret.add(TextUtil.titleize("(" + flocation.asCoordString() + ") " + factionLoc.tagLegacy(fplayer)));
 
         // Get the compass
         List<Component> asciiCompass = AsciiCompass.of(inDegrees, "<red>", "<gold>");

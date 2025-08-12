@@ -89,6 +89,7 @@ import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.incendo.cloud.CommandManager;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 
 import java.io.BufferedReader;
@@ -132,6 +133,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@ApiStatus.Internal
 public abstract class AbstractFactionsPlugin extends JavaPlugin implements FactionsPlugin {
     private static AbstractFactionsPlugin instance;
 

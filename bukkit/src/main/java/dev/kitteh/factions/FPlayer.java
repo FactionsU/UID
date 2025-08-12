@@ -8,6 +8,7 @@ import dev.kitteh.factions.util.WarmUpUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -22,6 +23,8 @@ import java.util.UUID;
  * <p>
  * The same instance is always returned for the same player. This means you can use the == operator.
  */
+@ApiStatus.AvailableSince("4.0.0")
+@ApiStatus.NonExtendable
 @NullMarked
 public interface FPlayer extends Participator, Selectable {
     UUID uniqueId();
@@ -111,6 +114,7 @@ public interface FPlayer extends Participator, Selectable {
 
     void lastStoodAt(FLocation flocation);
 
+    @ApiStatus.Obsolete
     default String titleLegacy() {
         return Mini.toLegacy(this.title());
     }
@@ -121,12 +125,14 @@ public interface FPlayer extends Participator, Selectable {
 
     Component nameWithTitle();
 
+    @ApiStatus.Obsolete
     default String nameWithTitleLegacy() {
         return Mini.toLegacy(this.nameWithTitle());
     }
 
     Component nameWithTag();
 
+    @ApiStatus.Obsolete
     default String nameWithTagLegacy() {
         return Mini.toLegacy(this.nameWithTag());
     }
@@ -192,8 +198,10 @@ public interface FPlayer extends Participator, Selectable {
 
     boolean isOnline();
 
+    @ApiStatus.Obsolete
     void sendMessageLegacy(String message);
 
+    @ApiStatus.Obsolete
     void sendMessageLegacy(List<String> messages);
 
     int mapHeight();

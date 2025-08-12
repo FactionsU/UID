@@ -2,6 +2,7 @@ package dev.kitteh.factions.data;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+@ApiStatus.Internal
 @NullMarked
 public abstract class MemoryFPlayers implements FPlayers {
     protected final Map<UUID, FPlayer> fPlayers = new ConcurrentSkipListMap<>();

@@ -3,11 +3,13 @@ package dev.kitteh.factions.permissible;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.format.TextColor;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;
 import java.util.Set;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public enum Relation implements Permissible {
     MEMBER(4, TL.RELATION_MEMBER_SINGULAR.toString()),

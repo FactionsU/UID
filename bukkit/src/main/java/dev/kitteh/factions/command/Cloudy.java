@@ -7,10 +7,15 @@ import dev.kitteh.factions.util.TL;
 import org.bukkit.ChatColor;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.permission.PredicatePermission;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Predicate;
 
+/**
+ * Helper methods for cloud.
+ */
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class Cloudy {
     public static PredicatePermission<Sender> predicate(Predicate<Sender> predicate) {

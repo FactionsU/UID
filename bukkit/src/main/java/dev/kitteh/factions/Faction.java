@@ -14,6 +14,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -26,6 +27,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+@ApiStatus.AvailableSince("4.0.0")
+@ApiStatus.NonExtendable
 @NullMarked
 public interface Faction extends Participator, Selectable {
     interface Permissions {
@@ -333,6 +336,7 @@ public interface Faction extends Participator, Selectable {
 
     void tag(String str);
 
+    @ApiStatus.Obsolete
     String tagLegacy(@Nullable Participator participator);
 
     String description();
@@ -547,6 +551,7 @@ public interface Faction extends Participator, Selectable {
         }
     }
 
+    @ApiStatus.Obsolete
     default void sendMessageLegacy(String message) {
         for (FPlayer fplayer : this.membersOnline(true)) {
             fplayer.sendMessageLegacy(message);

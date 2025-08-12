@@ -1,5 +1,6 @@
 package dev.kitteh.factions.permissible;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -8,6 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class PermissibleActionRegistry {
     private static boolean closed = false;

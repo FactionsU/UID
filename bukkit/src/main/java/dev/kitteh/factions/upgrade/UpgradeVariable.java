@@ -2,6 +2,7 @@ package dev.kitteh.factions.upgrade;
 
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.util.MiscUtil;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;
@@ -10,6 +11,7 @@ import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.function.Function;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public record UpgradeVariable(String name, BigDecimal min, BigDecimal max, Function<BigDecimal, String> formatter) {
     private static final BigInteger INT_MAX = BigInteger.valueOf(Integer.MAX_VALUE);

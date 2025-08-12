@@ -9,10 +9,12 @@ import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.NumberConversions;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public record FLocation(String worldName, int x, int z) {
     public FLocation() {

@@ -9,10 +9,12 @@ import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FactionSelector extends AbstractSelector {
     public static final String NAME = "faction";

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.format.TextColor;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public enum Role implements Permissible {
     @SerializedName(value = "ADMIN", alternate = {"LEADER"}) // Import

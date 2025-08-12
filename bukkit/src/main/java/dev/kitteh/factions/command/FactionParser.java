@@ -16,6 +16,7 @@ import org.incendo.cloud.parser.ParserDescriptor;
 import org.incendo.cloud.suggestion.BlockingSuggestionProvider;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingSuggestionProvider<Sender> {
     public static ParserDescriptor<Sender, Faction> of(Include... includes) {

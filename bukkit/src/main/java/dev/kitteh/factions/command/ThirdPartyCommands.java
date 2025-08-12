@@ -5,12 +5,13 @@ import org.bukkit.plugin.Plugin;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
  * For the registry of /f and /fa commands from other plugins.
  */
-@SuppressWarnings("unused")
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public final class ThirdPartyCommands {
     private ThirdPartyCommands() {

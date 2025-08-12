@@ -1,12 +1,14 @@
 package dev.kitteh.factions.permissible;
 
 import dev.kitteh.factions.upgrade.Upgrade;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
  * Permissible actions, such as the ability to open container blocks.
  */
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public interface PermissibleAction {
     /**

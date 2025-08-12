@@ -1,7 +1,9 @@
 package dev.kitteh.factions.chat;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public interface ChatTarget {
     Public PUBLIC = new Public();

@@ -13,8 +13,10 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class PowerControl implements LandRaidControl {
     @Override

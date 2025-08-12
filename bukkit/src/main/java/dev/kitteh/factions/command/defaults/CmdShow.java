@@ -100,7 +100,7 @@ public class CmdShow implements Cmd {
             // send header and that's all
             String header = show.getFirst();
             if (FactionTag.HEADER.foundInString(header)) {
-                context.sender().sender().sendMessage(TextUtil.titleize(tag));
+                context.sender().sender().sendMessage(TextUtil.titleizeLegacy(tag));
             } else {
                 String message = header.replace(FactionTag.FACTION.getTag(), tag);
                 message = Tag.parsePlain(faction, fPlayer, message);

@@ -6,6 +6,7 @@ import dev.kitteh.factions.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ApiStatus.Obsolete
 public abstract class GUI<Type> implements InventoryHolder {
     protected Inventory inventory;
 

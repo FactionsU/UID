@@ -3,12 +3,14 @@ package dev.kitteh.factions.permissible;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.TL;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
  * Default permissible actions.
  */
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public enum PermissibleActions implements PermissibleAction {
     BUILD(TL.PERM_BUILD, TL.PERM_SHORT_BUILD),

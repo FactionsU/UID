@@ -14,12 +14,14 @@ import org.incendo.cloud.parser.ParserDescriptor;
 import org.incendo.cloud.suggestion.BlockingSuggestionProvider;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingSuggestionProvider<Sender> {
     public static ParserDescriptor<Sender, FPlayer> of(Include primary, Include... includes) {

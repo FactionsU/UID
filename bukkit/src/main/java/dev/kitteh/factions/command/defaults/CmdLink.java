@@ -28,6 +28,6 @@ public class CmdLink implements Cmd {
 
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
-        sender.msgLegacy(TL.COMMAND_LINK_SHOW, TextUtil.getString(FactionsPlugin.instance().conf().colors().relations().getMember()), sender.faction().link());
+        sender.msgLegacy(TL.COMMAND_LINK_SHOW, TextUtil.getLegacyString(FactionsPlugin.instance().conf().colors().relations().getMember()), sender.faction().link());
     }
 }

@@ -3,6 +3,7 @@ package dev.kitteh.factions.permissible.selector;
 import dev.kitteh.factions.permissible.PermSelector;
 import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -14,6 +15,7 @@ import java.util.function.Supplier;
  * Default, abstract implementations of basics that all built-in
  * PermSelectors utilize.
  */
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public abstract class AbstractSelector implements PermSelector {
     public static class BasicDescriptor implements Descriptor {

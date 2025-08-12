@@ -6,13 +6,18 @@ import dev.kitteh.factions.config.file.PermissionsConfig;
 import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.config.transition.Transitioner;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.logging.Level;
 
+@ApiStatus.AvailableSince("4.0.0")
+@NullMarked
 public class ConfigManager {
     private final AbstractFactionsPlugin plugin;
-    private PermissionsConfig permissionsConfig = null;
+    private @Nullable PermissionsConfig permissionsConfig = null;
     private final MainConfig mainConfig = new MainConfig();
     private final DynmapConfig dynmapConfig = new DynmapConfig();
     private final TranslationsConfig translationsConfig = new TranslationsConfig();

@@ -2,11 +2,14 @@ package dev.kitteh.factions;
 
 import dev.kitteh.factions.plugin.Instances;
 import org.bukkit.Location;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@ApiStatus.AvailableSince("4.0.0")
+@ApiStatus.NonExtendable
 @NullMarked
 public interface Factions {
     int ID_WILDERNESS = 0;

@@ -1,6 +1,7 @@
 package dev.kitteh.factions.upgrade;
 
 import dev.kitteh.factions.config.file.TranslationsConfig;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@SuppressWarnings("unused")
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public final class Upgrades {
     public static final class Variables {

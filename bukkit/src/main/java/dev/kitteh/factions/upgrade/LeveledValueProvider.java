@@ -4,11 +4,13 @@ import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ParseException;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;
 import java.util.stream.IntStream;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public interface LeveledValueProvider {
     record Equation(Expression expression) implements LeveledValueProvider {

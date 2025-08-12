@@ -7,10 +7,12 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.HashSet;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class WorldUtil {
     private static HashSet<String> worlds = new HashSet<>();

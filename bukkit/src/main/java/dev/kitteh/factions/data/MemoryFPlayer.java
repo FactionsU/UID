@@ -43,6 +43,7 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -68,6 +69,7 @@ import java.util.UUID;
  * The same instance is always returned for the same player. This means you can use the == operator. No .equals method
  * necessary.
  */
+@ApiStatus.Internal
 @NullMarked
 public abstract class MemoryFPlayer implements FPlayer {
 

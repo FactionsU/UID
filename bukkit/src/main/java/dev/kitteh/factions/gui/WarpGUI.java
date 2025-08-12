@@ -19,6 +19,7 @@ import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ApiStatus.Obsolete
 public class WarpGUI extends GUI<Integer> {
     private static final SimpleItem warpItem;
     private static final SimpleItem passwordModifier;

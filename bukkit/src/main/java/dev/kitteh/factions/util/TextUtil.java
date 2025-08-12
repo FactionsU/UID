@@ -7,12 +7,14 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.jetbrains.annotations.ApiStatus;
 
 public class TextUtil {
     private TextUtil() {
     }
 
-    public static String getString(TextColor color) {
+    @ApiStatus.Obsolete
+    public static String getLegacyString(TextColor color) {
         if (color instanceof NamedTextColor namedTextColor) {
             ChatColor col = switch (namedTextColor.toString()) {
                 case "black" -> ChatColor.BLACK;
@@ -42,10 +44,12 @@ public class TextUtil {
         return builder.toString();
     }
 
+    @ApiStatus.Obsolete
     public static String parse(String str, Object... args) {
         return String.format(parse(str), args);
     }
 
+    @ApiStatus.Obsolete
     public static String parse(String str) {
         return ChatColor.translateAlternateColorCodes('&', str);
     }
@@ -69,7 +73,8 @@ public class TextUtil {
     private final static String titleizeLine = repeat("_", 52);
     private final static int titleizeBalance = -1;
 
-    public static String titleize(String str) {
+    @ApiStatus.Obsolete
+    public static String titleizeLegacy(String str) {
         String center = ".[ " + ChatColor.DARK_GREEN + str + ChatColor.GOLD + " ].";
         int centerlen = ChatColor.stripColor(center).length();
         int pivot = titleizeLine.length() / 2;
@@ -83,7 +88,7 @@ public class TextUtil {
         }
     }
 
-    public static Component titleizeC(String string) {
+    public static Component titleize(String string) {
         String str = MiniMessage.miniMessage().serialize(LegacyComponentSerializer.legacySection().deserialize(string));
         String center = ".[ <dark_green>" + str + "<gold> ].";
         int centerLen = ChatColor.stripColor(Mini.toLegacy(Mini.parse(center))).length();

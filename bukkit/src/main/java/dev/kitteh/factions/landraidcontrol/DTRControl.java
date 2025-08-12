@@ -16,12 +16,14 @@ import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.stream.Stream;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class DTRControl implements LandRaidControl {
     private static FactionsPlugin plugin = FactionsPlugin.instance();

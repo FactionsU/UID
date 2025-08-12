@@ -2,10 +2,13 @@ package dev.kitteh.factions;
 
 import dev.kitteh.factions.plugin.Instances;
 import org.bukkit.World;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
 
+@ApiStatus.AvailableSince("4.0.0")
+@ApiStatus.NonExtendable
 @NullMarked
 public interface Board {
     static Board board() {

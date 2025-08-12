@@ -14,9 +14,11 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FactionResolver extends ObservedResolver {
     public static FactionResolver of(@Nullable FPlayer observer, Faction faction) {

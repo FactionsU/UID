@@ -25,9 +25,11 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Wither;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public final class Protection {
     public static @Nullable PermissibleAction useActionFromBlockType(Material material) {

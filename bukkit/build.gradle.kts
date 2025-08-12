@@ -14,7 +14,7 @@ configurations.implementation {
 }
 
 dependencies {
-  compileOnlyApi(libs.jspecify)
+  compileOnlyApi(libs.bundles.annotations)
 
   implementation(libs.spigot)
   implementation(libs.bundles.cloud)

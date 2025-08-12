@@ -7,6 +7,7 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Selectable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -19,6 +20,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public abstract class AbstractRelationSelector extends AbstractSelector {
     public static class RelationDescriptor extends BasicDescriptor {

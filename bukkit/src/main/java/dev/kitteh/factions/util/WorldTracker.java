@@ -6,10 +6,12 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.longs.*;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class WorldTracker {
     public static final int NO_MATCH = Integer.MIN_VALUE;

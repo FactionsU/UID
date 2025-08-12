@@ -7,6 +7,7 @@ import dev.kitteh.factions.event.FactionCreateEvent;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+@ApiStatus.Internal
 @NullMarked
 public abstract class MemoryFactions implements Factions {
     public final Map<Integer, MemoryFaction> factions = new ConcurrentHashMap<>();

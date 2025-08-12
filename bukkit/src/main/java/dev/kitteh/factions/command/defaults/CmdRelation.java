@@ -79,8 +79,8 @@ public class CmdRelation implements Cmd {
         // try to set the new relation
         faction.relationWish(them, targetRelation);
         Relation currentRelation = faction.relationTo(them, true);
-        String currentRelationColor = TextUtil.getString(currentRelation.color());
-        String targetRelationColor = TextUtil.getString(targetRelation.color());
+        String currentRelationColor = TextUtil.getLegacyString(currentRelation.color());
+        String targetRelationColor = TextUtil.getLegacyString(targetRelation.color());
 
         // if the relation change was successful
         if (targetRelation.value == currentRelation.value) {

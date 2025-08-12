@@ -6,9 +6,10 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.permissible.Relation;
 import net.kyori.adventure.text.format.TextColor;
+import org.jetbrains.annotations.ApiStatus;
 
 public class RelationUtil {
-
+    @ApiStatus.Obsolete
     public static String describeThatToMeLegacy(Participator that, Participator me, boolean ucfirst) {
         String ret = "";
 
@@ -43,6 +44,7 @@ public class RelationUtil {
         return getLegacyColorStringOfThatToMe(that, me) + ret;
     }
 
+    @ApiStatus.Obsolete
     public static String describeThatToMeLegacy(Participator that, Participator me) {
         return describeThatToMeLegacy(that, me, false);
     }
@@ -94,8 +96,9 @@ public class RelationUtil {
         return null;
     }
 
+    @ApiStatus.Obsolete
     public static String getLegacyColorStringOfThatToMe(Participator that, Participator me) {
-        return TextUtil.getString(getTextColorOfThatToMe(that, me));
+        return TextUtil.getLegacyString(getTextColorOfThatToMe(that, me));
     }
 
     public static TextColor getTextColorOfThatToMe(Participator that, Participator me) {

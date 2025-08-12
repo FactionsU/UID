@@ -2,6 +2,7 @@ package dev.kitteh.factions.permissible;
 
 import dev.kitteh.factions.Faction;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -16,6 +17,7 @@ import java.util.Map;
  * Implementations must be immutable and should extend AbstractSelector (or
  * at least copy its methods to be consistent).
  */
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public interface PermSelector {
     /**

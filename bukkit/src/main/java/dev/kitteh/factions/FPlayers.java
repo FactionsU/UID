@@ -3,11 +3,14 @@ package dev.kitteh.factions;
 import dev.kitteh.factions.plugin.Instances;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 import java.util.UUID;
 
+@ApiStatus.AvailableSince("4.0.0")
+@ApiStatus.NonExtendable
 @NullMarked
 public interface FPlayers {
     static FPlayers fPlayers() {

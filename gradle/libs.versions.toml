@@ -32,10 +32,11 @@ essentialsx = { module = "net.essentialsx:EssentialsX", version.ref = "essential
 fastutil = { module = "it.unimi.dsi:fastutil", version = "8.5.6" }
 graves = { module = "com.ranull:graves", version = "4.9" }
 ifchestonly = { module = "dev.kitteh.forkedproject:IF-ChestOnly", version = "0.10.19" }
+jetbrains = { module = "org.jetbrains:annotations", version = "26.0.2" }
 jspecify = { module = "org.jspecify:jspecify", version = "0.3.0" }
 luckperms-api = { module = "net.luckperms:api", version = "5.0" }
 magic-api = { module = "com.elmakers.mine.bukkit:MagicAPI", version = "10.2" }
-paper = { module = "io.papermc.paper:paper-api", version.ref = "minecraft"}
+paper = { module = "io.papermc.paper:paper-api", version.ref = "minecraft" }
 placeholderapi = { module = "me.clip:placeholderapi", version = "2.11.6" }
 playervaultsx = { module = "com.drtshock:PlayerVaultsX", version = "4.2.15" }
 sentinel = { module = "org.mcmonkey:sentinel", version = "2.9.2-SNAPSHOT" }
@@ -48,4 +49,5 @@ worldguard-core = { module = "com.sk89q.worldguard:worldguard-core", version.ref
 
 [bundles]
 adventure = ["adventure-text-minimessage", "adventure-text-serializer-gson", "adventure-text-serializer-legacy"]
+annotations = ["jetbrains", "jspecify"]
 cloud = ["cloud-paper", "cloud-extras"]

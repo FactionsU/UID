@@ -2,7 +2,9 @@ package dev.kitteh.factions.data;
 
 import dev.kitteh.factions.*;
 import dev.kitteh.factions.plugin.Instances;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class SaveTask implements Runnable {
     private static boolean running = false;
 

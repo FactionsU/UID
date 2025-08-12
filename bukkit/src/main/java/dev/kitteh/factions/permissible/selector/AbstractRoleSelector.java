@@ -7,6 +7,7 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -20,6 +21,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public abstract class AbstractRoleSelector extends AbstractSelector {
     public static class RoleDescriptor extends BasicDescriptor {
