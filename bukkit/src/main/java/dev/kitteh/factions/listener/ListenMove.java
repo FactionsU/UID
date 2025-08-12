@@ -1,12 +1,11 @@
 package dev.kitteh.factions.listener;
 
-import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.data.MemoryBoard;
+import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
@@ -113,7 +112,7 @@ public class ListenMove implements Listener {
 
         if (me.mapAutoUpdating()) {
             if (!mapLastShown.containsKey(player.getUniqueId()) || (mapLastShown.get(player.getUniqueId()) < System.currentTimeMillis())) {
-                for (Component component : ((MemoryBoard) Board.board()).getMap(me, to, player.getLocation().getYaw())) {
+                for (Component component : Instances.BOARD.getMap(me, to, player.getLocation().getYaw())) {
                     me.sendMessage(component);
                 }
                 mapLastShown.put(player.getUniqueId(), System.currentTimeMillis() + this.plugin.conf().commands().map().getCooldown());

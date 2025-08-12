@@ -1,9 +1,8 @@
 package dev.kitteh.factions.scoreboard.sidebar;
 
-import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.data.MemoryBoard;
+import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.scoreboard.FSidebarProvider;
 import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
@@ -48,7 +47,7 @@ public class FDefaultSidebar extends FSidebarProvider {
             }
             if (next.contains("{map}")) {
                 if (mapMap == null) {
-                    mapMap = ((MemoryBoard) Board.board()).getScoreboardMap(fplayer);
+                    mapMap = Instances.BOARD.getScoreboardMap(fplayer);
                 }
                 String rep = mapMap.isEmpty() ? "" : Mini.toLegacy(mapMap.removeFirst());
                 if (!rep.isEmpty() && !mapC.isEmpty()) {

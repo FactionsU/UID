@@ -1,23 +1,15 @@
 package dev.kitteh.factions.command.defaults.admin;
 
-import dev.kitteh.factions.Board;
-import dev.kitteh.factions.FPlayers;
-import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
-import dev.kitteh.factions.data.MemoryBoard;
-import dev.kitteh.factions.data.MemoryFPlayers;
-import dev.kitteh.factions.data.MemoryFactions;
-import dev.kitteh.factions.data.MemoryUniverse;
+import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdSaveAll implements Cmd {
@@ -32,10 +24,10 @@ public class CmdSaveAll implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        ((MemoryFPlayers) FPlayers.fPlayers()).forceSave(false);
-        ((MemoryFactions) Factions.factions()).forceSave(false);
-        ((MemoryBoard) Board.board()).forceSave(false);
-        ((MemoryUniverse) Universe.universe()).forceSave(false);
+        Instances.PLAYERS.forceSave(false);
+        Instances.FACTIONS.forceSave(false);
+        Instances.BOARD.forceSave(false);
+        Instances.UNIVERSE.forceSave(false);
         context.sender().msg(TL.COMMAND_SAVEALL_SUCCESS);
     }
 }

@@ -1,8 +1,7 @@
 package dev.kitteh.factions.data.json;
 
-import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.data.MemoryFPlayer;
-import dev.kitteh.factions.data.MemoryFPlayers;
+import dev.kitteh.factions.plugin.Instances;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.UUID;
@@ -15,6 +14,6 @@ public final class JSONFPlayer extends MemoryFPlayer {
 
     @Override
     public void eraseData() {
-        ((MemoryFPlayers) FPlayers.fPlayers()).removePlayer(this);
+        Instances.PLAYERS.removePlayer(this);
     }
 }

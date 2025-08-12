@@ -1,6 +1,5 @@
 package dev.kitteh.factions.data;
 
-import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
@@ -23,6 +22,7 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
@@ -1201,7 +1201,7 @@ public abstract class MemoryFaction implements Faction {
         }
 
         // Clean the board
-        ((MemoryBoard) Board.board()).clean(this);
+        Instances.BOARD.clean(this);
 
         for (FPlayer fPlayer : fplayers) {
             fPlayer.resetFactionData(true);

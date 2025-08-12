@@ -1,13 +1,12 @@
 package dev.kitteh.factions.command.defaults;
 
-import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
-import dev.kitteh.factions.data.MemoryBoard;
+import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
@@ -59,7 +58,7 @@ public class CmdMap implements Cmd {
             sender.msgLegacy(TL.COMMAND_MAP_UPDATE_ENABLED);
         }
 
-        for (Component component : ((MemoryBoard) Board.board()).getMap(sender, new FLocation(player), player.getLocation().getYaw())) {
+        for (Component component : Instances.BOARD.getMap(sender, new FLocation(player), player.getLocation().getYaw())) {
             context.sender().sendMessage(component);
         }
     }

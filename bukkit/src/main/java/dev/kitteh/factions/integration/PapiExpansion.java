@@ -6,10 +6,10 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.tag.FactionTag;
 import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.Mini;
@@ -88,7 +88,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
         }
 
         if (placeholder.startsWith("player_map_")) {
-            List<Component> list = ((MemoryBoard) Board.board()).getScoreboardMap(fPlayer);
+            List<Component> list = Instances.BOARD.getScoreboardMap(fPlayer);
             if (list.isEmpty()) {
                 return "";
             }
