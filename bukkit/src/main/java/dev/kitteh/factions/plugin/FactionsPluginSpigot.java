@@ -79,4 +79,9 @@ public class FactionsPluginSpigot extends AbstractFactionsPlugin {
             return manager;
         });
     }
+
+    @Override
+    protected String getPluginName() {
+        return this.getDescription().getName();
+    }
 }

@@ -79,4 +79,9 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     public CompletableFuture<Boolean> teleport(Player player, Location location) {
         return player.teleportAsync(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
+
+    @Override
+    protected String getPluginName() {
+        return this.getPluginMeta().getName();
+    }
 }

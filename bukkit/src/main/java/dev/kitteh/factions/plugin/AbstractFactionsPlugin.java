@@ -482,7 +482,8 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     }
 
     private void setupMetrics() {
-        this.metrics = new Metrics(this);
+        if (!"FactionsUUID".equals(this.getPluginName())) return;
+        this.metrics = new Metrics(this, 5125);
 
         // Version
         String verString = this.getDescription().getVersion();
@@ -979,4 +980,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     public abstract CompletableFuture<Boolean> teleport(Player player, Location location);
 
     public abstract void addCommands(BiConsumer<String, Cmd> reg, Consumer<Supplier<CommandManager<Sender>>> commandManager);
+
+    protected abstract String getPluginName();
 }
