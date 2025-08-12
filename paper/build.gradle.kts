@@ -15,6 +15,8 @@ publishing {
   publications {
     create<MavenPublication>("factionsuuid") {
       artifact(tasks.shadowJar)
+      artifact(tasks.javadocJar)
+      artifact(tasks.sourcesJar)
       groupId = "dev.kitteh"
       artifactId = "factions"
       version = project.version.toString()
