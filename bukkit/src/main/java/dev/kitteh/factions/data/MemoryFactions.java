@@ -115,7 +115,9 @@ public abstract class MemoryFactions implements Factions {
 
     @Override
     public void remove(Faction faction) {
-        factions.remove(faction.id()).remove();
+        if (factions.remove(faction.id()) instanceof MemoryFaction f) {
+            f.remove();
+        }
     }
 
     @Override
