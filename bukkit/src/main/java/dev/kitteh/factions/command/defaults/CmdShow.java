@@ -75,13 +75,13 @@ public class CmdShow implements Cmd {
 
         Faction faction = context.getOrDefault("faction", fPlayer == null ? Factions.factions().wilderness() : fPlayer.faction());
         if (faction.isWilderness()) {
-            context.sender().msg(TL.COMMAND_SHOW_NOFACTION_OTHER);
+            context.sender().msgLegacy(TL.COMMAND_SHOW_NOFACTION_OTHER);
             return;
         }
 
         if (!context.sender().hasPermission(Permission.SHOW_BYPASS_EXEMPT)
                 && FactionsPlugin.instance().conf().commands().show().getExempt().contains(faction.tag())) {
-            context.sender().msg(TL.COMMAND_SHOW_EXEMPT);
+            context.sender().msgLegacy(TL.COMMAND_SHOW_EXEMPT);
             return;
         }
 

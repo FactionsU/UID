@@ -90,7 +90,7 @@ public class CmdForceRole implements Cmd {
 
     private void handle(Sender sender, FPlayer target, Role targetNewRole) {
         if (targetNewRole == null || targetNewRole == Role.ADMIN) {
-            sender.msg(TL.COMMAND_ROLE_NOT_ALLOWED);
+            sender.msgLegacy(TL.COMMAND_ROLE_NOT_ALLOWED);
             return;
         }
 
@@ -98,7 +98,7 @@ public class CmdForceRole implements Cmd {
                 !FactionsPlugin.instance().conf().factions().other().isAllowMultipleColeaders() &&
                 !target.faction().members(Role.COLEADER).isEmpty()
         ) {
-            sender.msg(TL.COMMAND_COLEADER_ALREADY_COLEADER);
+            sender.msgLegacy(TL.COMMAND_COLEADER_ALREADY_COLEADER);
             return;
         }
 
@@ -108,7 +108,7 @@ public class CmdForceRole implements Cmd {
         }
 
         target.msgLegacy(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
-        sender.msg(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
+        sender.msgLegacy(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
     }
 
     private void handleAdmin(CommandContext<Sender> context) {
@@ -139,7 +139,7 @@ public class CmdForceRole implements Cmd {
         faction.msgLegacy(TL.COMMAND_ADMIN_PROMOTED, "Server", target.describeToLegacy(faction), faction.describeToLegacy(faction));
         FPlayer senderMaybe = context.sender().fPlayerOrNull();
         if (senderMaybe == null || senderMaybe.faction() != faction) {
-            context.sender().msg(TL.COMMAND_ADMIN_PROMOTED, "You", target.describeToLegacy(senderMaybe), faction.describeToLegacy(senderMaybe));
+            context.sender().msgLegacy(TL.COMMAND_ADMIN_PROMOTED, "You", target.describeToLegacy(senderMaybe), faction.describeToLegacy(senderMaybe));
         }
     }
 }

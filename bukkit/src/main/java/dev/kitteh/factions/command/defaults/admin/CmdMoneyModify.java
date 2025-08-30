@@ -48,7 +48,7 @@ public class CmdMoneyModify implements Cmd {
 
     private void handle(CommandContext<Sender> context, boolean modify) {
         if (!FactionsPlugin.instance().conf().economy().isBankEnabled()) {
-            context.sender().msg(TL.ECON_DISABLED);
+            context.sender().msgLegacy(TL.ECON_DISABLED);
             return;
         }
         double amount = context.get("amount");
@@ -58,7 +58,7 @@ public class CmdMoneyModify implements Cmd {
 
         if (modify) {
             if (Econ.modifyBalance(faction, amount)) {
-                context.sender().msg(TL.COMMAND_MONEYMODIFY_MODIFIED, faction.describeToLegacy(context.sender().fPlayerOrNull()), Econ.moneyString(amount));
+                context.sender().msgLegacy(TL.COMMAND_MONEYMODIFY_MODIFIED, faction.describeToLegacy(context.sender().fPlayerOrNull()), Econ.moneyString(amount));
                 if (notify) {
                     faction.msgLegacy(TL.COMMAND_MONEYMODIFY_NOTIFY, faction.describeToLegacy(null), Econ.moneyString(amount));
                 }
@@ -67,11 +67,11 @@ public class CmdMoneyModify implements Cmd {
                     AbstractFactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYMODIFY_MODIFIED.toString(), faction.describeToLegacy(null), Econ.moneyString(amount))));
                 }
             } else {
-                context.sender().msg(TL.COMMAND_MONEYMODIFY_FAIL);
+                context.sender().msgLegacy(TL.COMMAND_MONEYMODIFY_FAIL);
             }
         } else {
             if (Econ.setBalance(faction, amount)) {
-                context.sender().msg(TL.COMMAND_MONEYMODIFY_SET, faction.describeToLegacy(context.sender().fPlayerOrNull()), Econ.moneyString(amount));
+                context.sender().msgLegacy(TL.COMMAND_MONEYMODIFY_SET, faction.describeToLegacy(context.sender().fPlayerOrNull()), Econ.moneyString(amount));
                 if (notify) {
                     faction.msgLegacy(TL.COMMAND_MONEYMODIFY_SETNOTIFY, faction.describeToLegacy(null), Econ.moneyString(amount));
                 }
@@ -80,7 +80,7 @@ public class CmdMoneyModify implements Cmd {
                     AbstractFactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYMODIFY_SET.toString(), faction.describeToLegacy(null), Econ.moneyString(amount))));
                 }
             } else {
-                context.sender().msg(TL.COMMAND_MONEYMODIFY_FAIL);
+                context.sender().msgLegacy(TL.COMMAND_MONEYMODIFY_FAIL);
             }
         }
     }

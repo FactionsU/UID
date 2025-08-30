@@ -44,7 +44,7 @@ public class CmdPermanentPower implements Cmd {
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
         // Inform sender
-        context.sender().msg(TL.COMMAND_PERMANENTPOWER_SUCCESS, change, targetFaction.describeToLegacy(fPlayer));
+        context.sender().msgLegacy(TL.COMMAND_PERMANENTPOWER_SUCCESS, change, targetFaction.describeToLegacy(fPlayer));
 
         // Inform all other players
         for (FPlayer fplayer : targetFaction.membersOnline(true)) {

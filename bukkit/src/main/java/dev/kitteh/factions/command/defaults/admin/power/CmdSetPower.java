@@ -33,6 +33,6 @@ public class CmdSetPower implements Cmd {
         Double number = context.get("value");
 
         player.power(number);
-        context.sender().msg(TL.COMMAND_MODIFYPOWER_SET, player.power(), player.name());
+        context.sender().msgLegacy(TL.COMMAND_MODIFYPOWER_SET, player.power(), player.name());
     }
 }

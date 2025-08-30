@@ -70,6 +70,6 @@ public class CmdChat implements Cmd {
             };
             default -> TL.COMMAND_CHAT_MODE_PUBLIC;
         };
-        context.sender().msg(tl);
+        context.sender().msgLegacy(tl);
     }
 }

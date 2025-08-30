@@ -45,7 +45,7 @@ public class CmdMoneyBalance implements Cmd {
         }
 
         if (faction == null || !faction.isNormal()) {
-            context.sender().msg(TL.GENERIC_MEMBERONLY);
+            context.sender().msgLegacy(TL.GENERIC_MEMBERONLY);
             return;
         }
 

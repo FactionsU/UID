@@ -29,6 +29,6 @@ public class CmdSetAutoSave implements Cmd {
     private void handle(CommandContext<Sender> context) {
         boolean state = context.get("state");
         AbstractFactionsPlugin.instance().autoSave(state);
-        context.sender().msg(state ? TL.COMMAND_SETAUTOSAVE_ENABLED : TL.COMMAND_SETAUTOSAVE_DISABLED);
+        context.sender().msgLegacy(state ? TL.COMMAND_SETAUTOSAVE_ENABLED : TL.COMMAND_SETAUTOSAVE_DISABLED);
     }
 }

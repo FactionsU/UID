@@ -50,6 +50,6 @@ public class CmdToggleChat implements Cmd {
             sender.ignoreTruceChat(!sender.ignoreTruceChat());
             tl = sender.ignoreTruceChat() ? TL.COMMAND_TOGGLETRUCECHAT_IGNORE : TL.COMMAND_TOGGLETRUCECHAT_UNIGNORE;
         }
-        context.sender().msg(tl);
+        context.sender().msgLegacy(tl);
     }
 }

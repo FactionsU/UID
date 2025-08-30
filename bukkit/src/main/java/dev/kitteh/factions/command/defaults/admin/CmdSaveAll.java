@@ -28,6 +28,6 @@ public class CmdSaveAll implements Cmd {
         Instances.FACTIONS.forceSave(false);
         Instances.BOARD.forceSave(false);
         Instances.UNIVERSE.forceSave(false);
-        context.sender().msg(TL.COMMAND_SAVEALL_SUCCESS);
+        context.sender().msgLegacy(TL.COMMAND_SAVEALL_SUCCESS);
     }
 }

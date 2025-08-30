@@ -31,6 +31,6 @@ public class CmdReload implements Cmd {
         AbstractFactionsPlugin.instance().loadLang();
         long timeReload = (System.currentTimeMillis() - timeInitStart);
 
-        context.sender().msg(TL.COMMAND_RELOAD_TIME, timeReload);
+        context.sender().msgLegacy(TL.COMMAND_RELOAD_TIME, timeReload);
     }
 }

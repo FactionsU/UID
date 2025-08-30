@@ -77,7 +77,7 @@ public class CmdTop implements Cmd {
 
         Function<Faction, FTopValue<?>> ftopGenerator = topValueGenerators.get(criteria);
         if (ftopGenerator == null || (!(FactionsPlugin.instance().landRaidControl() instanceof PowerControl) && criteria.equalsIgnoreCase("power"))) {
-            context.sender().msg(TL.COMMAND_TOP_INVALID, criteria);
+            context.sender().msgLegacy(TL.COMMAND_TOP_INVALID, criteria);
             return;
         }
 

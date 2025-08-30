@@ -34,7 +34,7 @@ public class CmdSetGrace implements Cmd {
 
     private void handleOff(CommandContext<Sender> context) {
         Universe.universe().graceRemaining(Duration.ZERO);
-        context.sender().msg(TL.COMMAND_SET_GRACE_OFF);
+        context.sender().msgLegacy(TL.COMMAND_SET_GRACE_OFF);
     }
 
     private void handleOn(CommandContext<Sender> context) {
@@ -44,6 +44,6 @@ public class CmdSetGrace implements Cmd {
             return;
         }
         Universe.universe().graceRemaining(duration);
-        context.sender().msg(TL.COMMAND_SET_GRACE_ACTIVE, MiscUtil.durationString(duration));
+        context.sender().msgLegacy(TL.COMMAND_SET_GRACE_ACTIVE, MiscUtil.durationString(duration));
     }
 }

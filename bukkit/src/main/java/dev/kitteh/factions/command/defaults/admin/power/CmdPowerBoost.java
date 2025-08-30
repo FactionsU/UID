@@ -66,7 +66,7 @@ public class CmdPowerBoost implements Cmd {
 
         target.powerBoost(value);
 
-        context.sender().msg(TL.COMMAND_POWERBOOST_BOOST, target, Math.round(value));
+        context.sender().msgLegacy(TL.COMMAND_POWERBOOST_BOOST, target, Math.round(value));
     }
 
     private void handleFaction(CommandContext<Sender> context, boolean modify) {
@@ -79,6 +79,6 @@ public class CmdPowerBoost implements Cmd {
 
         target.powerBoost(value);
 
-        context.sender().msg(TL.COMMAND_POWERBOOST_BOOST, target, Math.round(value));
+        context.sender().msgLegacy(TL.COMMAND_POWERBOOST_BOOST, target, Math.round(value));
     }
 }

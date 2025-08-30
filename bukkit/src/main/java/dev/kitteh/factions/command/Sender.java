@@ -43,8 +43,14 @@ public interface Sender {
         return this instanceof Player p ? p.fPlayer() : null;
     }
 
-    default void msg(TL translation, Object... args) {
+    @ApiStatus.Obsolete
+    default void msgLegacy(TL translation, Object... args) {
         sender().sendMessage(TextUtil.parse(translation.toString(), args));
+    }
+
+    @Deprecated(forRemoval = true, since = "4.0.1")
+    default void msg(TL translation, Object... args) {
+        this.msgLegacy(translation, args);
     }
 
     default boolean hasPermission(Permission perm) {

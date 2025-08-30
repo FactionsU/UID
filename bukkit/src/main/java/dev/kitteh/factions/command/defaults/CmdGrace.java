@@ -34,9 +34,9 @@ public class CmdGrace implements Cmd {
         Duration remaining = Universe.universe().graceRemaining();
 
         if (remaining.isZero()) {
-            context.sender().msg(TL.COMMAND_GRACE_NOT_SET);
+            context.sender().msgLegacy(TL.COMMAND_GRACE_NOT_SET);
         } else {
-            context.sender().msg(TL.COMMAND_GRACE_ACTIVE, MiscUtil.durationString(remaining));
+            context.sender().msgLegacy(TL.COMMAND_GRACE_ACTIVE, MiscUtil.durationString(remaining));
         }
     }
 }
