@@ -5,6 +5,7 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.defaults.admin.force.CmdForceDisband;
 import dev.kitteh.factions.command.defaults.admin.force.CmdForceHome;
 import dev.kitteh.factions.command.defaults.admin.force.CmdForceKick;
+import dev.kitteh.factions.command.defaults.admin.force.CmdForceRole;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 
@@ -20,6 +21,7 @@ public class CmdAdminForce implements Cmd {
             new CmdForceKick().consumer().accept(manager, forceBuilder, help);
             new CmdForceDisband().consumer().accept(manager, forceBuilder, help);
             new CmdForceHome().consumer().accept(manager, forceBuilder, help);
+            new CmdForceRole().consumer().accept(manager, forceBuilder, help);
         };
     }
 }

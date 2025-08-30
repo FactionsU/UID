@@ -76,6 +76,7 @@ permissions:
       factions.managesafezone: true
       factions.managewarzone: true
       factions.bypass: true
+      factions.force.role: true
       factions.kick.any: true
       factions.chatspy: true
       factions.show.bypassexempt: true
@@ -337,3 +338,5 @@ permissions:
     description: List claims of other factions
   factions.upgrades:
     description: Show faction upgrades
+  factions.force.role:
+    description: Modify roles anywhere
