@@ -810,6 +810,7 @@ public abstract class MemoryFaction implements Faction {
         this.maxVaults = FactionsPlugin.instance().conf().plugins().playerVaults().getDefaultMaxVaults();
         this.defaultRole = FactionsPlugin.instance().conf().factions().other().getDefaultRole();
         this.dtr = FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getStartingDTR();
+        this.resetPerms();
     }
 
     @Override
