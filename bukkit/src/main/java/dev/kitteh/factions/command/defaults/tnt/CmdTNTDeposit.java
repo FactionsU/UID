@@ -20,6 +20,7 @@ import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.parser.standard.IntegerParser;
 
 import java.util.Map;
+
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
@@ -54,6 +55,12 @@ public class CmdTNTDeposit implements Cmd {
             return;
         }
 
+        int bankMax = faction.tntBankMax();
+        if (bankMax <= faction.tntBank()) {
+            sender.msgLegacy(TL.COMMAND_TNT_DEPOSIT_FAIL_FULL, bankMax);
+            return;
+        }
+
         ItemStack tntStack = new ItemStack(Material.TNT);
         int available = 0;
         for (ItemStack i : player.getInventory().getStorageContents()) {
@@ -62,14 +69,8 @@ public class CmdTNTDeposit implements Cmd {
             }
         }
         amount = Math.min(amount, available);
+        amount = Math.min(amount, bankMax);
 
-        if (FactionsPlugin.instance().conf().commands().tnt().isAboveMaxStorage(faction.tntBank() + amount)) {
-            if (FactionsPlugin.instance().conf().commands().tnt().getMaxStorage() == faction.tntBank()) {
-                sender.msgLegacy(TL.COMMAND_TNT_DEPOSIT_FAIL_FULL, FactionsPlugin.instance().conf().commands().tnt().getMaxStorage());
-                return;
-            }
-            amount = FactionsPlugin.instance().conf().commands().tnt().getMaxStorage() - faction.tntBank();
-        }
         int current = amount;
         Map<Integer, ? extends ItemStack> all = player.getInventory().all(Material.TNT);
         for (Map.Entry<Integer, ? extends ItemStack> entry : all.entrySet()) {

@@ -91,6 +91,7 @@ public enum Permission {
     TNT_WITHDRAW("tnt.withdraw"),
     TNT_FILL("tnt.fill"),
     TNT_SIPHON("tnt.siphon"),
+    TNT_MODIFY("tnt.modify"),
     UNCLAIM("unclaim"),
     UNCLAIM_FILL("unclaim.fill"),
     UNCLAIM_ALL("unclaimall"),

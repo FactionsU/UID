@@ -80,6 +80,7 @@ permissions:
       factions.kick.any: true
       factions.chatspy: true
       factions.show.bypassexempt: true
+      factions.tnt.modify: true
   factions.kit.fullplayer:
     default: true
     description: Can also create new factions and use title colors.
@@ -330,6 +331,8 @@ permissions:
     description: Use TNT fill command
   factions.tnt.siphon:
     description: Use TNT siphon command
+  factions.tnt.modify:
+    description: Modify a faction's TNT bank
   factions.coords:
     description: Send coordinates to your teammates
   factions.listclaims:
@@ -341,4 +344,4 @@ permissions:
   factions.force.role:
     description: Modify roles anywhere
   factions.force.join:
-    description: Modify roles anywhere
+    description: Force a player to join a faction

@@ -945,7 +945,8 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public int tntBankMax() {
-        return FactionsPlugin.instance().conf().commands().tnt().getMaxStorage();
+        int configMax = FactionsPlugin.instance().conf().commands().tnt().getMaxStorage();
+        return configMax >= 0 ? configMax : Integer.MAX_VALUE;
     }
 
     @Override

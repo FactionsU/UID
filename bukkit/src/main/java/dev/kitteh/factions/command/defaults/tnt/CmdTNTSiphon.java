@@ -57,7 +57,8 @@ public class CmdTNTSiphon implements Cmd {
             return;
         }
 
-        if (FactionsPlugin.instance().conf().commands().tnt().isAboveMaxStorage(faction.tntBank() + 1)) {
+        int bankMax = faction.tntBankMax();
+        if (bankMax <= faction.tntBank()) {
             sender.msgLegacy(TL.COMMAND_TNT_SIPHON_FAIL_FULL);
             return;
         }
@@ -69,14 +70,7 @@ public class CmdTNTSiphon implements Cmd {
 
         List<Dispenser> list = CmdTNTFill.getDispensers(player.getLocation(), radius, faction);
 
-        int canTake;
-        if (FactionsPlugin.instance().conf().commands().tnt().getMaxStorage() < 0) {
-            canTake = Integer.MAX_VALUE;
-        } else {
-            canTake = FactionsPlugin.instance().conf().commands().tnt().getMaxStorage();
-        }
-
-        canTake -= faction.tntBank();
+        int canTake = bankMax - faction.tntBank();
 
         if (amount > 0 && amount < canTake) {
             canTake = amount;

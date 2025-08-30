@@ -434,6 +434,7 @@ public enum TL {
     COMMAND_TNT_WITHDRAW_MESSAGE("&eWithdrew %d TNT. %d left in the faction bank."),
     COMMAND_TNT_WITHDRAW_FAIL_NOTENOUGH("&cThe faction bank does not have %d TNT!"),
     COMMAND_TNT_WITHDRAW_FAIL_POSITIVE("&cPositive values only!"),
+    COMMAND_TNT_MODIFY_SUCCESS("&e%s now has %d TNT"),
 
     COMMAND_VAULT_DESCRIPTION("/f vault <number> to open one of your Faction's vaults."),
     COMMAND_VAULT_TOOHIGH("&cYou tried to open vault %d but your Faction only has %d vaults."),

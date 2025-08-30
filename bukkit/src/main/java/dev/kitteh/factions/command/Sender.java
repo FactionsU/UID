@@ -48,7 +48,7 @@ public interface Sender {
         sender().sendMessage(TextUtil.parse(translation.toString(), args));
     }
 
-    @Deprecated(forRemoval = true, since = "4.0.1")
+    @Deprecated(forRemoval = true, since = "4.1.0")
     default void msg(TL translation, Object... args) {
         this.msgLegacy(translation, args);
     }
