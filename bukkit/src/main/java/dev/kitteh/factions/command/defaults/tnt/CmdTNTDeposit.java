@@ -34,7 +34,7 @@ public class CmdTNTDeposit implements Cmd {
                                         .and(Cloudy.hasPermission(Permission.TNT_DEPOSIT))
                                         .and(Cloudy.hasSelfFactionPerms(PermissibleActions.TNTDEPOSIT))
                         )
-                        .required("amount", IntegerParser.integerParser(1))
+                        .optional("amount", IntegerParser.integerParser(1))
                         .handler(this::handle)
         );
     }
@@ -48,16 +48,20 @@ public class CmdTNTDeposit implements Cmd {
             sender.msgLegacy(TL.COMMAND_TNT_TERRITORYONLY);
             return;
         }
-        int amount = context.get("amount");
+        int amount = context.getOrDefault("amount", Integer.MAX_VALUE);
         if (amount <= 0) {
             sender.msgLegacy(TL.COMMAND_TNT_DEPOSIT_FAIL_POSITIVE, amount);
             return;
         }
 
-        if (!player.getInventory().containsAtLeast(new ItemStack(Material.TNT), amount)) {
-            sender.msgLegacy(TL.COMMAND_TNT_DEPOSIT_FAIL_NOTENOUGH, amount);
-            return;
+        ItemStack tntStack = new ItemStack(Material.TNT);
+        int available = 0;
+        for (ItemStack i : player.getInventory().getStorageContents()) {
+            if (tntStack.isSimilar(i)) {
+                available += i.getAmount();
+            }
         }
+        amount = Math.min(amount, available);
 
         if (FactionsPlugin.instance().conf().commands().tnt().isAboveMaxStorage(faction.tntBank() + amount)) {
             if (FactionsPlugin.instance().conf().commands().tnt().getMaxStorage() == faction.tntBank()) {
@@ -69,6 +73,9 @@ public class CmdTNTDeposit implements Cmd {
         int current = amount;
         Map<Integer, ? extends ItemStack> all = player.getInventory().all(Material.TNT);
         for (Map.Entry<Integer, ? extends ItemStack> entry : all.entrySet()) {
+            if (!tntStack.isSimilar(entry.getValue())) {
+                continue; // Don't eat special items
+            }
             final int count = entry.getValue().getAmount();
             final int newCount = Math.max(0, count - current);
             current -= (count - newCount);

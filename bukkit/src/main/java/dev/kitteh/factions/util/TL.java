@@ -416,7 +416,6 @@ public enum TL {
     COMMAND_TNT_TERRITORYONLY("&cCommand can only be run from your faction's territory!"),
     COMMAND_TNT_DEPOSIT_DESCRIPTION("Add to your faction's TNT bank"),
     COMMAND_TNT_DEPOSIT_FAIL_FULL("&cFaction bank already at maximum!"),
-    COMMAND_TNT_DEPOSIT_FAIL_NOTENOUGH("&cYou do not have that much TNT!"),
     COMMAND_TNT_DEPOSIT_FAIL_POSITIVE("&cMust deposit at least one!"),
     COMMAND_TNT_DEPOSIT_SUCCESS("&eYour faction now has %d TNT"),
     COMMAND_TNT_FILL_DESCRIPTION("Fill TNT into nearby dispensers"),
