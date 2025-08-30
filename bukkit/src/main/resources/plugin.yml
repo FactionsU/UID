@@ -312,3 +312,5 @@ permissions:
     description: Show faction upgrades
   factions.force.role:
     description: Modify roles anywhere
+  factions.force.join:
+    description: Force a player to join a faction

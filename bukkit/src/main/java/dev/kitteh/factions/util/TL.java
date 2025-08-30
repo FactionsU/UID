@@ -243,6 +243,8 @@ public enum TL {
     COMMAND_JOIN_JOINEDLOG("%1$s joined the faction %2$s."),
     COMMAND_JOIN_DESCRIPTION("Join a faction"),
     COMMAND_JOIN_BANNED("&cYou are banned from %1$s &c:("),
+    COMMAND_FORCE_JOIN_INOTHERFACTION("&cUser already in a faction."),
+    COMMAND_FORCE_JOIN_SUCCESS("&e%1$s joined %2$s."),
 
     COMMAND_KICK_CANDIDATES("Players you can kick: "),
     COMMAND_KICK_CLICKTOKICK("Click to kick "),

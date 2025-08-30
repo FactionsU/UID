@@ -13,6 +13,7 @@ public class FPlayerJoinEvent extends FactionPlayerEvent implements Cancellable 
     public enum Reason {
         CREATE(false),
         COMMAND(true),
+        COMMAND_FORCE(true),
         ;
 
         final boolean cancellable;

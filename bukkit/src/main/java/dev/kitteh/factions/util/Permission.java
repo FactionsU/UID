@@ -36,6 +36,7 @@ public enum Permission {
     FLY_SAFEZONE("fly.safezone"),
     FLY_WARZONE("fly.warzone"),
     FLY_TRAILS("fly.trails"),
+    FORCE_JOIN("force.join"),
     FORCE_ROLE("force.role"),
     GRACE_VIEW("grace.view"),
     GRACE_SET("grace.set"),
