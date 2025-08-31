@@ -32,6 +32,16 @@ public interface Universe {
     Duration graceRemaining();
 
     /**
+     * Gets if grace is currently enabled
+     *
+     * @return true if grace enabled
+     */
+    @ApiStatus.AvailableSince("4.1.1")
+    default boolean grace() {
+        return !this.graceRemaining().equals(Duration.ZERO);
+    }
+
+    /**
      * Sets grace time remaining.
      *
      * @param graceRemaining remaining grace time or zero to deactivate

@@ -2,6 +2,7 @@ package dev.kitteh.factions.listener;
 
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.protection.Protection;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Chunk;
@@ -69,7 +70,7 @@ public class ListenExplode implements Listener {
         }
 
         // Anti-Waterlog feature
-        if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && this.plugin.conf().exploits().isTntWaterlog()) {
+        if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && this.plugin.conf().exploits().isTntWaterlog() && !Universe.universe().grace()) {
             // TNT in water/lava doesn't normally destroy any surrounding blocks, which is usually desired behavior, but...
             // this change below provides workaround for waterwalling providing perfect protection,
             // and makes cheap (non-obsidian) TNT cannons require minor maintenance between shots

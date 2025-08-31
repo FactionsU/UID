@@ -325,7 +325,7 @@ public interface Faction extends Participator, Selectable {
     boolean peacefulExplosionsEnabled();
 
     default boolean noExplosionsInTerritory() {
-        return this.shieldActive() || (this.isPeaceful() && !this.peacefulExplosionsEnabled());
+        return Universe.universe().grace() || this.shieldActive() || (this.isPeaceful() && !this.peacefulExplosionsEnabled());
     }
 
     boolean isPermanent();
