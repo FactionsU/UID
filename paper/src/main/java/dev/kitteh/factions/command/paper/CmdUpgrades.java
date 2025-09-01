@@ -45,13 +45,15 @@ public class CmdUpgrades implements Cmd {
 
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        var tl = FactionsPlugin.instance().tl().commands().upgrades();
-        return (manager, builder, help) -> manager.command(
-                builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.UPGRADES).and(Cloudy.hasFaction())))
-                        .commandDescription(Cloudy.desc(TL.COMMAND_UPGRADES_DESCRIPTION))
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().upgrades();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.UPGRADES).and(Cloudy.hasFaction())))
+                            .commandDescription(Cloudy.desc(TL.COMMAND_UPGRADES_DESCRIPTION))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
