@@ -3,3 +3,9 @@ version: ${version}
 main: dev.kitteh.example.fuuid.ExamplePlugin
 api-version: '${apiversion}'
 authors: [mbaxter]
+dependencies:
+  server:
+    FactionsUUID:
+      load: BEFORE
+      required: true
+      join-classpath: true
