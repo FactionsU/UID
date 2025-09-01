@@ -2,14 +2,18 @@ package dev.kitteh.factions.upgrade;
 
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.data.MemoryUniverse;
+import dev.kitteh.factions.plugin.Instances;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
@@ -17,6 +21,7 @@ public class UpgradeRegistry {
     private static boolean closed = false;
     private static final Map<String, Upgrade> upgradeRegistry = new ConcurrentHashMap<>();
     private static final Map<String, UpgradeVariable> variableRegistry = new ConcurrentHashMap<>();
+    private static final List<Consumer<MemoryUniverse>> upgradeDefaultRunners = new CopyOnWriteArrayList<>();
 
     static {
         for (UpgradeVariable variable : Upgrades.VARIABLES) {
@@ -31,6 +36,9 @@ public class UpgradeRegistry {
     @SuppressWarnings("unused")
     private static void close() {
         closed = true;
+        for (Consumer<MemoryUniverse> upgrade : upgradeDefaultRunners) {
+            upgrade.accept(Instances.UNIVERSE);
+        }
     }
 
     public static @Nullable Upgrade getUpgrade(String name) {
@@ -47,7 +55,7 @@ public class UpgradeRegistry {
 
     public static void registerUpgrade(Upgrade upgrade, UpgradeSettings settings, boolean defaultDisabled) {
         if (closed) {
-            throw new IllegalStateException("Cannot register upgrade. Must be done during onLoad().");
+            throw new IllegalStateException("Cannot register upgrade. Must be completed during load/enable.");
         }
         if (upgradeRegistry.containsKey(upgrade.name().toLowerCase())) {
             throw new IllegalArgumentException("Upgrade with name '" + upgrade.name() + "' already registered");
@@ -65,12 +73,12 @@ public class UpgradeRegistry {
             }
         }
         upgradeRegistry.put(upgrade.name().toLowerCase(), upgrade);
-        ((MemoryUniverse) Universe.universe()).addDefaultsIfNotPresent(settings, defaultDisabled);
+        upgradeDefaultRunners.add(u -> u.addDefaultsIfNotPresent(settings, defaultDisabled));
     }
 
     public static void registerVariable(UpgradeVariable variable) {
         if (closed) {
-            throw new IllegalStateException("Cannot register upgrade variable. Must be done during onLoad().");
+            throw new IllegalStateException("Cannot register upgrade variable. Must be completed during load/enable.");
         }
         if (variableRegistry.containsKey(variable.name().toLowerCase())) {
             throw new IllegalArgumentException("Upgrade variable with name '" + variable.name() + "' already registered");
