@@ -108,14 +108,14 @@ public class CommandsRoot {
         reg(providingPlugin, command, consumer, adminRegistry, true);
     }
 
-    private static void reg(Plugin providingPlugin, String command, TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer, @Nullable Map<String, Register> adminRegistry, boolean admin) {
-        if (adminRegistry == null) {
+    private static void reg(Plugin providingPlugin, String command, TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer, @Nullable Map<String, Register> registry, boolean admin) {
+        if (registry == null) {
             throw new IllegalStateException("Registration closed");
         }
         if (Objects.requireNonNull(providingPlugin) == FactionsPlugin.instance()) {
             throw new IllegalArgumentException("Use your own plugin!");
         }
-        if (adminRegistry.put(Objects.requireNonNull(command), new Register(Objects.requireNonNull(consumer), providingPlugin, command)) == null) {
+        if (registry.put(Objects.requireNonNull(command), new Register(Objects.requireNonNull(consumer), providingPlugin, command)) == null) {
             AbstractFactionsPlugin.instance().getLogger().info("New " + (admin ? "admin " : "") + "command '" + command + "' registered by " + providingPlugin.getName());
         } else {
             AbstractFactionsPlugin.instance().getLogger().info("Replacement " + (admin ? "admin " : "") + "command '" + command + "' registered by " + providingPlugin.getName());
