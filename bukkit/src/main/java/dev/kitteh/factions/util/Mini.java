@@ -14,9 +14,31 @@ import java.util.List;
 @NullMarked
 public class Mini {
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
-    private static final MiniMessage limitedMiniMessage = MiniMessage.builder()
-            .tags(TagResolver.resolver(StandardTags.color(), StandardTags.decorations(), StandardTags.rainbow(), StandardTags.pride()))
-            .build();
+    private static final MiniMessage limitedMiniMessage = createLimitedMiniMessage();
+
+    private static MiniMessage createLimitedMiniMessage() {
+        // Build a TagResolver set that is compatible across Adventure versions.
+        TagResolver.Builder tags = TagResolver.builder()
+                .resolver(StandardTags.color())
+                .resolver(StandardTags.decorations());
+        // Try optional tags that may not exist on older servers
+        try {
+            tags.resolver(StandardTags.rainbow());
+        } catch (Throwable ignored) {
+            // Older Adventure: no rainbow tag
+        }
+        try {
+            // Use reflection to avoid linking errors if 'pride' doesn't exist
+            var m = StandardTags.class.getMethod("pride");
+            Object resolver = m.invoke(null);
+            if (resolver instanceof TagResolver tr) {
+                tags.resolver(tr);
+            }
+        } catch (Throwable ignored) {
+            // Older Adventure: no pride tag
+        }
+        return MiniMessage.builder().tags(tags.build()).build();
+    }
 
     public static Component parse(List<String> input, TagResolver... tagResolvers) {
         TextComponent.Builder builder = Component.text();
