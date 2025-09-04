@@ -10,7 +10,6 @@ import dev.kitteh.factions.listener.ListenPaperChat;
 import dev.kitteh.factions.scoreboard.BufferedObjective;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.scoreboard.numbers.NumberFormat;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,7 +39,20 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
                 (commandSender, component) -> commandSender.sendActionBar(component)
         );
 
-        BufferedObjective.objectiveConsumer = objective -> objective.numberFormat(NumberFormat.blank());
+        // Try to apply Paper's scoreboard NumberFormat if available; otherwise, keep default
+        try {
+            Class<?> nf = Class.forName("io.papermc.paper.scoreboard.numbers.NumberFormat", false, this.getClass().getClassLoader());
+            Object blank = nf.getMethod("blank").invoke(null);
+            BufferedObjective.objectiveConsumer = objective -> {
+                try {
+                    objective.getClass().getMethod("numberFormat", nf).invoke(objective, blank);
+                } catch (Throwable ignored) {
+                    // Silently ignore on older servers where the method/type isn't present
+                }
+            };
+        } catch (Throwable ignored) {
+            // API not present; do not alter the default objective consumer
+        }
     }
 
     private interface PaperSender extends Sender {
@@ -55,7 +67,22 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
 
     @Override
     public void addCommands(BiConsumer<String, Cmd> reg, Consumer<Supplier<CommandManager<Sender>>> commandManager) {
-        reg.accept("upgrades", new CmdUpgrades());
+        boolean hasPaperDialogs = false;
+        try {
+            // Detect availability of Paper Dialog API introduced in later 1.21.x
+            ClassLoader cl = this.getClass().getClassLoader();
+            Class.forName("io.papermc.paper.dialog.Dialog", false, cl);
+            Class.forName("io.papermc.paper.registry.data.dialog.action.DialogAction", false, cl);
+            hasPaperDialogs = true;
+        } catch (ClassNotFoundException ignored) {
+            this.getLogger().warning("Paper Dialog API not found. Falling back to inventory-based upgrades UI.");
+        }
+
+        if (hasPaperDialogs) {
+            // Register Paper-specific upgrades command only when supported by the server
+            reg.accept("upgrades", new CmdUpgrades());
+        }
+
         commandManager.accept(() ->
                 PaperCommandManager.<Sender>builder(SenderMapper.create(
                                 css -> {
