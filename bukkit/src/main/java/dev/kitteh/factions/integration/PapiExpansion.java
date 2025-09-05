@@ -6,6 +6,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
@@ -13,6 +14,7 @@ import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.tag.FactionTag;
 import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.Mini;
+import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.TL;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
@@ -26,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.List;
 
 @NullMarked
@@ -106,7 +109,15 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
         }
 
         return switch (placeholder) {
-            // First list player stuff
+            case "grace_status" -> {
+                Duration remaining = Universe.universe().graceRemaining();
+                if (remaining.isZero()) {
+                    yield TL.COMMAND_GRACE_NOT_SET.toString();
+                } else {
+                    yield TL.COMMAND_GRACE_ACTIVE.format(MiscUtil.durationString(remaining));
+                }
+            }
+
             case "player_name" -> fPlayer.name();
             case "player_lastseen" -> {
                 String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fPlayer.lastLogin(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
@@ -121,7 +132,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "player_role" -> fPlayer.hasFaction() ? fPlayer.role().getPrefix() : "";
             case "player_role_name" -> fPlayer.hasFaction() ? fPlayer.role().translation() : TL.PLACEHOLDER_ROLE_NAME.toString();
             case "player_factionless" -> fPlayer.hasFaction() ? "" : TL.GENERIC_FACTIONLESS.toString();
-            // Then Faction stuff
+
             case "faction_name" -> (fPlayer.hasFaction() || territory) ? faction.tag() : TL.NOFACTION_PREFIX.toString();
             case "faction_name_custom" -> (fPlayer.hasFaction() || territory) ? Tag.parsePlain(fPlayer, TL.PLACEHOLDER_CUSTOM_FACTION.toString()) : "";
             case "faction_only_space" -> (fPlayer.hasFaction() || territory) ? " " : "";
