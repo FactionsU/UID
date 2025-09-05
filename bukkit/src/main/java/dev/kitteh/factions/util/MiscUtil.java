@@ -141,9 +141,9 @@ public class MiscUtil {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < items.size(); i++) {
             builder.append(items.get(i));
-            if (i < items.size() - 1) {
+            if (i < items.size() - 2) {
                 builder.append(", ");
-            } else if (i == items.size() - 1) {
+            } else if (i == items.size() - 2) {
                 String and = TL.DURATION_AND.toString();
                 and = and.isBlank() ? "" : and + " ";
                 builder.append(", ").append(and);
