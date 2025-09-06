@@ -11,8 +11,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerTeleportEvent;
-import dev.kitteh.factions.integration.Essentials;
-import dev.kitteh.factions.integration.IntegrationManager;
+import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
@@ -145,7 +144,7 @@ public class CmdHome implements Cmd {
 
             if (plr == null) return;
 
-            if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.handleTeleport(plr, destination)) {
+            if (ExternalChecks.isTeleported(plr, destination)) {
                 return;
             }
 
