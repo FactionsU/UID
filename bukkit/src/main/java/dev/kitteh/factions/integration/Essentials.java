@@ -33,12 +33,14 @@ public class Essentials {
         ExternalChecks.registerAfk(ess, player -> essentials.getUser(player).isAfk());
         ExternalChecks.registerIgnored(ess, (viewer, chatter) -> essentials.getUser(viewer).isIgnoredPlayer(essentials.getUser(chatter)));
         ExternalChecks.registerVanished(ess, player -> essentials.getUser(player).isVanished());
+        ExternalChecks.registerMuted(ess, player -> essentials.getUser(player).isMuted());
         if (plugin.conf().factions().other().isDeleteEssentialsHomes()) {
             plugin.getLogger().info("Based on main.conf will delete Essentials player homes in their old faction when they leave");
             plugin.getServer().getPluginManager().registerEvents(new EssentialsListener(essentials), plugin);
         }
         if (plugin.conf().factions().homes().isTeleportCommandEssentialsIntegration()) {
             plugin.getLogger().info("Using Essentials for teleportation");
+            ExternalChecks.registerTeleported(ess, Essentials::handleTeleport);
         }
         return true;
     }

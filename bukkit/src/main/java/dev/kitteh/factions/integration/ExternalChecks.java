@@ -1,6 +1,7 @@
 package dev.kitteh.factions.integration;
 
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -22,9 +23,14 @@ public final class ExternalChecks {
     private record DoubleCheck(Plugin plugin, BiPredicate<Player, Player> function) {
     }
 
+    private record TeleportCheck(Plugin plugin, BiPredicate<Player, Location> function) {
+    }
+
     private static final List<SingleCheck> afk = new ArrayList<>();
     private static final List<DoubleCheck> ignored = new ArrayList<>();
     private static final List<SingleCheck> vanished = new ArrayList<>();
+    private static final List<SingleCheck> muted = new ArrayList<>();
+    private static final List<TeleportCheck> teleported = new ArrayList<>();
 
     /**
      * Registers a function for testing if a player is AFK.
@@ -54,6 +60,26 @@ public final class ExternalChecks {
      */
     public static void registerVanished(Plugin plugin, Predicate<Player> function) {
         vanished.add(new SingleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
+    }
+
+    /**
+     * Registers a function for testing if a player is muted.
+     *
+     * @param plugin plugin registering
+     * @param function function testing the player
+     */
+    public static void registerMuted(Plugin plugin, Predicate<Player> function) {
+        muted.add(new SingleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
+    }
+
+    /**
+     * Registers a function for testing if a player was teleported by External plugin.
+     *
+     * @param plugin plugin registering
+     * @param function function testing the player and location
+     */
+    public static void registerTeleported(Plugin plugin, BiPredicate<Player, Location> function) {
+        teleported.add(new TeleportCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
 
     public static boolean isAfk(Player player) {
@@ -90,6 +116,33 @@ public final class ExternalChecks {
                 }
             } catch (Exception e) {
                 AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "Could not check with " + check.plugin.getName() + " if player is vanished!", e);
+            }
+        }
+        return false;
+    }
+
+
+    public static boolean isMuted(Player player) {
+        for (SingleCheck check : muted) {
+            try {
+                if (check.function.test(player)) {
+                    return true;
+                }
+            } catch (Exception e) {
+                AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "Could not check with " + check.plugin.getName() + " if player is muted!", e);
+            }
+        }
+        return false;
+    }
+
+    public static boolean isTeleported(Player player, Location location) {
+        for (TeleportCheck check : teleported) {
+            try {
+                if (check.function.test(player, location)) {
+                    return true;
+                }
+            } catch (Exception e) {
+                AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "Could not check with " + check.plugin.getName() + " if player is teleported!", e);
             }
         }
         return false;
