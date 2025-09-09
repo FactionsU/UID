@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.sql.Date;
 import java.time.Duration;
 import java.util.List;
 
@@ -161,7 +162,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_maxclaims" -> (fPlayer.hasFaction() || territory) ? String.valueOf(FactionsPlugin.instance().landRaidControl().landLimit(faction)) : "";
             case "faction_description" -> faction.description();
             case "faction_claims" -> String.valueOf(faction.claims().size());
-            case "faction_founded" -> TL.sdf.format(faction.founded());
+            case "faction_founded" -> TL.sdf.format(Date.from(faction.founded()));
             case "faction_joining" -> (faction.open() ? TL.COMMAND_SHOW_UNINVITED.toString() : TL.COMMAND_SHOW_INVITATION.toString());
             case "faction_peaceful" -> faction.isPeaceful() ? FactionsPlugin.instance().conf().colors().relations().getNeutral() + TL.COMMAND_SHOW_PEACEFUL.toString() : "";
             case "faction_powerboost" -> {

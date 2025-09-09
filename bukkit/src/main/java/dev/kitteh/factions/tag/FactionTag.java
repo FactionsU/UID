@@ -12,6 +12,7 @@ import dev.kitteh.factions.util.TextUtil;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Location;
 
+import java.sql.Date;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -64,7 +65,7 @@ public enum FactionTag implements Tag {
     PERMANENT("permanent", (fac) -> fac.isPermanent() ? "permanent" : "{notPermanent}"), // no braces needed
     LAND_VALUE("land-value", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(fac.claimCount())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("value")),
     DESCRIPTION("description", fac -> fac.description()),
-    CREATE_DATE("create-date", (fac) -> TL.sdf.format(fac.founded().toEpochMilli())),
+    CREATE_DATE("create-date", (fac) -> TL.sdf.format(Date.from(fac.founded()))),
     LAND_REFUND("land-refund", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(fac.claimCount())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("refund")),
     BANK_BALANCE("faction-balance", (fac) -> {
         if (Econ.shouldBeUsed()) {
