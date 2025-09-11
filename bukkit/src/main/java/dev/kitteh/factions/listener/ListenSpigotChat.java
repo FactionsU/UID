@@ -5,6 +5,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
+import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.Relation;
@@ -96,6 +97,10 @@ public class ListenSpigotChat implements Listener {
             return;
         }
 
+        if (ExternalChecks.isMuted(player)) {
+            return;
+        }
+
         event.setCancelled(true);
 
         ListenSpigotChat.processFactionChat(me, Component.text(event.getMessage()));
@@ -111,6 +116,10 @@ public class ListenSpigotChat implements Listener {
         // Are we to insert the Faction tag into the format?
         // If we are not to insert it - we are done.
         if (this.plugin.conf().factions().chat().spigot().isTagHandledByAnotherPlugin()) {
+            return;
+        }
+
+        if (ExternalChecks.isMuted(event.getPlayer())) {
             return;
         }
 

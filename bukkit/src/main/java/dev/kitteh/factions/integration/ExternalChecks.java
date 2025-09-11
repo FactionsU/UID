@@ -24,6 +24,7 @@ public final class ExternalChecks {
 
     private static final List<SingleCheck> afk = new ArrayList<>();
     private static final List<DoubleCheck> ignored = new ArrayList<>();
+    private static final List<SingleCheck> muted = new ArrayList<>();
     private static final List<SingleCheck> vanished = new ArrayList<>();
 
     /**
@@ -44,6 +45,16 @@ public final class ExternalChecks {
      */
     public static void registerIgnored(Plugin plugin, BiPredicate<Player, Player> function) {
         ignored.add(new DoubleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
+    }
+
+    /**
+     * Registers a function for testing if a player is muted.
+     *
+     * @param plugin plugin registering
+     * @param function function testing the player
+     */
+    public static void registerMuted(Plugin plugin, Predicate<Player> function) {
+        muted.add(new SingleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
 
     /**
@@ -77,6 +88,19 @@ public final class ExternalChecks {
                 }
             } catch (Exception e) {
                 AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "Could not check with " + check.plugin.getName() + " if player is ignored!", e);
+            }
+        }
+        return false;
+    }
+
+    public static boolean isMuted(Player player) {
+        for (SingleCheck check : muted) {
+            try {
+                if (check.function.test(player)) {
+                    return true;
+                }
+            } catch (Exception e) {
+                AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "Could not check with " + check.plugin.getName() + " if player is muted!", e);
             }
         }
         return false;

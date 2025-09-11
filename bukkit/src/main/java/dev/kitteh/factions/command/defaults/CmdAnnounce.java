@@ -5,6 +5,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
@@ -32,6 +33,10 @@ public class CmdAnnounce implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
+
+        if (ExternalChecks.isMuted(((Sender.Player) context.sender()).player())) {
+            return;
+        }
 
         String prefix = ChatColor.GREEN + faction.tag() + ChatColor.YELLOW + " [" + ChatColor.GRAY + sender.name() + ChatColor.YELLOW + "] " + ChatColor.RESET;
         String message = context.get("message");

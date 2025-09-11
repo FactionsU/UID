@@ -5,6 +5,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.config.file.MainConfig;
+import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.WorldUtil;
@@ -30,6 +31,10 @@ public class ListenPaperChat implements Listener {
             return;
         }
 
+        if (ExternalChecks.isMuted(player)) {
+            return;
+        }
+
         event.setCancelled(true);
 
         ListenSpigotChat.processFactionChat(me, event.message());
@@ -38,6 +43,10 @@ public class ListenPaperChat implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerChatLater(AsyncChatEvent event) {
         if (!WorldUtil.isEnabled(event.getPlayer())) {
+            return;
+        }
+
+        if (ExternalChecks.isMuted(event.getPlayer())) {
             return;
         }
 
