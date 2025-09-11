@@ -59,7 +59,7 @@ public class CmdSetWarp implements Cmd {
             return;
         }
 
-        int maxWarps = FactionsPlugin.instance().conf().commands().warp().getMaxWarps();
+        int maxWarps = faction.maxWarps();
         if (maxWarps <= faction.warps().size()) {
             sender.msgLegacy(TL.COMMAND_SETFWARP_LIMIT, maxWarps);
             return;

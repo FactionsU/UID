@@ -23,6 +23,7 @@ public enum FactionTag implements Tag {
     HOME_Z("z", (fac) -> fac.home() instanceof Location loc ? String.valueOf(loc.getBlockZ()) : Tag.isMinimalShow() ? null : "{ig}"),
     CHUNKS("chunks", (fac) -> String.valueOf(fac.claimCount())),
     WARPS("warps", (fac) -> String.valueOf(fac.warps().size())),
+    MAX_WARPS("max-warps", (fac) -> String.valueOf(fac.maxWarps())),
     HEADER("header", (fac, fp) -> TextUtil.titleizeLegacy(fac.tagLegacy(fp))),
     POWER("power", (fac) -> String.valueOf(fac.power())),
     MAX_POWER("maxPower", (fac) -> String.valueOf(fac.powerMax())),

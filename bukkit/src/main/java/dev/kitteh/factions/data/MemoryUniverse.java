@@ -3,6 +3,7 @@ package dev.kitteh.factions.data;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.upgrade.LeveledValueProvider;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
@@ -10,11 +11,13 @@ import dev.kitteh.factions.upgrade.Upgrades;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ApiStatus.Internal
 @NullMarked
@@ -74,8 +77,24 @@ public abstract class MemoryUniverse implements Universe {
                 }
             }
             if (!this.data.upgrades.settings.containsKey(name)) {
+                if (upgrade.upgrade() == Upgrades.WARPS) {
+                    upgrade = new UpgradeSettings(
+                            Upgrades.WARPS,
+                            Map.of(
+                                    Upgrades.Variables.COUNT,  LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(FactionsPlugin.instance().conf().commands().warp().getMaxWarps()))
+                            ),
+                            1,
+                            1,
+                            LeveledValueProvider.LevelMap.of(1, BigDecimal.ZERO)
+                    );
+                }
                 this.data.upgrades.settings.put(name, upgrade);
-                if (!(upgrade.upgrade() == Upgrades.FLIGHT && FactionsPlugin.instance().conf().commands().fly().isEnable())) {
+                if (
+                        !( // Negate the conditions for if-should-default-enable, which my brain finds easier to read.
+                                (upgrade.upgrade() == Upgrades.FLIGHT && FactionsPlugin.instance().conf().commands().fly().isEnable()) ||
+                                        (upgrade.upgrade() == Upgrades.WARPS && FactionsPlugin.instance().conf().commands().warp().getMaxWarps() > 0)
+                        )
+                ) {
                     this.data.upgrades.disabled.add(name);
                 }
             }

@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import java.util.function.Supplier;
 
 public enum GeneralTag implements Tag {
-    MAX_WARPS("max-warps", () -> String.valueOf(FactionsPlugin.instance().conf().commands().warp().getMaxWarps())),
     MAX_ALLIES("max-allies", () -> getRelation(Relation.ALLY)),
     MAX_ENEMIES("max-enemies", () -> getRelation(Relation.ENEMY)),
     MAX_TRUCES("max-truces", () -> getRelation(Relation.TRUCE)),

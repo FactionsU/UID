@@ -1109,6 +1109,8 @@ public class TranslationsConfig {
 
         private UpgradeDetail shield = new UpgradeDetail("<green>Shield", "<green>Protect territory from explosions", "<green><duration> shield, cooldown <cooldown>");
 
+        private UpgradeDetail warps = new UpgradeDetail("<green>Warps", "<green>Additional locations to which members can teleport", "<green><count> warps");
+
         private UpgradeDetail zones = new UpgradeDetail("<green>Zones", "<green>Assign your faction claims to zones to label or grant different permissions", "<green>Grants <increase> zones");
 
         public UpgradeDetail dtrClaimLimit() {
@@ -1141,6 +1143,10 @@ public class TranslationsConfig {
 
         public UpgradeDetail shield() {
             return this.shield;
+        }
+
+        public UpgradeDetail warps() {
+            return this.warps;
         }
 
         public UpgradeDetail zones() {

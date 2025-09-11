@@ -68,7 +68,7 @@ public class FactionResolver extends ObservedResolver {
             case "claims_max" -> tag(FactionsPlugin.instance().landRaidControl().landLimit(faction));
 
             case "warps_count" -> tag(faction.warps().size());
-            case "warps_max" -> tag(FactionsPlugin.instance().conf().commands().warp().getMaxWarps());
+            case "warps_max" -> tag(faction.maxWarps());
 
             case "power_exact" -> tag(faction.powerExact());
             case "power_rounded" -> tag(faction.power());

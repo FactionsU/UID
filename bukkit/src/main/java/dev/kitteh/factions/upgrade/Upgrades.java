@@ -18,6 +18,8 @@ public final class Upgrades {
     public static final class Variables {
         public static final UpgradeVariable CHANCE = UpgradeVariable.ofPercent("chance", BigDecimal.ZERO, BigDecimal.valueOf(100));
 
+        public static final UpgradeVariable COUNT = UpgradeVariable.ofInteger("count", BigDecimal.ONE, BigDecimal.valueOf(Integer.MAX_VALUE));
+
         public static final UpgradeVariable PERCENT = UpgradeVariable.ofPercent("percent", BigDecimal.valueOf(Integer.MIN_VALUE), BigDecimal.valueOf(Integer.MAX_VALUE));
 
         public static final UpgradeVariable GROWTH_BOOST = UpgradeVariable.ofInteger("boost", BigDecimal.ONE, BigDecimal.valueOf(100));
@@ -44,6 +46,8 @@ public final class Upgrades {
     public static final Upgrade REDSTONE_PROTECT = new Upgrade.SimpleImpl("redstone_anti_flood", TranslationsConfig.Upgrades::redstoneAntiFlood, 1, Set.of());
 
     public static final Upgrade SHIELD = new Upgrade.ReactiveImpl("shield", TranslationsConfig.Upgrades::shield, Integer.MAX_VALUE, Set.of(Variables.DURATION, Variables.COOLDOWN), Upgrade.Reactor.UPDATE_COMMANDS);
+
+    public static final Upgrade WARPS = new Upgrade.ReactiveImpl("warps", TranslationsConfig.Upgrades::warps, Integer.MAX_VALUE, Set.of(Variables.COUNT), Upgrade.Reactor.UPDATE_COMMANDS);
 
     public static final Upgrade ZONES = new Upgrade.ReactiveImpl("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE), Upgrade.Reactor.UPDATE_COMMANDS);
 
@@ -155,6 +159,15 @@ public final class Upgrades {
                     3,
                     0,
                     LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(50000), 2, BigDecimal.valueOf(100000), 3, BigDecimal.valueOf(1000000))
+            ),
+            new UpgradeSettings( // If modifying this, also modify the hackily added one to MemoryUniverse
+                    Upgrades.WARPS,
+                    Map.of(
+                            Variables.COUNT,  LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(5))
+                    ),
+                    1,
+                    1,
+                    LeveledValueProvider.LevelMap.of(1, BigDecimal.ZERO)
             ),
             new UpgradeSettings(
                     Upgrades.ZONES,

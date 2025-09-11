@@ -292,6 +292,14 @@ public interface Faction extends Participator, Selectable {
 
     void clearWarps();
 
+    default int maxWarps() {
+        int lvl = this.upgradeLevel(Upgrades.WARPS);
+        if (lvl == 0) {
+            return 0;
+        }
+        return Universe.universe().upgradeSettings(Upgrades.WARPS).valueAt(Upgrades.Variables.COUNT, lvl).intValue();
+    }
+
     int maxVaults();
 
     void maxVaults(int value);
