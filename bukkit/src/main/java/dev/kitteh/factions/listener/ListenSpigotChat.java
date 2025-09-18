@@ -5,7 +5,6 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
-import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.Relation;
@@ -50,8 +49,8 @@ public class ListenSpigotChat implements Listener {
             String format = role == Role.RECRUIT ? chatConf.getFactionMemberAllChatFormat() : chatConf.getFactionMemberChatFormat();
             String spyFormat = chatConf.getSpyingPrefix() + format;
 
-            for (FPlayer fPlayer : faction.membersOnline(true)) {
-                boolean qualifies = fPlayer.role().isAtLeast(role);
+            for (FPlayer fPlayer : FPlayers.fPlayers().online()) {
+                boolean qualifies = fPlayer.faction() == faction && fPlayer.role().isAtLeast(role);
                 if (qualifies || fPlayer.spyingChat()) {
                     fPlayer.sendRichMessage((qualifies ? format : spyFormat),
                             messagePlaceholder,
