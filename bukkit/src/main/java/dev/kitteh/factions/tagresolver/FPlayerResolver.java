@@ -45,6 +45,9 @@ public class FPlayerResolver extends ObservedResolver {
 
             case "name" -> tag(observed.name());
 
+            case "title" -> observed.hasFaction() ? tag(observed.title()) : tag(Component.empty());
+            case "name_and_title" -> observed.hasFaction() ? tag(observed.nameWithTitle()) : tag(observed.name());
+
             case "role_name" -> tagLegacy(observed.role().translation());
             case "role_prefix" -> tagLegacy(observed.role().getPrefix());
 

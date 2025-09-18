@@ -120,6 +120,8 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             }
 
             case "player_name" -> fPlayer.name();
+            case "player_name_and_title" -> fPlayer.hasFaction() ? fPlayer.nameWithTitleLegacy() : fPlayer.name();
+            case "player_title" -> fPlayer.hasFaction() ? fPlayer.titleLegacy() : "";
             case "player_lastseen" -> {
                 String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fPlayer.lastLogin(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
                 yield fPlayer.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fPlayer.lastLogin() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
