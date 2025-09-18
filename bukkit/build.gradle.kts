@@ -53,7 +53,8 @@ dependencies {
     libs.luckperms.api,
     libs.magic.api,
     libs.graves,
-    libs.duels
+    libs.duels,
+    libs.brigadier
   ).forEach {
     compileOnly(it) {
       isTransitive = false

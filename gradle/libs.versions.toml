@@ -2,6 +2,7 @@
 apiversion = "1.21.7"
 minecraft = "1.21.7-R0.1-SNAPSHOT"
 adventure = "4.23.0"
+brigadier = "1.0.18"
 cloud = "2.0.0-beta.10"
 essentialsx = "2.21.1"
 indra = "3.1.3"
@@ -18,6 +19,7 @@ adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", 
 adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure" }
 adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure" }
 authlib = { module = "com.mojang:authlib", version = "6.0.54" }
+brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
 citizens = { module = "net.citizensnpcs:citizens-main", version = "2.0.38-SNAPSHOT" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud" }
 cloud-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud" }
