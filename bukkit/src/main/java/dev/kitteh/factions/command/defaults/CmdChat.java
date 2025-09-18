@@ -21,7 +21,8 @@ public class CmdChat implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            manager.command(builder.literal("chat").literal("public")
+            var tl = FactionsPlugin.instance().tl().commands().chat();
+            manager.command(builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases()).literal("public")
                     .commandDescription(Cloudy.desc(TL.COMMAND_CHAT_DESCRIPTION))
                     .permission(builder.commandPermission()
                             .and(Cloudy.predicate(s ->
@@ -32,7 +33,7 @@ public class CmdChat implements Cmd {
                     .handler(ctx -> this.handle(ctx, ChatTarget.PUBLIC))
             );
 
-            Command.Builder<Sender> roleBuilder = builder.literal("chat")
+            Command.Builder<Sender> roleBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(TL.COMMAND_CHAT_DESCRIPTION))
                     .permission(builder.commandPermission()
                             .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().chat().internalChat().isFactionMemberChatEnabled()))
@@ -44,7 +45,7 @@ public class CmdChat implements Cmd {
             manager.command(roleBuilder.literal("mod").permission(roleBuilder.commandPermission().and(Cloudy.isAtLeastRole(Role.MODERATOR))).handler(ctx -> this.handle(ctx, ChatTarget.Role.MODERATOR)));
             manager.command(roleBuilder.literal("member").permission(roleBuilder.commandPermission().and(Cloudy.isAtLeastRole(Role.NORMAL))).handler(ctx -> this.handle(ctx, ChatTarget.Role.NORMAL)));
 
-            Command.Builder<Sender> relationBuilder = builder.literal("chat")
+            Command.Builder<Sender> relationBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(TL.COMMAND_CHAT_DESCRIPTION))
                     .permission(builder.commandPermission()
                             .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().chat().internalChat().isRelationChatEnabled()))
