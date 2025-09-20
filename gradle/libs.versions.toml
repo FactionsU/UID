@@ -1,6 +1,6 @@
 [versions]
-apiversion = "1.21.7"
-minecraft = "1.21.7-R0.1-SNAPSHOT"
+apiversion = "1.21.8"
+minecraft = "1.21.8-R0.1-SNAPSHOT"
 adventure = "4.23.0"
 brigadier = "1.0.18"
 cloud = "2.0.0-beta.10"
