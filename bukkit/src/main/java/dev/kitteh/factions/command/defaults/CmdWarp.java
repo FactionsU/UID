@@ -34,7 +34,7 @@ public class CmdWarp implements Cmd {
                         .commandDescription(Cloudy.desc(TL.COMMAND_FWARP_DESCRIPTION))
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.WARP).and(Cloudy.hasSelfFactionPerms(PermissibleActions.WARP).or(Cloudy.isBypass()))))
                         .optional("warp", StringParser.stringParser())
-                        .optional("password", StringParser.stringParser())
+                        .flag(manager.flagBuilder("password").withComponent(StringParser.stringParser()))
                         .flag(manager.flagBuilder("faction").withComponent(FactionParser.of()))
                         .handler(this::handle)
         );
@@ -56,7 +56,7 @@ public class CmdWarp implements Cmd {
             WarpGUI ui = new WarpGUI(sender, faction);
             ui.open();
         } else {
-            final String passwordAttempt = context.getOrDefault("password", null);
+            final String passwordAttempt = context.flags().get("password") instanceof String s ? s : "";
 
             LazyLocation destination = faction.warp(warpName);
             if (destination != null) {
