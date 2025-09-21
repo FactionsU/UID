@@ -81,11 +81,11 @@ public abstract class MemoryUniverse implements Universe {
                     upgrade = new UpgradeSettings(
                             Upgrades.WARPS,
                             Map.of(
-                                    Upgrades.Variables.COUNT,  LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(FactionsPlugin.instance().conf().commands().warp().getMaxWarps()))
+                                    Upgrades.Variables.COUNT,  LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(FactionsPlugin.instance().conf().commands().warp().getMaxWarps()))
                             ),
                             1,
                             1,
-                            LeveledValueProvider.LevelMap.of(1, BigDecimal.ZERO)
+                            LeveledValueProvider.LevelMap.of(BigDecimal.ZERO)
                     );
                 }
                 this.data.upgrades.settings.put(name, upgrade);

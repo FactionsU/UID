@@ -88,18 +88,18 @@ public final class Upgrades {
             new UpgradeSettings(
                     Upgrades.FALL_DAMAGE_REDUCTION,
                     Map.of(Variables.PERCENT, LeveledValueProvider.LevelMap.of(
-                            1, BigDecimal.valueOf(0.25),
-                            2, BigDecimal.valueOf(0.5),
-                            3, BigDecimal.valueOf(0.75),
-                            4, BigDecimal.valueOf(1)
+                            BigDecimal.valueOf(0.25),
+                            BigDecimal.valueOf(0.5),
+                            BigDecimal.valueOf(0.75),
+                            BigDecimal.valueOf(1)
                     )),
                     4,
                     0,
                     LeveledValueProvider.LevelMap.of(
-                            1, BigDecimal.valueOf(10000),
-                            2, BigDecimal.valueOf(50000),
-                            3, BigDecimal.valueOf(100000),
-                            4, BigDecimal.valueOf(1000000)
+                            BigDecimal.valueOf(10000),
+                            BigDecimal.valueOf(50000),
+                            BigDecimal.valueOf(100000),
+                            BigDecimal.valueOf(1000000)
                     )
             ),
             new UpgradeSettings(
@@ -107,17 +107,17 @@ public final class Upgrades {
                     Map.of(),
                     1,
                     1,
-                    LeveledValueProvider.LevelMap.of(1, BigDecimal.ZERO)
+                    LeveledValueProvider.LevelMap.of(BigDecimal.ZERO)
             ),
             new UpgradeSettings(
                     Upgrades.GROWTH,
                     Map.of(
-                            Variables.CHANCE, LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(0.1), 2, BigDecimal.valueOf(0.25), 3, BigDecimal.valueOf(0.25)),
-                            Variables.GROWTH_BOOST, LeveledValueProvider.LevelMap.of(1, BigDecimal.ONE, 2, BigDecimal.ONE, 3, BigDecimal.TWO)
+                            Variables.CHANCE, LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(0.1), BigDecimal.valueOf(0.25), BigDecimal.valueOf(0.25)),
+                            Variables.GROWTH_BOOST, LeveledValueProvider.LevelMap.of(BigDecimal.ONE, BigDecimal.ONE, BigDecimal.TWO)
                     ),
                     3,
                     0,
-                    LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(2000000), 2, BigDecimal.valueOf(5000000), 3, BigDecimal.valueOf(10000000))
+                    LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(2000000), BigDecimal.valueOf(5000000), BigDecimal.valueOf(10000000))
             ),
             new UpgradeSettings(
                     Upgrades.MAX_MEMBERS,
@@ -142,43 +142,43 @@ public final class Upgrades {
                     Map.of(),
                     1,
                     0,
-                    LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(10000))
+                    LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(10000))
             ),
             new UpgradeSettings(
                     Upgrades.SHIELD,
                     Map.of(
                             Variables.DURATION, LeveledValueProvider.LevelMap.of(
-                                    1, BigDecimal.valueOf(21600),
-                                    2, BigDecimal.valueOf(36000),
-                                    3, BigDecimal.valueOf(36000)
+                                    BigDecimal.valueOf(21600),
+                                    BigDecimal.valueOf(36000),
+                                    BigDecimal.valueOf(36000)
                             ),
                             Variables.COOLDOWN, LeveledValueProvider.LevelMap.of(
-                                    1, BigDecimal.valueOf(172800),
-                                    2, BigDecimal.valueOf(172800),
-                                    3, BigDecimal.valueOf(86400)
+                                    BigDecimal.valueOf(172800),
+                                    BigDecimal.valueOf(172800),
+                                    BigDecimal.valueOf(86400)
                             )
                     ),
                     3,
                     0,
-                    LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(50000), 2, BigDecimal.valueOf(100000), 3, BigDecimal.valueOf(1000000))
+                    LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(50000), BigDecimal.valueOf(100000), BigDecimal.valueOf(1000000))
             ),
             new UpgradeSettings( // If modifying this, also modify the hackily added one to MemoryUniverse
                     Upgrades.WARPS,
                     Map.of(
-                            Variables.COUNT,  LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(5))
+                            Variables.COUNT,  LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(5))
                     ),
                     1,
                     1,
-                    LeveledValueProvider.LevelMap.of(1, BigDecimal.ZERO)
+                    LeveledValueProvider.LevelMap.of(BigDecimal.ZERO)
             ),
             new UpgradeSettings(
                     Upgrades.ZONES,
                     Map.of(
-                            Variables.POSITIVE_INCREASE, LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(Integer.MAX_VALUE))
+                            Variables.POSITIVE_INCREASE, LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(Integer.MAX_VALUE))
                     ),
                     1,
                     0,
-                    LeveledValueProvider.LevelMap.of(1, BigDecimal.valueOf(10000))
+                    LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(10000))
             )
     );
 }

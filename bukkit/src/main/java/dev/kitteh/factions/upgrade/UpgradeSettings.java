@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Settings for an upgrade.
+ */
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public final class UpgradeSettings {
@@ -29,6 +32,12 @@ public final class UpgradeSettings {
         }
     }
 
+    /**
+     * Tests this setting for issues like levels not aligning or missing variables.
+     * Called during construction, but this method allows for testing deserialized objects.
+     *
+     * @return first flaw found or null if no flaws found
+     */
     public @Nullable String findFlaw() {
         if (maxLevel > upgrade.maxLevel()) {
             return "Max level must be less than or equal to " + upgrade.maxLevel();
@@ -50,22 +59,50 @@ public final class UpgradeSettings {
         return null;
     }
 
+    /**
+     * Gets the associated upgrade.
+     *
+     * @return upgrade
+     */
     public Upgrade upgrade() {
         return upgrade;
     }
 
+    /**
+     * Gets the value of a variable at a given level.
+     *
+     * @param variable variable
+     * @param level level
+     * @return value of variable at level
+     */
     public BigDecimal valueAt(UpgradeVariable variable, int level) {
         return variable.get(Objects.requireNonNull(this.variableSettings.get(variable)).get(level));
     }
 
+    /**
+     * Gets the max level chosen in settings. Cannot exceed {@link Upgrade#maxLevel()}.
+     *
+     * @return max level
+     */
     public int maxLevel() {
         return maxLevel;
     }
 
+    /**
+     * Gets the starting level for factions to begin at.
+     *
+     * @return starting level
+     */
     public int startingLevel() {
         return startingLevel;
     }
 
+    /**
+     * Gets the cost of the upgrade at a given level.
+     *
+     * @param level level
+     * @return cost at level
+     */
     public BigDecimal costAt(int level) {
         if (level < 1 || level > maxLevel) {
             throw new IllegalArgumentException("Level must be between 1 and max level");
