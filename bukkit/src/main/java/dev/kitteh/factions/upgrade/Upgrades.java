@@ -18,6 +18,7 @@ public final class Upgrades {
     public static final class Variables {
         public static final UpgradeVariable CHANCE = UpgradeVariable.ofPercent("chance", BigDecimal.ZERO, BigDecimal.valueOf(100));
 
+        @ApiStatus.AvailableSince("4.2.0")
         public static final UpgradeVariable COUNT = UpgradeVariable.ofInteger("count", BigDecimal.ONE, BigDecimal.valueOf(Integer.MAX_VALUE));
 
         public static final UpgradeVariable PERCENT = UpgradeVariable.ofPercent("percent", BigDecimal.valueOf(Integer.MIN_VALUE), BigDecimal.valueOf(Integer.MAX_VALUE));
@@ -47,6 +48,7 @@ public final class Upgrades {
 
     public static final Upgrade SHIELD = new Upgrade.ReactiveImpl("shield", TranslationsConfig.Upgrades::shield, Integer.MAX_VALUE, Set.of(Variables.DURATION, Variables.COOLDOWN), Upgrade.Reactor.UPDATE_COMMANDS);
 
+    @ApiStatus.AvailableSince("4.2.0")
     public static final Upgrade WARPS = new Upgrade.ReactiveImpl("warps", TranslationsConfig.Upgrades::warps, Integer.MAX_VALUE, Set.of(Variables.COUNT), Upgrade.Reactor.UPDATE_COMMANDS);
 
     public static final Upgrade ZONES = new Upgrade.ReactiveImpl("zones", TranslationsConfig.Upgrades::zones, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE), Upgrade.Reactor.UPDATE_COMMANDS);

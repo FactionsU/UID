@@ -292,6 +292,7 @@ public interface Faction extends Participator, Selectable {
 
     void clearWarps();
 
+    @ApiStatus.AvailableSince("4.2.0")
     default int maxWarps() {
         int lvl = this.upgradeLevel(Upgrades.WARPS);
         if (lvl == 0) {

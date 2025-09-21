@@ -53,6 +53,7 @@ public final class ExternalChecks {
      * @param plugin plugin registering
      * @param function function testing the player
      */
+    @ApiStatus.AvailableSince("4.2.0")
     public static void registerMuted(Plugin plugin, Predicate<Player> function) {
         muted.add(new SingleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
@@ -93,6 +94,7 @@ public final class ExternalChecks {
         return false;
     }
 
+    @ApiStatus.AvailableSince("4.2.0")
     public static boolean isMuted(Player player) {
         for (SingleCheck check : muted) {
             try {
