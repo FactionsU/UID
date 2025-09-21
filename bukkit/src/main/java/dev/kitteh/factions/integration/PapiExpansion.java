@@ -19,6 +19,7 @@ import dev.kitteh.factions.util.TL;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -208,6 +209,23 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_deaths" -> String.valueOf(faction.deaths());
             case "faction_maxvaults" -> String.valueOf(faction.maxVaults());
             case "faction_relation_color" -> fPlayer.colorLegacyStringTo(faction);
+            case "faction_shield_active" -> {
+                if (faction.shieldActive()) {
+                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveTrue(),
+                            Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
+                } else {
+                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveFalse()));
+                }
+            }
+            case "faction_shield_status" -> {
+                if (faction.shieldActive()) {
+                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusTrue(),
+                            Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
+                } else {
+                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusFalse()));
+                }
+            }
+            case "faction_shield_remaining" -> MiscUtil.durationString(faction.shieldRemaining());
             default -> null;
         };
     }

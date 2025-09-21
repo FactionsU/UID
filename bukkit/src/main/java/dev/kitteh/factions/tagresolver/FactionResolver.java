@@ -6,12 +6,15 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.util.Mini;
+import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -134,6 +137,24 @@ public class FactionResolver extends ObservedResolver {
 
             case "relation_name" -> tagLegacy(faction.relationTo(observer).translation());
             case "relation_color" -> tag(faction.relationTo(observer).color());
+
+            case "shield_active" -> {
+                if (faction.shieldActive()) {
+                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveTrue(),
+                            Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
+                } else {
+                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveFalse()));
+                }
+            }
+            case "shield_status" -> {
+                if (faction.shieldActive()) {
+                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusTrue(),
+                            Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
+                } else {
+                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusFalse()));
+                }
+            }
+            case "shield_remaining" -> tagLegacy(MiscUtil.durationString(faction.shieldRemaining()));
 
             default -> tag(Component.empty());
         };

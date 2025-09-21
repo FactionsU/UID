@@ -1068,6 +1068,38 @@ public class TranslationsConfig {
         }
     }
 
+    public static class Placeholders {
+        public static class Shield {
+            private String activeTrue = "active";
+            private String activeFalse = "not active";
+
+            private String statusTrue = "Shield active. Time remaining: <remaining>";
+            private String statusFalse = "Shield not active.";
+
+            public String getActiveTrue() {
+                return activeTrue;
+            }
+
+            public String getActiveFalse() {
+                return activeFalse;
+            }
+
+            public String getStatusTrue() {
+                return statusTrue;
+            }
+
+            public String getStatusFalse() {
+                return statusFalse;
+            }
+        }
+
+        private Shield shield = new Shield();
+
+        public Shield shield() {
+            return shield;
+        }
+    }
+
     public static class Upgrades {
         public static class UpgradeDetail {
             private UpgradeDetail(String name, String description, String detail) {
@@ -1164,6 +1196,7 @@ public class TranslationsConfig {
             "All information here uses MiniMessage. https://docs.adventure.kyori.net/minimessage.html")
     private Commands commands = new Commands();
     private Permissions permissions = new Permissions();
+    private Placeholders placeholders = new Placeholders();
     private Upgrades upgrades = new Upgrades();
 
     public Commands commands() {
@@ -1172,6 +1205,10 @@ public class TranslationsConfig {
 
     public Permissions permissions() {
         return this.permissions;
+    }
+
+    public Placeholders placeholders() {
+        return this.placeholders;
     }
 
     public Upgrades upgrades() {

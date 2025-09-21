@@ -7,8 +7,11 @@ import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.util.Mini;
+import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Location;
 
@@ -110,6 +113,23 @@ public enum FactionTag implements Tag {
     FACTION_DEATHS("faction-deaths", (fac) -> String.valueOf(fac.deaths())),
     FACTION_BANCOUNT("faction-bancount", (fac) -> String.valueOf(fac.bans().size())),
     FACTION_LINK("faction-link", (fac) -> fac.link()),
+    SHIELD_ACTIVE("shield-active", (fac) -> {
+        if (fac.shieldActive()) {
+            return Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveTrue(),
+                    Placeholder.unparsed("remaining", MiscUtil.durationString(fac.shieldRemaining()))));
+        } else {
+            return Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveFalse()));
+        }
+    }),
+    SHIELD_STATUS("shield-status", fac -> {
+        if (fac.shieldActive()) {
+            return Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusTrue(),
+                    Placeholder.unparsed("remaining", MiscUtil.durationString(fac.shieldRemaining()))));
+        } else {
+            return Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusFalse()));
+        }
+    }),
+    SHIELD_REMAINING("shield-remaining", (fac) -> MiscUtil.durationString(fac.shieldRemaining())),
     ;
 
     private final String tag;
