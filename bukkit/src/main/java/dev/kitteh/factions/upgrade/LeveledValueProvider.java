@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
-public interface LeveledValueProvider {
+public sealed interface LeveledValueProvider permits LeveledValueProvider.Equation, LeveledValueProvider.LevelMap {
     record Equation(Expression expression) implements LeveledValueProvider {
         public static Equation of(String expression) {
             return new Equation(new Expression(expression));
