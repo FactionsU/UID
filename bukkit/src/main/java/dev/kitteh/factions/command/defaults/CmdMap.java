@@ -27,9 +27,9 @@ public class CmdMap implements Cmd {
                 builder.literal("map")
                         .commandDescription(Cloudy.desc(TL.COMMAND_MAP_DESCRIPTION))
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MAP).and(Cloudy.isPlayer())))
-                        .flag(manager.flagBuilder("auto-on"))
-                        .flag(manager.flagBuilder("auto-off"))
-                        .flag(manager.flagBuilder("setheight").withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().map().getHeight() * 2)))
+                        .flag(manager.flagBuilder("auto-on").withPermission(Cloudy.hasPermission(Permission.MAP_AUTO)))
+                        .flag(manager.flagBuilder("auto-off").withPermission(Cloudy.hasPermission(Permission.MAP_AUTO)))
+                        .flag(manager.flagBuilder("set-height").withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().map().getHeight() * 2)))
                         .handler(this::handle)
         );
     }
@@ -38,7 +38,7 @@ public class CmdMap implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
 
-        if (context.flags().get("setheight") instanceof Integer height) {
+        if (context.flags().get("set-height") instanceof Integer height) {
             sender.mapHeight(height);
             sender.sendMessageLegacy(TL.COMMAND_MAPHEIGHT_SET.format(sender.mapHeight()));
         }

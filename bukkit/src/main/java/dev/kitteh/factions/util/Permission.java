@@ -52,6 +52,7 @@ public enum Permission {
     LISTCLAIMS("listclaims"),
     LISTCLAIMS_OTHER("listclaims.other"),
     MAP("map"),
+    MAP_AUTO("map.auto"),
     MAPHEIGHT("mapheight"),
     MODIFY_DTR("modifydtr"),
     MODIFY_POWER("modifypower"),

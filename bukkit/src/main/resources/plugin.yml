@@ -84,6 +84,7 @@ permissions:
       factions.link: true
       factions.list: true
       factions.map: true
+      factions.map.auto: true
       factions.money.kit.standard: true
       factions.noboom: true
       factions.open: true
@@ -169,7 +170,9 @@ permissions:
   factions.managewarzone:
     description: claim land as a war zone and build/destroy within war zones
   factions.map:
-    description: show the territory map, and set optional auto update
+    description: show the territory map
+  factions.map.auto:
+    description: set optional auto update for map
   factions.money.balance:
     description: show your factions current money balance
   factions.money.balance.any:

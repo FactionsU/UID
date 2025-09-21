@@ -7,6 +7,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.util.ComponentDispatcher;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
 import dev.kitteh.factions.util.WorldUtil;
@@ -110,14 +111,20 @@ public class ListenMove implements Listener {
             }
         }
 
+        dance:
         if (me.mapAutoUpdating()) {
             if (!mapLastShown.containsKey(player.getUniqueId()) || (mapLastShown.get(player.getUniqueId()) < System.currentTimeMillis())) {
+                if (!Permission.MAP_AUTO.has(player)) {
+                    me.mapAutoUpdating(false);
+                    break dance;
+                }
                 for (Component component : Instances.BOARD.getMap(me, to, player.getLocation().getYaw())) {
                     me.sendMessage(component);
                 }
                 mapLastShown.put(player.getUniqueId(), System.currentTimeMillis() + this.plugin.conf().commands().map().getCooldown());
             }
-        } else if (changedFaction) {
+        }
+        if (changedFaction) {
             me.sendFactionHereMessage(factionFrom);
         }
 
