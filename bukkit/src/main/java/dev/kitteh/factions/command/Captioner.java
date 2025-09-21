@@ -1,7 +1,6 @@
 package dev.kitteh.factions.command;
 
 import dev.kitteh.factions.FactionsPlugin;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.caption.Caption;
 import org.incendo.cloud.caption.CaptionProvider;
 import org.incendo.cloud.caption.DelegatingCaptionProvider;

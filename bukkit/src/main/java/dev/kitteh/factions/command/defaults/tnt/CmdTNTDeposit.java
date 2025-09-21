@@ -4,7 +4,6 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
