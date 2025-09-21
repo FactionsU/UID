@@ -403,13 +403,16 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
             getLogger().warning("Looks like you have an old, mistaken 'nofactions-prefix' in your lang.yml. It currently displays [4-] which is... strange.");
         }
 
-        new CommandsRoot(this);
+        closeRegistries(
+                CommandsRoot.class, // Registers the commands
+                PermissibleActionRegistry.class,
+                PermSelectorRegistry.class,
+                UpgradeRegistry.class // Also registers settings with Universe as necessary
+        );
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                closeRegistries(PermissibleActionRegistry.class, PermSelectorRegistry.class, UpgradeRegistry.class);
-
                 Econ.setup();
                 vaultPerms = new VaultPerms();
                 // Grand metrics adventure!

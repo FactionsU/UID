@@ -136,10 +136,9 @@ public class CommandsRoot {
         adminRegistry.put(command, new Register(cmd.consumer(), AbstractFactionsPlugin.instance(), command));
     }
 
-    public CommandsRoot(AbstractFactionsPlugin plugin) {
-        if (registry == null || adminRegistry == null || commandManager == null) {
-            throw new IllegalStateException("Second attempt at creating this class!");
-        }
+    @SuppressWarnings("unused")
+    private static void close() {
+        AbstractFactionsPlugin plugin =  AbstractFactionsPlugin.instance();
 
         CommandManager<Sender> manager = CommandsRoot.commandManager.get();
 
