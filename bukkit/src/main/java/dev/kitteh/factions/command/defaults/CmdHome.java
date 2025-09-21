@@ -47,8 +47,7 @@ public class CmdHome implements Cmd {
                         ))
                         .flag(
                                 manager.flagBuilder("faction")
-                                        .withComponent(FactionParser.of(FactionParser.Include.PLAYERS))
-                                        .withPermission(Cloudy.isBypass())
+                                        .withComponent(FactionParser.of())
                         )
                         .handler(this::handle)
         );
@@ -60,22 +59,22 @@ public class CmdHome implements Cmd {
 
         Faction targetFaction = sender.faction();
 
-        if (sender.adminBypass() && context.flags().get("faction") instanceof Faction fac) {
-            if (targetFaction.hasHome()) {
-                AbstractFactionsPlugin.instance().teleport(player, fac.home());
-            } else {
-                sender.msgLegacy(TL.COMMAND_HOME_NOHOME);
-            }
-            return;
+        if (context.flags().get("faction") instanceof Faction fac) {
+            targetFaction = fac;
         }
 
-        if (!targetFaction.hasHome()) {
-            sender.msgLegacy(TL.COMMAND_HOME_NOHOME);
+        if (sender.adminBypass()) {
+            AbstractFactionsPlugin.instance().teleport(player, targetFaction.home());
             return;
         }
 
         if (!targetFaction.hasAccess(sender, PermissibleActions.HOME, sender.lastStoodAt())) {
             sender.msgLegacy(TL.COMMAND_HOME_DENIED, targetFaction.tagLegacy(sender));
+            return;
+        }
+
+        if (!targetFaction.hasHome()) {
+            sender.msgLegacy(TL.COMMAND_HOME_NOHOME);
             return;
         }
 
