@@ -65,7 +65,7 @@ public enum FactionTag implements Tag {
             DurationFormatUtils.formatDuration(fac.dtrFrozenUntil() - System.currentTimeMillis(), FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
             TL.DTR_FROZEN_TIME_NOTFROZEN.toString()))),
     MAX_CHUNKS("max-chunks", (fac -> String.valueOf(FactionsPlugin.instance().landRaidControl().landLimit(fac)))),
-    PEACEFUL("peaceful", (fac) -> fac.isPeaceful() ? FactionsPlugin.instance().conf().colors().relations().getPeaceful() + TL.COMMAND_SHOW_PEACEFUL.toString() : ""),
+    PEACEFUL("peaceful", (fac) -> fac.isPeaceful() ? TextUtil.getLegacyString(FactionsPlugin.instance().conf().colors().relations().getPeaceful()) + TL.COMMAND_SHOW_PEACEFUL : ""),
     PERMANENT("permanent", (fac) -> fac.isPermanent() ? "permanent" : "{notPermanent}"), // no braces needed
     LAND_VALUE("land-value", (fac) -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(fac.claimCount())) : Tag.isMinimalShow() ? null : TL.ECON_OFF.format("value")),
     DESCRIPTION("description", fac -> fac.description()),
