@@ -99,14 +99,11 @@ public class IntegrationManager implements Listener {
         }
     }
 
-    private final AbstractFactionsPlugin plugin;
-
     private final Map<String, Integration> integrations = new HashMap<>();
 
     private final Set<Integration> integrationsEnabled = new HashSet<>();
 
-    public IntegrationManager(AbstractFactionsPlugin plugin) {
-        this.plugin = plugin;
+    public IntegrationManager() {
         for (Integrations integration : Integrations.values()) {
             this.add(integration);
         }
@@ -116,10 +113,11 @@ public class IntegrationManager implements Listener {
         this.integrations.put(integration.pluginName(), integration);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPluginEnabled(ServerLoadEvent event) {
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
         for (Integration integration : this.integrations.values()) {
-            Plugin plug = this.plugin.getServer().getPluginManager().getPlugin(integration.pluginName());
+            Plugin plug = plugin.getServer().getPluginManager().getPlugin(integration.pluginName());
 
             if (plug != null && plug.isEnabled()) {
                 try {
@@ -127,7 +125,7 @@ public class IntegrationManager implements Listener {
                         this.integrationsEnabled.add(integration);
                     }
                 } catch (Exception e) {
-                    this.plugin.getLogger().log(Level.WARNING, "Failed to start " + integration.pluginName() + " integration", e);
+                    plugin.getLogger().log(Level.WARNING, "Failed to start " + integration.pluginName() + " integration", e);
                 }
             }
         }
