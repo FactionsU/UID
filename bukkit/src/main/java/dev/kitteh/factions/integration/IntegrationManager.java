@@ -2,10 +2,14 @@ package dev.kitteh.factions.integration;
 
 import dev.kitteh.factions.integration.dynmap.EngineDynmap;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import me.youhavetrouble.yardwatch.Protection;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.ServicePriority;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,8 +18,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 
+@ApiStatus.Internal
 public class IntegrationManager implements Listener {
-
     public interface Integration {
         String pluginName();
 
@@ -78,7 +82,13 @@ public class IntegrationManager implements Listener {
                 f.log(Level.WARNING, "Found WorldGuard but couldn't support this version: " + version);
             }
             return false;
-        });
+        }),
+        YARDWATCH("YardWatch", plugin -> {
+            AbstractFactionsPlugin f = AbstractFactionsPlugin.instance();
+            f.getServer().getServicesManager().register(Protection.class, new YardWatch(), f, ServicePriority.Normal);
+            return true;
+        })
+        ;
 
         private final String pluginName;
         private final Function<Plugin, Boolean> startup;

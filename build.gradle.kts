@@ -130,6 +130,7 @@ allprojects {
       filter {
         includeModule("com.github.MilkBowl", "VaultAPI")
         includeModule("com.github.dumbo-the-developer.Duels", "duels-api")
+        includeModule("com.github.YouHaveTrouble", "YardWatchAPI")
       }
     }
 

@@ -54,7 +54,8 @@ dependencies {
     libs.magic.api,
     libs.graves,
     libs.duels,
-    libs.brigadier
+    libs.brigadier,
+    libs.yardwatch
   ).forEach {
     compileOnly(it) {
       isTransitive = false

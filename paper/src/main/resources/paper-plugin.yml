@@ -39,6 +39,9 @@ dependencies:
     Vault:
       required: false
       join-classpath: true
+    YardWatch:
+      required: false
+      join-classpath: true
 
 permissions:
   factions.kit.admin:

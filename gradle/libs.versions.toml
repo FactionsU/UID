@@ -48,6 +48,7 @@ worldedit-bukkit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.re
 worldedit-core = { module = "com.sk89q.worldedit:worldedit-core", version.ref = "worldedit" }
 worldguard-bukkit = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
 worldguard-core = { module = "com.sk89q.worldguard:worldguard-core", version.ref = "worldguard" }
+yardwatch = { module = "com.github.YouHaveTrouble:YardWatchAPI", version = "2.0.0" }
 
 [bundles]
 adventure = ["adventure-text-minimessage", "adventure-text-serializer-gson", "adventure-text-serializer-legacy"]
