@@ -52,7 +52,7 @@ public class CmdJoin implements Cmd {
         }
 
         int max = faction.memberLimit();
-        if (faction.size() > max) {
+        if (faction.size() >= max) {
             sender.msgLegacy(TL.COMMAND_JOIN_ATLIMIT, faction.tagLegacy(sender), max, sender.describeToLegacy(sender, false));
             return;
         }
