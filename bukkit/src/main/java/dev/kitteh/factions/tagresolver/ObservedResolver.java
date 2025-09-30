@@ -60,6 +60,10 @@ public abstract class ObservedResolver implements TagResolver {
         return Tag.selfClosingInserting(LegacyComponentSerializer.legacySection().deserialize(string));
     }
 
+    public static Tag tagLegacyIns(String string) {
+        return Tag.inserting(LegacyComponentSerializer.legacySection().deserialize(string));
+    }
+
     public static Tag tagLegacy(TL tl) {
         return Tag.selfClosingInserting(LegacyComponentSerializer.legacySection().deserialize(tl.toString()));
     }
