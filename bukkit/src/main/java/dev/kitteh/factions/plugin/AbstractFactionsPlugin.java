@@ -99,6 +99,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
@@ -124,6 +125,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Handler;
@@ -169,7 +171,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     private final List<RuntimeException> grumpyExceptions = new ArrayList<>();
     private VaultPerms vaultPerms;
     public final boolean likesCats = Arrays.stream(AbstractFactionsPlugin.class.getDeclaredMethods()).anyMatch(m -> m.isSynthetic() && m.getName().startsWith("loadCon") && m.getName().endsWith("0"));
-    private Method getOffline;
+    private BiFunction<UUID, String, OfflinePlayer> getOfflinePlayer;
     private String mcVersionString;
     private String updateCheck;
     private Response updateResponse;
@@ -266,10 +268,38 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         this.getLogger().info("Server UUID " + this.serverUUID);
 
-        try {
-            this.getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", GameProfile.class);
-        } catch (Exception e) {
-            this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", e);
+        if ("1.21.8".equals(this.mcVersionString)) {
+            try {
+                Method getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", GameProfile.class);
+                this.getOfflinePlayer = (uuid, name) -> {
+                    try {
+                        return (OfflinePlayer) getOffline.invoke(this.getServer(), new GameProfile(uuid, name));
+                    } catch (Exception e) {
+                        this.getLogger().log(Level.SEVERE, "Failed to get offline player the fast way, reverting to slow mode", e);
+                        this.getOfflinePlayer = null;
+                    }
+                    return null;
+                };
+            } catch (Exception e) {
+                this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", e);
+            }
+        } else { // TODO 1.21.9 temporary, will remove above section when 1.21.8 dropped.
+            try {
+                Class<?> nameAndIdClass = Class.forName("net.minecraft.server.players.NameAndId");
+                Method getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", nameAndIdClass);
+                Constructor<?> constructor = nameAndIdClass.getDeclaredConstructor(UUID.class, String.class);
+                this.getOfflinePlayer = (uuid, name) -> {
+                    try {
+                        return (OfflinePlayer) getOffline.invoke(this.getServer(), constructor.newInstance(uuid, name));
+                    } catch (Exception e) {
+                        this.getLogger().log(Level.SEVERE, "Failed to get offline player the fast way, reverting to slow mode", e);
+                        this.getOfflinePlayer = null;
+                    }
+                    return null;
+                };
+            } catch (Exception ee) {
+                this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", ee);
+            }
         }
 
         // Migration from older FUUID
@@ -882,12 +912,10 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
     @SuppressWarnings("deprecation")
     public OfflinePlayer getOfflinePlayer(String name, UUID uuid) {
-        if (this.getOffline != null) {
-            try {
-                return (OfflinePlayer) this.getOffline.invoke(this.getServer(), new GameProfile(uuid, name));
-            } catch (Exception e) {
-                this.getLogger().log(Level.SEVERE, "Failed to get offline player the fast way, reverting to slow mode", e);
-                this.getOffline = null;
+        if (this.getOfflinePlayer != null) {
+            OfflinePlayer offlinePlayer = this.getOfflinePlayer.apply(uuid, name);
+            if (offlinePlayer != null) {
+                return offlinePlayer;
             }
         }
         return this.getServer().getOfflinePlayer(name);
