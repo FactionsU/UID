@@ -107,6 +107,13 @@ public class ListenBlock implements Listener {
             return;
         }
 
+        int x = Math.floorMod(event.getBlock().getX(), 16);
+        int z = Math.floorMod(event.getBlock().getZ(), 16);
+
+        if (!(x == 0 || x == 15 || z == 0 || z == 15)) {
+            return;
+        }
+
         Material material = event.getItem().getType();
         FLocation start = new FLocation(event.getBlock());
         FLocation end = new FLocation(event.getBlock().getRelative(((Directional) event.getBlock().getState().getData()).getFacing())); // ((Dispenser) event.getBlock().getBlockData()).getFacing()
