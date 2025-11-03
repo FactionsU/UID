@@ -20,6 +20,7 @@ public enum Permission {
     CLAIM("claim"),
     CLAIM_FILL("claim.fill"),
     CLAIM_RADIUS("claim.radius"),
+    CONFIRM("confirm"),
     COORDS("coords"),
     CREATE("create"),
     DEFAULTRANK("defaultrank"),

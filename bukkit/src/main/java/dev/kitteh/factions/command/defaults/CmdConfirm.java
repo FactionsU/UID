@@ -7,6 +7,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.util.Permission;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -49,7 +50,7 @@ public class CmdConfirm implements Cmd {
             var confirm = FactionsPlugin.instance().tl().commands().confirm();
             manager.command(
                     builder.literal(confirm.getFirstAlias(), confirm.getSecondaryAliases())
-                            .permission(builder.commandPermission().and(Cloudy.hasFaction().or(Cloudy.predicate(s -> !s.isPlayer()))))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.CONFIRM)))
                             .required("confirmation-string", StringParser.stringParser())
                             .handler(this::handle)
             );

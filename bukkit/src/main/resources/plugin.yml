@@ -17,7 +17,6 @@ permissions:
     description: All faction permissions.
     children:
       factions.kit.mod: true
-      factions.config: true
       factions.autosave: true
       factions.reload: true
       factions.save: true
@@ -69,6 +68,7 @@ permissions:
       factions.claim: true
       factions.claim.line: true
       factions.claim.radius: true
+      factions.confirm: true
       factions.coords: true
       factions.deinvite: true
       factions.description: true
@@ -129,8 +129,8 @@ permissions:
     description: claim land where you are standing
   factions.claim.radius:
     description: claim land in a large radius
-  factions.config:
-    description: change a conf.json setting
+  factions.confirm:
+    description: confirm a big change
   factions.create:
     description: create a new faction
   factions.deinvite:
