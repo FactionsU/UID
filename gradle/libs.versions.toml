@@ -1,7 +1,7 @@
 [versions]
-apiversion = "1.21.8"
-minecraft = "1.21.8-R0.1-SNAPSHOT"
-adventure = "4.23.0"
+apiversion = "1.21.10"
+minecraft = "1.21.10-R0.1-SNAPSHOT"
+adventure = "4.25.0"
 brigadier = "1.0.18"
 cloud = "2.0.0-beta.10" # Check the included patch before changing
 essentialsx = "2.21.1"
