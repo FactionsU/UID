@@ -43,7 +43,7 @@ public class CmdSetTitle implements Cmd {
         FPlayer target = context.get("player");
         Faction faction = sender.faction();
 
-        if (sender.faction() != target.faction() || sender.role().value <= target.role().value) {
+        if (sender.faction() != target.faction() || (sender.role() != Role.ADMIN && sender.role().value <= target.role().value)) {
             sender.msgLegacy(TL.COMMAND_TITLE_CANNOTPLAYER);
             return;
         }
