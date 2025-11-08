@@ -86,6 +86,12 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Show extends AbsCommand {
+            protected Show() {
+                super("show");
+            }
+        }
+
         public static class Permissions extends AbsCommand {
             public static class SubCmdAdd extends AbsCommand {
                 public SubCmdAdd() {
@@ -871,6 +877,7 @@ public class TranslationsConfig {
         private Chat chat = new Chat();
         private Confirm confirm = new Confirm();
         private Set set = new Set();
+        private Show show = new Show();
         private Permissions permissions = new Permissions();
         private Upgrades upgrades = new Upgrades();
         private Zone zone = new Zone();
@@ -889,6 +896,10 @@ public class TranslationsConfig {
 
         public Set set() {
             return set;
+        }
+
+        public Show show() {
+            return show;
         }
 
         public Permissions permissions() {
