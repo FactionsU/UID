@@ -1,5 +1,6 @@
 package dev.kitteh.factions.util;
 
+import dev.kitteh.factions.tagresolver.GeneralResolver;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @NullMarked
 public class Mini {
-    private static final MiniMessage miniMessage = MiniMessage.miniMessage();
+    private static final MiniMessage miniMessage = MiniMessage.builder().editTags(b -> b.resolver(GeneralResolver.resolver())).build();
     private static final MiniMessage limitedMiniMessage = MiniMessage.builder()
             .tags(TagResolver.resolver(StandardTags.color(), StandardTags.decorations(), StandardTags.rainbow(), StandardTags.pride()))
             .build();

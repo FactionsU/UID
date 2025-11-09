@@ -1,13 +1,18 @@
 package dev.kitteh.factions.util;
 
+import dev.kitteh.factions.FactionsPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.Context;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.Nullable;
 
 public class TextUtil {
     private TextUtil() {
@@ -45,11 +50,13 @@ public class TextUtil {
     }
 
     @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true)
     public static String parse(String str, Object... args) {
         return String.format(parse(str), args);
     }
 
     @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true)
     public static String parse(String str) {
         return ChatColor.translateAlternateColorCodes('&', str);
     }
@@ -58,48 +65,51 @@ public class TextUtil {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 
+    @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true)
     public static String repeat(String s, int times) {
-        if (times <= 0) {
-            return "";
-        } else {
-            return s + repeat(s, times - 1);
-        }
+        return s.repeat(times);
     }
 
     public static String getMaterialName(Material material) {
         return material.toString().replace('_', ' ').toLowerCase();
     }
 
-    private final static String titleizeLine = repeat("_", 52);
-    private final static int titleizeBalance = -1;
+    public static Component titleize(Component title, @Nullable Context ctx) {
+        var tiTL = FactionsPlugin.instance().tl().placeholders().title();
+        Component center = Mini.parse(tiTL.getTitleCenter(), Placeholder.component("content", title));
+        int centerLen = PlainTextComponentSerializer.plainText().serialize(center).length();
+        int sideLen = 26 - (centerLen / 2);
 
-    @ApiStatus.Obsolete
-    public static String titleizeLegacy(String str) {
-        String center = ".[ " + ChatColor.DARK_GREEN + str + ChatColor.GOLD + " ].";
-        int centerlen = ChatColor.stripColor(center).length();
-        int pivot = titleizeLine.length() / 2;
-        int eatLeft = (centerlen / 2) - titleizeBalance;
-        int eatRight = (centerlen - eatLeft) + titleizeBalance;
+        String leftRepeat = tiTL.getLeftRepeat().repeat(sideLen / tiTL.getLeftRepeat().length());
+        String rightRepeat = tiTL.getRightRepeat().repeat(sideLen / tiTL.getRightRepeat().length());
 
-        if (eatLeft < pivot) {
-            return ChatColor.GOLD + titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight);
+        TagResolver tagResolver = TagResolver.resolver(Placeholder.parsed("left_repeat", leftRepeat),
+                Placeholder.parsed("right_repeat", rightRepeat),
+                Placeholder.styling("left_color", c -> c.color(tiTL.getLeftColor())),
+                Placeholder.styling("right_color", c -> c.color(tiTL.getRightColor())),
+                Placeholder.component("center", center));
+
+        if (ctx == null) {
+            return Mini.parse(tiTL.getTitleMain(), tagResolver);
         } else {
-            return ChatColor.GOLD + center;
+            return ctx.deserialize(tiTL.getTitleMain(), tagResolver);
         }
     }
 
-    public static Component titleize(String string) {
-        String str = MiniMessage.miniMessage().serialize(LegacyComponentSerializer.legacySection().deserialize(string));
-        String center = ".[ <dark_green>" + str + "<gold> ].";
-        int centerLen = ChatColor.stripColor(Mini.toLegacy(Mini.parse(center))).length();
-        int pivot = titleizeLine.length() / 2;
-        int eatLeft = (centerLen / 2) - titleizeBalance;
-        int eatRight = (centerLen - eatLeft) + titleizeBalance;
+    public static Component titleize(Component title) {
+        return titleize(title, null);
+    }
 
-        if (eatLeft < pivot) {
-            return Mini.parse("<gold>" + titleizeLine.substring(0, pivot - eatLeft) + center + titleizeLine.substring(pivot + eatRight));
-        } else {
-            return Mini.parse("<gold>" + center);
-        }
+    @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true)
+    public static String titleizeLegacy(String str) {
+        return Mini.toLegacy(titleize(str));
+    }
+
+    @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true)
+    public static Component titleize(String string) {
+        return titleize(LegacyComponentSerializer.legacySection().deserialize(string));
     }
 }
