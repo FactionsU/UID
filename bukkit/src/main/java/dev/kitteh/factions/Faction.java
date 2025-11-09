@@ -453,6 +453,16 @@ public interface Faction extends Participator, Selectable {
         return count;
     }
 
+    /**
+     * Gets if the faction is raidable.
+     *
+     * @return true if raidable
+     * @see dev.kitteh.factions.landraidcontrol.LandRaidControl#isRaidable(Faction)
+     */
+    default boolean isRaidable() {
+        return FactionsPlugin.instance().landRaidControl().isRaidable(this);
+    }
+
     double dtr();
 
     double dtrWithoutUpdate();
