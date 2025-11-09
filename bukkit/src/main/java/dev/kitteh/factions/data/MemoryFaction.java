@@ -1198,7 +1198,7 @@ public abstract class MemoryFaction implements Faction {
             return;
         }
 
-        if (Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled()) {
+        if (Econ.shouldBeUsedWithBanks()) {
             Econ.setBalance(this, 0);
         }
 

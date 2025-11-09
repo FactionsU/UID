@@ -75,6 +75,10 @@ public class Econ {
         return FactionsPlugin.instance().conf().economy().isEnabled() && econ != null && econ.isEnabled();
     }
 
+    public static boolean shouldBeUsedWithBanks() {
+        return shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled();
+    }
+
     public static boolean isSetup() {
         return econ != null;
     }

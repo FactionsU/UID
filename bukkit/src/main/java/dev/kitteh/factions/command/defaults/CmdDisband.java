@@ -92,7 +92,7 @@ public class CmdDisband implements Cmd {
             AbstractFactionsPlugin.instance().log("The faction " + faction.tag() + " (" + faction.id() + ") was disbanded by " + sender.name() + ".");
         }
 
-        if (Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled()) {
+        if (Econ.shouldBeUsedWithBanks()) {
             //Give all the faction's money to the disbander
             double amount = Econ.getBalance(faction);
 
