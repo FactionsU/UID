@@ -8,15 +8,12 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
-import dev.kitteh.factions.tag.FactionTag;
 import dev.kitteh.factions.tag.FancyTag;
-import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.Component;
 import org.incendo.cloud.Command;
@@ -95,7 +92,7 @@ public class CmdShow implements Cmd {
 
             FancyTag tag = FancyTag.getMatch(raw);
             if (tag != null) {
-                msg = msg.replace(tag.getTag(), "");
+                msg = msg.replace(tag.tag(), "");
             }
             Component component = Mini.parse(msg, FactionResolver.of(fPlayer, faction));
             if (component == Component.empty()) {
@@ -105,7 +102,7 @@ public class CmdShow implements Cmd {
             if (tag == null) {
                 ComponentDispatcher.send(context.sender().sender(), component);
             } else {
-                for (Component comp : tag.getMessage(component, faction, fPlayer)) {
+                for (Component comp : tag.getComponents(component, faction, fPlayer)) {
                     ComponentDispatcher.send(context.sender().sender(), comp);
                 }
             }

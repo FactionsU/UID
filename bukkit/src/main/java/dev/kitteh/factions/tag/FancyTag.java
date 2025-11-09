@@ -12,18 +12,21 @@ import dev.kitteh.factions.util.TriFunction;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public enum FancyTag implements Tag {
+@NullMarked
+public enum FancyTag {
     ALLIES_LIST("allies-list", (prefix, faction, observer) -> processRelation(prefix, faction, observer, Relation.ALLY)),
     ENEMIES_LIST("enemies-list", (prefix, faction, observer) -> processRelation(prefix, faction, observer, Relation.ENEMY)),
     TRUCES_LIST("truces-list", (prefix, faction, observer) -> processRelation(prefix, faction, observer, Relation.TRUCE)),
     ONLINE_LIST("online-list", (prefix, faction, observer) -> processPlayers(prefix, faction, observer, true)),
     OFFLINE_LIST("offline-list", (prefix, faction, observer) -> processPlayers(prefix, faction, observer, false));
+
+    private static final int ARBITRARY_LIMIT = 20000;
 
     private final String tag;
     private final TriFunction<Component, Faction, FPlayer, List<Component>> function;
@@ -73,22 +76,10 @@ public enum FancyTag implements Tag {
         return first && Tag.isMinimalShow() ? null : fancyMessages;
     }
 
-    private static Component tip(List<String> lines) {
-        TextComponent.Builder tip = Component.text();
-        boolean lb = false;
-        for (String tipLine : lines) {
-            if (lb) {
-                tip.appendNewline();
-            }
-            lb = true;
-            tip.append(LegacyComponentSerializer.legacySection().deserialize(tipLine));
-        }
-        return tip.build();
-    }
-
+    @Nullable
     public static FancyTag getMatch(String text) {
         for (FancyTag tag : FancyTag.values()) {
-            if (tag.foundInString(text)) {
+            if (text.contains(tag.tag)) {
                 return tag;
             }
         }
@@ -100,17 +91,11 @@ public enum FancyTag implements Tag {
         this.function = function;
     }
 
-    @Override
-    public String getTag() {
+    public String tag() {
         return this.tag;
     }
 
-    @Override
-    public boolean foundInString(String test) {
-        return test != null && test.contains(this.tag);
-    }
-
-    public List<Component> getMessage(Component prefix, Faction faction, FPlayer observer) {
+    public List<Component> getComponents(Component prefix, Faction faction, FPlayer observer) {
         return this.function.apply(prefix, faction, observer);
     }
 }
