@@ -28,7 +28,7 @@ public enum PlayerTag implements Tag {
         String humanized = DurationFormatUtils.formatDurationWords(duration, true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
         return duration < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized;
     }),
-    PLAYER_BALANCE("balance", (fp) -> Econ.isSetup() ? Econ.getFriendlyBalance(fp) : (Tag.isMinimalShow() ? null : TL.ECON_OFF.format("balance"))),
+    PLAYER_BALANCE("balance", (fp) -> Econ.isSetup() ? Econ.getFriendlyBalance(fp) : TL.ECON_OFF.format("balance")),
     PLAYER_POWER("player-power", (fp) -> String.valueOf(fp.powerRounded())),
     PLAYER_MAXPOWER("player-maxpower", (fp) -> String.valueOf(fp.powerMaxRounded())),
     PLAYER_KILLS("player-kills", (fp) -> String.valueOf(fp.kills())),
@@ -43,11 +43,10 @@ public enum PlayerTag implements Tag {
     PLAYER_NAME("name", FPlayer::name),
     PLAYER_ROLE("player-role-prefix", (fp) -> fp.hasFaction() ? fp.role().getPrefix() : ""),
     TOTAL_ONLINE_VISIBLE("total-online-visible", (fp) -> {
-        if (fp == null) {
+        if (fp == null || !(fp.asPlayer() instanceof Player me)) {
             return String.valueOf(Bukkit.getOnlinePlayers().size());
         }
         int count = 0;
-        Player me = fp.asPlayer();
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (me.canSee(player)) {
                 count++;
