@@ -3,11 +3,14 @@ package dev.kitteh.factions.tagresolver;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.IntegrationManager;
+import dev.kitteh.factions.util.MiscUtil;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -54,12 +57,33 @@ public class FPlayerResolver extends ObservedResolver {
             case "uuid" -> tag(observed.uniqueId().toString());
 
             case "power_exact" -> tag(observed.power());
-            case "power_rounded" -> tag(observed.powerRounded());
+            case "power_rounded", "power" -> tag(observed.powerRounded());
             case "power_max_exact" -> tag(observed.powerMax());
-            case "power_max_rounded" -> tag(observed.powerMaxRounded());
+            case "power_max_rounded", "power_max" -> tag(observed.powerMaxRounded());
 
             case "relation_name" -> tagLegacy(observed.relationTo(observer).translation());
             case "relation_color" -> tag(observed.relationTo(observer).color());
+
+            case "last_seen" -> {
+                long last = observed.lastLogin();
+                long since = (last == 0 ? -1 : (System.currentTimeMillis() - last)) / 1000L;
+                var tl = FactionsPlugin.instance().tl().placeholders().lastSeen();
+
+                since = since - (since % tl.getIntervalSeconds());
+                String duration = MiscUtil.durationString(since);
+
+                if (since == -1) {
+                    yield tagMini(tl.getUnknownText(), this);
+                } else if (since >= tl.getRecentSeconds()) {
+                    yield tagMini(tl.getOlderText(), Placeholder.unparsed("duration", duration), this);
+                } else if (since >= tl.getTooRecentSeconds()) {
+                    yield tagMini(tl.getRecentText(), Placeholder.unparsed("duration", duration), this);
+                } else {
+                    yield tagMini(tl.getTooRecentText(), Placeholder.unparsed("duration", duration), this);
+                }
+            }
+
+            case "tooltip" -> tagTip(FactionsPlugin.instance().tl().placeholders().tooltips().getPlayer(), this);
 
             case "standing_in_faction" -> FactionResolver.of(observer, observed.lastStoodAt().faction()).solve(arguments, ctx);
 

@@ -60,23 +60,29 @@ public class FactionResolver extends ObservedResolver {
             case "link" -> tag(Component.text().content(faction.link()).clickEvent(ClickEvent.openUrl(faction.link())));
 
             case "create-date" -> tag(TL.sdf.format(Date.from(faction.founded())));
+            case "creation_date" -> tag(TL.sdf.format(Date.from(faction.founded())));
 
             case "members_total_count" -> tag(faction.members().size());
             case "members_online_count" -> tag(faction.membersOnline(true, observer).size());
             case "members_offline_count" -> tag(faction.membersOnline(false, observer).size());
+
+            case "tooltip" -> tagTip(FactionsPlugin.instance().tl().placeholders().tooltips().getFaction(), this);
 
             case "id" -> tag(faction.id());
 
             case "claims_count" -> tag(faction.claimCount());
             case "claims_max" -> tag(FactionsPlugin.instance().landRaidControl().landLimit(faction));
 
+            case "claims_value" -> tag(Econ.moneyString(Econ.calculateTotalLandValue(faction.claimCount())));
+            case "claims_refund" -> tag(Econ.moneyString(Econ.calculateTotalLandRefund(faction.claimCount())));
+
             case "warps_count" -> tag(faction.warps().size());
             case "warps_max" -> tag(faction.maxWarps());
 
             case "power_exact" -> tag(faction.powerExact());
-            case "power_rounded" -> tag(faction.power());
+            case "power_rounded", "power" -> tag(faction.power());
             case "power_max_exact" -> tag(faction.powerMaxExact());
-            case "power_max_rounded" -> tag(faction.powerMax());
+            case "power_max_rounded", "power_max" -> tag(faction.powerMax());
             case "power_boost" -> tag(faction.powerBoost());
 
             case "dtr_exact" -> {
@@ -114,10 +120,10 @@ public class FactionResolver extends ObservedResolver {
 
             case "raidable" -> tagLegacy(FactionsPlugin.instance().landRaidControl().isRaidable(faction) ? TL.RAIDABLE_TRUE : TL.RAIDABLE_FALSE);
 
-            case "leader" -> faction.admin() instanceof FPlayer fp ? FPlayerResolver.of("leader", observer, fp).solve(arguments, ctx) : tag("");
+            case "leader", "admin" -> faction.admin() instanceof FPlayer fp ? FPlayerResolver.of("leader", observer, fp).solve(arguments, ctx) : tag("");
 
             case "bank_balance" -> {
-                if (Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled()) {
+                if (Econ.shouldBeUsedWithBanks()) {
                     yield tag(Econ.moneyString(Econ.getBalance(faction)));
                 }
                 yield tag(0);
@@ -155,6 +161,17 @@ public class FactionResolver extends ObservedResolver {
                 }
             }
             case "shield_remaining" -> tagLegacy(MiscUtil.durationString(faction.shieldRemaining()));
+
+            case "if_permanent" -> tagToggle(faction.isPermanent(), arguments);
+            case "if_peaceful" -> tagToggle(faction.isPeaceful(), arguments);
+            case "if_open" -> tagToggle(faction.open(), arguments);
+            case "if_raidable" -> tagToggle(faction.isRaidable(), arguments);
+            case "if_online" -> tagToggle(!faction.membersOnline(true, observer).isEmpty(), arguments);
+            case "if_offline" -> tagToggle(faction.membersOnline(true, observer).size() < faction.members().size(), arguments);
+            case "if_allies" -> tagToggle(faction.relationCount(Relation.ALLY) > 0, arguments);
+            case "if_enemies" -> tagToggle(faction.relationCount(Relation.ENEMY) > 0, arguments);
+            case "if_truces" -> tagToggle(faction.relationCount(Relation.TRUCE) > 0, arguments);
+            case "if_leader" -> tagToggle(faction.admin() != null,  arguments);
 
             default -> tag(Component.empty());
         };

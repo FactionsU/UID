@@ -39,7 +39,7 @@ public class MainConfig {
         }
     }
 
-    private static TextColor getColor(String name, TextColor current, TextColor defaultColor) {
+    static TextColor getColor(String name, TextColor current, TextColor defaultColor) {
         if (current != null) {
             return current;
         }
@@ -52,7 +52,7 @@ public class MainConfig {
             ret = NamedTextColor.NAMES.value(name.toLowerCase());
         }
 
-        return ret == null ? NamedTextColor.WHITE : ret;
+        return ret == null ? defaultColor : ret;
     }
 
     public class Colors {
@@ -362,7 +362,7 @@ public class MainConfig {
             private List<String> format = new ArrayList<>() {
                 {
                     this.add("{header}");
-                    this.add("&6Description: &e{description}");
+                    this.add("&6Description: &e<faction:description>");
                     this.add("&6Joining: &e{joining}    {peaceful}");
                     this.add("&6Land / Power / Maxpower: &e {chunks}/{power}/{maxPower}");
                     this.add("&6Raidable: {raidable}");
@@ -466,7 +466,7 @@ public class MainConfig {
         }
 
         public class ToolTips {
-            @Comment("Faction on-hover tooltip information")
+            @Comment("Outdated tooltips - left as reference - removing in a future version")
             private List<String> faction = new ArrayList<>() {
                 {
                     this.add("&6Leader: &f{leader}");
@@ -477,7 +477,7 @@ public class MainConfig {
                     this.add("&6Members: &f{online}/{members}");
                 }
             };
-            @Comment("Player on-hover tooltip information")
+            @Comment("Outdated tooltips - left as reference - removing in a future version")
             private List<String> player = new ArrayList<>() {
                 {
                     this.add("&6Last Seen: &f{lastSeen}");
