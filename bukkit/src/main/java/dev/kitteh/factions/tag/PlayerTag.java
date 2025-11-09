@@ -9,9 +9,13 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Function;
 
+@ApiStatus.Internal
+@ApiStatus.Obsolete
+@Deprecated(forRemoval = true)
 public enum PlayerTag implements Tag {
     GROUP("group", (fp) -> {
         if (fp.isOnline()) {
