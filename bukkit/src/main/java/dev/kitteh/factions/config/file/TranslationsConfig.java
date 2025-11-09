@@ -1,9 +1,13 @@
 package dev.kitteh.factions.config.file;
 
 import dev.kitteh.factions.config.annotation.Comment;
+import dev.kitteh.factions.config.annotation.WipeOnReload;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
@@ -89,6 +93,46 @@ public class TranslationsConfig {
         public static class Show extends AbsCommand {
             protected Show() {
                 super("show");
+            }
+
+            private List<String> normalFormat = new ArrayList<>() {
+                {
+                    this.add("<fuuid:title><faction:relation_color><faction:name>");
+                    this.add("<gold>Description: <yellow><faction:description>");
+                    this.add("<gold><faction:if_open>No invitation required</faction:if_open><faction:if_open:else>Invitation required</faction:if_open:else><faction:if_peaceful>.    <fuuid:color:peaceful>Peaceful");
+                    this.add("<gold>Land / Power / Max Power: <yellow><faction:claims_count></yellow> / <yellow><faction:power></yellow> / <yellow><faction:power_max>");
+                    this.add("<gold>Raidable: <faction:if_raidable><green>Yes</faction:if_raidable><faction:if_raidable:else><red>No");
+                    this.add("<gold>Founded: <yellow><faction:creation_date>");
+                    this.add("<faction:if_permanent><gold>This faction is permanent, remaining even with no members.");
+                    this.add("<fuuid:if_economy><fuuid:if_banks><gold>Balance: <yellow><faction:bank_balance></fuuid:if_banks>     <gold>Land value: <yellow><faction:claims_value>");
+                    this.add("<faction:if_allies><gold>Allies (<yellow><faction:allies_count></yellow>/<yellow><faction:allies_max></yellow>): {allies-list}");
+                    this.add("<faction:if_online><gold>Online: (<yellow><faction:members_online_count></yellow>/<yellow><faction:members_total_count></yellow>)<faction:if_online>: {online-list}");
+                    this.add("<faction:if_offline><gold>Offline: (<yellow><faction:members_offline_count></yellow>/<yellow><faction:members_total_count></yellow>)<faction:if_offline>: {offline-list}");
+                }
+            };
+
+            private List<String> safezoneFormat = new ArrayList<>() {
+                {
+                    this.add("<yellow>The <fuuid:color:safezone>safezone</fuuid:color:safezone> faction is a special faction that 'owns' territory where players cannot be hurt");
+                }
+            };
+
+            private List<String> warzoneFormat = new ArrayList<>() {
+                {
+                    this.add("<yellow>The <fuuid:color:warzone>warzone</fuuid:color:warzone> faction is a special faction that 'owns' territory where players can be hurt");
+                }
+            };
+
+            public List<String> getNormalFormat() {
+                return Collections.unmodifiableList(normalFormat);
+            }
+
+            public List<String> getSafezoneFormat() {
+                return Collections.unmodifiableList(safezoneFormat);
+            }
+
+            public List<String> getWarzoneFormat() {
+                return Collections.unmodifiableList(warzoneFormat);
             }
         }
 
@@ -1104,10 +1148,142 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Title {
+            private String titleMain = "<left_color><underline><left_repeat></underline></left_color><center><right_color><right_repeat></right_color>";
+            private String titleCenter = "<gold>.[ </gold><dark_green><content></dark_green><gold> ].</gold>";
+            private String leftRepeat = "_";
+            private String rightRepeat = "_";
+            @WipeOnReload
+            private transient TextColor leftColorColor;
+            private String leftColor = "gold";
+            @WipeOnReload
+            private transient TextColor rightColorColor;
+            private String rightColor = "gold";
+
+            public String getTitleMain() {
+                return this.titleMain;
+            }
+
+            public String getTitleCenter() {
+                return this.titleCenter;
+            }
+
+            public String getLeftRepeat() {
+                return leftRepeat;
+            }
+
+            public String getRightRepeat() {
+                return rightRepeat;
+            }
+
+            public TextColor getLeftColor() {
+                return this.leftColorColor = MainConfig.getColor(this.leftColor, this.leftColorColor, NamedTextColor.GOLD);
+            }
+
+            public TextColor getRightColor() {
+                return this.rightColorColor = MainConfig.getColor(this.rightColor, this.rightColorColor, NamedTextColor.GOLD);
+            }
+        }
+
+        public static class LastSeen {
+            private String onlineText = "<green>Online";
+
+            private String tooRecentText = "<green>Within the last hour";
+            private int tooRecentSeconds = 3599;
+
+            private String recentText = "<yellow><duration> ago";
+            private int recentSeconds = 432000;
+
+            private String olderText = "<red><duration> ago";
+            private String unknownText = "<red>Unknown";
+
+            @Comment("""
+                    Round down to a number of seconds. Ideally, put in the following:
+                    1     - Don't round
+                    60    - Don't give seconds, just minutes/hours/days
+                    3600  - Don't give minutes, just hours/days
+                    86400 - Don't give hours, just days""")
+            private int intervalSeconds = 3600;
+
+            public String getOnlineText() {
+                return onlineText;
+            }
+
+            public String getTooRecentText() {
+                return tooRecentText;
+            }
+
+            public int getTooRecentSeconds() {
+                return tooRecentSeconds;
+            }
+
+            public String getRecentText() {
+                return recentText;
+            }
+
+            public int getRecentSeconds() {
+                return recentSeconds;
+            }
+
+            public String getOlderText() {
+                return olderText;
+            }
+
+            public String getUnknownText() {
+                return unknownText;
+            }
+
+            public int getIntervalSeconds() {
+                return intervalSeconds;
+            }
+        }
+
+        public static class ToolTips {
+            @Comment("Faction on-hover tooltip information")
+            private List<String> faction = new ArrayList<>() {
+                {
+                    this.add("<faction:if_leader><gold>Leader: <yellow><faction:leader>");
+                    this.add("<gold>Land / Power / Max Power: <yellow><faction:claims_count></yellow> / <yellow><faction:power></yellow> / <yellow><faction:power_max>");
+                    this.add("<gold>Raidable: <faction:if_raidable><green>Yes</faction:if_raidable><faction:if_raidable:else><red>No");
+                    this.add("<gold>Online: <yellow><faction:members_online_count></yellow>/<yellow><faction:members_total_count></yellow>");
+                }
+            };
+            @Comment("Player on-hover tooltip information")
+            private List<String> player = new ArrayList<>() {
+                {
+                    this.add("<gold>Last Seen: <yellow><player:last_seen>");
+                    this.add("<gold>Power: <yellow><player:power></yellow> / <yellow><player:power_max>");
+                }
+            };
+
+            public List<String> getFaction() {
+                return Collections.unmodifiableList(faction);
+            }
+
+            public List<String> getPlayer() {
+                return Collections.unmodifiableList(player);
+            }
+        }
+
+        private LastSeen lastSeen = new LastSeen();
         private Shield shield = new Shield();
+        private Title title = new Title();
+        private ToolTips tooltips = new ToolTips();
+
+        public LastSeen lastSeen() {
+            return lastSeen;
+        }
 
         public Shield shield() {
             return shield;
+        }
+
+        public Title title() {
+            return title;
+        }
+
+        public ToolTips tooltips() {
+            return tooltips;
         }
     }
 
