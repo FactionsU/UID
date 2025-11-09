@@ -20,7 +20,7 @@ public class CmdMoney implements Cmd {
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
             Command.Builder<Sender> moneyBuilder = builder.literal("money")
-                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled())));
+                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> Econ.shouldBeUsedWithBanks())));
 
             new CmdMoneyBalance().consumer().accept(manager, moneyBuilder, help);
             new CmdMoneyDeposit().consumer().accept(manager, moneyBuilder, help);

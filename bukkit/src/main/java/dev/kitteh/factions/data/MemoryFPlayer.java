@@ -747,7 +747,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         // Am I the last one in the faction?
         if (myFaction.members().size() == 1) {
             // Transfer all money
-            if (Econ.shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled()) {
+            if (Econ.shouldBeUsedWithBanks()) {
                 if (!perm || FactionsPlugin.instance().conf().economy().isBankPermanentFactionSendBalanceToLastLeaver()) {
                     //Give all the faction's money to the disbander
                     double amount = Econ.getBalance(myFaction);
