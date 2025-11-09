@@ -9,8 +9,6 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.OfflinePlayer;
 
 public interface Tag {
-    int ARBITRARY_LIMIT = 20000;
-
     /**
      * Replaces all variables in a plain raw line for a faction
      *
