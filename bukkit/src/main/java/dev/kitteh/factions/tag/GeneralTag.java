@@ -5,9 +5,13 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Supplier;
 
+@ApiStatus.Internal
+@ApiStatus.Obsolete
+@Deprecated(forRemoval = true)
 public enum GeneralTag implements Tag {
     MAX_ALLIES("max-allies", () -> getRelation(Relation.ALLY)),
     MAX_ENEMIES("max-enemies", () -> getRelation(Relation.ENEMY)),

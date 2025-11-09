@@ -14,11 +14,15 @@ import dev.kitteh.factions.util.TextUtil;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Location;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.sql.Date;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+@ApiStatus.Internal
+@ApiStatus.Obsolete
+@Deprecated(forRemoval = true)
 public enum FactionTag implements Tag {
     INTERNAL_ID("faction-internal-id", (fac) -> String.valueOf(fac.id())),
     HOME_X("x", (fac) -> fac.home() instanceof Location loc ? String.valueOf(loc.getBlockX()) : "{ig}"),

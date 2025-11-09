@@ -7,7 +7,11 @@ import dev.kitteh.factions.integration.IntegrationManager;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
+@ApiStatus.Obsolete
+@Deprecated(forRemoval = true)
 public interface Tag {
     /**
      * Replaces all variables in a plain raw line for a faction
