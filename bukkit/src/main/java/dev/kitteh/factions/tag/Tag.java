@@ -55,10 +55,6 @@ public interface Tag {
         return line;
     }
 
-    static boolean isMinimalShow() {
-        return FactionsPlugin.instance().conf().commands().show().isMinimal();
-    }
-
     /**
      * Gets the Tag's string representation.
      *

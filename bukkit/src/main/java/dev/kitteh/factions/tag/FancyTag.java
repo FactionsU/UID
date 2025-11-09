@@ -29,7 +29,7 @@ public enum FancyTag {
     private static final int ARBITRARY_LIMIT = 20000;
 
     private final String tag;
-    private final TriFunction<Component, Faction, FPlayer, List<Component>> function;
+    private final TriFunction<Component, Faction, @Nullable FPlayer, List<Component>> function;
 
     private static List<Component> processRelation(Component prefix, Faction faction, @Nullable FPlayer fPlayer, Relation relation) {
         List<Component> fancyMessages = new ArrayList<>();
@@ -53,7 +53,7 @@ public enum FancyTag {
             }
         }
         fancyMessages.add(message.build());
-        return first && Tag.isMinimalShow() ? null : fancyMessages;
+        return fancyMessages;
     }
 
     private static List<Component> processPlayers(Component prefix, Faction faction, @Nullable FPlayer fPlayer, boolean online) {
@@ -73,7 +73,7 @@ public enum FancyTag {
             }
         }
         fancyMessages.add(message.build());
-        return first && Tag.isMinimalShow() ? null : fancyMessages;
+        return fancyMessages;
     }
 
     @Nullable
@@ -86,7 +86,7 @@ public enum FancyTag {
         return null;
     }
 
-    FancyTag(String tag, TriFunction<Component, Faction, FPlayer, List<Component>> function) {
+    FancyTag(String tag, TriFunction<Component, Faction, @Nullable FPlayer, List<Component>> function) {
         this.tag = '{' + tag + '}';
         this.function = function;
     }
@@ -95,7 +95,7 @@ public enum FancyTag {
         return this.tag;
     }
 
-    public List<Component> getComponents(Component prefix, Faction faction, FPlayer observer) {
+    public List<Component> getComponents(Component prefix, Faction faction, @Nullable FPlayer observer) {
         return this.function.apply(prefix, faction, observer);
     }
 }

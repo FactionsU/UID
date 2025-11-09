@@ -376,8 +376,6 @@ public class MainConfig {
                     this.add("&6Offline: (&e{offline}&6/&e{members}&6): {offline-list}");
                 }
             };
-            @Comment("Set true to not display empty fancy messages")
-            private boolean minimal = false;
             @Comment("Factions that should be exempt from /f show, case sensitive, useful for a\n" +
                     "serverteam faction, since the command shows vanished players otherwise")
             private List<String> exempt = new ArrayList<>() {
@@ -388,10 +386,6 @@ public class MainConfig {
 
             public List<String> getFormat() {
                 return format != null ? Collections.unmodifiableList(format) : Collections.emptyList();
-            }
-
-            public boolean isMinimal() {
-                return minimal;
             }
 
             public List<String> getExempt() {
