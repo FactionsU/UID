@@ -64,6 +64,9 @@ public class FPlayerResolver extends ObservedResolver {
             case "relation_name" -> tagLegacy(observed.relationTo(observer).translation());
             case "relation_color" -> tag(observed.relationTo(observer).color());
 
+            case "kills" -> tag(observed.kills());
+            case "deaths" -> tag(observed.deaths());
+
             case "last_seen" -> {
                 long last = observed.lastLogin();
                 long since = (last == 0 ? -1 : (System.currentTimeMillis() - last)) / 1000L;

@@ -11,8 +11,6 @@ import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.plugin.Instances;
-import dev.kitteh.factions.tag.FactionTag;
-import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.TL;
@@ -25,6 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -138,7 +137,6 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "player_factionless" -> fPlayer.hasFaction() ? "" : TL.GENERIC_FACTIONLESS.toString();
 
             case "faction_name" -> (fPlayer.hasFaction() || territory) ? faction.tag() : TL.NOFACTION_PREFIX.toString();
-            case "faction_name_custom" -> (fPlayer.hasFaction() || territory) ? Tag.parsePlain(fPlayer, TL.PLACEHOLDER_CUSTOM_FACTION.toString()) : "";
             case "faction_only_space" -> (fPlayer.hasFaction() || territory) ? " " : "";
             case "faction_internal_id" -> faction.id() + "";
             case "faction_power" -> String.valueOf(faction.power());
@@ -152,13 +150,15 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             }
             case "faction_dtr_frozen" -> {
                 if ((fPlayer.hasFaction() || territory) && FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
-                    yield FactionTag.DTR_FROZEN.replace(FactionTag.DTR_FROZEN.getTag(), faction);
+                    yield TL.DTR_FROZEN_STATUS_MESSAGE.format(faction.dtrFrozen() ? TL.DTR_FROZEN_STATUS_TRUE.toString() : TL.DTR_FROZEN_STATUS_FALSE.toString());
                 }
                 yield "";
             }
             case "faction_dtr_frozen_time" -> {
                 if ((fPlayer.hasFaction() || territory) && FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
-                    yield FactionTag.DTR_FROZEN_TIME.replace(FactionTag.DTR_FROZEN_TIME.getTag(), faction);
+                    yield TL.DTR_FROZEN_TIME_MESSAGE.format(faction.dtrFrozen() ?
+                            DurationFormatUtils.formatDuration(faction.dtrFrozenUntil() - System.currentTimeMillis(), FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
+                            TL.DTR_FROZEN_TIME_NOTFROZEN.toString());
                 }
                 yield "";
             }
@@ -181,15 +181,15 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
                 boolean raid = FactionsPlugin.instance().landRaidControl().isRaidable(faction);
                 yield raid ? TL.RAIDABLE_TRUE.toString() : TL.RAIDABLE_FALSE.toString();
             }
-            case "faction_home_world" -> faction.home() instanceof Location home ? home.getWorld().getName() : "";
+            case "faction_home_world" -> faction.home() instanceof Location home ? (home.getWorld() instanceof World w ? w.getName() : "?????") : "";
             case "faction_home_x" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockX()) : "";
             case "faction_home_y" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockY()) : "";
             case "faction_home_z" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockZ()) : "";
             case "faction_land_value" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(faction.claimCount())) : TL.ECON_OFF.format("value");
             case "faction_land_refund" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.claimCount())) : TL.ECON_OFF.format("refund");
             case "faction_bank_balance" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.getBalance(faction)) : TL.ECON_OFF.format("balance");
-            case "faction_tnt_balance" -> FactionTag.TNT_BALANCE.replace(FactionTag.TNT_BALANCE.getTag(), faction);
-            case "faction_tnt_max_balance" -> FactionTag.TNT_MAX.replace(FactionTag.TNT_MAX.getTag(), faction);
+            case "faction_tnt_balance" -> FactionsPlugin.instance().conf().commands().tnt().isEnable() ? String.valueOf(faction.tntBank()) : "";
+            case "faction_tnt_max_balance" -> FactionsPlugin.instance().conf().commands().tnt().isEnable() ? String.valueOf(faction.tntBankMax()) : "";
             case "faction_allies" -> String.valueOf(faction.relationCount(Relation.ALLY));
             case "faction_allies_players" -> String.valueOf(this.countOn(faction, Relation.ALLY, null, fPlayer));
             case "faction_allies_players_online" -> String.valueOf(this.countOn(faction, Relation.ALLY, true, fPlayer));
