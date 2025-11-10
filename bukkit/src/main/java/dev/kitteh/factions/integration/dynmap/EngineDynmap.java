@@ -10,13 +10,15 @@ import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.tag.FactionTag;
-import dev.kitteh.factions.tag.GeneralTag;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.LazyLocation;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Morton;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -40,6 +42,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 // This source code is a heavily modified version of mikeprimms plugin Dynmap-Factions.
@@ -720,6 +724,21 @@ public class EngineDynmap {
         String playersRecruitsCount = String.valueOf(playersRecruitsList.size());
         String playersRecruits = getHtmlPlayerString(playersRecruitsList);
 
+        FactionResolver factionResolver = FactionResolver.of((FPlayer) null, faction);
+
+        StringBuilder builder = new StringBuilder();
+
+        Pattern tagPattern = Pattern.compile("%%(<(?:(?!%%).)*?)%%");
+        Matcher tagMatcher = tagPattern.matcher(ret);
+        while(tagMatcher.find()) {
+            String inner =  tagMatcher.group(1);
+            Component component = Mini.parse(inner, factionResolver);
+            String rep = PlainTextComponentSerializer.plainText().serialize(component);
+            tagMatcher.appendReplacement(builder, Matcher.quoteReplacement(rep));
+        }
+        tagMatcher.appendTail(builder);
+
+        ret = builder.toString();
 
         ret = ret.replace("%players%", players);
         ret = ret.replace("%players.count%", playersCount);
@@ -734,18 +753,6 @@ public class EngineDynmap {
         ret = ret.replace("%players.normals.count%", playersNormalsCount);
         ret = ret.replace("%players.recruits%", playersRecruits);
         ret = ret.replace("%players.recruits.count%", playersRecruitsCount);
-
-
-        for (FactionTag tag : FactionTag.values()) {
-            if (ret.contains(tag.getTag())) {
-                ret = ret.replace(tag.getTag(), escapeHtml(ChatColor.stripColor(tag.replace(tag.getTag(), faction))));
-            }
-        }
-        for (GeneralTag tag : GeneralTag.values()) {
-            if (ret.contains(tag.getTag())) {
-                ret = ret.replace(tag.getTag(), escapeHtml(ChatColor.stripColor(tag.replace(tag.getTag()))));
-            }
-        }
 
         return ret;
     }
