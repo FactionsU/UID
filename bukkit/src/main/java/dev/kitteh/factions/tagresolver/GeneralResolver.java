@@ -1,5 +1,7 @@
 package dev.kitteh.factions.tagresolver;
 
+import dev.kitteh.factions.FPlayer;
+import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.Relation;
@@ -10,6 +12,7 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Modifying;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -64,6 +67,13 @@ public class GeneralResolver extends HelperResolver {
                     yield empty();
                 }
             }
+
+            case "players_count_online" -> tag(Bukkit.getOnlinePlayers().size());
+            case "players_factionless_online" -> tag(FPlayers.fPlayers().online().stream().filter(p -> !p.hasFaction()).count());
+            case "players_factionless_total" -> tag(FPlayers.fPlayers().all().stream().filter(p -> !p.hasFaction()).count());
+            case "players_faction_members_online" -> tag(FPlayers.fPlayers().online().stream().filter(FPlayer::hasFaction).count());
+            case "players_faction_members_total" -> tag(FPlayers.fPlayers().all().stream().filter(FPlayer::hasFaction).count());
+            case "players_tracked_total" -> tag(FPlayers.fPlayers().all().size());
 
             case "if_economy" -> tagToggle(Econ.shouldBeUsed(), arguments);
             case "if_banks" -> tagToggle(Econ.shouldBeUsedWithBanks(), arguments);

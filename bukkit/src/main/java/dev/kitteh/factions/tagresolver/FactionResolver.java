@@ -59,8 +59,7 @@ public class FactionResolver extends ObservedResolver {
 
             case "link" -> tag(Component.text().content(faction.link()).clickEvent(ClickEvent.openUrl(faction.link())));
 
-            case "create-date" -> tag(TL.sdf.format(Date.from(faction.founded())));
-            case "creation_date" -> tag(TL.sdf.format(Date.from(faction.founded())));
+            case "create-date", "creation_date" -> tag(TL.sdf.format(Date.from(faction.founded())));
 
             case "members_total_count" -> tag(faction.members().size());
             case "members_online_count" -> tag(faction.membersOnline(true, observer).size());
