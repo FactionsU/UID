@@ -50,13 +50,13 @@ public class TextUtil {
     }
 
     @ApiStatus.Obsolete
-    @Deprecated(forRemoval = true)
+    @Deprecated(forRemoval = true, since = "4.3.0")
     public static String parse(String str, Object... args) {
         return String.format(parse(str), args);
     }
 
     @ApiStatus.Obsolete
-    @Deprecated(forRemoval = true)
+    @Deprecated(forRemoval = true, since = "4.3.0")
     public static String parse(String str) {
         return ChatColor.translateAlternateColorCodes('&', str);
     }
@@ -66,7 +66,7 @@ public class TextUtil {
     }
 
     @ApiStatus.Obsolete
-    @Deprecated(forRemoval = true)
+    @Deprecated(forRemoval = true, since = "4.3.0")
     public static String repeat(String s, int times) {
         return s.repeat(times);
     }
@@ -75,6 +75,7 @@ public class TextUtil {
         return material.toString().replace('_', ' ').toLowerCase();
     }
 
+    @ApiStatus.AvailableSince("4.3.0")
     public static Component titleize(Component title, @Nullable Context ctx) {
         var tiTL = FactionsPlugin.instance().tl().placeholders().title();
         Component center = Mini.parse(tiTL.getTitleCenter(), Placeholder.component("content", title));
@@ -97,18 +98,19 @@ public class TextUtil {
         }
     }
 
+    @ApiStatus.AvailableSince("4.3.0")
     public static Component titleize(Component title) {
         return titleize(title, null);
     }
 
     @ApiStatus.Obsolete
-    @Deprecated(forRemoval = true)
+    @Deprecated(forRemoval = true, since = "4.3.0")
     public static String titleizeLegacy(String str) {
         return Mini.toLegacy(titleize(str));
     }
 
     @ApiStatus.Obsolete
-    @Deprecated(forRemoval = true)
+    @Deprecated(forRemoval = true, since = "4.3.0")
     public static Component titleize(String string) {
         return titleize(LegacyComponentSerializer.legacySection().deserialize(string));
     }

@@ -17,6 +17,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
 import java.text.DecimalFormat;
@@ -75,6 +76,7 @@ public class Econ {
         return FactionsPlugin.instance().conf().economy().isEnabled() && econ != null && econ.isEnabled();
     }
 
+    @ApiStatus.AvailableSince("4.3.0")
     public static boolean shouldBeUsedWithBanks() {
         return shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled();
     }
