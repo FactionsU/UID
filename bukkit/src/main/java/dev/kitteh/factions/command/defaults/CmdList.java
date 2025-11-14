@@ -1,5 +1,6 @@
 package dev.kitteh.factions.command.defaults;
 
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.defaults.list.CmdListBans;
@@ -16,7 +17,8 @@ public class CmdList implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> listBuilder = builder.literal("list");
+            var tl = FactionsPlugin.instance().tl().commands().list();
+            Command.Builder<Sender> listBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases());
 
             new CmdListBans().consumer().accept(manager, listBuilder, help);
             new CmdListClaims().consumer().accept(manager, listBuilder, help);

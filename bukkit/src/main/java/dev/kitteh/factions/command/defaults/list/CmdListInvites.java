@@ -2,6 +2,7 @@ package dev.kitteh.factions.command.defaults.list;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
@@ -23,12 +24,15 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdListInvites implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("invites")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_SHOWINVITES_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SHOW_INVITES).and(Cloudy.hasFaction())))
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().list().invites();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(TL.COMMAND_SHOWINVITES_DESCRIPTION))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SHOW_INVITES).and(Cloudy.hasFaction())))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {

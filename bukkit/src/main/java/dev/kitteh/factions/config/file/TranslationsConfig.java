@@ -84,6 +84,57 @@ public class TranslationsConfig {
             }
         }
 
+        public static class ListCmd extends AbsCommand {
+            public ListCmd() {
+                super("list");
+            }
+
+            public static class ListBans extends AbsCommand {
+                public ListBans() {
+                    super("bans");
+                }
+            }
+
+            public static class ListClaims extends AbsCommand {
+                public ListClaims() {
+                    super("claims");
+                }
+            }
+
+            public static class ListFactions extends AbsCommand {
+                public ListFactions() {
+                    super("factions");
+                }
+            }
+
+            public static class ListInvites extends AbsCommand {
+                public ListInvites() {
+                    super("invites");
+                }
+            }
+
+            private ListBans bans = new ListBans();
+            private ListClaims claims = new ListClaims();
+            private ListFactions factions = new ListFactions();
+            private ListInvites invites = new ListInvites();
+
+            public ListBans bans() {
+                return bans;
+            }
+
+            public ListClaims claims() {
+                return claims;
+            }
+
+            public ListFactions factions() {
+                return factions;
+            }
+
+            public ListInvites invites() {
+                return invites;
+            }
+        }
+
         public static class Set extends AbsCommand {
             public Set() {
                 super("set");
@@ -920,6 +971,7 @@ public class TranslationsConfig {
 
         private Chat chat = new Chat();
         private Confirm confirm = new Confirm();
+        private ListCmd list = new ListCmd();
         private Set set = new Set();
         private Show show = new Show();
         private Permissions permissions = new Permissions();
@@ -936,6 +988,10 @@ public class TranslationsConfig {
 
         public Confirm confirm() {
             return confirm;
+        }
+
+        public ListCmd list() {
+            return list;
         }
 
         public Set set() {

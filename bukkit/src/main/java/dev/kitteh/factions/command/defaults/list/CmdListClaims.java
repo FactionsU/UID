@@ -4,6 +4,7 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
@@ -33,18 +34,21 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdListClaims implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("claims")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_LISTCLAIMS_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LISTCLAIMS).and(Cloudy.hasSelfFactionPerms(PermissibleActions.LISTCLAIMS))))
-                        .flag(manager.flagBuilder("world").withComponent(StringParser.stringParser()))
-                        .flag(
-                                manager.flagBuilder("faction")
-                                        .withComponent(FactionParser.of(FactionParser.Include.SELF))
-                                        .withPermission(Cloudy.hasPermission(Permission.LISTCLAIMS_OTHER))
-                        )
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().list().claims();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(TL.COMMAND_LISTCLAIMS_DESCRIPTION))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LISTCLAIMS).and(Cloudy.hasSelfFactionPerms(PermissibleActions.LISTCLAIMS))))
+                            .flag(manager.flagBuilder("world").withComponent(StringParser.stringParser()))
+                            .flag(
+                                    manager.flagBuilder("faction")
+                                            .withComponent(FactionParser.of(FactionParser.Include.SELF))
+                                            .withPermission(Cloudy.hasPermission(Permission.LISTCLAIMS_OTHER))
+                            )
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
