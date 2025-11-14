@@ -9,8 +9,7 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerTeleportEvent;
-import dev.kitteh.factions.integration.Essentials;
-import dev.kitteh.factions.integration.IntegrationManager;
+import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.SpiralTask;
@@ -96,7 +95,7 @@ public class CmdStuck implements Cmd {
                             int y = world.getHighestBlockYAt(cx, cz);
                             Location tp = new Location(world, cx, y, cz);
                             sender.msgLegacy(TL.COMMAND_STUCK_TELEPORT, tp.getBlockX(), tp.getBlockY(), tp.getBlockZ());
-                            if (!FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) || !Essentials.handleTeleport(player, tp)) {
+                            if (!ExternalChecks.isTeleported(player, tp)) {
                                 AbstractFactionsPlugin.instance().teleport(player, tp);
                                 AbstractFactionsPlugin.instance().debug("/f stuck used regular teleport, not essentials!");
                             }
