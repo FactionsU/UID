@@ -102,7 +102,7 @@ public class CmdRole implements Cmd {
             sender.msgLegacy(TL.COMMAND_ROLE_WRONGFACTION);
             return;
         }
-        if (target.role() == Role.ADMIN || targetNewRole == null || targetNewRole == Role.ADMIN || targetNewRole.isAtLeast(sender.role())) {
+        if (target.role() == Role.ADMIN || targetNewRole == null || targetNewRole == Role.ADMIN || target.role().isAtLeast(sender.role()) || targetNewRole.isAtLeast(sender.role())) {
             sender.msgLegacy(TL.COMMAND_ROLE_NOT_ALLOWED);
             return;
         }
