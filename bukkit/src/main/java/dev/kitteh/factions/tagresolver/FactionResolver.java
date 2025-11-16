@@ -171,6 +171,7 @@ public class FactionResolver extends ObservedResolver {
             case "if_enemies" -> tagToggle(faction.relationCount(Relation.ENEMY) > 0, arguments);
             case "if_truces" -> tagToggle(faction.relationCount(Relation.TRUCE) > 0, arguments);
             case "if_leader" -> tagToggle(faction.admin() != null,  arguments);
+            case "if_hashome" -> tagToggle(faction.hasHome(), arguments);
 
             default -> tag(Component.empty());
         };
