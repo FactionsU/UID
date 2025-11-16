@@ -102,6 +102,33 @@ public class TranslationsConfig {
             }
 
             public static class ListFactions extends AbsCommand {
+                @Comment("You can also use <page_current> and <page_count> in the header.\n" +
+                        "Blank entry results in nothing being displayed.")
+                private String header = "<fuuid:title><dark_green>Faction List</dark_green> <gold><page_current></gold>/<gold><page_count></gold>";
+                @Comment("You can also use <page_current> and <page_count> in the header.\n" +
+                        "Blank entry results in nothing being displayed.")
+                private String footer = "";
+                @Comment("You can use per-faction <faction:thing> placeholders here")
+                private String factionlessEntry = "<yellow>Factionless <faction:members_online_count> online";
+                @Comment("You can use per-faction <faction:thing> placeholders here")
+                private String entry = "<yellow><faction> <faction:members_online_count>/<faction:members_total_count> online, <gold>Land/Power/Max Power: <yellow><faction:claims_count></yellow>/<yellow><faction:power></yellow>/<yellow><faction:power_max>";
+
+                public String getHeader() {
+                    return header;
+                }
+
+                public String getFooter() {
+                    return footer;
+                }
+
+                public String getFactionlessEntry() {
+                    return factionlessEntry;
+                }
+
+                public String getEntry() {
+                    return entry;
+                }
+
                 public ListFactions() {
                     super("factions");
                 }
@@ -1205,7 +1232,7 @@ public class TranslationsConfig {
         }
 
         public static class Title {
-            private String titleMain = "<left_color><underline><left_repeat></underline></left_color><center><right_color><right_repeat></right_color>";
+            private String titleMain = "<left_color><st><left_repeat></st></left_color><center><right_color><right_repeat></right_color>";
             private String titleCenter = "<gold>.[ </gold><dark_green><content></dark_green><gold> ].</gold>";
             private String leftRepeat = "_";
             private String rightRepeat = "_";

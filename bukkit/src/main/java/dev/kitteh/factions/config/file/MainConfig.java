@@ -276,32 +276,11 @@ public class MainConfig {
         }
 
         public class ListCmd {
-            @Comment("You can only use {pagenumber} and {pagecount} in the header.\n" +
-                    "Blank entry results in nothing being displayed.")
-            private String header = "&e&m----------&r&e[ &2Faction List &9{pagenumber}&e/&9{pagecount} &e]&m----------";
-            @Comment("You can only use {pagenumber} and {pagecount} in the footer.\n" +
-                    "Blank entry results in nothing being displayed.")
+            // If anything is added here, update the command on this class's field.
+            private String header = "";
             private String footer = "";
-            @Comment("You can use any variables here")
-            private String factionlessEntry = "&eFactionless&e {factionless} online";
-            @Comment("You can use any variable here")
-            private String entry = "&6{faction-relation-color}{faction} &e{online} / {members} online, &6Land / Power / Maxpower: &e{chunks}/{power}/{maxPower}";
-
-            public String getHeader() {
-                return header;
-            }
-
-            public String getFooter() {
-                return footer;
-            }
-
-            public String getFactionlessEntry() {
-                return factionlessEntry;
-            }
-
-            public String getEntry() {
-                return entry;
-            }
+            private String factionlessEntry = "";
+            private String entry = "";
         }
 
         public class MapCmd {
@@ -470,6 +449,7 @@ public class MainConfig {
         private Fly fly = new Fly();
         private Home home = new Home();
         private Link link = new Link();
+        @Comment("Legacy faction list command output, kept for reference when you convert to the entry in the translations file.")
         private ListCmd list = new ListCmd();
         private MapCmd map = new MapCmd();
         private Near near = new Near();

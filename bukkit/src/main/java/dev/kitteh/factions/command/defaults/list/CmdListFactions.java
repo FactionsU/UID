@@ -8,9 +8,13 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.util.ComponentDispatcher;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.TextUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -69,7 +73,7 @@ public class CmdListFactions implements Cmd {
         // Then sort by how many members are online now
         factionList.sort(this.compare(f -> f.membersOnline(true, fPlayer)));
 
-        ArrayList<String> lines = new ArrayList<>();
+        ArrayList<Component> lines = new ArrayList<>();
 
         factionList.addFirst(Factions.factions().wilderness());
 
@@ -89,28 +93,28 @@ public class CmdListFactions implements Cmd {
 
         AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
 
-        String header = plugin.conf().commands().list().getHeader();
-        String footer = plugin.conf().commands().list().getFooter();
+        String header = plugin.tl().commands().list().factions().getHeader();
+        String footer = plugin.tl().commands().list().factions().getFooter();
+        String factionlessEntry = plugin.tl().commands().list().factions().getFactionlessEntry();
+        String factionEntry = plugin.tl().commands().list().factions().getEntry();
 
         if (!header.isEmpty()) {
-            header = header.replace("{pagenumber}", String.valueOf(pagenumber)).replace("{pagecount}", String.valueOf(pagecount));
-            lines.add(TextUtil.parse(header));
+            lines.add(Mini.parse(header,
+                    Placeholder.unparsed("page_current", String.valueOf(pagenumber)),
+                    Placeholder.unparsed("page_count", String.valueOf(pagecount))));
         }
 
         for (Faction faction : factionList.subList(start, end)) {
-            if (faction.isWilderness()) {
-                lines.add(TextUtil.parse(Tag.parsePlain(faction, plugin.conf().commands().list().getFactionlessEntry())));
-                continue;
-            }
-            lines.add(TextUtil.parse(Tag.parsePlain(faction, fPlayer, plugin.conf().commands().list().getEntry())));
+            lines.add(Mini.parse(faction.isWilderness() ? factionlessEntry : factionEntry, FactionResolver.of(fPlayer, faction)));
         }
 
         if (!footer.isEmpty()) {
-            footer = footer.replace("{pagenumber}", String.valueOf(pagenumber)).replace("{pagecount}", String.valueOf(pagecount));
-            lines.add(TextUtil.parse(footer));
+            lines.add(Mini.parse(footer,
+                    Placeholder.unparsed("page_current", String.valueOf(pagenumber)),
+                    Placeholder.unparsed("page_count", String.valueOf(pagecount))));
         }
 
-        lines.forEach(context.sender().sender()::sendMessage);
+        lines.forEach(line -> ComponentDispatcher.send(context.sender().sender(), line));
     }
 
     private Comparator<Faction> compare(Function<Faction, ? extends Collection<?>> func) {
