@@ -35,14 +35,17 @@ import java.util.List;
 public class CmdShow implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        var tl = FactionsPlugin.instance().tl().commands().show();
-        return (manager, builder, help) -> manager.command(
-                builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                        .commandDescription(Cloudy.desc(TL.COMMAND_SHOW_COMMANDDESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SHOW)))
-                        .optional("faction", FactionParser.of(FactionParser.Include.SELF, FactionParser.Include.PLAYERS))
-                        .handler(this::handle)
-        );
+
+        return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().show();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(TL.COMMAND_SHOW_COMMANDDESCRIPTION))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SHOW)))
+                            .optional("faction", FactionParser.of(FactionParser.Include.SELF, FactionParser.Include.PLAYERS))
+                            .handler(this::handle)
+            );
+        };
     }
 
     final List<String> defaults = new ArrayList<>();
