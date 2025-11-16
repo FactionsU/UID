@@ -354,39 +354,14 @@ public class MainConfig {
 
         public class Show {
             @Comment("""
-                    You can use any variable here, including fancy messages. Color codes and or tags work fine.
-                    Lines that aren't defined wont be sent (home not set, faction not peaceful / permanent, dtr freeze)
-                    Supports placeholders.
-                    First line can be {header} for default header, or any string (we recommend &m for smooth lines ;p)
-                    The line with 'permanent' in it only appears if the faction is permanent.""")
-            private List<String> format = new ArrayList<>() {
-                {
-                    this.add("{header}");
-                    this.add("&6Description: &e<faction:description>");
-                    this.add("&6Joining: &e{joining}    {peaceful}");
-                    this.add("&6Land / Power / Maxpower: &e {chunks}/{power}/{maxPower}");
-                    this.add("&6Raidable: {raidable}");
-                    this.add("&6Founded: &e{create-date}");
-                    this.add("&6This faction is permanent, remaining even with no members.");
-                    this.add("&6Land value: &e{land-value} {land-refund}");
-                    this.add("&6Balance: &e{faction-balance}");
-                    this.add("&6Bans: &e{faction-bancount}");
-                    this.add("&6Allies(&e{allies}&6/&e{max-allies}&6): {allies-list} ");
-                    this.add("&6Online: (&e{online}&6/&e{members}&6): {online-list}");
-                    this.add("&6Offline: (&e{offline}&6/&e{members}&6): {offline-list}");
-                }
-            };
-            @Comment("Factions that should be exempt from /f show, case sensitive, useful for a\n" +
-                    "serverteam faction, since the command shows vanished players otherwise")
+                    Legacy show command output, kept for reference when you convert to the entry in the translations file.""")
+            private List<String> format = new ArrayList<>();
+            @Comment("Factions that should be exempt from /f show, case sensitive, useful for a server-team faction")
             private List<String> exempt = new ArrayList<>() {
                 {
                     this.add("put_faction_tag_here");
                 }
             };
-
-            public List<String> getFormat() {
-                return format != null ? Collections.unmodifiableList(format) : Collections.emptyList();
-            }
 
             public List<String> getExempt() {
                 return exempt != null ? Collections.unmodifiableList(exempt) : Collections.emptyList();
