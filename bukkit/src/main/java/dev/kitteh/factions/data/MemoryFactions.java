@@ -4,6 +4,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.event.FactionCreateEvent;
+import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
@@ -117,6 +118,7 @@ public abstract class MemoryFactions implements Factions {
     public void remove(Faction faction) {
         if (factions.remove(faction.id()) instanceof MemoryFaction f) {
             f.remove();
+            FTeamWrapper.applyUpdates(f);
         }
     }
 
