@@ -1,8 +1,10 @@
 package dev.kitteh.factions.tagresolver;
 
+import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.IntegrationManager;
+import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.util.MiscUtil;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
@@ -15,6 +17,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
@@ -84,6 +90,19 @@ public class FPlayerResolver extends ObservedResolver {
                 } else {
                     yield tagMini(tl.getTooRecentText(), Placeholder.unparsed("duration", duration), this);
                 }
+            }
+
+            case "scoreboard_map" -> {
+                if (arguments.hasNext()) {
+                    OptionalInt index = arguments.pop().asInt();
+                    if (index.isPresent()) {
+                        List<Component> board = Instances.BOARD.getScoreboardMap(observed);
+                        if (index.getAsInt() < board.size()) {
+                            yield tag(board.get(index.getAsInt()));
+                        }
+                    }
+                }
+                yield empty();
             }
 
             case "tooltip" -> tagTip(FactionsPlugin.instance().tl().placeholders().tooltips().getPlayer(), this);

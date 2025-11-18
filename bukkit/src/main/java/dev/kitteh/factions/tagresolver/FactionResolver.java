@@ -53,7 +53,7 @@ public class FactionResolver extends ObservedResolver {
         return switch (main) {
             case "", "name_decorated" -> tagLegacy(faction.describeToLegacy(observer));
 
-            case "name" -> tag(faction.tag());
+            case "name", "tag" -> tag(faction.tag());
 
             case "description" -> tag(faction.description());
 
