@@ -1,6 +1,7 @@
 package dev.kitteh.factions.scoreboard;
 
 import dev.kitteh.factions.FPlayer;
+import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Bukkit;
@@ -8,17 +9,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@ApiStatus.Internal
 public class FScoreboard {
     private static final Map<FPlayer, FScoreboard> fscoreboards = new HashMap<>();
 
     private final Scoreboard scoreboard;
     private final FPlayer fplayer;
     private final BufferedObjective bufferedObjective;
-    private FSidebarProvider defaultProvider;
     private FSidebarProvider temporaryProvider;
     private boolean removed = false;
 
@@ -36,7 +38,7 @@ public class FScoreboard {
         FScoreboard fboard = fscoreboards.remove(fplayer);
 
         if (fboard != null) {
-            if (fboard.scoreboard == player.getScoreboard()) { // No equals method implemented, so may as well skip a nullcheck
+            if (fboard.scoreboard == player.getScoreboard()) {
                 player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
             }
             fboard.removed = true;
@@ -55,6 +57,22 @@ public class FScoreboard {
         this.bufferedObjective = new BufferedObjective(scoreboard);
 
         player.setScoreboard(scoreboard);
+
+        updateObjective();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (removed) {
+                    cancel();
+                    return;
+                }
+
+                if (temporaryProvider == null) {
+                    updateObjective();
+                }
+            }
+        }.runTaskTimer(AbstractFactionsPlugin.instance(), 20, 20);
     }
 
     protected FPlayer getFPlayer() {
@@ -69,29 +87,8 @@ public class FScoreboard {
         bufferedObjective.setDisplaySlot(visible ? DisplaySlot.SIDEBAR : null);
     }
 
-    public void setDefaultSidebar(final FSidebarProvider provider) {
-        defaultProvider = provider;
-        if (temporaryProvider == null) {
-            // We have no temporary provider; update the BufferedObjective!
-            updateObjective();
-        }
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (removed || provider != defaultProvider) {
-                    cancel();
-                    return;
-                }
-
-                if (temporaryProvider == null) {
-                    updateObjective();
-                }
-            }
-        }.runTaskTimer(AbstractFactionsPlugin.instance(), 20, 20);
-    }
-
-    public void setTemporarySidebar(final FSidebarProvider provider) {
+    public void setTemporarySidebar(Faction faction) {
+        final FSidebarProvider provider = FSidebarProvider.info(faction);
         temporaryProvider = provider;
         updateObjective();
 
@@ -111,14 +108,10 @@ public class FScoreboard {
     }
 
     private void updateObjective() {
-        FSidebarProvider provider = temporaryProvider != null ? temporaryProvider : defaultProvider;
+        FSidebarProvider provider = temporaryProvider != null ? temporaryProvider : FSidebarProvider.defaultSidebar();
 
-        if (provider == null) {
-            bufferedObjective.hide();
-        } else {
-            bufferedObjective.setTitle(provider.getTitle(fplayer));
-            bufferedObjective.setAllLines(provider.getLines(fplayer));
-            bufferedObjective.flip();
-        }
+        bufferedObjective.setTitle(provider.getTitle(fplayer));
+        bufferedObjective.setAllLines(provider.getLines(fplayer));
+        bufferedObjective.flip();
     }
 }

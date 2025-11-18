@@ -276,10 +276,13 @@ public class MainConfig {
         }
 
         public class ListCmd {
-            // If anything is added here, update the command on this class's field.
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private String header = "";
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private String footer = "";
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private String factionlessEntry = "";
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private String entry = "";
         }
 
@@ -332,8 +335,7 @@ public class MainConfig {
         }
 
         public class Show {
-            @Comment("""
-                    Legacy show command output, kept for reference when you convert to the entry in the translations file.""")
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private List<String> format = new ArrayList<>();
             @Comment("Factions that should be exempt from /f show, case sensitive, useful for a server-team faction")
             private List<String> exempt = new ArrayList<>() {
@@ -449,7 +451,6 @@ public class MainConfig {
         private Fly fly = new Fly();
         private Home home = new Home();
         private Link link = new Link();
-        @Comment("Legacy faction list command output, kept for reference when you convert to the entry in the translations file.")
         private ListCmd list = new ListCmd();
         private MapCmd map = new MapCmd();
         private Near near = new Near();
@@ -2680,8 +2681,7 @@ public class MainConfig {
     public class Scoreboard {
         public class Constant {
             private boolean enabled = false;
-            @Comment("Can use any placeholders, but does not update once set")
-            private String title = "Faction Status";
+
             @Comment("If true, show faction prefixes on nametags and in tab list if scoreboard is enabled")
             private boolean prefixes = true;
             @Comment("Set the length limit for prefixes.\n" +
@@ -2698,31 +2698,19 @@ public class MainConfig {
             @Comment("Takes {relationcolor}, {faction}, player-specific tags, &-prefixed color codes")
             private String suffixTemplate = " {relationcolor}[{faction}]";
 
-            private List<String> content = new ArrayList<>() {
-                {
-                    this.add("&6Your Faction");
-                    this.add("{faction}");
-                    this.add("&3Your Power");
-                    this.add("{power}");
-                    this.add("&aBalance");
-                    this.add("${balance}");
-                }
-            };
             private boolean factionlessEnabled = false;
-            private List<String> factionlessContent = new ArrayList<>() {
-                {
-                    this.add("Make a new Faction");
-                    this.add("Use /f create");
-                }
-            };
+
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            private String title = "Faction Status";
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            private List<String> content = new ArrayList<>();
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            private List<String> factionlessContent = new ArrayList<>();
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private String factionlessTitle = "Status";
 
             public boolean isEnabled() {
                 return enabled;
-            }
-
-            public String getTitle() {
-                return title;
             }
 
             public boolean isPrefixes() {
@@ -2749,20 +2737,8 @@ public class MainConfig {
                 return suffixTemplate;
             }
 
-            public List<String> getContent() {
-                return content != null ? Collections.unmodifiableList(content) : Collections.emptyList();
-            }
-
             public boolean isFactionlessEnabled() {
                 return factionlessEnabled;
-            }
-
-            public List<String> getFactionlessContent() {
-                return factionlessContent != null ? Collections.unmodifiableList(factionlessContent) : Collections.emptyList();
-            }
-
-            public String getFactionlessTitle() {
-                return factionlessTitle;
             }
         }
 

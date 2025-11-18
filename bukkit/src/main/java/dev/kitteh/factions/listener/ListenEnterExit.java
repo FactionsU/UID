@@ -9,7 +9,6 @@ import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
-import dev.kitteh.factions.scoreboard.sidebar.FDefaultSidebar;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
@@ -227,7 +226,6 @@ public class ListenEnterExit implements Listener {
 
         if (this.plugin.conf().scoreboard().constant().isEnabled()) {
             FScoreboard.init(player, me);
-            FScoreboard.get(me).setDefaultSidebar(new FDefaultSidebar());
             FScoreboard.get(me).setSidebarVisibility(me.showScoreboard());
         }
 

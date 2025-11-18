@@ -1370,6 +1370,101 @@ public class TranslationsConfig {
         }
     }
 
+    public class Scoreboard {
+        public class Constant {
+
+            private String prefixTemplate = "<faction:relation_color>[<faction:name>] </faction:relation_color> ";
+            private String suffixTemplate = " <faction:relation_color>[<faction:name>]";
+
+            private List<String> normalContent = new ArrayList<>() {
+                {
+                    this.add("<gold>Your Faction");
+                    this.add("<faction>");
+                    this.add("<gold>Your Power");
+                    this.add("<player:power>");
+                }
+            };
+
+            @Comment("Can use any placeholders, but does not update once set")
+            private String normalTitle = "Faction Status";
+
+            private List<String> factionlessContent = new ArrayList<>() {
+                {
+                    this.add("<gold>Not in a faction");
+                    this.add("");
+                    this.add("<gold>Join a faction");
+                    this.add("<gold>  or make your own!");
+                }
+            };
+
+            private String factionlessTitle = "Status";
+
+            public String getNormalTitle() {
+                return normalTitle;
+            }
+
+            public String getPrefixTemplate() {
+                return prefixTemplate;
+            }
+
+            public String getSuffixTemplate() {
+                return suffixTemplate;
+            }
+
+            public List<String> getNormalContent() {
+                return normalContent != null ? Collections.unmodifiableList(normalContent) : Collections.emptyList();
+            }
+
+            public List<String> getFactionlessContent() {
+                return factionlessContent != null ? Collections.unmodifiableList(factionlessContent) : Collections.emptyList();
+            }
+
+            public String getFactionlessTitle() {
+                return factionlessTitle;
+            }
+        }
+
+        public class Info {
+            @Comment("Supports placeholders")
+            private List<String> content = new ArrayList<>() {
+                {
+                    this.add("<gold>Power");
+                    this.add("<faction:power>");
+                    this.add("<gold>Members");
+                    this.add("<faction:members_online_count>/<faction:members_total_count>");
+                    this.add("<gold>Leader");
+                    this.add("<faction:leader>");
+                    this.add("<gold>Territory");
+                    this.add("<faction:claims_count>");
+                }
+            };
+            private String title = "<fuuid:color:relation:member><faction:name>";
+
+            public List<String> getContent() {
+                return content != null ? Collections.unmodifiableList(content) : Collections.emptyList();
+            }
+
+            public String getTitle() {
+                return title;
+            }
+        }
+
+        @Comment("Constant scoreboard stays around all the time, displaying status info.\n" +
+                "Also, if prefixes are enabled while it is enabled, will show prefixes on nametags and tab")
+        private Scoreboard.Constant constant = new Scoreboard.Constant();
+        @Comment("Info scoreboard is displayed when a player walks into a new Faction's territory.\n" +
+                "Scoreboard disappears after <expiration> seconds.")
+        private Scoreboard.Info info = new Scoreboard.Info();
+
+        public Scoreboard.Constant constant() {
+            return constant;
+        }
+
+        public Scoreboard.Info info() {
+            return info;
+        }
+    }
+
     public static class Upgrades {
         public static class UpgradeDetail {
             private UpgradeDetail(String name, String description, String detail) {
@@ -1467,6 +1562,7 @@ public class TranslationsConfig {
     private Commands commands = new Commands();
     private Permissions permissions = new Permissions();
     private Placeholders placeholders = new Placeholders();
+    private Scoreboard scoreboard = new Scoreboard();
     private Upgrades upgrades = new Upgrades();
 
     public Commands commands() {
@@ -1479,6 +1575,10 @@ public class TranslationsConfig {
 
     public Placeholders placeholders() {
         return this.placeholders;
+    }
+
+    public Scoreboard scoreboard() {
+        return this.scoreboard;
     }
 
     public Upgrades upgrades() {

@@ -15,6 +15,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.execution.ExecutionCoordinator;
@@ -41,6 +43,12 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
         );
 
         BufferedObjective.objectiveConsumer = objective -> objective.numberFormat(NumberFormat.blank());
+        BufferedObjective.titleConsumer = Objective::displayName;
+        BufferedObjective.scoreFunction = (objective, component, lineNum) -> {
+            Score score = objective.getScore("line" + lineNum);
+            score.customName(component);
+            return score;
+        };
     }
 
     private interface PaperSender extends Sender {

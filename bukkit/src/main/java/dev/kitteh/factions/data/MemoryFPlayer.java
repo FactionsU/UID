@@ -23,7 +23,6 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
-import dev.kitteh.factions.scoreboard.sidebar.FInfoSidebar;
 import dev.kitteh.factions.tag.Tag;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Mini;
@@ -684,7 +683,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         if (showInfoBoard(toShow)) {
-            FScoreboard.get(this).setTemporarySidebar(new FInfoSidebar(toShow));
+            FScoreboard.get(this).setTemporarySidebar(toShow);
             showChat = FactionsPlugin.instance().conf().scoreboard().info().isAlsoSendChat();
         }
         if (showChat) {
