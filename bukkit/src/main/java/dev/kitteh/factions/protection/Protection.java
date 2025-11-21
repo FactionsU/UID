@@ -38,7 +38,7 @@ public final class Protection {
             case CHEST, ENDER_CHEST, TRAPPED_CHEST, BARREL, DROPPER, DISPENSER, HOPPER, CAMPFIRE, BREWING_STAND,
                  CARTOGRAPHY_TABLE, GRINDSTONE, SMOKER, STONECUTTER, LECTERN, ITEM_FRAME, GLOW_ITEM_FRAME, JUKEBOX,
                  ARMOR_STAND, REPEATER, ENCHANTING_TABLE, BEACON, CHIPPED_ANVIL,
-                 DAMAGED_ANVIL, FLOWER_POT, BEE_NEST -> PermissibleActions.CONTAINER;
+                 DAMAGED_ANVIL, FLOWER_POT, BEE_NEST, CHISELED_BOOKSHELF -> PermissibleActions.CONTAINER;
 
             default -> {
                 String materialName = material.name();
@@ -56,6 +56,7 @@ public final class Protection {
                         materialName.contains("ANVIL") ||
                         materialName.startsWith("POTTED") ||
                         materialName.contains("FURNACE") ||
+                        materialName.contains("_SHELF") ||
                         FactionsPlugin.instance().conf().factions().protection().getCustomContainers().contains(material)) {
                     yield PermissibleActions.CONTAINER;
                 }
