@@ -70,9 +70,7 @@ public class ListenEnterExit implements Listener {
 
         FScoreboard.remove(me, event.getPlayer());
 
-        if (this.plugin.seeChunkUtil() != null) {
-            this.plugin.seeChunkUtil().updatePlayerInfo(me.uniqueId(), false);
-        }
+        this.plugin.seeChunkUtil().updatePlayerInfo(me.uniqueId(), false);
         ((MemoryFPlayer) me).setOfflinePlayer(null);
     }
 
@@ -245,9 +243,7 @@ public class ListenEnterExit implements Listener {
         }
         me.flightCheck();
 
-        if (this.plugin.seeChunkUtil() != null) {
-            this.plugin.seeChunkUtil().updatePlayerInfo(me.uniqueId(), me.seeChunk());
-        }
+        this.plugin.seeChunkUtil().updatePlayerInfo(me.uniqueId(), me.seeChunk());
     }
 
 }

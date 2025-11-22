@@ -254,7 +254,7 @@ public class WarpGUI extends GUI<Integer> {
 
         double cost = FactionsPlugin.instance().conf().economy().getCostWarp();
 
-        if (!Econ.shouldBeUsed() || this.user == null || cost == 0.0 || user.adminBypass()) {
+        if (!Econ.shouldBeUsed() || cost == 0.0 || user.adminBypass()) {
             return true;
         }
 

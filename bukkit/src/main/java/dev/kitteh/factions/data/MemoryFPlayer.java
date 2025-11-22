@@ -256,10 +256,10 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public boolean isVanished() {
         Player player = this.asPlayer();
-        if (ExternalChecks.isVanished(player)) {
-            return true;
-        }
         if (player != null) {
+            if (ExternalChecks.isVanished(player)) {
+                return true;
+            }
             for (@Nullable MetadataValue metadataValue : player.getMetadata("vanished")) {
                 if (metadataValue != null && metadataValue.asBoolean()) {
                     return true;
