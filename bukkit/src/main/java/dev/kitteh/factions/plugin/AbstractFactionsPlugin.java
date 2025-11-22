@@ -1,6 +1,5 @@
 package dev.kitteh.factions.plugin;
 
-import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -907,7 +906,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     }
 
     public OfflinePlayer factionOfflinePlayer(String name) {
-        return this.getOfflinePlayer(name, UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
+        return this.getOfflinePlayer(name, UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(StandardCharsets.UTF_8)));
     }
 
     @SuppressWarnings("deprecation")
