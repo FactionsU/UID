@@ -7,8 +7,10 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.util.Mini;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
@@ -21,9 +23,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 @ApiStatus.Internal
 public class FTeamWrapper {
+    public static BiConsumer<Team, Component> prefixSetter = (team, component) -> {
+        String string = Mini.toLegacy(component);
+        if (!string.equals(team.getPrefix())) {
+            team.setPrefix(string);
+        }
+    };
+    public static BiConsumer<Team, Component> suffixSetter = (team, component) -> {
+        String string = Mini.toLegacy(component);
+        if (!string.equals(team.getSuffix())) {
+            team.setSuffix(string);
+        }
+    };
     private static final Map<Faction, FTeamWrapper> wrappers = new HashMap<>();
     private static final List<FScoreboard> tracking = new ArrayList<>();
     private static int factionTeamPtr;
@@ -160,38 +175,15 @@ public class FTeamWrapper {
         }
     }
 
-    private void updatePrefixAndSuffix(FScoreboard fboard) {
+    private void updatePrefixAndSuffix(FScoreboard scoreboard) {
         MainConfig.Scoreboard.Constant conf = FactionsPlugin.instance().conf().scoreboard().constant();
+        var tl = FactionsPlugin.instance().tl().scoreboard().constant();
         if (conf.isPrefixes()) {
-            Team team = teams.get(fboard);
-            String prefix = this.apply(conf.getPrefixTemplate(), fboard.getFPlayer(), conf.getPrefixLength());
-
-            if (!prefix.equals(team.getPrefix())) {
-                team.setPrefix(prefix);
-            }
+            prefixSetter.accept(teams.get(scoreboard), Mini.parse(tl.getPrefixTemplate(), FactionResolver.of(scoreboard.getFPlayer(), faction)));
         }
         if (conf.isSuffixes()) {
-            Team team = teams.get(fboard);
-            String suffix = this.apply(conf.getSuffixTemplate(), fboard.getFPlayer(), conf.getSuffixLength());
-
-            if (!suffix.equals(team.getSuffix())) {
-                team.setSuffix(suffix);
-            }
+            suffixSetter.accept(teams.get(scoreboard), Mini.parse(tl.getSuffixTemplate(), FactionResolver.of(scoreboard.getFPlayer(), faction)));
         }
-    }
-
-    private String apply(String prefixOrSuffix, FPlayer fplayer, int maxLength) {
-        prefixOrSuffix = Tag.parsePlaceholders(fplayer.asPlayer(), prefixOrSuffix);
-        prefixOrSuffix = prefixOrSuffix.replace("{relationcolor}", faction.colorLegacyStringTo(fplayer));
-        int remaining = Math.min("{faction}".length() + maxLength - prefixOrSuffix.length(), faction.tag().length());
-        prefixOrSuffix = prefixOrSuffix.replace("{faction}", remaining > 0 ? faction.tag().substring(0, remaining) : "");
-        prefixOrSuffix = Tag.parsePlain(fplayer, prefixOrSuffix);
-        prefixOrSuffix = ChatColor.translateAlternateColorCodes('&', prefixOrSuffix);
-
-        if (prefixOrSuffix.length() > maxLength) {
-            prefixOrSuffix = prefixOrSuffix.substring(0, maxLength);
-        }
-        return prefixOrSuffix;
     }
 
     private void addPlayer(String player) {

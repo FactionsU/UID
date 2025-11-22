@@ -8,6 +8,7 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.paper.CmdUpgrades;
 import dev.kitteh.factions.listener.ListenPaperChat;
 import dev.kitteh.factions.scoreboard.BufferedObjective;
+import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.scoreboard.numbers.NumberFormat;
@@ -48,6 +49,16 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
             Score score = objective.getScore("line" + lineNum);
             score.customName(component);
             return score;
+        };
+        FTeamWrapper.prefixSetter = (team, component) -> {
+            if (!component.equals(team.prefix())) {
+                team.prefix(component);
+            }
+        };
+        FTeamWrapper.suffixSetter = (team, component) -> {
+            if (!component.equals(team.suffix())) {
+                team.suffix(component);
+            }
         };
     }
 

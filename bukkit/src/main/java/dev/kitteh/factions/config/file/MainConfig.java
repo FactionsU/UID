@@ -2682,25 +2682,19 @@ public class MainConfig {
         public class Constant {
             private boolean enabled = false;
 
-            @Comment("If true, show faction prefixes on nametags and in tab list if scoreboard is enabled")
+            @Comment("If true, show configured prefixes on nametags and in tab list if this scoreboard is enabled")
             private boolean prefixes = true;
-            @Comment("Set the length limit for prefixes.\n" +
-                    "If 0, will use a sane default for your Minecraft version (16 for pre-1.13, 32 for 1.13+).")
-            private int prefixLength = 0;
-            @Comment("Takes {relationcolor}, {faction}, player-specific tags, &-prefixed color codes")
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private String prefixTemplate = "{relationcolor}[{faction}] &r";
 
-            @Comment("If true, show suffixes on nametags and in tab list if scoreboard is enabled")
+            @Comment("If true, show configured suffixes on nametags and in tab list if this scoreboard is enabled")
             private boolean suffixes = false;
-            @Comment("Set the length limit for suffixes.\n" +
-                    "If 0, will use a sane default for your Minecraft version (16 for pre-1.13, 32 for 1.13+).")
-            private int suffixLength = 0;
-            @Comment("Takes {relationcolor}, {faction}, player-specific tags, &-prefixed color codes")
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private String suffixTemplate = " {relationcolor}[{faction}]";
 
             private boolean factionlessEnabled = false;
 
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+
             private String title = "Faction Status";
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private List<String> content = new ArrayList<>();
@@ -2717,24 +2711,8 @@ public class MainConfig {
                 return prefixes;
             }
 
-            public int getPrefixLength() {
-                return prefixLength < 1 ? 32 : prefixLength;
-            }
-
-            public String getPrefixTemplate() {
-                return prefixTemplate;
-            }
-
             public boolean isSuffixes() {
                 return suffixes;
-            }
-
-            public int getSuffixLength() {
-                return suffixLength < 1 ? 32 : suffixLength;
-            }
-
-            public String getSuffixTemplate() {
-                return suffixTemplate;
             }
 
             public boolean isFactionlessEnabled() {
@@ -2743,24 +2721,14 @@ public class MainConfig {
         }
 
         public class Info {
-            @Comment("send faction change message as well when scoreboard is up?")
+            @Comment("Send faction change message as well when scoreboard is up?")
             private boolean alsoSendChat = true;
             @Comment("How long do we want scoreboards to stay")
             private int expiration = 7;
             private boolean enabled = false;
-            @Comment("Supports placeholders")
-            private List<String> content = new ArrayList<>() {
-                {
-                    this.add("&6Power");
-                    this.add("{power}");
-                    this.add("&3Members");
-                    this.add("{online}/{members}");
-                    this.add("&4Leader");
-                    this.add("{leader}");
-                    this.add("&bTerritory");
-                    this.add("{chunks}");
-                }
-            };
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            private List<String> content = new ArrayList<>();
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private String title = "{faction-relation-color}{faction}";
 
             public boolean isAlsoSendChat() {
@@ -2773,14 +2741,6 @@ public class MainConfig {
 
             public boolean isEnabled() {
                 return enabled;
-            }
-
-            public List<String> getContent() {
-                return content != null ? Collections.unmodifiableList(content) : Collections.emptyList();
-            }
-
-            public String getTitle() {
-                return title;
             }
         }
 
