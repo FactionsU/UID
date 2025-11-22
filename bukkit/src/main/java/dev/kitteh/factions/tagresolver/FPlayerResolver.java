@@ -110,7 +110,7 @@ public class FPlayerResolver extends ObservedResolver {
 
             case "space_if_faction" -> tag(observed.hasFaction() ? " " : "");
 
-            case "papi", "papi_open" -> {
+            case "papi", "papi_open", "papi_mini" -> {
                 if (!arguments.hasNext() || !FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.PLACEHOLDERAPI)) {
                     yield tag(Component.empty());
                 }
@@ -124,7 +124,7 @@ public class FPlayerResolver extends ObservedResolver {
                 } else {
                     result = PlaceholderAPI.setPlaceholders(observed.asOfflinePlayer(), papiString(papi));
                 }
-                yield main.equals("papi_open") ? tagLegacyIns(result) : tag(result);
+                yield main.equals("papi_open") ? tagLegacyIns(result) : (main.equals("papi_mini") ? Tag.preProcessParsed(result) : tag(result));
             }
 
             default -> tag(Component.empty());
