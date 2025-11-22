@@ -60,9 +60,12 @@ public class Transitioner {
             if (version < 8) {
                 transitioner.migrateV7(rootNode);
             }
+            if (version < 9) {
+                transitioner.migrateV8();
+            }
 
             // Update the below when bumping version!
-            rootNode.getNode("aVeryFriendlyFactionsConfig", "version").setValue(8);
+            rootNode.getNode("aVeryFriendlyFactionsConfig", "version").setValue(9);
 
             loader.save(rootNode);
         } catch (IOException e) {
@@ -230,6 +233,25 @@ public class Transitioner {
         shift(node.getNode("worldGuard"), node.getNode("plugins", "worldGuard"), "checkingFlag");
         shift(node.getNode("worldGuard"), node.getNode("plugins", "worldGuard"), "buildPriority");
         shift(node.getNode("worldGuard"), node.getNode("plugins", "worldGuard"), "pvpPriority");
+    }
+
+    private void migrateV8() {
+        this.plugin.getLogger().info("");
+        this.plugin.getLogger().info("              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        this.plugin.getLogger().info("");
+        this.plugin.getLogger().info("          You are upgrading from a version prior to 4.3.0.");
+        this.plugin.getLogger().info("");
+        this.plugin.getLogger().info("  /f show, /f list factions, and the scoreboard functionality have");
+        this.plugin.getLogger().info("    all changed to use MiniMessage and can be found in translations.conf");
+        this.plugin.getLogger().info("  However, they could not be automatically migrated. You must do this");
+        this.plugin.getLogger().info("    yourself. Your old selections are still in main.conf for reference.");
+        this.plugin.getLogger().info("");
+        this.plugin.getLogger().info("  Also, note that the chiseled bookshelf and all the wood shelves have been");
+        this.plugin.getLogger().info("    added to be treated as containers. Add them as container exceptions if");
+        this.plugin.getLogger().info("    you don't want them to be protected as containers.");
+        this.plugin.getLogger().info("");
+        this.plugin.getLogger().info("              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        this.plugin.getLogger().info("");
     }
 
     private void shift(CommentedConfigurationNode from, CommentedConfigurationNode to, String name) {

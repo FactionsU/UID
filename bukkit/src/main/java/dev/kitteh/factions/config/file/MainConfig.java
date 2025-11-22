@@ -27,7 +27,7 @@ public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @SuppressWarnings("unused")
         @Comment("This is the config version, used for migrating on plugin updates. Don't change this value yourself, unless you WANT a broken config!")
-        private int version = 8;
+        private int version = 9;
 
         @Comment("""
                 Debug
