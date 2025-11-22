@@ -8,6 +8,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.Context;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.ParsingException;
 import net.kyori.adventure.text.minimessage.tag.Modifying;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -58,7 +59,7 @@ public abstract class HelperResolver implements TagResolver {
     }
 
     public static Tag tagLegacyIns(String string) {
-        return Tag.inserting(LegacyComponentSerializer.legacySection().deserialize(string));
+        return Tag.preProcessParsed(MiniMessage.miniMessage().serialize(LegacyComponentSerializer.legacySection().deserialize(string)));
     }
 
     public static Tag tagLegacy(TL tl) {
