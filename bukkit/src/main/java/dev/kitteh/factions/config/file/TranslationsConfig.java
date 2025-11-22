@@ -1370,8 +1370,8 @@ public class TranslationsConfig {
         }
     }
 
-    public class Scoreboard {
-        public class Constant {
+    public static class Scoreboard {
+        public static class Constant {
 
             private String prefixTemplate = "<faction:relation_color>[<faction:name>] </faction:relation_color> ";
             private String suffixTemplate = " <faction:relation_color>[<faction:name>]";
@@ -1424,7 +1424,7 @@ public class TranslationsConfig {
             }
         }
 
-        public class Info {
+        public static class Info {
             @Comment("Supports placeholders")
             private List<String> content = new ArrayList<>() {
                 {
