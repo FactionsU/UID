@@ -3,7 +3,6 @@ package dev.kitteh.factions.plugin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.mojang.authlib.GameProfile;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
@@ -267,38 +266,21 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         this.getLogger().info("Server UUID " + this.serverUUID);
 
-        if ("1.21.8".equals(this.mcVersionString)) {
-            try {
-                Method getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", GameProfile.class);
-                this.getOfflinePlayer = (uuid, name) -> {
-                    try {
-                        return (OfflinePlayer) getOffline.invoke(this.getServer(), new GameProfile(uuid, name));
-                    } catch (Exception e) {
-                        this.getLogger().log(Level.SEVERE, "Failed to get offline player the fast way, reverting to slow mode", e);
-                        this.getOfflinePlayer = null;
-                    }
-                    return null;
-                };
-            } catch (Exception e) {
-                this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", e);
-            }
-        } else { // TODO 1.21.9 temporary, will remove above section when 1.21.8 dropped.
-            try {
-                Class<?> nameAndIdClass = Class.forName("net.minecraft.server.players.NameAndId");
-                Method getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", nameAndIdClass);
-                Constructor<?> constructor = nameAndIdClass.getDeclaredConstructor(UUID.class, String.class);
-                this.getOfflinePlayer = (uuid, name) -> {
-                    try {
-                        return (OfflinePlayer) getOffline.invoke(this.getServer(), constructor.newInstance(uuid, name));
-                    } catch (Exception e) {
-                        this.getLogger().log(Level.SEVERE, "Failed to get offline player the fast way, reverting to slow mode", e);
-                        this.getOfflinePlayer = null;
-                    }
-                    return null;
-                };
-            } catch (Exception ee) {
-                this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", ee);
-            }
+        try {
+            Class<?> nameAndIdClass = Class.forName("net.minecraft.server.players.NameAndId");
+            Method getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", nameAndIdClass);
+            Constructor<?> constructor = nameAndIdClass.getDeclaredConstructor(UUID.class, String.class);
+            this.getOfflinePlayer = (uuid, name) -> {
+                try {
+                    return (OfflinePlayer) getOffline.invoke(this.getServer(), constructor.newInstance(uuid, name));
+                } catch (Exception e) {
+                    this.getLogger().log(Level.SEVERE, "Failed to get offline player the fast way, reverting to slow mode", e);
+                    this.getOfflinePlayer = null;
+                }
+                return null;
+            };
+        } catch (Exception ee) {
+            this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", ee);
         }
 
         // Migration from older FUUID
