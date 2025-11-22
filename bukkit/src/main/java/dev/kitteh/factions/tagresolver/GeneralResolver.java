@@ -16,8 +16,6 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.List;
-
 @ApiStatus.AvailableSince("4.3.0")
 @NullMarked
 public class GeneralResolver extends HelperResolver {

@@ -1,6 +1,5 @@
 package dev.kitteh.factions.tagresolver;
 
-import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.IntegrationManager;
@@ -8,7 +7,6 @@ import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.util.MiscUtil;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
@@ -19,7 +17,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.OptionalInt;
 
 @ApiStatus.AvailableSince("4.0.0")

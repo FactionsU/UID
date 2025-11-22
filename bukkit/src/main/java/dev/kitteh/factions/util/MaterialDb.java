@@ -1,7 +1,6 @@
 package dev.kitteh.factions.util;
 
 import com.google.gson.reflect.TypeToken;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;

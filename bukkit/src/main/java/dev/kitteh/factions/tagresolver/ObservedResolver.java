@@ -2,17 +2,6 @@ package dev.kitteh.factions.tagresolver;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
-import dev.kitteh.factions.util.TL;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.Context;
-import net.kyori.adventure.text.minimessage.ParsingException;
-import net.kyori.adventure.text.minimessage.tag.Modifying;
-import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
