@@ -71,7 +71,7 @@ public final class JSONBoard extends MemoryBoard {
     @Override
     public void forceSave(boolean sync) {
         Map<String, Map<String, String>> map = dumpAsSaveFormat();
-        JsonSaver.write(boardPath, () -> FactionsPlugin.instance().gson().toJson(map), sync);
+        JsonSaver.write(boardPath, () -> AbstractFactionsPlugin.instance().gson().toJson(map), sync);
     }
 
     @Override
@@ -85,7 +85,7 @@ public final class JSONBoard extends MemoryBoard {
         try {
             Type type = new TypeToken<Map<String, Map<String, String>>>() {
             }.getType();
-            Map<String, Map<String, String>> worldCoordIds = FactionsPlugin.instance().gson().fromJson(Files.newBufferedReader(boardPath), type);
+            Map<String, Map<String, String>> worldCoordIds = AbstractFactionsPlugin.instance().gson().fromJson(Files.newBufferedReader(boardPath), type);
             loadFromSaveFormat(worldCoordIds);
         } catch (Exception e) {
             AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to load the board from disk.", e);

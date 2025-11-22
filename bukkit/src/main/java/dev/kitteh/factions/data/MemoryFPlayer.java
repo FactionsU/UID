@@ -474,7 +474,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                         public void run() {
                             try {
                                 URL url = new URI("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid).toURL();
-                                NameLookup lookup = FactionsPlugin.instance().gson().fromJson(new InputStreamReader(url.openStream()), NameLookup.class);
+                                NameLookup lookup = AbstractFactionsPlugin.instance().gson().fromJson(new InputStreamReader(url.openStream()), NameLookup.class);
                                 String newName = lookup.name;
                                 new BukkitRunnable() {
                                     @Override

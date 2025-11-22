@@ -4,7 +4,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.json.JSONFaction;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 
@@ -33,6 +32,6 @@ public class OldJSONFactionDeserializer implements JsonDeserializer<JSONFaction>
             }
         }
 
-        return FactionsPlugin.instance().gson().fromJson(jsonElement, JSONFaction.class);
+        return AbstractFactionsPlugin.instance().gson().fromJson(jsonElement, JSONFaction.class);
     }
 }

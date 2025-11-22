@@ -43,7 +43,7 @@ public final class JSONFPlayers extends MemoryFPlayers {
             }
         }
 
-        JsonSaver.write(playersPath, () -> FactionsPlugin.instance().gson().toJson(entitiesThatShouldBeSaved), sync);
+        JsonSaver.write(playersPath, () -> AbstractFactionsPlugin.instance().gson().toJson(entitiesThatShouldBeSaved), sync);
     }
 
     @Override
@@ -81,7 +81,7 @@ public final class JSONFPlayers extends MemoryFPlayers {
                 }.getType());
                 return new ArrayList<>(map.values());
             } else {
-                return FactionsPlugin.instance().gson().fromJson(bufferedReader, new TypeToken<List<JSONFPlayer>>() {
+                return AbstractFactionsPlugin.instance().gson().fromJson(bufferedReader, new TypeToken<List<JSONFPlayer>>() {
                 }.getType());
             }
         } catch (IOException e) {

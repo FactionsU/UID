@@ -44,9 +44,9 @@ public final class JSONFactions extends MemoryFactions {
     public void forceSave(boolean sync) {
         final List<Faction> entitiesThatShouldBeSaved = new ArrayList<>(this.factions.values());
         // Serialize sync, write (a)sync
-        String json = FactionsPlugin.instance().gson().toJson(entitiesThatShouldBeSaved);
+        String json = AbstractFactionsPlugin.instance().gson().toJson(entitiesThatShouldBeSaved);
         JsonSaver.write(factionsPath, () -> json, sync);
-        String jsonId = FactionsPlugin.instance().gson().toJson(new NextId(this.nextId));
+        String jsonId = AbstractFactionsPlugin.instance().gson().toJson(new NextId(this.nextId));
         JsonSaver.write(this.nextIdPath, () -> jsonId, sync);
     }
 
@@ -118,9 +118,9 @@ public final class JSONFactions extends MemoryFactions {
                 nextIdData = Files.readString(this.nextIdPath);
             } catch (IOException ignored) {
             }
-            NextId next = FactionsPlugin.instance().gson().fromJson(nextIdData, NextId.class);
+            NextId next = AbstractFactionsPlugin.instance().gson().fromJson(nextIdData, NextId.class);
             this.nextId = next.next();
-            return FactionsPlugin.instance().gson().fromJson(content, new TypeToken<List<JSONFaction>>() {
+            return AbstractFactionsPlugin.instance().gson().fromJson(content, new TypeToken<List<JSONFaction>>() {
             }.getType());
         }
     }

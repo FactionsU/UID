@@ -46,7 +46,7 @@ public class MaterialDb {
         InputStreamReader reader = new InputStreamReader(AbstractFactionsPlugin.instance().getResource("materials.json"));
         Type typeToken = new TypeToken<HashMap<String, String>>() {
         }.getType();
-        HashMap<String, String> materialData = FactionsPlugin.instance().gson().fromJson(reader, typeToken);
+        HashMap<String, String> materialData = AbstractFactionsPlugin.instance().gson().fromJson(reader, typeToken);
         map = new HashMap<>();
         for (Material m : Material.values()) {
             map.put(m.name(), m);

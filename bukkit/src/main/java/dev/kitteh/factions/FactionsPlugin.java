@@ -19,6 +19,7 @@ public interface FactionsPlugin {
         return AbstractFactionsPlugin.instance();
     }
 
+    @Deprecated(forRemoval = true, since = "4.3.0")
     Gson gson();
 
     SeeChunkUtil seeChunkUtil();

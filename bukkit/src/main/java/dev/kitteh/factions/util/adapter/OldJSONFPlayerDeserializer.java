@@ -4,8 +4,8 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.data.json.JSONFPlayer;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 
 import java.lang.reflect.Type;
 
@@ -21,6 +21,6 @@ public class OldJSONFPlayerDeserializer implements JsonDeserializer<JSONFPlayer>
             factionId = 0;
         }
         jsonElement.getAsJsonObject().addProperty("factionId", factionId);
-        return FactionsPlugin.instance().gson().fromJson(jsonElement, JSONFPlayer.class);
+        return AbstractFactionsPlugin.instance().gson().fromJson(jsonElement, JSONFPlayer.class);
     }
 }
