@@ -810,6 +810,12 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Warp extends AbsCommand {
+            protected Warp() {
+                super("warp");
+            }
+        }
+
         public static class Zone extends AbsCommand {
             public static class Claim extends AbsCommand {
                 private String zoneNotFound = "<red>Zone named '<name>' not found</red>";
@@ -1003,6 +1009,7 @@ public class TranslationsConfig {
         private Show show = new Show();
         private Permissions permissions = new Permissions();
         private Upgrades upgrades = new Upgrades();
+        private Warp warp =  new Warp();
         private Zone zone = new Zone();
 
         public Generic generic() {
@@ -1035,6 +1042,10 @@ public class TranslationsConfig {
 
         public Upgrades upgrades() {
             return upgrades;
+        }
+
+        public Warp warp() {
+            return warp;
         }
 
         public Zone zone() {

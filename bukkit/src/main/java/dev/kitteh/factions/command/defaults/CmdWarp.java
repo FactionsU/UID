@@ -29,15 +29,18 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdWarp implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("warp")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_FWARP_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.WARP).and(Cloudy.hasSelfFactionPerms(PermissibleActions.WARP).or(Cloudy.isBypass()))))
-                        .optional("warp", StringParser.stringParser())
-                        .flag(manager.flagBuilder("password").withComponent(StringParser.stringParser()))
-                        .flag(manager.flagBuilder("faction").withComponent(FactionParser.of()))
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().warp();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(TL.COMMAND_FWARP_DESCRIPTION))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.WARP).and(Cloudy.hasSelfFactionPerms(PermissibleActions.WARP).or(Cloudy.isBypass()))))
+                            .optional("warp", StringParser.stringParser())
+                            .flag(manager.flagBuilder("password").withComponent(StringParser.stringParser()))
+                            .flag(manager.flagBuilder("faction").withComponent(FactionParser.of()))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
