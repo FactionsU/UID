@@ -33,28 +33,27 @@ public class DynmapConfig {
         @Comment("(optional) set minimum zoom level before layer is visible (0 = default, always visible)")
         private int layerMinimumZoom = 0;
 
+        @Comment("UNUSED: Former description, if any. Use for reference in migration. Will be deleted in the future.")
+        private String description ="";
+
         @Comment("Format for popup")
-        private String description =
+        private String factionDescription =
                 """
                         <div class="infowindow">
-                        <span style="font-weight: bold; font-size: 150%;">{faction}</span><br>
-                        <span style="font-style: italic; font-size: 110%;">{description}</span><br>\
+                        <span style="font-weight: bold; font-size: 150%;">%%<faction:name>%%</span><br>
+                        <span style="font-style: italic; font-size: 110%;">%%<faction:description>%%</span><br>\
                         <br>
                         <span style="font-weight: bold;">Leader:</span> %players.leader%<br>
                         <span style="font-weight: bold;">Admins:</span> %players.admins.count%<br>
                         <span style="font-weight: bold;">Moderators:</span> %players.moderators.count%<br>
                         <span style="font-weight: bold;">Members:</span> %players.normals.count%<br>
+                        <span style="font-weight: bold;">Recruits:</span> %players.recruits.count%<br>
                         <span style="font-weight: bold;">TOTAL:</span> %players.count%<br>
-                        </br>
-                        <span style="font-weight: bold;">Bank:</span> %money%<br>
                         <br>
                         </div>""";
 
-        @Comment("Warp popup")
+        @Comment("Warp popup. Replaces %warpname% with the warp name.")
         private String warpDescription = "Warp: %warpname%";
-
-        @Comment("Enable the %money% macro. Only do this if you know your economy manager is thread-safe.")
-        private boolean descriptionMoney = false;
 
         @Comment("Allow players in faction to see one another on Dynmap (only relevant if Dynmap has 'player-info-protected' enabled)")
         private boolean visibilityByFaction = true;
@@ -105,10 +104,6 @@ public class DynmapConfig {
 
         public String getWarpDescription() {
             return warpDescription;
-        }
-
-        public boolean isDescriptionMoney() {
-            return descriptionMoney;
         }
 
         public boolean isVisibilityByFaction() {

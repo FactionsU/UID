@@ -674,27 +674,6 @@ public class EngineDynmap {
     private String getDescription(Faction faction) {
         String ret = "<div class=\"regioninfo\">" + dynmapConf.dynmap().getDescription() + "</div>";
 
-        // Name
-        String name = faction.tag();
-        name = ChatColor.stripColor(name);
-        name = escapeHtml(name);
-        ret = ret.replace("%name%", name);
-
-        // Description
-        String description = faction.description();
-        description = ChatColor.stripColor(description);
-        description = escapeHtml(description);
-        ret = ret.replace("%description%", description);
-
-        // Money
-
-        String money = "unavailable";
-        if (FactionsPlugin.instance().conf().economy().isBankEnabled() && dynmapConf.dynmap().isDescriptionMoney()) {
-            money = String.format("%.2f", Econ.getBalance(faction));
-        }
-        ret = ret.replace("%money%", money);
-
-
         // Players
         Set<FPlayer> playersList = faction.members();
         String playersCount = String.valueOf(playersList.size());
