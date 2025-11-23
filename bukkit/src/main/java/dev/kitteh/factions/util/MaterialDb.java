@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 @ApiStatus.Obsolete
+@Deprecated(forRemoval = true, since = "4.0.0")
 public class MaterialDb {
     private static Map<String, Material> map;
 
@@ -24,17 +25,21 @@ public class MaterialDb {
 
     public static Material get(String name, Material defaultMaterial) {
         if (name == null) {
-            AbstractFactionsPlugin.instance().log("Null material name found");
             return defaultMaterial;
         }
 
         Material material = Material.getMaterial(name);
         if (material == null) {
             material = map.get(name.toUpperCase());
+            if (material != null) {
+                AbstractFactionsPlugin.instance().getLogger().warning("Outdated material name \"" + name + "\" found in a config - update it to \"" + material.name() + "\" ASAP!");
+            }
         }
 
         if (material == null) {
-            AbstractFactionsPlugin.instance().log(Level.INFO, "Material does not exist: " + name.toUpperCase());
+            if (!name.equalsIgnoreCase("exampleMaterial")) {
+                AbstractFactionsPlugin.instance().log(Level.INFO, "Material does not exist: " + name.toUpperCase());
+            }
             return defaultMaterial;
         }
 
@@ -59,6 +64,5 @@ public class MaterialDb {
             }
             map.put(nNull ? n : l, nNull ? matL : matN);
         });
-        AbstractFactionsPlugin.instance().getLogger().info(String.format("Loaded %s material mappings.", map.size()));
     }
 }

@@ -340,6 +340,25 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         // Load Material database
         MaterialDb.load();
 
+        // Hit all material lookups in config
+        {
+            var conf = this.configManager.mainConfig().factions();
+            conf.specialCase().getIgnoreBuildMaterials();
+            conf.protection().getBreakExceptions();
+            conf.protection().getContainerExceptions();
+            conf.protection().getCustomContainers();
+            conf.protection().getTerritoryDenyUsageMaterials();
+            conf.protection().getTerritoryDenyUsageMaterialsWhenOffline();
+            conf.spawning().getPreventInSafezone();
+            conf.spawning().getPreventInSafezoneExceptions();
+            conf.spawning().getPreventInTerritory();
+            conf.spawning().getPreventInTerritoryExceptions();
+            conf.spawning().getPreventInWarzone();
+            conf.spawning().getPreventInWarzoneExceptions();
+            conf.spawning().getPreventInWilderness();
+            conf.spawning().getPreventInWildernessExceptions();
+        }
+
         // Create Utility Instances
         WorldUtil.init(this.conf().restrictWorlds());
 

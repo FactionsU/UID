@@ -5,7 +5,6 @@ import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
-import dev.kitteh.factions.util.MaterialDb;
 import dev.kitteh.factions.util.MiscUtil;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -1149,10 +1148,7 @@ public class MainConfig {
 
             public Set<Material> getIgnoreBuildMaterials() {
                 if (ignoreBuildMaterialsMat == null) {
-                    ignoreBuildMaterialsMat = new HashSet<>();
-                    ignoreBuildMaterials.forEach(m -> ignoreBuildMaterialsMat.add(MaterialDb.get(m)));
-                    ignoreBuildMaterialsMat.remove(Material.AIR);
-                    ignoreBuildMaterials = Collections.unmodifiableSet(ignoreBuildMaterials);
+                    ignoreBuildMaterialsMat = MiscUtil.typeSetFromStringSet(ignoreBuildMaterials, MiscUtil.MATERIAL_FUNCTION);
                 }
                 return ignoreBuildMaterialsMat;
             }
@@ -1734,40 +1730,28 @@ public class MainConfig {
 
             public Set<Material> getTerritoryDenyUsageMaterials() {
                 if (territoryDenyUsageMaterialsMat == null) {
-                    territoryDenyUsageMaterialsMat = new HashSet<>();
-                    territoryDenyUsageMaterials.forEach(m -> territoryDenyUsageMaterialsMat.add(MaterialDb.get(m)));
-                    territoryDenyUsageMaterialsMat.remove(Material.AIR);
-                    territoryDenyUsageMaterialsMat = Collections.unmodifiableSet(territoryDenyUsageMaterialsMat);
+                    territoryDenyUsageMaterialsMat = MiscUtil.typeSetFromStringSet(territoryDenyUsageMaterials, MiscUtil.MATERIAL_FUNCTION);
                 }
                 return territoryDenyUsageMaterialsMat;
             }
 
             public Set<Material> getTerritoryDenyUsageMaterialsWhenOffline() {
                 if (territoryDenyUsageMaterialsWhenOfflineMat == null) {
-                    territoryDenyUsageMaterialsWhenOfflineMat = new HashSet<>();
-                    territoryDenyUsageMaterialsWhenOffline.forEach(m -> territoryDenyUsageMaterialsWhenOfflineMat.add(MaterialDb.get(m)));
-                    territoryDenyUsageMaterialsWhenOfflineMat.remove(Material.AIR);
-                    territoryDenyUsageMaterialsWhenOfflineMat = Collections.unmodifiableSet(territoryDenyUsageMaterialsWhenOfflineMat);
+                    territoryDenyUsageMaterialsWhenOfflineMat = MiscUtil.typeSetFromStringSet(territoryDenyUsageMaterialsWhenOffline, MiscUtil.MATERIAL_FUNCTION);
                 }
                 return territoryDenyUsageMaterialsWhenOfflineMat;
             }
 
             public Set<Material> getContainerExceptions() {
                 if (containerExceptionsMat == null) {
-                    containerExceptionsMat = new HashSet<>();
-                    containerExceptions.forEach(m -> containerExceptionsMat.add(MaterialDb.get(m)));
-                    containerExceptionsMat.remove(Material.AIR);
-                    containerExceptionsMat = Collections.unmodifiableSet(containerExceptionsMat);
+                    containerExceptionsMat = MiscUtil.typeSetFromStringSet(containerExceptions, MiscUtil.MATERIAL_FUNCTION);
                 }
                 return containerExceptionsMat;
             }
 
             public Set<Material> getBreakExceptions() {
                 if (breakExceptionsMat == null) {
-                    breakExceptionsMat = new HashSet<>();
-                    breakExceptions.forEach(m -> breakExceptionsMat.add(MaterialDb.get(m)));
-                    breakExceptionsMat.remove(Material.AIR);
-                    breakExceptionsMat = Collections.unmodifiableSet(breakExceptionsMat);
+                    breakExceptionsMat = MiscUtil.typeSetFromStringSet(breakExceptions, MiscUtil.MATERIAL_FUNCTION);
                 }
                 return breakExceptionsMat;
             }
@@ -1786,10 +1770,7 @@ public class MainConfig {
 
             public Set<Material> getCustomContainers() {
                 if (customContainersMat == null) {
-                    customContainersMat = new HashSet<>();
-                    customContainers.forEach(m -> customContainersMat.add(MaterialDb.get(m)));
-                    customContainersMat.remove(Material.AIR);
-                    customContainersMat = Collections.unmodifiableSet(customContainersMat);
+                    customContainersMat = MiscUtil.typeSetFromStringSet(customContainers, MiscUtil.MATERIAL_FUNCTION);
                 }
                 return customContainersMat;
             }
