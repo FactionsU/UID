@@ -1390,7 +1390,7 @@ public class TranslationsConfig {
             private List<String> normalContent = new ArrayList<>() {
                 {
                     this.add("<gold>Your Faction");
-                    this.add("<faction>");
+                    this.add("<fuuid:color:relation:member><faction:name>");
                     this.add("<gold>Your Power");
                     this.add("<player:power>");
                 }
@@ -1449,7 +1449,7 @@ public class TranslationsConfig {
                     this.add("<faction:claims_count>");
                 }
             };
-            private String title = "<fuuid:color:relation:member><faction:name>";
+            private String title = "<faction:relation_color><faction:name>";
 
             public List<String> getContent() {
                 return content != null ? Collections.unmodifiableList(content) : Collections.emptyList();
