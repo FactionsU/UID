@@ -248,12 +248,13 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         this.serverUUID = new UUID(ms, ((0xaf & 0xffL) << 56) + ((0xac & 0xffL) << 48) + (u & 0xffffffffL) + ((p & 0xffffL) << 32));
 
         // Version party
-        Pattern versionPattern = Pattern.compile("1\\.(\\d{1,2})(?:\\.(\\d{1,2}))?");
+        Pattern versionPattern = Pattern.compile("(\\d{2}|1)\\.(\\d{1,2})(?:\\.(\\d{1,2}))?");
         Matcher versionMatcher = versionPattern.matcher(this.getServer().getVersion());
         if (versionMatcher.find()) {
-            String minor = versionMatcher.group(1);
-            String patchS = versionMatcher.group(2);
-            this.mcVersionString = "1." + minor + (patchS == null ? "" : ('.' + patchS));
+            String major = versionMatcher.group(1);
+            String minor = versionMatcher.group(2);
+            String patchS = versionMatcher.group(3);
+            this.mcVersionString = major + '.' + minor + (patchS == null ? "" : ('.' + patchS));
         }
 
         getLogger().info("");
