@@ -57,6 +57,7 @@ public final class Protection {
                         materialName.startsWith("POTTED") ||
                         materialName.contains("FURNACE") ||
                         materialName.contains("_SHELF") ||
+                        materialName.contains("COPPER_CHEST") ||
                         FactionsPlugin.instance().conf().factions().protection().getCustomContainers().contains(material)) {
                     yield PermissibleActions.CONTAINER;
                 }
