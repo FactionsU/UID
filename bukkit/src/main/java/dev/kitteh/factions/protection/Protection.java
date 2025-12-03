@@ -42,22 +42,21 @@ public final class Protection {
 
             default -> {
                 String materialName = material.name();
-                if (materialName.contains("BUTTON")) {
+                if (materialName.endsWith("BUTTON")) {
                     yield PermissibleActions.BUTTON;
-                } else if (materialName.contains("DOOR") || materialName.contains("GATE")) {
+                } else if (materialName.endsWith("DOOR") || materialName.endsWith("GATE")) {
                     yield PermissibleActions.DOOR;
                 } else if (materialName.endsWith("_PLATE")) {
                     yield PermissibleActions.PLATE;
-                } else if (materialName.contains("SIGN")) {
+                } else if (materialName.endsWith("SIGN")) {
                     yield PermissibleActions.ITEM;
-                } else if (materialName.contains("CAULDRON") ||
-                        materialName.contains("POTTED") ||
-                        materialName.contains("SHULKER") ||
-                        materialName.contains("ANVIL") ||
+                } else if (materialName.endsWith("CAULDRON") ||
+                        materialName.endsWith("SHULKER_BOX") ||
+                        materialName.endsWith("ANVIL") ||
                         materialName.startsWith("POTTED") ||
-                        materialName.contains("FURNACE") ||
-                        materialName.contains("_SHELF") ||
-                        materialName.contains("COPPER_CHEST") ||
+                        materialName.endsWith("FURNACE") ||
+                        materialName.endsWith("_SHELF") ||
+                        materialName.endsWith("COPPER_CHEST") ||
                         FactionsPlugin.instance().conf().factions().protection().getCustomContainers().contains(material)) {
                     yield PermissibleActions.CONTAINER;
                 }
