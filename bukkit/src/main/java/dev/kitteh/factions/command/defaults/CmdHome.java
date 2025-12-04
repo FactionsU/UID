@@ -11,8 +11,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerTeleportEvent;
-import dev.kitteh.factions.integration.Essentials;
-import dev.kitteh.factions.integration.IntegrationManager;
+import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
@@ -73,7 +72,7 @@ public class CmdHome implements Cmd {
             return;
         }
 
-        if (!targetFaction.hasHome()) {
+        if (!(targetFaction.home() instanceof Location destination)) {
             sender.msgLegacy(TL.COMMAND_HOME_NOHOME);
             return;
         }
@@ -83,7 +82,7 @@ public class CmdHome implements Cmd {
             return;
         }
 
-        if (!FactionsPlugin.instance().conf().factions().homes().isTeleportAllowedFromDifferentWorld() && player.getWorld().getUID() != targetFaction.home().getWorld().getUID()) {
+        if (!FactionsPlugin.instance().conf().factions().homes().isTeleportAllowedFromDifferentWorld() && !player.getWorld().equals(destination.getWorld())) {
             sender.msgLegacy(TL.COMMAND_HOME_WRONGWORLD);
             return;
         }
@@ -126,7 +125,6 @@ public class CmdHome implements Cmd {
             }
         }
 
-        Location destination = targetFaction.home();
         FPlayerTeleportEvent tpEvent = new FPlayerTeleportEvent(sender, destination, FPlayerTeleportEvent.Reason.HOME);
         Bukkit.getServer().getPluginManager().callEvent(tpEvent);
         if (tpEvent.isCancelled()) {
@@ -144,7 +142,7 @@ public class CmdHome implements Cmd {
 
             if (plr == null) return;
 
-            if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.handleTeleport(plr, destination)) {
+            if (ExternalChecks.tryTeleport(plr, destination)) {
                 return;
             }
 

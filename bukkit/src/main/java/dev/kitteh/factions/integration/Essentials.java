@@ -34,6 +34,9 @@ public class Essentials {
         ExternalChecks.registerIgnored(ess, (viewer, chatter) -> essentials.getUser(viewer).isIgnoredPlayer(essentials.getUser(chatter)));
         ExternalChecks.registerMuted(ess, player -> essentials.getUser(player).isMuted());
         ExternalChecks.registerVanished(ess, player -> essentials.getUser(player).isVanished());
+        if (FactionsPlugin.instance().conf().factions().homes().isTeleportCommandEssentialsIntegration()) {
+            ExternalChecks.registerTeleport(ess, Essentials::handleTeleport);
+        }
         if (plugin.conf().factions().other().isDeleteEssentialsHomes()) {
             plugin.getLogger().info("Based on main.conf will delete Essentials player homes in their old faction when they leave");
             plugin.getServer().getPluginManager().registerEvents(new EssentialsListener(essentials), plugin);
@@ -44,12 +47,7 @@ public class Essentials {
         return true;
     }
 
-    // return false if feature is disabled or Essentials isn't available
-    public static boolean handleTeleport(Player player, Location loc) {
-        if (!FactionsPlugin.instance().conf().factions().homes().isTeleportCommandEssentialsIntegration() || essentials == null) {
-            return false;
-        }
-
+    private static boolean handleTeleport(Player player, Location loc) {
         AsyncTeleport teleport = essentials.getUser(player).getAsyncTeleport();
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         future.exceptionally(e -> {

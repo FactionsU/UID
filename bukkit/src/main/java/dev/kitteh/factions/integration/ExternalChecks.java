@@ -1,10 +1,12 @@
 package dev.kitteh.factions.integration;
 
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +21,14 @@ public final class ExternalChecks {
     private record SingleCheck(Plugin plugin, Predicate<Player> function) {
     }
 
-    private record DoubleCheck(Plugin plugin, BiPredicate<Player, Player> function) {
+    private record DoubleCheck<Second>(Plugin plugin, BiPredicate<Player, Second> function) {
     }
 
     private static final List<SingleCheck> afk = new ArrayList<>();
-    private static final List<DoubleCheck> ignored = new ArrayList<>();
+    private static final List<DoubleCheck<Player>> ignored = new ArrayList<>();
     private static final List<SingleCheck> muted = new ArrayList<>();
     private static final List<SingleCheck> vanished = new ArrayList<>();
+    private static @Nullable DoubleCheck<Location> teleport;
 
     /**
      * Registers a function for testing if a player is AFK.
@@ -44,7 +47,7 @@ public final class ExternalChecks {
      * @param function function testing if, respectively, the viewer is ignoring the chatter
      */
     public static void registerIgnored(Plugin plugin, BiPredicate<Player, Player> function) {
-        ignored.add(new DoubleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
+        ignored.add(new DoubleCheck<>(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
 
     /**
@@ -68,6 +71,17 @@ public final class ExternalChecks {
         vanished.add(new SingleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
 
+    /**
+     * Registers a function for teleporting a player, replacing any previously registered teleportation function.
+     *
+     * @param plugin   plugin registering
+     * @param function function for teleporting the player, returning true if successful
+     */
+    @ApiStatus.AvailableSince("4.4.0")
+    public static void registerTeleport(Plugin plugin, BiPredicate<Player, Location> function) {
+        teleport = new DoubleCheck<>(Objects.requireNonNull(plugin), Objects.requireNonNull(function));
+    }
+
     public static boolean isAfk(Player player) {
         for (SingleCheck check : afk) {
             try {
@@ -82,7 +96,7 @@ public final class ExternalChecks {
     }
 
     public static boolean isIgnored(Player viewer, Player chatter) {
-        for (DoubleCheck check : ignored) {
+        for (DoubleCheck<Player> check : ignored) {
             try {
                 if (check.function.test(viewer, chatter)) {
                     return true;
@@ -117,6 +131,19 @@ public final class ExternalChecks {
             } catch (Exception e) {
                 AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "Could not check with " + check.plugin.getName() + " if player is vanished!", e);
             }
+        }
+        return false;
+    }
+
+    @ApiStatus.AvailableSince("4.4.0")
+    public static boolean tryTeleport(Player player, Location location) {
+        if (teleport == null) {
+            return false;
+        }
+        try {
+            return teleport.function.test(player, location);
+        } catch (Exception e) {
+            AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "Could not teleport with " + teleport.plugin.getName() + "!", e);
         }
         return false;
     }
