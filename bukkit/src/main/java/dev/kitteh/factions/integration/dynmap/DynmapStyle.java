@@ -2,7 +2,9 @@ package dev.kitteh.factions.integration.dynmap;
 
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.DynmapConfig;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class DynmapStyle {
     public static final String DEFAULT_LINE_COLOR = "#00FF00";
     public static final double DEFAULT_LINE_OPACITY = 0.8D;

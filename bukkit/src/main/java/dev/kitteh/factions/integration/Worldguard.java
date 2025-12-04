@@ -20,7 +20,9 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class Worldguard {
     public static final String FLAG_CLAIM_NAME = "fuuid-claim";
     public static final String FLAG_PVP_NAME = "fuuid-pvp";

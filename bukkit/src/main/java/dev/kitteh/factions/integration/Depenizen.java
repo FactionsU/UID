@@ -19,6 +19,7 @@ import dev.kitteh.factions.integration.depenizen.FactionsNPCProperties;
 import dev.kitteh.factions.integration.depenizen.FactionsPlayerProperties;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.logging.Level;
 
@@ -47,6 +48,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 @SuppressWarnings("deprecation")
+@ApiStatus.Internal
 public class Depenizen extends Bridge {
     public static boolean init(Plugin plugin) {
         try {

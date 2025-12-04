@@ -8,7 +8,9 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class YardWatch implements me.youhavetrouble.yardwatch.Protection {
     @Override
     public boolean isEnabled() {

@@ -17,6 +17,7 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.util.LazyLocation;
 import org.bukkit.Location;
+import org.jetbrains.annotations.ApiStatus;
 
 /*
 This code is from the Depenizen plugin, modified to work with this plugin.
@@ -42,6 +43,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
+@ApiStatus.Internal
 public class FactionTag implements ObjectTag {
     public static FactionTag valueOf(String string) {
         return valueOf(string, null);

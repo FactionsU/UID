@@ -25,6 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -32,6 +33,7 @@ import java.sql.Date;
 import java.time.Duration;
 import java.util.List;
 
+@ApiStatus.Internal
 @NullMarked
 public class PapiExpansion extends PlaceholderExpansion implements Relational {
     private static final String mapChars = "0123456789abcdef";

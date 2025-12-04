@@ -2,7 +2,9 @@ package dev.kitteh.factions.integration.dynmap;
 
 import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.MarkerSet;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class TempAreaMarker {
     public String label;
     public String world;

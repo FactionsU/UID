@@ -4,9 +4,11 @@ import dev.kitteh.factions.integration.permcontext.LuckpermsContextCalculator;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.logging.Level;
 
+@ApiStatus.Internal
 public class LuckPerms {
     private static LuckpermsContextCalculator calculator;
     private static Plugin plugin;

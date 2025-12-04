@@ -5,7 +5,9 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class VaultPerms {
     private Permission perms = null;
 

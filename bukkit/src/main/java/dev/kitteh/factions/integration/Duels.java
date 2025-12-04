@@ -7,7 +7,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class Duels implements Listener {
     public static boolean init(Plugin plugin) {
         if (plugin instanceof com.meteordevelopments.duels.api.Duels duels) {

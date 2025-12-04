@@ -7,6 +7,7 @@ import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
+import org.jetbrains.annotations.ApiStatus;
 
 /*
 This code is from the Depenizen plugin, modified to work with this plugin.
@@ -33,6 +34,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 @SuppressWarnings("deprecation")
+@ApiStatus.Internal
 public class FactionsPlayerProperties implements Property {
 
     @Override

@@ -17,13 +17,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
+@ApiStatus.Internal
 public class Essentials {
-
     private static IEssentials essentials;
 
     public static boolean setup(Plugin ess) {

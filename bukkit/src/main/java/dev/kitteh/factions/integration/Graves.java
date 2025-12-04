@@ -12,9 +12,11 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.logging.Level;
 
+@ApiStatus.Internal
 public class Graves {
     private static com.ranull.graves.Graves plugin;
 

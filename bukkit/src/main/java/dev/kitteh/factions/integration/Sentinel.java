@@ -8,12 +8,14 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 import org.mcmonkey.sentinel.SentinelIntegration;
 import org.mcmonkey.sentinel.SentinelPlugin;
 
 import java.util.List;
 import java.util.logging.Level;
 
+@ApiStatus.Internal
 public class Sentinel extends SentinelIntegration {
     public static final String TARGET_FACTIONS = "factions";
     public static final String TARGET_FACTIONS_ENEMY = "factionsEnemy";

@@ -5,7 +5,9 @@ import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class TempMarker {
     public String label;
     public String world;

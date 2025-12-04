@@ -32,6 +32,7 @@ import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
 import org.dynmap.markers.PlayerSet;
 import org.dynmap.utils.TileFlags;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 // This source code is a heavily modified version of mikeprimms plugin Dynmap-Factions.
+@ApiStatus.Internal
 public class EngineDynmap {
     public final static int BLOCKS_PER_CHUNK = 16;
 
