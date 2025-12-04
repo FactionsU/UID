@@ -32,7 +32,7 @@ dynmap = { module = "org.dynmap:dynmap", version = "2.0" }
 evalex = { module = "com.ezylang:EvalEx", version = "3.5.0" }
 essentialsx = { module = "net.essentialsx:EssentialsX", version.ref = "essentialsx" }
 fastutil = { module = "it.unimi.dsi:fastutil", version = "8.5.6" }
-graves = { module = "com.ranull:graves", version = "4.9" }
+graves = { module = "com.ranull:GravesX", version = "4.9.9.2-api" }
 ifchestonly = { module = "dev.kitteh.forkedproject:IF-ChestOnly", version = "0.10.19" }
 jetbrains = { module = "org.jetbrains:annotations", version = "26.0.2" }
 jspecify = { module = "org.jspecify:jspecify", version = "0.3.0" }

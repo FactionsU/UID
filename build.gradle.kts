@@ -114,7 +114,7 @@ allprojects {
 
     exclusiveContent {
       forRepository {
-        maven("https://repo.ranull.com/maven/ranull/")
+        maven("https://repo.cwhead.dev/repository/maven-public/")
       }
 
       filter {
