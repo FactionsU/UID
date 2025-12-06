@@ -8,7 +8,6 @@ import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -62,6 +61,6 @@ public class PlayerSelector extends AbstractSelector {
         FPlayer player = FPlayers.fPlayers().get(this.uuid);
         return player.name().equals(player.uniqueId().toString()) ?
                 Mini.parse(FactionsPlugin.instance().tl().permissions().selectors().player().getUuidValue(), Placeholder.unparsed("uuid", this.uuid.toString()))
-                : LegacyComponentSerializer.legacySection().deserialize(player.colorLegacyStringTo(context) + player.name());
+                : Component.text().color(player.textColorTo(context)).content(player.name()).build();
     }
 }

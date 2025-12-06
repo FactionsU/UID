@@ -8,7 +8,6 @@ import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -68,7 +67,7 @@ public class FactionSelector extends AbstractSelector {
         Faction faction = Factions.factions().get(this.id);
         return faction == null ?
                 Mini.parse(FactionsPlugin.instance().tl().permissions().selectors().faction().getDisbandedValue(), Placeholder.unparsed("lastknown", this.lastKnown)) :
-                LegacyComponentSerializer.legacySection().deserialize(faction.tagLegacy(context));
+                Component.text().color(faction.textColorTo(context)).content(faction.tag()).build();
     }
 
     @Override

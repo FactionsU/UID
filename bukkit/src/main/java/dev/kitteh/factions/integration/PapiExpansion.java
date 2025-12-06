@@ -14,6 +14,7 @@ import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TextUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
 import net.kyori.adventure.text.Component;
@@ -68,7 +69,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
 
         return switch (placeholder) {
             case "relation" -> fp1.relationTo(fp2).nicename;
-            case "relation_color" -> fp1.colorLegacyStringTo(fp2);
+            case "relation_color" -> TextUtil.getLegacyString(fp1.textColorTo(fp2));
             default -> null;
         };
     }
@@ -122,8 +123,8 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             }
 
             case "player_name" -> fPlayer.name();
-            case "player_name_and_title" -> fPlayer.hasFaction() ? fPlayer.nameWithTitleLegacy() : fPlayer.name();
-            case "player_title" -> fPlayer.hasFaction() ? fPlayer.titleLegacy() : "";
+            case "player_name_and_title" -> fPlayer.hasFaction() ? Mini.toLegacy(fPlayer.nameWithTitle()) : fPlayer.name();
+            case "player_title" -> fPlayer.hasFaction() ? Mini.toLegacy(fPlayer.title()) : "";
             case "player_lastseen" -> {
                 String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fPlayer.lastLogin(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
                 yield fPlayer.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fPlayer.lastLogin() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
@@ -210,7 +211,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_kills" -> String.valueOf(faction.kills());
             case "faction_deaths" -> String.valueOf(faction.deaths());
             case "faction_maxvaults" -> String.valueOf(faction.maxVaults());
-            case "faction_relation_color" -> fPlayer.colorLegacyStringTo(faction);
+            case "faction_relation_color" -> TextUtil.getLegacyString(fPlayer.textColorTo(faction));
             case "faction_shield_active" -> {
                 if (faction.shieldActive()) {
                     yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveTrue(),

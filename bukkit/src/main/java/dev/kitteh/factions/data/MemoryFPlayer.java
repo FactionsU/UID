@@ -115,7 +115,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     public void cleanupDeserialization() {
         this.shouldTakeFallDamage = true;
-        if (this.title != null) {
+        if (this.title != null) { // Migration from 0.7.x
             this.titleComponent = LegacyComponentSerializer.legacySection().deserialize(this.title);
             this.titleMM = MiniMessage.miniMessage().serialize(this.titleComponent);
         }
