@@ -26,7 +26,7 @@ public class SmokeUtil {
     public static final Random random = new Random();
 
     public static void spawnSingle(Location location, int direction) {
-        if (location == null) {
+        if (location == null || location.getWorld() == null) {
             return;
         }
         location.getWorld().playEffect(location.clone(), Effect.SMOKE, direction);

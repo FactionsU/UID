@@ -33,6 +33,7 @@ public interface Participator {
      * @param args args
      */
     @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true, since = "4.0.0")
     void msgLegacy(String str, Object... args);
 
     /**
@@ -42,6 +43,7 @@ public interface Participator {
      * @param args args
      */
     @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true, since = "4.0.0")
     default void msgLegacy(TL translation, Object... args) {
         this.msgLegacy(translation.toString(), args);
     }
@@ -58,11 +60,13 @@ public interface Participator {
     }
 
     @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true, since = "4.0.0")
     default String describeToLegacy(@Nullable Participator that) {
         return RelationUtil.describeThatToMeLegacy(this, that);
     }
 
     @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true, since = "4.0.0")
     default String describeToLegacy(@Nullable Participator that, boolean uppercaseFirst) {
         return RelationUtil.describeThatToMeLegacy(this, that, uppercaseFirst);
     }
@@ -80,6 +84,7 @@ public interface Participator {
     }
 
     @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true, since = "4.0.0")
     default String colorLegacyStringTo(@Nullable Participator that) {
         return RelationUtil.getLegacyColorStringOfThatToMe(this, that);
     }
