@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
  * An enum for requesting strings from the language file. The contents of this enum file may be subject to frequent
  * changes.
  */
+@Deprecated(forRemoval = true, since = "4.5.0")
 @ApiStatus.Obsolete
 public enum TL {
     /**
