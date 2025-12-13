@@ -625,7 +625,6 @@ public enum TL {
      * Clip placeholder stuff
      */
     PLACEHOLDER_ROLE_NAME("None"),
-    PLACEHOLDER_CUSTOM_FACTION("{faction} "),
 
     /**
      * ASCII compass (for chat map)

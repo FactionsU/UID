@@ -86,12 +86,12 @@ public class RelationUtil {
     }
 
     public static Faction getFaction(Participator rp) {
-        if (rp instanceof Faction) {
-            return (Faction) rp;
+        if (rp instanceof Faction faction) {
+            return faction;
         }
 
-        if (rp instanceof FPlayer) {
-            return ((FPlayer) rp).faction();
+        if (rp instanceof FPlayer player) {
+            return player.faction();
         }
 
         // ERROR
