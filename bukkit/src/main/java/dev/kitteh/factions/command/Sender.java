@@ -30,6 +30,39 @@ public interface Sender {
         FPlayer fPlayer();
 
         Faction faction();
+
+        @Override
+        default boolean payForCommand(double cost, String toDoThis, String forDoingThis) {
+            if (!Econ.shouldBeUsed() || cost == 0.0) {
+                return true;
+            }
+            FPlayer fPlayer = this.fPlayer();
+            if (fPlayer.adminBypass()) {
+                return true;
+            }
+
+            if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.faction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.lastStoodAt())) {
+                return Econ.modifyMoney(fPlayer.faction(), -cost, toDoThis, forDoingThis);
+            } else {
+                return Econ.modifyMoney(fPlayer, -cost, toDoThis, forDoingThis);
+            }
+        }
+
+        @Override
+        default boolean canAffordCommand(double cost, String toDoThis) {
+            if (!Econ.shouldBeUsed() || cost == 0.0) {
+                return true;
+            }
+            FPlayer fPlayer = this.fPlayer();
+            if (fPlayer.adminBypass()) {
+                return true;
+            }
+            if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction()) {
+                return Econ.hasAtLeast(fPlayer.faction(), cost, toDoThis);
+            } else {
+                return Econ.hasAtLeast(fPlayer, cost, toDoThis);
+            }
+        }
     }
 
     interface Console extends Sender {
@@ -82,42 +115,21 @@ public interface Sender {
         this.sendMessage(Mini.parse(miniMessage, resolvers));
     }
 
-    default boolean payForCommand(double cost, TL toDoThis, TL forDoingThis) {
-        if (!Econ.shouldBeUsed() || cost == 0.0) {
-            return true;
-        }
-        if (this instanceof Player player) {
-            FPlayer fPlayer = player.fPlayer();
-            if (fPlayer.adminBypass()) {
-                return true;
-            }
-
-            if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.faction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.lastStoodAt())) {
-                return Econ.modifyMoney(fPlayer.faction(), -cost, toDoThis.toString(), forDoingThis.toString());
-            } else {
-                return Econ.modifyMoney(fPlayer, -cost, toDoThis.toString(), forDoingThis.toString());
-            }
-        } else {
-            return true;
-        }
+    default boolean canAffordCommand(double cost, String toDoThis) {
+        return true;
     }
 
+    default boolean payForCommand(double cost, String toDoThis, String forDoingThis) {
+        return true;
+    }
+
+    @Deprecated(forRemoval = true, since = "4.5.0")
+    default boolean payForCommand(double cost, TL toDoThis, TL forDoingThis) {
+        return this.payForCommand(cost, toDoThis.toString(), forDoingThis.toString());
+    }
+
+    @Deprecated(forRemoval = true, since = "4.5.0")
     default boolean canAffordCommand(double cost, TL toDoThis) {
-        if (!Econ.shouldBeUsed() || cost == 0.0) {
-            return true;
-        }
-        if (this instanceof Player player) {
-            FPlayer fPlayer = player.fPlayer();
-            if (fPlayer.adminBypass()) {
-                return true;
-            }
-            if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction()) {
-                return Econ.hasAtLeast(fPlayer.faction(), cost, toDoThis.toString());
-            } else {
-                return Econ.hasAtLeast(fPlayer, cost, toDoThis.toString());
-            }
-        } else {
-            return true;
-        }
+        return this.canAffordCommand(cost, toDoThis.toString());
     }
 }
