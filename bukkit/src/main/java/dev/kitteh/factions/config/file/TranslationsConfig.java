@@ -1053,6 +1053,49 @@ public class TranslationsConfig {
         }
     }
 
+    public static class Economy {
+        public static class Modification {
+            @Comment("Example: You gained $30 for unclaiming land")
+            private String gainSuccess = "<you> gained <light_purple><amount></light_purple> <for>.";
+            private String gainFailure = "<yellow><you> would have gained <light_purple><amount></light_purple> <for>, but the deposit failed.";
+            private String lossSuccess = "<you> lost <light_purple><amount></light_purple> <for>.";
+            private String lossFailure = "<you> cannot afford <light_purple><amount></light_purple> <to>.";
+
+            private String you = "You";
+            private String yourFaction = "Your faction";
+
+            public String getGainSuccess() {
+                return gainSuccess;
+            }
+
+            public String getGainFailure() {
+                return gainFailure;
+            }
+
+            public String getLossSuccess() {
+                return lossSuccess;
+            }
+
+            public String getLossFailure() {
+                return lossFailure;
+            }
+
+            public String getYou() {
+                return you;
+            }
+
+            public String getYourFaction() {
+                return yourFaction;
+            }
+        }
+
+        private Modification modification = new Modification();
+
+        public Modification modification() {
+            return modification;
+        }
+    }
+
     public static class Permissions {
         public static class Selectors {
             public static class BasicSelector {
@@ -1569,8 +1612,9 @@ public class TranslationsConfig {
     }
 
     @Comment("This config file will slowly become the location for all text content\n" +
-            "All information here uses MiniMessage. https://docs.adventure.kyori.net/minimessage.html")
+            "All information here uses MiniMessage. https://docs.papermc.io/adventure/minimessage/")
     private Commands commands = new Commands();
+    private Economy economy = new Economy();
     private Permissions permissions = new Permissions();
     private Placeholders placeholders = new Placeholders();
     private Scoreboard scoreboard = new Scoreboard();
@@ -1578,6 +1622,10 @@ public class TranslationsConfig {
 
     public Commands commands() {
         return this.commands;
+    }
+
+    public Economy economy() {
+        return economy;
     }
 
     public Permissions permissions() {
