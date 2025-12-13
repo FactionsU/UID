@@ -10,6 +10,8 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.RelationUtil;
 import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -301,7 +303,7 @@ public class Econ {
         return modifyMoney(participator, delta, null, null);
     }
 
-    public static boolean modifyMoney(Participator ep, double delta, @Nullable String toDoThis, @Nullable String forDoingThis) {
+    public static boolean modifyMoney(Participator participator, double delta, @Nullable String toDoThis, @Nullable String forDoingThis) {
         if (!shouldBeUsed()) {
             return false;
         }
@@ -310,9 +312,11 @@ public class Econ {
             return true;
         }
 
-        OfflinePlayer acc = checkStatus(ep.asOfflinePlayer());
+        OfflinePlayer acc = checkStatus(participator.asOfflinePlayer());
 
-        String You = ep.describeToLegacy(ep, true);
+        var tl = FactionsPlugin.instance().tl().economy().modification();
+
+        String you = participator instanceof FPlayer? tl.getYou() : tl.getYourFaction();
 
         if (delta > 0) {
             // The player should gain money
@@ -320,13 +324,21 @@ public class Econ {
             if (deposit(acc, delta)) {
                 modifyUniverseMoney(-delta);
                 if (forDoingThis != null && !forDoingThis.isEmpty()) {
-                    ep.msgLegacy(TL.ECON_GAIN_SUCCESS, You, moneyString(delta), forDoingThis);
+                    participator.sendRichMessage(tl.getGainSuccess(),
+                            Placeholder.parsed("you", you),
+                            Placeholder.parsed("amount", moneyString(delta)),
+                            Placeholder.parsed("for", forDoingThis)
+                    );
                 }
                 return true;
             } else {
                 // transfer to account failed
                 if (forDoingThis != null && !forDoingThis.isEmpty()) {
-                    ep.msgLegacy(TL.ECON_GAIN_FAILURE, You, moneyString(delta), forDoingThis);
+                    participator.sendRichMessage(tl.getGainFailure(),
+                            Placeholder.parsed("you", you),
+                            Placeholder.parsed("amount", moneyString(delta)),
+                            Placeholder.parsed("for", forDoingThis)
+                    );
                 }
                 return false;
             }
@@ -338,13 +350,21 @@ public class Econ {
                 // There is enough money to pay
                 modifyUniverseMoney(-delta);
                 if (forDoingThis != null && !forDoingThis.isEmpty()) {
-                    ep.msgLegacy(TL.ECON_LOST_SUCCESS, You, moneyString(-delta), forDoingThis);
+                    participator.sendRichMessage(tl.getLossSuccess(),
+                            Placeholder.parsed("you", you),
+                            Placeholder.parsed("amount", moneyString(-delta)),
+                            Placeholder.parsed("for", forDoingThis)
+                    );
                 }
                 return true;
             } else {
                 // There was not enough money to pay
                 if (toDoThis != null && !toDoThis.isEmpty()) {
-                    ep.msgLegacy(TL.ECON_LOST_FAILURE, You, moneyString(-delta), toDoThis);
+                    participator.sendRichMessage(tl.getLossFailure(),
+                            Placeholder.parsed("you", you),
+                            Placeholder.parsed("amount", moneyString(delta)),
+                            Placeholder.parsed("to", toDoThis)
+                    );
                 }
                 return false;
             }
