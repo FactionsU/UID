@@ -162,6 +162,33 @@ public class TranslationsConfig {
             }
         }
 
+        public static class MapCmd extends AbsCommand {
+            public MapCmd() {
+                super("map");
+            }
+
+            private String compassLetterNorth = "N";
+            private String compassLetterSouth = "S";
+            private String compassLetterEast = "E";
+            private String compassLetterWest = "W";
+
+            public String getCompassLetterNorth() {
+                return compassLetterNorth;
+            }
+
+            public String getCompassLetterSouth() {
+                return compassLetterSouth;
+            }
+
+            public String getCompassLetterEast() {
+                return compassLetterEast;
+            }
+
+            public String getCompassLetterWest() {
+                return compassLetterWest;
+            }
+        }
+
         public static class Set extends AbsCommand {
             public Set() {
                 super("set");
@@ -1091,6 +1118,7 @@ public class TranslationsConfig {
         private Chat chat = new Chat();
         private Confirm confirm = new Confirm();
         private ListCmd list = new ListCmd();
+        private MapCmd map = new MapCmd();
         private Set set = new Set();
         private Show show = new Show();
         private Permissions permissions = new Permissions();
@@ -1112,6 +1140,10 @@ public class TranslationsConfig {
 
         public ListCmd list() {
             return list;
+        }
+
+        public MapCmd map() {
+            return map;
         }
 
         public Set set() {

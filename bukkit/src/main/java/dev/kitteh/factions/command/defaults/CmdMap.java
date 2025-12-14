@@ -23,15 +23,18 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdMap implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("map")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_MAP_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MAP).and(Cloudy.isPlayer())))
-                        .flag(manager.flagBuilder("auto-on").withPermission(Cloudy.hasPermission(Permission.MAP_AUTO)))
-                        .flag(manager.flagBuilder("auto-off").withPermission(Cloudy.hasPermission(Permission.MAP_AUTO)))
-                        .flag(manager.flagBuilder("set-height").withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().map().getHeight() * 2)))
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().map();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(TL.COMMAND_MAP_DESCRIPTION))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MAP).and(Cloudy.isPlayer())))
+                            .flag(manager.flagBuilder("auto-on").withPermission(Cloudy.hasPermission(Permission.MAP_AUTO)))
+                            .flag(manager.flagBuilder("auto-off").withPermission(Cloudy.hasPermission(Permission.MAP_AUTO)))
+                            .flag(manager.flagBuilder("set-height").withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().map().getHeight() * 2)))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {

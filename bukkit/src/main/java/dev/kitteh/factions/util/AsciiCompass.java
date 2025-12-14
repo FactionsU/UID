@@ -1,5 +1,6 @@
 package dev.kitteh.factions.util;
 
+import dev.kitteh.factions.FactionsPlugin;
 import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.NullMarked;
 
@@ -32,16 +33,16 @@ public class AsciiCompass {
 
         public String getTranslation() {
             if (this == N) {
-                return TL.COMPASS_SHORT_NORTH.toString();
+                return FactionsPlugin.instance().tl().commands().map().getCompassLetterNorth();
             }
             if (this == E) {
-                return TL.COMPASS_SHORT_EAST.toString();
+                return FactionsPlugin.instance().tl().commands().map().getCompassLetterEast();
             }
             if (this == S) {
-                return TL.COMPASS_SHORT_SOUTH.toString();
+                return FactionsPlugin.instance().tl().commands().map().getCompassLetterSouth();
             }
             if (this == W) {
-                return TL.COMPASS_SHORT_WEST.toString();
+                return FactionsPlugin.instance().tl().commands().map().getCompassLetterWest();
             }
             return toString();
         }
