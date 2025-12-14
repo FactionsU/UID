@@ -10,48 +10,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.AvailableSince("4.0.0")
 public class RelationUtil {
-    @ApiStatus.Obsolete
-    @Deprecated(forRemoval = true, since = "4.0.0")
-    public static String describeThatToMeLegacy(Participator that, Participator me, boolean ucfirst) {
-        String ret = "";
-
-        Faction thatFaction = getFaction(that);
-        if (thatFaction == null) {
-            return "ERROR"; // ERROR
-        }
-
-        Faction myFaction = getFaction(me);
-//		if (myFaction == null) return that.describeTo(null); // no relation, but can show basic name or tag
-
-        if (that instanceof Faction) {
-            if (me instanceof FPlayer && myFaction == thatFaction) {
-                ret = TL.GENERIC_YOURFACTION.toString();
-            } else {
-                ret = thatFaction.tag();
-            }
-        } else if (that instanceof FPlayer fplayerthat) {
-            if (that == me) {
-                ret = TL.GENERIC_YOU.toString();
-            } else if (thatFaction == myFaction) {
-                ret = fplayerthat.nameWithTitleLegacy();
-            } else {
-                ret = fplayerthat.nameWithTagLegacy();
-            }
-        }
-
-        if (ucfirst) {
-            ret = TextUtil.upperCaseFirst(ret);
-        }
-
-        return getLegacyColorStringOfThatToMe(that, me) + ret;
-    }
-
-    @ApiStatus.Obsolete
-    @Deprecated(forRemoval = true, since = "4.0.0")
-    public static String describeThatToMeLegacy(Participator that, Participator me) {
-        return describeThatToMeLegacy(that, me, false);
-    }
-
     public static Relation getRelationTo(Participator me, Participator that) {
         return getRelationTo(that, me, false);
     }
@@ -97,6 +55,48 @@ public class RelationUtil {
 
         // ERROR
         return null;
+    }
+
+    @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true, since = "4.0.0")
+    public static String describeThatToMeLegacy(Participator that, Participator me, boolean ucfirst) {
+        String ret = "";
+
+        Faction thatFaction = getFaction(that);
+        if (thatFaction == null) {
+            return "ERROR"; // ERROR
+        }
+
+        Faction myFaction = getFaction(me);
+//		if (myFaction == null) return that.describeTo(null); // no relation, but can show basic name or tag
+
+        if (that instanceof Faction) {
+            if (me instanceof FPlayer && myFaction == thatFaction) {
+                ret = TL.GENERIC_YOURFACTION.toString();
+            } else {
+                ret = thatFaction.tag();
+            }
+        } else if (that instanceof FPlayer fplayerthat) {
+            if (that == me) {
+                ret = TL.GENERIC_YOU.toString();
+            } else if (thatFaction == myFaction) {
+                ret = fplayerthat.nameWithTitleLegacy();
+            } else {
+                ret = fplayerthat.nameWithTagLegacy();
+            }
+        }
+
+        if (ucfirst) {
+            ret = TextUtil.upperCaseFirst(ret);
+        }
+
+        return getLegacyColorStringOfThatToMe(that, me) + ret;
+    }
+
+    @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true, since = "4.0.0")
+    public static String describeThatToMeLegacy(Participator that, Participator me) {
+        return describeThatToMeLegacy(that, me, false);
     }
 
     @ApiStatus.Obsolete
