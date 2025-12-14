@@ -19,7 +19,40 @@ public class TextUtil {
     private TextUtil() {
     }
 
+    public static String upperCaseFirst(String string) {
+        return string.substring(0, 1).toUpperCase() + string.substring(1);
+    }
+
+    @ApiStatus.AvailableSince("4.3.0")
+    public static Component titleize(Component title, @Nullable Context ctx) {
+        var tiTL = FactionsPlugin.instance().tl().placeholders().title();
+        Component center = Mini.parse(tiTL.getTitleCenter(), Placeholder.component("content", title));
+        int centerLen = PlainTextComponentSerializer.plainText().serialize(center).length();
+        int sideLen = 26 - (centerLen / 2);
+
+        String leftRepeat = tiTL.getLeftRepeat().repeat(sideLen / tiTL.getLeftRepeat().length());
+        String rightRepeat = tiTL.getRightRepeat().repeat(sideLen / tiTL.getRightRepeat().length());
+
+        TagResolver tagResolver = TagResolver.resolver(Placeholder.parsed("left_repeat", leftRepeat),
+                Placeholder.parsed("right_repeat", rightRepeat),
+                Placeholder.styling("left_color", c -> c.color(tiTL.getLeftColor())),
+                Placeholder.styling("right_color", c -> c.color(tiTL.getRightColor())),
+                Placeholder.component("center", center));
+
+        if (ctx == null) {
+            return Mini.parse(tiTL.getTitleMain(), tagResolver);
+        } else {
+            return ctx.deserialize(tiTL.getTitleMain(), tagResolver);
+        }
+    }
+
+    @ApiStatus.AvailableSince("4.3.0")
+    public static Component titleize(Component title) {
+        return titleize(title, null);
+    }
+
     @ApiStatus.Obsolete
+    @Deprecated(forRemoval = true, since = "4.5.0")
     public static String getLegacyString(TextColor color) {
         if (color instanceof NamedTextColor namedTextColor) {
             ChatColor col = switch (namedTextColor.toString()) {
@@ -62,10 +95,6 @@ public class TextUtil {
         return ChatColor.translateAlternateColorCodes('&', str);
     }
 
-    public static String upperCaseFirst(String string) {
-        return string.substring(0, 1).toUpperCase() + string.substring(1);
-    }
-
     @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.3.0")
     public static String repeat(String s, int times) {
@@ -75,34 +104,6 @@ public class TextUtil {
     @Deprecated(forRemoval = true, since = "4.5.0")
     public static String getMaterialName(Material material) {
         return material.toString().replace('_', ' ').toLowerCase();
-    }
-
-    @ApiStatus.AvailableSince("4.3.0")
-    public static Component titleize(Component title, @Nullable Context ctx) {
-        var tiTL = FactionsPlugin.instance().tl().placeholders().title();
-        Component center = Mini.parse(tiTL.getTitleCenter(), Placeholder.component("content", title));
-        int centerLen = PlainTextComponentSerializer.plainText().serialize(center).length();
-        int sideLen = 26 - (centerLen / 2);
-
-        String leftRepeat = tiTL.getLeftRepeat().repeat(sideLen / tiTL.getLeftRepeat().length());
-        String rightRepeat = tiTL.getRightRepeat().repeat(sideLen / tiTL.getRightRepeat().length());
-
-        TagResolver tagResolver = TagResolver.resolver(Placeholder.parsed("left_repeat", leftRepeat),
-                Placeholder.parsed("right_repeat", rightRepeat),
-                Placeholder.styling("left_color", c -> c.color(tiTL.getLeftColor())),
-                Placeholder.styling("right_color", c -> c.color(tiTL.getRightColor())),
-                Placeholder.component("center", center));
-
-        if (ctx == null) {
-            return Mini.parse(tiTL.getTitleMain(), tagResolver);
-        } else {
-            return ctx.deserialize(tiTL.getTitleMain(), tagResolver);
-        }
-    }
-
-    @ApiStatus.AvailableSince("4.3.0")
-    public static Component titleize(Component title) {
-        return titleize(title, null);
     }
 
     @ApiStatus.Obsolete
