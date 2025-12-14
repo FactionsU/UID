@@ -35,7 +35,6 @@ import dev.kitteh.factions.listener.ListenDamage;
 import dev.kitteh.factions.listener.ListenEnderPearl;
 import dev.kitteh.factions.listener.ListenEnterExit;
 import dev.kitteh.factions.listener.ListenExplode;
-import dev.kitteh.factions.listener.ListenGUI;
 import dev.kitteh.factions.listener.ListenInteract;
 import dev.kitteh.factions.listener.ListenMove;
 import dev.kitteh.factions.listener.ListenPiston;
@@ -415,7 +414,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         this.getServer().getPluginManager().registerEvents(new ListenEnderPearl(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenEnterExit(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenExplode(this), this);
-        this.getServer().getPluginManager().registerEvents(new ListenGUI(), this);
         this.getServer().getPluginManager().registerEvents(new ListenInteract(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenMove(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPiston(this), this);

@@ -814,6 +814,92 @@ public class TranslationsConfig {
             protected Warp() {
                 super("warp");
             }
+
+            private String description = "Teleport to a faction warp";
+            private String noPermission = "<red>You do not have permission to use <faction:relation_color><faction:name> warps.";
+            private String invalidPassword = "<red>Invalid password!";
+            private String warped = "<yellow>Warped to <green><warp>.";
+            private String invalidWarp = "<red>Couldn't find warp '<warp>.'";
+            private String warmup = "<yellow>You will teleport to <green><warp></green> in <green><seconds></green> seconds.";
+            private String noWarps = "<yellow><faction:relation_color><faction:name> has no warps.";
+
+            private String menuWarpName = "<green><warp>";
+            private String menuTitle = "<faction:relation_color><faction:name> warps";
+            private List<String> menuBody = new ArrayList<>() {
+                {
+                    this.add("Click the warp name below to teleport!");
+                }
+            };
+            private String menuCancel = "Cancel";
+
+            private String menuPassTitle = "<warp>";
+            private List<String> menuPassBody = new ArrayList<>() {
+                {
+                    this.add("Enter the password!");
+                }
+            };
+            private String menuPassInputLabel = "Password";
+            private String menuPassConfirm = "Confirm";
+
+            public String getDescription() {
+                return description;
+            }
+
+            public String getNoPermission() {
+                return noPermission;
+            }
+
+            public String getInvalidPassword() {
+                return invalidPassword;
+            }
+
+            public String getInvalidWarp() {
+                return invalidWarp;
+            }
+
+            public String getWarped() {
+                return warped;
+            }
+
+            public String getWarmup() {
+                return warmup;
+            }
+
+            public String getNoWarps() {
+                return noWarps;
+            }
+
+            public String getMenuWarpName() {
+                return menuWarpName;
+            }
+
+            public String getMenuTitle() {
+                return menuTitle;
+            }
+
+            public List<String> getMenuBody() {
+                return menuBody;
+            }
+
+            public String getMenuCancel() {
+                return menuCancel;
+            }
+
+            public String getMenuPassTitle() {
+                return menuPassTitle;
+            }
+
+            public List<String> getMenuPassBody() {
+                return menuPassBody;
+            }
+
+            public String getMenuPassInputLabel() {
+                return menuPassInputLabel;
+            }
+
+            public String getMenuPassConfirm() {
+                return menuPassConfirm;
+            }
         }
 
         public static class Zone extends AbsCommand {
@@ -1009,7 +1095,7 @@ public class TranslationsConfig {
         private Show show = new Show();
         private Permissions permissions = new Permissions();
         private Upgrades upgrades = new Upgrades();
-        private Warp warp =  new Warp();
+        private Warp warp = new Warp();
         private Zone zone = new Zone();
 
         public Generic generic() {
@@ -1054,6 +1140,19 @@ public class TranslationsConfig {
     }
 
     public static class Economy {
+        public static class Actions {
+            private String warpFor = "for warping";
+            private String warpTo = "to warp";
+
+            public String getWarpFor() {
+                return warpFor;
+            }
+
+            public String getWarpTo() {
+                return warpTo;
+            }
+        }
+
         public static class Modification {
             @Comment("Example: You gained $30 for unclaiming land")
             private String gainSuccess = "<you> gained <light_purple><amount></light_purple> <for>.";
@@ -1089,7 +1188,12 @@ public class TranslationsConfig {
             }
         }
 
+        private Actions actions = new Actions();
         private Modification modification = new Modification();
+
+        public Actions actions() {
+            return actions;
+        }
 
         public Modification modification() {
             return modification;
