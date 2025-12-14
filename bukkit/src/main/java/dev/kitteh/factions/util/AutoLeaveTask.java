@@ -5,9 +5,11 @@ import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ListIterator;
 
+@ApiStatus.Internal
 public class AutoLeaveTask implements Runnable {
     private static AutoLeaveProcessor<?> task;
     private final double rate;

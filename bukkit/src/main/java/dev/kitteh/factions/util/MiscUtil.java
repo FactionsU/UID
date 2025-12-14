@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+@ApiStatus.Internal
 @NullMarked
 public class MiscUtil {
     private static final Map<String, EntityType> entityTypeMap;

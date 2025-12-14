@@ -6,9 +6,11 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.logging.Level;
 
+@ApiStatus.Internal
 public class AutoLeaveProcessFactionTask extends AutoLeaveTask.AutoLeaveProcessor<Faction> {
     public AutoLeaveProcessFactionTask() {
         this.iterator = Factions.factions().all().listIterator();

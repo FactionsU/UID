@@ -5,6 +5,7 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.logging.Level;
 
@@ -20,7 +21,7 @@ import java.util.logging.Level;
  * [^][5][<][<][<][<][5][v]
  * [7][<][<][<][<][<][<][7]
  */
-
+@ApiStatus.Internal
 public abstract class SpiralTask implements Runnable {
 
     // general task-related reference data

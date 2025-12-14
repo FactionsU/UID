@@ -1,8 +1,10 @@
 package dev.kitteh.factions.util;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public enum Permission {
     MANAGE_SAFE_ZONE("managesafezone"),

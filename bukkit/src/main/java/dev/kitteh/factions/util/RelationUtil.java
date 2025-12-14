@@ -8,6 +8,7 @@ import dev.kitteh.factions.permissible.Relation;
 import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.AvailableSince("4.0.0")
 public class RelationUtil {
     @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")

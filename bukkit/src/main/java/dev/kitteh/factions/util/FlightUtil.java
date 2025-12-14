@@ -10,9 +10,11 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 
+@ApiStatus.Internal
 public class FlightUtil {
 
     private static FlightUtil instance;
