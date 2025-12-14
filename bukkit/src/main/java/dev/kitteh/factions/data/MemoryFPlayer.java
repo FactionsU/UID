@@ -101,7 +101,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected boolean flyTrailsState = false;
     protected @Nullable String flyTrailsEffect = null;
     protected boolean seeingChunk = false;
-    protected FLocation lastStoodAt = new FLocation(); // Where did this player stand the last time we checked?
+    protected FLocation lastStoodAt = new FLocation("world", 0, 0); // Where did this player stand the last time we checked?
 
     // Non-serialized data
     protected transient boolean mapAutoUpdating;
