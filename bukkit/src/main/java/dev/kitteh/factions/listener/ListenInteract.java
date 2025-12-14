@@ -9,8 +9,9 @@ import dev.kitteh.factions.integration.Graves;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.protection.Protection;
-import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.WorldUtil;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -67,7 +68,7 @@ public class ListenInteract implements Listener {
         }
 
         if (check && !this.plugin.conf().factions().protection().getEntityInteractExceptions().contains(event.getRightClicked().getType().name()) &&
-                Protection.denyInteract(event.getPlayer(), event.getRightClicked().getLocation())) {
+                Protection.denyInteract(event.getPlayer(), event.getRightClicked().getLocation(), true)) {
             event.setCancelled(true);
         }
     }
@@ -111,7 +112,7 @@ public class ListenInteract implements Listener {
                 int count = attempt.increment();
                 if (count >= 10) {
                     FPlayer me = FPlayers.fPlayers().get(player);
-                    me.msgLegacy(TL.PLAYER_OUCH);
+                    me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getInteractionSpamHurtOuch());
                     player.damage(NumberConversions.floor((double) count / 10));
                 }
             }
@@ -224,7 +225,7 @@ public class ListenInteract implements Listener {
 
         PermissibleAction action = PermissibleActions.CONTAINER;
         if (!otherFaction.hasAccess(me, action, location)) {
-            me.msgLegacy(TL.GENERIC_NOPERMISSION, action.shortDescription());
+            me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(), FactionResolver.of(me, otherFaction), Placeholder.unparsed("action", action.shortDescription()));
             event.setCancelled(true);
         }
     }

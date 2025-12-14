@@ -57,7 +57,7 @@ public class YardWatch implements me.youhavetrouble.yardwatch.Protection {
 
     @Override
     public boolean canInteract(Player player, Entity target) {
-        return !WorldUtil.isEnabled(target) || !Protection.denyInteract(player, target.getLocation());
+        return !WorldUtil.isEnabled(target) || !Protection.denyInteract(player, target.getLocation(), false);
     }
 
     @Override

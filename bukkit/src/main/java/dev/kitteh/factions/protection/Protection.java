@@ -10,9 +10,12 @@ import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -95,7 +98,7 @@ public final class Protection {
             }
 
             if (notify) {
-                me.msgLegacy(TL.PERM_DENIED_WILDERNESS, permissibleAction.shortDescription());
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionWilderness(), Placeholder.unparsed("action", permissibleAction.shortDescription()));
             }
 
             return true;
@@ -109,7 +112,7 @@ public final class Protection {
             }
 
             if (notify) {
-                me.msgLegacy(TL.PERM_DENIED_SAFEZONE, permissibleAction.shortDescription());
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionSafezone(), Placeholder.unparsed("action", permissibleAction.shortDescription()));
             }
 
             return true;
@@ -123,7 +126,7 @@ public final class Protection {
             }
 
             if (notify) {
-                me.msgLegacy(TL.PERM_DENIED_WARZONE, permissibleAction.shortDescription());
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionWarzone(), Placeholder.unparsed("action", permissibleAction.shortDescription()));
             }
 
             return true;
@@ -139,10 +142,10 @@ public final class Protection {
         if (!otherFaction.hasAccess(me, permissibleAction, loc)) {
             if (pain && permissibleAction != PermissibleActions.FROSTWALK) {
                 player.damage(conf.factions().other().getActionDeniedPainAmount());
-                me.msgLegacy(TL.PERM_DENIED_PAINTERRITORY, permissibleAction.shortDescription(), otherFaction.tagLegacy(myFaction));
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritoryPain(), FactionResolver.of(me, otherFaction), Placeholder.unparsed("action", permissibleAction.shortDescription()));
                 return false;
             } else if (notify) {
-                me.msgLegacy(TL.PERM_DENIED_TERRITORY, permissibleAction.shortDescription(), otherFaction.tagLegacy(myFaction));
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(), FactionResolver.of(me, otherFaction), Placeholder.unparsed("action", permissibleAction.shortDescription()));
             }
             return true;
         }
@@ -185,7 +188,12 @@ public final class Protection {
                     (faction.isSafeZone() && protection.isSafeZoneBlockOtherExplosions());
     }
 
+    @Deprecated(forRemoval = true, since = "4.5.0")
     public static boolean denyInteract(Player player, Location location) {
+        return denyInteract(player, location, true);
+    }
+
+    public static boolean denyInteract(Player player, Location location, boolean notify) {
         String name = player.getName();
         if (FactionsPlugin.instance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(name)) {
             return false;
@@ -208,19 +216,28 @@ public final class Protection {
             if (!protection.isWildernessDenyUsage() || protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) {
                 return false; // This is not faction territory. Use whatever you like here.
             }
-            me.msgLegacy(TL.PLAYER_USE_WILDERNESS, "this");
+            if (notify) {
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseWilderness(),
+                        Placeholder.parsed("thing", FactionsPlugin.instance().tl().protection().denied().getUseThis()));
+            }
             return true;
         } else if (otherFaction.isSafeZone()) {
             if (!protection.isSafeZoneDenyUsage() || Permission.MANAGE_SAFE_ZONE.has(player)) {
                 return false;
             }
-            me.msgLegacy(TL.PLAYER_USE_SAFEZONE, "this");
+            if (notify)  {
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseSafezone(),
+                        Placeholder.parsed("thing", FactionsPlugin.instance().tl().protection().denied().getUseThis()));
+            }
             return true;
         } else if (otherFaction.isWarZone()) {
             if (!protection.isWarZoneDenyUsage() || Permission.MANAGE_WAR_ZONE.has(player)) {
                 return false;
             }
-            me.msgLegacy(TL.PLAYER_USE_WARZONE, "this");
+            if (notify) {
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseWarzone(),
+                        Placeholder.parsed("thing", FactionsPlugin.instance().tl().protection().denied().getUseThis()));
+            }
 
             return true;
         }
@@ -229,7 +246,11 @@ public final class Protection {
 
         // Cancel if we are not in our own territory
         if (!access) {
-            me.msgLegacy(TL.PLAYER_USE_TERRITORY, "this", otherFaction.tagLegacy(me.faction()));
+            if (notify) {
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseTerritory(),
+                        FactionResolver.of(me, otherFaction),
+                        Placeholder.parsed("thing", FactionsPlugin.instance().tl().protection().denied().getUseThis()));
+            }
             return true;
         }
 
@@ -285,7 +306,7 @@ public final class Protection {
         }
 
         if (action != PermissibleActions.PLATE && notify) {
-            me.msgLegacy(TL.GENERIC_NOPERMISSION, action.shortDescription());
+            me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(), FactionResolver.of(me, otherFaction), Placeholder.unparsed("action", action.shortDescription()));
         }
         return true;
     }
@@ -327,7 +348,8 @@ public final class Protection {
             }
 
             if (notify) {
-                me.msgLegacy(TL.PLAYER_USE_WILDERNESS, TextUtil.getMaterialName(material));
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseWilderness(),
+                        Placeholder.component("thing", Component.translatable(material.getTranslationKey())));
             }
 
             return true;
@@ -337,7 +359,8 @@ public final class Protection {
             }
 
             if (notify) {
-                me.msgLegacy(TL.PLAYER_USE_SAFEZONE, TextUtil.getMaterialName(material));
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseSafezone(),
+                        Placeholder.component("thing", Component.translatable(material.getTranslationKey())));
             }
 
             return true;
@@ -347,7 +370,8 @@ public final class Protection {
             }
 
             if (notify) {
-                me.msgLegacy(TL.PLAYER_USE_WARZONE, TextUtil.getMaterialName(material));
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseWarzone(),
+                        Placeholder.component("thing", Component.translatable(material.getTranslationKey())));
             }
 
             return true;
@@ -355,7 +379,9 @@ public final class Protection {
 
         if (!otherFaction.hasAccess(me, PermissibleActions.ITEM, loc)) {
             if (notify) {
-                me.msgLegacy(TL.PLAYER_USE_TERRITORY, TextUtil.getMaterialName(material), otherFaction.tagLegacy(me.faction()));
+                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseTerritory(),
+                        FactionResolver.of(player, otherFaction),
+                        Placeholder.component("thing", Component.translatable(material.getTranslationKey())));
             }
             return true;
         }
@@ -401,13 +427,17 @@ public final class Protection {
         if (!(damagee instanceof Player damagedPlayer)) {
             if (FactionsPlugin.instance().conf().factions().protection().isSafeZoneBlockAllEntityDamage() && defLocFaction.isSafeZone()) {
                 if (damager instanceof Player && notify) {
-                    FPlayers.fPlayers().get((Player) damager).msgLegacy(TL.PERM_DENIED_SAFEZONE.format(TL.GENERIC_ATTACK.toString()));
+                    FPlayers.fPlayers().get((Player) damager).sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionSafezone(),
+                            Placeholder.unparsed("action", FactionsPlugin.instance().tl().protection().permissions().getAttack()));
                 }
                 return true;
             }
             if (FactionsPlugin.instance().conf().factions().protection().isPeacefulBlockAllEntityDamage() && defLocFaction.isPeaceful()) {
                 if (damager instanceof Player && notify) {
-                    FPlayers.fPlayers().get((Player) damager).msgLegacy(TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.tagLegacy(FPlayers.fPlayers().get((Player) damager))));
+                    FPlayer fPlayer = FPlayers.fPlayers().get((Player) damager);
+                    fPlayer.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(),
+                            FactionResolver.of(fPlayer, defLocFaction),
+                            Placeholder.unparsed("action", FactionsPlugin.instance().tl().protection().permissions().getAttack()));
                 }
                 return true;
             }
@@ -415,7 +445,9 @@ public final class Protection {
                 FPlayer fPlayer = FPlayers.fPlayers().get((Player) damager);
                 if (!defLocFaction.hasAccess(fPlayer, PermissibleActions.DESTROY, defLoc)) {
                     if (notify) {
-                        fPlayer.msgLegacy(TL.PERM_DENIED_TERRITORY.format(TL.GENERIC_ATTACK.toString(), defLocFaction.tagLegacy(FPlayers.fPlayers().get((Player) damager))));
+                        fPlayer.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(),
+                                FactionResolver.of(fPlayer, defLocFaction),
+                                Placeholder.unparsed("action", FactionsPlugin.instance().tl().protection().permissions().getAttack()));
                     }
                     return true;
                 }
