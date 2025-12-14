@@ -17,6 +17,7 @@ import java.util.Objects;
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public record FLocation(String worldName, int x, int z) {
+    @Deprecated(forRemoval = true, since = "4.5.0")
     public FLocation() {
         this("world", 0, 0);
     }
