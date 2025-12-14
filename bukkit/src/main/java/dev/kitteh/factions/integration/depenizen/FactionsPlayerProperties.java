@@ -7,6 +7,7 @@ import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
+import dev.kitteh.factions.util.Mini;
 import org.jetbrains.annotations.ApiStatus;
 
 /*
@@ -114,7 +115,7 @@ public class FactionsPlayerProperties implements Property {
                 // Returns the player's title.
                 // -->
                 else if (attribute.startsWith("title")) {
-                    return new ElementTag(getFPlayer().titleLegacy()).getObjectAttribute(attribute.fulfill(1));
+                    return new ElementTag(Mini.toLegacy(getFPlayer().title())).getObjectAttribute(attribute.fulfill(1));
                 }
             }
 
