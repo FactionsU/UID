@@ -5,10 +5,12 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+@ApiStatus.Internal
 public class AutoLeaveProcessTask extends AutoLeaveTask.AutoLeaveProcessor<FPlayer> {
     public AutoLeaveProcessTask() {
         this.iterator = ((ArrayList<FPlayer>) FPlayers.fPlayers().all()).listIterator();

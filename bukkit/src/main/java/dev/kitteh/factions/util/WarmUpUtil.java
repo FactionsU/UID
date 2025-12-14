@@ -5,8 +5,10 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+@ApiStatus.Internal
 @NullMarked
 public class WarmUpUtil {
     @Deprecated(forRemoval = true, since = "4.5.0")

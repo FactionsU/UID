@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
+@ApiStatus.AvailableSince("4.0.0")
 public class TextUtil {
     private TextUtil() {
     }

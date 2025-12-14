@@ -2,6 +2,7 @@ package dev.kitteh.factions.util;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 import java.util.Random;
@@ -21,6 +22,7 @@ import java.util.Random;
 //            8    North - West
 //-----------------------------
 
+@ApiStatus.Internal
 public class SmokeUtil {
 
     public static final Random random = new Random();

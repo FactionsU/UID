@@ -15,11 +15,13 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@ApiStatus.Internal
 public class SeeChunkUtil extends BukkitRunnable {
 
     private final Set<UUID> playersSeeingChunks = new HashSet<>();

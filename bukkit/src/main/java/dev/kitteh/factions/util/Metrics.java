@@ -45,7 +45,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class Metrics {
 
     private final Plugin plugin;

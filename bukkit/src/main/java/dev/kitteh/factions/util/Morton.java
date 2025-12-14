@@ -1,12 +1,14 @@
 package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.FLocation;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
  * Simple two-ints-in-a-long Morton code.
  */
 @NullMarked
+@ApiStatus.AvailableSince("4.0.0")
 public final class Morton {
     public static long of(FLocation location) {
         return Morton.of(location.x(), location.z());
