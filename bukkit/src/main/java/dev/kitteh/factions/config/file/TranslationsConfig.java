@@ -1560,6 +1560,297 @@ public class TranslationsConfig {
         }
     }
 
+    public static class Protection {
+        public static class Permissions {
+            private String ban = "Banning players from the faction";
+            private String banShort = "ban";
+            private String build = "Building blocks";
+            private String buildShort = "build";
+            private String button = "Using buttons";
+            private String buttonShort = "use buttons";
+            private String container = "Opening any block that can store items";
+            private String containerShort = "open containers";
+            private String destroy = "Breaking blocks";
+            private String destroyShort = "destroy";
+            private String disband = "Disbanding the entire faction";
+            private String disbandShort = "disband";
+            private String door = "Opening doors";
+            private String doorShort = "open doors";
+            private String economy = "Spending faction money";
+            private String economyShort = "spend faction money";
+            private String fly = "Flying in faction territory";
+            private String flyShort = "fly";
+            private String frostWalk = "Walking on water with the frostwalk enchantment";
+            private String frostWalkShort = "frostwalk";
+            private String home = "Visiting the faction home";
+            private String homeShort = "visit home";
+            private String invite = "Inviting others to join the faction";
+            private String inviteShort = "invite";
+            private String item = "Using items";
+            private String itemShort = "use items";
+            private String kick = "Kicking members from the faction";
+            private String kickShort = "kick";
+            private String lever = "Using levers";
+            private String leverShort = "use levers";
+            private String listClaims = "View listed faction claims";
+            private String listClaimsShort = "list claims";
+            private String painBuild = "If allow, can build but hurts to do so";
+            private String painBuildShort = "painbuild";
+            private String plate = "Using pressure plates";
+            private String plateShort = "use pressure plates";
+            private String promote = "Promoting members of the faction";
+            private String promoteShort = "promote";
+            private String setHome = "Setting the faction home";
+            private String setHomeShort = "set home";
+            private String setWarp = "Setting and unsetting faction warps";
+            private String setWarpShort = "set warps";
+            private String shield = "Activating a faction shield";
+            private String shieldShort = "activate shields";
+            private String territory = "Claiming or unclaiming faction territory";
+            private String territoryShort = "manage faction territory";
+            private String tntDeposit = "Deposit TNT into faction bank";
+            private String tntDepositShort = "deposit TNT";
+            private String tntWithdraw = "Withdraw TNT from faction bank";
+            private String tntWithdrawShort = "withdraw TNT";
+            private String upgrade = "Purchasing faction upgrades";
+            private String upgradeShort = "buy upgrades";
+            private String warp = "Using faction warps";
+            private String warpShort = "use warps";
+            private String zone = "Managing faction zones";
+            private String zoneShort = "manage zones";
+
+            public String getBan() {
+                return ban;
+            }
+
+            public String getBanShort() {
+                return banShort;
+            }
+
+            public String getBuild() {
+                return build;
+            }
+
+            public String getBuildShort() {
+                return buildShort;
+            }
+
+            public String getButton() {
+                return button;
+            }
+
+            public String getButtonShort() {
+                return buttonShort;
+            }
+
+            public String getContainer() {
+                return container;
+            }
+
+            public String getContainerShort() {
+                return containerShort;
+            }
+
+            public String getDestroy() {
+                return destroy;
+            }
+
+            public String getDestroyShort() {
+                return destroyShort;
+            }
+
+            public String getDisband() {
+                return disband;
+            }
+
+            public String getDisbandShort() {
+                return disbandShort;
+            }
+
+            public String getDoor() {
+                return door;
+            }
+
+            public String getDoorShort() {
+                return doorShort;
+            }
+
+            public String getEconomy() {
+                return economy;
+            }
+
+            public String getEconomyShort() {
+                return economyShort;
+            }
+
+            public String getFly() {
+                return fly;
+            }
+
+            public String getFlyShort() {
+                return flyShort;
+            }
+
+            public String getFrostWalk() {
+                return frostWalk;
+            }
+
+            public String getFrostWalkShort() {
+                return frostWalkShort;
+            }
+
+            public String getHome() {
+                return home;
+            }
+
+            public String getHomeShort() {
+                return homeShort;
+            }
+
+            public String getInvite() {
+                return invite;
+            }
+
+            public String getInviteShort() {
+                return inviteShort;
+            }
+
+            public String getItem() {
+                return item;
+            }
+
+            public String getItemShort() {
+                return itemShort;
+            }
+
+            public String getKick() {
+                return kick;
+            }
+
+            public String getKickShort() {
+                return kickShort;
+            }
+
+            public String getLever() {
+                return lever;
+            }
+
+            public String getLeverShort() {
+                return leverShort;
+            }
+
+            public String getListClaims() {
+                return listClaims;
+            }
+
+            public String getListClaimsShort() {
+                return listClaimsShort;
+            }
+
+            public String getPainBuild() {
+                return painBuild;
+            }
+
+            public String getPainBuildShort() {
+                return painBuildShort;
+            }
+
+            public String getPlate() {
+                return plate;
+            }
+
+            public String getPlateShort() {
+                return plateShort;
+            }
+
+            public String getPromote() {
+                return promote;
+            }
+
+            public String getPromoteShort() {
+                return promoteShort;
+            }
+
+            public String getSetHome() {
+                return setHome;
+            }
+
+            public String getSetHomeShort() {
+                return setHomeShort;
+            }
+
+            public String getSetWarp() {
+                return setWarp;
+            }
+
+            public String getSetWarpShort() {
+                return setWarpShort;
+            }
+
+            public String getShield() {
+                return shield;
+            }
+
+            public String getShieldShort() {
+                return shieldShort;
+            }
+
+            public String getTerritory() {
+                return territory;
+            }
+
+            public String getTerritoryShort() {
+                return territoryShort;
+            }
+
+            public String getTntDeposit() {
+                return tntDeposit;
+            }
+
+            public String getTntDepositShort() {
+                return tntDepositShort;
+            }
+
+            public String getTntWithdraw() {
+                return tntWithdraw;
+            }
+
+            public String getTntWithdrawShort() {
+                return tntWithdrawShort;
+            }
+
+            public String getUpgrade() {
+                return upgrade;
+            }
+
+            public String getUpgradeShort() {
+                return upgradeShort;
+            }
+
+            public String getWarp() {
+                return warp;
+            }
+
+            public String getWarpShort() {
+                return warpShort;
+            }
+
+            public String getZone() {
+                return zone;
+            }
+
+            public String getZoneShort() {
+                return zoneShort;
+            }
+        }
+
+        private Permissions permissions;
+
+        public Permissions permissions() {
+            return this.permissions;
+        }
+    }
+
     public static class Scoreboard {
         public static class Constant {
 
@@ -1753,6 +2044,7 @@ public class TranslationsConfig {
     private Economy economy = new Economy();
     private Permissions permissions = new Permissions();
     private Placeholders placeholders = new Placeholders();
+    private Protection protection = new Protection();
     private Scoreboard scoreboard = new Scoreboard();
     private Upgrades upgrades = new Upgrades();
 
@@ -1770,6 +2062,10 @@ public class TranslationsConfig {
 
     public Placeholders placeholders() {
         return this.placeholders;
+    }
+
+    public Protection protection() {
+        return this.protection;
     }
 
     public Scoreboard scoreboard() {

@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
  * changes.
  */
 @Deprecated(forRemoval = true, since = "4.5.0")
+@ApiStatus.Internal
 @ApiStatus.Obsolete
 public enum TL {
     /**
@@ -715,75 +716,11 @@ public enum TL {
 
     PLAYER_TELEPORTEDONJOIN("&eYou were teleported out of %s territory"),
 
-    PERM_BUILD("Building blocks"),
-    PERM_DESTROY("Breaking blocks"),
-    PERM_PAINBUILD("If allow, can build but hurts to do so"),
-    PERM_ITEM("Using items"),
-    PERM_CONTAINER("Opening any block that can store items"),
-    PERM_BUTTON("Using buttons"),
-    PERM_DOOR("Opening doors"),
-    PERM_LEVER("Using levers"),
-    PERM_PLATE("Using pressure plates"),
-    PERM_FROSTWALK("Walking on water with the frostwalk enchantment"),
-    PERM_INVITE("Inviting others to join the faction"),
-    PERM_KICK("Kicking members from the faction"),
-    PERM_BAN("Banning players from the faction"),
-    PERM_PROMOTE("Promoting members of the faction"),
-    PERM_DISBAND("Disbanding the entire faction"),
-    PERM_ECONOMY("Spending faction money"),
-    PERM_TERRITORY("Claiming or unclaiming faction territory"),
-    PERM_HOME("Visiting the faction home"),
-    PERM_SETHOME("Setting the faction home"),
-    PERM_LISTCLAIMS("View listed faction claims"),
-    PERM_SETWARP("Setting and unsetting faction warps"),
-    PERM_TNTDEPOSIT("Deposit TNT into faction bank"),
-    PERM_TNTWITHDRAW("Withdraw TNT from faction bank"),
-    PERM_WARP("Using faction warps"),
-    PERM_FLY("Flying in faction territory"),
-    PERM_SHIELD("Activating a faction shield"),
-    PERM_UPGRADE("Purchasing faction upgrades"),
-    PERM_ZONE("Managing faction zones"),
-
-    PERM_SHORT_BUILD("build"),
-    PERM_SHORT_DESTROY("destroy"),
-    PERM_SHORT_PAINBUILD("painbuild"),
-    PERM_SHORT_ITEM("use items"),
-    PERM_SHORT_CONTAINER("open containers"),
-    PERM_SHORT_BUTTON("use buttons"),
-    PERM_SHORT_DOOR("open doors"),
-    PERM_SHORT_LEVER("use levers"),
-    PERM_SHORT_PLATE("use pressure plates"),
-    PERM_SHORT_FROSTWALK("frostwalk"),
-    PERM_SHORT_INVITE("invite"),
-    PERM_SHORT_KICK("kick"),
-    PERM_SHORT_BAN("ban"),
-    PERM_SHORT_PROMOTE("promote"),
-    PERM_SHORT_DISBAND("disband"),
-    PERM_SHORT_ECONOMY("spend faction money"),
-    PERM_SHORT_TERRITORY("manage faction territory"),
-    PERM_SHORT_HOME("visit home"),
-    PERM_SHORT_SETHOME("set home"),
-    PERM_SHORT_LISTCLAIMS("list claims"),
-    PERM_SHORT_SETWARP("set warps"),
-    PERM_SHORT_TNTDEPOSIT("deposit TNT"),
-    PERM_SHORT_TNTWITHDRAW("withdraw TNT"),
-    PERM_SHORT_WARP("use warps"),
-    PERM_SHORT_FLY("fly"),
-    PERM_SHORT_SHIELD("activate shields"),
-    PERM_SHORT_UPGRADE("buy upgrades"),
-    PERM_SHORT_ZONE("manage zones"),
-
     PERM_DENIED_WILDERNESS("&cYou can't %s in the wilderness"),
     PERM_DENIED_SAFEZONE("&c>You can't %s in a safe zone"),
     PERM_DENIED_WARZONE("&cYou can't %s in a war zone"),
     PERM_DENIED_TERRITORY("&cYou can't %s in the territory of %s"),
     PERM_DENIED_PAINTERRITORY("&cIt is painful to %s in the territory of %s"),
-
-    GUI_WARPS_ONE_PAGE("%s warps"),
-    GUI_WARPS_PAGE("%1$s warps (page %2$d)"),
-
-    GUI_BUTTON_NEXT("NEXT"),
-    GUI_BUTTON_PREV("PREVIOUS"),
 
     TAG_LEADER_OWNERLESS("Server"),
 
