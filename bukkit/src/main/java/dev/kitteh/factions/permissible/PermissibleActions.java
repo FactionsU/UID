@@ -1,86 +1,90 @@
 package dev.kitteh.factions.permissible;
 
+import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.Upgrades;
-import dev.kitteh.factions.util.TL;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.function.Function;
+
 /**
  * Default permissible actions.
  */
+@SuppressWarnings("Convert2MethodRef")
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public enum PermissibleActions implements PermissibleAction {
-    BUILD(TL.PERM_BUILD, TL.PERM_SHORT_BUILD),
-    DESTROY(TL.PERM_DESTROY, TL.PERM_SHORT_DESTROY),
-    PAINBUILD(TL.PERM_PAINBUILD, TL.PERM_SHORT_PAINBUILD),
+    BUILD(tl -> tl.getBuild(), tl -> tl.getBuildShort()),
+    DESTROY(tl -> tl.getDestroy(), tl -> tl.getDestroyShort()),
+    PAINBUILD(tl -> tl.getPainBuild(), tl -> tl.getPainBuildShort()),
 
-    ITEM(TL.PERM_ITEM, TL.PERM_SHORT_ITEM),
+    ITEM(tl -> tl.getItem(), tl -> tl.getItemShort()),
 
-    CONTAINER(TL.PERM_CONTAINER, TL.PERM_SHORT_CONTAINER),
+    CONTAINER(tl -> tl.getContainer(), tl -> tl.getContainerShort()),
 
-    BUTTON(TL.PERM_BUTTON, TL.PERM_SHORT_BUTTON),
-    DOOR(TL.PERM_DOOR, TL.PERM_SHORT_DOOR),
-    LEVER(TL.PERM_LEVER, TL.PERM_SHORT_LEVER),
-    PLATE(TL.PERM_PLATE, TL.PERM_SHORT_PLATE),
+    BUTTON(tl -> tl.getButton(), tl -> tl.getButtonShort()),
+    DOOR(tl -> tl.getDoor(), tl -> tl.getDoorShort()),
+    LEVER(tl -> tl.getLever(), tl -> tl.getLeverShort()),
+    PLATE(tl -> tl.getPlate(), tl -> tl.getPlateShort()),
 
-    FROSTWALK(TL.PERM_FROSTWALK, TL.PERM_SHORT_FROSTWALK),
+    FROSTWALK(tl -> tl.getFrostWalk(), tl -> tl.getFrostWalkShort()),
 
-    INVITE(TL.PERM_INVITE, TL.PERM_SHORT_INVITE),
-    KICK(TL.PERM_KICK, TL.PERM_SHORT_KICK),
-    BAN(TL.PERM_BAN, TL.PERM_SHORT_BAN),
-    PROMOTE(TL.PERM_PROMOTE, TL.PERM_SHORT_PROMOTE),
+    INVITE(tl -> tl.getInvite(), tl -> tl.getInviteShort()),
+    KICK(tl -> tl.getKick(), tl -> tl.getKickShort()),
+    BAN(tl -> tl.getBan(), tl -> tl.getBanShort()),
+    PROMOTE(tl -> tl.getPromote(), tl -> tl.getPromoteShort()),
 
-    DISBAND(TL.PERM_DISBAND, TL.PERM_SHORT_DISBAND),
+    DISBAND(tl -> tl.getDisband(), tl -> tl.getDisbandShort()),
 
-    ECONOMY(TL.PERM_ECONOMY, TL.PERM_SHORT_ECONOMY),
+    ECONOMY(tl -> tl.getEconomy(), tl -> tl.getEconomyShort()),
 
-    TERRITORY(TL.PERM_TERRITORY, TL.PERM_SHORT_TERRITORY),
+    TERRITORY(tl -> tl.getTerritory(), tl -> tl.getTerritoryShort()),
 
-    HOME(TL.PERM_HOME, TL.PERM_SHORT_HOME),
-    SETHOME(TL.PERM_SETHOME, TL.PERM_SHORT_SETHOME),
+    HOME(tl -> tl.getHome(), tl -> tl.getHomeShort()),
+    SETHOME(tl -> tl.getSetHome(), tl -> tl.getSetHomeShort()),
 
-    LISTCLAIMS(TL.PERM_LISTCLAIMS, TL.PERM_SHORT_LISTCLAIMS),
+    LISTCLAIMS(tl -> tl.getListClaims(), tl -> tl.getListClaimsShort()),
 
-    WARP(TL.PERM_WARP, TL.PERM_SHORT_WARP),
-    SETWARP(TL.PERM_SETWARP, TL.PERM_SHORT_SETWARP),
+    WARP(tl -> tl.getWarp(), tl -> tl.getWarpShort()),
+    SETWARP(tl -> tl.getSetWarp(), tl -> tl.getSetWarpShort()),
 
-    TNTDEPOSIT(TL.PERM_TNTDEPOSIT, TL.PERM_SHORT_TNTDEPOSIT),
-    TNTWITHDRAW(TL.PERM_TNTWITHDRAW, TL.PERM_SHORT_TNTWITHDRAW),
+    TNTDEPOSIT(tl -> tl.getTntDeposit(), tl -> tl.getTntDepositShort()),
+    TNTWITHDRAW(tl -> tl.getTntWithdraw(), tl -> tl.getTntWithdrawShort()),
 
-    SHIELD(TL.PERM_SHIELD, TL.PERM_SHORT_SHIELD, Upgrades.SHIELD),
+    SHIELD(tl -> tl.getShield(), tl -> tl.getShieldShort(), Upgrades.SHIELD),
 
-    FLY(TL.PERM_FLY, TL.PERM_SHORT_FLY, Upgrades.FLIGHT),
+    FLY(tl -> tl.getFly(), tl -> tl.getFlyShort(), Upgrades.FLIGHT),
 
-    UPGRADE(TL.PERM_UPGRADE, TL.PERM_SHORT_UPGRADE),
+    UPGRADE(tl -> tl.getUpgrade(), tl -> tl.getUpgradeShort()),
 
-    ZONE(TL.PERM_ZONE, TL.PERM_SHORT_ZONE, Upgrades.ZONES),
+    ZONE(tl -> tl.getZone(), tl -> tl.getZoneShort(), Upgrades.ZONES),
     ;
 
-    private final TL desc;
-    private final TL shortDesc;
+    private final String desc;
+    private final String shortDesc;
     private @Nullable Upgrade prerequisite;
 
-    PermissibleActions(TL desc, TL shortDesc) {
-        this.desc = desc;
-        this.shortDesc = shortDesc;
+    PermissibleActions(Function<TranslationsConfig.Protection.Permissions, String> desc, Function<TranslationsConfig.Protection.Permissions, String> shortDesc) {
+        this.desc = desc.apply(FactionsPlugin.instance().tl().protection().permissions());
+        this.shortDesc = shortDesc.apply(FactionsPlugin.instance().tl().protection().permissions());
     }
 
-    PermissibleActions(TL desc, TL shortDesc, Upgrade prerequisite) {
+    PermissibleActions(Function<TranslationsConfig.Protection.Permissions, String> desc, Function<TranslationsConfig.Protection.Permissions, String> shortDesc, Upgrade prerequisite) {
         this(desc, shortDesc);
         this.prerequisite = prerequisite;
     }
 
     @Override
     public String description() {
-        return this.desc.toString();
+        return this.desc;
     }
 
     @Override
     public String shortDescription() {
-        return this.shortDesc.toString();
+        return this.shortDesc;
     }
 
     @Override
