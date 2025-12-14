@@ -1562,6 +1562,9 @@ public class TranslationsConfig {
 
     public static class Protection {
         public static class Permissions {
+            @Comment("Okay, so this first one isn't really a 'permission' but it's also something you're denied from doing.\n" +
+                    "e.g. \"You cannot attack in a safe zone.\"")
+            private String attack = "attack";
             private String ban = "Banning players from the faction";
             private String banShort = "ban";
             private String build = "Building blocks";
@@ -1618,6 +1621,10 @@ public class TranslationsConfig {
             private String warpShort = "use warps";
             private String zone = "Managing faction zones";
             private String zoneShort = "manage zones";
+
+            public String getAttack() {
+                return attack;
+            }
 
             public String getBan() {
                 return ban;
@@ -1844,10 +1851,76 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Denied {
+            private String actionWilderness="<red>You cannot <action> in the wilderness.";
+            private String actionSafezone ="<red>>You cannot <action> in a safe zone.";
+            private String actionWarzone ="<red>You cannot <action> in a war zone.";
+            private String actionTerritory ="<red>You cannot <action> in the territory of <faction>.";
+            private String actionTerritoryPain ="<red>It is painful to <action> in the territory of <faction>.";
+
+            private String useWilderness    ="<red>You cannot use <light_purple><thing></light_purple> in the wilderness.";
+            private String useSafezone      ="<red>You cannot use <light_purple><thing></light_purple> in a safe zone.";
+            private String useWarzone       ="<red>You cannot use <light_purple><thing></light_purple> in a war zone.";
+            private String useTerritory     ="<red>You cannot <light_purple><thing></light_purple> in the territory of <faction>.";
+            @Comment("When not possible to display a more specific description, message like \"You cannot use this\" instead occurs.")
+            private String useThis = "this";
+
+            private String interactionSpamHurtOuch = "Ouch, that is starting to hurt. You should give it a rest.";
+
+            public String getActionWilderness() {
+                return actionWilderness;
+            }
+
+            public String getActionSafezone() {
+                return actionSafezone;
+            }
+
+            public String getActionWarzone() {
+                return actionWarzone;
+            }
+
+            public String getActionTerritory() {
+                return actionTerritory;
+            }
+
+            public String getActionTerritoryPain() {
+                return actionTerritoryPain;
+            }
+
+            public String getUseWilderness() {
+                return useWilderness;
+            }
+
+            public String getUseSafezone() {
+                return useSafezone;
+            }
+
+            public String getUseWarzone() {
+                return useWarzone;
+            }
+
+            public String getUseTerritory() {
+                return useTerritory;
+            }
+
+            public String getUseThis() {
+                return useThis;
+            }
+
+            public String getInteractionSpamHurtOuch() {
+                return interactionSpamHurtOuch;
+            }
+        }
+
+        private Denied denied;
         private Permissions permissions;
 
         public Permissions permissions() {
             return this.permissions;
+        }
+
+        public Denied denied() {
+            return this.denied;
         }
     }
 

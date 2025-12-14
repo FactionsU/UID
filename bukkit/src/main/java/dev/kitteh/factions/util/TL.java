@@ -610,7 +610,6 @@ public enum TL {
     GENERIC_FACTIONTAG_TOOSHORT("&eThe faction tag can't be shorter than &d%1$s&e chars."),
     GENERIC_FACTIONTAG_TOOLONG("&eThe faction tag can't be longer than &d%s&e chars."),
     GENERIC_FACTIONTAG_ALPHANUMERIC("&eFaction tag must be alphanumeric. \"&d%s&e\" is not allowed."),
-    GENERIC_ATTACK("attack"),
 
     /**
      * Clip placeholder stuff
@@ -680,11 +679,6 @@ public enum TL {
      * In the player and entity listeners
      */
     PLAYER_CANTHURT("&eYou may not harm other players in %s"),
-    PLAYER_OUCH("&cOuch, that is starting to hurt. You should give it a rest."),
-    PLAYER_USE_WILDERNESS("&cYou can't use &d%s&c in the wilderness."),
-    PLAYER_USE_SAFEZONE("&cYou can't use &d%s&c in a safe zone."),
-    PLAYER_USE_WARZONE("&cYou can't use &d%s&c in a war zone."),
-    PLAYER_USE_TERRITORY("&cYou can't &d%s&c in the territory of &d%s&c."),
     PLAYER_COMMAND_WARZONE("&cYou can't use the command '%s' in war zone."),
     PLAYER_COMMAND_NEUTRAL("&cYou can't use the command '%s' in neutral territory."),
     PLAYER_COMMAND_ENEMY("&cYou can't use the command '%s' in enemy territory."),

@@ -72,6 +72,7 @@ public class TextUtil {
         return s.repeat(times);
     }
 
+    @Deprecated(forRemoval = true, since = "4.5.0")
     public static String getMaterialName(Material material) {
         return material.toString().replace('_', ' ').toLowerCase();
     }
