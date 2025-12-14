@@ -53,4 +53,9 @@ public class Cloudy {
     public static Description desc(TL tl) {
         return Description.of(ChatColor.stripColor(tl.toString()));
     }
+
+    @ApiStatus.AvailableSince("4.5.0")
+    public static Description desc(String text) {
+        return Description.of(text);
+    }
 }

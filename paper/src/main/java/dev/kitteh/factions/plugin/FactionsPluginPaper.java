@@ -6,6 +6,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.paper.CmdUpgrades;
+import dev.kitteh.factions.command.paper.CmdWarp;
 import dev.kitteh.factions.listener.ListenPaperChat;
 import dev.kitteh.factions.scoreboard.BufferedObjective;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
@@ -75,6 +76,7 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     @Override
     public void addCommands(BiConsumer<String, Cmd> reg, Consumer<Supplier<CommandManager<Sender>>> commandManager) {
         reg.accept("upgrades", new CmdUpgrades());
+        reg.accept("warp", new CmdWarp());
         commandManager.accept(() ->
                 PaperCommandManager.<Sender>builder(SenderMapper.create(
                                 css -> {

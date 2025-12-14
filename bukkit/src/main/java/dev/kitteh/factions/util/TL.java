@@ -191,16 +191,6 @@ public enum TL {
     COMMAND_FLYTRAILS_PARTICLE_CHANGE("&eFaction flight trail effect set to &d%1s"),
     COMMAND_FLYTRAILS_CHANGE("&eFaction flight trail &d%1s"),
 
-    COMMAND_FWARP_WARPED("&eWarped to &6%1$s"),
-    COMMAND_FWARP_INVALID_WARP("&eCouldn't find warp &6%1$s"),
-    COMMAND_FWARP_TOWARP("to warp"),
-    COMMAND_FWARP_FORWARPING("for warping"),
-    COMMAND_FWARP_DESCRIPTION("Teleport to a faction warp"),
-    COMMAND_FWARP_INVALID_PASSWORD("&4Invalid password!"),
-    COMMAND_FWARP_PASSWORD_REQUIRED("&aPlease enter warp password. This will not be visible to anyone else"),
-    COMMAND_FWARP_PASSWORD_CANCEL("&cWarp canceled"),
-    COMMAND_FWARP_NOACCESS("&cYou do not have permission to use %s &cwarps"),
-
     COMMAND_GRACE_DESCRIPTION("View the current grace status"),
     COMMAND_GRACE_NOT_SET("&eGrace is not active"),
     COMMAND_GRACE_ACTIVE("&eGrace active! No explosions for %s"),
@@ -826,7 +816,6 @@ public enum TL {
      */
     WARMUPS_NOTIFY_FLY("&eFlight will enable in &d%d &eseconds."),
     WARMUPS_NOTIFY_HOME("&eYou will teleport home in &d%d &eseconds."),
-    WARMUPS_NOTIFY_WARP("&eYou will teleport to &d%1$s &ein &d%2$d &eseconds."),
     WARMUPS_NOTIFY_STUCK("&eYou will find a safe place to become unstuck in &d%d &eseconds."),
     WARMUPS_NOTIFY_CANCELLED("&cYou have cancelled your pending action!"),
     /**
