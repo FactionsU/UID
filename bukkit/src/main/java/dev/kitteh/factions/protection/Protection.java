@@ -10,10 +10,9 @@ import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.TextUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Location;
@@ -275,7 +274,7 @@ public final class Protection {
             if (material == Material.ITEM_FRAME ||
                     material == Material.GLOW_ITEM_FRAME ||
                     material == Material.ARMOR_STAND) {
-                return Protection.denyInteract(player, location);
+                return Protection.denyInteract(player, location, true);
             }
             return false;
         }
@@ -472,7 +471,13 @@ public final class Protection {
             if (damager instanceof Player plr && plr.canSee(damagedPlayer)) {
                 if (notify) {
                     FPlayer attacker = FPlayers.fPlayers().get(plr);
-                    attacker.msgLegacy(TL.PLAYER_CANTHURT, (defLocFaction.isSafeZone() ? TL.REGION_SAFEZONE.toString() : TL.REGION_PEACEFUL.toString()));
+                    if (defLocFaction.isSafeZone()) {
+                        attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpSafezone());
+                    } else if(defLocFaction.isPeaceful()) {
+                        attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpPeacefulTerritory());
+                    } else { // Unexpected, maybe new feature!
+                        attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpCantHurt(), FPlayerResolver.of("target", attacker, defender));
+                    }
                 }
                 return true;
             }
@@ -497,7 +502,7 @@ public final class Protection {
 
         if (attacker.loginPVPDisabled()) {
             if (notify) {
-                attacker.msgLegacy(TL.PLAYER_PVP_LOGIN, facConf.pvp().getNoPVPDamageToOthersForXSecondsAfterLogin());
+                attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpLogin(), Placeholder.unparsed("seconds", String.valueOf(facConf.pvp().getNoPVPDamageToOthersForXSecondsAfterLogin())));
             }
             return true;
         }
@@ -507,7 +512,13 @@ public final class Protection {
         // so we know from above that the defender isn't in a safezone... what about the attacker, sneaky dog that he might be?
         if (locFaction.noPvPInTerritory()) {
             if (notify) {
-                attacker.msgLegacy(TL.PLAYER_CANTHURT, (locFaction.isSafeZone() ? TL.REGION_SAFEZONE.toString() : TL.REGION_PEACEFUL.toString()));
+                if (locFaction.isSafeZone()) {
+                    attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpSafezone());
+                } else if(locFaction.isPeaceful()) {
+                    attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpPeacefulTerritory());
+                } else { // Unexpected, maybe new feature!
+                    attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpCantHurt(), FPlayerResolver.of("target", attacker, defender));
+                }
             }
             return true;
         }
@@ -525,7 +536,7 @@ public final class Protection {
 
         if (attackFaction.isWilderness() && facConf.pvp().isDisablePVPForFactionlessPlayers()) {
             if (notify) {
-                attacker.msgLegacy(TL.PLAYER_PVP_REQUIREFACTION);
+                attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpRequireFaction());
             }
             return true;
         } else if (defendFaction.isWilderness()) {
@@ -534,21 +545,16 @@ public final class Protection {
                 return false;
             } else if (facConf.pvp().isDisablePVPForFactionlessPlayers()) {
                 if (notify) {
-                    attacker.msgLegacy(TL.PLAYER_PVP_FACTIONLESS);
+                    attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpFactionless());
                 }
                 return true;
             }
         }
 
         if (!defLocFaction.isWarZone() || facConf.pvp().isDisablePeacefulPVPInWarzone()) {
-            if (defendFaction.isPeaceful()) {
+            if (defendFaction.isPeaceful() || attackFaction.isPeaceful()) {
                 if (notify) {
-                    attacker.msgLegacy(TL.PLAYER_PVP_PEACEFUL);
-                }
-                return true;
-            } else if (attackFaction.isPeaceful()) {
-                if (notify) {
-                    attacker.msgLegacy(TL.PLAYER_PVP_PEACEFUL);
+                    attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpPeaceful());
                 }
                 return true;
             }
@@ -559,7 +565,7 @@ public final class Protection {
         // You can not hurt neutral factions
         if (facConf.pvp().isDisablePVPBetweenNeutralFactions() && relation.isNeutral()) {
             if (notify) {
-                attacker.msgLegacy(TL.PLAYER_PVP_NEUTRAL);
+                attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpNeutral());
             }
             return true;
         }
@@ -572,7 +578,7 @@ public final class Protection {
         // You can never hurt faction members or allies
         if (relation.isMember() || relation.isAlly() || relation.isTruce()) {
             if (notify) {
-                attacker.msgLegacy(TL.PLAYER_PVP_CANTHURT, defender.describeToLegacy(attacker));
+                attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpCantHurt(), FPlayerResolver.of("target", attacker, defender));
             }
             return true;
         }
@@ -582,8 +588,8 @@ public final class Protection {
         // You can not hurt neutrals in their own territory.
         if (ownTerritory && relation.isNeutral()) {
             if (notify) {
-                attacker.msgLegacy(TL.PLAYER_PVP_NEUTRALFAIL, defender.describeToLegacy(attacker));
-                defender.msgLegacy(TL.PLAYER_PVP_TRIED, attacker.describeToLegacy(defender, true));
+                attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpNeutralFail(), FPlayerResolver.of("target", attacker, defender));
+                attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpTried(), FPlayerResolver.of("attacker", defender, attacker));
             }
             return true;
         }
