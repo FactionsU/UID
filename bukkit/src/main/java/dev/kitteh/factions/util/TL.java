@@ -617,14 +617,6 @@ public enum TL {
     PLACEHOLDER_ROLE_NAME("None"),
 
     /**
-     * ASCII compass (for chat map)
-     */
-    COMPASS_SHORT_NORTH("N"),
-    COMPASS_SHORT_EAST("E"),
-    COMPASS_SHORT_SOUTH("S"),
-    COMPASS_SHORT_WEST("W"),
-
-    /**
      * Economy stuff
      */
 
@@ -670,15 +662,8 @@ public enum TL {
     ROLE_RECRUIT("recruit"),
 
     /**
-     * Region types.
-     */
-    REGION_SAFEZONE("safezone"),
-
-    REGION_PEACEFUL("peaceful territory"),
-    /**
      * In the player and entity listeners
      */
-    PLAYER_CANTHURT("&eYou may not harm other players in %s"),
     PLAYER_COMMAND_WARZONE("&cYou can't use the command '%s' in war zone."),
     PLAYER_COMMAND_NEUTRAL("&cYou can't use the command '%s' in neutral territory."),
     PLAYER_COMMAND_ENEMY("&cYou can't use the command '%s' in enemy territory."),
@@ -697,16 +682,6 @@ public enum TL {
     PLAYER_POWER_LOSS_WARZONE("&cThe world you are in has power loss normally disabled, but you still lost power since you were in a war zone.\n&eYour power is now &d%d / %d"),
     PLAYER_POWER_NOW("&eYour power is now &d%d / %d"),
     PLAYER_POWER_VAMPIRISM_GAIN("&eStole &d%.2f&e power from %s&e. Your power is now &d%d / %d"),
-
-    PLAYER_PVP_LOGIN("&eYou can't hurt other players for %d seconds after logging in."),
-    PLAYER_PVP_REQUIREFACTION("&eYou can't hurt other players until you join a faction."),
-    PLAYER_PVP_FACTIONLESS("&eYou can't hurt players who are not currently in a faction."),
-    PLAYER_PVP_PEACEFUL("&ePeaceful players cannot participate in combat."),
-    PLAYER_PVP_NEUTRAL("&eYou can't hurt neutral factions. Declare them as an enemy."),
-    PLAYER_PVP_CANTHURT("&eYou can't hurt %s&e."),
-
-    PLAYER_PVP_NEUTRALFAIL("&eYou can't hurt %s&e in their own territory unless you declare them as an enemy."),
-    PLAYER_PVP_TRIED("%s&e tried to hurt you."),
 
     PLAYER_TELEPORTEDONJOIN("&eYou were teleported out of %s territory"),
 

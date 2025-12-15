@@ -1852,16 +1852,27 @@ public class TranslationsConfig {
         }
 
         public static class Denied {
-            private String actionWilderness="<red>You cannot <action> in the wilderness.";
-            private String actionSafezone ="<red>>You cannot <action> in a safe zone.";
-            private String actionWarzone ="<red>You cannot <action> in a war zone.";
-            private String actionTerritory ="<red>You cannot <action> in the territory of <faction>.";
-            private String actionTerritoryPain ="<red>It is painful to <action> in the territory of <faction>.";
+            private String actionWilderness = "<red>You cannot <action> in the wilderness.";
+            private String actionSafezone = "<red>>You cannot <action> in a safe zone.";
+            private String actionWarzone = "<red>You cannot <action> in a war zone.";
+            private String actionTerritory = "<red>You cannot <action> in the territory of <faction>.";
+            private String actionTerritoryPain = "<red>It is painful to <action> in the territory of <faction>.";
 
-            private String useWilderness    ="<red>You cannot use <light_purple><thing></light_purple> in the wilderness.";
-            private String useSafezone      ="<red>You cannot use <light_purple><thing></light_purple> in a safe zone.";
-            private String useWarzone       ="<red>You cannot use <light_purple><thing></light_purple> in a war zone.";
-            private String useTerritory     ="<red>You cannot <light_purple><thing></light_purple> in the territory of <faction>.";
+            private String pvpLogin = "<yellow>You can't hurt other players for <seconds> seconds after logging in.";
+            private String pvpRequireFaction = "<yellow>You can't hurt other players until you join a faction.";
+            private String pvpFactionless = "<yellow>You can't hurt players who are not currently in a faction.";
+            private String pvpPeaceful = "<yellow><fuuid:color:peaceful>Peaceful</fuuid:color:peaceful> players cannot participate in combat.";
+            private String pvpNeutral = "<yellow>You can't hurt <fuuid:color:relation:neutral>neutral</fuuid:color:relation:neutral> factions. Declare them as an <fuuid:color:relation:enemy>enemy</fuuid:color:relation:enemy>.";
+            private String pvpCantHurt = "<yellow>You can't hurt <target>.";
+            private String pvpNeutralFail = "<yellow>You can't hurt <target> in their own territory unless you declare them as an <fuuid:color:relation:enemy>enemy</fuuid:color:relation:enemy>.";
+            private String pvpTried = "<yellow><attacker> tried to hurt you.";
+            private String pvpPeacefulTerritory = "<yellow>You may not harm other players in <fuuid:color:peaceful>peaceful</fuuid:color:peaceful> territory.";
+            private String pvpSafezone = "<yellow>You may not harm other players in a <fuuid:color:safezone>safe zone</fuuid:color:peaceful>.";
+
+            private String useWilderness = "<red>You cannot use <light_purple><thing></light_purple> in the wilderness.";
+            private String useSafezone = "<red>You cannot use <light_purple><thing></light_purple> in a safe zone.";
+            private String useWarzone = "<red>You cannot use <light_purple><thing></light_purple> in a war zone.";
+            private String useTerritory = "<red>You cannot <light_purple><thing></light_purple> in the territory of <faction>.";
             @Comment("When not possible to display a more specific description, message like \"You cannot use this\" instead occurs.")
             private String useThis = "this";
 
@@ -1885,6 +1896,46 @@ public class TranslationsConfig {
 
             public String getActionTerritoryPain() {
                 return actionTerritoryPain;
+            }
+
+            public String getPvpLogin() {
+                return pvpLogin;
+            }
+
+            public String getPvpRequireFaction() {
+                return pvpRequireFaction;
+            }
+
+            public String getPvpFactionless() {
+                return pvpFactionless;
+            }
+
+            public String getPvpPeaceful() {
+                return pvpPeaceful;
+            }
+
+            public String getPvpNeutral() {
+                return pvpNeutral;
+            }
+
+            public String getPvpCantHurt() {
+                return pvpCantHurt;
+            }
+
+            public String getPvpNeutralFail() {
+                return pvpNeutralFail;
+            }
+
+            public String getPvpTried() {
+                return pvpTried;
+            }
+
+            public String getPvpPeacefulTerritory() {
+                return pvpPeacefulTerritory;
+            }
+
+            public String getPvpSafezone() {
+                return pvpSafezone;
             }
 
             public String getUseWilderness() {
