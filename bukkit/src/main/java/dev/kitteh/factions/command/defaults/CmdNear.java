@@ -6,9 +6,13 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
-import dev.kitteh.factions.tag.Tag;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Location;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -17,18 +21,22 @@ import org.incendo.cloud.context.CommandContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdNear implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("near")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_NEAR_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.NEAR).and(Cloudy.hasFaction())))
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().near();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(TL.COMMAND_NEAR_DESCRIPTION))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.NEAR).and(Cloudy.hasFaction())))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
@@ -53,29 +61,33 @@ public class CmdNear implements Cmd {
             }
         }
 
-        StringBuilder playerMessageBuilder = new StringBuilder();
-        String playerMessage = TL.COMMAND_NEAR_PLAYER.toString();
-        for (FPlayer member : nearbyMembers) {
-            playerMessageBuilder.append(parsePlaceholders(sender, member, playerMessage));
-        }
-        // Append none text if no players where found
-        if (playerMessageBuilder.toString().isEmpty()) {
-            playerMessageBuilder.append(TL.COMMAND_NEAR_NONE);
+        var tl = FactionsPlugin.instance().tl().commands().near();
+        if (nearbyMembers.isEmpty()) {
+            sender.sendRichMessage(tl.getNoneNearby());
+            return;
         }
 
-        sender.msgLegacy(TL.COMMAND_NEAR_PLAYERLIST.toString().replace("{players-nearby}", playerMessageBuilder.toString()));
-    }
+        List<Component> messages = new ArrayList<>();
 
-    private String parsePlaceholders(FPlayer user, FPlayer target, String string) {
-        string = Tag.parsePlain(target, string);
-        string = Tag.parsePlaceholders(target.asPlayer(), string);
-        string = string.replace("{role}", target.role().toString());
-        string = string.replace("{role-prefix}", target.role().getPrefix());
-        // Only run distance calculation if needed
-        if (string.contains("{distance}")) {
-            double distance = Math.round(user.asPlayer().getLocation().distance(target.asPlayer().getLocation()));
-            string = string.replace("{distance}", distance + "");
+        while (!nearbyMembers.isEmpty()) {
+            TextComponent.Builder builder = Component.text();
+            if (messages.isEmpty()) {
+                builder.append(Mini.parse(tl.getStartOfLine()));
+            }
+            for (int x = 0; x < 20 && x < nearbyMembers.size(); x++) {
+                FPlayer member = nearbyMembers.removeFirst();
+                builder.append(Mini.parse(tl.getPerPlayer(),
+                        FPlayerResolver.of("player", sender, member),
+                        Placeholder.unparsed("distance", String.valueOf(Math.round(loc.distance(member.asPlayer().getLocation()))))));
+                if (x < nearbyMembers.size() - 1) {
+                    builder.append(Component.text(", "));
+                }
+            }
+            messages.add(builder.build());
         }
-        return string;
+
+        for (Component message : messages) {
+            sender.sendMessage(message);
+        }
     }
 }
