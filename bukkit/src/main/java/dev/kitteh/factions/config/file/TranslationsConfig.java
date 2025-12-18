@@ -189,8 +189,30 @@ public class TranslationsConfig {
             }
         }
 
-        public static class Set extends AbsCommand {
-            public Set() {
+        public static class Near extends AbsCommand {
+            public Near() {
+                super("near");
+            }
+
+            private String perPlayer = "<player> <dark_gray>(<distance>)</dark_gray>";
+            private String startOfLine = "<yellow>Near: </yellow>";
+            private String noneNearby = "<yellow>No faction members nearby</yellow>";
+
+            public String getPerPlayer() {
+                return perPlayer;
+            }
+
+            public String getStartOfLine() {
+                return startOfLine;
+            }
+
+            public String getNoneNearby() {
+                return noneNearby;
+            }
+        }
+
+        public static class SetCmd extends AbsCommand {
+            public SetCmd() {
                 super("set");
             }
         }
@@ -1119,7 +1141,8 @@ public class TranslationsConfig {
         private Confirm confirm = new Confirm();
         private ListCmd list = new ListCmd();
         private MapCmd map = new MapCmd();
-        private Set set = new Set();
+        private Near near = new Near();
+        private SetCmd set = new SetCmd();
         private Show show = new Show();
         private Permissions permissions = new Permissions();
         private Upgrades upgrades = new Upgrades();
@@ -1146,7 +1169,11 @@ public class TranslationsConfig {
             return map;
         }
 
-        public Set set() {
+        public Near near() {
+            return near;
+        }
+
+        public SetCmd set() {
             return set;
         }
 
