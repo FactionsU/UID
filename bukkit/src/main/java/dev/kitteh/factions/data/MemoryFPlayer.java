@@ -572,21 +572,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public int powerRounded() {
-        return (int) Math.round(this.power());
-    }
-
-    @Override
-    public int powerMaxRounded() {
-        return (int) Math.round(this.powerMax());
-    }
-
-    @Override
-    public int powerMinRounded() {
-        return (int) Math.round(this.powerMin());
-    }
-
-    @Override
     public void updatePower() {
         if (!this.isOnline()) {
             losePowerFromBeingOffline();

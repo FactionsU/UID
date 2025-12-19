@@ -154,11 +154,17 @@ public interface FPlayer extends Participator, Selectable {
 
     double powerMin();
 
-    int powerRounded();
+    default int powerRounded() {
+        return (int) Math.round(this.power());
+    }
 
-    int powerMaxRounded();
+    default int powerMaxRounded() {
+        return (int) Math.round(this.powerMax());
+    }
 
-    int powerMinRounded();
+    default int powerMinRounded() {
+        return (int) Math.round(this.powerMin());
+    }
 
     double powerBoost();
 
