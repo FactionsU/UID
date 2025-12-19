@@ -18,10 +18,14 @@ public class ComponentDispatcher {
             commandSender.spigot().sendMessage(ComponentSerializer.deserialize(GsonComponentSerializer.gson().serializeToTree(component.asComponent())));
     private static BiConsumer<Player, ComponentLike> actionBarSender = (player, component) ->
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, ComponentSerializer.deserialize(GsonComponentSerializer.gson().serializeToTree(component.asComponent())));
+    private static HexConsumer<Player, ComponentLike, ComponentLike, Integer, Integer, Integer> titleSender = (player, title, subtitle, fadeIn, stay, fadeOut) ->
+            player.sendTitle(Mini.toLegacy(title), Mini.toLegacy(subtitle), fadeIn, stay, fadeOut);
 
-    public static void setSenders(BiConsumer<CommandSender, ComponentLike> componentSender,  BiConsumer<Player, ComponentLike> actionBarSender) {
+    public static void setSenders(BiConsumer<CommandSender, ComponentLike> componentSender, BiConsumer<Player, ComponentLike> actionBarSender,
+                                  HexConsumer<Player, ComponentLike, ComponentLike, Integer, Integer, Integer> titleSender) {
         ComponentDispatcher.componentSender = componentSender;
         ComponentDispatcher.actionBarSender = actionBarSender;
+        ComponentDispatcher.titleSender = titleSender;
     }
 
     public static void send(CommandSender commandSender, ComponentLike component) {
@@ -30,5 +34,9 @@ public class ComponentDispatcher {
 
     public static void sendActionBar(Player player, ComponentLike component) {
         actionBarSender.accept(player, component);
+    }
+
+    public static void sendTitle(Player player, ComponentLike title, ComponentLike subtitle, int fadeInTicks, int stayTicks, int fadeOutTicks) {
+        titleSender.accept(player, title, subtitle, fadeInTicks, stayTicks, fadeOutTicks);
     }
 }
