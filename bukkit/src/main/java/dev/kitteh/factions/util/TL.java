@@ -300,9 +300,6 @@ public enum TL {
     COMMAND_MONEYWITHDRAW_WITHDRAW("%1$s withdrew %2$s from the faction bank: %3$s"),
 
     COMMAND_NEAR_DESCRIPTION("Show nearby faction members"),
-    COMMAND_NEAR_PLAYER("&a&l{role-prefix}&8{name} (&d{distance}m&8)"),
-    COMMAND_NEAR_PLAYERLIST("&eNear: {players-nearby}"),
-    COMMAND_NEAR_NONE("&8None"),
 
     COMMAND_OPEN_TOOPEN("to open or close the faction"),
     COMMAND_OPEN_FOROPEN("for opening or closing the faction"),
@@ -705,7 +702,6 @@ public enum TL {
     TOGGLE_SB("toggle-sb", "You now have scoreboards set to {value}"),
     FACTIONS_ANNOUNCEMENT_TOP("faction-announcement-top", "&d--Unread Faction Announcements--"),
     FACTIONS_ANNOUNCEMENT_BOTTOM("faction-announcement-bottom", "&d--Unread Faction Announcements--"),
-    DEFAULT_PREFIX("default-prefix", "{relationcolor}[{faction}] &r"),
     FACTION_LOGIN("faction-login", "&e%1$s &9logged in."),
     FACTION_LOGOUT("faction-logout", "&e%1$s &9logged out.."),
     NOFACTION_PREFIX("nofactions-prefix", "&6[&ano-faction&6]&r"),

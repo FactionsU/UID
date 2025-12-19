@@ -2660,12 +2660,12 @@ public class MainConfig {
             @Comment("If true, show configured prefixes on nametags and in tab list if this scoreboard is enabled")
             private boolean prefixes = true;
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            private String prefixTemplate = "{relationcolor}[{faction}] &r";
+            private String prefixTemplate = "";
 
             @Comment("If true, show configured suffixes on nametags and in tab list if this scoreboard is enabled")
             private boolean suffixes = false;
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            private String suffixTemplate = " {relationcolor}[{faction}]";
+            private String suffixTemplate = "";
 
             private boolean factionlessEnabled = false;
 
@@ -2704,7 +2704,7 @@ public class MainConfig {
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private List<String> content = new ArrayList<>();
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            private String title = "{faction-relation-color}{faction}";
+            private String title = "";
 
             public boolean isAlsoSendChat() {
                 return alsoSendChat;
