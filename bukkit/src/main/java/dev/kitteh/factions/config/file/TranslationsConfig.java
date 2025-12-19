@@ -230,7 +230,7 @@ public class TranslationsConfig {
 
             private List<String> normalFormat = new ArrayList<>() {
                 {
-                    this.add("<fuuid:title><faction:relation_color><faction:name>");
+                    this.add("<fuuid:title><faction>");
                     this.add("<gold>Description: <yellow><faction:description>");
                     this.add("<gold><faction:if_open>No invitation required</faction:if_open><faction:if_open:else>Invitation required</faction:if_open:else><faction:if_peaceful>.    <fuuid:color:peaceful>Peaceful");
                     this.add("<gold>Land / Power / Max Power: <yellow><faction:claims_count></yellow> / <yellow><faction:power></yellow> / <yellow><faction:power_max>");
@@ -871,15 +871,15 @@ public class TranslationsConfig {
             }
 
             private String description = "Teleport to a faction warp";
-            private String noPermission = "<red>You do not have permission to use <faction:relation_color><faction:name> warps.";
+            private String noPermission = "<red>You do not have permission to use <faction> warps.";
             private String invalidPassword = "<red>Invalid password!";
             private String warped = "<yellow>Warped to <green><warp>.";
             private String invalidWarp = "<red>Couldn't find warp '<warp>.'";
             private String warmup = "<yellow>You will teleport to <green><warp></green> in <green><seconds></green> seconds.";
-            private String noWarps = "<yellow><faction:relation_color><faction:name> has no warps.";
+            private String noWarps = "<yellow><faction> has no warps.";
 
             private String menuWarpName = "<green><warp>";
-            private String menuTitle = "<faction:relation_color><faction:name> warps";
+            private String menuTitle = "<faction> warps";
             private List<String> menuBody = new ArrayList<>() {
                 {
                     this.add("Click the warp name below to teleport!");
@@ -2081,7 +2081,7 @@ public class TranslationsConfig {
                     this.add("<faction:claims_count>");
                 }
             };
-            private String title = "<faction:relation_color><faction:name>";
+            private String title = "<faction>";
 
             public List<String> getContent() {
                 return content != null ? Collections.unmodifiableList(content) : Collections.emptyList();

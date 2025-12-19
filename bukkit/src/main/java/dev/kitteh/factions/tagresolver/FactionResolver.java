@@ -51,7 +51,7 @@ public class FactionResolver extends ObservedResolver {
         String main = arguments.hasNext() ? arguments.pop().lowerValue() : "";
 
         return switch (main) {
-            case "", "name_decorated" -> tagLegacy(faction.describeToLegacy(observer));
+            case "", "name_decorated" -> tag(Component.text().content(faction.tag()).color(faction.textColorTo(observer)));
 
             case "name", "tag" -> tag(faction.tag());
 
