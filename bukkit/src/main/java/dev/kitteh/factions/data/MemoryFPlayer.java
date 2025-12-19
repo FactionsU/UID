@@ -24,6 +24,7 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.tag.Tag;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
@@ -671,15 +672,15 @@ public abstract class MemoryFPlayer implements FPlayer {
         boolean showChat = true;
         Player player = asPlayer();
 
+        var tl = FactionsPlugin.instance().tl().general().enterTitles();
+
         if (showTitle && player != null) {
             int in = FactionsPlugin.instance().conf().factions().enterTitles().getFadeIn();
             int stay = FactionsPlugin.instance().conf().factions().enterTitles().getStay();
             int out = FactionsPlugin.instance().conf().factions().enterTitles().getFadeOut();
 
-            String title = Tag.parsePlain(toShow, this, FactionsPlugin.instance().conf().factions().enterTitles().getTitle());
-            String sub = TextUtil.parse(Tag.parsePlain(toShow, this, FactionsPlugin.instance().conf().factions().enterTitles().getSubtitle()));
-
-            player.sendTitle(title, sub, in, stay, out);
+            FactionResolver factionResolver = FactionResolver.of(this, toShow);
+            ComponentDispatcher.sendTitle(player, Mini.parse(tl.getTitle(), factionResolver), Mini.parse(tl.getSubtitle(), factionResolver), in, stay, out);
 
             showChat = FactionsPlugin.instance().conf().factions().enterTitles().isAlsoShowChat();
         }
@@ -689,7 +690,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             showChat = FactionsPlugin.instance().conf().scoreboard().info().isAlsoSendChat();
         }
         if (showChat) {
-            this.sendMessageLegacy(TextUtil.parse(TL.FACTION_LEAVE.format(from.tagLegacy(this), toShow.tagLegacy(this))));
+            this.sendRichMessage(tl.getChat(), FactionResolver.of("oldfaction", player, from), FactionResolver.of("newfaction", player, toShow));
         }
     }
 

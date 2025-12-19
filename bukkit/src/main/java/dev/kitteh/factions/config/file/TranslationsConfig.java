@@ -1209,6 +1209,32 @@ public class TranslationsConfig {
         }
     }
 
+    public static class General {
+        public static class EnterTitles {
+            private String title = "<faction>";
+            private String subtitle = "<gray><faction:description>";
+            private String chat = "<gold>Leaving <oldfaction>. Entering <newfaction>.";
+
+            public String getTitle() {
+                return title;
+            }
+
+            public String getSubtitle() {
+                return subtitle;
+            }
+
+            public String getChat() {
+                return chat;
+            }
+        }
+
+        private EnterTitles enterTitles = new EnterTitles();
+
+        public EnterTitles enterTitles() {
+            return enterTitles;
+        }
+    }
+
     public static class Economy {
         public static class Actions {
             private String warpFor = "for warping";
@@ -2203,6 +2229,7 @@ public class TranslationsConfig {
     @Comment("This config file will slowly become the location for all text content\n" +
             "All information here uses MiniMessage. https://docs.papermc.io/adventure/minimessage/")
     private Commands commands = new Commands();
+    private General general = new General();
     private Economy economy = new Economy();
     private Permissions permissions = new Permissions();
     private Placeholders placeholders = new Placeholders();
@@ -2216,6 +2243,10 @@ public class TranslationsConfig {
 
     public Economy economy() {
         return economy;
+    }
+
+    public General general() {
+        return general;
     }
 
     public Permissions permissions() {

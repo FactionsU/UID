@@ -34,6 +34,16 @@ public class FactionResolver extends ObservedResolver {
         return new FactionResolver("faction", observer, faction);
     }
 
+    @ApiStatus.AvailableSince("4.5.0")
+    public static FactionResolver of(String name, @Nullable FPlayer observer, Faction faction) {
+        return new FactionResolver(name, observer, faction);
+    }
+
+    @ApiStatus.AvailableSince("4.5.0")
+    public static FactionResolver of(String name, @Nullable Player observer, Faction faction) {
+        return new FactionResolver(name, observer, faction);
+    }
+
     private final Faction faction;
 
     public FactionResolver(String name, @Nullable FPlayer observer, Faction faction) {
