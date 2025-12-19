@@ -13,6 +13,7 @@ import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.scoreboard.numbers.NumberFormat;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,7 +42,9 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     public void onPluginLoad() {
         ComponentDispatcher.setSenders(
                 (commandSender, component) -> commandSender.sendMessage(component),
-                (commandSender, component) -> commandSender.sendActionBar(component)
+                (commandSender, component) -> commandSender.sendActionBar(component),
+                (player, title, subtitle, fadeIn, stay, fadeOut) ->
+                        player.showTitle(Title.title(title.asComponent(), subtitle.asComponent(), fadeIn, stay, fadeOut))
         );
 
         BufferedObjective.objectiveConsumer = objective -> objective.numberFormat(NumberFormat.blank());
