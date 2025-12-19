@@ -19,10 +19,6 @@ public class TextUtil {
     private TextUtil() {
     }
 
-    public static String upperCaseFirst(String string) {
-        return string.substring(0, 1).toUpperCase() + string.substring(1);
-    }
-
     @ApiStatus.AvailableSince("4.3.0")
     public static Component titleize(Component title, @Nullable Context ctx) {
         var tiTL = FactionsPlugin.instance().tl().placeholders().title();
@@ -49,6 +45,11 @@ public class TextUtil {
     @ApiStatus.AvailableSince("4.3.0")
     public static Component titleize(Component title) {
         return titleize(title, null);
+    }
+
+    @Deprecated(forRemoval = true, since = "4.5.0")
+    public static String upperCaseFirst(String string) {
+        return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 
     @ApiStatus.Obsolete
