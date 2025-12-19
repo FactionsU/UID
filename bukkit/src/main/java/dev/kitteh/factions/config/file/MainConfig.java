@@ -2131,8 +2131,10 @@ public class MainConfig {
             private int stay = 70;
             private int fadeOut = 20;
             private boolean alsoShowChat = false;
-            private String title = "{faction-relation-color}{faction}";
-            private String subtitle = "&7{description}";
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            private String title = "";
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            private String subtitle = "";
 
             public boolean isEnabled() {
                 return enabled;
@@ -2152,14 +2154,6 @@ public class MainConfig {
 
             public boolean isAlsoShowChat() {
                 return alsoShowChat;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public String getSubtitle() {
-                return subtitle;
             }
         }
 
