@@ -138,20 +138,22 @@ public class CommandsRoot {
 
     @SuppressWarnings("unused")
     private static void close() {
-        AbstractFactionsPlugin plugin =  AbstractFactionsPlugin.instance();
+        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
 
         CommandManager<Sender> manager = CommandsRoot.commandManager.get();
 
         manager.captionRegistry().registerProvider(new Captioner());
 
+        var main = plugin.tl().commands().generic().getCommandRoot();
+        var helpTl = plugin.tl().commands().help();
+
         MinecraftHelp<Sender> help = MinecraftHelp.<Sender>builder()
                 .commandManager(manager)
                 .audienceProvider(LilAudience::new)
-                .commandPrefix("/f help")
+                .commandPrefix("/" + main.getFirstAlias() + " " + helpTl.getFirstAlias())
                 .commandFilter(command -> !command.commandMeta().contains(Cmd.HIDE_IN_HELP))
                 .build();
 
-        var main = plugin.tl().commands().generic().getCommandRoot();
         Command.Builder<Sender> builder = manager.commandBuilder(main.getFirstAlias(), main.getSecondaryAliases())
                 .permission(Cloudy.predicate(sender -> WorldUtil.isEnabled(sender.sender())));
         registry.values().forEach(reg -> {
@@ -174,7 +176,7 @@ public class CommandsRoot {
         });
 
         manager.command(
-                builder.literal("help")
+                builder.literal(helpTl.getFirstAlias(), helpTl.getSecondaryAliases())
                         .optional(
                                 "query",
                                 StringParser.greedyStringParser(),

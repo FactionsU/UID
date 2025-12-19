@@ -84,6 +84,12 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Help extends AbsCommand {
+            public Help() {
+                super("help");
+            }
+        }
+
         public static class ListCmd extends AbsCommand {
             public ListCmd() {
                 super("list");
@@ -1139,6 +1145,7 @@ public class TranslationsConfig {
 
         private Chat chat = new Chat();
         private Confirm confirm = new Confirm();
+        private Help help = new Help();
         private ListCmd list = new ListCmd();
         private MapCmd map = new MapCmd();
         private Near near = new Near();
@@ -1159,6 +1166,10 @@ public class TranslationsConfig {
 
         public Confirm confirm() {
             return confirm;
+        }
+
+        public Help help() {
+            return help;
         }
 
         public ListCmd list() {
