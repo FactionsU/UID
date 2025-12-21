@@ -28,7 +28,6 @@ import java.text.SimpleDateFormat;
  */
 @Deprecated(forRemoval = true, since = "4.5.0")
 @ApiStatus.Internal
-@ApiStatus.Obsolete
 public enum TL {
     /**
      * Translation meta

@@ -57,7 +57,6 @@ public class RelationUtil {
         return null;
     }
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")
     public static String describeThatToMeLegacy(Participator that, Participator me, boolean ucfirst) {
         String ret = "";
@@ -93,13 +92,11 @@ public class RelationUtil {
         return getLegacyColorStringOfThatToMe(that, me) + ret;
     }
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")
     public static String describeThatToMeLegacy(Participator that, Participator me) {
         return describeThatToMeLegacy(that, me, false);
     }
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")
     public static String getLegacyColorStringOfThatToMe(Participator that, Participator me) {
         return TextUtil.getLegacyString(getTextColorOfThatToMe(that, me));

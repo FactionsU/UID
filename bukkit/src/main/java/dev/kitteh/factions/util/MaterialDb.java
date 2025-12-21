@@ -3,7 +3,6 @@ package dev.kitteh.factions.util;
 import com.google.gson.reflect.TypeToken;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Material;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -11,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-@ApiStatus.Obsolete
 @Deprecated(forRemoval = true, since = "4.0.0")
 public class MaterialDb {
     private static Map<String, Material> map;
