@@ -345,7 +345,6 @@ public interface Faction extends Participator, Selectable {
 
     void tag(String str);
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")
     String tagLegacy(@Nullable Participator participator);
 
@@ -572,7 +571,6 @@ public interface Faction extends Participator, Selectable {
         }
     }
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")
     default void sendMessageLegacy(String message) {
         for (FPlayer fplayer : this.membersOnline(true)) {

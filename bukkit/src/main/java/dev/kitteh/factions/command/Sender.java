@@ -76,7 +76,6 @@ public interface Sender {
         return this instanceof Player p ? p.fPlayer() : null;
     }
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")
     default void msgLegacy(TL translation, Object... args) {
         sender().sendMessage(TextUtil.parse(translation.toString(), args));

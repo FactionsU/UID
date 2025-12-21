@@ -114,7 +114,6 @@ public interface FPlayer extends Participator, Selectable {
 
     void lastStoodAt(FLocation flocation);
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")
     default String titleLegacy() {
         return Mini.toLegacy(this.title());
@@ -126,7 +125,6 @@ public interface FPlayer extends Participator, Selectable {
 
     Component nameWithTitle();
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")
     default String nameWithTitleLegacy() {
         return Mini.toLegacy(this.nameWithTitle());
@@ -134,7 +132,6 @@ public interface FPlayer extends Participator, Selectable {
 
     Component nameWithTag();
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")
     default String nameWithTagLegacy() {
         return Mini.toLegacy(this.nameWithTag());
@@ -207,11 +204,9 @@ public interface FPlayer extends Participator, Selectable {
 
     boolean isOnline();
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")
     void sendMessageLegacy(String message);
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.0.0")
     void sendMessageLegacy(List<String> messages);
 

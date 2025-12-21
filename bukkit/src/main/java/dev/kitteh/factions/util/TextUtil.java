@@ -52,7 +52,6 @@ public class TextUtil {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.5.0")
     public static String getLegacyString(TextColor color) {
         if (color instanceof NamedTextColor namedTextColor) {
@@ -84,19 +83,16 @@ public class TextUtil {
         return builder.toString();
     }
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.3.0")
     public static String parse(String str, Object... args) {
         return String.format(parse(str), args);
     }
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.3.0")
     public static String parse(String str) {
         return ChatColor.translateAlternateColorCodes('&', str);
     }
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.3.0")
     public static String repeat(String s, int times) {
         return s.repeat(times);
@@ -107,13 +103,11 @@ public class TextUtil {
         return material.toString().replace('_', ' ').toLowerCase();
     }
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.3.0")
     public static String titleizeLegacy(String str) {
         return Mini.toLegacy(titleize(str));
     }
 
-    @ApiStatus.Obsolete
     @Deprecated(forRemoval = true, since = "4.3.0")
     public static Component titleize(String string) {
         return titleize(LegacyComponentSerializer.legacySection().deserialize(string));
