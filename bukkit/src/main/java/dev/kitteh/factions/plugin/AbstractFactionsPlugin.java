@@ -53,7 +53,6 @@ import dev.kitteh.factions.util.AutoLeaveTask;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.FlightUtil;
 import dev.kitteh.factions.util.LazyLocation;
-import dev.kitteh.factions.util.MaterialDb;
 import dev.kitteh.factions.util.Metrics;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.SeeChunkUtil;
@@ -334,8 +333,8 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
             dataFolder.mkdir();
         }
 
-        // Load Material database
-        MaterialDb.load();
+        // Load Material database - TODO remove
+        dev.kitteh.factions.util.MaterialDb.load();
 
         // Hit all material lookups in config
         {

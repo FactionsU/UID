@@ -30,7 +30,8 @@ public class MaterialDb {
         if (material == null) {
             material = map.get(name.toUpperCase());
             if (material != null) {
-                AbstractFactionsPlugin.instance().getLogger().warning("Outdated material name \"" + name + "\" found in a config - update it to \"" + material.name() + "\" ASAP!");
+                AbstractFactionsPlugin.instance().getLogger().warning("Outdated material name \"" + name + "\" found in a config - update it to \"" + material.name() + "\" ASAP!\n" +
+                        "This wrong name will stop working in a future plugin update.");
             }
         }
 
