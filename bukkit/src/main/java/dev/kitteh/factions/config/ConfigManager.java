@@ -28,13 +28,13 @@ public class ConfigManager {
     }
 
     public void loadConfigs() {
+        this.loadConfig("main", this.mainConfig);
+        this.loadConfig("translations", this.translationsConfig);
+
         if (this.permissionsConfig == null) {
             this.permissionsConfig = new PermissionsConfig();
         }
-
-        this.loadConfig("translations", this.translationsConfig);
         this.loadConfig("permissions", this.permissionsConfig);
-        this.loadConfig("main", this.mainConfig);
         this.loadConfig("dynmap", this.dynmapConfig);
     }
 
