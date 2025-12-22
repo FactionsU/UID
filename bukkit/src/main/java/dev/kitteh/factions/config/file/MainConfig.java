@@ -930,6 +930,7 @@ public class MainConfig {
                 private boolean tagPadBefore = false;
                 private boolean tagPadAfter = true;
                 private String tagFormat = "%s§f";
+                private String tagNoFaction = "§6[§ano-faction§6]§r";
                 private boolean alwaysShowChatTag = true;
 
                 public boolean isTagHandledByAnotherPlugin() {
@@ -966,6 +967,10 @@ public class MainConfig {
 
                 public String getTagFormat() {
                     return tagFormat;
+                }
+
+                public String getTagNoFaction() {
+                    return tagNoFaction;
                 }
 
                 public boolean isAlwaysShowChatTag() {
