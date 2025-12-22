@@ -781,10 +781,12 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         log(Level.INFO, msg);
     }
 
+    @Deprecated(forRemoval = true, since = "4.5.0")
     public void log(String str, Object... args) {
         log(Level.INFO, TextUtil.parse(str, args));
     }
 
+    @Deprecated(forRemoval = true, since = "4.5.0")
     public void log(Level level, String str, Object... args) {
         log(level, TextUtil.parse(str, args));
     }
