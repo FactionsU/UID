@@ -12,7 +12,7 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.tagresolver.FactionResolver;
-import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.Component;
@@ -135,7 +135,7 @@ public class ListenSpigotChat implements Listener {
         if (!chatConf.getTagReplaceString().isEmpty() && eventFormat.contains(chatConf.getTagReplaceString())) {
             // we're using the "replace" method of inserting the faction tags
             if (eventFormat.contains("[FACTION_TITLE]")) {
-                eventFormat = eventFormat.replace("[FACTION_TITLE]", me.titleLegacy());
+                eventFormat = eventFormat.replace("[FACTION_TITLE]", Mini.toLegacy(me.title()));
             }
             InsertIndex = eventFormat.indexOf(chatConf.getTagReplaceString());
             eventFormat = eventFormat.replace(chatConf.getTagReplaceString(), "");
@@ -183,10 +183,14 @@ public class ListenSpigotChat implements Listener {
     }
 
     private String chatTagLegacy(FPlayer me) {
-        return me.hasFaction() ? String.format(FactionsPlugin.instance().conf().factions().chat().spigot().getTagFormat(), me.role().getPrefix() + (me.hasFaction() ? me.faction().tag() : "")) : TL.NOFACTION_PREFIX.toString();
+        return me.hasFaction() ?
+                String.format(FactionsPlugin.instance().conf().factions().chat().spigot().getTagFormat(), me.role().getPrefix() + (me.hasFaction() ? me.faction().tag() : "")) :
+                FactionsPlugin.instance().conf().factions().chat().spigot().getTagNoFaction();
     }
 
     private String chatTagLegacy(FPlayer me, FPlayer participator) {
-        return me.hasFaction() ? TextUtil.getLegacyString(me.relationTo(participator).color()) + chatTagLegacy(me) : TL.NOFACTION_PREFIX.toString();
+        return me.hasFaction() ?
+                TextUtil.getLegacyString(me.relationTo(participator).color()) + chatTagLegacy(me) :
+                FactionsPlugin.instance().conf().factions().chat().spigot().getTagNoFaction();
     }
 }
