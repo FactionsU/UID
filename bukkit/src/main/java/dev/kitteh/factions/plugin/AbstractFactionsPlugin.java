@@ -265,7 +265,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
             }
         }
 
-        loadLang();
+        loadLang(); // Call before config loading to run cleanup - TODO remove in 5.0
 
         this.gson = this.getGsonBuilder(true).create();
         // Load Conf from disk
@@ -649,7 +649,9 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         this.worldguard = wg;
     }
 
+    @Deprecated(forRemoval = true, since = "4.5.0")
     public void loadLang() {
+        // TODO migrate part to conf transitioner in 5.0
         Path langPath = this.getDataFolder().toPath().resolve("config/lang.yml");
         if (!Files.exists(langPath)) {
             Path oldLangPath = this.getDataFolder().toPath().resolve("lang.yml");
