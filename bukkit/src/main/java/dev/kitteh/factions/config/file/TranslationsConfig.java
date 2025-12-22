@@ -1922,13 +1922,13 @@ public class TranslationsConfig {
             private String actionTerritory = "<red>You cannot <action> in the territory of <faction>.";
             private String actionTerritoryPain = "<red>It is painful to <action> in the territory of <faction>.";
 
-            private String pvpLogin = "<yellow>You can't hurt other players for <seconds> seconds after logging in.";
-            private String pvpRequireFaction = "<yellow>You can't hurt other players until you join a faction.";
-            private String pvpFactionless = "<yellow>You can't hurt players who are not currently in a faction.";
+            private String pvpLogin = "<yellow>You cannot hurt other players for <seconds> seconds after logging in.";
+            private String pvpRequireFaction = "<yellow>You cannot hurt other players until you join a faction.";
+            private String pvpFactionless = "<yellow>You cannot hurt players who are not currently in a faction.";
             private String pvpPeaceful = "<yellow><fuuid:color:peaceful>Peaceful</fuuid:color:peaceful> players cannot participate in combat.";
-            private String pvpNeutral = "<yellow>You can't hurt <fuuid:color:relation:neutral>neutral</fuuid:color:relation:neutral> factions. Declare them as an <fuuid:color:relation:enemy>enemy</fuuid:color:relation:enemy>.";
-            private String pvpCantHurt = "<yellow>You can't hurt <target>.";
-            private String pvpNeutralFail = "<yellow>You can't hurt <target> in their own territory unless you declare them as an <fuuid:color:relation:enemy>enemy</fuuid:color:relation:enemy>.";
+            private String pvpNeutral = "<yellow>You cannot hurt <fuuid:color:relation:neutral>neutral</fuuid:color:relation:neutral> factions. Declare them as an <fuuid:color:relation:enemy>enemy</fuuid:color:relation:enemy>.";
+            private String pvpCantHurt = "<yellow>You cannot hurt <target>.";
+            private String pvpNeutralFail = "<yellow>You cannot hurt <target> in their own territory unless you declare them as an <fuuid:color:relation:enemy>enemy</fuuid:color:relation:enemy>.";
             private String pvpTried = "<yellow><attacker> tried to hurt you.";
             private String pvpPeacefulTerritory = "<yellow>You may not harm other players in <fuuid:color:peaceful>peaceful</fuuid:color:peaceful> territory.";
             private String pvpSafezone = "<yellow>You may not harm other players in a <fuuid:color:safezone>safe zone</fuuid:color:peaceful>.";
