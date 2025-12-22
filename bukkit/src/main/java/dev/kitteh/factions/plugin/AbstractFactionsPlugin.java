@@ -172,6 +172,32 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     private String mcVersionString;
     private String updateCheck;
     private Response updateResponse;
+    private final StringBuilder startupBuilder = new StringBuilder();
+    private final StringBuilder startupExceptionBuilder = new StringBuilder();
+    private final Handler handler = new Handler() {
+        @Override
+        public void publish(LogRecord record) {
+            if (record.getMessage() != null && record.getMessage().contains("Loaded class {0}")) {
+                return;
+            }
+            startupBuilder.append('[').append(record.getLevel().getName()).append("] ").append(record.getMessage()).append('\n');
+            if (record.getThrown() != null) {
+                StringWriter stringWriter = new StringWriter();
+                PrintWriter printWriter = new PrintWriter(stringWriter);
+                record.getThrown().printStackTrace(printWriter);
+                startupExceptionBuilder.append('[').append(record.getLevel().getName()).append("] ").append(record.getMessage()).append('\n')
+                        .append(stringWriter).append('\n');
+            }
+        }
+
+        @Override
+        public void flush() {
+        }
+
+        @Override
+        public void close() throws SecurityException {
+        }
+    };
 
     public AbstractFactionsPlugin() {
         instance = this;
@@ -179,6 +205,9 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
     @Override
     public void onLoad() {
+        getLogger().addHandler(handler);
+        getLogger().info("=== Starting up! ===");
+        this.loadSuccessful = false;
         this.onPluginLoad();
         try {
             Class.forName("com.sk89q.worldguard.WorldGuard");
@@ -186,41 +215,72 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         } catch (Exception ignored) {
             // eh
         }
+        try {
+            Class<?> nameAndIdClass = Class.forName("net.minecraft.server.players.NameAndId");
+            Method getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", nameAndIdClass);
+            Constructor<?> constructor = nameAndIdClass.getDeclaredConstructor(UUID.class, String.class);
+            this.getOfflinePlayer = (uuid, name) -> {
+                try {
+                    return (OfflinePlayer) getOffline.invoke(this.getServer(), constructor.newInstance(uuid, name));
+                } catch (Exception e) {
+                    this.getLogger().log(Level.SEVERE, "Failed to get offline player the fast way, reverting to slow mode", e);
+                    this.getOfflinePlayer = null;
+                }
+                return null;
+            };
+        } catch (Exception ee) {
+            this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", ee);
+        }
+
+        // Migration from older FUUID
+        Path dataPath = this.getDataFolder().toPath();
+        if (!Files.exists(dataPath)) {
+            try {
+                Files.createDirectories(dataPath);
+            } catch (IOException e) {
+                throw new RuntimeException("Could not create FactionsUUID directory", e);
+            }
+            Path oldPath = dataPath.getParent().resolve("Factions");
+            if (Files.exists(oldPath)) {
+                this.getLogger().info("No FactionsUUID data folder exists, but found older Factions folder. Migrating...");
+                try {
+                    Files.walkFileTree(oldPath, new SimpleFileVisitor<>() {
+                        @Override
+                        public @NonNull FileVisitResult preVisitDirectory(@NonNull Path dir, @NonNull BasicFileAttributes attrs)
+                                throws IOException {
+                            Files.createDirectories(dataPath.resolve(oldPath.relativize(dir).toString()));
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                        @Override
+                        public @NonNull FileVisitResult visitFile(@NonNull Path file, @NonNull BasicFileAttributes attrs)
+                                throws IOException {
+                            Files.copy(file, dataPath.resolve(oldPath.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
+                            return FileVisitResult.CONTINUE;
+                        }
+                    });
+                } catch (IOException e) {
+                    this.getServer().shutdown();
+                    throw new RuntimeException("Failed to migrate files, bailing out before potentially ruining data. To manually migrate, copy Factions folder to FactionsUUID. To not migrate, rename the Factions folder or move it out.", e);
+                }
+            }
+        }
+
+        loadLang();
+
+        this.gson = this.getGsonBuilder(true).create();
+        // Load Conf from disk
+        this.configManager = new ConfigManager(this);
+        this.configManager.loadConfigs();
+        this.gson = this.getGsonBuilder(false).create();
+
+        if (this.conf().data().json().useEfficientStorage()) {
+            getLogger().info("Using space efficient (less readable) storage.");
+        }
     }
 
     @Override
     public void onEnable() {
-        this.loadSuccessful = false;
-        StringBuilder startupBuilder = new StringBuilder();
-        StringBuilder startupExceptionBuilder = new StringBuilder();
-        Handler handler = new Handler() {
-            @Override
-            public void publish(LogRecord record) {
-                if (record.getMessage() != null && record.getMessage().contains("Loaded class {0}")) {
-                    return;
-                }
-                startupBuilder.append('[').append(record.getLevel().getName()).append("] ").append(record.getMessage()).append('\n');
-                if (record.getThrown() != null) {
-                    StringWriter stringWriter = new StringWriter();
-                    PrintWriter printWriter = new PrintWriter(stringWriter);
-                    record.getThrown().printStackTrace(printWriter);
-                    startupExceptionBuilder.append('[').append(record.getLevel().getName()).append("] ").append(record.getMessage()).append('\n')
-                            .append(stringWriter).append('\n');
-                }
-            }
-
-            @Override
-            public void flush() {
-            }
-
-            @Override
-            public void close() throws SecurityException {
-            }
-        };
-        getLogger().addHandler(handler);
-        getLogger().info("=== Starting up! ===");
-        long timeEnableStart = System.currentTimeMillis();
-
         if (!this.grumpyExceptions.isEmpty()) {
             this.grumpyExceptions.forEach(e -> getLogger().log(Level.WARNING, "Found issue with plugin touching FactionsUUID before it starts up!", e));
         }
@@ -265,69 +325,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         getLogger().info("");
 
         this.getLogger().info("Server UUID " + this.serverUUID);
-
-        try {
-            Class<?> nameAndIdClass = Class.forName("net.minecraft.server.players.NameAndId");
-            Method getOffline = this.getServer().getClass().getDeclaredMethod("getOfflinePlayer", nameAndIdClass);
-            Constructor<?> constructor = nameAndIdClass.getDeclaredConstructor(UUID.class, String.class);
-            this.getOfflinePlayer = (uuid, name) -> {
-                try {
-                    return (OfflinePlayer) getOffline.invoke(this.getServer(), constructor.newInstance(uuid, name));
-                } catch (Exception e) {
-                    this.getLogger().log(Level.SEVERE, "Failed to get offline player the fast way, reverting to slow mode", e);
-                    this.getOfflinePlayer = null;
-                }
-                return null;
-            };
-        } catch (Exception ee) {
-            this.getLogger().log(Level.WARNING, "Faction economy lookups will be slower:", ee);
-        }
-
-        // Migration from older FUUID
-        Path dataPath = this.getDataFolder().toPath();
-        if (!Files.exists(dataPath)) {
-            try {
-                Files.createDirectories(dataPath);
-            } catch (IOException e) {
-                throw new RuntimeException("Could not create FactionsUUID directory", e);
-            }
-            Path oldPath = dataPath.getParent().resolve("Factions");
-            if (Files.exists(oldPath)) {
-                this.getLogger().info("No FUUID data folder exists, but found older Factions folder. Migrating...");
-                try {
-                    Files.walkFileTree(oldPath, new SimpleFileVisitor<>() {
-                        @Override
-                        public @NonNull FileVisitResult preVisitDirectory(@NonNull Path dir, @NonNull BasicFileAttributes attrs)
-                                throws IOException {
-                            Files.createDirectories(dataPath.resolve(oldPath.relativize(dir).toString()));
-                            return FileVisitResult.CONTINUE;
-                        }
-
-                        @Override
-                        public @NonNull FileVisitResult visitFile(@NonNull Path file, @NonNull BasicFileAttributes attrs)
-                                throws IOException {
-                            Files.copy(file, dataPath.resolve(oldPath.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
-                            return FileVisitResult.CONTINUE;
-                        }
-                    });
-                } catch (IOException e) {
-                    this.getServer().shutdown();
-                    throw new RuntimeException("Failed to migrate files, bailing out before potentially ruining data. To manually migrate, copy Factions folder to FactionsUUID. To not migrate, rename the Factions folder or move it out.", e);
-                }
-            }
-        }
-
-        loadLang();
-
-        this.gson = this.getGsonBuilder(true).create();
-        // Load Conf from disk
-        this.configManager = new ConfigManager(this);
-        this.configManager.loadConfigs();
-        this.gson = this.getGsonBuilder(false).create();
-
-        if (this.conf().data().json().useEfficientStorage()) {
-            getLogger().info("Using space efficient (less readable) storage.");
-        }
 
         this.landRaidControl = LandRaidControl.getByName(this.conf().factions().landRaidControl().getSystem());
 
@@ -442,6 +439,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         new BukkitRunnable() {
             @Override
             public void run() {
+                getLogger().info("=== Second phase begins! ===");
                 Econ.setup();
                 vaultPerms = new VaultPerms();
                 // Grand metrics adventure!
@@ -449,10 +447,11 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
                 getLogger().removeHandler(handler);
                 startupLog = startupBuilder.toString();
                 startupExceptionLog = startupExceptionBuilder.toString();
+                getLogger().info("=== Done! ===");
             }
         }.runTask(this);
 
-        getLogger().info("=== Initial start took " + (System.currentTimeMillis() - timeEnableStart) + "ms! ===");
+        getLogger().info("=== Initial start complete! ===");
         this.loadSuccessful = true;
 
         this.updateCheck = new Gson().toJson(update);
