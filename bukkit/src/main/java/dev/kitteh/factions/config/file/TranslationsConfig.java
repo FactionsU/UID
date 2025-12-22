@@ -2027,8 +2027,8 @@ public class TranslationsConfig {
             }
         }
 
-        private Denied denied;
-        private Permissions permissions;
+        private Denied denied = new Denied();
+        private Permissions permissions = new Permissions();
 
         public Permissions permissions() {
             return this.permissions;
