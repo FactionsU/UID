@@ -1936,7 +1936,7 @@ public class TranslationsConfig {
             private String useWilderness = "<red>You cannot use <light_purple><thing></light_purple> in the wilderness.";
             private String useSafezone = "<red>You cannot use <light_purple><thing></light_purple> in a safe zone.";
             private String useWarzone = "<red>You cannot use <light_purple><thing></light_purple> in a war zone.";
-            private String useTerritory = "<red>You cannot <light_purple><thing></light_purple> in the territory of <faction>.";
+            private String useTerritory = "<red>You cannot use <light_purple><thing></light_purple> in the territory of <faction>.";
             @Comment("When not possible to display a more specific description, message like \"You cannot use this\" instead occurs.")
             private String useThis = "this";
 
