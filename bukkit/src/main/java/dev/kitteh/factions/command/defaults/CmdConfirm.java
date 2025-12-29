@@ -50,6 +50,7 @@ public class CmdConfirm implements Cmd {
             var confirm = FactionsPlugin.instance().tl().commands().confirm();
             manager.command(
                     builder.literal(confirm.getFirstAlias(), confirm.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(confirm.getDescription()))
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.CONFIRM)))
                             .required("confirmation-string", StringParser.stringParser())
                             .handler(this::handle)

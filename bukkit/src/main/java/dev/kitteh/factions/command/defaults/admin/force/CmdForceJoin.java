@@ -10,8 +10,9 @@ import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerJoinEvent;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TriConsumer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,8 +25,9 @@ public class CmdForceJoin implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> build = builder.literal("join")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_JOIN_DESCRIPTION))
+            var tl = FactionsPlugin.instance().tl().commands().admin().force().join();
+            Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.FORCE_JOIN)));
 
             manager.command(
@@ -40,17 +42,18 @@ public class CmdForceJoin implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().admin().force().join();
         Sender sender = context.sender();
         FPlayer target = context.get("player");
         Faction faction = context.get("faction");
 
         if (!faction.isNormal()) {
-            sender.msgLegacy(TL.COMMAND_JOIN_SYSTEMFACTION);
+            sender.sendRichMessage(tl.getDeniedSpecial());
             return;
         }
 
         if (target.hasFaction()) {
-            sender.msgLegacy(TL.COMMAND_FORCE_JOIN_INOTHERFACTION);
+            sender.sendRichMessage(tl.getDeniedAlreadyHasFaction());
             return;
         }
 
@@ -61,9 +64,9 @@ public class CmdForceJoin implements Cmd {
             return;
         }
 
-        sender.msgLegacy(TL.COMMAND_FORCE_JOIN_SUCCESS, target.describeToLegacy(faction, true), faction.tagLegacy(target));
-
-        faction.msgLegacy(TL.COMMAND_JOIN_JOINED, target.describeToLegacy(faction, true));
+        target.sendRichMessage(tl.getSuccessNoticePlayer(), FactionResolver.of(target, faction));
+        sender.sendRichMessage(tl.getSuccess(), FactionResolver.of(sender.fPlayerOrNull(), faction), FPlayerResolver.of("player", sender.fPlayerOrNull(), target));
+        faction.membersOnline(true).forEach(fp -> fp.sendRichMessage(tl.getSuccessNotice(), FactionResolver.of(fp, faction), FPlayerResolver.of("player", fp, target)));
 
         target.resetFactionData();
         target.faction(faction);
@@ -74,7 +77,7 @@ public class CmdForceJoin implements Cmd {
         }
 
         if (FactionsPlugin.instance().conf().logging().isFactionJoin()) {
-            AbstractFactionsPlugin.instance().log(TL.COMMAND_JOIN_JOINEDLOG.toString(), target.name(), faction.tag());
+            AbstractFactionsPlugin.instance().log(target.name() + " force-joined the faction " + faction.tag());
         }
     }
 }

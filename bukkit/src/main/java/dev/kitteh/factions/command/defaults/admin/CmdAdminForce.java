@@ -1,5 +1,7 @@
 package dev.kitteh.factions.command.defaults.admin;
 
+import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.defaults.admin.force.CmdForceDisband;
@@ -17,7 +19,9 @@ public class CmdAdminForce implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> forceBuilder = builder.literal("force");
+            var tl = FactionsPlugin.instance().tl().commands().admin().force();
+            Command.Builder<Sender> forceBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()));
 
             new CmdForceKick().consumer().accept(manager, forceBuilder, help);
             new CmdForceDisband().consumer().accept(manager, forceBuilder, help);

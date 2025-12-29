@@ -16,7 +16,6 @@ import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import io.papermc.paper.dialog.Dialog;
 import io.papermc.paper.registry.data.dialog.ActionButton;
 import io.papermc.paper.registry.data.dialog.DialogBase;
@@ -50,7 +49,7 @@ public class CmdUpgrades implements Cmd {
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.UPGRADES).and(Cloudy.hasFaction())))
-                            .commandDescription(Cloudy.desc(TL.COMMAND_UPGRADES_DESCRIPTION))
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
                             .handler(this::handle)
             );
         };

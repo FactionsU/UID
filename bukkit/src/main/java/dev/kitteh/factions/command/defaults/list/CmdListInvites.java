@@ -28,7 +28,7 @@ public class CmdListInvites implements Cmd {
             var tl = FactionsPlugin.instance().tl().commands().list().invites();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                            .commandDescription(Cloudy.desc(TL.COMMAND_SHOWINVITES_DESCRIPTION))
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SHOW_INVITES).and(Cloudy.hasFaction())))
                             .handler(this::handle)
             );

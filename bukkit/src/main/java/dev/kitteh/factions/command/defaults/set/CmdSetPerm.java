@@ -19,7 +19,6 @@ import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.TextComponent;
@@ -76,7 +75,7 @@ public class CmdSetPerm implements Cmd {
             var tl = FactionsPlugin.instance().tl().commands().permissions();
             List<String> aliases = new ArrayList<>(tl.getAliases());
             Command.Builder<Sender> permBuilder = builder.literal(aliases.removeFirst(), aliases.toArray(new String[0]))
-                    .commandDescription(Cloudy.desc(TL.COMMAND_PERMS_DESCRIPTION))
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.PERMISSIONS).and(Cloudy.isAtLeastRole(Role.ADMIN))));
 
             manager.command(permBuilder.handler(this::handleList));

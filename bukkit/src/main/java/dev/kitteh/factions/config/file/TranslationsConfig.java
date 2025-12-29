@@ -14,11 +14,13 @@ import java.util.List;
 public class TranslationsConfig {
     public static class AbsCommand {
         private List<String> aliases;
+        private String description;
 
-        protected AbsCommand(String firstAlias, String... aliases) {
+        protected AbsCommand(String description, String firstAlias, String... aliases) {
             this.aliases = new ArrayList<>();
             this.aliases.add(firstAlias);
             this.aliases.addAll(Arrays.asList(aliases));
+            this.description = description;
         }
 
         public List<String> getAliases() {
@@ -34,12 +36,16 @@ public class TranslationsConfig {
             secondaries.removeFirst();
             return secondaries.toArray(new String[0]);
         }
+
+        public String getDescription() {
+            return this.description;
+        }
     }
 
     public static class Commands {
         public static class Generic {
-            private AbsCommand commandRoot = new AbsCommand("f");
-            private AbsCommand commandAdminRoot = new AbsCommand("fa");
+            private AbsCommand commandRoot = new AbsCommand("Root command for all faction commands", "f");
+            private AbsCommand commandAdminRoot = new AbsCommand("Root command for all administrative factions commands", "fa");
 
             private String noFactionFound = "No faction found for input '<input>'";
             private String noPlayerFound = "No player found for input '<input>'";
@@ -61,15 +67,337 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Admin {
+            public static class DTR extends AbsCommand {
+                public DTR() {
+                    super("Change faction DTR", "dtr");
+                }
+
+                public static class DTRModify extends AbsCommand {
+                    public DTRModify() {
+                        super("Modify faction DTR", "modify");
+                    }
+
+                    private String success = "<yellow>Set DTR for <faction> to <faction:dtr_rounded>.";
+
+                    public String getSuccess() {
+                        return success;
+                    }
+                }
+
+                public static class DTRResetAll extends AbsCommand {
+                    public DTRResetAll() {
+                        super("Reset all faction DTR", "reset-all");
+                    }
+
+                    private String success = "<yellow>Reset all faction DTR to their max!";
+
+                    public String getSuccess() {
+                        return success;
+                    }
+                }
+
+                public static class DTRSet extends AbsCommand {
+                    public DTRSet() {
+                        super("Set faction DTR", "set");
+                    }
+
+                    private String success = "<yellow>Set DTR for <faction> to <faction:dtr_rounded>.";
+
+                    public String getSuccess() {
+                        return success;
+                    }
+                }
+
+                private DTRModify modify = new DTRModify();
+                private DTRResetAll resetAll = new DTRResetAll();
+                private DTRSet set = new DTRSet();
+
+                public DTRModify modify() {
+                    return this.modify;
+                }
+
+                public DTRResetAll resetAll() {
+                    return this.resetAll;
+                }
+
+                public DTRSet set() {
+                    return this.set;
+                }
+            }
+
+            public static class Force extends AbsCommand {
+                public Force() {
+                    super("Override behavior", "force");
+                }
+
+                public static class Home extends AbsCommand {
+                    public Home() {
+                        super("Send a player to their f home no matter what.", "home");
+                    }
+
+                    private String success = "<yellow><player> was sent to their faction home.";
+                    private String successNotice = "<yellow>You were sent to your faction home.";
+                    private String offline = "<red><player> is offline.";
+                    private String noHome = "<red><player>'s faction has no home.";
+
+                    public String getSuccess() {
+                        return success;
+                    }
+
+                    public String getSuccessNotice() {
+                        return successNotice;
+                    }
+
+                    public String getOffline() {
+                        return offline;
+                    }
+
+                    public String getNoHome() {
+                        return noHome;
+                    }
+                }
+
+                public static class Join extends AbsCommand {
+                    public Join() {
+                        super("Join a faction", "join");
+                    }
+
+                    private String deniedSpecial = "<red>Players cannot join this faction.";
+                    private String deniedAlreadyHasFaction = "<red><player> must leave their current faction first.";
+                    private String successNoticePlayer = "<yellow>You joined <faction>.";
+                    private String successNotice = "<yellow><player> joined your faction.";
+                    private String success = "<yellow><player> forced to join <faction>";
+
+                    public String getDeniedSpecial() {
+                        return deniedSpecial;
+                    }
+
+                    public String getDeniedAlreadyHasFaction() {
+                        return deniedAlreadyHasFaction;
+                    }
+
+                    public String getSuccessNoticePlayer() {
+                        return successNoticePlayer;
+                    }
+
+                    public String getSuccessNotice() {
+                        return successNotice;
+                    }
+
+                    public String getSuccess() {
+                        return success;
+                    }
+                }
+
+                private Home home = new Home();
+                private Join join = new Join();
+
+                public Home home() {
+                    return this.home;
+                }
+
+                public Join join() {
+                    return this.join;
+                }
+            }
+
+            public static class Power extends AbsCommand {
+                public Power() {
+                    super("Change faction power", "power");
+                }
+            }
+
+            public static class SetCmd extends AbsCommand {
+                public SetCmd() {
+                    super("Set faction information", "set");
+                }
+            }
+
+            public static class TNT extends AbsCommand {
+                public TNT() {
+                    super("Change faction TNT bank", "tnt");
+                }
+
+                private String subCmdModify = "modify";
+                private String subCmdSet = "set";
+                @Comment("On top of <faction>, supports <amount> and <oldamount>")
+                private String success = "<yellow><faction> now has <faction:tnt_bank_balance> TNT";
+
+                public String getSubCmdModify() {
+                    return subCmdModify;
+                }
+
+                public String getSubCmdSet() {
+                    return subCmdSet;
+                }
+
+                public String getSuccess() {
+                    return success;
+                }
+            }
+
+            public static class Bypass extends AbsCommand {
+                public Bypass() {
+                    super("Enable admin bypass mode", "bypass");
+                }
+
+                private String enabled = "You have enabled admin bypass mode. You will be able to build or destroy anywhere.";
+                private String disabled = "You have disabled admin bypass mode.";
+
+                public String getEnabled() {
+                    return enabled;
+                }
+
+                public String getDisabled() {
+                    return disabled;
+                }
+            }
+
+            public static class ChatSpy extends AbsCommand {
+                public ChatSpy() {
+                    super("Enable admin chat spy mode", "chatspy");
+                }
+
+                private String enable = "<yellow>You have enabled chat spying mode.";
+                private String disable = "<yellow>You have disabled chat spying mode.";
+
+                public String getEnable() {
+                    return enable;
+                }
+
+                public String getDisable() {
+                    return disable;
+                }
+            }
+
+            public static class Money extends AbsCommand {
+                public Money() {
+                    super("Modify faction bank money.", "money");
+                }
+
+                private String modified = "<yellow>Modified <faction> bank by <amount>>";
+                private String modifyNotify = "<yellow>Modified <faction> bank by <amount>";
+                private String set = "<yellow>Set <faction> bank to <amount>";
+                private String setNotify = "<yellow>Modified <faction> bank by <amount>";
+                private String fail = "<red>Failed to modify!";
+                private String subCmdModify = "modify";
+                private String subCmdSet = "set";
+
+                public String getModified() {
+                    return modified;
+                }
+
+                public String getModifyNotify() {
+                    return modifyNotify;
+                }
+
+                public String getSet() {
+                    return set;
+                }
+
+                public String getSetNotify() {
+                    return setNotify;
+                }
+
+                public String getFail() {
+                    return fail;
+                }
+
+                public String getSubCmdModify() {
+                    return subCmdModify;
+                }
+
+                public String getSubCmdSet() {
+                    return subCmdSet;
+                }
+            }
+
+            public static class Reload extends AbsCommand {
+                public Reload() {
+                    super("Reload configuration", "reload");
+                }
+
+                private String success = "<yellow>Reloaded all configuration files, took <millis> ms.";
+
+                public String getSuccess() {
+                    return success;
+                }
+            }
+
+            public static class SaveAll extends AbsCommand {
+                public SaveAll() {
+                    super("Save all data.", "save-all");
+                }
+
+                private String success = "<yellow>Saving data!";
+
+                public String getSuccess() {
+                    return success;
+                }
+            }
+
+            private DTR dtr = new DTR();
+            private Force force = new Force();
+            private Power power = new Power();
+            private SetCmd set = new SetCmd();
+            private TNT tnt = new TNT();
+            private Bypass bypass = new Bypass();
+            private ChatSpy chatSpy = new ChatSpy();
+            private Money money = new Money();
+            private Reload reload = new Reload();
+            private SaveAll saveAll = new SaveAll();
+
+            public DTR dtr() {
+                return dtr;
+            }
+
+            public Force force() {
+                return force;
+            }
+
+            public Power power() {
+                return power;
+            }
+
+            public SetCmd set() {
+                return set;
+            }
+
+            public TNT tnt() {
+                return tnt;
+            }
+
+            public Bypass bypass() {
+                return bypass;
+            }
+
+            public ChatSpy chatSpy() {
+                return chatSpy;
+            }
+
+            public Money money() {
+                return money;
+            }
+
+            public Reload reload() {
+                return reload;
+            }
+
+            public SaveAll saveAll() {
+                return saveAll;
+            }
+        }
+
         public static class Chat extends AbsCommand {
             protected Chat() {
-                super("chat");
+                super("Change chat mode", "chat");
             }
         }
 
         public static class Confirm extends AbsCommand {
             public Confirm() {
-                super("confirm");
+                super("Confirm an action", "confirm");
             }
 
             private String invalid = "<red>Invalid confirmation code.";
@@ -84,26 +412,125 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Disband extends AbsCommand {
+            public Disband() {
+                super("Disband a faction", "disband");
+            }
+
+            private String deniedSpecial = "<red>You cannot disband this faction.";
+            private String deniedPermanent = "<red>You cannot disband this permanent faction.";
+            private String confirm = "<yellow>Are you sure you want to disband <faction>? If so, run /<command>";
+            private String broadcastYours = "<yellow><player> disbanded your faction.";
+            private String broadcastNotYours = "<yellow><player> disbanded <faction>.";
+            private String broadcastConsoleYours = "<yellow>Your faction was disbanded.";
+            private String broadcastConsoleNotYours = "<yellow><faction> was disbanded.";
+            private String econHoldings = "<yellow>You have been given the disbanded faction's bank, totaling <amount>.";
+
+            public String getDeniedSpecial() {
+                return deniedSpecial;
+            }
+
+            public String getDeniedPermanent() {
+                return deniedPermanent;
+            }
+
+            public String getConfirm() {
+                return confirm;
+            }
+
+            public String getBroadcastYours() {
+                return broadcastYours;
+            }
+
+            public String getBroadcastNotYours() {
+                return broadcastNotYours;
+            }
+
+            public String getBroadcastConsoleYours() {
+                return broadcastConsoleYours;
+            }
+
+            public String getBroadcastConsoleNotYours() {
+                return broadcastConsoleNotYours;
+            }
+
+            public String getEconHoldings() {
+                return econHoldings;
+            }
+        }
+
         public static class Help extends AbsCommand {
             public Help() {
-                super("help");
+                super("Command help.", "help");
+            }
+        }
+
+        public static class Join extends AbsCommand {
+            public Join() {
+                super("Join a faction", "join");
+            }
+
+            private String deniedSpecial = "<red>Players cannot join this faction.";
+            private String deniedAlreadyHaveFaction = "<red>You must leave your current faction first.";
+            private String deniedAlreadyMember = "<red>You are already a member of <faction>.";
+            private String deniedMaxMembers = "<red>The faction <faction> is at the limit of <limit> members.";
+            private String deniedRequiresInvite = "<red>An invitation is required to join <faction>.";
+            private String deniedRequiresInviteNotice = "<yellow><player> tried to join your faction without an invitation.";
+            private String deniedBanned = "<red>You are banned from <faction>.";
+            private String success = "<yellow>You joined <faction>.";
+            private String successNotice = "<yellow><player> joined your faction.";
+
+            public String getDeniedSpecial() {
+                return deniedSpecial;
+            }
+
+            public String getDeniedAlreadyHaveFaction() {
+                return deniedAlreadyHaveFaction;
+            }
+
+            public String getDeniedAlreadyMember() {
+                return deniedAlreadyMember;
+            }
+
+            public String getDeniedMaxMembers() {
+                return deniedMaxMembers;
+            }
+
+            public String getDeniedRequiresInvite() {
+                return deniedRequiresInvite;
+            }
+
+            public String getDeniedRequiresInviteNotice() {
+                return deniedRequiresInviteNotice;
+            }
+
+            public String getDeniedBanned() {
+                return deniedBanned;
+            }
+
+            public String getSuccess() {
+                return success;
+            }
+
+            public String getSuccessNotice() {
+                return successNotice;
             }
         }
 
         public static class ListCmd extends AbsCommand {
             public ListCmd() {
-                super("list");
+                super("List faction information", "list");
             }
 
             public static class ListBans extends AbsCommand {
                 public ListBans() {
-                    super("bans");
+                    super("View faction bans", "bans");
                 }
             }
 
             public static class ListClaims extends AbsCommand {
                 public ListClaims() {
-                    super("claims");
+                    super("View faction claims", "claims");
                 }
             }
 
@@ -136,13 +563,13 @@ public class TranslationsConfig {
                 }
 
                 public ListFactions() {
-                    super("factions");
+                    super("List factions", "factions");
                 }
             }
 
             public static class ListInvites extends AbsCommand {
                 public ListInvites() {
-                    super("invites");
+                    super("List pending faction invites", "invites");
                 }
             }
 
@@ -170,7 +597,7 @@ public class TranslationsConfig {
 
         public static class MapCmd extends AbsCommand {
             public MapCmd() {
-                super("map");
+                super("Show the territory map, and set optional auto update", "map");
             }
 
             private String compassLetterNorth = "N";
@@ -197,7 +624,7 @@ public class TranslationsConfig {
 
         public static class Near extends AbsCommand {
             public Near() {
-                super("near");
+                super("Show nearby faction members", "near");
             }
 
             private String perPlayer = "<player> <dark_gray>(<distance>)</dark_gray>";
@@ -219,13 +646,13 @@ public class TranslationsConfig {
 
         public static class SetCmd extends AbsCommand {
             public SetCmd() {
-                super("set");
+                super("Set faction info", "set");
             }
         }
 
         public static class Show extends AbsCommand {
             protected Show() {
-                super("show");
+                super("Show faction information", "show");
             }
 
             private List<String> normalFormat = new ArrayList<>() {
@@ -272,7 +699,7 @@ public class TranslationsConfig {
         public static class Permissions extends AbsCommand {
             public static class SubCmdAdd extends AbsCommand {
                 public SubCmdAdd() {
-                    super("add");
+                    super("Unused description", "add");
                 }
 
                 private String availableSelectorsIntro = "Available: ";
@@ -370,7 +797,7 @@ public class TranslationsConfig {
                         "<color:#66ffb0><value>";
 
                 public SubCmdList() {
-                    super("list");
+                    super("Unused description", "list");
                 }
 
                 public String getFooter() {
@@ -394,7 +821,7 @@ public class TranslationsConfig {
                         "<color:#66ffb0><value>";
 
                 public SubCmdListOverride() {
-                    super("listoverride");
+                    super("Unused description", "listoverride");
                 }
 
                 public String getFooter() {
@@ -427,7 +854,7 @@ public class TranslationsConfig {
                 private String errorInvalidPositon = "<red>Cannot move invalid position!</red>";
 
                 public SubCmdMove() {
-                    super("move");
+                    super("Unused description", "move");
                 }
 
                 public List<String> getAliasUp() {
@@ -457,7 +884,7 @@ public class TranslationsConfig {
 
             public static class SubCmdRemove extends AbsCommand {
                 public SubCmdRemove() {
-                    super("remove");
+                    super("Unused description", "remove");
                 }
             }
 
@@ -468,7 +895,7 @@ public class TranslationsConfig {
                 private String confirmWord = "confirm";
 
                 public SubCmdReset() {
-                    super("reset");
+                    super("Unused description", "reset");
                 }
 
                 public String getConfirmWord() {
@@ -493,7 +920,7 @@ public class TranslationsConfig {
                 private String selectorNotFound = "<red>No selector available with that name</red>";
 
                 public SubCmdShow() {
-                    super("show");
+                    super("Unused description", "show");
                 }
 
                 public String getHeader() {
@@ -521,7 +948,7 @@ public class TranslationsConfig {
                 private String selectorNotFound = "<red>No override selector available with that name</red>";
 
                 public SubCmdShowOverride() {
-                    super("showoverride");
+                    super("Unused description", "showoverride");
                 }
 
                 public String getHeader() {
@@ -542,7 +969,7 @@ public class TranslationsConfig {
             }
 
             protected Permissions() {
-                super("perms", "perm", "permission", "permissions");
+                super("Your faction's permissions", "perms");
             }
 
             private SubCmdAdd add = new SubCmdAdd();
@@ -589,7 +1016,7 @@ public class TranslationsConfig {
 
         public static class Upgrades extends AbsCommand {
             protected Upgrades() {
-                super("upgrades");
+                super("Show faction upgrades", "upgrades");
             }
 
             public static class Paper {
@@ -867,10 +1294,9 @@ public class TranslationsConfig {
 
         public static class Warp extends AbsCommand {
             protected Warp() {
-                super("warp");
+                super("Teleport to a faction warp", "warp");
             }
 
-            private String description = "Teleport to a faction warp";
             private String noPermission = "<red>You do not have permission to use <faction> warps.";
             private String invalidPassword = "<red>Invalid password!";
             private String warped = "<yellow>Warped to <green><warp>.";
@@ -895,10 +1321,6 @@ public class TranslationsConfig {
             };
             private String menuPassInputLabel = "Password";
             private String menuPassConfirm = "Confirm";
-
-            public String getDescription() {
-                return description;
-            }
 
             public String getNoPermission() {
                 return noPermission;
@@ -970,7 +1392,7 @@ public class TranslationsConfig {
                 private String autoSetOff = "<yellow>Disabled automatic zone setting";
 
                 public Claim() {
-                    super("claim");
+                    super("Unused description", "claim");
                 }
 
                 public String getAlreadyZone() {
@@ -1011,7 +1433,7 @@ public class TranslationsConfig {
                 private String success = "<yellow>Created new zone '<name>'";
 
                 public Create() {
-                    super("create");
+                    super("Unused description", "create");
                 }
 
                 public String getNameAlreadyInUse() {
@@ -1029,7 +1451,7 @@ public class TranslationsConfig {
                 private String confirm = "Are you sure you want to delete zone '<name>'? If so, run /<command>";
 
                 public Delete() {
-                    super("delete");
+                    super("Unused description", "delete");
                 }
 
                 public String getConfirm() {
@@ -1059,7 +1481,7 @@ public class TranslationsConfig {
                     private String zoneNotFound = "<red>Zone '<name>' not found</red>";
 
                     protected Greeting() {
-                        super("greeting");
+                        super("Unused description", "greeting");
                     }
 
                     public String getSuccess() {
@@ -1077,7 +1499,7 @@ public class TranslationsConfig {
                     private String zoneNotFound = "<red>Zone '<name>' not found</red>";
 
                     protected Name() {
-                        super("name");
+                        super("Unused description", "name");
                     }
 
                     public String getNameAlreadyInUse() {
@@ -1097,7 +1519,7 @@ public class TranslationsConfig {
                 private Name name = new Name();
 
                 public Set() {
-                    super("set");
+                    super("Unused description", "set");
                 }
 
                 public Greeting greeting() {
@@ -1117,7 +1539,7 @@ public class TranslationsConfig {
             private Set set = new Set();
 
             protected Zone() {
-                super("zone");
+                super("Manage zones", "zone");
             }
 
             public Claim claim() {
@@ -1143,9 +1565,13 @@ public class TranslationsConfig {
 
         private Generic generic = new Generic();
 
+        private Admin admin = new Admin();
+
         private Chat chat = new Chat();
         private Confirm confirm = new Confirm();
+        private Disband disband = new Disband();
         private Help help = new Help();
+        private Join join = new Join();
         private ListCmd list = new ListCmd();
         private MapCmd map = new MapCmd();
         private Near near = new Near();
@@ -1160,12 +1586,24 @@ public class TranslationsConfig {
             return generic;
         }
 
+        public Admin admin() {
+            return admin;
+        }
+
         public Chat chat() {
             return chat;
         }
 
         public Confirm confirm() {
             return confirm;
+        }
+
+        public Disband disband() {
+            return disband;
+        }
+
+        public Join join() {
+            return join;
         }
 
         public Help help() {
@@ -1239,6 +1677,16 @@ public class TranslationsConfig {
         public static class Actions {
             private String warpFor = "for warping";
             private String warpTo = "to warp";
+            private String joinFor = "for joining a faction";
+            private String joinTo = "to join a faction";
+
+            public String getJoinTo() {
+                return joinTo;
+            }
+
+            public String getJoinFor() {
+                return joinFor;
+            }
 
             public String getWarpFor() {
                 return warpFor;
@@ -1921,6 +2369,7 @@ public class TranslationsConfig {
             private String actionWarzone = "<red>You cannot <action> in a war zone.";
             private String actionTerritory = "<red>You cannot <action> in the territory of <faction>.";
             private String actionTerritoryPain = "<red>It is painful to <action> in the territory of <faction>.";
+            private String actionGeneric = "<red><faction> does not permit you to <action>.";
 
             private String pvpLogin = "<yellow>You cannot hurt other players for <seconds> seconds after logging in.";
             private String pvpRequireFaction = "<yellow>You cannot hurt other players until you join a faction.";
@@ -1960,6 +2409,10 @@ public class TranslationsConfig {
 
             public String getActionTerritoryPain() {
                 return actionTerritoryPain;
+            }
+
+            public String getActionGeneric() {
+                return actionGeneric;
             }
 
             public String getPvpLogin() {

@@ -9,7 +9,6 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -32,7 +31,7 @@ public class CmdNear implements Cmd {
             var tl = FactionsPlugin.instance().tl().commands().near();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                            .commandDescription(Cloudy.desc(TL.COMMAND_NEAR_DESCRIPTION))
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.NEAR).and(Cloudy.hasFaction())))
                             .handler(this::handle)
             );

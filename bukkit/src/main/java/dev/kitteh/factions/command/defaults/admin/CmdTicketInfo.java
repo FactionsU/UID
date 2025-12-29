@@ -8,7 +8,6 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -55,7 +54,7 @@ public class CmdTicketInfo implements Cmd {
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> manager.command(
                 builder.literal("ticket-info")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_TICKETINFO_DESCRIPTION))
+                        .commandDescription(Cloudy.desc("Creates requested ticket info"))
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DEBUG)))
                         .flag(manager.flagBuilder("full"))
                         .handler(this::handle)
