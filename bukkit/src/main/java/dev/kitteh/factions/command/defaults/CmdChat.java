@@ -23,7 +23,7 @@ public class CmdChat implements Cmd {
         return (manager, builder, help) -> {
             var tl = FactionsPlugin.instance().tl().commands().chat();
             manager.command(builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases()).literal("public")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_CHAT_DESCRIPTION))
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission()
                             .and(Cloudy.predicate(s ->
                                     FactionsPlugin.instance().conf().factions().chat().internalChat().isFactionMemberChatEnabled() ||
@@ -34,7 +34,7 @@ public class CmdChat implements Cmd {
             );
 
             Command.Builder<Sender> roleBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                    .commandDescription(Cloudy.desc(TL.COMMAND_CHAT_DESCRIPTION))
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission()
                             .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().chat().internalChat().isFactionMemberChatEnabled()))
                             .and(Cloudy.hasPermission(Permission.CHAT))
@@ -46,7 +46,7 @@ public class CmdChat implements Cmd {
             manager.command(roleBuilder.literal("member").permission(roleBuilder.commandPermission().and(Cloudy.isAtLeastRole(Role.NORMAL))).handler(ctx -> this.handle(ctx, ChatTarget.Role.NORMAL)));
 
             Command.Builder<Sender> relationBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                    .commandDescription(Cloudy.desc(TL.COMMAND_CHAT_DESCRIPTION))
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission()
                             .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().chat().internalChat().isRelationChatEnabled()))
                             .and(Cloudy.hasPermission(Permission.CHAT))

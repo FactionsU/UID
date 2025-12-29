@@ -38,7 +38,7 @@ public class CmdListClaims implements Cmd {
             var tl = FactionsPlugin.instance().tl().commands().list().claims();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                            .commandDescription(Cloudy.desc(TL.COMMAND_LISTCLAIMS_DESCRIPTION))
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LISTCLAIMS).and(Cloudy.hasSelfFactionPerms(PermissibleActions.LISTCLAIMS))))
                             .flag(manager.flagBuilder("world").withComponent(StringParser.stringParser()))
                             .flag(

@@ -19,7 +19,8 @@ public class CmdAdminPower implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> powerBuilder = builder.literal("power")
+            var tl = FactionsPlugin.instance().tl().commands().admin().power();
+            Command.Builder<Sender> powerBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .permission(builder.commandPermission().and(Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof PowerControl)));
 
             new CmdPowerBoost().consumer().accept(manager, powerBuilder, help);

@@ -27,7 +27,7 @@ public class CmdListBans implements Cmd {
             var tl = FactionsPlugin.instance().tl().commands().list().bans();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                            .commandDescription(Cloudy.desc(TL.COMMAND_BANLIST_DESCRIPTION))
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.BAN).and(Cloudy.hasFaction())))
                             .optional("faction", FactionParser.of(FactionParser.Include.SELF))
                             .handler(this::handle)

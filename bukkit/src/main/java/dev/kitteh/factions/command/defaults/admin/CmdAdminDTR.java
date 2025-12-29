@@ -18,7 +18,8 @@ public class CmdAdminDTR implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> dtrBuilder = builder.literal("dtr")
+            var tl = FactionsPlugin.instance().tl().commands().admin().dtr();
+            Command.Builder<Sender> dtrBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .permission(builder.commandPermission().and(Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof DTRControl)));
 
             new CmdDTRModify().consumer().accept(manager, dtrBuilder, help);

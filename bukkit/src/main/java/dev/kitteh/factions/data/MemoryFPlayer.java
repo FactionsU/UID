@@ -741,7 +741,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
                     if (amount > 0.0) {
                         String amountString = Econ.moneyString(amount);
-                        this.msgLegacy(TL.COMMAND_DISBAND_HOLDINGS, amountString);
+                        this.sendRichMessage(FactionsPlugin.instance().tl().commands().disband().getEconHoldings(), Placeholder.unparsed("amount", amountString));
                         AbstractFactionsPlugin.instance().log(this.name() + " has been given bank holdings of " + amountString + " from disbanding " + myFaction.tag() + ".");
                     }
                 }

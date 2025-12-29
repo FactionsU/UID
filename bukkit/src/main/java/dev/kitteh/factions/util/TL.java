@@ -58,7 +58,6 @@ public enum TL {
     COMMAND_ADMIN_TARGETSELF("&cThe target player mustn't be yourself."),
     COMMAND_ADMIN_PROMOTED("%1$s&e gave %2$s&e the leadership of %3$s&e."),
 
-    COMMAND_AHOME_DESCRIPTION("Send a player to their f home no matter what."),
     COMMAND_AHOME_NOHOME("%1$s doesn't have an f home."),
     COMMAND_AHOME_SUCCESS("%1$s was sent to their f home."),
     COMMAND_AHOME_OFFLINE("%1$s is offline."),
@@ -81,7 +80,6 @@ public enum TL {
     COMMAND_BAN_SELF("&cYou may not ban yourself"),
     COMMAND_BAN_INSUFFICIENTRANK("&cYour rank is too low to ban &7%1$s"),
 
-    COMMAND_BANLIST_DESCRIPTION("View a Faction's ban list"),
     COMMAND_BANLIST_HEADER("&6There are &c%d&6 bans for %s"),
     COMMAND_BANLIST_ENTRY("&7%d. &c%s &r- &a%s &r- &e%s"),
     COMMAND_BANLIST_NOFACTION("&4You are not in a Faction."),
@@ -92,14 +90,6 @@ public enum TL {
     COMMAND_BOOM_ENABLED("%1$s&e has %2$s explosions in your faction's territory."),
     COMMAND_BOOM_DESCRIPTION("Toggle explosions (peaceful factions only)"),
 
-    COMMAND_BYPASS_ENABLE("&eYou have enabled admin bypass mode. You will be able to build or destroy anywhere."),
-    COMMAND_BYPASS_ENABLELOG(" has ENABLED admin bypass mode."),
-    COMMAND_BYPASS_DISABLE("&eYou have disabled admin bypass mode."),
-    COMMAND_BYPASS_DISABLELOG(" has DISABLED admin bypass mode."),
-    COMMAND_BYPASS_DESCRIPTION("Enable admin bypass mode"),
-
-    COMMAND_CHAT_DESCRIPTION("Change chat mode"),
-
     COMMAND_CHAT_MODE_PUBLIC("&ePublic chat mode."),
     COMMAND_CHAT_MODE_ALLIANCE("&eAlliance only chat mode."),
     COMMAND_CHAT_MODE_TRUCE("&eTruce only chat mode."),
@@ -107,12 +97,6 @@ public enum TL {
     COMMAND_CHAT_MODE_COLEADER("&eColeader only chat mode."),
     COMMAND_CHAT_MODE_MOD("&eMod only chat mode."),
     COMMAND_CHAT_MODE_NORMAL("&eNormal member only chat mode."),
-
-    COMMAND_CHATSPY_ENABLE("&eYou have enabled chat spying mode."),
-    COMMAND_CHATSPY_ENABLELOG(" has ENABLED chat spying mode."),
-    COMMAND_CHATSPY_DISABLE("&eYou have disabled chat spying mode."),
-    COMMAND_CHATSPY_DISABLELOG(" has DISABLED chat spying mode."),
-    COMMAND_CHATSPY_DESCRIPTION("Enable admin chat spy mode"),
 
     COMMAND_CLAIM_DENIED("&cYou do not have permission to claim in a radius."),
     COMMAND_CLAIM_DESCRIPTION("Claim land from where you are standing"),
@@ -163,20 +147,10 @@ public enum TL {
     COMMAND_DESCRIPTION_FORCHANGE("for changing faction description"),
     COMMAND_DESCRIPTION_DESCRIPTION("Change the faction description"),
 
-    COMMAND_DISBAND_IMMUTABLE("&eYou cannot disband the Wilderness, safe zone, or war zone."),
-    COMMAND_DISBAND_MARKEDPERMANENT("&eThis faction is designated as permanent, so you cannot disband it."),
-    COMMAND_DISBAND_BROADCAST_YOURS("&d%1$s&e disbanded your faction."),
-    COMMAND_DISBAND_BROADCAST_NOTYOURS("&d%1$s&e disbanded the faction %2$s."),
-    COMMAND_DISBAND_HOLDINGS("&eYou have been given the disbanded faction's bank, totaling %1$s."),
-    COMMAND_DISBAND_CONFIRM("&eAre you sure you want to disband %s? If so, run /%s"),
-    COMMAND_DISBAND_DESCRIPTION("Disband a faction"),
-
     COMMAND_DTR_TOSHOW("to show faction DTR info"),
     COMMAND_DTR_FORSHOW("for showing faction DTR info"),
     COMMAND_DTR_DTR("%1$s&6 - DTR / Max DTR: &e%2$s / %3$s"),
     COMMAND_DTR_DESCRIPTION("Show faction DTR info"),
-    COMMAND_DTR_MODIFY_DESCRIPTION("Modify faction DTR"),
-    COMMAND_DTR_MODIFY_DONE("&eSet DTR for %s&e to %s"),
 
     COMMAND_FLY_DESCRIPTION("Enter or leave Faction flight mode"),
     COMMAND_FLY_CHANGE("&eFaction flight &d%1$s"),
@@ -258,12 +232,10 @@ public enum TL {
 
     COMMAND_LIST_TOLIST("to list the factions"),
     COMMAND_LIST_FORLIST("for listing the factions"),
-    COMMAND_LIST_DESCRIPTION("See a list of the factions"),
 
     COMMAND_LISTCLAIMS_MESSAGE("&eClaims by %s&e in %s:"),
     COMMAND_LISTCLAIMS_INVALIDWORLD("&cInvalid world name %s"),
     COMMAND_LISTCLAIMS_NOCLAIMS("&cNo claims by %s&e in world %s"),
-    COMMAND_LISTCLAIMS_DESCRIPTION("List your faction's claims"),
 
     COMMAND_SETAUTOSAVE_DISABLED("&eFactions autosave disabled"),
     COMMAND_SETAUTOSAVE_ENABLED("&eFactions autosave enabled"),
@@ -298,8 +270,6 @@ public enum TL {
 
     COMMAND_MONEYWITHDRAW_WITHDRAW("%1$s withdrew %2$s from the faction bank: %3$s"),
 
-    COMMAND_NEAR_DESCRIPTION("Show nearby faction members"),
-
     COMMAND_OPEN_TOOPEN("to open or close the faction"),
     COMMAND_OPEN_FOROPEN("for opening or closing the faction"),
     COMMAND_OPEN_OPEN("open"),
@@ -313,8 +283,6 @@ public enum TL {
     COMMAND_PEACEFUL_OTHER("%s&e has %s the faction '%s&e'."),
     COMMAND_PEACEFUL_GRANT("granted peaceful status to"),
     COMMAND_PEACEFUL_REVOKE("removed peaceful status from"),
-
-    COMMAND_PERMS_DESCRIPTION("&6Edit or list your Faction's permissions."),
 
     COMMAND_PERMANENT_DESCRIPTION("Toggles a faction's permanence"),
     COMMAND_PERMANENT_GRANT("added permanent status to"),
@@ -358,12 +326,6 @@ public enum TL {
     COMMAND_RELATIONS_PROPOSAL_1("%1$s&e wishes to be your %2$s"),
     COMMAND_RELATIONS_PROPOSAL_2("&eType &b/%1$s %2$s %3$s&e to accept."),
     COMMAND_RELATIONS_PROPOSAL_SENT("%1$s&e were informed that you wish to be %2$s"),
-
-    COMMAND_RELOAD_TIME("&eReloaded &dall configuration files &efrom disk, took &d%1$d ms&e."),
-    COMMAND_RELOAD_DESCRIPTION("Reload data file(s) from disk"),
-
-    COMMAND_SAVEALL_SUCCESS("&eFactions saved to disk!"),
-    COMMAND_SAVEALL_DESCRIPTION("Save all data to disk"),
 
     COMMAND_SCOREBOARD_DESCRIPTION("Scoreboardy things"),
 
@@ -439,13 +401,11 @@ public enum TL {
     COMMAND_SHOW_NOHOME("n/a"),
     COMMAND_SHOW_BONUS(" (bonus: "),
     COMMAND_SHOW_PENALTY(" (penalty: "),
-    COMMAND_SHOW_COMMANDDESCRIPTION("Show faction information"),
     COMMAND_SHOW_DEATHS_TIL_RAIDABLE("&eDTR: %1$d"),
     COMMAND_SHOW_EXEMPT("&cThis faction cannot be seen."),
 
     COMMAND_SHOWINVITES_PENDING("Players with pending invites: "),
     COMMAND_SHOWINVITES_CLICKTOREVOKE("Click to revoke invite for %1$s"),
-    COMMAND_SHOWINVITES_DESCRIPTION("Show pending faction invites"),
 
     COMMAND_STATUS_FORMAT("%1$s Power: %2$s Last Seen: %3$s"),
     COMMAND_STATUS_ONLINE("Online"),
@@ -527,11 +487,8 @@ public enum TL {
 
     COMMAND_VERSION_DESCRIPTION("Show plugin and translation version information"),
 
-    COMMAND_UPGRADES_DESCRIPTION("Show faction upgrades"),
     COMMAND_UPGRADES_TOUPGRADE("to buy an upgrade"),
     COMMAND_UPGRADES_FORUPGRADE("for buying an upgrade"),
-
-    COMMAND_ZONE_DESCRIPTION("Manage zones"),
 
     /**
      * Leaving - This is accessed through a command, and so it MAY need a COMMAND_* slug :s

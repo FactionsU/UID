@@ -32,15 +32,16 @@ public class CmdListFactions implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().list().factions();
             manager.command(
                     builder
-                            .commandDescription(Cloudy.desc(TL.COMMAND_LIST_DESCRIPTION))
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LIST)))
                             .handler(this::handle)
             );
             manager.command(
-                    builder.literal("factions")
-                            .commandDescription(Cloudy.desc(TL.COMMAND_LIST_DESCRIPTION))
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LIST)))
                             .optional("page", IntegerParser.integerParser(1))
                             .handler(this::handle)

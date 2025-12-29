@@ -40,7 +40,7 @@ public class CmdShow implements Cmd {
             var tl = FactionsPlugin.instance().tl().commands().show();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                            .commandDescription(Cloudy.desc(TL.COMMAND_SHOW_COMMANDDESCRIPTION))
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SHOW)))
                             .optional("faction", FactionParser.of(FactionParser.Include.SELF, FactionParser.Include.PLAYERS))
                             .handler(this::handle)

@@ -1,5 +1,6 @@
 package dev.kitteh.factions.command.defaults.admin;
 
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.defaults.admin.set.*;
@@ -13,7 +14,8 @@ public class CmdAdminSet implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> setBuilder = builder.literal("set");
+            var tl = FactionsPlugin.instance().tl().commands().admin().set();
+            Command.Builder<Sender> setBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases());
 
             new CmdSetAutoSave().consumer().accept(manager, setBuilder, help);
             new CmdSetGrace().consumer().accept(manager, setBuilder, help);

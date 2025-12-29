@@ -9,8 +9,10 @@ import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerJoinEvent;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -23,8 +25,9 @@ public class CmdJoin implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> build = builder.literal("join")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_JOIN_DESCRIPTION))
+            var tl = FactionsPlugin.instance().tl().commands().join();
+            Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.JOIN).and(Cloudy.isPlayer())));
 
             manager.command(
@@ -37,28 +40,29 @@ public class CmdJoin implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().join();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         Faction faction = context.get("faction");
 
         if (!faction.isNormal()) {
-            sender.msgLegacy(TL.COMMAND_JOIN_SYSTEMFACTION);
+            sender.sendRichMessage(tl.getDeniedSpecial());
             return;
         }
 
         if (faction == sender.faction()) {
-            sender.msgLegacy(TL.COMMAND_JOIN_ALREADYMEMBERFIXED, faction.tagLegacy(sender));
+            sender.sendRichMessage(tl.getDeniedAlreadyMember(), FactionResolver.of(sender, faction));
+            return;
+        }
+
+        if (sender.hasFaction()) {
+            sender.sendRichMessage(tl.getDeniedAlreadyHaveFaction());
             return;
         }
 
         int max = faction.memberLimit();
         if (faction.size() >= max) {
-            sender.msgLegacy(TL.COMMAND_JOIN_ATLIMIT, faction.tagLegacy(sender), max, sender.describeToLegacy(sender, false));
-            return;
-        }
-
-        if (sender.hasFaction()) {
-            sender.msgLegacy(TL.COMMAND_JOIN_INOTHERFACTIONFIXED);
+            sender.sendRichMessage(tl.getDeniedMaxMembers(), Placeholder.unparsed("limit", String.valueOf(max)), FactionResolver.of(sender, faction));
             return;
         }
 
@@ -67,21 +71,21 @@ public class CmdJoin implements Cmd {
         }
 
         if (!(faction.open() || faction.hasInvite(sender))) {
-            sender.msgLegacy(TL.COMMAND_JOIN_REQUIRESINVITATION);
+            sender.sendRichMessage(tl.getDeniedRequiresInvite(), FactionResolver.of(sender, faction));
             if (!faction.isBanned(sender)) {
-                faction.msgLegacy(TL.COMMAND_JOIN_ATTEMPTEDJOIN, sender.describeToLegacy(faction, true));
+                faction.membersOnline(true).forEach(fp -> fp.sendRichMessage(tl.getDeniedRequiresInviteNotice(), FPlayerResolver.of("player", fp, sender)));
             }
             return;
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make sure they can pay
-        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostJoin(), TL.COMMAND_JOIN_TOJOIN)) {
+        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostJoin(), FactionsPlugin.instance().tl().economy().actions().getJoinTo())) {
             return;
         }
 
         // Check for ban
         if (faction.isBanned(sender)) {
-            sender.msgLegacy(TL.COMMAND_JOIN_BANNED, faction.tagLegacy(sender));
+            sender.sendRichMessage(tl.getDeniedBanned(), FactionResolver.of(sender, faction));
             return;
         }
 
@@ -93,22 +97,22 @@ public class CmdJoin implements Cmd {
         }
 
         // then make 'em pay (if applicable)
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostJoin(), TL.COMMAND_JOIN_TOJOIN, TL.COMMAND_JOIN_FORJOIN)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostJoin(), FactionsPlugin.instance().tl().economy().actions().getJoinTo(), FactionsPlugin.instance().tl().economy().actions().getJoinFor())) {
             return;
         }
 
-        sender.msgLegacy(TL.COMMAND_JOIN_SUCCESS, sender.describeToLegacy(sender, true), faction.tagLegacy(sender));
+        sender.sendRichMessage(tl.getSuccess(), FactionResolver.of(sender, faction));
 
-        faction.msgLegacy(TL.COMMAND_JOIN_JOINED, sender.describeToLegacy(faction, true));
+        faction.membersOnline(true).forEach(fp -> fp.sendRichMessage(tl.getSuccessNotice(), FactionResolver.of(fp, faction), FPlayerResolver.of("player", fp, sender)));
 
         sender.resetFactionData();
         sender.faction(faction);
         faction.deInvite(sender);
         sender.role(faction.defaultRole());
-        sender.asPlayer().updateCommands();
+        ((Sender.Player) context.sender()).player().updateCommands();
 
         if (FactionsPlugin.instance().conf().logging().isFactionJoin()) {
-            AbstractFactionsPlugin.instance().log(TL.COMMAND_JOIN_JOINEDLOG.toString(), sender.name(), faction.tag());
+            AbstractFactionsPlugin.instance().log(sender.name() + " joined the faction " + faction.tag());
         }
     }
 }

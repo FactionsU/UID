@@ -11,7 +11,6 @@ import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.SpiralTask;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -32,7 +31,7 @@ public class CmdZone implements Cmd {
         return (manager, builder, help) -> {
             var tl = FactionsPlugin.instance().tl().commands().zone();
             Command.Builder<Sender> zoneBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                    .commandDescription(Cloudy.desc(TL.COMMAND_ZONE_DESCRIPTION))
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission()
                             .and(Cloudy.predicate(Sender::hasFaction))
                             .and(Cloudy.predicate(s -> s.fPlayerOrNull() instanceof FPlayer fp && fp.faction().upgradeLevel(Upgrades.ZONES) > 0))

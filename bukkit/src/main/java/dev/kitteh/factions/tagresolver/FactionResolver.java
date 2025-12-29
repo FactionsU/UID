@@ -101,7 +101,7 @@ public class FactionResolver extends ObservedResolver {
                     yield tag((faction.power() - faction.claimCount()) / FactionsPlugin.instance().conf().factions().landRaidControl().power().getLossPerDeath());
                 }
             }
-            case "dtr_rounded" -> {
+            case "dtr_rounded", "dtr" -> {
                 if (FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
                     yield tag(DTRControl.round(faction.dtr()));
                 } else {

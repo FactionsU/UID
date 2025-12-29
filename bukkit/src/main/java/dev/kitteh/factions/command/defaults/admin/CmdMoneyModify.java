@@ -1,17 +1,17 @@
 package dev.kitteh.factions.command.defaults.admin;
 
+import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.TextUtil;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -24,21 +24,23 @@ public class CmdMoneyModify implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> moneyBuilder = builder.literal("money")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_MONEYMODIFY_DESCRIPTION))
+            var tl = FactionsPlugin.instance().tl().commands().admin().money();
+
+            Command.Builder<Sender> moneyBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().economy().isBankEnabled()).and(Cloudy.hasPermission(Permission.MONEY_MODIFY))))
                     .required("faction", FactionParser.of(FactionParser.Include.SELF));
 
 
             manager.command(
-                    moneyBuilder.literal("modify")
+                    moneyBuilder.literal(tl.getSubCmdModify())
                             .required("amount", DoubleParser.doubleParser())
                             .flag(manager.flagBuilder("notify"))
                             .handler(ctx -> this.handle(ctx, true))
             );
 
             manager.command(
-                    moneyBuilder.literal("set")
+                    moneyBuilder.literal(tl.getSubCmdSet())
                             .required("amount", DoubleParser.doubleParser())
                             .flag(manager.flagBuilder("notify"))
                             .handler(ctx -> this.handle(ctx, false))
@@ -47,40 +49,39 @@ public class CmdMoneyModify implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context, boolean modify) {
-        if (!FactionsPlugin.instance().conf().economy().isBankEnabled()) {
-            context.sender().msgLegacy(TL.ECON_DISABLED);
-            return;
-        }
+        var tl = FactionsPlugin.instance().tl().commands().admin().money();
+        Sender sender = context.sender();
+
         double amount = context.get("amount");
-        Participator faction = context.get("faction");
+        Faction faction = context.get("faction");
         boolean notify = context.flags().contains("notify");
 
 
         if (modify) {
             if (Econ.modifyBalance(faction, amount)) {
-                context.sender().msgLegacy(TL.COMMAND_MONEYMODIFY_MODIFIED, faction.describeToLegacy(context.sender().fPlayerOrNull()), Econ.moneyString(amount));
+                sender.sendRichMessage(tl.getModified(), FactionResolver.of(sender.fPlayerOrNull(), faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 if (notify) {
-                    faction.msgLegacy(TL.COMMAND_MONEYMODIFY_NOTIFY, faction.describeToLegacy(null), Econ.moneyString(amount));
+                    sender.sendRichMessage(tl.getModifyNotify(), FactionResolver.of((Player) null, faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 }
 
                 if (FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
-                    AbstractFactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYMODIFY_MODIFIED.toString(), faction.describeToLegacy(null), Econ.moneyString(amount))));
+                    AbstractFactionsPlugin.instance().log(faction.tag() + " bank modified by " + Econ.moneyString(amount));
                 }
             } else {
-                context.sender().msgLegacy(TL.COMMAND_MONEYMODIFY_FAIL);
+                sender.sendRichMessage(tl.getFail(), FactionResolver.of(sender.fPlayerOrNull(), faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
             }
         } else {
             if (Econ.setBalance(faction, amount)) {
-                context.sender().msgLegacy(TL.COMMAND_MONEYMODIFY_SET, faction.describeToLegacy(context.sender().fPlayerOrNull()), Econ.moneyString(amount));
+                sender.sendRichMessage(tl.getSet(), FactionResolver.of(sender.fPlayerOrNull(), faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 if (notify) {
-                    faction.msgLegacy(TL.COMMAND_MONEYMODIFY_SETNOTIFY, faction.describeToLegacy(null), Econ.moneyString(amount));
+                    sender.sendRichMessage(tl.getSetNotify(), FactionResolver.of((Player) null, faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 }
 
                 if (FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
-                    AbstractFactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYMODIFY_SET.toString(), faction.describeToLegacy(null), Econ.moneyString(amount))));
+                    AbstractFactionsPlugin.instance().log(faction.tag() + " bank set to " + Econ.moneyString(amount));
                 }
             } else {
-                context.sender().msgLegacy(TL.COMMAND_MONEYMODIFY_FAIL);
+                sender.sendRichMessage(tl.getFail(), FactionResolver.of(sender.fPlayerOrNull(), faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
             }
         }
     }

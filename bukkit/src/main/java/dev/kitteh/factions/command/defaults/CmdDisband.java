@@ -13,8 +13,10 @@ import dev.kitteh.factions.event.FactionDisbandEvent;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -26,12 +28,15 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdDisband implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("disband")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_DISBAND_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DISBAND).and(Cloudy.hasSelfFactionPerms(PermissibleActions.DISBAND))))
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().disband();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DISBAND).and(Cloudy.hasSelfFactionPerms(PermissibleActions.DISBAND))))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
@@ -40,20 +45,25 @@ public class CmdDisband implements Cmd {
     }
 
     private void doIt(FPlayer sender, boolean confirmed) {
+        var tl = FactionsPlugin.instance().tl().commands().disband();
+
         Faction faction = sender.faction();
 
         if (!faction.isNormal()) {
-            sender.msgLegacy(TL.COMMAND_DISBAND_IMMUTABLE);
+            sender.sendRichMessage(tl.getDeniedSpecial(), FactionResolver.of(sender, faction));
             return;
         }
 
         if (!faction.hasAccess(sender, PermissibleActions.DISBAND, sender.lastStoodAt())) {
-            sender.msgLegacy(TL.GENERIC_NOPERMISSION, PermissibleActions.DISBAND.shortDescription());
+            sender.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionGeneric(),
+                    FactionResolver.of(sender, faction),
+                    Placeholder.unparsed("action", PermissibleActions.DISBAND.shortDescription())
+                    );
             return;
         }
 
         if (faction.isPermanent()) {
-            sender.msgLegacy(TL.COMMAND_DISBAND_MARKEDPERMANENT);
+            sender.sendRichMessage(tl.getDeniedPermanent(), FactionResolver.of(sender, faction));
             return;
         }
 
@@ -63,7 +73,7 @@ public class CmdDisband implements Cmd {
 
         if (!confirmed) {
             String conf = CmdConfirm.add(sender, s -> this.doIt(s, true));
-            sender.msgLegacy(TL.COMMAND_DISBAND_CONFIRM, faction.tag(), conf);
+            sender.sendRichMessage(tl.getConfirm(), FactionResolver.of(sender, faction), Placeholder.unparsed("command", conf));
             return;
         }
 
@@ -80,12 +90,8 @@ public class CmdDisband implements Cmd {
 
         // Inform all players
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-            String who = sender.describeToLegacy(fplayer);
-            if (fplayer.faction() == faction) {
-                fplayer.msgLegacy(TL.COMMAND_DISBAND_BROADCAST_YOURS, who);
-            } else {
-                fplayer.msgLegacy(TL.COMMAND_DISBAND_BROADCAST_NOTYOURS, who, faction.tagLegacy(fplayer));
-            }
+            String message = fplayer.faction() == faction ? tl.getBroadcastYours() : tl.getBroadcastNotYours();
+            fplayer.sendRichMessage(message, FactionResolver.of(fplayer, faction), FPlayerResolver.of("player", fplayer, sender));
         }
         if (FactionsPlugin.instance().conf().logging().isFactionDisband()) {
             AbstractFactionsPlugin.instance().log("The faction " + faction.tag() + " (" + faction.id() + ") was disbanded by " + sender.name() + ".");
@@ -98,7 +104,7 @@ public class CmdDisband implements Cmd {
             if (amount > 0.0) {
                 Econ.transferMoney(sender, faction, sender, amount, false);
                 String amountString = Econ.moneyString(amount);
-                sender.msgLegacy(TL.COMMAND_DISBAND_HOLDINGS, amountString);
+                sender.sendRichMessage(tl.getEconHoldings(), Placeholder.unparsed("amount", amountString));
                 AbstractFactionsPlugin.instance().log(sender.name() + " has been given bank holdings of " + amountString + " from disbanding " + faction.tag() + ".");
             }
         }
