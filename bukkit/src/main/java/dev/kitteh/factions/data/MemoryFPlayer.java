@@ -507,6 +507,9 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (title.equals(Component.empty())) {
             return Component.text(this.role.getPrefix() + this.name);
         }
+        if (FactionsPlugin.instance().tl().placeholders().isPlayerTitleColorContinuesIntoName()) {
+            return Component.text().append(Component.text(this.role.getPrefix())).append(title.append(Component.text(" " + this.name))).build();
+        }
         return Component.text().append(Component.text(this.role.getPrefix())).append(title).append(Component.text(" " + this.name)).build();
     }
 

@@ -2055,6 +2055,12 @@ public class TranslationsConfig {
         private Title title = new Title();
         private ToolTips tooltips = new ToolTips();
 
+        private boolean playerTitleColorContinuesIntoName = false;
+
+        public boolean isPlayerTitleColorContinuesIntoName() {
+            return playerTitleColorContinuesIntoName;
+        }
+
         public LastSeen lastSeen() {
             return lastSeen;
         }
