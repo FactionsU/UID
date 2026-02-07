@@ -1364,7 +1364,7 @@ public class MainConfig {
                     return relations.contains(relation);
                 }
 
-                @Deprecated
+                @Deprecated(forRemoval = true, since = "4.0.0")
                 public boolean isRelationToTeleportOut(Relation relation) {
                     if (relations == null) {
                         relations = new HashSet<>();
