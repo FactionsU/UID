@@ -110,8 +110,8 @@ public class Essentials {
                 // We're only going to remove homes in territory that belongs to THEIR faction.
                 if (factionAt == faction && factionAt.isNormal()) {
                     user.delHome(homeName);
-                    AbstractFactionsPlugin.instance().log(Level.INFO, "FactionLeaveEvent: Removing EssX home %s, player %s, in territory of %s",
-                            homeName, event.getFPlayer().name(), faction.tag());
+                    AbstractFactionsPlugin.instance().log(Level.INFO, String.format("FactionLeaveEvent: Removing EssX home %s, player %s, in territory of %s",
+                            homeName, event.getFPlayer().name(), faction.tag()));
                 }
             }
         }

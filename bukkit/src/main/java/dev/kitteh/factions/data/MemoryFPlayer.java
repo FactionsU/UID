@@ -43,7 +43,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.ApiStatus;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -973,7 +972,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         Board.board().claim(flocation, forFaction);
 
         if (FactionsPlugin.instance().conf().logging().isLandClaims()) {
-            AbstractFactionsPlugin.instance().log(TL.CLAIM_CLAIMEDLOG.toString(), this.name(), flocation.asCoordString(), forFaction.tag());
+            AbstractFactionsPlugin.instance().log(String.format(TL.CLAIM_CLAIMEDLOG.toString(), this.name(), flocation.asCoordString(), forFaction.tag()));
         }
 
         return true;
@@ -1103,7 +1102,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public void msgLegacy(@NonNull String str, @NonNull Object @NonNull ... args) {
+    public void msgLegacy(String str, Object... args) {
         this.sendMessageLegacy(TextUtil.parse(str, args));
     }
 
@@ -1253,7 +1252,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public void sendMessage(@NonNull Component component) {
+    public void sendMessage(Component component) {
         if (this.asPlayer() instanceof Player player) {
             ComponentDispatcher.send(player, component);
         }

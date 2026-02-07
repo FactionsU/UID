@@ -197,12 +197,12 @@ public class ListenEnterExit implements Listener {
 
         if (me.spyingChat() && !player.hasPermission(Permission.CHATSPY.node)) {
             me.spyingChat(false);
-            this.plugin.log(Level.INFO, "Found %s spying chat without permission on login. Disabled their chat spying.", player.getName());
+            this.plugin.log(Level.INFO, "Found " + player.getName() + " spying chat without permission on login. Disabled their chat spying.");
         }
 
         if (me.adminBypass() && !player.hasPermission(Permission.BYPASS.node)) {
             me.adminBypass(false);
-            this.plugin.log(Level.INFO, "Found %s on admin Bypass without permission on login. Disabled it for them.", player.getName());
+            this.plugin.log(Level.INFO, "Found " + player.getName() + " on admin Bypass without permission on login. Disabled it for them.");
         }
 
         if (WorldUtil.isEnabled(player)) {

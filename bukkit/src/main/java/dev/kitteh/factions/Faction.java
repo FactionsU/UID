@@ -15,7 +15,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -565,7 +564,7 @@ public interface Faction extends Participator, Selectable {
     void defaultRole(Role role);
 
     @Override
-    default void sendMessage(@NonNull Component component) {
+    default void sendMessage(Component component) {
         for (FPlayer fplayer : this.membersOnline(true)) {
             fplayer.sendMessage(component);
         }

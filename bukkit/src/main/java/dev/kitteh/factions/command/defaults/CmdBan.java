@@ -68,7 +68,7 @@ public class CmdBan implements Cmd {
 
             if (event.isCancelled()) {
                 // if someone cancels a ban, we'll get people complaining here. So lets log it.
-                AbstractFactionsPlugin.instance().log(Level.WARNING, "Attempted to ban {0} but a plugin cancelled the kick event.", target.name());
+                AbstractFactionsPlugin.instance().log(Level.WARNING, "Attempted to ban " + target.name() + " but a plugin cancelled the kick event.");
                 return;
             }
 

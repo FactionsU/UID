@@ -30,6 +30,7 @@ import org.incendo.cloud.parser.standard.StringParser;
 
 import java.util.List;
 
+@SuppressWarnings("UnstableApiUsage")
 public class CmdWarp implements Cmd {
     private static final ClickCallback.Options OPT = ClickCallback.Options.builder().build();
 
