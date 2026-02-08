@@ -3,6 +3,7 @@
 /build/
 /bukkit/build/
 /paper/build/
+/paper/run/
 /example-plugin/build/
 
 # Eclipse stuff
