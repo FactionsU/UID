@@ -138,9 +138,11 @@ public class ListenDamage implements Listener {
 
         FPlayer fPlayer = FPlayers.fPlayers().get(player);
         if (fPlayer.flying()) {
-            fPlayer.flying(false, true);
+            fPlayer.flying(false, false);
+            fPlayer.msgLegacy(TL.COMMAND_FLY_DAMAGE);
             if (fPlayer.autoFlying()) {
                 fPlayer.autoFlying(false);
+                fPlayer.msgLegacy(TL.COMMAND_FLY_AUTO, "disabled");
             }
         }
     }

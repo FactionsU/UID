@@ -220,9 +220,11 @@ public interface FPlayer extends Participator, Selectable {
 
     boolean flying();
 
-    void flying(boolean fly);
+    default void flying(boolean fly) {
+        flying(fly, true);
+    }
 
-    void flying(boolean fly, boolean damage);
+    void flying(boolean fly, boolean notify);
 
     boolean autoFlying();
 

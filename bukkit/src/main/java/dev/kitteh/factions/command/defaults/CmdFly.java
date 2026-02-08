@@ -46,12 +46,14 @@ public class CmdFly implements Cmd {
         if (context.flags().hasFlag("auto")) {
             //if (Permission.FLY_AUTO.has(context.sender().sender(), true)) {
             sender.autoFlying(!sender.autoFlying());
+            sender.msgLegacy(TL.COMMAND_FLY_AUTO, sender.autoFlying() ? "enabled" : "disabled");
             toggleFlight(sender, sender.autoFlying(), false);
             unhandled = false;
             //}
         }
         if (context.flags().get("trail") instanceof Boolean bool) {
             sender.flyTrail(bool);
+            sender.msgLegacy(TL.COMMAND_FLYTRAILS_CHANGE, bool ? "enabled" : "disabled");
             unhandled = false;
         }
         if (context.flags().get("particle") instanceof String effectName) {
@@ -63,6 +65,7 @@ public class CmdFly implements Cmd {
 
             if (context.sender().sender().hasPermission(Permission.FLY_TRAILS.node + "." + effectName)) {
                 sender.flyTrailEffect(effectName);
+                sender.msgLegacy(TL.COMMAND_FLYTRAILS_PARTICLE_CHANGE, effectName);
             } else {
                 sender.msgLegacy(TL.COMMAND_FLYTRAILS_PARTICLE_PERMS, effectName);
             }
