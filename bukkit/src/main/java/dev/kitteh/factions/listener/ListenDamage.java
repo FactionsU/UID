@@ -45,9 +45,8 @@ public class ListenDamage implements Listener {
             return;
         }
 
-        Entity entity = event.getEntity();
-        if (entity instanceof Player) {
-            FactionsPlugin.instance().landRaidControl().onDeath((Player) entity);
+        if (event.getEntity() instanceof Player player) {
+            FactionsPlugin.instance().landRaidControl().onDeath(player);
         }
     }
 
