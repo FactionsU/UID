@@ -63,6 +63,7 @@ public class FlightUtil {
                         pilot.flying(false);
                         if (pilot.autoFlying()) {
                             pilot.autoFlying(false);
+                            pilot.msgLegacy(TL.COMMAND_FLY_AUTO, "disabled");
                         }
                     }
                 }

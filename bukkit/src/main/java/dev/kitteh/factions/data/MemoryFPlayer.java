@@ -762,7 +762,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         this.resetFactionData(true);
         if (FactionsPlugin.instance().conf().commands().fly().isEnable()) {
-            flying(false, false);
+            flying(false);
         }
 
         if (myFaction.isNormal() && !perm && myFaction.members().isEmpty()) {
@@ -1122,7 +1122,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (FactionsPlugin.instance().conf().commands().fly().isEnable() && !this.adminBypass()) {
             boolean canFly = this.canFlyAtLocation(this.lastStoodAt());
             if (this.flying() && !canFly) {
-                this.flying(false, false);
+                this.flying(false);
             } else if (this.autoFlying() && !this.flying() && canFly) {
                 this.flying(true);
             }
@@ -1135,22 +1135,15 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
-    public void flying(boolean fly) {
-        flying(fly, false);
-    }
-
-    @Override
-    public void flying(boolean fly, boolean damage) {
+    public void flying(boolean fly, boolean notify) {
         Player player = asPlayer();
         if (player != null) {
             player.setAllowFlight(fly);
             player.setFlying(fly);
         }
 
-        if (!damage) {
+        if (notify) {
             msgLegacy(TL.COMMAND_FLY_CHANGE, fly ? "enabled" : "disabled");
-        } else {
-            msgLegacy(TL.COMMAND_FLY_DAMAGE);
         }
 
         // If leaving fly mode, don't let them take fall damage for x seconds.
@@ -1181,7 +1174,6 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public void autoFlying(boolean autoFly) {
-        msgLegacy(TL.COMMAND_FLY_AUTO, autoFly ? "enabled" : "disabled");
         this.isAutoFlying = autoFly;
     }
 
@@ -1237,7 +1229,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public void flyTrail(boolean state) {
         flyTrailsState = state;
-        msgLegacy(TL.COMMAND_FLYTRAILS_CHANGE, state ? "enabled" : "disabled");
     }
 
     @Override
@@ -1248,7 +1239,6 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public void flyTrailEffect(String effect) {
         flyTrailsEffect = effect;
-        msgLegacy(TL.COMMAND_FLYTRAILS_PARTICLE_CHANGE, effect);
     }
 
     @Override
