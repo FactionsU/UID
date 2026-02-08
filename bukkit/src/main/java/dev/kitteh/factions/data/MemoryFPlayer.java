@@ -801,10 +801,13 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public boolean canClaimForFaction(Faction forFaction) {
         Player player = this.asPlayer();
-        if (player == null) {
+        if (player == null || forFaction.isWilderness()) {
             return false;
         }
-        return this.adminBypass() || !forFaction.isWilderness() && (forFaction == this.faction() && this.faction().hasAccess(this, PermissibleActions.TERRITORY, null)) || (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(player)) || (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(player));
+        return this.adminBypass() ||
+                (forFaction == this.faction() && this.faction().hasAccess(this, PermissibleActions.TERRITORY, null)) ||
+                (forFaction.isSafeZone() && Permission.MANAGE_SAFE_ZONE.has(player)) ||
+                (forFaction.isWarZone() && Permission.MANAGE_WAR_ZONE.has(player));
     }
 
     @Override
