@@ -54,6 +54,7 @@ import dev.kitteh.factions.command.defaults.admin.CmdSaveAll;
 import dev.kitteh.factions.command.defaults.admin.CmdTicketInfo;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.WorldUtil;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.incendo.cloud.Command;
@@ -149,7 +150,12 @@ public class CommandsRoot {
 
         MinecraftHelp<Sender> help = MinecraftHelp.<Sender>builder()
                 .commandManager(manager)
-                .audienceProvider(LilAudience::new)
+                .audienceProvider(sender -> {
+                    if (sender.sender() instanceof Audience audience) {
+                        return audience;
+                    }
+                    return new LilAudience(sender.sender());
+                })
                 .commandPrefix("/" + main.getFirstAlias() + " " + helpTl.getFirstAlias())
                 .commandFilter(command -> !command.commandMeta().contains(Cmd.HIDE_IN_HELP))
                 .build();
