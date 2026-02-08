@@ -1,5 +1,6 @@
 package dev.kitteh.factions.util;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.ChatMessageType;
@@ -29,7 +30,11 @@ public class ComponentDispatcher {
     }
 
     public static void send(CommandSender commandSender, ComponentLike component) {
-        componentSender.accept(commandSender, component);
+        Component comp = component.asComponent();
+        if (comp.equals(Component.empty())) {
+            return;
+        }
+        componentSender.accept(commandSender, comp);
     }
 
     public static void sendActionBar(Player player, ComponentLike component) {
