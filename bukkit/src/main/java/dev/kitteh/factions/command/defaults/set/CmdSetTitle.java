@@ -8,24 +8,26 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.parser.standard.StringParser;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.parser.standard.StringParser;
 
 public class CmdSetTitle implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> build = builder.literal("title")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_TITLE_DESCRIPTION))
+            var tl = FactionsPlugin.instance().tl().commands().set().title();
+            Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TITLE).and(Cloudy.isAtLeastRole(Role.MODERATOR))));
 
             manager.command(
@@ -34,7 +36,8 @@ public class CmdSetTitle implements Cmd {
                             .handler(this::handle)
             );
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f set title <player> [title]", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx ->
+                    help.queryCommands("f " + FactionsPlugin.instance().tl().commands().set().getFirstAlias() + " " + tl.getFirstAlias() + " <player> [title]", ctx.sender())));
         };
     }
 
@@ -43,17 +46,14 @@ public class CmdSetTitle implements Cmd {
         FPlayer target = context.get("player");
         Faction faction = sender.faction();
 
+        var tl = FactionsPlugin.instance().tl().commands().set().title();
+
         if (sender.faction() != target.faction() || (sender.role() != Role.ADMIN && sender.role().value <= target.role().value)) {
-            sender.msgLegacy(TL.COMMAND_TITLE_CANNOTPLAYER);
+            sender.sendRichMessage(tl.getCannotChange());
             return;
         }
 
         String title = context.getOrDefault("title", "").trim();
-
-        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostTitle(), TL.COMMAND_TITLE_TOCHANGE, TL.COMMAND_TITLE_FORCHANGE)) {
-            return;
-        }
 
         Component titleComponent;
         if (context.sender().hasPermission(Permission.TITLE_COLOR)) {
@@ -61,10 +61,24 @@ public class CmdSetTitle implements Cmd {
         } else {
             titleComponent = Component.text(title);
         }
+
+        int limit = FactionsPlugin.instance().conf().factions().other().getTitleLengthMax();
+        if (PlainTextComponentSerializer.plainText().serialize(titleComponent).length() > limit) {
+            sender.sendRichMessage(tl.getLimit(), Placeholder.unparsed("limit", String.valueOf(limit)));
+            return;
+        }
+
+        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
+        var econ = FactionsPlugin.instance().conf().economy();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        if (!context.sender().payForCommand(econ.getCostTitle(), econTl.getTitleTo(), econTl.getTitleFor())) {
+            return;
+        }
+
         target.title(titleComponent);
 
         // Inform
-        faction.msgLegacy(TL.COMMAND_TITLE_CHANGED, sender.describeToLegacy(faction), target.describeToLegacy(faction));
+        faction.sendRichMessage(tl.getChanged(), FPlayerResolver.of("sender", (FPlayer) null, sender), FPlayerResolver.of("target", (FPlayer) null, target));
     }
 
 }

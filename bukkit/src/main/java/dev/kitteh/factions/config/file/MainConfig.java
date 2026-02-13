@@ -1944,6 +1944,10 @@ public class MainConfig {
             private int tagLengthMin = 3;
             @Comment("Maximum faction tag length")
             private int tagLengthMax = 10;
+
+            @Comment("Maximum member title length")
+            private int titleLengthMax = 64;
+
             private boolean tagForceUpperCase = false;
             private String tagValidCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
             private transient List<Character> tagValidCharactersList;
@@ -2075,6 +2079,10 @@ public class MainConfig {
 
             public int getTagLengthMax() {
                 return tagLengthMax;
+            }
+
+            public int getTitleLengthMax() {
+                return Math.max(0, titleLengthMax);
             }
 
             public boolean isTagForceUpperCase() {

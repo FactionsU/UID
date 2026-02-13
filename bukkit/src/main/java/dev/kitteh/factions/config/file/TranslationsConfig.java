@@ -648,6 +648,34 @@ public class TranslationsConfig {
             public SetCmd() {
                 super("Set faction info", "set");
             }
+
+            public static class SetTitleCmd extends AbsCommand {
+                public SetTitleCmd() {
+                    super("Set or remove a player's title", "title");
+                }
+
+                private String cannotChange = "<red>Cannot change this player's title.";
+                private String changed = "<yellow><sender> changed a title: <target>.";
+                private String limit = "<red>Titles cannot be longer than <limit> characters.";
+
+                public String getCannotChange() {
+                    return cannotChange;
+                }
+
+                public String getChanged() {
+                    return changed;
+                }
+
+                public String getLimit() {
+                    return limit;
+                }
+            }
+
+            private SetTitleCmd title = new SetTitleCmd();
+
+            public SetTitleCmd title() {
+                return title;
+            }
         }
 
         public static class Show extends AbsCommand {
@@ -1679,6 +1707,8 @@ public class TranslationsConfig {
             private String warpTo = "to warp";
             private String joinFor = "for joining a faction";
             private String joinTo = "to join a faction";
+            private String titleFor = "for changing a player's title";
+            private String titleTo = "to change a player's title";
 
             public String getJoinTo() {
                 return joinTo;
@@ -1694,6 +1724,14 @@ public class TranslationsConfig {
 
             public String getWarpTo() {
                 return warpTo;
+            }
+
+            public String getTitleFor() {
+                return titleFor;
+            }
+
+            public String getTitleTo() {
+                return titleTo;
             }
         }
 
