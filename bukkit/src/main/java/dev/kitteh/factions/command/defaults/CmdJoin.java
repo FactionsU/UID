@@ -97,7 +97,9 @@ public class CmdJoin implements Cmd {
         }
 
         // then make 'em pay (if applicable)
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostJoin(), FactionsPlugin.instance().tl().economy().actions().getJoinTo(), FactionsPlugin.instance().tl().economy().actions().getJoinFor())) {
+        var econ = FactionsPlugin.instance().conf().economy();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        if (!context.sender().payForCommand(econ.getCostJoin(), econTl.getJoinTo(), econTl.getJoinFor())) {
             return;
         }
 
