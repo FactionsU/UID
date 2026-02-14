@@ -33,6 +33,9 @@ dependencies:
     PlaceholderAPI:
       required: false
       join-classpath: true
+    PlayerVaults:
+      required: false
+      join-classpath: true
     Sentinel:
       required: false
       join-classpath: true
