@@ -9,6 +9,7 @@ libraries:
   - "net.kyori:adventure-text-minimessage:${adv}"
   - "net.kyori:adventure-text-serializer-gson:${adv}"
   - "net.kyori:adventure-text-serializer-legacy:${adv}"
+  - "net.kyori:adventure-text-serializer-plain:${adv}"
 
 softdepend: [LuckPerms, WorldGuard]
 
