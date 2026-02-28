@@ -114,7 +114,11 @@ allprojects {
 
     exclusiveContent {
       forRepository {
-        maven("https://repo.cwhead.dev/repository/maven-public/")
+        maven("https://repo.cwhead.dev/repository/maven-releases/") {
+            metadataSources {
+                artifact()
+            }
+        }
       }
 
       filter {

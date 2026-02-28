@@ -27,6 +27,9 @@ dependencies:
     dynmap:
       required: false
       join-classpath: true
+    GravesX:
+      required: false
+      join-classpath: true
     Magic:
       required: false
       join-classpath: true

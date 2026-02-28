@@ -1,6 +1,6 @@
 package dev.kitteh.factions.integration;
 
-import com.ranull.graves.event.GraveCreateEvent;
+import dev.cwhead.GravesX.event.GraveCreateEvent;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.Faction;
