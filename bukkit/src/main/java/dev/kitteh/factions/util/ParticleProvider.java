@@ -40,6 +40,8 @@ public class ParticleProvider {
     public static void spawn(Player player, Particle particle, Location location, Color color) {
         if (particle.getDataType().equals(Particle.DustOptions.class)) {
             player.spawnParticle(particle, location, 1, new Particle.DustOptions(color, 1.5f));
+        } else if (particle.getDataType().equals(Color.class)) {
+            player.spawnParticle(particle, location, 1, color);
         } else if (particle.getDataType() == Void.class) {
             player.spawnParticle(particle, location, 1, null);
         }

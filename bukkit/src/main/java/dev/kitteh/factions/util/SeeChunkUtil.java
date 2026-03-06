@@ -70,6 +70,8 @@ public class SeeChunkUtil extends BukkitRunnable {
         if (useColor) {
             TextColor textColor = Board.board().factionAt(flocation).relationTo(fme).color();
             color = Color.fromRGB(textColor.red(), textColor.green(), textColor.blue());
+        } else if (effect.getDataType().equals(Particle.DustOptions.class) || effect.getDataType().equals(Color.class)) {
+            color = Color.WHITE;
         }
 
         int blockX;
