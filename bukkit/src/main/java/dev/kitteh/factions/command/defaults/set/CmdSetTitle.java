@@ -78,7 +78,7 @@ public class CmdSetTitle implements Cmd {
         target.title(titleComponent);
 
         // Inform
-        faction.sendRichMessage(tl.getChanged(), FPlayerResolver.of("sender", (FPlayer) null, sender), FPlayerResolver.of("target", (FPlayer) null, target));
+        faction.sendRichMessage(tl.getChanged(), FPlayerResolver.of("sender", sender), FPlayerResolver.of("target", target));
     }
 
 }

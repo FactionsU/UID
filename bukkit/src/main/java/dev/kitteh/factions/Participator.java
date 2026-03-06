@@ -54,6 +54,7 @@ public interface Participator {
     void sendMessage(Component component);
 
     default void sendRichMessage(String miniMessage, TagResolver... resolvers) {
+        // TODO is changing this from default an ABI break?
         this.sendMessage(Mini.parse(miniMessage, resolvers));
     }
 

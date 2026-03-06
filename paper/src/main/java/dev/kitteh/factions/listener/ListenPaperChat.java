@@ -56,10 +56,10 @@ public class ListenPaperChat implements Listener {
             FPlayer fPlayer = FPlayers.fPlayers().get(event.getPlayer());
             String format = fPlayer.hasFaction() ? chatConf.getFormatHasFaction() : chatConf.getFormatNoFaction();
             event.renderer((source, sourceDisplayName, message, viewer) -> {
-                Player observer = viewer instanceof Player player ? player : null;
-                return Mini.parse(format,
+                FPlayer observer = viewer instanceof Player player ? FPlayers.fPlayers().get(player) : null;
+                return Mini.parse(format, observer,
                         Placeholder.component("message", message),
-                        FPlayerResolver.of("sender", observer, fPlayer)
+                        FPlayerResolver.of("sender", fPlayer)
                 );
             });
         }

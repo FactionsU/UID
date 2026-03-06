@@ -50,20 +50,20 @@ public class CmdDisband implements Cmd {
         Faction faction = sender.faction();
 
         if (!faction.isNormal()) {
-            sender.sendRichMessage(tl.getDeniedSpecial(), FactionResolver.of(sender, faction));
+            sender.sendRichMessage(tl.getDeniedSpecial(), FactionResolver.of(faction));
             return;
         }
 
         if (!faction.hasAccess(sender, PermissibleActions.DISBAND, sender.lastStoodAt())) {
             sender.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionGeneric(),
-                    FactionResolver.of(sender, faction),
+                    FactionResolver.of(faction),
                     Placeholder.unparsed("action", PermissibleActions.DISBAND.shortDescription())
                     );
             return;
         }
 
         if (faction.isPermanent()) {
-            sender.sendRichMessage(tl.getDeniedPermanent(), FactionResolver.of(sender, faction));
+            sender.sendRichMessage(tl.getDeniedPermanent(), FactionResolver.of(faction));
             return;
         }
 
@@ -73,7 +73,7 @@ public class CmdDisband implements Cmd {
 
         if (!confirmed) {
             String conf = CmdConfirm.add(sender, s -> this.doIt(s, true));
-            sender.sendRichMessage(tl.getConfirm(), FactionResolver.of(sender, faction), Placeholder.unparsed("command", conf));
+            sender.sendRichMessage(tl.getConfirm(), FactionResolver.of(faction), Placeholder.unparsed("command", conf));
             return;
         }
 
@@ -91,7 +91,7 @@ public class CmdDisband implements Cmd {
         // Inform all players
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             String message = fplayer.faction() == faction ? tl.getBroadcastYours() : tl.getBroadcastNotYours();
-            fplayer.sendRichMessage(message, FactionResolver.of(fplayer, faction), FPlayerResolver.of("player", fplayer, sender));
+            fplayer.sendRichMessage(message, FactionResolver.of(faction), FPlayerResolver.of("player", sender));
         }
         if (FactionsPlugin.instance().conf().logging().isFactionDisband()) {
             AbstractFactionsPlugin.instance().log("The faction " + faction.tag() + " (" + faction.id() + ") was disbanded by " + sender.name() + ".");

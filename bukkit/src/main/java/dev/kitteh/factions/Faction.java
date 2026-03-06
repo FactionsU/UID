@@ -11,6 +11,7 @@ import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.LazyLocation;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -567,6 +568,13 @@ public interface Faction extends Participator, Selectable {
     default void sendMessage(Component component) {
         for (FPlayer fplayer : this.membersOnline(true)) {
             fplayer.sendMessage(component);
+        }
+    }
+
+    @Override
+    default void sendRichMessage(String miniMessage, TagResolver... resolvers) {
+        for (FPlayer fplayer : this.membersOnline(true)) {
+            fplayer.sendRichMessage(miniMessage, resolvers);
         }
     }
 

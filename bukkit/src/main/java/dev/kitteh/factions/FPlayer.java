@@ -5,6 +5,7 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.WarmUpUtil;
+import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ import java.util.UUID;
 @ApiStatus.AvailableSince("4.0.0")
 @ApiStatus.NonExtendable
 @NullMarked
-public interface FPlayer extends Participator, Selectable {
+public interface FPlayer extends Participator, Pointered, Selectable {
     UUID uniqueId();
 
     String name();

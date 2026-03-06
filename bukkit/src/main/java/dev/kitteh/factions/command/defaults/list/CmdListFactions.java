@@ -100,17 +100,17 @@ public class CmdListFactions implements Cmd {
         String factionEntry = plugin.tl().commands().list().factions().getEntry();
 
         if (!header.isEmpty()) {
-            lines.add(Mini.parse(header,
+            lines.add(Mini.parse(header, fPlayer,
                     Placeholder.unparsed("page_current", String.valueOf(pagenumber)),
                     Placeholder.unparsed("page_count", String.valueOf(pagecount))));
         }
 
         for (Faction faction : factionList.subList(start, end)) {
-            lines.add(Mini.parse(faction.isWilderness() ? factionlessEntry : factionEntry, FactionResolver.of(fPlayer, faction)));
+            lines.add(Mini.parse(faction.isWilderness() ? factionlessEntry : factionEntry, fPlayer, FactionResolver.of(faction)));
         }
 
         if (!footer.isEmpty()) {
-            lines.add(Mini.parse(footer,
+            lines.add(Mini.parse(footer, fPlayer,
                     Placeholder.unparsed("page_current", String.valueOf(pagenumber)),
                     Placeholder.unparsed("page_count", String.valueOf(pagecount))));
         }

@@ -71,12 +71,12 @@ public class CmdNear implements Cmd {
         while (!nearbyMembers.isEmpty()) {
             TextComponent.Builder builder = Component.text();
             if (messages.isEmpty()) {
-                builder.append(Mini.parse(tl.getStartOfLine()));
+                builder.append(Mini.parse(tl.getStartOfLine(), sender));
             }
             for (int x = 0; x < 20 && x < nearbyMembers.size(); x++) {
                 FPlayer member = nearbyMembers.removeFirst();
-                builder.append(Mini.parse(tl.getPerPlayer(),
-                        FPlayerResolver.of("player", sender, member),
+                builder.append(Mini.parse(tl.getPerPlayer(), sender,
+                        FPlayerResolver.of("player", member),
                         Placeholder.unparsed("distance", String.valueOf(Math.round(loc.distance(member.asPlayer().getLocation()))))));
                 if (x < nearbyMembers.size() - 1) {
                     builder.append(Component.text(", "));

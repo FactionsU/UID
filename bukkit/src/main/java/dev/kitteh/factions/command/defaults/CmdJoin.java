@@ -51,7 +51,7 @@ public class CmdJoin implements Cmd {
         }
 
         if (faction == sender.faction()) {
-            sender.sendRichMessage(tl.getDeniedAlreadyMember(), FactionResolver.of(sender, faction));
+            sender.sendRichMessage(tl.getDeniedAlreadyMember(), FactionResolver.of(faction));
             return;
         }
 
@@ -62,7 +62,7 @@ public class CmdJoin implements Cmd {
 
         int max = faction.memberLimit();
         if (faction.size() >= max) {
-            sender.sendRichMessage(tl.getDeniedMaxMembers(), Placeholder.unparsed("limit", String.valueOf(max)), FactionResolver.of(sender, faction));
+            sender.sendRichMessage(tl.getDeniedMaxMembers(), Placeholder.unparsed("limit", String.valueOf(max)), FactionResolver.of(faction));
             return;
         }
 
@@ -71,9 +71,9 @@ public class CmdJoin implements Cmd {
         }
 
         if (!(faction.open() || faction.hasInvite(sender))) {
-            sender.sendRichMessage(tl.getDeniedRequiresInvite(), FactionResolver.of(sender, faction));
+            sender.sendRichMessage(tl.getDeniedRequiresInvite(), FactionResolver.of(faction));
             if (!faction.isBanned(sender)) {
-                faction.membersOnline(true).forEach(fp -> fp.sendRichMessage(tl.getDeniedRequiresInviteNotice(), FPlayerResolver.of("player", fp, sender)));
+                faction.membersOnline(true).forEach(fp -> fp.sendRichMessage(tl.getDeniedRequiresInviteNotice(), FPlayerResolver.of("player", sender)));
             }
             return;
         }
@@ -85,7 +85,7 @@ public class CmdJoin implements Cmd {
 
         // Check for ban
         if (faction.isBanned(sender)) {
-            sender.sendRichMessage(tl.getDeniedBanned(), FactionResolver.of(sender, faction));
+            sender.sendRichMessage(tl.getDeniedBanned(), FactionResolver.of(faction));
             return;
         }
 
@@ -103,9 +103,9 @@ public class CmdJoin implements Cmd {
             return;
         }
 
-        sender.sendRichMessage(tl.getSuccess(), FactionResolver.of(sender, faction));
+        sender.sendRichMessage(tl.getSuccess(), FactionResolver.of(faction));
 
-        faction.membersOnline(true).forEach(fp -> fp.sendRichMessage(tl.getSuccessNotice(), FactionResolver.of(fp, faction), FPlayerResolver.of("player", fp, sender)));
+        faction.membersOnline(true).forEach(fp -> fp.sendRichMessage(tl.getSuccessNotice(), FactionResolver.of(faction), FPlayerResolver.of("player", sender)));
 
         sender.resetFactionData();
         sender.faction(faction);

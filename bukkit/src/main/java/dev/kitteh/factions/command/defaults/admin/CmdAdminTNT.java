@@ -55,7 +55,7 @@ public class CmdAdminTNT implements Cmd {
 
         faction.tntBank(newVal);
         sender.sendRichMessage(FactionsPlugin.instance().tl().commands().admin().tnt().getSuccess(),
-                FactionResolver.of(sender.fPlayerOrNull(), faction),
+                FactionResolver.of(faction),
                 Placeholder.parsed("oldamount", String.valueOf(oldVal))
                 );
     }

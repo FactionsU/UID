@@ -26,7 +26,7 @@ public abstract class FSidebarProvider {
     public abstract List<Component> getLines(FPlayer fplayer);
 
     public Component process(String message, FPlayer fPlayer, Faction faction) {
-        return Mini.parse(message, FPlayerResolver.of("player", fPlayer, fPlayer), FactionResolver.of(fPlayer, faction));
+        return Mini.parse(message, fPlayer, FPlayerResolver.of("player", fPlayer), FactionResolver.of(faction));
     }
 
     private static class FDefaultSidebar extends FSidebarProvider {

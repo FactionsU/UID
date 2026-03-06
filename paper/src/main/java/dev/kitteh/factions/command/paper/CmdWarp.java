@@ -57,11 +57,11 @@ public class CmdWarp implements Cmd {
     }
 
     private Dialog menuWarp(Sender sender, Faction faction) {
-        FactionResolver factionResolver = FactionResolver.of(sender.fPlayerOrNull(), faction);
+        FactionResolver factionResolver = FactionResolver.of(faction);
         var tl = FactionsPlugin.instance().tl().commands().warp();
         List<ActionButton> warps = faction.warps().keySet().stream()
                 .map(warp -> {
-                    ActionButton.Builder builder = ActionButton.builder(Mini.parse(tl.getMenuWarpName(), Placeholder.unparsed("warp", warp)));
+                    ActionButton.Builder builder = ActionButton.builder(Mini.parse(tl.getMenuWarpName(), sender.fPlayerOrNull(), Placeholder.unparsed("warp", warp)));
                     if (faction.hasWarpPassword(warp)) {
                         return builder.action(DialogAction.customClick((r, audience) ->
                                 audience.showDialog(this.password(sender, warp, faction, factionResolver)), OPT)).build();
@@ -74,10 +74,10 @@ public class CmdWarp implements Cmd {
                 .toList();
 
         return Dialog.create(b -> b.empty()
-                .base(DialogBase.builder(Mini.parse(tl.getMenuTitle(), factionResolver)).body(this.body(tl.getMenuBody(), factionResolver)).build())
+                .base(DialogBase.builder(Mini.parse(tl.getMenuTitle(), sender.fPlayerOrNull(), factionResolver)).body(this.body(tl.getMenuBody(), factionResolver)).build())
                 .type(DialogType.multiAction(
                         warps,
-                        ActionButton.builder(Mini.parse(tl.getMenuCancel(), factionResolver)).build(),
+                        ActionButton.builder(Mini.parse(tl.getMenuCancel(), sender.fPlayerOrNull(), factionResolver)).build(),
                         2
                 )));
     }
@@ -86,16 +86,16 @@ public class CmdWarp implements Cmd {
         var tl = FactionsPlugin.instance().tl().commands().warp();
         TagResolver warp = Placeholder.unparsed("warp", warpName);
         return Dialog.create(b -> b.empty()
-                .base(DialogBase.builder(Mini.parse(tl.getMenuPassTitle(), warp, factionResolver))
+                .base(DialogBase.builder(Mini.parse(tl.getMenuPassTitle(), sender.fPlayerOrNull(), warp, factionResolver))
                         .body(this.body(tl.getMenuPassBody(), warp, factionResolver))
                         .inputs(List.of(
-                                DialogInput.text("password", Mini.parse(tl.getMenuPassInputLabel()))
+                                DialogInput.text("password", Mini.parse(tl.getMenuPassInputLabel(), sender.fPlayerOrNull()))
                                         .width(300)
                                         .build()
                         ))
                         .build())
                 .type(DialogType.confirmation(
-                        ActionButton.builder(Mini.parse(tl.getMenuPassConfirm(), factionResolver, warp))
+                        ActionButton.builder(Mini.parse(tl.getMenuPassConfirm(), sender.fPlayerOrNull(), factionResolver, warp))
                                 .action(DialogAction.customClick(
                                         (r, audience) ->
                                         {
@@ -109,7 +109,7 @@ public class CmdWarp implements Cmd {
                                             }
                                         }
                                         , OPT)).build(),
-                        ActionButton.builder(Mini.parse(tl.getMenuCancel(), factionResolver)).build()
+                        ActionButton.builder(Mini.parse(tl.getMenuCancel(), sender.fPlayerOrNull(), factionResolver)).build()
                 )));
     }
 

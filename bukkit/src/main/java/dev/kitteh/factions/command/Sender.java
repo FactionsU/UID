@@ -32,6 +32,11 @@ public interface Sender {
         Faction faction();
 
         @Override
+        default void sendRichMessage(String miniMessage, TagResolver... resolvers) {
+            fPlayer().sendRichMessage(miniMessage, resolvers);
+        }
+
+        @Override
         default boolean payForCommand(double cost, String toDoThis, String forDoingThis) {
             if (!Econ.shouldBeUsed() || cost == 0.0) {
                 return true;

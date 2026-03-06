@@ -179,10 +179,10 @@ public class FTeamWrapper {
         MainConfig.Scoreboard.Constant conf = FactionsPlugin.instance().conf().scoreboard().constant();
         var tl = FactionsPlugin.instance().tl().scoreboard().constant();
         if (conf.isPrefixes()) {
-            prefixSetter.accept(teams.get(scoreboard), Mini.parse(tl.getPrefixTemplate(), FactionResolver.of(scoreboard.getFPlayer(), faction)));
+            prefixSetter.accept(teams.get(scoreboard), Mini.parse(tl.getPrefixTemplate(), scoreboard.getFPlayer(), FactionResolver.of(faction)));
         }
         if (conf.isSuffixes()) {
-            suffixSetter.accept(teams.get(scoreboard), Mini.parse(tl.getSuffixTemplate(), FactionResolver.of(scoreboard.getFPlayer(), faction)));
+            suffixSetter.accept(teams.get(scoreboard), Mini.parse(tl.getSuffixTemplate(), scoreboard.getFPlayer(), FactionResolver.of(faction)));
         }
     }
 

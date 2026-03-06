@@ -1,5 +1,6 @@
 package dev.kitteh.factions.tagresolver;
 
+import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
@@ -30,6 +31,11 @@ public abstract class HelperResolver implements TagResolver {
         this.name = name;
     }
 
+    @ApiStatus.AvailableSince("4.5.0")
+    protected @Nullable FPlayer observer(Context context) {
+        return context.target() instanceof FPlayer fPlayer ? fPlayer : null;
+    }
+
     @Override
     public @Nullable Tag resolve(String name, ArgumentQueue arguments, Context ctx) throws ParsingException {
         if (!this.name.equals(name)) {
@@ -51,7 +57,12 @@ public abstract class HelperResolver implements TagResolver {
     }
 
     public static Tag tagMini(String string, TagResolver... resolvers) {
-        return Tag.selfClosingInserting(Mini.parse(string, resolvers));
+        return tagMini(string, null, resolvers);
+    }
+
+    @ApiStatus.AvailableSince("4.5.0")
+    public static Tag tagMini(String string, @Nullable FPlayer observer, TagResolver... resolvers) {
+        return Tag.selfClosingInserting(Mini.parse(string, observer, resolvers));
     }
 
     public static Tag tagLegacy(String string) {
@@ -62,6 +73,7 @@ public abstract class HelperResolver implements TagResolver {
         return Tag.preProcessParsed(MiniMessage.miniMessage().serialize(LegacyComponentSerializer.legacySection().deserialize(string)));
     }
 
+    @Deprecated(forRemoval = true, since = "4.5.0")
     public static Tag tagLegacy(TL tl) {
         return Tag.selfClosingInserting(LegacyComponentSerializer.legacySection().deserialize(tl.toString()));
     }
@@ -100,6 +112,11 @@ public abstract class HelperResolver implements TagResolver {
     }
 
     public static Tag tagTip(List<String> lines, TagResolver... resolvers) {
+        return tagTip(lines, null, resolvers);
+    }
+
+    @ApiStatus.AvailableSince("4.5.0")
+    public static Tag tagTip(List<String> lines, @Nullable FPlayer fPlayer, TagResolver... resolvers) {
         TextComponent.Builder builder = Component.text();
         boolean newLine = false;
         for (String line : lines) {
@@ -107,7 +124,7 @@ public abstract class HelperResolver implements TagResolver {
                 builder.appendNewline();
             }
             newLine = true;
-            builder.append(Mini.parse(line, resolvers));
+            builder.append(Mini.parse(line, fPlayer, resolvers));
         }
         return Tag.styling(b->b.hoverEvent(HoverEvent.showText(builder.build())));
     }

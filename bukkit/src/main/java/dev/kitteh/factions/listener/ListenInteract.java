@@ -225,7 +225,7 @@ public class ListenInteract implements Listener {
 
         PermissibleAction action = PermissibleActions.CONTAINER;
         if (!otherFaction.hasAccess(me, action, location)) {
-            me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(), FactionResolver.of(me, otherFaction), Placeholder.unparsed("action", action.shortDescription()));
+            me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(), FactionResolver.of(otherFaction), Placeholder.unparsed("action", action.shortDescription()));
             event.setCancelled(true);
         }
     }

@@ -174,7 +174,7 @@ public class CmdZone implements Cmd {
 
         sender.sendRichMessage(tl.getSuccess(),
                 Placeholder.unparsed("name", name),
-                Placeholder.component("greeting", Mini.parse(greeting, Placeholder.unparsed("tag", faction.tag())))
+                Placeholder.component("greeting", Mini.parse(greeting, sender, Placeholder.unparsed("tag", faction.tag())))
         );
     }
 

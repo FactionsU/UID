@@ -178,14 +178,14 @@ public class CmdSetPerm implements Cmd {
         Collections.sort(selectors);
 
         ComponentBuilder<TextComponent, TextComponent.Builder> build = Component.text();
-        build.append(Mini.parse(tl.add().getAvailableSelectorsIntro()));
+        build.append(Mini.parse(tl.add().getAvailableSelectorsIntro(), sender.fPlayerOrNull()));
         ChatColor.stripColor(Mini.toLegacy(build.build()));
         int x = length(build);
 
         String commandPiece = this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + ' ';
 
         for (String selector : selectors) {
-            build.append(Mini.parse(tl.add().getAvailableSelectorsSelector(),
+            build.append(Mini.parse(tl.add().getAvailableSelectorsSelector(), sender.fPlayerOrNull(),
                     Placeholder.parsed("command", commandPiece + "\"" + selector + "\""),
                     Placeholder.unparsed("selector", selector)
             ));
@@ -231,13 +231,13 @@ public class CmdSetPerm implements Cmd {
                 }
                 if (options != null) {
                     ComponentBuilder<TextComponent, TextComponent.Builder> build = Component.text();
-                    build.append(Mini.parse(tl.add().getSelectorOptionsIntro()));
+                    build.append(Mini.parse(tl.add().getSelectorOptionsIntro(), sender.fPlayerOrNull()));
                     int x = length(build);
 
                     String commandPiece = this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + ' ';
 
                     for (Map.Entry<String, String> entry : options.entrySet()) {
-                        build.append(Mini.parse(tl.add().getSelectorOptionsItem(),
+                        build.append(Mini.parse(tl.add().getSelectorOptionsItem(), sender.fPlayerOrNull(),
                                 Placeholder.parsed("command", commandPiece + '"' + entry.getKey() + '"'),
                                 Placeholder.unparsed("display", entry.getValue())));
                         x = length(build);
@@ -266,13 +266,13 @@ public class CmdSetPerm implements Cmd {
             Collections.sort(actions);
 
             ComponentBuilder<TextComponent, TextComponent.Builder> build = Component.text();
-            build.append(Mini.parse(tl.add().getActionOptionsIntro()));
+            build.append(Mini.parse(tl.add().getActionOptionsIntro(), sender.fPlayerOrNull()));
             int x = length(build);
 
             String commandPiece = this.firstCmdBit.apply(context) + tl.add().getAliases().getFirst() + " \"" + selector.serialize() + "\" ";
 
             for (String action : actions) {
-                build.append(Mini.parse(tl.add().getActionOptionsItem(),
+                build.append(Mini.parse(tl.add().getActionOptionsItem(), sender.fPlayerOrNull(),
                         Placeholder.unparsed("description", PermissibleActionRegistry.get(action) instanceof PermissibleAction a ? a.description() : "???"),
                         Placeholder.unparsed("action", action),
                         Placeholder.parsed("commandtrue", commandPiece + action + ' ' + tl.add().getActionAllowAlias().getFirst()),

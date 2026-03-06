@@ -214,18 +214,18 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_relation_color" -> TextUtil.getLegacyString(fPlayer.textColorTo(faction));
             case "faction_shield_active" -> {
                 if (faction.shieldActive()) {
-                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveTrue(),
+                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveTrue(), fPlayer,
                             Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
                 } else {
-                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveFalse()));
+                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveFalse(), fPlayer));
                 }
             }
             case "faction_shield_status" -> {
                 if (faction.shieldActive()) {
-                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusTrue(),
+                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusTrue(), fPlayer,
                             Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
                 } else {
-                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusFalse()));
+                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusFalse(), fPlayer));
                 }
             }
             case "faction_shield_remaining" -> MiscUtil.durationString(faction.shieldRemaining());

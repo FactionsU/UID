@@ -59,29 +59,29 @@ public class CmdMoneyModify implements Cmd {
 
         if (modify) {
             if (Econ.modifyBalance(faction, amount)) {
-                sender.sendRichMessage(tl.getModified(), FactionResolver.of(sender.fPlayerOrNull(), faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
+                sender.sendRichMessage(tl.getModified(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 if (notify) {
-                    sender.sendRichMessage(tl.getModifyNotify(), FactionResolver.of((Player) null, faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
+                    sender.sendRichMessage(tl.getModifyNotify(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 }
 
                 if (FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
                     AbstractFactionsPlugin.instance().log(faction.tag() + " bank modified by " + Econ.moneyString(amount));
                 }
             } else {
-                sender.sendRichMessage(tl.getFail(), FactionResolver.of(sender.fPlayerOrNull(), faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
+                sender.sendRichMessage(tl.getFail(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
             }
         } else {
             if (Econ.setBalance(faction, amount)) {
-                sender.sendRichMessage(tl.getSet(), FactionResolver.of(sender.fPlayerOrNull(), faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
+                sender.sendRichMessage(tl.getSet(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 if (notify) {
-                    sender.sendRichMessage(tl.getSetNotify(), FactionResolver.of((Player) null, faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
+                    sender.sendRichMessage(tl.getSetNotify(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 }
 
                 if (FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
                     AbstractFactionsPlugin.instance().log(faction.tag() + " bank set to " + Econ.moneyString(amount));
                 }
             } else {
-                sender.sendRichMessage(tl.getFail(), FactionResolver.of(sender.fPlayerOrNull(), faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
+                sender.sendRichMessage(tl.getFail(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
             }
         }
     }

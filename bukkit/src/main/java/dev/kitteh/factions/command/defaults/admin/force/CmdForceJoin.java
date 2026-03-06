@@ -64,9 +64,9 @@ public class CmdForceJoin implements Cmd {
             return;
         }
 
-        target.sendRichMessage(tl.getSuccessNoticePlayer(), FactionResolver.of(target, faction));
-        sender.sendRichMessage(tl.getSuccess(), FactionResolver.of(sender.fPlayerOrNull(), faction), FPlayerResolver.of("player", sender.fPlayerOrNull(), target));
-        faction.membersOnline(true).forEach(fp -> fp.sendRichMessage(tl.getSuccessNotice(), FactionResolver.of(fp, faction), FPlayerResolver.of("player", fp, target)));
+        target.sendRichMessage(tl.getSuccessNoticePlayer(), FactionResolver.of(faction));
+        sender.sendRichMessage(tl.getSuccess(), FactionResolver.of(faction), FPlayerResolver.of("player", target));
+        faction.membersOnline(true).forEach(fp -> fp.sendRichMessage(tl.getSuccessNotice(), FactionResolver.of(faction), FPlayerResolver.of("player", target)));
 
         target.resetFactionData();
         target.faction(faction);

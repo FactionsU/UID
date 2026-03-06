@@ -34,6 +34,7 @@ import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -665,8 +666,8 @@ public abstract class MemoryFPlayer implements FPlayer {
             int stay = FactionsPlugin.instance().conf().factions().enterTitles().getStay();
             int out = FactionsPlugin.instance().conf().factions().enterTitles().getFadeOut();
 
-            FactionResolver factionResolver = FactionResolver.of(this, toShow);
-            ComponentDispatcher.sendTitle(player, Mini.parse(tl.getTitle(), factionResolver), Mini.parse(tl.getSubtitle(), factionResolver), in, stay, out);
+            FactionResolver factionResolver = FactionResolver.of(toShow);
+            ComponentDispatcher.sendTitle(player, Mini.parse(tl.getTitle(), this, factionResolver), Mini.parse(tl.getSubtitle(), this, factionResolver), in, stay, out);
 
             showChat = FactionsPlugin.instance().conf().factions().enterTitles().isAlsoShowChat();
         }
@@ -676,7 +677,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             showChat = FactionsPlugin.instance().conf().scoreboard().info().isAlsoSendChat();
         }
         if (showChat) {
-            this.sendRichMessage(tl.getChat(), FactionResolver.of("oldfaction", player, from), FactionResolver.of("newfaction", player, toShow));
+            this.sendRichMessage(tl.getChat(), FactionResolver.of("oldfaction", from), FactionResolver.of("newfaction", toShow));
         }
     }
 
@@ -1248,6 +1249,13 @@ public abstract class MemoryFPlayer implements FPlayer {
     public void sendMessage(Component component) {
         if (this.asPlayer() instanceof Player player) {
             ComponentDispatcher.send(player, component);
+        }
+    }
+
+    @Override
+    public void sendRichMessage(String miniMessage, TagResolver... resolvers) {
+        if (this.asPlayer() instanceof Player player) {
+            ComponentDispatcher.send(player, Mini.parse(miniMessage, this, resolvers));
         }
     }
 

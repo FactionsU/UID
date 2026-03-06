@@ -26,33 +26,40 @@ import java.sql.Date;
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FactionResolver extends ObservedResolver {
-    public static FactionResolver of(@Nullable FPlayer observer, Faction faction) {
-        return new FactionResolver("faction", observer, faction);
-    }
-
-    public static FactionResolver of(@Nullable Player observer, Faction faction) {
-        return new FactionResolver("faction", observer, faction);
+    public static FactionResolver of(Faction faction) {
+        return new FactionResolver("faction", faction);
     }
 
     @ApiStatus.AvailableSince("4.5.0")
-    public static FactionResolver of(String name, @Nullable FPlayer observer, Faction faction) {
-        return new FactionResolver(name, observer, faction);
+    public static FactionResolver of(String name, Faction faction) {
+        return new FactionResolver(name, faction);
     }
 
-    @ApiStatus.AvailableSince("4.5.0")
-    public static FactionResolver of(String name, @Nullable Player observer, Faction faction) {
-        return new FactionResolver(name, observer, faction);
+    public static FactionResolver of(@Nullable FPlayer forcedObserver, Faction faction) {
+        return new FactionResolver("faction", forcedObserver, faction);
+    }
+
+    @Deprecated(forRemoval = true, since = "4.5.0")
+    public static FactionResolver of(@Nullable Player forcedObserver, Faction faction) {
+        return new FactionResolver("faction", forcedObserver, faction);
     }
 
     private final Faction faction;
 
-    public FactionResolver(String name, @Nullable FPlayer observer, Faction faction) {
-        super(name, observer);
+    private FactionResolver(String name, Faction faction) {
+        super(name);
         this.faction = faction;
     }
 
-    public FactionResolver(String name, @Nullable Player observer, Faction faction) {
-        super(name, observer);
+    @Deprecated(forRemoval = true, since = "4.5.0")
+    public FactionResolver(String name, @Nullable FPlayer forcedObserver, Faction faction) {
+        super(name, forcedObserver);
+        this.faction = faction;
+    }
+
+    @Deprecated(forRemoval = true, since = "4.5.0")
+    public FactionResolver(String name, @Nullable Player forcedObserver, Faction faction) {
+        super(name, forcedObserver);
         this.faction = faction;
     }
 
@@ -61,7 +68,7 @@ public class FactionResolver extends ObservedResolver {
         String main = arguments.hasNext() ? arguments.pop().lowerValue() : "";
 
         return switch (main) {
-            case "", "name_decorated" -> tag(Component.text().content(faction.tag()).color(faction.textColorTo(observer)));
+            case "", "name_decorated" -> tag(Component.text().content(faction.tag()).color(faction.textColorTo(this.observer(ctx))));
 
             case "name", "tag" -> tag(faction.tag());
 
@@ -72,10 +79,10 @@ public class FactionResolver extends ObservedResolver {
             case "create-date", "creation_date" -> tag(TL.sdf.format(Date.from(faction.founded())));
 
             case "members_total_count" -> tag(faction.members().size());
-            case "members_online_count" -> tag(faction.membersOnline(true, observer).size());
-            case "members_offline_count" -> tag(faction.membersOnline(false, observer).size());
+            case "members_online_count" -> tag(faction.membersOnline(true, this.observer(ctx)).size());
+            case "members_offline_count" -> tag(faction.membersOnline(false, this.observer(ctx)).size());
 
-            case "tooltip" -> tagTip(FactionsPlugin.instance().tl().placeholders().tooltips().getFaction(), this);
+            case "tooltip" -> tagTip(FactionsPlugin.instance().tl().placeholders().tooltips().getFaction(), this.observer(ctx), this);
 
             case "id" -> tag(faction.id());
 
@@ -129,7 +136,7 @@ public class FactionResolver extends ObservedResolver {
 
             case "raidable" -> tagLegacy(FactionsPlugin.instance().landRaidControl().isRaidable(faction) ? TL.RAIDABLE_TRUE : TL.RAIDABLE_FALSE);
 
-            case "leader", "admin" -> faction.admin() instanceof FPlayer fp ? FPlayerResolver.of("leader", observer, fp).solve(arguments, ctx) : tag("");
+            case "leader", "admin" -> faction.admin() instanceof FPlayer fp ? FPlayerResolver.of("leader", fp).solve(arguments, ctx) : tag("");
 
             case "bank_balance" -> {
                 if (Econ.shouldBeUsedWithBanks()) {
@@ -150,23 +157,23 @@ public class FactionResolver extends ObservedResolver {
             case "truces_count" -> tag(faction.relationCount(Relation.TRUCE));
             case "truces_max" -> tagLegacy(getRelation(Relation.TRUCE));
 
-            case "relation_name" -> tagLegacy(faction.relationTo(observer).translation());
-            case "relation_color" -> tag(faction.relationTo(observer).color());
+            case "relation_name" -> tagLegacy(faction.relationTo(this.observer(ctx)).translation());
+            case "relation_color" -> tag(faction.relationTo(this.observer(ctx)).color());
 
             case "shield_active" -> {
                 if (faction.shieldActive()) {
-                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveTrue(),
+                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveTrue(), this.observer(ctx),
                             Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
                 } else {
-                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveFalse()));
+                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveFalse(), this.observer(ctx)));
                 }
             }
             case "shield_status" -> {
                 if (faction.shieldActive()) {
-                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusTrue(),
+                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusTrue(), this.observer(ctx),
                             Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
                 } else {
-                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusFalse()));
+                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusFalse(), this.observer(ctx)));
                 }
             }
             case "shield_remaining" -> tagLegacy(MiscUtil.durationString(faction.shieldRemaining()));
@@ -175,8 +182,8 @@ public class FactionResolver extends ObservedResolver {
             case "if_peaceful" -> tagToggle(faction.isPeaceful(), arguments);
             case "if_open" -> tagToggle(faction.open(), arguments);
             case "if_raidable" -> tagToggle(faction.isRaidable(), arguments);
-            case "if_online" -> tagToggle(!faction.membersOnline(true, observer).isEmpty(), arguments);
-            case "if_offline" -> tagToggle(faction.membersOnline(true, observer).size() < faction.members().size(), arguments);
+            case "if_online" -> tagToggle(!faction.membersOnline(true, this.observer(ctx)).isEmpty(), arguments);
+            case "if_offline" -> tagToggle(faction.membersOnline(true, this.observer(ctx)).size() < faction.members().size(), arguments);
             case "if_allies" -> tagToggle(faction.relationCount(Relation.ALLY) > 0, arguments);
             case "if_enemies" -> tagToggle(faction.relationCount(Relation.ENEMY) > 0, arguments);
             case "if_truces" -> tagToggle(faction.relationCount(Relation.TRUCE) > 0, arguments);

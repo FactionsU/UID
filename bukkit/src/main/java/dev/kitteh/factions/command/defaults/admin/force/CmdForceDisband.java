@@ -50,18 +50,18 @@ public class CmdForceDisband implements Cmd {
         var tl = FactionsPlugin.instance().tl().commands().disband();
 
         if (!faction.isNormal()) {
-            sender.sendRichMessage(tl.getDeniedSpecial(), FactionResolver.of(sender.fPlayerOrNull(), faction));
+            sender.sendRichMessage(tl.getDeniedSpecial(), FactionResolver.of(faction));
             return;
         }
 
         if (faction.isPermanent()) {
-            sender.sendRichMessage(tl.getDeniedPermanent(), FactionResolver.of(sender.fPlayerOrNull(), faction));
+            sender.sendRichMessage(tl.getDeniedPermanent(), FactionResolver.of(faction));
             return;
         }
 
         if (!confirmed && sender.fPlayerOrNull() instanceof FPlayer fp) {
             String conf = CmdConfirm.add(fp, s -> this.doIt(sender, faction, true));
-            sender.sendRichMessage(tl.getConfirm(), FactionResolver.of(sender.fPlayerOrNull(), faction), Placeholder.unparsed("command", conf));
+            sender.sendRichMessage(tl.getConfirm(), FactionResolver.of(faction), Placeholder.unparsed("command", conf));
             return;
         }
 
@@ -82,12 +82,12 @@ public class CmdForceDisband implements Cmd {
         if (sender.fPlayerOrNull() instanceof FPlayer fp) {
             for (FPlayer fplayer : FPlayers.fPlayers().online()) {
                 String message = fplayer.faction() == faction ? tl.getBroadcastYours() : tl.getBroadcastNotYours();
-                fplayer.sendRichMessage(message, FactionResolver.of(fplayer, faction), FPlayerResolver.of("player", fplayer, fp));
+                fplayer.sendRichMessage(message, FactionResolver.of(faction), FPlayerResolver.of("player", fp));
             }
         } else {
             for (FPlayer fplayer : FPlayers.fPlayers().online()) {
                 String message = fplayer.faction() == faction ? tl.getBroadcastConsoleYours() : tl.getBroadcastConsoleNotYours();
-                fplayer.sendRichMessage(message, FactionResolver.of(fplayer, faction));
+                fplayer.sendRichMessage(message, FactionResolver.of(faction));
             }
         }
 

@@ -704,7 +704,7 @@ public class EngineDynmap {
         String playersRecruitsCount = String.valueOf(playersRecruitsList.size());
         String playersRecruits = getHtmlPlayerString(playersRecruitsList);
 
-        FactionResolver factionResolver = FactionResolver.of((FPlayer) null, faction);
+        FactionResolver factionResolver = FactionResolver.of(faction);
 
         StringBuilder builder = new StringBuilder();
 

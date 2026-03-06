@@ -22,23 +22,34 @@ import java.util.OptionalInt;
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FPlayerResolver extends ObservedResolver {
-    public static FPlayerResolver of(String name, @Nullable FPlayer observer, FPlayer observed) {
-        return new FPlayerResolver(name, observer, observed);
+    @ApiStatus.AvailableSince("4.5.0")
+    public static FPlayerResolver of(String name, FPlayer observed) {
+        return new FPlayerResolver(name, observed);
     }
 
-    public static FPlayerResolver of(String name, @Nullable Player observer, FPlayer observed) {
-        return new FPlayerResolver(name, observer, observed);
+    public static FPlayerResolver of(String name, @Nullable FPlayer forcedObserver, FPlayer observed) {
+        return new FPlayerResolver(name, forcedObserver, observed);
+    }
+
+    @Deprecated(forRemoval = true, since = "4.5.0")
+    public static FPlayerResolver of(String name, @Nullable Player forcedObserver, FPlayer observed) {
+        return new FPlayerResolver(name, forcedObserver, observed);
     }
 
     private final FPlayer observed;
 
-    private FPlayerResolver(String name, @Nullable FPlayer observer, FPlayer observed) {
-        super(name, observer);
+    private FPlayerResolver(String name, FPlayer observed) {
+        super(name);
         this.observed = observed;
     }
 
-    private FPlayerResolver(String name, @Nullable Player observer, FPlayer observed) {
-        super(name, observer);
+    private FPlayerResolver(String name, @Nullable FPlayer forcedObserver, FPlayer observed) {
+        super(name, forcedObserver);
+        this.observed = observed;
+    }
+
+    private FPlayerResolver(String name, @Nullable Player forcedObserver, FPlayer observed) {
+        super(name, forcedObserver);
         this.observed = observed;
     }
 
@@ -47,7 +58,7 @@ public class FPlayerResolver extends ObservedResolver {
         String main = arguments.hasNext() ? arguments.pop().lowerValue() : "";
 
         return switch (main) {
-            case "", "name_decorated" -> tagLegacy(observed.describeToLegacy(observer));
+            case "", "name_decorated" -> tagLegacy(observed.describeToLegacy(this.observer(ctx)));
 
             case "name" -> tag(observed.name());
 
@@ -64,8 +75,8 @@ public class FPlayerResolver extends ObservedResolver {
             case "power_max_exact" -> tag(observed.powerMax());
             case "power_max_rounded", "power_max" -> tag(observed.powerMaxRounded());
 
-            case "relation_name" -> tagLegacy(observed.relationTo(observer).translation());
-            case "relation_color" -> tag(observed.relationTo(observer).color());
+            case "relation_name" -> tagLegacy(observed.relationTo(this.observer(ctx)).translation());
+            case "relation_color" -> tag(observed.relationTo(this.observer(ctx)).color());
 
             case "kills" -> tag(observed.kills());
             case "deaths" -> tag(observed.deaths());
@@ -79,13 +90,13 @@ public class FPlayerResolver extends ObservedResolver {
                 String duration = MiscUtil.durationString(since);
 
                 if (since == -1) {
-                    yield tagMini(tl.getUnknownText(), this);
+                    yield tagMini(tl.getUnknownText(), this.observer(ctx), this);
                 } else if (since >= tl.getRecentSeconds()) {
-                    yield tagMini(tl.getOlderText(), Placeholder.unparsed("duration", duration), this);
+                    yield tagMini(tl.getOlderText(), this.observer(ctx), Placeholder.unparsed("duration", duration), this);
                 } else if (since >= tl.getTooRecentSeconds()) {
-                    yield tagMini(tl.getRecentText(), Placeholder.unparsed("duration", duration), this);
+                    yield tagMini(tl.getRecentText(), this.observer(ctx), Placeholder.unparsed("duration", duration), this);
                 } else {
-                    yield tagMini(tl.getTooRecentText(), Placeholder.unparsed("duration", duration), this);
+                    yield tagMini(tl.getTooRecentText(), this.observer(ctx), Placeholder.unparsed("duration", duration), this);
                 }
             }
 
@@ -102,11 +113,11 @@ public class FPlayerResolver extends ObservedResolver {
                 yield empty();
             }
 
-            case "tooltip" -> tagTip(FactionsPlugin.instance().tl().placeholders().tooltips().getPlayer(), this);
+            case "tooltip" -> tagTip(FactionsPlugin.instance().tl().placeholders().tooltips().getPlayer(), this.observer(ctx), this);
 
-            case "standing_in_faction" -> FactionResolver.of(observer, observed.lastStoodAt().faction()).solve(arguments, ctx);
+            case "standing_in_faction" -> FactionResolver.of(observed.lastStoodAt().faction()).solve(arguments, ctx);
 
-            case "faction" -> FactionResolver.of(observer, observed.faction()).solve(arguments, ctx);
+            case "faction" -> FactionResolver.of(observed.faction()).solve(arguments, ctx);
 
             case "space_if_faction" -> tag(observed.hasFaction() ? " " : "");
 
@@ -117,10 +128,11 @@ public class FPlayerResolver extends ObservedResolver {
                 String papi = arguments.pop().value();
                 String result;
                 if (papi.startsWith("rel_")) {
+                    Player observerPlayer = this.observer(ctx) instanceof FPlayer fp ? fp.asPlayer() : null;
                     if (observerPlayer == null || !(observed.asPlayer() instanceof Player p)) {
                         yield (tag(Component.empty()));
                     }
-                    result = PlaceholderAPI.setRelationalPlaceholders(p, this.observerPlayer, papiString(papi));
+                    result = PlaceholderAPI.setRelationalPlaceholders(p, observerPlayer, papiString(papi));
                 } else {
                     result = PlaceholderAPI.setPlaceholders(observed.asOfflinePlayer(), papiString(papi));
                 }

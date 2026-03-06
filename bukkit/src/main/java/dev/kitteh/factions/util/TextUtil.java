@@ -1,5 +1,6 @@
 package dev.kitteh.factions.util;
 
+import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -21,8 +22,9 @@ public class TextUtil {
 
     @ApiStatus.AvailableSince("4.3.0")
     public static Component titleize(Component title, @Nullable Context ctx) {
+        FPlayer observer = ctx == null ? null : ctx.target() instanceof FPlayer fPlayer ? fPlayer : null;
         var tiTL = FactionsPlugin.instance().tl().placeholders().title();
-        Component center = Mini.parse(tiTL.getTitleCenter(), Placeholder.component("content", title));
+        Component center = Mini.parse(tiTL.getTitleCenter(), observer, Placeholder.component("content", title));
         int centerLen = PlainTextComponentSerializer.plainText().serialize(center).length();
         int sideLen = 26 - (centerLen / 2);
 

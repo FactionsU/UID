@@ -51,14 +51,14 @@ public class CmdWarp implements Cmd {
         var tl = FactionsPlugin.instance().tl().commands().warp();
 
         if (!context.sender().isBypass() && !faction.hasAccess(sender, PermissibleActions.WARP, sender.lastStoodAt())) {
-            sender.sendRichMessage(tl.getNoPermission(), FactionResolver.of(sender, faction));
+            sender.sendRichMessage(tl.getNoPermission(), FactionResolver.of(faction));
             return;
         }
 
         String warpName = context.getOrDefault("warp", null);
         if (warpName == null) {
             if (faction.warps().isEmpty()) {
-                context.sender().sendRichMessage(tl.getNoWarps(), FactionResolver.of(sender, faction));
+                context.sender().sendRichMessage(tl.getNoWarps(), FactionResolver.of( faction));
             } else {
                 consumer.accept(context.sender(), faction);
             }
@@ -95,7 +95,7 @@ public class CmdWarp implements Cmd {
         final UUID uuid = sender.uniqueId();
 
         int delay = FactionsPlugin.instance().conf().commands().warp().getDelay();
-        WarmUpUtil.process(sender, WarmUpUtil.Warmup.WARP, Mini.parse(tl.getWarmup(), Placeholder.unparsed("warp", warpName), Placeholder.unparsed("seconds", String.valueOf(delay))), () -> {
+        WarmUpUtil.process(sender, WarmUpUtil.Warmup.WARP, Mini.parse(tl.getWarmup(), sender, Placeholder.unparsed("warp", warpName), Placeholder.unparsed("seconds", String.valueOf(delay))), () -> {
             Player player = Bukkit.getPlayer(uuid);
             if (destination == faction.warp(warpName) && player != null) {
                 AbstractFactionsPlugin.instance().teleport(player, destination.asLocation()).thenAccept(success -> {

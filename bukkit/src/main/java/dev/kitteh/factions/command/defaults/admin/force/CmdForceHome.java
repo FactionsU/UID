@@ -53,16 +53,16 @@ public class CmdForceHome implements Cmd {
                 }
                 AbstractFactionsPlugin.instance().teleport(target.asPlayer(), destination).thenAccept(success -> {
                     if (success) {
-                        sender.sendRichMessage(tl.getSuccess(), FPlayerResolver.of("player", sender.fPlayerOrNull(), target));
+                        sender.sendRichMessage(tl.getSuccess(), FPlayerResolver.of("player", target));
                         target.sendRichMessage(tl.getSuccessNotice());
                     }
                 });
 
             } else {
-                sender.sendRichMessage(tl.getNoHome(), FPlayerResolver.of("player", sender.fPlayerOrNull(), target));
+                sender.sendRichMessage(tl.getNoHome(), FPlayerResolver.of("player", target));
             }
         } else {
-            sender.sendRichMessage(tl.getOffline(), FPlayerResolver.of("player", sender.fPlayerOrNull(), target));
+            sender.sendRichMessage(tl.getOffline(), FPlayerResolver.of("player", target));
         }
     }
 }

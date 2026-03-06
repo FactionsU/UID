@@ -58,16 +58,16 @@ public class CmdUpgrades implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
-        Faction faction = sender.faction();
 
-        player.showDialog(this.mainMenu(faction));
+        player.showDialog(this.mainMenu(sender));
     }
 
     private Dialog mainMenu(Audience audience) {
-        return this.mainMenu(FPlayers.fPlayers().get((Player) audience).faction());
+        return this.mainMenu(FPlayers.fPlayers().get((Player) audience));
     }
 
-    private Dialog mainMenu(Faction faction) {
+    private Dialog mainMenu(FPlayer sender) {
+        Faction faction = sender.faction();
         if (!faction.isNormal()) {
             return this.noLongerInFaction();
         }
@@ -85,14 +85,15 @@ public class CmdUpgrades implements Cmd {
         TagResolver click = Placeholder.component("click",
                 Mini.parse(Econ.shouldBeUsed()
                         ? tl.mainPage().getClickValueIfEconEnabled()
-                        : tl.mainPage().getClickValueIfEconDisabled())
+                        : tl.mainPage().getClickValueIfEconDisabled(),
+                        sender)
         );
 
         return Dialog.create(b -> b.empty()
-                .base(DialogBase.builder(Mini.parse(tl.mainPage().getTitle())).body(this.body(tl.mainPage().getBody(), click)).build())
+                .base(DialogBase.builder(Mini.parse(tl.mainPage().getTitle(), sender)).body(this.body(tl.mainPage().getBody(), click)).build())
                 .type(DialogType.multiAction(
                         upgrades,
-                        ActionButton.builder(Mini.parse(tl.general().getDone())).build(),
+                        ActionButton.builder(Mini.parse(tl.general().getDone(), sender)).build(),
                         2
                 )));
     }
@@ -115,11 +116,11 @@ public class CmdUpgrades implements Cmd {
                 .append(upgrade.nameComponent()).appendNewline().appendNewline()
                 .append(upgrade.description()).appendNewline().appendNewline();
         if (lvl > 0 && settings.maxLevel() != 1) {
-            builder.append(Mini.parse(info.getStatusCurrentLevel(), Placeholder.parsed("level", String.valueOf(lvl))));
+            builder.append(Mini.parse(info.getStatusCurrentLevel(), fPlayer, Placeholder.parsed("level", String.valueOf(lvl))));
         } else if (lvl == 1) {
-            builder.append(Mini.parse(info.getStatusUnlocked()));
+            builder.append(Mini.parse(info.getStatusUnlocked(), fPlayer));
         } else {
-            builder.append(Mini.parse(info.getStatusLocked()));
+            builder.append(Mini.parse(info.getStatusLocked(), fPlayer));
         }
         if (lvl > 0) {
             builder.appendNewline().appendNewline()
@@ -130,23 +131,23 @@ public class CmdUpgrades implements Cmd {
         if (econ) {
             if (lvl < settings.maxLevel()) {
                 builder.appendNewline().appendNewline()
-                        .append(Mini.parse(info.getUpgradeAvailable())).appendNewline()
-                        .append(Mini.parse(info.getUpgradeAvailableCosts(), Placeholder.parsed("cost", String.valueOf(settings.costAt(lvl + 1).doubleValue())))).appendNewline()
+                        .append(Mini.parse(info.getUpgradeAvailable(), fPlayer)).appendNewline()
+                        .append(Mini.parse(info.getUpgradeAvailableCosts(), fPlayer, Placeholder.parsed("cost", String.valueOf(settings.costAt(lvl + 1).doubleValue())))).appendNewline()
                         .appendNewline();
                 if (settings.maxLevel() > 1) {
-                    builder.append(Mini.parse(info.getUpgradeAvailableLevelNumberIfNotSingleLevel(), Placeholder.parsed("level", String.valueOf(lvl + 1)))).appendNewline();
+                    builder.append(Mini.parse(info.getUpgradeAvailableLevelNumberIfNotSingleLevel(), fPlayer, Placeholder.parsed("level", String.valueOf(lvl + 1)))).appendNewline();
                 }
                 builder.append(upgrade.details(settings, lvl + 1));
             } else if (lvl != 1) {
                 builder.appendNewline()
-                        .append(Mini.parse(info.getUpgradeAtMaxLevel()));
+                        .append(Mini.parse(info.getUpgradeAtMaxLevel(), fPlayer));
             }
         }
 
         List<ActionButton> actions;
         if (lvl < settings.maxLevel() && econ && faction.hasAccess(fPlayer, PermissibleActions.UPGRADE, null)) {
             actions = List.of(
-                    ActionButton.builder(Mini.parse(info.getPurchaseButton()))
+                    ActionButton.builder(Mini.parse(info.getPurchaseButton(), fPlayer))
                             .action(DialogAction.customClick((r, aud) ->
                                     aud.showDialog(this.purchaseMenu(aud, upgrade)), OPT))
                             .build()
@@ -156,12 +157,12 @@ public class CmdUpgrades implements Cmd {
         }
 
         return Dialog.create(b -> b.empty()
-                .base(DialogBase.builder(Mini.parse(info.getTitle()))
+                .base(DialogBase.builder(Mini.parse(info.getTitle(), fPlayer))
                         .body(List.of(
                                 DialogBody.plainMessage(builder.build(), 400)
                         )).build())
                 .type(actions.isEmpty() ?
-                        DialogType.notice(ActionButton.builder(Mini.parse(tl.general().getReturnToList()))
+                        DialogType.notice(ActionButton.builder(Mini.parse(tl.general().getReturnToList(), fPlayer))
                                 .action(DialogAction.customClick((r, aud) ->
                                         aud.showDialog(this.mainMenu(aud)), OPT))
                                 .build())
@@ -187,7 +188,7 @@ public class CmdUpgrades implements Cmd {
 
         if (lvl == settings.maxLevel()) {
             return Dialog.create(b -> b.empty()
-                    .base(DialogBase.builder(Mini.parse(tl.alreadyMax().getTitle()))
+                    .base(DialogBase.builder(Mini.parse(tl.alreadyMax().getTitle(), fPlayer))
                             .body(this.body(tl.alreadyMax().getBody())).build())
                     .type(DialogType.notice(this.returnToUpgrade(upgrade))));
         }
@@ -203,7 +204,7 @@ public class CmdUpgrades implements Cmd {
 
         if (Econ.has(purchaser, cost)) {
             return Dialog.create(b -> b.empty()
-                    .base(DialogBase.builder(Mini.parse(tl.purchasePage().getTitle()))
+                    .base(DialogBase.builder(Mini.parse(tl.purchasePage().getTitle(), fPlayer))
                             .body(
                                     this.body(tl.purchasePage().getBody(),
                                             Placeholder.component("upgrade", upgrade.nameComponent()),
@@ -211,7 +212,7 @@ public class CmdUpgrades implements Cmd {
                             ).build())
                     .type(DialogType.multiAction(
                             List.of(
-                                    ActionButton.builder(Mini.parse(tl.purchasePage().getConfirmButton()))
+                                    ActionButton.builder(Mini.parse(tl.purchasePage().getConfirmButton(), fPlayer))
                                             .action(DialogAction.customClick((r, aud) ->
                                                     aud.showDialog(this.makePurchase(aud, upgrade, lvl + 1)), OPT))
                                             .build()
@@ -235,7 +236,7 @@ public class CmdUpgrades implements Cmd {
 
         if (newLvl != (1 + faction.upgradeLevel(upgrade))) {
             return Dialog.create(b -> b.empty()
-                    .base(DialogBase.builder(Mini.parse(tl.noLongerSameLevel().getTitle()))
+                    .base(DialogBase.builder(Mini.parse(tl.noLongerSameLevel().getTitle(), fPlayer))
                             .body(this.body(tl.noLongerSameLevel().getBody())).build())
                     .type(DialogType.notice(this.returnToUpgrade(upgrade))));
         }
@@ -254,7 +255,7 @@ public class CmdUpgrades implements Cmd {
         if (Econ.modifyMoney(purchaser, -cost)) {
             faction.upgradeLevel(upgrade, newLvl);
             return Dialog.create(b -> b.empty()
-                    .base(DialogBase.builder(Mini.parse(tl.purchaseComplete().getTitle()))
+                    .base(DialogBase.builder(Mini.parse(tl.purchaseComplete().getTitle(), fPlayer))
                             .body(this.body(tl.purchaseComplete().getBody())).build())
                     .type(DialogType.notice(this.returnToUpgrade(upgrade))));
         } else {

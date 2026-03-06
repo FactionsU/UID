@@ -105,7 +105,7 @@ public class CmdShow implements Cmd {
             if (tag != null) {
                 msg = msg.replace(tag.tag(), "");
             }
-            Component component = Mini.parse(msg, FactionResolver.of(fPlayer, faction));
+            Component component = Mini.parse(msg, fPlayer, FactionResolver.of(faction));
             if (component == Component.empty()) {
                 continue; // Due to minimal f show.
             }
@@ -144,7 +144,7 @@ public class CmdShow implements Cmd {
                     if (!first) {
                         message.append(Component.text(", "));
                     }
-                    message.append(Mini.parse("<faction:tooltip><faction>", FactionResolver.of(fPlayer, otherFaction)));
+                    message.append(Mini.parse("<faction:tooltip><faction>", fPlayer, FactionResolver.of(otherFaction)));
                     first = false;
                     Component current = message.build();
                     if (GsonComponentSerializer.gson().serialize(current).length() > ARBITRARY_LIMIT) {
@@ -165,7 +165,7 @@ public class CmdShow implements Cmd {
                 if (!first) {
                     message.append(Component.text(", "));
                 }
-                message.append(Mini.parse("<player:tooltip><player:relation_color><player:name_and_title>", FPlayerResolver.of("player", fPlayer, p)));
+                message.append(Mini.parse("<player:tooltip><player:relation_color><player:name_and_title>", fPlayer, FPlayerResolver.of("player", p)));
                 first = false;
                 Component current = message.build();
                 if (GsonComponentSerializer.gson().serialize(current).length() > ARBITRARY_LIMIT) {
