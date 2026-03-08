@@ -9,7 +9,10 @@ import dev.kitteh.factions.event.FactionRelationWishEvent;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -22,19 +25,22 @@ public class CmdRelation implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().relation();
             Command.Builder<Sender> build = builder
-                    .literal("relation")
-                    .commandDescription(Description.of(TL.COMMAND_RELATIONS_DESCRIPTION.toString()))
+                    .literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Description.of(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.isAtLeastRole(Role.MODERATOR)));
 
             Command.Builder<Sender> relationBuilder = build.required("faction", FactionParser.of(FactionParser.Include.PLAYERS));
 
-            manager.command(relationBuilder.literal("ally").handler(ctx -> this.handleRelation(ctx, Relation.ALLY)));
-            manager.command(relationBuilder.literal("true").handler(ctx -> this.handleRelation(ctx, Relation.TRUCE)));
-            manager.command(relationBuilder.literal("neutral").handler(ctx -> this.handleRelation(ctx, Relation.NEUTRAL)));
-            manager.command(relationBuilder.literal("enemy").handler(ctx -> this.handleRelation(ctx, Relation.ENEMY)));
+            manager.command(relationBuilder.literal(tl.getCommandAlly()).handler(ctx -> this.handleRelation(ctx, Relation.ALLY)));
+            manager.command(relationBuilder.literal(tl.getCommandTruce()).handler(ctx -> this.handleRelation(ctx, Relation.TRUCE)));
+            manager.command(relationBuilder.literal(tl.getCommandNeutral()).handler(ctx -> this.handleRelation(ctx, Relation.NEUTRAL)));
+            manager.command(relationBuilder.literal(tl.getCommandEnemy()).handler(ctx -> this.handleRelation(ctx, Relation.ENEMY)));
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f relation <faction>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx ->
+                    help.queryCommands(FactionsPlugin.instance().tl().commands().generic().getCommandRoot() + " " + tl.getFirstAlias() + " <faction>", ctx.sender()))
+            );
         };
     }
 
@@ -44,19 +50,20 @@ public class CmdRelation implements Cmd {
 
         Faction them = context.get("faction");
 
+        var tl = FactionsPlugin.instance().tl().commands().relation();
 
         if (!them.isNormal()) {
-            sender.msgLegacy(TL.COMMAND_RELATIONS_ALLTHENOPE);
+            sender.sendRichMessage(tl.getDenySystemFaction());
             return;
         }
 
         if (them == faction) {
-            sender.msgLegacy(TL.COMMAND_RELATIONS_MORENOPE);
+            sender.sendRichMessage(tl.getDenySelfFaction());
             return;
         }
 
         if (faction.relationWish(them) == targetRelation) {
-            sender.msgLegacy(TL.COMMAND_RELATIONS_ALREADYINRELATIONSHIP, them.tag());
+            sender.sendRichMessage(tl.getDenyAlreadySet(), FactionResolver.of(them));
             return;
         }
 
@@ -72,15 +79,14 @@ public class CmdRelation implements Cmd {
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(targetRelation.getRelationCost(), TL.COMMAND_RELATIONS_TOMARRY, TL.COMMAND_RELATIONS_FORMARRY)) {
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        if (!context.sender().payForCommand(targetRelation.getRelationCost(), econTl.getRelationTo(), econTl.getRelationFor())) {
             return;
         }
 
         // try to set the new relation
         faction.relationWish(them, targetRelation);
         Relation currentRelation = faction.relationTo(them, true);
-        String currentRelationColor = TextUtil.getLegacyString(currentRelation.color());
-        String targetRelationColor = TextUtil.getLegacyString(targetRelation.color());
 
         // if the relation change was successful
         if (targetRelation.value == currentRelation.value) {
@@ -88,23 +94,33 @@ public class CmdRelation implements Cmd {
             FactionRelationEvent relationEvent = new FactionRelationEvent(faction, them, oldRelation, currentRelation);
             Bukkit.getServer().getPluginManager().callEvent(relationEvent);
 
-            them.msgLegacy(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + faction.tag());
-            faction.msgLegacy(TL.COMMAND_RELATIONS_MUTUAL, currentRelationColor + targetRelation.translation(), currentRelationColor + them.tag());
+            them.sendRichMessage(tl.getUpdated(), FactionResolver.of(faction), Placeholder.component("relation", Component.text(currentRelation.translation(), currentRelation.color())));
+            faction.sendRichMessage(tl.getUpdated(), FactionResolver.of(them), Placeholder.component("relation", Component.text(currentRelation.translation(), currentRelation.color())));
         } else {
             // inform the other faction of your request
-            them.msgLegacy(TL.COMMAND_RELATIONS_PROPOSAL_1, currentRelationColor + faction.tag(), targetRelationColor + targetRelation.translation());
-            them.msgLegacy(TL.COMMAND_RELATIONS_PROPOSAL_2, MiscUtil.commandRoot(), targetRelation, faction.tag());
-            faction.msgLegacy(TL.COMMAND_RELATIONS_PROPOSAL_SENT, currentRelationColor + them.tag(), targetRelationColor + targetRelation);
+            String command = FactionsPlugin.instance().tl().commands().generic().getCommandRoot() + " " + tl.getFirstAlias() + " " + faction.tag() + " "
+                    + switch (targetRelation) {
+                case ALLY -> tl.getCommandAlly();
+                case TRUCE -> tl.getCommandTruce();
+                case ENEMY -> tl.getCommandEnemy();
+                default -> tl.getCommandNeutral();
+            };
+            them.sendRichMessage(tl.getProposal(),
+                    FactionResolver.of(faction),
+                    Placeholder.component("relation", Component.text(targetRelation.translation(), targetRelation.color())),
+                    Placeholder.parsed("command", command)
+            );
+            faction.sendRichMessage(tl.getProposalSent(), FactionResolver.of(faction), Placeholder.component("relation", Component.text(targetRelation.translation(), targetRelation.color())));
         }
 
         if (!targetRelation.isNeutral() && them.isPeaceful()) {
-            them.msgLegacy(TL.COMMAND_RELATIONS_PEACEFUL);
-            faction.msgLegacy(TL.COMMAND_RELATIONS_PEACEFULOTHER);
+            them.sendRichMessage(tl.getPeacefulSelf());
+            faction.sendRichMessage(tl.getPeacefulThem());
         }
 
         if (!targetRelation.isNeutral() && faction.isPeaceful()) {
-            them.msgLegacy(TL.COMMAND_RELATIONS_PEACEFULOTHER);
-            faction.msgLegacy(TL.COMMAND_RELATIONS_PEACEFUL);
+            them.sendRichMessage(tl.getPeacefulThem());
+            faction.sendRichMessage(tl.getPeacefulSelf());
         }
 
         FTeamWrapper.updatePrefixes(faction);
@@ -115,12 +131,14 @@ public class CmdRelation implements Cmd {
         if (FactionsPlugin.instance().conf().factions().maxRelations().isEnabled()) {
             int max = targetRelation.getMax();
             if (max != -1) {
+                var tl = FactionsPlugin.instance().tl().commands().relation();
+                String relation = max == 1 ? targetRelation.translation() : targetRelation.getPluralTranslation();
                 if (us.relationCount(targetRelation) >= max) {
-                    sender.msgLegacy(TL.COMMAND_RELATIONS_EXCEEDS_ME, max, targetRelation.getPluralTranslation());
+                    sender.sendRichMessage(tl.getRelationLimitSelf(), FactionResolver.of(us), Placeholder.unparsed("limit", String.valueOf(max)), Placeholder.component("relation", Component.text(relation, targetRelation.color())));
                     return true;
                 }
                 if (them.relationCount(targetRelation) >= max) {
-                    sender.msgLegacy(TL.COMMAND_RELATIONS_EXCEEDS_THEY, max, targetRelation.getPluralTranslation());
+                    sender.sendRichMessage(tl.getRelationLimitSelf(), FactionResolver.of(them), Placeholder.unparsed("limit", String.valueOf(max)), Placeholder.component("relation", Component.text(relation, targetRelation.color())));
                     return true;
                 }
             }

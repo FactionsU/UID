@@ -311,22 +311,6 @@ public enum TL {
     COMMAND_POWERBOOST_BOOST("&e%1$s now has a power bonus/penalty of %2$d to min and max power levels."),
     COMMAND_POWERBOOST_DESCRIPTION("Apply permanent power bonus/penalty to specified player or faction"),
 
-    COMMAND_RELATIONS_ALLTHENOPE("&cNope! You can't."),
-    COMMAND_RELATIONS_MORENOPE("&cNope! You can't declare a relation to yourself :)"),
-    COMMAND_RELATIONS_ALREADYINRELATIONSHIP("&cYou already have that relation wish set with %1$s."),
-    COMMAND_RELATIONS_TOMARRY("to change a relation wish"),
-    COMMAND_RELATIONS_FORMARRY("for changing a relation wish"),
-    COMMAND_RELATIONS_MUTUAL("&eYour faction is now %1$s&e to %2$s"),
-    COMMAND_RELATIONS_PEACEFUL("&eThis will have no effect while your faction is peaceful."),
-    COMMAND_RELATIONS_PEACEFULOTHER("&eThis will have no effect while their faction is peaceful."),
-    COMMAND_RELATIONS_DESCRIPTION("Set relation wish to another faction"),
-    COMMAND_RELATIONS_EXCEEDS_ME("&eFailed to set relation wish. You can only have %1$s %2$s."),
-    COMMAND_RELATIONS_EXCEEDS_THEY("&eFailed to set relation wish. They can only have %1$s %2$s."),
-
-    COMMAND_RELATIONS_PROPOSAL_1("%1$s&e wishes to be your %2$s"),
-    COMMAND_RELATIONS_PROPOSAL_2("&eType &b/%1$s %2$s %3$s&e to accept."),
-    COMMAND_RELATIONS_PROPOSAL_SENT("%1$s&e were informed that you wish to be %2$s"),
-
     COMMAND_SCOREBOARD_DESCRIPTION("Scoreboardy things"),
 
     COMMAND_SETDEFAULTROLE_DESCRIPTION("/f defaultrole <role> - set your Faction's default role."),

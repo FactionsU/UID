@@ -1042,6 +1042,83 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Relation extends AbsCommand {
+            protected Relation() {
+                super("relation", "Set relation wish to another faction");
+            }
+
+            private String commandAlly = "ally";
+            private String commandTruce = "truce";
+            private String commandEnemy = "enemy";
+            private String commandNeutral = "neutral";
+            private String denySystemFaction = "<red>You cannot set a relation with this faction!";
+            private String denySelfFaction = "<red>You cannot set a relation with your own faction!";
+            private String denyAlreadySet = "<red>Your faction already wishes this relation with <faction>.";
+            private String updated = "<yellow>Your faction is now <relation> to <faction>.";
+            private String proposal = "<yellow><faction> wishes to be your <relation>. To accept, run or click <white><click:run_command:\"/<command>\">/<command></click>.";
+            private String proposalSent = "<yellow><faction> were informed that you wish to be <relation>.";
+            private String peacefulSelf = "<yellow>This will have little effect while your faction is peaceful.";
+            private String peacefulThem = "<yellow>This will have little effect while their faction is peaceful.";
+            private String relationLimitSelf = "<red>Cannot set relation wish because your faction cannot have more than <limit> <relation>.";
+            private String relationLimitThem = "<red>Cannot set relation wish because their faction cannot have more than <limit> <relation>.";
+
+            public String getCommandAlly() {
+                return commandAlly;
+            }
+
+            public String getCommandTruce() {
+                return commandTruce;
+            }
+
+            public String getCommandEnemy() {
+                return commandEnemy;
+            }
+
+            public String getCommandNeutral() {
+                return commandNeutral;
+            }
+
+            public String getDenySystemFaction() {
+                return denySystemFaction;
+            }
+
+            public String getDenySelfFaction() {
+                return denySelfFaction;
+            }
+
+            public String getDenyAlreadySet() {
+                return denyAlreadySet;
+            }
+
+            public String getPeacefulSelf() {
+                return peacefulSelf;
+            }
+
+            public String getPeacefulThem() {
+                return peacefulThem;
+            }
+
+            public String getProposal() {
+                return proposal;
+            }
+
+            public String getProposalSent() {
+                return proposalSent;
+            }
+
+            public String getRelationLimitSelf() {
+                return relationLimitSelf;
+            }
+
+            public String getRelationLimitThem() {
+                return relationLimitThem;
+            }
+
+            public String getUpdated() {
+                return updated;
+            }
+        }
+
         public static class Upgrades extends AbsCommand {
             protected Upgrades() {
                 super("Show faction upgrades", "upgrades");
@@ -1606,6 +1683,7 @@ public class TranslationsConfig {
         private SetCmd set = new SetCmd();
         private Show show = new Show();
         private Permissions permissions = new Permissions();
+        private Relation relation = new Relation();
         private Upgrades upgrades = new Upgrades();
         private Warp warp = new Warp();
         private Zone zone = new Zone();
@@ -1662,6 +1740,10 @@ public class TranslationsConfig {
             return permissions;
         }
 
+        public Relation relation() {
+            return relation;
+        }
+
         public Upgrades upgrades() {
             return upgrades;
         }
@@ -1707,6 +1789,8 @@ public class TranslationsConfig {
             private String warpTo = "to warp";
             private String joinFor = "for joining a faction";
             private String joinTo = "to join a faction";
+            private String relationFor = "for changing a relation wish";
+            private String relationTo = "to change a relation wish";
             private String titleFor = "for changing a player's title";
             private String titleTo = "to change a player's title";
 
@@ -1724,6 +1808,14 @@ public class TranslationsConfig {
 
             public String getWarpTo() {
                 return warpTo;
+            }
+
+            public String getRelationFor() {
+                return relationFor;
+            }
+
+            public String getRelationTo() {
+                return relationTo;
             }
 
             public String getTitleFor() {
