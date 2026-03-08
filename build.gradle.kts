@@ -128,13 +128,13 @@ allprojects {
 
     exclusiveContent {
       forRepository {
-        maven("https://jitpack.io/")
+        maven("https://dependency.download/thirdparty")
       }
 
       filter {
-        includeModule("com.github.MilkBowl", "VaultAPI")
-        includeModule("com.github.dumbo-the-developer.Duels", "duels-api")
-        includeModule("com.github.YouHaveTrouble", "YardWatchAPI")
+        includeModule("com.meteordevelopments", "duels-api")
+        includeModule("me.youhavetrouble", "YardWatch")
+        includeModule("net.milkbowl.vault", "VaultAPI")
       }
     }
 
