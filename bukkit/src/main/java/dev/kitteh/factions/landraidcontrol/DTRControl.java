@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
-public class DTRControl implements LandRaidControl {
+public final class DTRControl implements LandRaidControl {
     private static FactionsPlugin plugin = FactionsPlugin.instance();
 
     public static String round(double dtr) {

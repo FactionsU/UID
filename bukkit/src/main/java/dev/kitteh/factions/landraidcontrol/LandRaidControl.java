@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
-public interface LandRaidControl {
+public sealed interface LandRaidControl permits DTRControl, PowerControl {
     static LandRaidControl getByName(String name) {
         return switch (name.toLowerCase()) {
             case "dtr" -> new DTRControl();

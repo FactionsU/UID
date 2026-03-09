@@ -30,7 +30,7 @@ import java.util.UUID;
 @ApiStatus.AvailableSince("4.0.0")
 @ApiStatus.NonExtendable
 @NullMarked
-public interface Faction extends Participator, Selectable {
+public non-sealed interface Faction extends Participator, Selectable {
     interface Permissions {
         interface SelectorPerms {
             /**

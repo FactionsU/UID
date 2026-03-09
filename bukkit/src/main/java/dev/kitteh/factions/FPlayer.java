@@ -27,7 +27,7 @@ import java.util.UUID;
 @ApiStatus.AvailableSince("4.0.0")
 @ApiStatus.NonExtendable
 @NullMarked
-public interface FPlayer extends Participator, Pointered, Selectable {
+public non-sealed interface FPlayer extends Participator, Pointered, Selectable {
     UUID uniqueId();
 
     String name();

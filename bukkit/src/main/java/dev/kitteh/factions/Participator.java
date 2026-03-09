@@ -16,9 +16,8 @@ import org.jspecify.annotations.Nullable;
  * Describes an entity participating in Factions, i.e. a player or faction.
  */
 @ApiStatus.AvailableSince("4.0.0")
-@ApiStatus.NonExtendable
 @NullMarked
-public interface Participator {
+public sealed interface Participator permits FPlayer, Faction {
     /**
      * Gets an OfflinePlayer for the given participator.
      *

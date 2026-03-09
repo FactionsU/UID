@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
 
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
-public class PowerControl implements LandRaidControl {
+public final class PowerControl implements LandRaidControl {
     @Override
     public boolean isRaidable(Faction faction) {
         return this.isRaidable(faction, faction.power());
