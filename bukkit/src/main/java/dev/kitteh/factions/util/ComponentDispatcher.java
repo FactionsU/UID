@@ -3,6 +3,7 @@ package dev.kitteh.factions.util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.command.CommandSender;
@@ -31,7 +32,7 @@ public class ComponentDispatcher {
 
     public static void send(CommandSender commandSender, ComponentLike component) {
         Component comp = component.asComponent();
-        if (comp.equals(Component.empty())) {
+        if (comp.equals(Component.empty()) || PlainTextComponentSerializer.plainText().serialize(comp).isBlank()) {
             return;
         }
         componentSender.accept(commandSender, comp);
