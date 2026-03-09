@@ -24,7 +24,7 @@ import java.util.List;
 
 @ApiStatus.AvailableSince("4.3.0")
 @NullMarked
-public abstract class HelperResolver implements TagResolver {
+public sealed abstract class HelperResolver implements TagResolver permits GeneralResolver, ObservedResolver {
     protected final String name;
 
     protected HelperResolver(String name) {

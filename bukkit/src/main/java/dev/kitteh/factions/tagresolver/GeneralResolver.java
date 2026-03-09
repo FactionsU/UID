@@ -19,7 +19,7 @@ import org.jspecify.annotations.NullMarked;
 
 @ApiStatus.AvailableSince("4.3.0")
 @NullMarked
-public class GeneralResolver extends HelperResolver {
+public final class GeneralResolver extends HelperResolver {
     private static final GeneralResolver INSTANCE = new GeneralResolver();
 
     public static GeneralResolver resolver() {

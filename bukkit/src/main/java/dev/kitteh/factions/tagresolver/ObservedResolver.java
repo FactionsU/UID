@@ -9,9 +9,8 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @ApiStatus.AvailableSince("4.0.0")
-@ApiStatus.NonExtendable
 @NullMarked
-public abstract class ObservedResolver extends HelperResolver {
+public abstract sealed class ObservedResolver extends HelperResolver permits FPlayerResolver, FactionResolver {
     private final @Nullable FPlayer forcedObserver;
 
     protected ObservedResolver(String name, @Nullable FPlayer forcedObserver) {

@@ -25,7 +25,7 @@ import java.sql.Date;
 
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
-public class FactionResolver extends ObservedResolver {
+public final class FactionResolver extends ObservedResolver {
     public static FactionResolver of(Faction faction) {
         return new FactionResolver("faction", faction);
     }

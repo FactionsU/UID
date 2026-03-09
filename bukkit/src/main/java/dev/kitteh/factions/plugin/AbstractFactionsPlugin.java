@@ -333,7 +333,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
             dataFolder.mkdir();
         }
 
-        // Load Material database - TODO remove
+        // Load Material database - TODO remove in 5.0
         dev.kitteh.factions.util.MaterialDb.load();
 
         // Hit all material lookups in config

@@ -21,7 +21,7 @@ import java.util.OptionalInt;
 
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
-public class FPlayerResolver extends ObservedResolver {
+public final class FPlayerResolver extends ObservedResolver {
     @ApiStatus.AvailableSince("4.5.0")
     public static FPlayerResolver of(String name, FPlayer observed) {
         return new FPlayerResolver(name, observed);
