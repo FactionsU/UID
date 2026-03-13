@@ -1119,6 +1119,48 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Shield extends AbsCommand {
+            protected Shield() {
+                super("shield", "View and manage shields");
+            }
+
+            private String commandActivate = "activate";
+            private String commandStatus = "status";
+            private String statusActive = "<yellow>Shield active! No explosions for <duration>.";
+            private String statusCooldown= "<red>Shield on cooldown for <duration>.";
+            private String statusAvailable = "<yellow>Shield available! Duration: <duration>. Cooldown: <cooldown>.";
+            private String statusNotActive = "<yellow>Shield is not active.";
+            private String activated = "<yellow>Shield activated by <player>! No explosions for <duration>.";
+
+            public String getActivated() {
+                return activated;
+            }
+
+            public String getCommandActivate() {
+                return commandActivate;
+            }
+
+            public String getCommandStatus() {
+                return commandStatus;
+            }
+
+            public String getStatusActive() {
+                return statusActive;
+            }
+
+            public String getStatusAvailable() {
+                return statusAvailable;
+            }
+
+            public String getStatusCooldown() {
+                return statusCooldown;
+            }
+
+            public String getStatusNotActive() {
+                return statusNotActive;
+            }
+        }
+
         public static class Upgrades extends AbsCommand {
             protected Upgrades() {
                 super("Show faction upgrades", "upgrades");
@@ -1684,6 +1726,7 @@ public class TranslationsConfig {
         private Show show = new Show();
         private Permissions permissions = new Permissions();
         private Relation relation = new Relation();
+        private Shield shield = new Shield();
         private Upgrades upgrades = new Upgrades();
         private Warp warp = new Warp();
         private Zone zone = new Zone();
@@ -1742,6 +1785,10 @@ public class TranslationsConfig {
 
         public Relation relation() {
             return relation;
+        }
+
+        public Shield shield() {
+            return shield;
         }
 
         public Upgrades upgrades() {

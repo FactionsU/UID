@@ -340,13 +340,6 @@ public enum TL {
     COMMAND_SETMAXVAULTS_DESCRIPTION("Set max vaults for a Faction."),
     COMMAND_SETMAXVAULTS_SUCCESS("&aSet max vaults for &e%s &ato &b%d"),
 
-    COMMAND_SHIELD_DESCRIPTION("View and manage shields."),
-    COMMAND_SHIELD_NOT_SET("&eShield is not active"),
-    COMMAND_SHIELD_AVAILABLE("&eShield available: %s"),
-    COMMAND_SHIELD_COOLDOWN("&cShield on cooldown for %s"),
-    COMMAND_SHIELD_ACTIVATED("&eShield activated by %s&e! No explosions for %s"),
-    COMMAND_SHIELD_ACTIVE("&eShield active! No explosions for %s"),
-
     COMMAND_TNT_TERRITORYONLY("&cCommand can only be run from your faction's territory!"),
     COMMAND_TNT_DEPOSIT_DESCRIPTION("Add to your faction's TNT bank"),
     COMMAND_TNT_DEPOSIT_FAIL_FULL("&cFaction bank already at maximum!"),
