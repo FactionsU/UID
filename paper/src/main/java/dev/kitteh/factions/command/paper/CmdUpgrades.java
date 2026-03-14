@@ -25,7 +25,6 @@ import io.papermc.paper.registry.data.dialog.type.DialogType;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
@@ -40,8 +39,6 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 @SuppressWarnings("UnstableApiUsage")
 public class CmdUpgrades implements Cmd {
-    private static final ClickCallback.Options OPT = ClickCallback.Options.builder().build();
-
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
@@ -79,7 +76,7 @@ public class CmdUpgrades implements Cmd {
                 .filter(Universe.universe()::isUpgradeEnabled)
                 .map(upgrade -> ActionButton.builder(upgrade.nameComponent())
                         .action(DialogAction.customClick((r, audience) ->
-                                audience.showDialog(this.upgradeMenu(audience, upgrade)), OPT)).build())
+                                audience.showDialog(this.upgradeMenu(audience, upgrade)), Dialogue.CLICK_CALLBACK)).build())
                 .toList();
 
         TagResolver click = Placeholder.component("click",
@@ -149,7 +146,7 @@ public class CmdUpgrades implements Cmd {
             actions = List.of(
                     ActionButton.builder(Mini.parse(info.getPurchaseButton(), fPlayer))
                             .action(DialogAction.customClick((r, aud) ->
-                                    aud.showDialog(this.purchaseMenu(aud, upgrade)), OPT))
+                                    aud.showDialog(this.purchaseMenu(aud, upgrade)), Dialogue.CLICK_CALLBACK))
                             .build()
             );
         } else {
@@ -164,7 +161,7 @@ public class CmdUpgrades implements Cmd {
                 .type(actions.isEmpty() ?
                         DialogType.notice(ActionButton.builder(Mini.parse(tl.general().getReturnToList(), fPlayer))
                                 .action(DialogAction.customClick((r, aud) ->
-                                        aud.showDialog(this.mainMenu(aud)), OPT))
+                                        aud.showDialog(this.mainMenu(aud)), Dialogue.CLICK_CALLBACK))
                                 .build())
                         :
                         DialogType.multiAction(
@@ -214,7 +211,7 @@ public class CmdUpgrades implements Cmd {
                             List.of(
                                     ActionButton.builder(Mini.parse(tl.purchasePage().getConfirmButton(), fPlayer))
                                             .action(DialogAction.customClick((r, aud) ->
-                                                    aud.showDialog(this.makePurchase(aud, upgrade, lvl + 1)), OPT))
+                                                    aud.showDialog(this.makePurchase(aud, upgrade, lvl + 1)), Dialogue.CLICK_CALLBACK))
                                             .build()
                             ),
                             this.returnToUpgrade(upgrade),
@@ -282,14 +279,14 @@ public class CmdUpgrades implements Cmd {
     private ActionButton returnToUpgrade(Upgrade upgrade) {
         return ActionButton.builder(Mini.parse(FactionsPlugin.instance().tl().commands().upgrades().paper().general().getReturnToInfo()))
                 .action(DialogAction.customClick((r, aud) ->
-                        aud.showDialog(this.upgradeMenu(aud, upgrade)), OPT))
+                        aud.showDialog(this.upgradeMenu(aud, upgrade)), Dialogue.CLICK_CALLBACK))
                 .build();
     }
 
     private ActionButton returnToList() {
         return ActionButton.builder(Mini.parse(FactionsPlugin.instance().tl().commands().upgrades().paper().general().getReturnToList()))
                 .action(DialogAction.customClick((r, aud) ->
-                        aud.showDialog(this.mainMenu(aud)), OPT))
+                        aud.showDialog(this.mainMenu(aud)), Dialogue.CLICK_CALLBACK))
                 .build();
     }
 

@@ -17,7 +17,7 @@ import java.util.function.Predicate;
  */
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
-public class Cloudy {
+public final class Cloudy {
     public static PredicatePermission<Sender> predicate(Predicate<Sender> predicate) {
         return PredicatePermission.of(predicate);
     }
@@ -50,6 +50,7 @@ public class Cloudy {
         return PredicatePermission.of(s -> s instanceof Sender.Player player && player.faction().isNormal() && player.faction().hasAccess(player.fPlayer(), action, player.fPlayer().lastStoodAt()));
     }
 
+    @Deprecated(forRemoval = true, since = "4.5.0")
     public static Description desc(TL tl) {
         return Description.of(ChatColor.stripColor(tl.toString()));
     }

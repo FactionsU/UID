@@ -19,7 +19,6 @@ import io.papermc.paper.registry.data.dialog.action.DialogAction;
 import io.papermc.paper.registry.data.dialog.body.DialogBody;
 import io.papermc.paper.registry.data.dialog.input.DialogInput;
 import io.papermc.paper.registry.data.dialog.type.DialogType;
-import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
@@ -32,8 +31,6 @@ import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
 public class CmdWarp implements Cmd {
-    private static final ClickCallback.Options OPT = ClickCallback.Options.builder().build();
-
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
@@ -64,10 +61,10 @@ public class CmdWarp implements Cmd {
                     ActionButton.Builder builder = ActionButton.builder(Mini.parse(tl.getMenuWarpName(), sender.fPlayerOrNull(), Placeholder.unparsed("warp", warp)));
                     if (faction.hasWarpPassword(warp)) {
                         return builder.action(DialogAction.customClick((r, audience) ->
-                                audience.showDialog(this.password(sender, warp, faction, factionResolver)), OPT)).build();
+                                audience.showDialog(this.password(sender, warp, faction, factionResolver)), Dialogue.CLICK_CALLBACK)).build();
                     } else {
                         return builder.action(DialogAction.customClick(
-                                (r, audience) -> warp(faction, warp, sender), OPT)
+                                (r, audience) -> warp(faction, warp, sender), Dialogue.CLICK_CALLBACK)
                         ).build();
                     }
                 })
@@ -108,7 +105,7 @@ public class CmdWarp implements Cmd {
                                                 audience.showDialog(menuWarp(sender, faction));
                                             }
                                         }
-                                        , OPT)).build(),
+                                        , Dialogue.CLICK_CALLBACK)).build(),
                         ActionButton.builder(Mini.parse(tl.getMenuCancel(), sender.fPlayerOrNull(), factionResolver)).build()
                 )));
     }
