@@ -1121,7 +1121,7 @@ public class TranslationsConfig {
 
         public static class Shield extends AbsCommand {
             protected Shield() {
-                super("shield", "View and manage shields");
+                super("View and manage shields", "shield");
             }
 
             private String commandActivate = "activate";
