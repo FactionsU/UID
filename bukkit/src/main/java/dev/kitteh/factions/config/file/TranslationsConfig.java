@@ -2,6 +2,7 @@ package dev.kitteh.factions.config.file;
 
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 
@@ -28,13 +29,28 @@ public class TranslationsConfig {
         }
 
         public String getFirstAlias() {
-            return this.aliases.getFirst();
+            return this.getAlias(this.aliases.getFirst());
         }
 
         public String[] getSecondaryAliases() {
             List<String> secondaries = new ArrayList<>(this.aliases);
             secondaries.removeFirst();
+            for (int i = 0; i < secondaries.size(); i++) {
+                String alias = secondaries.get(i);
+                String newAlias = this.getAlias(alias);
+                if (!newAlias.equals(alias)) {
+                    secondaries.set(i, newAlias);
+                }
+            }
             return secondaries.toArray(new String[0]);
+        }
+
+        private String getAlias(String alias) {
+            if (alias.contains(" ")) {
+                AbstractFactionsPlugin.instance().getLogger().warning("Found invalid alias with a space: \"" + alias + "\". Removing spaces to make an ugly command, so you notice.");
+                alias = alias.replace(" ", "");
+            }
+            return alias;
         }
 
         public String getDescription() {
@@ -1127,7 +1143,7 @@ public class TranslationsConfig {
             private String commandActivate = "activate";
             private String commandStatus = "status";
             private String statusActive = "<yellow>Shield active! No explosions for <duration>.";
-            private String statusCooldown= "<red>Shield on cooldown for <duration>.";
+            private String statusCooldown = "<red>Shield on cooldown for <duration>.";
             private String statusAvailable = "<yellow>Shield available! Duration: <duration>. Cooldown: <cooldown>.";
             private String statusNotActive = "<yellow>Shield is not active.";
             private String activated = "<yellow>Shield activated by <player>! No explosions for <duration>.";
