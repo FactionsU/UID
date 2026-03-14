@@ -71,7 +71,7 @@ public class CmdWarp implements Cmd {
                 .toList();
 
         return Dialog.create(b -> b.empty()
-                .base(DialogBase.builder(Mini.parse(tl.getMenuTitle(), sender.fPlayerOrNull(), factionResolver)).body(this.body(tl.getMenuBody(), factionResolver)).build())
+                .base(DialogBase.builder(Mini.parse(tl.getMenuTitle(), sender.fPlayerOrNull(), factionResolver)).body(Dialogue.body(tl.getMenuBody(), factionResolver)).build())
                 .type(DialogType.multiAction(
                         warps,
                         ActionButton.builder(Mini.parse(tl.getMenuCancel(), sender.fPlayerOrNull(), factionResolver)).build(),
@@ -84,7 +84,7 @@ public class CmdWarp implements Cmd {
         TagResolver warp = Placeholder.unparsed("warp", warpName);
         return Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(Mini.parse(tl.getMenuPassTitle(), sender.fPlayerOrNull(), warp, factionResolver))
-                        .body(this.body(tl.getMenuPassBody(), warp, factionResolver))
+                        .body(Dialogue.body(tl.getMenuPassBody(), warp, factionResolver))
                         .inputs(List.of(
                                 DialogInput.text("password", Mini.parse(tl.getMenuPassInputLabel(), sender.fPlayerOrNull()))
                                         .width(300)
@@ -118,9 +118,5 @@ public class CmdWarp implements Cmd {
         } else {
             dev.kitteh.factions.command.defaults.CmdWarp.teleport(sender.fPlayerOrNull(), faction, warp, sender, destination);
         }
-    }
-
-    private List<DialogBody> body(List<String> body, TagResolver... tagResolvers) {
-        return List.of(DialogBody.plainMessage(Mini.parse(body, tagResolvers), 400));
     }
 }

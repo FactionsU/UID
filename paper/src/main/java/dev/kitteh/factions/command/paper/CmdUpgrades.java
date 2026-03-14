@@ -87,7 +87,7 @@ public class CmdUpgrades implements Cmd {
         );
 
         return Dialog.create(b -> b.empty()
-                .base(DialogBase.builder(Mini.parse(tl.mainPage().getTitle(), sender)).body(this.body(tl.mainPage().getBody(), click)).build())
+                .base(DialogBase.builder(Mini.parse(tl.mainPage().getTitle(), sender)).body(Dialogue.body(tl.mainPage().getBody(), click)).build())
                 .type(DialogType.multiAction(
                         upgrades,
                         ActionButton.builder(Mini.parse(tl.general().getDone(), sender)).build(),
@@ -186,7 +186,7 @@ public class CmdUpgrades implements Cmd {
         if (lvl == settings.maxLevel()) {
             return Dialog.create(b -> b.empty()
                     .base(DialogBase.builder(Mini.parse(tl.alreadyMax().getTitle(), fPlayer))
-                            .body(this.body(tl.alreadyMax().getBody())).build())
+                            .body(Dialogue.body(tl.alreadyMax().getBody())).build())
                     .type(DialogType.notice(this.returnToUpgrade(upgrade))));
         }
 
@@ -203,7 +203,7 @@ public class CmdUpgrades implements Cmd {
             return Dialog.create(b -> b.empty()
                     .base(DialogBase.builder(Mini.parse(tl.purchasePage().getTitle(), fPlayer))
                             .body(
-                                    this.body(tl.purchasePage().getBody(),
+                                    Dialogue.body(tl.purchasePage().getBody(),
                                             Placeholder.component("upgrade", upgrade.nameComponent()),
                                             Placeholder.parsed("cost", String.valueOf(cost)))
                             ).build())
@@ -234,7 +234,7 @@ public class CmdUpgrades implements Cmd {
         if (newLvl != (1 + faction.upgradeLevel(upgrade))) {
             return Dialog.create(b -> b.empty()
                     .base(DialogBase.builder(Mini.parse(tl.noLongerSameLevel().getTitle(), fPlayer))
-                            .body(this.body(tl.noLongerSameLevel().getBody())).build())
+                            .body(Dialogue.body(tl.noLongerSameLevel().getBody())).build())
                     .type(DialogType.notice(this.returnToUpgrade(upgrade))));
         }
 
@@ -253,7 +253,7 @@ public class CmdUpgrades implements Cmd {
             faction.upgradeLevel(upgrade, newLvl);
             return Dialog.create(b -> b.empty()
                     .base(DialogBase.builder(Mini.parse(tl.purchaseComplete().getTitle(), fPlayer))
-                            .body(this.body(tl.purchaseComplete().getBody())).build())
+                            .body(Dialogue.body(tl.purchaseComplete().getBody())).build())
                     .type(DialogType.notice(this.returnToUpgrade(upgrade))));
         } else {
             return this.cannotAfford(upgrade);
@@ -264,7 +264,7 @@ public class CmdUpgrades implements Cmd {
         var tl = FactionsPlugin.instance().tl().commands().upgrades().paper().noLongerInFaction();
         return Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(Mini.parse(tl.getTitle()))
-                        .body(this.body(tl.getBody())).build())
+                        .body(Dialogue.body(tl.getBody())).build())
                 .type(DialogType.notice()));
     }
 
@@ -272,7 +272,7 @@ public class CmdUpgrades implements Cmd {
         var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
         return Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(Mini.parse(tl.cannotAfford().getTitle()))
-                        .body(this.body(tl.cannotAfford().getBody())).build())
+                        .body(Dialogue.body(tl.cannotAfford().getBody())).build())
                 .type(DialogType.notice(this.returnToUpgrade(upgrade))));
     }
 
@@ -288,9 +288,5 @@ public class CmdUpgrades implements Cmd {
                 .action(DialogAction.customClick((r, aud) ->
                         aud.showDialog(this.mainMenu(aud)), Dialogue.CLICK_CALLBACK))
                 .build();
-    }
-
-    private List<DialogBody> body(List<String> body, TagResolver... tagResolvers) {
-        return List.of(DialogBody.plainMessage(Mini.parse(body, tagResolvers), 400));
     }
 }
