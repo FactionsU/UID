@@ -39,7 +39,12 @@ public class CmdShield implements Cmd {
             manager.command(shield.handler(ctx -> this.handle(ctx, false)));
             manager.command(shield.literal(tl.getCommandStatus()).handler(ctx -> this.handle(ctx, false)));
             manager.command(shield.literal(tl.getCommandActivate()).handler(ctx -> this.handle(ctx, true)));
+            manager.command(this.registerSchedule(shield.literal(tl.getCommandSchedule())));
         };
+    }
+
+    protected Command.Builder<Sender> registerSchedule(Command.Builder<Sender> shield) {
+        return shield.handler(this::handleSchedule);
     }
 
     private void handle(CommandContext<Sender> context, boolean exec) {
@@ -78,5 +83,10 @@ public class CmdShield implements Cmd {
                 }
             }
         }
+    }
+
+    private void handleSchedule(CommandContext<Sender> context) {
+        // TODO
+        context.sender().sendRichMessage("<red>Scheduling feature requires Paper server.");
     }
 }

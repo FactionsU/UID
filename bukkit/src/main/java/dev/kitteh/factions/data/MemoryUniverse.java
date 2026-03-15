@@ -13,6 +13,8 @@ import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,12 +29,17 @@ public abstract class MemoryUniverse implements Universe {
             private long graceTimeEnd = 0L;
         }
 
+        static class Shields {
+            private LocalTime lastRunShieldCheck = LocalTime.MIN;
+        }
+
         static class Upgrades {
             private List<String> disabled = new ArrayList<>();
             private Map<String, UpgradeSettings> settings = new HashMap<>();
         }
 
         private Grace grace = new Grace();
+        private Shields shields = new Shields();
         private Upgrades upgrades = new Upgrades();
     }
 
@@ -50,6 +57,16 @@ public abstract class MemoryUniverse implements Universe {
     @Override
     public void graceRemaining(Duration graceRemaining) {
         this.data.grace.graceTimeEnd = graceRemaining.isZero() ? 0L : System.currentTimeMillis() + graceRemaining.toMillis();
+    }
+
+    @Override
+    public LocalTime shieldScheduleLastTimeChecked() {
+        return this.data.shields.lastRunShieldCheck;
+    }
+
+    @Override
+    public void shieldScheduleNextTime() {
+        this.data.shields.lastRunShieldCheck = this.data.shields.lastRunShieldCheck.plusMinutes(30);
     }
 
     @Override
@@ -80,7 +97,7 @@ public abstract class MemoryUniverse implements Universe {
                     upgrade = new UpgradeSettings(
                             Upgrades.WARPS,
                             Map.of(
-                                    Upgrades.Variables.COUNT,  LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(FactionsPlugin.instance().conf().commands().warp().getMaxWarps()))
+                                    Upgrades.Variables.COUNT, LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(FactionsPlugin.instance().conf().commands().warp().getMaxWarps()))
                             ),
                             1,
                             1,

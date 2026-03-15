@@ -64,6 +64,7 @@ import dev.kitteh.factions.util.adapter.ChatTargetAdapter;
 import dev.kitteh.factions.util.adapter.LazyLocationAdapter;
 import dev.kitteh.factions.util.adapter.LeveledValueProviderDeserializer;
 import dev.kitteh.factions.util.adapter.LeveledValueProviderEquationSerializer;
+import dev.kitteh.factions.util.adapter.LocalTimeAdapter;
 import dev.kitteh.factions.util.adapter.MapFLocToStringSetAdapter;
 import dev.kitteh.factions.util.adapter.PermSelectorAdapter;
 import dev.kitteh.factions.util.adapter.SelectorPermsAdapter;
@@ -109,6 +110,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -838,6 +840,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
                 .registerTypeAdapter(LazyLocation.class, new LazyLocationAdapter())
                 .registerTypeAdapter(mapFLocToStringSetType, new MapFLocToStringSetAdapter())
                 .registerTypeAdapter(ChatTarget.class, new ChatTargetAdapter())
+                .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
                 .registerTypeAdapter(UpgradeVariable.class, new UpgradeVariableAdapter())
                 .registerTypeAdapter(Upgrade.class, new UpgradeAdapter())
                 .registerTypeAdapter(LeveledValueProvider.class, new LeveledValueProviderDeserializer())

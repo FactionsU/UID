@@ -7,6 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;
+import java.time.LocalTime;
 
 /**
  * Information not tied to any given faction.
@@ -47,6 +48,18 @@ public interface Universe {
      * @param graceRemaining remaining grace time or zero to deactivate
      */
     void graceRemaining(Duration graceRemaining);
+
+    /**
+     * Gets the last time used for the shield scheduling check.
+     *
+     * @return last time used for shield scheduling check
+     */
+    LocalTime shieldScheduleLastTimeChecked();
+
+    /**
+     * Bumps the shield scheduling check to the next time to check.
+     */
+    void shieldScheduleNextTime();
 
     /**
      * Gets if a given upgrade is enabled.

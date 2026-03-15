@@ -5,6 +5,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.command.paper.CmdShield;
 import dev.kitteh.factions.command.paper.CmdUpgrades;
 import dev.kitteh.factions.command.paper.CmdWarp;
 import dev.kitteh.factions.listener.ListenPaperChat;
@@ -80,6 +81,7 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     public void addCommands(BiConsumer<String, Cmd> reg, Consumer<Supplier<CommandManager<Sender>>> commandManager) {
         reg.accept("upgrades", new CmdUpgrades());
         reg.accept("warp", new CmdWarp());
+        reg.accept("shield", new CmdShield());
         commandManager.accept(() ->
                 PaperCommandManager.<Sender>builder(SenderMapper.create(
                                 css -> {

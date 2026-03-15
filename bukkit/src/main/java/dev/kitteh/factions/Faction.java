@@ -21,6 +21,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -432,6 +433,10 @@ public non-sealed interface Faction extends Participator, Selectable {
     Duration shieldCooldownRemaining();
 
     Duration shieldRemaining();
+
+    @Nullable LocalTime shieldDailyScheduleTime();
+
+    void shieldDailyScheduleTime(@Nullable LocalTime time);
 
     void shield(Duration duration, Duration cooldown);
 
