@@ -5,11 +5,15 @@ import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.jspecify.annotations.Nullable;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
 public class TranslationsConfig {
@@ -1141,6 +1145,7 @@ public class TranslationsConfig {
             }
 
             private String commandActivate = "activate";
+            private String commandSchedule = "schedule";
             private String commandStatus = "status";
             private String statusActive = "<yellow>Shield active! No explosions for <duration>.";
             private String statusCooldown = "<red>Shield on cooldown for <duration>.";
@@ -1148,12 +1153,47 @@ public class TranslationsConfig {
             private String statusNotActive = "<yellow>Shield is not active.";
             private String activated = "<yellow>Shield activated by <player>! No explosions for <duration>.";
 
+            private String scheduleMenuSetTitle = "<green>Schedule Shield";
+            private List<String> scheduleMenuSetBody = new ArrayList<>() {
+                {
+                    this.add("Choose the daily start time of your shield!");
+                    this.add("Current time according to the server: <currenttime>");
+                }
+            };
+            private String scheduleMenuSetButtonCancel = "Cancel";
+            private String scheduleMenuSetButtonTime = "<time>";
+
+            private int scheduleMenuSetColumns = 6;
+            private int scheduleMenuSetWidth = 50;
+            private String scheduleMenuTimeFormat = "h:mm a";
+            @WipeOnReload
+            private @Nullable DateTimeFormatter scheduleMenuTimeFormatter;
+
+            private String scheduleMenuStatusTitle = "<green>Schedule Shield";
+            private List<String> scheduleMenuStatusBodyNotSet = new ArrayList<>() {
+                {
+                    this.add("No schedule currently set");
+                }
+            };
+            private List<String> scheduleMenuStatusBodyCurrentlySet = new ArrayList<>() {
+                {
+                    this.add("Your shield is scheduled to start, when not on cooldown, at <scheduledtime>");
+                    this.add("Current time according to the server: <currenttime>");
+                }
+            };
+            private String scheduleMenuStatusButtonSetSchedule = "Set schedule";
+            private String scheduleMenuStatusButtonDone = "Done";
+
             public String getActivated() {
                 return activated;
             }
 
             public String getCommandActivate() {
                 return commandActivate;
+            }
+
+            public String getCommandSchedule() {
+                return commandSchedule;
             }
 
             public String getCommandStatus() {
@@ -1174,6 +1214,63 @@ public class TranslationsConfig {
 
             public String getStatusNotActive() {
                 return statusNotActive;
+            }
+
+            public String getScheduleMenuSetTitle() {
+                return scheduleMenuSetTitle;
+            }
+
+            public List<String> getScheduleMenuSetBody() {
+                return scheduleMenuSetBody;
+            }
+
+            public String getScheduleMenuSetButtonCancel() {
+                return scheduleMenuSetButtonCancel;
+            }
+
+            public int getScheduleMenuSetColumns() {
+                return scheduleMenuSetColumns;
+            }
+
+            public int getScheduleMenuSetWidth() {
+                return scheduleMenuSetWidth;
+            }
+
+            public String getScheduleMenuSetButtonTime() {
+                return scheduleMenuSetButtonTime;
+            }
+
+            public DateTimeFormatter getScheduleMenuTimeFormat() {
+                if (this.scheduleMenuTimeFormatter == null) {
+                    try {
+                        this.scheduleMenuTimeFormatter = DateTimeFormatter.ofPattern(this.scheduleMenuTimeFormat);
+                    } catch (DateTimeParseException e) {
+                        AbstractFactionsPlugin.instance().getLogger().log(Level.WARNING, "Could not parse schedule menu time format. Defaulting to \"h:mm a\"", e);
+                        this.scheduleMenuTimeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+                    }
+                }
+
+                return scheduleMenuTimeFormatter;
+            }
+
+            public String getScheduleMenuStatusTitle() {
+                return scheduleMenuStatusTitle;
+            }
+
+            public List<String> getScheduleMenuStatusBodyNotSet() {
+                return scheduleMenuStatusBodyNotSet;
+            }
+
+            public List<String> getScheduleMenuStatusBodyCurrentlySet() {
+                return scheduleMenuStatusBodyCurrentlySet;
+            }
+
+            public String getScheduleMenuStatusButtonSetSchedule() {
+                return scheduleMenuStatusButtonSetSchedule;
+            }
+
+            public String getScheduleMenuStatusButtonDone() {
+                return scheduleMenuStatusButtonDone;
             }
         }
 

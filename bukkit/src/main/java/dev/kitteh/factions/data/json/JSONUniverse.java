@@ -25,6 +25,7 @@ public final class JSONUniverse extends MemoryUniverse {
     public void loadData() {
         if (!Files.exists(path)) {
             AbstractFactionsPlugin.instance().getLogger().info("No universe to load from disk. Creating new file.");
+            this.firstTime();
             forceSave(true);
         }
 

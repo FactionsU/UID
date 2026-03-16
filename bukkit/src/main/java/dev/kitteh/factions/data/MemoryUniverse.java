@@ -13,6 +13,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,16 +28,22 @@ public abstract class MemoryUniverse implements Universe {
             private long graceTimeEnd = 0L;
         }
 
+        static class Shields {
+            private LocalTime lastRunShieldCheck = null;
+        }
+
         static class Upgrades {
             private List<String> disabled = new ArrayList<>();
             private Map<String, UpgradeSettings> settings = new HashMap<>();
         }
 
         private Grace grace = new Grace();
+        private Shields shields = new Shields();
         private Upgrades upgrades = new Upgrades();
     }
 
     protected Data data = new Data();
+    private boolean firstTime = false;
 
     @Override
     public Duration graceRemaining() {
@@ -53,6 +60,15 @@ public abstract class MemoryUniverse implements Universe {
     }
 
     @Override
+    public LocalTime shieldScheduleLastTimeChecked() {
+        return this.data.shields.lastRunShieldCheck;
+    }
+
+    public void shieldScheduleBumpNextTime() {
+        this.data.shields.lastRunShieldCheck = this.data.shields.lastRunShieldCheck.plusMinutes(30);
+    }
+
+    @Override
     public boolean isUpgradeEnabled(Upgrade upgrade) {
         return this.data.upgrades.settings.containsKey(upgrade.name()) && !this.data.upgrades.disabled.contains(upgrade.name());
     }
@@ -64,8 +80,21 @@ public abstract class MemoryUniverse implements Universe {
 
     public abstract void forceSave(boolean sync);
 
+    protected void firstTime() {
+        this.firstTime = true;
+    }
+
     public void load() {
         this.loadData();
+
+        if (this.firstTime) {
+            this.firstTime = false;
+
+            LocalTime previous30 = LocalTime.now().withSecond(0).withNano(0);
+            previous30 = previous30.withMinute(previous30.getMinute() >= 30 ? 30 : 0);
+            this.data.shields.lastRunShieldCheck = previous30;
+        }
+
         Upgrades.defaults.forEach(upgrade -> {
             String name = upgrade.upgrade().name();
             UpgradeSettings settings = this.data.upgrades.settings.get(name);
@@ -80,7 +109,7 @@ public abstract class MemoryUniverse implements Universe {
                     upgrade = new UpgradeSettings(
                             Upgrades.WARPS,
                             Map.of(
-                                    Upgrades.Variables.COUNT,  LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(FactionsPlugin.instance().conf().commands().warp().getMaxWarps()))
+                                    Upgrades.Variables.COUNT, LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(FactionsPlugin.instance().conf().commands().warp().getMaxWarps()))
                             ),
                             1,
                             1,

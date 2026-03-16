@@ -21,6 +21,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -429,11 +430,26 @@ public non-sealed interface Faction extends Participator, Selectable {
         return this.shieldRemaining().isPositive();
     }
 
+    @ApiStatus.AvailableSince("4.5.0")
+    default boolean shieldCooldownActive() {
+        return this.shieldCooldownRemaining().isPositive();
+    }
+
     Duration shieldCooldownRemaining();
 
     Duration shieldRemaining();
 
-    void shield(Duration duration, Duration cooldown);
+    @ApiStatus.AvailableSince("4.5.0")
+    @Nullable LocalTime shieldDailyScheduledTime();
+
+    @ApiStatus.AvailableSince("4.5.0")
+    void shieldDailyScheduledTime(@Nullable LocalTime time);
+
+    default void shield(Duration duration, Duration cooldown) {
+        this.shield(Instant.now(), duration, cooldown);
+    }
+
+    void shield(Instant start, Duration duration, Duration cooldown);
 
     int upgradeLevel(Upgrade upgrade);
 
