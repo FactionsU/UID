@@ -39,7 +39,7 @@ public class CmdRelation implements Cmd {
             manager.command(relationBuilder.literal(tl.getCommandEnemy()).handler(ctx -> this.handleRelation(ctx, Relation.ENEMY)));
 
             manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx ->
-                    help.queryCommands(FactionsPlugin.instance().tl().commands().generic().getCommandRoot() + " " + tl.getFirstAlias() + " <faction>", ctx.sender()))
+                    help.queryCommands(Cmd.rootCommand() + " " + tl.getFirstAlias() + " <faction>", ctx.sender()))
             );
         };
     }
@@ -98,7 +98,7 @@ public class CmdRelation implements Cmd {
             faction.sendRichMessage(tl.getUpdated(), FactionResolver.of(them), Placeholder.component("relation", Component.text(currentRelation.translation(), currentRelation.color())));
         } else {
             // inform the other faction of your request
-            String command = FactionsPlugin.instance().tl().commands().generic().getCommandRoot() + " " + tl.getFirstAlias() + " " + faction.tag() + " "
+            String command = Cmd.rootCommand() + " " + tl.getFirstAlias() + " " + faction.tag() + " "
                     + switch (targetRelation) {
                 case ALLY -> tl.getCommandAlly();
                 case TRUCE -> tl.getCommandTruce();
