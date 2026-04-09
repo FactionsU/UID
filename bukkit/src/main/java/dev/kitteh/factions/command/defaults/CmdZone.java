@@ -9,7 +9,6 @@ import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Mini;
-import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.SpiralTask;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
@@ -74,7 +73,7 @@ public class CmdZone implements Cmd {
                             .handler(this::claim)
             );
 
-            new CmdSetPerm((ctx) -> '/' + MiscUtil.commandRoot() + ' ' + tl.getFirstAlias() +
+            new CmdSetPerm((ctx) -> '/' + Cmd.rootCommand() + ' ' + tl.getFirstAlias() +
                     ' ' + tl.set().getFirstAlias() + ' ' + ctx.get("zone") + ' ' + FactionsPlugin.instance().tl().commands().permissions().getFirstAlias() + ' ', context -> {
                 FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
                 Faction faction = sender.faction();

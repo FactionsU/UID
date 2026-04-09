@@ -66,7 +66,7 @@ public class CmdForceRole implements Cmd {
                             .handler(this::handleAdmin)
             );
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("fa force role <member>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootAdminCommand() + " force role <member>", ctx.sender())));
         };
     }
 

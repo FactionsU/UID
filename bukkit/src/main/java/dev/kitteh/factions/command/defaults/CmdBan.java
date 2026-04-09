@@ -36,7 +36,7 @@ public class CmdBan implements Cmd {
                             .handler(this::handle)
             );
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f ban <player>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " ban <player>", ctx.sender())));
         };
     }
 

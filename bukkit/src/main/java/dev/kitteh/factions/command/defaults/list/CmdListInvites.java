@@ -6,7 +6,6 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
-import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
@@ -45,7 +44,7 @@ public class CmdListInvites implements Cmd {
             String name = fp.name();
             component = component.append(Component.text().color(NamedTextColor.WHITE).content(name + " ")
                     .hoverEvent(legacy.deserialize(TL.COMMAND_SHOWINVITES_CLICKTOREVOKE.format(name)).asHoverEvent())
-                    .clickEvent(ClickEvent.runCommand("/" + MiscUtil.commandRoot() + " deinvite " + name))
+                    .clickEvent(ClickEvent.runCommand("/" + Cmd.rootCommand() + " deinvite " + name))
             );
         }
 

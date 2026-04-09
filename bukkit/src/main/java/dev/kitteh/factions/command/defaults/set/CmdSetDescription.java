@@ -30,7 +30,7 @@ public class CmdSetDescription implements Cmd {
                             .handler(this::handle)
             );
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f description <description>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " description <description>", ctx.sender())));
         };
     }
 

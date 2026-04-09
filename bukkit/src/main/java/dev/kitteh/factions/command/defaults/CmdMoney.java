@@ -26,7 +26,7 @@ public class CmdMoney implements Cmd {
             new CmdMoneySend().consumer().accept(manager, moneyBuilder, help);
             new CmdMoneyWithdraw().consumer().accept(manager, moneyBuilder, help);
 
-            manager.command(moneyBuilder.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f money *", ctx.sender())));
+            manager.command(moneyBuilder.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " money *", ctx.sender())));
         };
     }
 }

@@ -37,7 +37,7 @@ public class CmdConfirm implements Cmd {
     public static String add(FPlayer fPlayer, Consumer<FPlayer> consumer) {
         String code = decimalFormat.format(random.nextInt(100000));
         cache.put(fPlayer.uniqueId(), new Conf(code, consumer));
-        return FactionsPlugin.instance().tl().commands().generic().getCommandRoot().getFirstAlias() +
+        return Cmd.rootCommand() +
                 " " +
                 FactionsPlugin.instance().tl().commands().confirm().getFirstAlias() +
                 " " +

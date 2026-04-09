@@ -25,8 +25,8 @@ public class CmdSet implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var setConf = FactionsPlugin.instance().tl().commands().set();
-            Command.Builder<Sender> setBuilder = builder.literal(setConf.getFirstAlias(), setConf.getSecondaryAliases()).permission(builder.commandPermission().and(Cloudy.hasFaction()));
+            var tl = FactionsPlugin.instance().tl().commands().set();
+            Command.Builder<Sender> setBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases()).permission(builder.commandPermission().and(Cloudy.hasFaction()));
 
             new CmdSetBoom().consumer().accept(manager, setBuilder, help);
             new CmdSetDefaultRole().consumer().accept(manager, setBuilder, help);
@@ -40,7 +40,7 @@ public class CmdSet implements Cmd {
             new CmdSetWarp().consumer().accept(manager, setBuilder, help);
             new CmdSetWarpProperty().consumer().accept(manager, setBuilder, help);
 
-            manager.command(setBuilder.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f set *", ctx.sender())));
+            manager.command(setBuilder.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " " + tl.getFirstAlias() + " *", ctx.sender())));
         };
     }
 }

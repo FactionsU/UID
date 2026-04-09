@@ -38,7 +38,7 @@ public class CmdSetTag implements Cmd {
                             .handler(this::handle)
             );
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f set tag <new tag>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " set tag <new tag>", ctx.sender())));
         };
     }
 

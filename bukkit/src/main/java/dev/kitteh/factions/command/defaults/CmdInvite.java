@@ -8,7 +8,6 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.PermissibleActions;
-import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
@@ -36,7 +35,7 @@ public class CmdInvite implements Cmd {
                             .flag(manager.flagBuilder("delete"))
                             .handler(this::handle)
             );
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f invite <player> [--delete]", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " invite <player> [--delete]", ctx.sender())));
         };
     }
 
@@ -76,7 +75,7 @@ public class CmdInvite implements Cmd {
                     .append(legacy.deserialize(faction.describeToLegacy(target)));
 
             component = component.hoverEvent(legacy.deserialize(TL.COMMAND_INVITE_CLICKTOJOIN.toString()).asHoverEvent())
-                    .clickEvent(ClickEvent.runCommand("/" + MiscUtil.commandRoot() + " join " + ChatColor.stripColor(faction.tag())));
+                    .clickEvent(ClickEvent.runCommand("/" + Cmd.rootCommand() + " join " + ChatColor.stripColor(faction.tag())));
             target.sendMessage(component);
         }
 

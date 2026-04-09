@@ -37,7 +37,7 @@ public class CmdSetTitle implements Cmd {
             );
 
             manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx ->
-                    help.queryCommands("f " + FactionsPlugin.instance().tl().commands().set().getFirstAlias() + " " + tl.getFirstAlias() + " <player> [title]", ctx.sender())));
+                    help.queryCommands(Cmd.rootCommand() + " " + FactionsPlugin.instance().tl().commands().set().getFirstAlias() + " " + tl.getFirstAlias() + " <player> [title]", ctx.sender())));
         };
     }
 

@@ -64,7 +64,7 @@ public class CmdClear implements Cmd {
                             .handler(this::handleInvite)
             );
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f clear *", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " clear *", ctx.sender())));
         };
     }
 

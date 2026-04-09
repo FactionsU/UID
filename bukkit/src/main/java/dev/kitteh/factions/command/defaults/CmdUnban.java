@@ -28,7 +28,7 @@ public class CmdUnban implements Cmd {
                     build.required("player", FPlayerParser.of(FPlayerParser.Include.BANNED))
                             .handler(this::handle)
             );
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f unban <player>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " unban <player>", ctx.sender())));
         };
     }
 

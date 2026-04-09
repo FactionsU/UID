@@ -194,6 +194,7 @@ public class MiscUtil {
         return ret;
     }
 
+    @Deprecated(forRemoval = true, since = "4.5.0")
     public static String commandRoot() {
         return FactionsPlugin.instance().tl().commands().generic().getCommandRoot().getFirstAlias();
     }

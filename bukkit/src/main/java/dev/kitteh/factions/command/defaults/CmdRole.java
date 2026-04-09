@@ -72,7 +72,7 @@ public class CmdRole implements Cmd {
                             .handler(this::handleAdmin)
             );
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f role <member>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " role <member>", ctx.sender())));
         };
     }
 

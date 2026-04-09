@@ -11,7 +11,6 @@ import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
@@ -51,14 +50,14 @@ public class CmdKick implements Cmd {
                 String s = player.name();
                 component = component.append(Component.text().color(NamedTextColor.WHITE).content(s + " ")
                         .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
-                        .clickEvent(ClickEvent.runCommand("/" + MiscUtil.commandRoot() + " kick " + s))
+                        .clickEvent(ClickEvent.runCommand("/" + Cmd.rootCommand() + " kick " + s))
                 );
             }
             for (FPlayer player : faction.members(Role.NORMAL)) {
                 String s = player.name();
                 component = component.append(Component.text().color(NamedTextColor.WHITE).content(s + " ")
                         .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
-                        .clickEvent(ClickEvent.runCommand("/" + MiscUtil.commandRoot() + " kick " + s))
+                        .clickEvent(ClickEvent.runCommand("/" + Cmd.rootCommand() + " kick " + s))
                 );
             }
             if (sender.role().isAtLeast(Role.COLEADER)) {
@@ -67,7 +66,7 @@ public class CmdKick implements Cmd {
                     String s = player.name();
                     component = component.append(Component.text().color(NamedTextColor.GRAY).content(s + " ")
                             .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
-                            .clickEvent(ClickEvent.runCommand("/" + MiscUtil.commandRoot() + " kick " + s))
+                            .clickEvent(ClickEvent.runCommand("/" + Cmd.rootCommand() + " kick " + s))
                     );
                 }
                 if (sender.role() == Role.ADMIN) {
@@ -76,7 +75,7 @@ public class CmdKick implements Cmd {
                         String s = player.name();
                         component = component.append(Component.text().color(NamedTextColor.RED).content(s + " ")
                                 .hoverEvent(legacy.deserialize(TL.COMMAND_KICK_CLICKTOKICK + s).asHoverEvent())
-                                .clickEvent(ClickEvent.runCommand("/" + MiscUtil.commandRoot() + " kick " + s))
+                                .clickEvent(ClickEvent.runCommand("/" + Cmd.rootCommand() + " kick " + s))
                         );
                     }
                 }

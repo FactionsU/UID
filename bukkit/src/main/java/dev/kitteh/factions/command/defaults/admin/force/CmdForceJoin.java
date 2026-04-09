@@ -37,7 +37,7 @@ public class CmdForceJoin implements Cmd {
                             .handler(this::handle)
             );
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("fa force join <player> <faction>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootAdminCommand() + " force join <player> <faction>", ctx.sender())));
         };
     }
 

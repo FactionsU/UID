@@ -28,7 +28,7 @@ public class CmdSetLink implements Cmd {
                     build.required("url", StringParser.greedyStringParser())
                             .handler(this::handle)
             );
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f set link <url>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " set link <url>", ctx.sender())));
         };
     }
 

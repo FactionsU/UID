@@ -43,7 +43,7 @@ public class CmdTop implements Cmd {
                             .optional("page", IntegerParser.integerParser(1))
                             .handler(this::handle)
             );
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands("f top <criteria>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " top <criteria>", ctx.sender())));
         };
     }
 
