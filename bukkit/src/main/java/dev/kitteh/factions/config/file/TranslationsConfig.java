@@ -1060,7 +1060,7 @@ public class TranslationsConfig {
 
         public static class Relation extends AbsCommand {
             protected Relation() {
-                super("relation", "Set relation wish to another faction");
+                super("Set relation wish to another faction", "relation");
             }
 
             private String commandAlly = "ally";
