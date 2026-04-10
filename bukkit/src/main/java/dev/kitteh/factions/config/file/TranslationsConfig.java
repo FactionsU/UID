@@ -292,7 +292,7 @@ public class TranslationsConfig {
                     super("Modify faction bank money.", "money");
                 }
 
-                private String modified = "<yellow>Modified <faction> bank by <amount>>";
+                private String modified = "<yellow>Modified <faction> bank by <amount>";
                 private String modifyNotify = "<yellow>Modified <faction> bank by <amount>";
                 private String set = "<yellow>Set <faction> bank to <amount>";
                 private String setNotify = "<yellow>Modified <faction> bank by <amount>";

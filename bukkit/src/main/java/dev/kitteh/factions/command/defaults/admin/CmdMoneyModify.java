@@ -56,12 +56,11 @@ public class CmdMoneyModify implements Cmd {
         Faction faction = context.get("faction");
         boolean notify = context.flags().contains("notify");
 
-
         if (modify) {
             if (Econ.modifyBalance(faction, amount)) {
                 sender.sendRichMessage(tl.getModified(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 if (notify) {
-                    sender.sendRichMessage(tl.getModifyNotify(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
+                    faction.sendRichMessage(tl.getModifyNotify(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 }
 
                 if (FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
@@ -74,7 +73,7 @@ public class CmdMoneyModify implements Cmd {
             if (Econ.setBalance(faction, amount)) {
                 sender.sendRichMessage(tl.getSet(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 if (notify) {
-                    sender.sendRichMessage(tl.getSetNotify(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
+                    faction.sendRichMessage(tl.getSetNotify(), FactionResolver.of(faction), Placeholder.unparsed("amount", Econ.moneyString(amount)));
                 }
 
                 if (FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
