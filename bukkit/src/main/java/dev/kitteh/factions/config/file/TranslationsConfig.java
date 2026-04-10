@@ -2127,10 +2127,10 @@ public class TranslationsConfig {
         }
 
         public static class Title {
-            private String titleMain = "<left_color><st><left_repeat></st></left_color><center><right_color><right_repeat></right_color>";
-            private String titleCenter = "<gold>.[ </gold><dark_green><content></dark_green><gold> ].</gold>";
-            private String leftRepeat = "_";
-            private String rightRepeat = "_";
+            private String titleMain = "<left_color><st><left_repeat></st></left_color><center><right_color><st><right_repeat></st></right_color>";
+            private String titleCenter = "<gold>[ </gold><dark_green><content></dark_green><gold> ]</gold>";
+            private String leftRepeat = " ";
+            private String rightRepeat = " ";
             @WipeOnReload
             private transient TextColor leftColorColor;
             private String leftColor = "gold";
