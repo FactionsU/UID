@@ -1463,7 +1463,7 @@ public class TranslationsConfig {
             private String noPermission = "<red>You do not have permission to use <faction> warps.";
             private String invalidPassword = "<red>Invalid password!";
             private String warped = "<yellow>Warped to <green><warp>.";
-            private String invalidWarp = "<red>Couldn't find warp '<warp>.'";
+            private String invalidWarp = "<red>Couldn't find warp '<warp>'.";
             private String warmup = "<yellow>You will teleport to <green><warp></green> in <green><seconds></green> seconds.";
             private String noWarps = "<yellow><faction> has no warps.";
 
