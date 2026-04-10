@@ -885,10 +885,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         }
     }
 
-    public String getPrimaryGroup(OfflinePlayer player) {
-        return this.vaultPerms.getPrimaryGroup(player);
-    }
-
     public void debug(Level level, String s) {
         if (conf().getaVeryFriendlyFactionsConfig().isDebug()) {
             getLogger().log(level, s);

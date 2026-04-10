@@ -1,9 +1,7 @@
 package dev.kitteh.factions.integration;
 
-import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -17,11 +15,7 @@ public class VaultPerms {
             if (rsp != null) {
                 perms = rsp.getProvider();
             }
-        } catch (NoClassDefFoundError ex) {
-            return;
-        }
-        if (perms != null) {
-            AbstractFactionsPlugin.instance().getLogger().info("Using Vault with permissions plugin " + perms.getName());
+        } catch (NoClassDefFoundError ignored) {
         }
     }
 
@@ -31,9 +25,5 @@ public class VaultPerms {
 
     public Object getPerms() {
         return perms;
-    }
-
-    public String getPrimaryGroup(OfflinePlayer player) {
-        return perms == null || !perms.hasGroupSupport() ? " " : perms.getPrimaryGroup(Bukkit.getWorlds().getFirst().toString(), player);
     }
 }

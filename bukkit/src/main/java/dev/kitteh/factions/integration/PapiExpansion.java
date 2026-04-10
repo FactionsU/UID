@@ -20,7 +20,6 @@ import me.clip.placeholderapi.expansion.Relational;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.apache.commons.lang3.time.DurationFormatUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -129,7 +128,6 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
                 String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fPlayer.lastLogin(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
                 yield fPlayer.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fPlayer.lastLogin() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
             }
-            case "player_group" -> AbstractFactionsPlugin.instance().getPrimaryGroup(Bukkit.getOfflinePlayer(fPlayer.uniqueId()));
             case "player_balance" -> Econ.isSetup() ? Econ.getFriendlyBalance(fPlayer) : TL.ECON_OFF.format("balance");
             case "player_power" -> String.valueOf(fPlayer.powerRounded());
             case "player_maxpower" -> String.valueOf(fPlayer.powerMaxRounded());
