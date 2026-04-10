@@ -2564,7 +2564,7 @@ public class TranslationsConfig {
 
         public static class Denied {
             private String actionWilderness = "<red>You cannot <action> in the wilderness.";
-            private String actionSafezone = "<red>>You cannot <action> in a safe zone.";
+            private String actionSafezone = "<red>You cannot <action> in a safe zone.";
             private String actionWarzone = "<red>You cannot <action> in a war zone.";
             private String actionTerritory = "<red>You cannot <action> in the territory of <faction>.";
             private String actionTerritoryPain = "<red>It is painful to <action> in the territory of <faction>.";
