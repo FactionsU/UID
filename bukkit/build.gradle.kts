@@ -1,110 +1,112 @@
 plugins {
-  alias(libs.plugins.indra)
-  alias(libs.plugins.shadow)
+    alias(libs.plugins.indra)
+    alias(libs.plugins.shadow)
 }
 
 indra {
-  javaVersions {
-    target(21)
-  }
+    javaVersions {
+        target(21)
+    }
 }
 
 configurations.implementation {
-  exclude("com.google.code.findbugs", "jsr305")
+    exclude("com.google.code.findbugs", "jsr305")
 }
 
 dependencies {
-  compileOnlyApi(libs.bundles.annotations)
+    compileOnlyApi(libs.bundles.annotations)
 
-  implementation(libs.spigot)
-  implementation(libs.bundles.cloud)
-  implementation(libs.commons.lang3)
-  implementation(libs.configurate.hocon) {
-    exclude("com.google.inject", "guice")
-    exclude("org.checkerframework", "checker-qual")
-  }
-  implementation(libs.bundles.adventure) {
-    exclude("org.jetbrains", "annotations")
-  }
-  implementation(libs.authlib) {
-    exclude("com.google.code.findbugs", "jsr305")
-    exclude("com.google.code.gson", "gson")
-    exclude("com.google.guava", "guava")
-    exclude("org.apache.commons", "commons-lang3")
-  }
-  implementation(libs.ifchestonly)
-  implementation(libs.evalex)
-
-  listOf(
-    libs.vault.api,
-    libs.worldedit.core,
-    libs.worldedit.bukkit,
-    libs.worldguard.core,
-    libs.worldguard.bukkit,
-    libs.essentialsx,
-    libs.fastutil,
-    libs.dynmap,
-    libs.playervaultsx,
-    libs.placeholderapi,
-    libs.sentinel,
-    libs.denizen,
-    libs.citizens,
-    libs.depenizen,
-    libs.luckperms.api,
-    libs.magic.api,
-    libs.graves,
-    libs.duels,
-    libs.brigadier,
-    libs.yardwatch
-  ).forEach {
-    compileOnly(it) {
-      isTransitive = false
+    implementation(libs.spigot)
+    implementation(libs.bundles.cloud)
+    implementation(libs.commons.lang3)
+    implementation(libs.configurate.hocon) {
+        exclude("com.google.inject", "guice")
+        exclude("org.checkerframework", "checker-qual")
     }
-  }
+    implementation(libs.bundles.adventure) {
+        exclude("org.jetbrains", "annotations")
+    }
+    implementation(libs.authlib) {
+        exclude("com.google.code.findbugs", "jsr305")
+        exclude("com.google.code.gson", "gson")
+        exclude("com.google.guava", "guava")
+        exclude("org.apache.commons", "commons-lang3")
+    }
+    implementation(libs.ifchestonly)
+    implementation(libs.evalex)
 
-  testImplementation(platform("org.junit:junit-bom:5.14.2"))
-  testImplementation("org.junit.jupiter:junit-jupiter-api")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    listOf(
+        libs.vault.api,
+        libs.worldedit.core,
+        libs.worldedit.bukkit,
+        libs.worldguard.core,
+        libs.worldguard.bukkit,
+        libs.essentialsx,
+        libs.fastutil,
+        libs.dynmap,
+        libs.playervaultsx,
+        libs.placeholderapi,
+        libs.sentinel,
+        libs.denizen,
+        libs.citizens,
+        libs.depenizen,
+        libs.luckperms.api,
+        libs.magic.api,
+        libs.graves,
+        libs.duels,
+        libs.brigadier,
+        libs.yardwatch
+    ).forEach {
+        compileOnly(it) {
+            isTransitive = false
+        }
+    }
+
+    testImplementation(platform("org.junit:junit-bom:5.14.2"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.processResources {
-  filesMatching("plugin.yml") {
-    expand(mapOf(
-      "version" to project.version,
-      "adv" to libs.versions.adventure.get(),
-      "apiversion" to libs.versions.apiversion.get()
-    ))
-  }
+    filesMatching("plugin.yml") {
+        expand(
+            mapOf(
+                "version" to project.version,
+                "adv" to libs.versions.adventure.get(),
+                "apiversion" to libs.versions.apiversion.get()
+            )
+        )
+    }
 }
 
 tasks.shadowJar {
-  dependencies {
-    include(dependency("com.typesafe:config"))
-    include(dependency("org.spongepowered:configurate-core"))
-    include(dependency("org.spongepowered:configurate-hocon"))
-    include(dependency("org.incendo:cloud-paper"))
-    include(dependency("org.incendo:cloud-minecraft-extras"))
-    include(dependency("org.incendo:cloud-bukkit"))
-    include(dependency("org.incendo:cloud-brigadier"))
-    include(dependency("org.incendo:cloud-core"))
-    include(dependency("org.incendo:cloud-services"))
-    include(dependency("io.leangen.geantyref:geantyref"))
-    include(dependency("dev.kitteh.forkedproject:IF-ChestOnly"))
-    include(dependency("com.ezylang:EvalEx"))
-  }
+    dependencies {
+        include(dependency("com.typesafe:config"))
+        include(dependency("org.spongepowered:configurate-core"))
+        include(dependency("org.spongepowered:configurate-hocon"))
+        include(dependency("org.incendo:cloud-paper"))
+        include(dependency("org.incendo:cloud-minecraft-extras"))
+        include(dependency("org.incendo:cloud-bukkit"))
+        include(dependency("org.incendo:cloud-brigadier"))
+        include(dependency("org.incendo:cloud-core"))
+        include(dependency("org.incendo:cloud-services"))
+        include(dependency("io.leangen.geantyref:geantyref"))
+        include(dependency("dev.kitteh.forkedproject:IF-ChestOnly"))
+        include(dependency("com.ezylang:EvalEx"))
+    }
 
-  relocate("com.typesafe", "moss.factions.shade.com.typesafe")
-  relocate("io.papermc.lib", "moss.factions.shade.io.papermc.lib")
-  relocate("ninja.leaping", "moss.factions.shade.ninja.leaping")
-  relocate("org.incendo", "moss.factions.shade.org.incendo")
-  relocate("io.leangen", "moss.factions.shade.io.leangen")
-  relocate("com.github.stefvanschie.inventoryframework", "moss.factions.shade.stefvanschie.if")
-  relocate("com.ezylang", "moss.factions.shade.com.ezylang")
+    relocate("com.typesafe", "moss.factions.shade.com.typesafe")
+    relocate("io.papermc.lib", "moss.factions.shade.io.papermc.lib")
+    relocate("ninja.leaping", "moss.factions.shade.ninja.leaping")
+    relocate("org.incendo", "moss.factions.shade.org.incendo")
+    relocate("io.leangen", "moss.factions.shade.io.leangen")
+    relocate("com.github.stefvanschie.inventoryframework", "moss.factions.shade.stefvanschie.if")
+    relocate("com.ezylang", "moss.factions.shade.com.ezylang")
 
-  archiveClassifier = ""
+    archiveClassifier = ""
 }
 
 tasks.assemble {
-  dependsOn(tasks.shadowJar)
+    dependsOn(tasks.shadowJar)
 }

@@ -1,27 +1,29 @@
 plugins {
-  alias(libs.plugins.indra)
+    alias(libs.plugins.indra)
 }
 
 indra {
-  javaVersions {
-    target(21)
-  }
+    javaVersions {
+        target(21)
+    }
 }
 
 dependencies {
-  compileOnly(project(":paper", configuration = "shadow"))
-  compileOnly(libs.paper)
+    compileOnly(project(":paper", configuration = "shadow"))
+    compileOnly(libs.paper)
 }
 
 tasks.processResources {
-  filesMatching("paper-plugin.yml") {
-    expand(mapOf(
-      "version" to project.version,
-      "apiversion" to libs.versions.apiversion.get()
-    ))
-  }
+    filesMatching("paper-plugin.yml") {
+        expand(
+            mapOf(
+                "version" to project.version,
+                "apiversion" to libs.versions.apiversion.get()
+            )
+        )
+    }
 }
 
 tasks.compileJava {
-  dependsOn(":bukkit:shadowJar", ":paper:shadowJar")
+    dependsOn(":bukkit:shadowJar", ":paper:shadowJar")
 }
