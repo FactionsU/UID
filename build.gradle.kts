@@ -15,6 +15,13 @@ allprojects {
     repositories {
         mavenCentral()
 
+        maven("https://central.sonatype.com/repository/maven-snapshots/") {
+            name = "sonatype-snapshots"
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+
         exclusiveContent {
             forRepository {
                 maven("https://repo.papermc.io/repository/maven-public/")
