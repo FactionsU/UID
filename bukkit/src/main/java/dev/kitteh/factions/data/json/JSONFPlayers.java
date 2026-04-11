@@ -68,11 +68,10 @@ public final class JSONFPlayers extends MemoryFPlayers {
             bufferedReader.mark(len + 1);
             int read = bufferedReader.read(chars, 0, len);
             if (read < 40) {
-                AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "JSON players were less than 40 chars in length???");
-                return null;
+                return null; // No players saved, save time treating as empty. 40 as pretty arbitrary length.
             }
             bufferedReader.reset();
-            if (new String(chars).trim().startsWith("{")) {
+            if (new String(chars).trim().startsWith("{")) { // Is this the old map format?
                 Gson gson = AbstractFactionsPlugin.instance().getGsonBuilder(false)
                         .registerTypeAdapter(JSONFaction.class, new OldJSONFPlayerDeserializer())
                         .create();
@@ -80,7 +79,7 @@ public final class JSONFPlayers extends MemoryFPlayers {
                 Map<String, JSONFPlayer> map = gson.fromJson(bufferedReader, new TypeToken<Map<String, JSONFPlayer>>() {
                 }.getType());
                 return new ArrayList<>(map.values());
-            } else {
+            } else { // Or is this the new list format?
                 return AbstractFactionsPlugin.instance().gson().fromJson(bufferedReader, new TypeToken<List<JSONFPlayer>>() {
                 }.getType());
             }
