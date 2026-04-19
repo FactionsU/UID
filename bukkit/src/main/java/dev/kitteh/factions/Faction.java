@@ -333,8 +333,14 @@ public non-sealed interface Faction extends Participator, Selectable {
 
     boolean peacefulExplosionsEnabled();
 
+    @ApiStatus.AvailableSince("4.5.2")
+    void explosionsEnabled(boolean val);
+
+    @ApiStatus.AvailableSince("4.5.2")
+    boolean explosionsEnabled();
+
     default boolean noExplosionsInTerritory() {
-        return (this.isNormal() && Universe.universe().grace()) || this.shieldActive() || (this.isPeaceful() && !this.peacefulExplosionsEnabled());
+        return !this.explosionsEnabled() || (this.isNormal() && Universe.universe().grace()) || this.shieldActive() || (this.isPeaceful() && !this.peacefulExplosionsEnabled());
     }
 
     boolean isPermanent();

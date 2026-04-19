@@ -228,6 +228,34 @@ public class TranslationsConfig {
                 public SetCmd() {
                     super("Set faction information", "set");
                 }
+
+                public static class Boom extends AbsCommand {
+                    public Boom() {
+                        super("Toggle explosions", "explosions");
+                    }
+
+                    private String notNormal = "<red>This faction can only be controlled via configuration.";
+                    private String setDisabled = "<yellow>Explosions are now forcibly disabled for <faction> territory.";
+                    private String setNotDisabled = "<yellow>Explosions are no longer forcibly disabled for <faction> territory.";
+
+                    public String getNotNormal() {
+                        return notNormal;
+                    }
+
+                    public String getSetNotDisabled() {
+                        return setNotDisabled;
+                    }
+
+                    public String getSetDisabled() {
+                        return setDisabled;
+                    }
+                }
+
+                private Boom boom = new Boom();
+
+                public Boom boom() {
+                    return this.boom;
+                }
             }
 
             public static class TNT extends AbsCommand {

@@ -354,6 +354,7 @@ public abstract class MemoryFaction implements Faction {
 
     protected int id;
     protected boolean peacefulExplosionsEnabled;
+    protected boolean explosionsEnabled;
     protected boolean permanent;
     protected String tag;
     protected String description;
@@ -578,6 +579,16 @@ public abstract class MemoryFaction implements Faction {
     @Override
     public boolean peacefulExplosionsEnabled() {
         return this.peacefulExplosionsEnabled;
+    }
+
+    @Override
+    public void explosionsEnabled(boolean val) {
+        this.explosionsEnabled = val;
+    }
+
+    @Override
+    public boolean explosionsEnabled() {
+        return this.explosionsEnabled;
     }
 
     @Override

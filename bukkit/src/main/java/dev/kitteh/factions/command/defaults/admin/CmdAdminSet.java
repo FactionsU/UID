@@ -18,6 +18,7 @@ public class CmdAdminSet implements Cmd {
             Command.Builder<Sender> setBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases());
 
             new CmdSetAutoSave().consumer().accept(manager, setBuilder, help);
+            new CmdSetBoom().consumer().accept(manager, setBuilder, help);
             new CmdSetGrace().consumer().accept(manager, setBuilder, help);
             new CmdSetPeaceful().consumer().accept(manager, setBuilder, help);
             new CmdSetPermanent().consumer().accept(manager, setBuilder, help);

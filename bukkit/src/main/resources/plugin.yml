@@ -39,6 +39,7 @@ permissions:
       factions.setpeaceful: true
       factions.setpermanent: true
       factions.setpermanentpower: true
+      factions.admin.set.explosions: true
       factions.powerboost: true
       factions.money.*: true
   factions.kit.halfmod:
@@ -321,3 +322,5 @@ permissions:
     description: Modify roles anywhere
   factions.force.join:
     description: Force a player to join a faction
+  factions.admin.set.explosions:
+    description: Forcibly set explosions disabled

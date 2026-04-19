@@ -83,6 +83,7 @@ public enum Permission {
     RELOAD("reload"),
     SAVE("save"),
     SETHOME("sethome"),
+    SET_EXPLOSIONS("admin.set.explosions"),
     SHOW("show"),
     SHOW_BYPASS_EXEMPT("show.bypassexempt"),
     STATUS("status"),
