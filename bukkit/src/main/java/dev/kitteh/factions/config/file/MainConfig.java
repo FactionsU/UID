@@ -1443,6 +1443,8 @@ public class MainConfig {
             private boolean territoryDenyEndermanBlocks = true;
             private boolean territoryDenyEndermanBlocksWhenOffline = true;
             private boolean territoryBlockEntityDamageMatchingPerms = false;
+            private boolean territoryBlockWindCharge = false;
+            private boolean territoryBlockWindChargeWhenOffline = false;
             @Comment("Blocks wind charge use to activate doors/levers/buttons etc. if lacking permission")
             private boolean territoryBlockWindChargeInteractionMatchingPerms = false;
             @Comment("If true, lecterns can be interacted with, but taking the book will still be protected by CONTAINER perm")
@@ -1456,6 +1458,7 @@ public class MainConfig {
             private boolean safeZonePreventAllDamageToPlayers = false;
             private boolean safeZonePreventLiquidFlowIn = true;
             private boolean safeZoneDenyEndermanBlocks = true;
+            private boolean safeZoneBlockWindCharge = true;
             private boolean safeZoneBlockAllEntityDamage = false;
 
             private boolean peacefulBlockAllEntityDamage = false;
@@ -1469,6 +1472,7 @@ public class MainConfig {
             private boolean warZoneFriendlyFire = false;
             private boolean warZonePreventLiquidFlowIn = true;
             private boolean warZoneDenyEndermanBlocks = true;
+            private boolean warZoneBlockWindCharge = true;
 
             private boolean wildernessDenyBuild = false;
             private boolean wildernessDenyUsage = false;
@@ -1477,6 +1481,7 @@ public class MainConfig {
             private boolean wildernessBlockTNT = false;
             private boolean wildernessBlockOtherExplosions = false;
             private boolean wildernessDenyEndermanBlocks = false;
+            private boolean wildernessBlockWindCharge = false;
 
             private boolean pistonProtectionThroughDenyBuild = true;
 
@@ -1731,6 +1736,26 @@ public class MainConfig {
 
             public boolean isWildernessBlockOtherExplosions() {
                 return wildernessBlockOtherExplosions;
+            }
+
+            public boolean isTerritoryBlockWindCharge() {
+                return territoryBlockWindCharge;
+            }
+
+            public boolean isTerritoryBlockWindChargeWhenOffline() {
+                return territoryBlockWindChargeWhenOffline;
+            }
+
+            public boolean isSafeZoneBlockWindCharge() {
+                return safeZoneBlockWindCharge;
+            }
+
+            public boolean isWarZoneBlockWindCharge() {
+                return warZoneBlockWindCharge;
+            }
+
+            public boolean isWildernessBlockWindCharge() {
+                return wildernessBlockWindCharge;
             }
 
             public Set<Material> getTerritoryDenyUsageMaterials() {

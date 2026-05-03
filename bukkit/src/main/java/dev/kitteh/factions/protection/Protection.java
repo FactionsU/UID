@@ -25,6 +25,7 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.WindCharge;
 import org.bukkit.entity.Wither;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.jetbrains.annotations.ApiStatus;
@@ -155,36 +156,63 @@ public final class Protection {
     public static boolean denyExplode(@Nullable Entity boomer, FLocation location) {
         Faction faction = location.faction();
         boolean online = faction.hasMembersOnline();
+        MainConfig.Factions.Protection protection = FactionsPlugin.instance().conf().factions().protection();
         if (faction.noExplosionsInTerritory() || (faction.isPeaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
             // faction is peaceful and has explosions set to disabled
             return true;
         }
-        MainConfig.Factions.Protection protection = FactionsPlugin.instance().conf().factions().protection();
-        if (boomer instanceof Creeper && ((faction.isWilderness() && protection.isWildernessBlockCreepers() && !protection.getWorldsNoWildernessProtection().contains(location.worldName())) ||
-                (faction.isNormal() && (online ? protection.isTerritoryBlockCreepers() : protection.isTerritoryBlockCreepersWhenOffline())) ||
-                (faction.isWarZone() && protection.isWarZoneBlockCreepers()) ||
-                faction.isSafeZone())) {
-            // creeper which needs prevention
-            return true;
-        } else if (
-                (boomer instanceof Fireball || boomer instanceof Wither) && ((faction.isWilderness() && protection.isWildernessBlockFireballs() && !protection.getWorldsNoWildernessProtection().contains(location.worldName())) ||
-                        (faction.isNormal() && (online ? protection.isTerritoryBlockFireballs() : protection.isTerritoryBlockFireballsWhenOffline())) ||
-                        (faction.isWarZone() && protection.isWarZoneBlockFireballs()) ||
-                        faction.isSafeZone())) {
-            // ghast fireball which needs prevention
-            // it's a bit crude just using fireball protection for Wither boss too, but I'd rather not add in a whole new set of xxxBlockWitherExplosion or whatever
-            return true;
-        } else if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && ((faction.isWilderness() && protection.isWildernessBlockTNT() && !protection.getWorldsNoWildernessProtection().contains(location.worldName())) ||
-                (faction.isNormal() && (online ? protection.isTerritoryBlockTNT() : protection.isTerritoryBlockTNTWhenOffline())) ||
-                (faction.isWarZone() && protection.isWarZoneBlockTNT()) ||
-                (faction.isSafeZone() && protection.isSafeZoneBlockTNT()))) {
-            // TNT which needs prevention
-            return true;
-        } else
-            return (faction.isWilderness() && protection.isWildernessBlockOtherExplosions() && !protection.getWorldsNoWildernessProtection().contains(location.worldName())) ||
-                    (faction.isNormal() && (online ? protection.isTerritoryBlockOtherExplosions() : protection.isTerritoryBlockOtherExplosionsWhenOffline())) ||
-                    (faction.isWarZone() && protection.isWarZoneBlockOtherExplosions()) ||
-                    (faction.isSafeZone() && protection.isSafeZoneBlockOtherExplosions());
+
+        if (faction.isWilderness() && protection.getWorldsNoWildernessProtection().contains(location.worldName())) {
+            return false;
+        }
+
+        if (boomer instanceof Creeper) {
+            return testFactionType(faction, online,
+                    protection.isTerritoryBlockCreepers(),
+                    protection.isTerritoryBlockCreepersWhenOffline(),
+                    protection.isWildernessBlockCreepers(),
+                    true,
+                    protection.isWarZoneBlockCreepers());
+        } else if (boomer instanceof WindCharge) {
+            return testFactionType(faction, online,
+                    protection.isTerritoryBlockWindCharge(),
+                    protection.isTerritoryBlockWindChargeWhenOffline(),
+                    protection.isWildernessBlockWindCharge(),
+                    protection.isSafeZoneBlockWindCharge(),
+                    protection.isWarZoneBlockWindCharge());
+        } else if (boomer instanceof Fireball || boomer instanceof Wither) {
+            return testFactionType(faction, online,
+                    protection.isTerritoryBlockFireballs(),
+                    protection.isTerritoryBlockFireballsWhenOffline(),
+                    protection.isWildernessBlockFireballs(),
+                    true,
+                    protection.isWarZoneBlockFireballs());
+        } else if (boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) {
+            return testFactionType(faction, online,
+                    protection.isTerritoryBlockTNT(),
+                    protection.isTerritoryBlockTNTWhenOffline(),
+                    protection.isWildernessBlockTNT(),
+                    protection.isSafeZoneBlockTNT(),
+                    protection.isWarZoneBlockTNT());
+        } else {
+            return testFactionType(faction, online,
+                    protection.isTerritoryBlockOtherExplosions(),
+                    protection.isTerritoryBlockOtherExplosionsWhenOffline(),
+                    protection.isWildernessBlockOtherExplosions(),
+                    protection.isSafeZoneBlockOtherExplosions(),
+                    protection.isWarZoneBlockOtherExplosions());
+        }
+    }
+
+    private static boolean testFactionType(Faction faction, boolean online, boolean ifNormal, boolean ifNormalOffline, boolean ifWilderness, boolean ifSafeZone, boolean ifWarZone) {
+        if (faction.isWilderness()) {
+            return ifWilderness;
+        } else if (faction.isSafeZone()) {
+            return ifSafeZone;
+        } else if (faction.isWarZone()) {
+            return ifWarZone;
+        }
+        return online ? ifNormal : ifNormalOffline;
     }
 
     @Deprecated(forRemoval = true, since = "4.5.0")
@@ -224,7 +252,7 @@ public final class Protection {
             if (!protection.isSafeZoneDenyUsage() || Permission.MANAGE_SAFE_ZONE.has(player)) {
                 return false;
             }
-            if (notify)  {
+            if (notify) {
                 me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseSafezone(),
                         Placeholder.parsed("thing", FactionsPlugin.instance().tl().protection().denied().getUseThis()));
             }
@@ -473,7 +501,7 @@ public final class Protection {
                     FPlayer attacker = FPlayers.fPlayers().get(plr);
                     if (defLocFaction.isSafeZone()) {
                         attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpSafezone());
-                    } else if(defLocFaction.isPeaceful()) {
+                    } else if (defLocFaction.isPeaceful()) {
                         attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpPeacefulTerritory());
                     } else { // Unexpected, maybe new feature!
                         attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpCantHurt(), FPlayerResolver.of("target", defender));
@@ -514,7 +542,7 @@ public final class Protection {
             if (notify) {
                 if (locFaction.isSafeZone()) {
                     attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpSafezone());
-                } else if(locFaction.isPeaceful()) {
+                } else if (locFaction.isPeaceful()) {
                     attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpPeacefulTerritory());
                 } else { // Unexpected, maybe new feature!
                     attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpCantHurt(), FPlayerResolver.of("target", defender));
