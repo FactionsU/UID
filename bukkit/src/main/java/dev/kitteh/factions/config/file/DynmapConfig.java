@@ -99,7 +99,7 @@ public class DynmapConfig {
         }
 
         public String getDescription() {
-            return description;
+            return factionDescription;
         }
 
         public String getWarpDescription() {
