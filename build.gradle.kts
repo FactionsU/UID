@@ -6,7 +6,7 @@ indra {
     github("FactionsU", "UID")
 
     javaVersions {
-        target(21)
+        target(25)
     }
 }
 

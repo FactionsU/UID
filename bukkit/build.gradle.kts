@@ -5,7 +5,7 @@ plugins {
 
 indra {
     javaVersions {
-        target(21)
+        target(25)
     }
 }
 
