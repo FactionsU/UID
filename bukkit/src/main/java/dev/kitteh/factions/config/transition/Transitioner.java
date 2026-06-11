@@ -16,6 +16,14 @@ import java.util.logging.Level;
 
 @ApiStatus.Internal
 public class Transitioner {
+    private static final String A_VERY_FRIENDLY_FACTIONS_CONFIG = "aVeryFriendlyFactionsConfig";
+    private static final String VERSION_STRING = "version";
+    private static boolean fixplosion;
+
+    public static boolean fixplosion() {
+        return fixplosion;
+    }
+
     private final AbstractFactionsPlugin plugin;
 
     public static void transition(AbstractFactionsPlugin plugin) {
@@ -30,17 +38,17 @@ public class Transitioner {
         HoconConfigurationLoader loader = Loader.getLoader("main");
         try {
             CommentedConfigurationNode rootNode = loader.load();
-            CommentedConfigurationNode versionNode = rootNode.getNode("aVeryFriendlyFactionsConfig", "version");
+            CommentedConfigurationNode versionNode = rootNode.getNode(A_VERY_FRIENDLY_FACTIONS_CONFIG, VERSION_STRING);
 
             if (versionNode.isVirtual()) {
                 rootNode = loader.load();
-                versionNode = rootNode.getNode("aVeryFriendlyFactionsConfig", "version");
+                versionNode = rootNode.getNode(A_VERY_FRIENDLY_FACTIONS_CONFIG, VERSION_STRING);
                 if (versionNode.isVirtual()) {
                     return; // Failure!
                 }
             }
 
-            int version = rootNode.getNode("aVeryFriendlyFactionsConfig", "version").getInt();
+            int version = rootNode.getNode(A_VERY_FRIENDLY_FACTIONS_CONFIG, VERSION_STRING).getInt();
             if (version < 3) {
                 transitioner.migrateV2(rootNode);
             }
@@ -62,9 +70,14 @@ public class Transitioner {
             if (version < 9) {
                 transitioner.migrateV8();
             }
+            if (version < 10) {
+                transitioner.migrateV10_11(version);
+            }
+            // No test for <11 (aka 10), due to skipping from 9->11
+            // if (version < 12) is next!
 
             // Update the below when bumping version!
-            rootNode.getNode("aVeryFriendlyFactionsConfig", "version").setValue(9);
+            rootNode.getNode(A_VERY_FRIENDLY_FACTIONS_CONFIG, VERSION_STRING).setValue(11);
 
             loader.save(rootNode);
         } catch (IOException e) {
@@ -248,6 +261,10 @@ public class Transitioner {
         this.plugin.getLogger().info("");
         this.plugin.getLogger().info("              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         this.plugin.getLogger().info("");
+    }
+
+    private void migrateV10_11(int version) {
+        fixplosion = version == 9;
     }
 
     private void shift(CommentedConfigurationNode from, CommentedConfigurationNode to, String name) {

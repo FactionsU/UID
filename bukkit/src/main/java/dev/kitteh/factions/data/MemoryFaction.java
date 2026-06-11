@@ -9,6 +9,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.config.file.PermissionsConfig;
+import dev.kitteh.factions.config.transition.Transitioner;
 import dev.kitteh.factions.event.FactionAutoDisbandEvent;
 import dev.kitteh.factions.event.FactionNewAdminEvent;
 import dev.kitteh.factions.integration.Econ;
@@ -354,7 +355,7 @@ public abstract class MemoryFaction implements Faction {
 
     protected int id;
     protected boolean peacefulExplosionsEnabled;
-    protected boolean explosionsEnabled;
+    protected boolean explosionsEnabled = true;
     protected boolean permanent;
     protected String tag;
     protected String description;
@@ -413,6 +414,9 @@ public abstract class MemoryFaction implements Faction {
             this.zones = new Zones(this);
         }
         this.zones.cleanupDeserialization(this); // Sets the transient helper main value.
+        if (Transitioner.fixplosion()) {
+            this.explosionsEnabled = true;
+        }
     }
 
     @Override
