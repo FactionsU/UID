@@ -546,7 +546,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public void power(double power) {
-        this.power = Math.min(Math.max(this.powerMin(), power), this.powerMax());
+        this.power = Math.clamp(power, this.powerMin(), this.powerMax());
     }
 
     @Override

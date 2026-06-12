@@ -39,7 +39,7 @@ public class CmdDTRSet implements Cmd {
         double amount = context.get("amount");
 
         DTRControl dtr = (DTRControl) FactionsPlugin.instance().landRaidControl();
-        target.dtr(Math.max(Math.min(amount, dtr.getMaxDTR(target)), FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getMinDTR()));
+        target.dtr(Math.clamp(amount, FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getMinDTR(), dtr.getMaxDTR(target)));
         context.sender().sendRichMessage(FactionsPlugin.instance().tl().commands().admin().dtr().set().getSuccess(),
                 FactionResolver.of(target));
     }
