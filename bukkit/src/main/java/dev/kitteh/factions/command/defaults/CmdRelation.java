@@ -110,7 +110,7 @@ public class CmdRelation implements Cmd {
                     Placeholder.component("relation", Component.text(targetRelation.translation(), targetRelation.color())),
                     Placeholder.parsed("command", command)
             );
-            faction.sendRichMessage(tl.getProposalSent(), FactionResolver.of(faction), Placeholder.component("relation", Component.text(targetRelation.translation(), targetRelation.color())));
+            faction.sendRichMessage(tl.getProposalSent(), FactionResolver.of(them), Placeholder.component("relation", Component.text(targetRelation.translation(), targetRelation.color())));
         }
 
         if (!targetRelation.isNeutral() && them.isPeaceful()) {
