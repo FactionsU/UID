@@ -219,6 +219,11 @@ public class ListenInteract implements Listener {
 
         FLocation location = new FLocation(event.getLectern().getLocation());
         Faction otherFaction = location.faction();
+
+        if (otherFaction.isWilderness()) {
+            return;
+        }
+
         if (this.plugin.landRaidControl().isRaidable(otherFaction)) {
             return;
         }
