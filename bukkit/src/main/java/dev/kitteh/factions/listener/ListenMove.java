@@ -8,7 +8,6 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
 import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.Component;
@@ -53,7 +52,7 @@ public class ListenMove implements Listener {
         if (fromLoc.getBlockX() != toLoc.getBlockX() || fromLoc.getBlockY() != toLoc.getBlockY() || fromLoc.getBlockZ() != toLoc.getBlockZ() || fromLoc.getWorld() != toLoc.getWorld()) {
             if (me.warmup() instanceof WarmUpUtil.Warmup warmup && warmup != WarmUpUtil.Warmup.STUCK) {
                 me.cancelWarmup();
-                me.msgLegacy(TL.WARMUPS_NOTIFY_CANCELLED);
+                me.sendRichMessage(FactionsPlugin.instance().tl().commands().generic().getWarmupCancelled());
             }
         }
 

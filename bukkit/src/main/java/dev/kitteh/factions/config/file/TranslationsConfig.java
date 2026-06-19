@@ -65,6 +65,62 @@ public class TranslationsConfig {
 
             private String noFactionFound = "No faction found for input '<input>'";
             private String noPlayerFound = "No player found for input '<input>'";
+            private String warmupCancelled = "<red>You have cancelled your pending action!";
+
+            public static class CommandDeny {
+                @Comment("Supports <command>")
+                private String permanent = "<red>You can't use the command '<command>' because you are in a permanent faction.";
+                @Comment("Supports <command>")
+                private String wilderness = "<red>You can't use the command '<command>' in the wilderness.";
+                @Comment("Supports <command>")
+                private String ally = "<red>You can't use the command '<command>' in ally territory.";
+                @Comment("Supports <command>")
+                private String truce = "<red>You can't use the command '<command>' in truce territory.";
+                @Comment("Supports <command>")
+                private String neutral = "<red>You can't use the command '<command>' in neutral territory.";
+                @Comment("Supports <command>")
+                private String enemy = "<red>You can't use the command '<command>' in enemy territory.";
+                @Comment("Supports <command>")
+                private String warzone = "<red>You can't use the command '<command>' in war zone.";
+
+                public String getPermanent() {
+                    return permanent;
+                }
+
+                public String getWilderness() {
+                    return wilderness;
+                }
+
+                public String getAlly() {
+                    return ally;
+                }
+
+                public String getTruce() {
+                    return truce;
+                }
+
+                public String getNeutral() {
+                    return neutral;
+                }
+
+                public String getEnemy() {
+                    return enemy;
+                }
+
+                public String getWarzone() {
+                    return warzone;
+                }
+            }
+
+            private CommandDeny commandDeny = new CommandDeny();
+
+            public CommandDeny commandDeny() {
+                return commandDeny;
+            }
+
+            public String getWarmupCancelled() {
+                return warmupCancelled;
+            }
 
             public String getNoFactionFound() {
                 return noFactionFound;
@@ -865,6 +921,13 @@ public class TranslationsConfig {
 
             public String getSuccessNotice() {
                 return successNotice;
+            }
+
+            @Comment("Supports <player>")
+            private String negativePower = "<red><player> cannot join a faction with a negative power level.";
+
+            public String getNegativePower() {
+                return negativePower;
             }
         }
 
@@ -2702,6 +2765,8 @@ public class TranslationsConfig {
             private String noAccess = "<red>Cannot fly in territory of <faction>";
             private String enemyNearby = "<red>Cannot enable fly, enemy nearby";
             private String warmup = "<yellow>Flight will enable in <light_purple><seconds> <yellow>seconds.";
+            private String damage = "<yellow>Faction flight <light_purple>disabled<yellow> due to entering combat";
+            private String enemyDisable = "<red>Enemy nearby, disabling fly";
 
             public String getAuto() {
                 return auto;
@@ -2733,6 +2798,14 @@ public class TranslationsConfig {
 
             public String getWarmup() {
                 return warmup;
+            }
+
+            public String getDamage() {
+                return damage;
+            }
+
+            public String getEnemyDisable() {
+                return enemyDisable;
             }
         }
 
@@ -2845,6 +2918,8 @@ public class TranslationsConfig {
             private String insufficientRank = "<red>Your rank is too low to kick this player.";
             private String factionMsg = "<yellow><player> kicked <target> from the faction! :O";
             private String kicked = "<yellow><player> kicked you from <faction>! :O";
+            private String enemyTerritory = "<red>You cannot kick a player in enemy territory";
+            private String negativePower = "<red>You cannot kick that member until their power is positive.";
 
             public String getCandidates() {
                 return candidates;
@@ -2877,11 +2952,25 @@ public class TranslationsConfig {
             public String getKicked() {
                 return kicked;
             }
+
+            public String getEnemyTerritory() {
+                return enemyTerritory;
+            }
+
+            public String getNegativePower() {
+                return negativePower;
+            }
         }
 
         public static class Leave extends AbsCommand {
             public Leave() {
                 super("Leave your faction", "leave");
+            }
+
+            private String negativePower = "<red>You cannot leave until your power is positive.";
+
+            public String getNegativePower() {
+                return negativePower;
             }
         }
 
@@ -3082,7 +3171,7 @@ public class TranslationsConfig {
             private String withdrawFailPositive = "<red>Positive values only!";
 
             private String subCmdDeposit = "deposit";
-            private String subCmdFill =  "fill";
+            private String subCmdFill = "fill";
             private String subCmdSiphon = "siphon";
             private String subCmdWithdraw = "withdraw";
 

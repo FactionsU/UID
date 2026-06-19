@@ -11,6 +11,7 @@ import dev.kitteh.factions.event.PowerLossEvent;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -45,7 +46,7 @@ public final class PowerControl implements LandRaidControl {
     @Override
     public boolean canJoinFaction(Faction faction, FPlayer player) {
         if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
-            player.msgLegacy(TL.COMMAND_JOIN_NEGATIVEPOWER, player.describeToLegacy(player, true));
+            player.sendRichMessage(FactionsPlugin.instance().tl().commands().join().getNegativePower(), Placeholder.unparsed("player", player.name()));
             return false;
         }
         return true;
@@ -54,7 +55,7 @@ public final class PowerControl implements LandRaidControl {
     @Override
     public boolean canLeaveFaction(FPlayer player) {
         if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
-            player.msgLegacy(TL.LEAVE_NEGATIVEPOWER);
+            player.sendRichMessage(FactionsPlugin.instance().tl().commands().leave().getNegativePower());
             return false;
         }
         return true;
@@ -67,13 +68,14 @@ public final class PowerControl implements LandRaidControl {
 
     @Override
     public boolean canKick(FPlayer toKick, FPlayer playerAttempting) {
+        var kickTl = FactionsPlugin.instance().tl().commands().kick();
         if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.power() < 0) {
-            playerAttempting.msgLegacy(TL.COMMAND_KICK_NEGATIVEPOWER);
+            playerAttempting.sendRichMessage(kickTl.getNegativePower());
             return false;
         }
         if (toKick.isOnline() && !FactionsPlugin.instance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
                 Board.board().factionAt(toKick.lastStoodAt()).relationTo(toKick.faction()) == Relation.ENEMY) {
-            playerAttempting.msgLegacy(TL.COMMAND_KICK_ENEMYTERRITORY);
+            playerAttempting.sendRichMessage(kickTl.getEnemyTerritory());
             return false;
         }
         return true;

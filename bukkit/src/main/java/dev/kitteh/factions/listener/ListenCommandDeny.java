@@ -9,8 +9,8 @@ import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,7 +37,7 @@ public class ListenCommandDeny implements Listener {
         if (this.plugin.conf().factions().chat().internalChat().isTriggerPublicChat(cmd.startsWith("/") ? cmd.substring(1) : cmd)) {
             FPlayer p = FPlayers.fPlayers().get(event.getPlayer());
             p.chatTarget(ChatTarget.PUBLIC);
-            p.msgLegacy(TL.COMMAND_CHAT_MODE_PUBLIC);
+            p.sendRichMessage(FactionsPlugin.instance().tl().commands().chat().getModePublic());
         }
 
         if (this.denyCommand(event.getMessage(), event.getPlayer())) {
@@ -73,44 +73,45 @@ public class ListenCommandDeny implements Listener {
             fullCmd = "/" + fullCmd;
         }
 
+        var tl = FactionsPlugin.instance().tl().commands().generic().commandDeny();
         if (me.hasFaction() &&
                 !me.adminBypass() &&
                 !protection.getPermanentFactionMemberDenyCommands().isEmpty() &&
                 me.faction().isPermanent() &&
                 isCommandInSet(fullCmd, shortCmd, protection.getPermanentFactionMemberDenyCommands())) {
-            me.msgLegacy(TL.PLAYER_COMMAND_PERMANENT, fullCmd);
+            me.sendRichMessage(tl.getPermanent(), Placeholder.unparsed("command", fullCmd));
             return true;
         }
 
         Faction at = new FLocation(player.getLocation()).faction();
         if (at.isWilderness() && !protection.getWildernessDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getWildernessDenyCommands())) {
-            me.msgLegacy(TL.PLAYER_COMMAND_WILDERNESS, fullCmd);
+            me.sendRichMessage(tl.getWilderness(), Placeholder.unparsed("command", fullCmd));
             return true;
         }
 
         Relation rel = at.relationTo(me);
         if (at.isNormal() && rel.isAlly() && !protection.getTerritoryAllyDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryAllyDenyCommands())) {
-            me.msgLegacy(TL.PLAYER_COMMAND_ALLY, fullCmd);
+            me.sendRichMessage(tl.getAlly(), Placeholder.unparsed("command", fullCmd));
             return true;
         }
 
         if (at.isNormal() && rel.isTruce() && !protection.getTerritoryTruceDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryTruceDenyCommands())) {
-            me.msgLegacy(TL.PLAYER_COMMAND_TRUCE, fullCmd);
+            me.sendRichMessage(tl.getTruce(), Placeholder.unparsed("command", fullCmd));
             return true;
         }
 
         if (at.isNormal() && rel.isNeutral() && !protection.getTerritoryNeutralDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryNeutralDenyCommands())) {
-            me.msgLegacy(TL.PLAYER_COMMAND_NEUTRAL, fullCmd);
+            me.sendRichMessage(tl.getNeutral(), Placeholder.unparsed("command", fullCmd));
             return true;
         }
 
         if (at.isNormal() && rel.isEnemy() && !protection.getTerritoryEnemyDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getTerritoryEnemyDenyCommands())) {
-            me.msgLegacy(TL.PLAYER_COMMAND_ENEMY, fullCmd);
+            me.sendRichMessage(tl.getEnemy(), Placeholder.unparsed("command", fullCmd));
             return true;
         }
 
         if (at.isWarZone() && !protection.getWarzoneDenyCommands().isEmpty() && !me.adminBypass() && isCommandInSet(fullCmd, shortCmd, protection.getWarzoneDenyCommands())) {
-            me.msgLegacy(TL.PLAYER_COMMAND_WARZONE, fullCmd);
+            me.sendRichMessage(tl.getWarzone(), Placeholder.unparsed("command", fullCmd));
             return true;
         }
 

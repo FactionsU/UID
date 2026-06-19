@@ -9,8 +9,8 @@ import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.protection.Protection;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -135,13 +135,14 @@ public class ListenDamage implements Listener {
             return;
         }
 
+        var flyTl = FactionsPlugin.instance().tl().commands().fly();
         FPlayer fPlayer = FPlayers.fPlayers().get(player);
         if (fPlayer.flying()) {
             fPlayer.flying(false, false);
-            fPlayer.msgLegacy(TL.COMMAND_FLY_DAMAGE);
+            fPlayer.sendRichMessage(flyTl.getDamage());
             if (fPlayer.autoFlying()) {
                 fPlayer.autoFlying(false);
-                fPlayer.msgLegacy(TL.COMMAND_FLY_AUTO, "disabled");
+                fPlayer.sendRichMessage(flyTl.getAuto(), Placeholder.unparsed("state", "disabled"));
             }
         }
     }
@@ -153,7 +154,7 @@ public class ListenDamage implements Listener {
         FPlayer me = FPlayers.fPlayers().get(player);
         if (me.warmingUp()) {
             me.cancelWarmup();
-            me.msgLegacy(TL.WARMUPS_NOTIFY_CANCELLED);
+            me.sendRichMessage(FactionsPlugin.instance().tl().commands().generic().getWarmupCancelled());
         }
     }
 
