@@ -21,8 +21,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.sql.Date;
-
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public final class FactionResolver extends ObservedResolver {
@@ -76,7 +74,7 @@ public final class FactionResolver extends ObservedResolver {
 
             case "link" -> tag(Component.text().content(faction.link()).clickEvent(ClickEvent.openUrl(faction.link())));
 
-            case "create-date", "creation_date" -> tag(TL.sdf.format(Date.from(faction.founded())));
+            case "create-date", "creation_date" -> tag(FactionsPlugin.instance().tl().placeholders().datesAndTimes().formatFactionCreationDate(faction.founded()));
 
             case "members_total_count" -> tag(faction.members().size());
             case "members_online_count" -> tag(faction.membersOnline(true, this.observer(ctx)).size());

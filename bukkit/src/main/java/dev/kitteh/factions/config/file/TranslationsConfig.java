@@ -6,6 +6,9 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -4187,6 +4190,46 @@ public class TranslationsConfig {
     }
 
     public static class Placeholders {
+        public static class DatesAndTimes {
+            private String banTiming = "MM/d/yy h:ma";
+            @WipeOnReload
+            private DateTimeFormatter banTimingFormatter;
+
+            private String factionCreationDate ="MM/d/yy h:ma";
+            @WipeOnReload
+            private DateTimeFormatter factionCreationDateFormatter;
+
+            public String getFactionCreationDate() {
+                return factionCreationDate;
+            }
+
+            public String formatFactionCreationDate(TemporalAccessor temporal) {
+                if (this.factionCreationDateFormatter == null) {
+                    try {
+                        this.factionCreationDateFormatter = DateTimeFormatter.ofPattern(this.factionCreationDate).withZone(ZoneId.systemDefault());
+                    } catch (IllegalArgumentException _) {
+                        this.factionCreationDateFormatter = DateTimeFormatter.ofPattern("MM/d/yy h:ma").withZone(ZoneId.systemDefault());
+                    }
+                }
+                return this.factionCreationDateFormatter.format(temporal);
+            }
+
+            public String getBanTiming() {
+                return banTiming;
+            }
+
+            public String formatBanTiming(TemporalAccessor temporal) {
+                if (this.banTimingFormatter == null) {
+                    try {
+                        this.banTimingFormatter = DateTimeFormatter.ofPattern(this.banTiming).withZone(ZoneId.systemDefault());
+                    } catch (IllegalArgumentException _) {
+                        this.banTimingFormatter = DateTimeFormatter.ofPattern("MM/d/yy h:ma").withZone(ZoneId.systemDefault());
+                    }
+                }
+                return this.banTimingFormatter.format(temporal);
+            }
+        }
+
         public static class Shield {
             private String activeTrue = "active";
             private String activeFalse = "not active";
@@ -4328,6 +4371,7 @@ public class TranslationsConfig {
             }
         }
 
+        private DatesAndTimes datesAndTimes = new DatesAndTimes();
         private LastSeen lastSeen = new LastSeen();
         private Shield shield = new Shield();
         private Title title = new Title();
@@ -4337,6 +4381,10 @@ public class TranslationsConfig {
 
         public boolean isPlayerTitleColorContinuesIntoName() {
             return playerTitleColorContinuesIntoName;
+        }
+
+        public DatesAndTimes datesAndTimes() {
+            return datesAndTimes;
         }
 
         public LastSeen lastSeen() {

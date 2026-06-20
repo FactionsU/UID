@@ -20,8 +20,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.text.SimpleDateFormat;
-
 /**
  * An enum for requesting strings from the language file. The contents of this enum file may be subject to frequent
  * changes.
@@ -265,7 +263,6 @@ public enum TL {
     private String path;
     private final String def;
     private static YamlConfiguration LANG;
-    public static SimpleDateFormat sdf;
 
     /**
      * Lang enum constructor.
@@ -298,7 +295,6 @@ public enum TL {
      */
     public static void setFile(YamlConfiguration config) {
         LANG = config;
-        sdf = new SimpleDateFormat(DATE_FORMAT.toString());
     }
 
     @Override

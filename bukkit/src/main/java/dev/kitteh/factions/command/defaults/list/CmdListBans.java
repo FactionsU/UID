@@ -15,7 +15,8 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
@@ -49,7 +50,8 @@ public class CmdListBans implements Cmd {
                 Placeholder.unparsed("count", String.valueOf(target.bans().size())),
                 Placeholder.unparsed("faction", target.tag()));
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        var date = FactionsPlugin.instance().tl().placeholders().datesAndTimes();
+
         int i = 1;
         for (BanInfo info : target.bans()) {
             FPlayer banned = FPlayers.fPlayers().get(info.banned());
@@ -58,7 +60,7 @@ public class CmdListBans implements Cmd {
                     Placeholder.unparsed("index", String.valueOf(i)),
                     Placeholder.unparsed("player", banned.name()),
                     Placeholder.unparsed("banner", banner.name()),
-                    Placeholder.unparsed("date", sdf.format(info.time())));
+                    Placeholder.unparsed("date", date.formatBanTiming(Instant.ofEpochMilli(info.time()))));
             i++;
         }
     }
