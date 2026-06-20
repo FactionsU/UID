@@ -606,8 +606,9 @@ public abstract class MemoryFPlayer implements FPlayer {
             long millisPassed = now - this.lastPowerUpdateTime;
 
             double loss = millisPassed * FactionsPlugin.instance().conf().factions().landRaidControl().power().getOfflineLossPerDay() / (24 * 60 * 60 * 1000);
-            if (this.power - loss < FactionsPlugin.instance().conf().factions().landRaidControl().power().getOfflineLossLimit()) {
-                loss = this.power;
+            double offlineLossLimit = FactionsPlugin.instance().conf().factions().landRaidControl().power().getOfflineLossLimit();
+            if (this.power - loss < offlineLossLimit) {
+                loss = this.power - offlineLossLimit;
             }
             this.alterPower(-loss);
         }
