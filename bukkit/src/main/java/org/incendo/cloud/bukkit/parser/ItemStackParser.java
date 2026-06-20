@@ -214,7 +214,7 @@ public class ItemStackParser<C> implements ArgumentParser.FutureArgumentParser<C
                 }
             };
             return new WrappedBrigadierParser<C, Object>(inst)
-                    .flatMapSuccess((ctx, itemInput) -> ArgumentParseResult.successFuture(
+                    .flatMapSuccess((_, itemInput) -> ArgumentParseResult.successFuture(
                             new ModernProtoItemStack(itemInput)));
         }
 
@@ -302,7 +302,7 @@ public class ItemStackParser<C> implements ArgumentParser.FutureArgumentParser<C
             BlockingSuggestionProvider.Strings<C> {
 
         private final ArgumentParser<C, ProtoItemStack> parser = new MaterialParser<C>()
-                .mapSuccess((ctx, material) -> CompletableFuture.completedFuture(new LegacyProtoItemStack(material)));
+                .mapSuccess((_, material) -> CompletableFuture.completedFuture(new LegacyProtoItemStack(material)));
 
         @Override
         public @NonNull CompletableFuture<@NonNull ArgumentParseResult<@NonNull ProtoItemStack>> parseFuture(

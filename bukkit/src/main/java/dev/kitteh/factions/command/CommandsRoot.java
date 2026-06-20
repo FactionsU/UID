@@ -187,7 +187,7 @@ public class CommandsRoot {
                                 "query",
                                 StringParser.greedyStringParser(),
                                 DefaultValue.constant(""),
-                                SuggestionProvider.blocking((ctx, in) -> manager.createHelpHandler()
+                                SuggestionProvider.blocking((ctx, _) -> manager.createHelpHandler()
                                         .queryRootIndex(ctx.sender())
                                         .entries()
                                         .stream()

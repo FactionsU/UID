@@ -29,7 +29,7 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdForceDisband implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().disband();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
@@ -60,7 +60,7 @@ public class CmdForceDisband implements Cmd {
         }
 
         if (!confirmed && sender.fPlayerOrNull() instanceof FPlayer fp) {
-            String conf = CmdConfirm.add(fp, s -> this.doIt(sender, faction, true));
+            String conf = CmdConfirm.add(fp, _ -> this.doIt(sender, faction, true));
             sender.sendRichMessage(tl.getConfirm(), FactionResolver.of(faction), Placeholder.unparsed("command", conf));
             return;
         }

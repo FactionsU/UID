@@ -17,12 +17,12 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdToggleChat implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().chat();
             manager.command(builder.literal("chat").literal("ally")
                     .commandDescription(Cloudy.desc(tl.getAllianceChatDescription()))
                     .permission(builder.commandPermission()
-                            .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().chat().internalChat().isRelationChatEnabled()))
+                            .and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().factions().chat().internalChat().isRelationChatEnabled()))
                             .and(Cloudy.hasPermission(Permission.CHAT))
                             .and(Cloudy.hasFaction()))
                     .handler(ctx -> this.handle(ctx, ChatTarget.Relation.ALLY))
@@ -31,7 +31,7 @@ public class CmdToggleChat implements Cmd {
             manager.command(builder.literal("chat").literal("truce")
                     .commandDescription(Cloudy.desc(tl.getTruceChatDescription()))
                     .permission(builder.commandPermission()
-                            .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().chat().internalChat().isRelationChatEnabled()))
+                            .and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().factions().chat().internalChat().isRelationChatEnabled()))
                             .and(Cloudy.hasPermission(Permission.CHAT))
                             .and(Cloudy.hasFaction()))
                     .handler(ctx -> this.handle(ctx, ChatTarget.Relation.TRUCE))

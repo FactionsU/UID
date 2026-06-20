@@ -26,7 +26,7 @@ public class CmdSetMaxVaults implements Cmd {
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
-                            .permission(builder.commandPermission().and(Cloudy.predicate(s -> Bukkit.getServer().getPluginManager().isPluginEnabled("PlayerVaults")).and(Cloudy.hasPermission(Permission.SETMAXVAULTS))))
+                            .permission(builder.commandPermission().and(Cloudy.predicate(_ -> Bukkit.getServer().getPluginManager().isPluginEnabled("PlayerVaults")).and(Cloudy.hasPermission(Permission.SETMAXVAULTS))))
                             .required("faction", FactionParser.of(FactionParser.Include.SELF))
                             .required("number", IntegerParser.integerParser(0))
                             .handler(this::handle)

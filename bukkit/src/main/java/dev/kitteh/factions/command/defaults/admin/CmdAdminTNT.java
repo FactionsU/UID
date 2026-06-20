@@ -19,11 +19,11 @@ import org.incendo.cloud.parser.standard.IntegerParser;
 public class CmdAdminTNT implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().admin().tnt();
             Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .permission(builder.commandPermission()
-                            .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().commands().tnt().isEnable()))
+                            .and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().commands().tnt().isEnable()))
                             .and(Cloudy.hasPermission(Permission.TNT_MODIFY)))
                     .required("faction", FactionParser.of(FactionParser.Include.SELF));
 

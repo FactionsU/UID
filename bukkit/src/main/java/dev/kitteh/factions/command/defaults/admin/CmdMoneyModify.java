@@ -22,12 +22,12 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdMoneyModify implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().admin().money();
 
             Command.Builder<Sender> moneyBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
-                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().economy().isBankEnabled()).and(Cloudy.hasPermission(Permission.MONEY_MODIFY))))
+                    .permission(builder.commandPermission().and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().economy().isBankEnabled()).and(Cloudy.hasPermission(Permission.MONEY_MODIFY))))
                     .required("faction", FactionParser.of(FactionParser.Include.SELF));
 
 

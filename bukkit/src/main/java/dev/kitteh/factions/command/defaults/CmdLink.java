@@ -19,7 +19,7 @@ public class CmdLink implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         var tl = FactionsPlugin.instance().tl().commands().link();
-        return (manager, builder, help) -> manager.command(
+        return (manager, builder, _) -> manager.command(
                 builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                         .commandDescription(Cloudy.desc(tl.getDescription()))
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LINK).and(Cloudy.hasFaction())))

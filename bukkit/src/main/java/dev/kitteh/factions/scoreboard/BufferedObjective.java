@@ -19,9 +19,9 @@ import java.util.function.Consumer;
 
 @ApiStatus.Internal
 public class BufferedObjective {
-    public static Consumer<Objective> objectiveConsumer = c -> {
+    public static Consumer<Objective> objectiveConsumer = _ -> {
     };
-    public static TriFunction<Objective, Component, Integer, Score> scoreFunction = (objective, component, lineNum) -> objective.getScore(Mini.toLegacy(component));
+    public static TriFunction<Objective, Component, Integer, Score> scoreFunction = (objective, component, _) -> objective.getScore(Mini.toLegacy(component));
     public static BiConsumer<Objective, Component> titleConsumer = (objective, component) -> objective.setDisplayName(Mini.toLegacy(component));
 
     private final Scoreboard scoreboard;

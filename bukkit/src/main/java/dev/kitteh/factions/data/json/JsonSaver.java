@@ -16,7 +16,7 @@ public class JsonSaver {
     private static final HashMap<String, Lock> locks = new HashMap<>();
 
     public static void write(Path path, Supplier<String> content, boolean sync) {
-        final Lock lock = locks.computeIfAbsent(path.toAbsolutePath().toString(), n -> new ReentrantReadWriteLock().writeLock());
+        final Lock lock = locks.computeIfAbsent(path.toAbsolutePath().toString(), _ -> new ReentrantReadWriteLock().writeLock());
 
         if (sync) {
             write(lock, path, content);

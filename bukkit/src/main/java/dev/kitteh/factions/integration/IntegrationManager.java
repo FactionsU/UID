@@ -62,7 +62,7 @@ public class IntegrationManager implements Listener {
             return true;
         }),
         MAGIC("Magic", p -> Magic.init(p)), // RESIST THE URGE TO REPLACE WITH LAMBDA REFERENCE
-        PLACEHOLDERAPI("PlaceholderAPI", p -> {
+        PLACEHOLDERAPI("PlaceholderAPI", _ -> {
             PapiExpansion papi = new PapiExpansion();
             if (papi.register()) {
                 AbstractFactionsPlugin.instance().getLogger().info("Successfully registered placeholders with PlaceholderAPI.");
@@ -83,7 +83,7 @@ public class IntegrationManager implements Listener {
             }
             return false;
         }),
-        YARDWATCH("YardWatch", plugin -> {
+        YARDWATCH("YardWatch", _ -> {
             AbstractFactionsPlugin f = AbstractFactionsPlugin.instance();
             f.getServer().getServicesManager().register(Protection.class, new YardWatch(), f, ServicePriority.Normal);
             return true;

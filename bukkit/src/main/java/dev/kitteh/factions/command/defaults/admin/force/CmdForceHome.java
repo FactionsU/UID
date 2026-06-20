@@ -23,7 +23,7 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdForceHome implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().admin().force().home();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())

@@ -26,7 +26,7 @@ public class CmdDTR implements Cmd {
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
                             .permission(builder.commandPermission().and(
-                                    Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof DTRControl)
+                                    Cloudy.predicate(_ -> FactionsPlugin.instance().landRaidControl() instanceof DTRControl)
                                             .and(Cloudy.hasPermission(Permission.DTR))
                             ))
                             .optional("faction", FactionParser.of(FactionParser.Include.PLAYERS))

@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class AllSelector extends AbstractSelector {
     public static final String NAME = "all";
-    public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, FactionsPlugin.instance().tl().permissions().selectors().all()::getDisplayName, s -> new AllSelector()).acceptEmpty();
+    public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, FactionsPlugin.instance().tl().permissions().selectors().all()::getDisplayName, _ -> new AllSelector()).acceptEmpty();
 
     public AllSelector() {
         super(DESCRIPTOR);

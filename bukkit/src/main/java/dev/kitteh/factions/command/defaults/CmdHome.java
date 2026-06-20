@@ -45,8 +45,8 @@ public class CmdHome implements Cmd {
                             .permission(builder.commandPermission().and(
                                     Cloudy.hasPermission(Permission.HOME)
                                             .and(Cloudy.hasFaction())
-                                            .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled()))
-                                            .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isTeleportCommandEnabled()))
+                                            .and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().factions().homes().isEnabled()))
+                                            .and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().factions().homes().isTeleportCommandEnabled()))
                             ))
                             .flag(
                                     manager.flagBuilder("faction")

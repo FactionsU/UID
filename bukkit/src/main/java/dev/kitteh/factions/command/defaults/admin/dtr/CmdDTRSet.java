@@ -20,7 +20,7 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdDTRSet implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().admin().dtr().set();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())

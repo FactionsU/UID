@@ -52,7 +52,7 @@ public class CmdSetPerm implements Cmd {
     }
 
     public CmdSetPerm() {
-        this.firstCmdBit = (ctx) -> '/' + Cmd.rootCommand() + ' ' +
+        this.firstCmdBit = (_) -> '/' + Cmd.rootCommand() + ' ' +
                 FactionsPlugin.instance().tl().commands().set().getFirstAlias() + ' ' +
                 FactionsPlugin.instance().tl().commands().permissions().getFirstAlias() + ' ';
         this.permissionsGetter = context -> ((Sender.Player) context.sender()).faction().permissions();
@@ -70,7 +70,7 @@ public class CmdSetPerm implements Cmd {
 
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().permissions();
             List<String> aliases = new ArrayList<>(tl.getAliases());
             Command.Builder<Sender> permBuilder = builder.literal(aliases.removeFirst(), aliases.toArray(new String[0]))

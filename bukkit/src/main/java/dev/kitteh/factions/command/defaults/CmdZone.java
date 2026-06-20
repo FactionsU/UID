@@ -287,7 +287,7 @@ public class CmdZone implements Cmd {
             return;
         }
 
-        String conf = CmdConfirm.add(sender, s -> this.delete(sender, name));
+        String conf = CmdConfirm.add(sender, _ -> this.delete(sender, name));
 
         sender.sendRichMessage(tl.getConfirm(),
                 Placeholder.unparsed("name", name),

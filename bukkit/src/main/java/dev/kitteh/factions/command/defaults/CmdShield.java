@@ -27,12 +27,12 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdShield implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().shield();
             Command.Builder<Sender> shield = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission()
-                            .and(Cloudy.predicate(s -> Universe.universe().isUpgradeEnabled(Upgrades.SHIELD)))
+                            .and(Cloudy.predicate(_ -> Universe.universe().isUpgradeEnabled(Upgrades.SHIELD)))
                             .and(Cloudy.hasPermission(Permission.SHIELD).and(Cloudy.isPlayer()))
                     );
 

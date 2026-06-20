@@ -25,7 +25,7 @@ public class CmdGrace implements Cmd {
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
                             .permission(builder.commandPermission()
-                                    .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().protection().isGraceSystem()))
+                                    .and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().factions().protection().isGraceSystem()))
                                     .and(Cloudy.hasPermission(Permission.GRACE_VIEW))
                             )
                             .handler(this::handle)

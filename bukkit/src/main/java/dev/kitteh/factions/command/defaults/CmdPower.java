@@ -26,7 +26,7 @@ public class CmdPower implements Cmd {
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
                             .permission(builder.commandPermission().and(
-                                    Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof PowerControl)
+                                    Cloudy.predicate(_ -> FactionsPlugin.instance().landRaidControl() instanceof PowerControl)
                                             .and(Cloudy.hasPermission(Permission.POWER))
                             ))
                             .optional("player", FPlayerParser.of(FPlayerParser.Include.ALL))

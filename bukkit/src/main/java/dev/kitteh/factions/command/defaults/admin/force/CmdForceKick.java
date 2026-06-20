@@ -25,7 +25,7 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdForceKick implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().kick();
             manager.command(
                     builder.literal("kick")

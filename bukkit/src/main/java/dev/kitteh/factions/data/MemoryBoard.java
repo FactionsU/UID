@@ -52,7 +52,7 @@ public abstract class MemoryBoard implements Board {
     protected Object2ObjectMap<String, WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
 
     protected WorldTracker getAndCreate(String world) {
-        return this.worldTrackers.computeIfAbsent(world, k -> new WorldTracker(world));
+        return this.worldTrackers.computeIfAbsent(world, _ -> new WorldTracker(world));
     }
 
     private int getIdAt(FLocation flocation) {

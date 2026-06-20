@@ -37,7 +37,7 @@ public class WorldTracker {
     }
 
     private LongSet getOrCreateClaims(int id) {
-        return IDToChunk.computeIfAbsent(id, k -> new LongOpenHashSet());
+        return IDToChunk.computeIfAbsent(id, _ -> new LongOpenHashSet());
     }
 
     public void addClaim(int id, FLocation location) {

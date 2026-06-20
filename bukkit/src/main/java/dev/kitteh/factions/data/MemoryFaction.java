@@ -130,7 +130,7 @@ public abstract class MemoryFaction implements Faction {
             if (!this.selectorOrder.contains(selector)) {
                 this.selectorOrder.add(selector);
             }
-            return this.perms.computeIfAbsent(selector, k -> new SelectorPerms());
+            return this.perms.computeIfAbsent(selector, _ -> new SelectorPerms());
         }
 
         @Override
@@ -349,7 +349,7 @@ public abstract class MemoryFaction implements Faction {
         }
 
         protected WorldTracker getAndCreate(String world) {
-            return this.worldTrackers.computeIfAbsent(world, k -> new WorldTracker(world));
+            return this.worldTrackers.computeIfAbsent(world, _ -> new WorldTracker(world));
         }
     }
 
@@ -421,7 +421,7 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public void addAnnouncement(FPlayer fPlayer, String msg) {
-        announcements.computeIfAbsent(fPlayer.uniqueId(), k -> new ArrayList<>()).add(msg);
+        announcements.computeIfAbsent(fPlayer.uniqueId(), _ -> new ArrayList<>()).add(msg);
     }
 
     @Override

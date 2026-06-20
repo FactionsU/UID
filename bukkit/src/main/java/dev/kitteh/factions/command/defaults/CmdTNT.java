@@ -24,7 +24,7 @@ public class CmdTNT implements Cmd {
             var tl = FactionsPlugin.instance().tl().commands().tnt();
             Command.Builder<Sender> tntBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
-                    .permission(builder.commandPermission().and(Cloudy.hasFaction().and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().commands().tnt().isEnable()))));
+                    .permission(builder.commandPermission().and(Cloudy.hasFaction().and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().commands().tnt().isEnable()))));
 
             manager.command(tntBuilder.permission(tntBuilder.commandPermission().and(Cloudy.hasPermission(Permission.TNT_INFO))).handler(this::handle));
             manager.command(tntBuilder.literal("info").permission(tntBuilder.commandPermission().and(Cloudy.hasPermission(Permission.TNT_INFO))).handler(this::handle));

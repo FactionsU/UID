@@ -41,7 +41,7 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdUpgrades implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().upgrades();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
@@ -75,7 +75,7 @@ public class CmdUpgrades implements Cmd {
                 .sorted(Comparator.comparing(Upgrade::name))
                 .filter(Universe.universe()::isUpgradeEnabled)
                 .map(upgrade -> ActionButton.builder(upgrade.nameComponent())
-                        .action(DialogAction.customClick((r, audience) ->
+                        .action(DialogAction.customClick((_, audience) ->
                                 audience.showDialog(this.upgradeMenu(audience, upgrade)), Dialogue.CLICK_CALLBACK)).build())
                 .toList();
 
@@ -145,7 +145,7 @@ public class CmdUpgrades implements Cmd {
         if (lvl < settings.maxLevel() && econ && faction.hasAccess(fPlayer, PermissibleActions.UPGRADE, null)) {
             actions = List.of(
                     ActionButton.builder(Mini.parse(info.getPurchaseButton(), fPlayer))
-                            .action(DialogAction.customClick((r, aud) ->
+                            .action(DialogAction.customClick((_, aud) ->
                                     aud.showDialog(this.purchaseMenu(aud, upgrade)), Dialogue.CLICK_CALLBACK))
                             .build()
             );
@@ -160,7 +160,7 @@ public class CmdUpgrades implements Cmd {
                         )).build())
                 .type(actions.isEmpty() ?
                         DialogType.notice(ActionButton.builder(Mini.parse(tl.general().getReturnToList(), fPlayer))
-                                .action(DialogAction.customClick((r, aud) ->
+                                .action(DialogAction.customClick((_, aud) ->
                                         aud.showDialog(this.mainMenu(aud)), Dialogue.CLICK_CALLBACK))
                                 .build())
                         :
@@ -210,7 +210,7 @@ public class CmdUpgrades implements Cmd {
                     .type(DialogType.multiAction(
                             List.of(
                                     ActionButton.builder(Mini.parse(tl.purchasePage().getConfirmButton(), fPlayer))
-                                            .action(DialogAction.customClick((r, aud) ->
+                                            .action(DialogAction.customClick((_, aud) ->
                                                     aud.showDialog(this.makePurchase(aud, upgrade, lvl + 1)), Dialogue.CLICK_CALLBACK))
                                             .build()
                             ),
@@ -278,14 +278,14 @@ public class CmdUpgrades implements Cmd {
 
     private ActionButton returnToUpgrade(Upgrade upgrade) {
         return ActionButton.builder(Mini.parse(FactionsPlugin.instance().tl().commands().upgrades().paper().general().getReturnToInfo()))
-                .action(DialogAction.customClick((r, aud) ->
+                .action(DialogAction.customClick((_, aud) ->
                         aud.showDialog(this.upgradeMenu(aud, upgrade)), Dialogue.CLICK_CALLBACK))
                 .build();
     }
 
     private ActionButton returnToList() {
         return ActionButton.builder(Mini.parse(FactionsPlugin.instance().tl().commands().upgrades().paper().general().getReturnToList()))
-                .action(DialogAction.customClick((r, aud) ->
+                .action(DialogAction.customClick((_, aud) ->
                         aud.showDialog(this.mainMenu(aud)), Dialogue.CLICK_CALLBACK))
                 .build();
     }

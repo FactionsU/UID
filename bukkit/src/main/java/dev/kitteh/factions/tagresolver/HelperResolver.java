@@ -107,7 +107,7 @@ public sealed abstract class HelperResolver implements TagResolver permits Gener
                 return Component.empty();
             };
         } else {
-            return (Modifying) (current, depth) -> Component.empty();
+            return (Modifying) (_, _) -> Component.empty();
         }
     }
 

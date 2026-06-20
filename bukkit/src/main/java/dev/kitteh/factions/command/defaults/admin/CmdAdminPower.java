@@ -21,7 +21,7 @@ public class CmdAdminPower implements Cmd {
         return (manager, builder, help) -> {
             var tl = FactionsPlugin.instance().tl().commands().admin().power();
             Command.Builder<Sender> powerBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof PowerControl)));
+                    .permission(builder.commandPermission().and(Cloudy.predicate(_ -> FactionsPlugin.instance().landRaidControl() instanceof PowerControl)));
 
             new CmdPowerBoost().consumer().accept(manager, powerBuilder, help);
             new CmdModifyPower().consumer().accept(manager, powerBuilder, help);

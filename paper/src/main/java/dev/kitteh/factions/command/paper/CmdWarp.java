@@ -32,7 +32,7 @@ import java.util.List;
 public class CmdWarp implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().warp();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
@@ -59,11 +59,11 @@ public class CmdWarp implements Cmd {
                 .map(warp -> {
                     ActionButton.Builder builder = ActionButton.builder(Mini.parse(tl.getMenuWarpName(), sender.fPlayerOrNull(), Placeholder.unparsed("warp", warp)));
                     if (faction.hasWarpPassword(warp)) {
-                        return builder.action(DialogAction.customClick((r, audience) ->
+                        return builder.action(DialogAction.customClick((_, audience) ->
                                 audience.showDialog(this.password(sender, warp, faction, factionResolver)), Dialogue.CLICK_CALLBACK)).build();
                     } else {
                         return builder.action(DialogAction.customClick(
-                                (r, audience) -> warp(faction, warp, sender), Dialogue.CLICK_CALLBACK)
+                                (_, _) -> warp(faction, warp, sender), Dialogue.CLICK_CALLBACK)
                         ).build();
                     }
                 })

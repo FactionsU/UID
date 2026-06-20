@@ -108,7 +108,7 @@ public class ListenInteract implements Listener {
             }
             if (this.plugin.conf().exploits().isInteractionSpam()) {
                 String name = player.getName();
-                InteractAttemptSpam attempt = interactSpammers.computeIfAbsent(name, n -> new InteractAttemptSpam());
+                InteractAttemptSpam attempt = interactSpammers.computeIfAbsent(name, _ -> new InteractAttemptSpam());
                 int count = attempt.increment();
                 if (count >= 10) {
                     FPlayer me = FPlayers.fPlayers().get(player);

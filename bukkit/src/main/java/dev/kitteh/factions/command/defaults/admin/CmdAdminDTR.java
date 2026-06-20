@@ -20,7 +20,7 @@ public class CmdAdminDTR implements Cmd {
         return (manager, builder, help) -> {
             var tl = FactionsPlugin.instance().tl().commands().admin().dtr();
             Command.Builder<Sender> dtrBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
-                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> FactionsPlugin.instance().landRaidControl() instanceof DTRControl)));
+                    .permission(builder.commandPermission().and(Cloudy.predicate(_ -> FactionsPlugin.instance().landRaidControl() instanceof DTRControl)));
 
             new CmdDTRModify().consumer().accept(manager, dtrBuilder, help);
             new CmdDTRResetAll().consumer().accept(manager, dtrBuilder, help);
