@@ -5,8 +5,9 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.util.MiscUtil;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -19,9 +20,10 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdSetGrace implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
-            Command.Builder<Sender> graceBuilder = builder.literal("grace")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_SET_GRACE_DESCRIPTION))
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().admin().set().grace();
+            Command.Builder<Sender> graceBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.GRACE_SET)));
             manager.command(graceBuilder.literal("off").handler(this::handleOff));
             manager.command(
@@ -33,17 +35,19 @@ public class CmdSetGrace implements Cmd {
     }
 
     private void handleOff(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().admin().set().grace();
         Universe.universe().graceRemaining(Duration.ZERO);
-        context.sender().msgLegacy(TL.COMMAND_SET_GRACE_OFF);
+        context.sender().sendRichMessage(tl.getInactive());
     }
 
     private void handleOn(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().admin().set().grace();
         Duration duration = context.get("duration");
         if (duration.isNegative() || duration.isZero()) {
             this.handleOff(context);
             return;
         }
         Universe.universe().graceRemaining(duration);
-        context.sender().msgLegacy(TL.COMMAND_SET_GRACE_ACTIVE, MiscUtil.durationString(duration));
+        context.sender().sendRichMessage(tl.getActive(), Placeholder.unparsed("duration", MiscUtil.durationString(duration)));
     }
 }

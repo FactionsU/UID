@@ -14,7 +14,7 @@ import dev.kitteh.factions.command.defaults.top.FTopValue;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -22,7 +22,6 @@ import org.incendo.cloud.parser.standard.IntegerParser;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +33,9 @@ public class CmdTop implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> build = builder.literal("top")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_TOP_DESCRIPTION))
+            var tl = FactionsPlugin.instance().tl().commands().top();
+            Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TOP)));
 
             manager.command(
@@ -76,8 +76,9 @@ public class CmdTop implements Cmd {
         criteria = criteria.toLowerCase();
 
         Function<Faction, FTopValue<?>> ftopGenerator = topValueGenerators.get(criteria);
+        var tl = FactionsPlugin.instance().tl().commands().top();
         if (ftopGenerator == null || (!(FactionsPlugin.instance().landRaidControl() instanceof PowerControl) && criteria.equalsIgnoreCase("power"))) {
-            context.sender().msgLegacy(TL.COMMAND_TOP_INVALID, criteria);
+            context.sender().sendRichMessage(tl.getInvalid(), Placeholder.unparsed("criteria", criteria));
             return;
         }
 
@@ -103,20 +104,20 @@ public class CmdTop implements Cmd {
             end = sortedFactionsCount;
         }
 
-        // One line for the header, end - start lines for the factions
-        List<String> lines = new ArrayList<>(1 + end - start);
-
-        lines.add(TL.COMMAND_TOP_TOP.format(criteria.toUpperCase(), pagenumber, pagecount));
+        context.sender().sendRichMessage(tl.getTop(),
+                Placeholder.unparsed("criteria", criteria.toUpperCase()),
+                Placeholder.unparsed("page_current", String.valueOf(pagenumber)),
+                Placeholder.unparsed("page_count", String.valueOf(pagecount)));
 
         int rank = start + 1;
         for (FTopFacValPair fvpair : sortedFactions.subList(start, end)) {
-            // Get the relation color if player is executing this.
             Faction faction = fvpair.faction;
-            String fac = context.sender().isPlayer() ? faction.colorLegacyStringTo(context.sender().fPlayerOrNull()) + faction.tag() : faction.tag();
-            lines.add(TL.COMMAND_TOP_LINE.format(rank, fac, fvpair.value.getDisplayString()));
+            String factionName = faction.tag();
+            context.sender().sendRichMessage(tl.getLine(),
+                    Placeholder.unparsed("rank", String.valueOf(rank)),
+                    Placeholder.unparsed("faction", factionName),
+                    Placeholder.unparsed("value", fvpair.value.getDisplayString()));
             rank++;
         }
-
-        lines.forEach(context.sender().sender()::sendMessage);
     }
 }

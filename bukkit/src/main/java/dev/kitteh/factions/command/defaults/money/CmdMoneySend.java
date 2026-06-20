@@ -12,9 +12,6 @@ import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.TextUtil;
-import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -26,13 +23,16 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdMoneySend implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
-            Command.Builder<Sender> sendBuilder = builder.literal("send")
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().money().send();
+
+            Command.Builder<Sender> sendBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .required("amount", DoubleParser.doubleParser(0))
-                    .literal("to");
+                    .literal(tl.getSubCmdTo());
 
             manager.command(
-                    sendBuilder.literal("faction")
+                    sendBuilder.literal(tl.getSubCmdFaction())
                             .required("faction", FactionParser.of())
                             .permission(
                                     builder.commandPermission()
@@ -43,7 +43,7 @@ public class CmdMoneySend implements Cmd {
             );
 
             manager.command(
-                    sendBuilder.literal("player")
+                    sendBuilder.literal(tl.getSubCmdPlayer())
                             .required("player", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION, FPlayerParser.Include.OTHER_FACTION))
                             .permission(
                                     builder.commandPermission()
@@ -74,7 +74,7 @@ public class CmdMoneySend implements Cmd {
         boolean success = Econ.transferMoney(sender, from, to, amount);
 
         if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
-            AbstractFactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYTRANSFERFF_TRANSFER.toString(), context.sender().sender().getName(), Econ.moneyString(amount), from.describeToLegacy(null), to.describeToLegacy(null))));
+            AbstractFactionsPlugin.instance().log(String.format("%s transferred %s from the faction \"%s\" to the faction \"%s\"", context.sender().sender().getName(), Econ.moneyString(amount), from.tag(), to.tag()));
         }
     }
 
@@ -93,7 +93,7 @@ public class CmdMoneySend implements Cmd {
         boolean success = Econ.transferMoney(sender, from, to, amount);
 
         if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
-            AbstractFactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYTRANSFERFP_TRANSFER.toString(), sender.name(), Econ.moneyString(amount), from.describeToLegacy(null), to.describeToLegacy(null))));
+            AbstractFactionsPlugin.instance().log(String.format("%s transferred %s from the faction \"%s\" to the player \"%s\"", sender.name(), Econ.moneyString(amount), from.tag(), to.name()));
         }
     }
 }

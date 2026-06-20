@@ -31,7 +31,7 @@ import java.util.function.BiConsumer;
 public class CmdWarp implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().warp();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())

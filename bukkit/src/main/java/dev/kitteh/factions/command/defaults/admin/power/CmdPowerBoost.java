@@ -7,8 +7,11 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -20,35 +23,36 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdPowerBoost implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
-            Command.Builder<Sender> boostBuilder = builder.literal("boost")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_POWERBOOST_DESCRIPTION))
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().admin().power().powerBoost();
+            Command.Builder<Sender> boostBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.POWERBOOST)));
 
-            Command.Builder<Sender> boostSetBuilder = boostBuilder.literal("set");
-            Command.Builder<Sender> boostModifyBuilder = boostBuilder.literal("modify");
+            Command.Builder<Sender> boostSetBuilder = boostBuilder.literal(tl.getSubCmdSet());
+            Command.Builder<Sender> boostModifyBuilder = boostBuilder.literal(tl.getSubCmdModify());
 
             manager.command(
-                    boostSetBuilder.literal("faction")
+                    boostSetBuilder.literal(tl.getSubCmdFaction())
                             .required("faction", FactionParser.of(FactionParser.Include.SELF))
                             .required("value", DoubleParser.doubleParser())
                             .handler(ctx -> this.handleFaction(ctx, false))
             );
             manager.command(
-                    boostSetBuilder.literal("player")
+                    boostSetBuilder.literal(tl.getSubCmdPlayer())
                             .required("player", FPlayerParser.of(FPlayerParser.Include.ALL))
                             .required("value", DoubleParser.doubleParser())
                             .handler(ctx -> this.handlePlayer(ctx, false))
             );
 
             manager.command(
-                    boostModifyBuilder.literal("faction")
+                    boostModifyBuilder.literal(tl.getSubCmdFaction())
                             .required("faction", FactionParser.of(FactionParser.Include.SELF))
                             .required("value", DoubleParser.doubleParser())
                             .handler(ctx -> this.handleFaction(ctx, true))
             );
             manager.command(
-                    boostModifyBuilder.literal("player")
+                    boostModifyBuilder.literal(tl.getSubCmdPlayer())
                             .required("player", FPlayerParser.of(FPlayerParser.Include.ALL))
                             .required("value", DoubleParser.doubleParser())
                             .handler(ctx -> this.handlePlayer(ctx, true))
@@ -57,6 +61,7 @@ public class CmdPowerBoost implements Cmd {
     }
 
     private void handlePlayer(CommandContext<Sender> context, boolean modify) {
+        var tl = FactionsPlugin.instance().tl().commands().admin().power().powerBoost();
         FPlayer target = context.get("player");
         double value = context.get("value");
 
@@ -66,10 +71,11 @@ public class CmdPowerBoost implements Cmd {
 
         target.powerBoost(value);
 
-        context.sender().msgLegacy(TL.COMMAND_POWERBOOST_BOOST, target, Math.round(value));
+        context.sender().sendRichMessage(tl.getBoost(), FPlayerResolver.of("target", target), Placeholder.unparsed("value", String.valueOf(Math.round(value))));
     }
 
     private void handleFaction(CommandContext<Sender> context, boolean modify) {
+        var tl = FactionsPlugin.instance().tl().commands().admin().power().powerBoost();
         Faction target = context.get("faction");
         double value = context.get("value");
 
@@ -79,6 +85,6 @@ public class CmdPowerBoost implements Cmd {
 
         target.powerBoost(value);
 
-        context.sender().msgLegacy(TL.COMMAND_POWERBOOST_BOOST, target, Math.round(value));
+        context.sender().sendRichMessage(tl.getBoost(), FactionResolver.of("target", target), Placeholder.unparsed("value", String.valueOf(Math.round(value))));
     }
 }

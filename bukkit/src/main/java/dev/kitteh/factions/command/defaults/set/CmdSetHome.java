@@ -10,8 +10,8 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FactionSetHomeEvent;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
@@ -24,26 +24,31 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdSetHome implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(builder.literal("home")
-                .commandDescription(Cloudy.desc(TL.COMMAND_SETHOME_DESCRIPTION))
-                .permission(builder.commandPermission().and(
-                        Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled())
-                                .and(Cloudy.hasPermission(Permission.SETHOME))
-                                .and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETHOME))
-                ))
-                .flag(
-                        manager.flagBuilder("delete")
-                                .withPermission(
-                                        Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled())
-                                                .and(Cloudy.hasPermission(Permission.DELHOME))
-                                                .and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETHOME))
-                                )
-                )
-                .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().set().home();
+            manager.command(builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
+                    .permission(builder.commandPermission().and(
+                            Cloudy.predicate(_ -> FactionsPlugin.instance().conf().factions().homes().isEnabled())
+                                    .and(Cloudy.hasPermission(Permission.SETHOME))
+                                    .and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETHOME))
+                    ))
+                    .flag(
+                            manager.flagBuilder("delete")
+                                    .withPermission(
+                                            Cloudy.predicate(_ -> FactionsPlugin.instance().conf().factions().homes().isEnabled())
+                                                    .and(Cloudy.hasPermission(Permission.DELHOME))
+                                                    .and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETHOME))
+                                    )
+                    )
+                    .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().set().home();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
         Faction faction = sender.faction();
@@ -53,14 +58,13 @@ public class CmdSetHome implements Cmd {
             return;
         }
 
-        // Can the player set the faction home HERE?
         if (FactionsPlugin.instance().conf().factions().homes().isMustBeInClaimedTerritory() &&
                 Board.board().factionAt(new FLocation(player)) != faction) {
-            sender.msgLegacy(TL.COMMAND_SETHOME_NOTCLAIMED);
+            sender.sendRichMessage(tl.getNotClaimed());
             return;
         }
 
-        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostSethome(), TL.COMMAND_SETHOME_TOSET)) {
+        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostSethome(), econTl.getSetHomeTo())) {
             return;
         }
 
@@ -70,33 +74,33 @@ public class CmdSetHome implements Cmd {
             return;
         }
 
-        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostSethome(), TL.COMMAND_SETHOME_TOSET, TL.COMMAND_SETHOME_FORSET)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostSethome(), econTl.getSetHomeTo(), econTl.getSetHomeFor())) {
             return;
         }
 
         faction.home(player.getLocation());
-
-        faction.msgLegacy(TL.COMMAND_SETHOME_SET, sender.describeToLegacy(faction, true));
+        faction.sendRichMessage(tl.getSet(), FPlayerResolver.of("player", sender));
     }
 
     private void handleDel(CommandContext<Sender> context, FPlayer sender, Faction faction) {
+        var tl = FactionsPlugin.instance().tl().commands().set().home();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
+
         if (!faction.hasHome()) {
-            sender.msgLegacy(TL.COMMAND_HOME_NOHOME);
+            sender.sendRichMessage(tl.getNoHome());
             return;
         }
 
         if (FactionsPlugin.instance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.warps().isEmpty()) {
-            sender.msgLegacy(TL.COMMAND_HOME_WARPSREMAIN);
+            sender.sendRichMessage(tl.getWarpsRemain());
             return;
         }
 
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDelhome(), TL.COMMAND_DELHOME_TOSET, TL.COMMAND_DELHOME_FORSET)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDelhome(), econTl.getDelHomeTo(), econTl.getDelHomeFor())) {
             return;
         }
 
         faction.removeHome();
-
-        faction.msgLegacy(TL.COMMAND_DELHOME_DEL, sender.describeToLegacy(faction, true));
+        faction.sendRichMessage(tl.getDel(), FPlayerResolver.of("player", sender));
     }
 }

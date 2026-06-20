@@ -11,9 +11,6 @@ import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.TextUtil;
-import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -25,17 +22,21 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdMoneyWithdraw implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("withdraw")
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MONEY_WITHDRAW)).and(Cloudy.isPlayer()))
-                        .required("amount", DoubleParser.doubleParser(0))
-                        .flag(
-                                manager.flagBuilder("faction")
-                                        .withComponent(FactionParser.of(FactionParser.Include.SELF))
-                                        .withPermission(Cloudy.hasPermission(Permission.MONEY_WITHDRAW_ANY))
-                        )
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().money().withdraw();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MONEY_WITHDRAW)).and(Cloudy.isPlayer()))
+                            .required("amount", DoubleParser.doubleParser(0))
+                            .flag(
+                                    manager.flagBuilder("faction")
+                                            .withComponent(FactionParser.of(FactionParser.Include.SELF))
+                                            .withPermission(Cloudy.hasPermission(Permission.MONEY_WITHDRAW_ANY))
+                            )
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
@@ -59,15 +60,16 @@ public class CmdMoneyWithdraw implements Cmd {
             return;
         }
 
+        var tl = FactionsPlugin.instance().tl().commands().money().withdraw();
         if (!faction.hasAccess(sender, PermissibleActions.ECONOMY, sender.lastStoodAt())) {
-            sender.msgLegacy(TL.GENERIC_NOPERMISSION, PermissibleActions.ECONOMY.shortDescription());
+            sender.sendRichMessage(tl.getNoPermission());
             return;
         }
 
         boolean success = Econ.transferMoney(sender, faction, sender, amount);
 
         if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
-            AbstractFactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYWITHDRAW_WITHDRAW.toString(), sender.name(), Econ.moneyString(amount), faction.describeToLegacy(null))));
+            AbstractFactionsPlugin.instance().log(String.format("%s withdrew %s from the faction bank: %s", sender.name(), Econ.moneyString(amount), faction.tag()));
         }
     }
 }

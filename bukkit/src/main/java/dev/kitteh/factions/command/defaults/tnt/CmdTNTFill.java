@@ -11,7 +11,7 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.Pair;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -36,44 +36,50 @@ import java.util.stream.Collectors;
 public class CmdTNTFill implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("fill")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_TNT_FILL_DESCRIPTION))
-                        .permission(
-                                builder.commandPermission()
-                                        .and(Cloudy.hasPermission(Permission.TNT_FILL))
-                                        .and(Cloudy.hasSelfFactionPerms(PermissibleActions.TNTWITHDRAW))
-                        )
-                        .required("radius", IntegerParser.integerParser(1))
-                        .required("amount", IntegerParser.integerParser(1))
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().tnt();
+            manager.command(
+                    builder.literal(tl.getSubCmdFill())
+                            .commandDescription(Cloudy.desc(tl.getFillDescription()))
+                            .permission(
+                                    builder.commandPermission()
+                                            .and(Cloudy.hasPermission(Permission.TNT_FILL))
+                                            .and(Cloudy.hasSelfFactionPerms(PermissibleActions.TNTWITHDRAW))
+                            )
+                            .required("radius", IntegerParser.integerParser(1))
+                            .required("amount", IntegerParser.integerParser(1))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().tnt();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
         Faction faction = sender.faction();
 
         if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
-            sender.msgLegacy(TL.COMMAND_TNT_TERRITORYONLY);
+            sender.sendRichMessage(tl.getTerritoryOnly());
             return;
         }
         final int radius = context.get("radius");
         final int amount = context.get("amount");
 
         if (radius <= 0 || amount <= 0) {
-            sender.msgLegacy(TL.COMMAND_TNT_FILL_FAIL_POSITIVE);
+            sender.sendRichMessage(tl.getFillFailPositive());
             return;
         }
 
         if (amount > faction.tntBank()) {
-            sender.msgLegacy(TL.COMMAND_TNT_FILL_FAIL_NOTENOUGH, amount);
+            sender.sendRichMessage(tl.getFillFailNotEnough(), Placeholder.unparsed("count", String.valueOf(amount)));
             return;
         }
 
         if (radius > FactionsPlugin.instance().conf().commands().tnt().getMaxRadius()) {
-            sender.msgLegacy(TL.COMMAND_TNT_FILL_FAIL_MAXRADIUS, radius, FactionsPlugin.instance().conf().commands().tnt().getMaxRadius());
+            sender.sendRichMessage(tl.getFillFailMaxRadius(),
+                    Placeholder.unparsed("value", String.valueOf(radius)),
+                    Placeholder.unparsed("max", String.valueOf(FactionsPlugin.instance().conf().commands().tnt().getMaxRadius())));
             return;
         }
 
@@ -102,7 +108,10 @@ public class CmdTNTFill implements Cmd {
 
         faction.tntBank(faction.tntBank() - amount + remaining);
 
-        sender.msgLegacy(TL.COMMAND_TNT_FILL_MESSAGE, amount - remaining, dispenserCount, faction.tntBank());
+        sender.sendRichMessage(tl.getFillMessage(),
+                Placeholder.unparsed("count", String.valueOf(amount - remaining)),
+                Placeholder.unparsed("dispensers", String.valueOf(dispenserCount)),
+                Placeholder.unparsed("remaining", String.valueOf(faction.tntBank())));
     }
 
     static ItemStack[] getStacks(int count) {

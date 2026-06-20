@@ -9,7 +9,6 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -20,7 +19,7 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdChat implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().chat();
             manager.command(builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases()).literal("public")
                     .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -61,16 +60,17 @@ public class CmdChat implements Cmd {
 
         sender.chatTarget(target);
 
-        TL tl = switch (target) {
-            case ChatTarget.Relation r -> r.relation() == Relation.ALLY ? TL.COMMAND_CHAT_MODE_ALLIANCE : TL.COMMAND_CHAT_MODE_TRUCE;
+        var tl = FactionsPlugin.instance().tl().commands().chat();
+        String message = switch (target) {
+            case ChatTarget.Relation r -> r.relation() == Relation.ALLY ? tl.getModeAlliance() : tl.getModeTruce();
             case ChatTarget.Role r -> switch (r.role()) {
-                case COLEADER -> TL.COMMAND_CHAT_MODE_COLEADER;
-                case MODERATOR -> TL.COMMAND_CHAT_MODE_MOD;
-                case NORMAL -> TL.COMMAND_CHAT_MODE_NORMAL;
-                default -> TL.COMMAND_CHAT_MODE_FACTION;
+                case COLEADER -> tl.getModeColeader();
+                case MODERATOR -> tl.getModeMod();
+                case NORMAL -> tl.getModeNormal();
+                default -> tl.getModeFaction();
             };
-            default -> TL.COMMAND_CHAT_MODE_PUBLIC;
+            default -> tl.getModePublic();
         };
-        context.sender().msgLegacy(tl);
+        context.sender().sendRichMessage(message);
     }
 }

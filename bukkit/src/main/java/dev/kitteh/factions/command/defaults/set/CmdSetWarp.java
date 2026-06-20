@@ -11,7 +11,7 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -23,18 +23,23 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdSetWarp implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("warp")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_SETFWARP_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SETWARP).and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETWARP))))
-                        .required("name", StringParser.stringParser())
-                        .flag(manager.flagBuilder("password").withComponent(StringParser.stringParser()))
-                        .flag(manager.flagBuilder("delete"))
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().set().warp();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SETWARP).and(Cloudy.hasSelfFactionPerms(PermissibleActions.SETWARP))))
+                            .required("name", StringParser.stringParser())
+                            .flag(manager.flagBuilder("password").withComponent(StringParser.stringParser()))
+                            .flag(manager.flagBuilder("delete"))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(org.incendo.cloud.context.CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().set().warp();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
         Player player = ((Sender.Player) context.sender()).player();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
@@ -43,33 +48,33 @@ public class CmdSetWarp implements Cmd {
 
         if (context.flags().hasFlag("delete")) {
             if (faction.isWarp(warp)) {
-                if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDelWarp(), TL.COMMAND_DELFWARP_TODELETE, TL.COMMAND_DELFWARP_FORDELETE)) {
+                if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDelWarp(), econTl.getDelWarpTo(), econTl.getDelWarpFor())) {
                     return;
                 }
                 faction.removeWarp(warp);
-                sender.msgLegacy(TL.COMMAND_DELFWARP_DELETED, warp);
+                sender.sendRichMessage(tl.getDeleted(), Placeholder.unparsed("warp", warp));
             } else {
-                sender.msgLegacy(TL.COMMAND_DELFWARP_INVALID, warp);
+                sender.sendRichMessage(tl.getDeleteNotFound(), Placeholder.unparsed("warp", warp));
             }
             return;
         }
 
         if (Board.board().factionAt(new FLocation(player)) != faction) {
-            sender.msgLegacy(TL.COMMAND_SETFWARP_NOTCLAIMED);
+            sender.sendRichMessage(tl.getNotClaimed());
             return;
         }
 
         int maxWarps = faction.maxWarps();
         if (maxWarps <= faction.warps().size()) {
-            sender.msgLegacy(TL.COMMAND_SETFWARP_LIMIT, maxWarps);
+            sender.sendRichMessage(tl.getLimit(), Placeholder.unparsed("max", String.valueOf(maxWarps)));
             return;
         }
 
         if (FactionsPlugin.instance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.hasHome()) {
-            sender.msgLegacy(TL.COMMAND_SETFWARP_HOMEREQUIRED);
+            sender.sendRichMessage(tl.getHomeRequired());
         }
 
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostSetWarp(), TL.COMMAND_SETFWARP_TOSET, TL.COMMAND_SETFWARP_FORSET)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostSetWarp(), econTl.getSetWarpTo(), econTl.getSetWarpFor())) {
             return;
         }
 
@@ -80,6 +85,8 @@ public class CmdSetWarp implements Cmd {
         if (password != null) {
             faction.setWarpPassword(warp, password);
         }
-        sender.msgLegacy(TL.COMMAND_SETFWARP_SET, warp, password != null ? password : "");
+        sender.sendRichMessage(tl.getSet(),
+                Placeholder.unparsed("warp", warp),
+                Placeholder.unparsed("password", password != null ? password : ""));
     }
 }

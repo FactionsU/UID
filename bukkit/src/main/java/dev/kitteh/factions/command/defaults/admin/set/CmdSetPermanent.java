@@ -3,13 +3,16 @@ package dev.kitteh.factions.command.defaults.admin.set;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -20,38 +23,43 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdSetPermanent implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("permanent")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_PERMANENT_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SET_PERMANENT)))
-                        .required("faction", FactionParser.of(FactionParser.Include.SELF))
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().admin().set().permanent();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SET_PERMANENT)))
+                            .required("faction", FactionParser.of(FactionParser.Include.SELF))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().admin().set().permanent();
         Faction faction = context.get("faction");
 
         String change;
         if (faction.isPermanent()) {
-            change = TL.COMMAND_PERMANENT_REVOKE.toString();
+            change = tl.getRevoke();
             faction.permanent(false);
         } else {
-            change = TL.COMMAND_PERMANENT_GRANT.toString();
+            change = tl.getGrant();
             faction.permanent(true);
         }
 
         FPlayer fPlayer = context.sender().fPlayerOrNull();
+        String blame = fPlayer == null ? "A server admin" : fPlayer.name();
 
-        AbstractFactionsPlugin.instance().log((fPlayer == null ? "A server admin" : fPlayer.name()) + " " + change + " the faction \"" + faction.tag() + "\".");
+        AbstractFactionsPlugin.instance().log(blame + " " + change + " the faction \"" + faction.tag() + "\".");
 
-        // Inform all players
+        TagResolver blames = Placeholder.unparsed("player", fPlayer == null ? "A server admin" : fPlayer.name());
+
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-            String blame = (fPlayer == null ? TL.GENERIC_SERVERADMIN.toString() : fPlayer.describeToLegacy(fplayer));
             if (fplayer.faction() == faction) {
-                fplayer.msgLegacy(TL.COMMAND_PERMANENT_YOURS, blame, change);
+                fplayer.sendRichMessage(tl.getYours(), blames, Placeholder.parsed("change", change));
             } else {
-                fplayer.msgLegacy(TL.COMMAND_PERMANENT_OTHER, blame, change, faction.tagLegacy(fplayer));
+                fplayer.sendRichMessage(tl.getOther(), blames, Placeholder.parsed("change", change), FactionResolver.of(faction));
             }
         }
     }

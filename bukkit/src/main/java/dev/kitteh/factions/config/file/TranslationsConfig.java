@@ -222,6 +222,115 @@ public class TranslationsConfig {
                 public Power() {
                     super("Change faction power", "power");
                 }
+
+                public static class PowerBoost extends AbsCommand {
+                    public PowerBoost() {
+                        super("Apply permanent power bonus/penalty", "boost");
+                    }
+
+                    @Comment("Supports <target>, <value>")
+                    private String boost = "<yellow><target> now has a power bonus/penalty of <value> to min and max power levels.";
+                    private String subCmdSet = "set";
+                    private String subCmdModify = "modify";
+                    private String subCmdFaction = "faction";
+                    private String subCmdPlayer = "player";
+
+                    public String getBoost() {
+                        return boost;
+                    }
+
+                    public String getSubCmdSet() {
+                        return subCmdSet;
+                    }
+
+                    public String getSubCmdModify() {
+                        return subCmdModify;
+                    }
+
+                    public String getSubCmdFaction() {
+                        return subCmdFaction;
+                    }
+
+                    public String getSubCmdPlayer() {
+                        return subCmdPlayer;
+                    }
+                }
+
+                public static class ModifyPower extends AbsCommand {
+                    public ModifyPower() {
+                        super("Modify the power of a player", "modify");
+                    }
+
+                    @Comment("Supports <change>, <player>, <power>")
+                    private String added = "<yellow>Added <gold><change></gold> power to <player>. New total rounded power: <gold><power></gold>";
+
+                    public String getAdded() {
+                        return added;
+                    }
+                }
+
+                public static class PermanentPower extends AbsCommand {
+                    public PermanentPower() {
+                        super("Toggle faction power permanence", "permanent");
+                    }
+
+                    private String grant = "added permanent power status to";
+                    private String revoke = "removed permanent power status from";
+                    @Comment("Supports <change>, <faction>")
+                    private String success = "<yellow>You <change> <faction></light_purple>.";
+                    @Comment("Supports <player>, <change>")
+                    private String factionMsg = "<yellow><player> <change> your faction";
+
+                    public String getGrant() {
+                        return grant;
+                    }
+
+                    public String getRevoke() {
+                        return revoke;
+                    }
+
+                    public String getSuccess() {
+                        return success;
+                    }
+
+                    public String getFactionMsg() {
+                        return factionMsg;
+                    }
+                }
+
+                public static class SetPower extends AbsCommand {
+                    public SetPower() {
+                        super("Set the power of a player", "set");
+                    }
+
+                    @Comment("Supports <value>, <player>")
+                    private String set = "<yellow>Set <gold><value></gold> power to <player>.";
+
+                    public String getSet() {
+                        return set;
+                    }
+                }
+
+                private PowerBoost powerBoost = new PowerBoost();
+                private ModifyPower modifyPower = new ModifyPower();
+                private PermanentPower permanentPower = new PermanentPower();
+                private SetPower setPower = new SetPower();
+
+                public PowerBoost powerBoost() {
+                    return powerBoost;
+                }
+
+                public ModifyPower modifyPower() {
+                    return modifyPower;
+                }
+
+                public PermanentPower permanentPower() {
+                    return permanentPower;
+                }
+
+                public SetPower setPower() {
+                    return setPower;
+                }
             }
 
             public static class SetCmd extends AbsCommand {
@@ -251,10 +360,141 @@ public class TranslationsConfig {
                     }
                 }
 
+                public static class Peaceful extends AbsCommand {
+                    public Peaceful() {
+                        super("Set a faction to peaceful", "peaceful");
+                    }
+
+                    private String grant = "granted peaceful status to";
+                    private String revoke = "removed peaceful status from";
+                    @Comment("Supports <player>, <change>")
+                    private String yours = "<player> has <change> your faction";
+                    @Comment("Supports <player>, <change>, <faction>")
+                    private String other = "<yellow><player> has <change> <faction>.";
+
+                    public String getGrant() {
+                        return grant;
+                    }
+
+                    public String getRevoke() {
+                        return revoke;
+                    }
+
+                    public String getYours() {
+                        return yours;
+                    }
+
+                    public String getOther() {
+                        return other;
+                    }
+                }
+
+                public static class Permanent extends AbsCommand {
+                    public Permanent() {
+                        super("Toggles a faction's permanence", "permanent");
+                    }
+
+                    private String grant = "added permanent status to";
+                    private String revoke = "removed permanent status from";
+                    @Comment("Supports <player>, <change>")
+                    private String yours = "<player> has <change> your faction";
+                    @Comment("Supports <player>, <change>, <faction>")
+                    private String other = "<player><yellow> has <change> the faction '<faction><yellow>'.";
+
+                    public String getGrant() {
+                        return grant;
+                    }
+
+                    public String getRevoke() {
+                        return revoke;
+                    }
+
+                    public String getYours() {
+                        return yours;
+                    }
+
+                    public String getOther() {
+                        return other;
+                    }
+                }
+
+                public static class AutoSave extends AbsCommand {
+                    public AutoSave() {
+                        super("Control autosaving", "autosave");
+                    }
+
+                    private String enabled = "<yellow>Factions autosave enabled";
+                    private String disabled = "<yellow>Factions autosave disabled";
+
+                    public String getEnabled() {
+                        return enabled;
+                    }
+
+                    public String getDisabled() {
+                        return disabled;
+                    }
+                }
+
+                public static class MaxVaults extends AbsCommand {
+                    public MaxVaults() {
+                        super("Set max vaults for a Faction", "max-vaults");
+                    }
+
+                    @Comment("Supports <faction>, <value>")
+                    private String success = "<green>Set max vaults for <yellow><faction> <green>to <aqua><value>";
+
+                    public String getSuccess() {
+                        return success;
+                    }
+                }
+
+                public static class Grace extends AbsCommand {
+                    public Grace() {
+                        super("Set grace status", "grace");
+                    }
+
+                    private String inactive = "<yellow>Grace disabled!";
+                    @Comment("Supports <duration>")
+                    private String active = "<yellow>Grace active! No explosions for <duration>";
+
+                    public String getInactive() {
+                        return inactive;
+                    }
+
+                    public String getActive() {
+                        return active;
+                    }
+                }
+
                 private Boom boom = new Boom();
+                private Peaceful peaceful = new Peaceful();
+                private Permanent permanent = new Permanent();
+                private AutoSave autoSave = new AutoSave();
+                private MaxVaults maxVaults = new MaxVaults();
+                private Grace grace = new Grace();
 
                 public Boom boom() {
                     return this.boom;
+                }
+
+                public Peaceful peaceful() {
+                    return peaceful;
+                }
+
+                public Permanent permanent() {
+                    return permanent;
+                }
+
+                public AutoSave autoSave() {
+                    return autoSave;
+                }
+
+                public MaxVaults maxVaults() {
+                    return maxVaults;
+                }
+
+                public Grace grace() {
+                    return grace;
                 }
             }
 
@@ -437,6 +677,73 @@ public class TranslationsConfig {
             protected Chat() {
                 super("Change chat mode", "chat");
             }
+
+            private String modePublic = "<yellow>Public chat mode.";
+            private String modeAlliance = "<yellow>Alliance only chat mode.";
+            private String modeTruce = "<yellow>Truce only chat mode.";
+            private String modeFaction = "<yellow>Faction only chat mode.";
+            private String modeColeader = "<yellow>Coleader only chat mode.";
+            private String modeMod = "<yellow>Mod only chat mode.";
+            private String modeNormal = "<yellow>Normal member only chat mode.";
+
+            private String allianceChatDescription = "Toggles whether or not you will see alliance chat";
+            private String truceChatDescription = "Toggles whether or not you will see truce chat";
+            private String allianceChatIgnore = "Alliance chat is now ignored";
+            private String allianceChatUnignore = "Alliance chat is no longer ignored";
+            private String truceChatIgnore = "Truce chat is now ignored";
+            private String truceChatUnignore = "Truce chat is no longer ignored";
+
+            public String getModePublic() {
+                return modePublic;
+            }
+
+            public String getModeAlliance() {
+                return modeAlliance;
+            }
+
+            public String getModeTruce() {
+                return modeTruce;
+            }
+
+            public String getModeFaction() {
+                return modeFaction;
+            }
+
+            public String getModeColeader() {
+                return modeColeader;
+            }
+
+            public String getModeMod() {
+                return modeMod;
+            }
+
+            public String getModeNormal() {
+                return modeNormal;
+            }
+
+            public String getAllianceChatDescription() {
+                return allianceChatDescription;
+            }
+
+            public String getTruceChatDescription() {
+                return truceChatDescription;
+            }
+
+            public String getAllianceChatIgnore() {
+                return allianceChatIgnore;
+            }
+
+            public String getAllianceChatUnignore() {
+                return allianceChatUnignore;
+            }
+
+            public String getTruceChatIgnore() {
+                return truceChatIgnore;
+            }
+
+            public String getTruceChatUnignore() {
+                return truceChatUnignore;
+            }
         }
 
         public static class Confirm extends AbsCommand {
@@ -561,6 +868,33 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Link extends AbsCommand {
+            public Link() {
+                super("Change the faction link", "link");
+            }
+
+            private String show = "<yellow><faction> link: <url>";
+            private String invalidUrl = "<red>Invalid URL!";
+            private String changed = "<player><yellow> changed their link to:";
+            private String youMustBeModerator = "<red>You must be <light_purple>Moderator</light_purple>.";
+
+            public String getShow() {
+                return show;
+            }
+
+            public String getInvalidUrl() {
+                return invalidUrl;
+            }
+
+            public String getChanged() {
+                return changed;
+            }
+
+            public String getYouMustBeModerator() {
+                return youMustBeModerator;
+            }
+        }
+
         public static class ListCmd extends AbsCommand {
             public ListCmd() {
                 super("List faction information", "list");
@@ -570,11 +904,43 @@ public class TranslationsConfig {
                 public ListBans() {
                     super("View faction bans", "bans");
                 }
+
+                private String noFaction = "<dark_red>You are not in a Faction.";
+                private String header = "<gold>There are <red><count><gold> bans for <faction>";
+                private String entry = "<gray><index>. <red><player> <reset>- <green><banner> <reset>- <yellow><date>";
+
+                public String getNoFaction() {
+                    return noFaction;
+                }
+
+                public String getHeader() {
+                    return header;
+                }
+
+                public String getEntry() {
+                    return entry;
+                }
             }
 
             public static class ListClaims extends AbsCommand {
                 public ListClaims() {
                     super("View faction claims", "claims");
+                }
+
+                private String invalidWorld = "<red>Invalid world name <world>";
+                private String noClaims = "<red>No claims by <faction> in world <world>";
+                private String message = "<yellow>Claims by <faction> in <world>:";
+
+                public String getInvalidWorld() {
+                    return invalidWorld;
+                }
+
+                public String getNoClaims() {
+                    return noClaims;
+                }
+
+                public String getMessage() {
+                    return message;
                 }
             }
 
@@ -614,6 +980,17 @@ public class TranslationsConfig {
             public static class ListInvites extends AbsCommand {
                 public ListInvites() {
                     super("List pending faction invites", "invites");
+                }
+
+                private String pending = "Players with pending invites: ";
+                private String clickToRevoke = "Click to revoke invite for <player>";
+
+                public String getPending() {
+                    return pending;
+                }
+
+                public String getClickToRevoke() {
+                    return clickToRevoke;
                 }
             }
 
@@ -664,6 +1041,22 @@ public class TranslationsConfig {
             public String getCompassLetterWest() {
                 return compassLetterWest;
             }
+
+            private String heightSet = "<yellow>Set /f map lines to <green><lines>";
+            private String updateEnabled = "<yellow>Map auto update <dark_green>ENABLED.";
+            private String updateDisabled = "<yellow>Map auto update <dark_red>DISABLED.";
+
+            public String getHeightSet() {
+                return heightSet;
+            }
+
+            public String getUpdateEnabled() {
+                return updateEnabled;
+            }
+
+            public String getUpdateDisabled() {
+                return updateDisabled;
+            }
         }
 
         public static class Near extends AbsCommand {
@@ -688,9 +1081,204 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Role extends AbsCommand {
+            public Role() {
+                super("Modify a faction member's role.", "role");
+            }
+
+            private String wrongFaction = "<red>That player is not part of your faction.";
+            private String notAllowed = "<red>You can't change that player's role.";
+            private String alreadyColeader = "The faction already has a coleader. There can only be 1.";
+            private String updated = "<green>Member <player><green> role updated to <role>.";
+            private String notAdmin = "<red>You are not the faction admin.";
+            private String targetSelf = "<red>The target player mustn't be yourself.";
+            private String notMember = "<player><yellow> is not a member in your faction.";
+            private String promoted = "<player><yellow> gave <target><yellow> the leadership of <faction><yellow>.";
+
+            public String getWrongFaction() {
+                return wrongFaction;
+            }
+
+            public String getNotAllowed() {
+                return notAllowed;
+            }
+
+            public String getAlreadyColeader() {
+                return alreadyColeader;
+            }
+
+            public String getUpdated() {
+                return updated;
+            }
+
+            public String getNotAdmin() {
+                return notAdmin;
+            }
+
+            public String getTargetSelf() {
+                return targetSelf;
+            }
+
+            public String getNotMember() {
+                return notMember;
+            }
+
+            public String getPromoted() {
+                return promoted;
+            }
+        }
+
         public static class SetCmd extends AbsCommand {
             public SetCmd() {
                 super("Set faction info", "set");
+            }
+
+            public static class SetBoom extends AbsCommand {
+                public SetBoom() {
+                    super("Toggle explosions (peaceful factions only)", "boom");
+                }
+
+                private String peacefulOnly = "<red>This command is only usable by factions which are specifically designated as peaceful.";
+                @Comment("Supports <player>, <state>")
+                private String enabled = "<player><yellow> has <state> explosions in your faction's territory.";
+
+                public String getPeacefulOnly() {
+                    return peacefulOnly;
+                }
+
+                public String getEnabled() {
+                    return enabled;
+                }
+            }
+
+            public static class SetDefaultRole extends AbsCommand {
+                public SetDefaultRole() {
+                    super("/f defaultrole <role> - set your Faction's default role.", "defaultrole");
+                }
+
+                private String invalidRole = "Couldn't find matching role for <role>";
+                private String notThatRole = "You cannot set the default to admin.";
+                private String success = "Set default role of your faction to <role>";
+
+                public String getInvalidRole() {
+                    return invalidRole;
+                }
+
+                public String getNotThatRole() {
+                    return notThatRole;
+                }
+
+                public String getSuccess() {
+                    return success;
+                }
+            }
+
+            public static class SetDescription extends AbsCommand {
+                public SetDescription() {
+                    super("Change the faction description", "description");
+                }
+
+                private String toolong = "<red>Description too long! Limit is <limit> characters.";
+                private String changed = "<yellow>The faction <faction> changed their description to:";
+                private String changes = "<yellow>You have changed the description for <faction><yellow> to:";
+
+                public String getToolong() {
+                    return toolong;
+                }
+
+                public String getChanged() {
+                    return changed;
+                }
+
+                public String getChanges() {
+                    return changes;
+                }
+            }
+
+            public static class SetHome extends AbsCommand {
+                public SetHome() {
+                    super("Set the faction home", "home");
+                }
+
+                private String notClaimed = "<red>Sorry, your faction home can only be set inside your own claimed territory.";
+                @Comment("Supports <player>")
+                private String set = "<player><yellow> set the home for your faction. You can now use:";
+                private String noHome = "<red>Your faction does not have a home. ";
+                private String warpsRemain = "<red>Cannot delete home while the faction has warps!";
+                private String del = "<player><yellow> unset the home for your faction.";
+
+                public String getNotClaimed() {
+                    return notClaimed;
+                }
+
+                public String getSet() {
+                    return set;
+                }
+
+                public String getNoHome() {
+                    return noHome;
+                }
+
+                public String getWarpsRemain() {
+                    return warpsRemain;
+                }
+
+                public String getDel() {
+                    return del;
+                }
+            }
+
+            public static class SetOpen extends AbsCommand {
+                public SetOpen() {
+                    super("Switch if invitation is required to join", "open");
+                }
+
+                private String open = "open";
+                private String closed = "closed";
+                @Comment("Supports <player>, <state>")
+                private String changes = "<player><yellow> changed the faction to <light_purple><state><yellow>.";
+                @Comment("Supports <faction>, <state>")
+                private String changed = "<yellow>The faction <faction><yellow> is now <state>";
+
+                public String getOpen() {
+                    return open;
+                }
+
+                public String getClosed() {
+                    return closed;
+                }
+
+                public String getChanges() {
+                    return changes;
+                }
+
+                public String getChanged() {
+                    return changed;
+                }
+            }
+
+            public static class SetTag extends AbsCommand {
+                public SetTag() {
+                    super("Change the faction tag", "tag");
+                }
+
+                private String taken = "<red>That tag is already taken";
+                @Comment("Supports <player>, <faction>")
+                private String factionMsg = "<player><yellow> changed your faction tag to <faction>";
+                @Comment("Supports <oldTag>, <faction>")
+                private String changed = "<yellow>The faction <oldtag><yellow> changed their name to <faction>.";
+
+                public String getTaken() {
+                    return taken;
+                }
+
+                public String getFactionMsg() {
+                    return factionMsg;
+                }
+
+                public String getChanged() {
+                    return changed;
+                }
             }
 
             public static class SetTitleCmd extends AbsCommand {
@@ -715,10 +1303,115 @@ public class TranslationsConfig {
                 }
             }
 
+            public static class SetWarp extends AbsCommand {
+                public SetWarp() {
+                    super("Set a faction warp", "warp");
+                }
+
+                private String notClaimed = "<yellow>You can only set warps in your faction territory.";
+                private String limit = "<yellow>Your Faction already has the max amount of warps set <gold>(<max>).";
+                @Comment("Supports <warp>, <password>")
+                private String set = "<yellow>Set warp <gold><warp><yellow> and password <aqua>'<password>' <yellow>to your location.";
+                private String homeRequired = "<red>Cannot create warps until a home is set!";
+                private String delWarpDescription = "Delete a faction warp";
+                private String deleted = "<yellow>Deleted warp <gold><warp>";
+                private String deleteNotFound = "<yellow>Couldn't find warp <gold><warp>";
+
+                public String getNotClaimed() {
+                    return notClaimed;
+                }
+
+                public String getLimit() {
+                    return limit;
+                }
+
+                public String getSet() {
+                    return set;
+                }
+
+                public String getHomeRequired() {
+                    return homeRequired;
+                }
+
+                public String getDelWarpDescription() {
+                    return delWarpDescription;
+                }
+
+                public String getDeleted() {
+                    return deleted;
+                }
+
+                public String getDeleteNotFound() {
+                    return deleteNotFound;
+                }
+            }
+
+            public static class SetWarpProperty extends AbsCommand {
+                public SetWarpProperty() {
+                    super("Set a faction warp property", "warp-property");
+                }
+
+                private String noWarp = "<red>No warp found with name <warp>";
+                private String removePassword = "<green>Password removed for warp <warp>";
+                private String setPassword = "<green>Password set for warp <warp>";
+
+                public String getNoWarp() {
+                    return noWarp;
+                }
+
+                public String getRemovePassword() {
+                    return removePassword;
+                }
+
+                public String getSetPassword() {
+                    return setPassword;
+                }
+            }
+
+            private SetBoom setBoom = new SetBoom();
+            private SetDefaultRole setDefaultRole = new SetDefaultRole();
+            private SetDescription setDescription = new SetDescription();
+            private SetHome setHome = new SetHome();
+            private SetOpen setOpen = new SetOpen();
+            private SetTag setTag = new SetTag();
             private SetTitleCmd title = new SetTitleCmd();
+            private SetWarp setWarp = new SetWarp();
+            private SetWarpProperty setWarpProperty = new SetWarpProperty();
+
+            public SetBoom boom() {
+                return setBoom;
+            }
+
+            public SetDefaultRole defaultRole() {
+                return setDefaultRole;
+            }
+
+            public SetDescription description() {
+                return setDescription;
+            }
+
+            public SetHome home() {
+                return setHome;
+            }
+
+            public SetOpen open() {
+                return setOpen;
+            }
+
+            public SetTag tag() {
+                return setTag;
+            }
 
             public SetTitleCmd title() {
                 return title;
+            }
+
+            public SetWarp warp() {
+                return setWarp;
+            }
+
+            public SetWarpProperty warpProperty() {
+                return setWarpProperty;
             }
         }
 
@@ -765,6 +1458,17 @@ public class TranslationsConfig {
 
             public List<String> getWarzoneFormat() {
                 return Collections.unmodifiableList(warzoneFormat);
+            }
+
+            private String noFactionOther = "That's not a faction";
+            private String exempt = "<red>This faction cannot be seen.";
+
+            public String getNoFactionOther() {
+                return noFactionOther;
+            }
+
+            public String getExempt() {
+                return exempt;
             }
         }
 
@@ -1754,24 +2458,966 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Announce extends AbsCommand {
+            public Announce() {
+                super("Announce a message to all faction members", "announce");
+            }
+        }
+
+        public static class Ban extends AbsCommand {
+            public Ban() {
+                super("Ban players from joining your Faction", "ban");
+            }
+
+            private String self = "<red>You may not ban yourself";
+            private String insufficientRank = "<red>Your rank is too low to ban <gray><player>";
+            private String alreadyBanned = "<red><player> is already banned";
+            private String target = "<red>You were banned from <gray><faction>";
+            private String banned = "<yellow><player> <red>banned <gray><target>";
+
+            public String getSelf() {
+                return self;
+            }
+
+            public String getInsufficientRank() {
+                return insufficientRank;
+            }
+
+            public String getAlreadyBanned() {
+                return alreadyBanned;
+            }
+
+            public String getTarget() {
+                return target;
+            }
+
+            public String getBanned() {
+                return banned;
+            }
+        }
+
+        public static class Claim extends AbsCommand {
+            public Claim() {
+                super("Claim land from where you are standing", "claim");
+            }
+
+            private String autoClaimEnabled = "<yellow>Now auto-claiming land for <light_purple><faction><yellow>.";
+            private String autoClaimDisabled = "<yellow>Auto-claiming of land disabled.";
+            private String autoClaimOtherFaction = "<red>You can't claim land for <light_purple><faction><red>.";
+            private String claimDenied = "<red>You do not have permission to claim in a radius.";
+            private String fillAboveMax = "<red>The maximum limit for claim fill is <max>.";
+            private String fillAlreadyClaimed = "<red>Cannot claim fill using already claimed land!";
+            private String fillTooFar = "<red>This fill would exceed the maximum distance of <max>";
+            private String fillPastLimit = "<red>This claim would exceed the limit!";
+            private String fillNotEnoughLand = "<red><faction> does not have enough land left to make <count> claims";
+            private String fillTooMuchFail = "<red>Aborting claim fill after <count> failures";
+            private String cantClaim = "<red>You can't claim land for <light_purple><faction><red>.";
+            private String alreadyOwn = "<faction> <yellow>already own this land.";
+
+            public String getAutoClaimEnabled() {
+                return autoClaimEnabled;
+            }
+
+            public String getAutoClaimDisabled() {
+                return autoClaimDisabled;
+            }
+
+            public String getAutoClaimOtherFaction() {
+                return autoClaimOtherFaction;
+            }
+
+            public String getClaimDenied() {
+                return claimDenied;
+            }
+
+            public String getFillAboveMax() {
+                return fillAboveMax;
+            }
+
+            public String getFillAlreadyClaimed() {
+                return fillAlreadyClaimed;
+            }
+
+            public String getFillTooFar() {
+                return fillTooFar;
+            }
+
+            public String getFillPastLimit() {
+                return fillPastLimit;
+            }
+
+            public String getFillNotEnoughLand() {
+                return fillNotEnoughLand;
+            }
+
+            public String getFillTooMuchFail() {
+                return fillTooMuchFail;
+            }
+
+            public String getCantClaim() {
+                return cantClaim;
+            }
+
+            public String getAlreadyOwn() {
+                return alreadyOwn;
+            }
+        }
+
+        public static class Clear extends AbsCommand {
+            public Clear() {
+                super("Clear faction data", "clear");
+            }
+
+            private String descriptionBans = "Unban all from faction";
+            private String descriptionClaims = "Unclaim all territory";
+            private String descriptionInvites = "Revoke all invites";
+            private String descriptionWarps = "Delete all warps";
+            private String subCmdBans = "bans";
+            private String subCmdClaims = "claims";
+            private String subCmdInvites = "invites";
+            private String subCmdWarps = "warps";
+            private String bansClearConfirm = "<yellow>Are you sure you want to clear all bans? If so, run /<command>";
+            private String bansClearSuccess = "<yellow>All bans removed.";
+            private String warpsClearConfirm = "<yellow>Are you sure you want to clear all warps? If so, run /<command>";
+            private String warpsClearSuccess = "<yellow>Deleted all warps";
+            private String invitesClearConfirm = "<yellow>Are you sure you want to clear all invites? If so, run /<command>";
+            private String invitesClearSuccess = "<yellow>Deleted all invites.";
+
+            public String getDescriptionBans() {
+                return descriptionBans;
+            }
+
+            public String getDescriptionClaims() {
+                return descriptionClaims;
+            }
+
+            public String getDescriptionInvites() {
+                return descriptionInvites;
+            }
+
+            public String getDescriptionWarps() {
+                return descriptionWarps;
+            }
+
+            public String getBansClearConfirm() {
+                return bansClearConfirm;
+            }
+
+            public String getBansClearSuccess() {
+                return bansClearSuccess;
+            }
+
+            public String getWarpsClearConfirm() {
+                return warpsClearConfirm;
+            }
+
+            public String getWarpsClearSuccess() {
+                return warpsClearSuccess;
+            }
+
+            public String getInvitesClearConfirm() {
+                return invitesClearConfirm;
+            }
+
+            public String getInvitesClearSuccess() {
+                return invitesClearSuccess;
+            }
+
+            public String getSubCmdBans() {
+                return subCmdBans;
+            }
+
+            public String getSubCmdClaims() {
+                return subCmdClaims;
+            }
+
+            public String getSubCmdInvites() {
+                return subCmdInvites;
+            }
+
+            public String getSubCmdWarps() {
+                return subCmdWarps;
+            }
+        }
+
+        public static class Coords extends AbsCommand {
+            public Coords() {
+                super("Broadcast your current position to your faction", "coords");
+            }
+
+            @Comment("Supports <player>, <x>, <y>, <z>, <world>")
+            private String message = "<yellow><player>'s location: <gold><x><yellow>, <gold><y><yellow>, <gold><z><yellow> in <gold><world><yellow>";
+
+            public String getMessage() {
+                return message;
+            }
+        }
+
+        public static class Create extends AbsCommand {
+            public Create() {
+                super("Create a new faction", "create");
+            }
+
+            private String mustLeave = "<red>You must leave your current faction first.";
+            private String inUse = "<red>That tag is already in use.";
+            @Comment("Supports <player> and <faction>")
+            private String created = "<player><yellow> created a new faction <light_purple><faction>";
+
+            public String getMustLeave() {
+                return mustLeave;
+            }
+
+            public String getInUse() {
+                return inUse;
+            }
+
+            public String getCreated() {
+                return created;
+            }
+        }
+
+        public static class DTR extends AbsCommand {
+            public DTR() {
+                super("Show faction DTR info", "dtr");
+            }
+
+            @Comment("Supports <faction>, <faction:dtr_rounded>, <faction:dtr_max_rounded>")
+            private String dtr = "<faction><gold> - DTR / Max DTR: <yellow><faction:dtr_rounded> / <faction:dtr_max_rounded>";
+
+            public String getDtr() {
+                return dtr;
+            }
+        }
+
+        public static class Fly extends AbsCommand {
+            public Fly() {
+                super("Enter or leave Faction flight mode", "fly");
+            }
+
+            private String auto = "<yellow>Faction auto flight <light_purple><state>";
+            private String trailsChange = "<yellow>Faction flight trail <light_purple><state>";
+            private String trailsParticleInvalid = "<red>Invalid particle effect";
+            private String trailsParticlePerms = "<red>Insufficient permission to use <light_purple><particle>";
+            private String trailsParticleChange = "<yellow>Faction flight trail effect set to <light_purple><particle>";
+            private String noAccess = "<red>Cannot fly in territory of <faction>";
+            private String enemyNearby = "<red>Cannot enable fly, enemy nearby";
+            private String warmup = "<yellow>Flight will enable in <light_purple><seconds> <yellow>seconds.";
+
+            public String getAuto() {
+                return auto;
+            }
+
+            public String getTrailsChange() {
+                return trailsChange;
+            }
+
+            public String getTrailsParticleInvalid() {
+                return trailsParticleInvalid;
+            }
+
+            public String getTrailsParticlePerms() {
+                return trailsParticlePerms;
+            }
+
+            public String getTrailsParticleChange() {
+                return trailsParticleChange;
+            }
+
+            public String getNoAccess() {
+                return noAccess;
+            }
+
+            public String getEnemyNearby() {
+                return enemyNearby;
+            }
+
+            public String getWarmup() {
+                return warmup;
+            }
+        }
+
+        public static class Grace extends AbsCommand {
+            public Grace() {
+                super("View the current grace status", "grace");
+            }
+
+            private String notSet = "<yellow>Grace is not active";
+            private String active = "<yellow>Grace active! No explosions for <duration>";
+
+            public String getNotSet() {
+                return notSet;
+            }
+
+            public String getActive() {
+                return active;
+            }
+        }
+
+        public static class Home extends AbsCommand {
+            public Home() {
+                super("Teleport to the faction home", "home");
+            }
+
+            private String denied = "<red>Sorry, you cannot teleport to the home of <faction>";
+            private String noHome = "<red>Your faction does not have a home. ";
+            private String inEnemy = "<red>You cannot teleport to your faction home while in the territory of an enemy faction.";
+            private String wrongWorld = "<red>You cannot teleport to your faction home while in a different world.";
+            private String enemyNear = "<red>You cannot teleport to your faction home while an enemy is within <range> blocks of you.";
+            private String warmup = "<yellow>You will teleport home in <light_purple><seconds> <yellow>seconds.";
+
+            public String getDenied() {
+                return denied;
+            }
+
+            public String getNoHome() {
+                return noHome;
+            }
+
+            public String getInEnemy() {
+                return inEnemy;
+            }
+
+            public String getWrongWorld() {
+                return wrongWorld;
+            }
+
+            public String getEnemyNear() {
+                return enemyNear;
+            }
+
+            public String getWarmup() {
+                return warmup;
+            }
+        }
+
+        public static class Invite extends AbsCommand {
+            public Invite() {
+                super("Invite a player to your faction", "invite");
+            }
+
+            private String alreadyMember = "<player><yellow> is already a member of <faction>";
+            private String deinviteRevoked = "<player><yellow> revoked your invitation to <light_purple><faction><yellow>.";
+            private String deinviteRevokes = "<player><yellow> revoked <target>'s<yellow> invitation.";
+            private String banned = "<gray><player> <red>is banned from your Faction. Not sending an invite.";
+            private String invited = "<yellow><player> invited <target><yellow> to your faction.";
+            private String invitedYou = " has invited you to join ";
+            private String clickToJoin = "Click to join!";
+
+            public String getAlreadyMember() {
+                return alreadyMember;
+            }
+
+            public String getDeinviteRevoked() {
+                return deinviteRevoked;
+            }
+
+            public String getDeinviteRevokes() {
+                return deinviteRevokes;
+            }
+
+            public String getBanned() {
+                return banned;
+            }
+
+            public String getInvited() {
+                return invited;
+            }
+
+            public String getInvitedYou() {
+                return invitedYou;
+            }
+
+            public String getClickToJoin() {
+                return clickToJoin;
+            }
+        }
+
+        public static class Kick extends AbsCommand {
+            public Kick() {
+                super("Kick a player from the faction", "kick");
+            }
+
+            private String candidates = "<gold>Players you can kick: ";
+            private String clickToKick = "Click to kick <player>";
+            private String self = "<red>You cannot kick yourself.";
+            private String none = "<red>That player is not in a faction.";
+            private String notMember = "<red><player> is not a member of <faction>";
+            private String insufficientRank = "<red>Your rank is too low to kick this player.";
+            private String factionMsg = "<yellow><player> kicked <target> from the faction! :O";
+            private String kicked = "<yellow><player> kicked you from <faction>! :O";
+
+            public String getCandidates() {
+                return candidates;
+            }
+
+            public String getClickToKick() {
+                return clickToKick;
+            }
+
+            public String getSelf() {
+                return self;
+            }
+
+            public String getNone() {
+                return none;
+            }
+
+            public String getNotMember() {
+                return notMember;
+            }
+
+            public String getInsufficientRank() {
+                return insufficientRank;
+            }
+
+            public String getFactionMsg() {
+                return factionMsg;
+            }
+
+            public String getKicked() {
+                return kicked;
+            }
+        }
+
+        public static class Leave extends AbsCommand {
+            public Leave() {
+                super("Leave your faction", "leave");
+            }
+        }
+
+        public static class MoneyCmd extends AbsCommand {
+            public MoneyCmd() {
+                super("Manage faction bank money", "money");
+            }
+
+            private String noFaction = "<red>You are not member of any faction.";
+
+
+            public String getNoFaction() {
+                return noFaction;
+            }
+
+            public static class MoneyBalanceCmd extends AbsCommand {
+                public MoneyBalanceCmd() {
+                    super("View your faction's bank balance", "balance");
+                }
+            }
+
+            public static class MoneyDepositCmd extends AbsCommand {
+                public MoneyDepositCmd() {
+                    super("Deposit money into the faction bank", "deposit");
+                }
+            }
+
+            public static class MoneyDepositSend extends AbsCommand {
+                public MoneyDepositSend() {
+                    super("Transfer money between factions", "send");
+                }
+
+                private String subCmdTo = "to";
+                private String subCmdPlayer = "player";
+                private String subCmdFaction = "faction";
+
+                public String getSubCmdTo() {
+                    return subCmdTo;
+                }
+
+                public String getSubCmdPlayer() {
+                    return subCmdPlayer;
+                }
+
+                public String getSubCmdFaction() {
+                    return subCmdFaction;
+                }
+            }
+
+            public static class MoneyWithdrawCmd extends AbsCommand {
+                public MoneyWithdrawCmd() {
+                    super("Withdraw money from the faction bank", "withdraw");
+                }
+
+                private String noPermission = "<red>You don't have permission to withdraw.";
+
+                public String getNoPermission() {
+                    return noPermission;
+                }
+            }
+
+            private MoneyBalanceCmd moneyBalanceCmd;
+            private MoneyDepositCmd moneyDepositCmd;
+            private MoneyDepositSend moneyDepositSend;
+            private MoneyWithdrawCmd moneyWithdrawCmd;
+
+            public MoneyBalanceCmd balance() {
+                return moneyBalanceCmd;
+            }
+
+            public MoneyDepositCmd deposit() {
+                return moneyDepositCmd;
+            }
+
+            public MoneyDepositSend send() {
+                return moneyDepositSend;
+            }
+
+            public MoneyWithdrawCmd withdraw() {
+                return moneyWithdrawCmd;
+            }
+        }
+
+        public static class Power extends AbsCommand {
+            public Power() {
+                super("Show player power info", "power");
+            }
+
+            @Comment("Supports <player>, <faction>, <power>, <power_max>, <bonus_penalty>")
+            private String power = "<player><gold> - Power / Maxpower: <yellow><power> / <power_max><bonus_penalty>";
+            private String bonus = " (bonus: ";
+            private String penalty = " (penalty: ";
+
+            public String getPower() {
+                return power;
+            }
+
+            public String getBonus() {
+                return bonus;
+            }
+
+            public String getPenalty() {
+                return penalty;
+            }
+        }
+
+        public static class Status extends AbsCommand {
+            public Status() {
+                super("Show the status of a player", "status");
+            }
+
+            @Comment("Supports <player>, <power>, <last_seen>")
+            private String format = "<player> Power: <power> Last Seen: <last_seen>";
+            private String online = "<green>Online";
+            private String agoSuffix = " ago.";
+
+            public String getFormat() {
+                return format;
+            }
+
+            public String getOnline() {
+                return online;
+            }
+
+            public String getAgoSuffix() {
+                return agoSuffix;
+            }
+        }
+
+        public static class Stuck extends AbsCommand {
+            public Stuck() {
+                super("Safely teleports you out of enemy faction", "stuck");
+            }
+
+            private String alreadyExists = "<gold>You are already teleporting, you must wait!";
+            @Comment("Supports <range>")
+            private String outside = "<gold>Teleport cancelled because you left <yellow><range> <gold>block radius";
+            @Comment("Supports <x>, <y>, <z>")
+            private String teleport = "<gold>Teleported safely to <x>, <y>, <z>.";
+            private String failed = "<red>Failed to find a safe place to get you out.";
+            @Comment("Supports <seconds>")
+            private String warmup = "<yellow>You will find a safe place to become unstuck in <light_purple><seconds> <yellow>seconds.";
+
+            public String getAlreadyExists() {
+                return alreadyExists;
+            }
+
+            public String getOutside() {
+                return outside;
+            }
+
+            public String getTeleport() {
+                return teleport;
+            }
+
+            public String getFailed() {
+                return failed;
+            }
+
+            public String getWarmup() {
+                return warmup;
+            }
+        }
+
+        public static class TNTCmd extends AbsCommand {
+            public TNTCmd() {
+                super("View your faction's TNT bank", "tnt");
+            }
+
+            @Comment("Supports <count>")
+            private String message = "<yellow>Your faction has <count> TNT";
+            private String territoryOnly = "<red>Command can only be run from your faction's territory!";
+            private String depositDescription = "Add to your faction's TNT bank";
+            private String depositFailFull = "<red>Faction bank already at maximum!";
+            private String depositFailPositive = "<red>Must deposit at least one!";
+            @Comment("Supports <count>")
+            private String depositSuccess = "<yellow>Your faction now has <count> TNT";
+            private String fillDescription = "Fill TNT into nearby dispensers";
+            @Comment("Supports <count>, <dispensers>, <remaining>")
+            private String fillMessage = "<yellow>Filled <count> TNT into <dispensers> dispensers. <remaining> left in the faction bank.";
+            @Comment("Supports <value>, <max>")
+            private String fillFailMaxRadius = "<red><value> is bigger than the maximum radius of <max>";
+            @Comment("Supports <count>")
+            private String fillFailNotEnough = "<red>The faction bank does not have <count> TNT!";
+            private String fillFailPositive = "<red>Positive values only!";
+            private String siphonDescription = "Take TNT from nearby dispensers";
+            @Comment("Supports <count>, <total>")
+            private String siphonMessage = "<yellow>Acquired <count> TNT, for a total of <total> in the faction bank.";
+            private String siphonFailPositive = "<red>Positive values only!";
+            private String siphonFailFull = "<red>Faction bank already at maximum!";
+            @Comment("Supports <value>, <max>")
+            private String siphonFailMaxRadius = "<red><value> is bigger than the maximum radius of <max>";
+            private String withdrawDescription = "Withdraw TNT from the faction bank";
+            @Comment("Supports <count>, <remaining>")
+            private String withdrawMessage = "<yellow>Withdrew <count> TNT. <remaining> left in the faction bank.";
+            @Comment("Supports <count>")
+            private String withdrawFailNotEnough = "<red>The faction bank does not have <count> TNT!";
+            private String withdrawFailPositive = "<red>Positive values only!";
+
+            private String subCmdDeposit = "deposit";
+            private String subCmdFill =  "fill";
+            private String subCmdSiphon = "siphon";
+            private String subCmdWithdraw = "withdraw";
+
+            public String getMessage() {
+                return message;
+            }
+
+            public String getTerritoryOnly() {
+                return territoryOnly;
+            }
+
+            public String getDepositDescription() {
+                return depositDescription;
+            }
+
+            public String getDepositFailFull() {
+                return depositFailFull;
+            }
+
+            public String getDepositFailPositive() {
+                return depositFailPositive;
+            }
+
+            public String getDepositSuccess() {
+                return depositSuccess;
+            }
+
+            public String getFillDescription() {
+                return fillDescription;
+            }
+
+            public String getFillMessage() {
+                return fillMessage;
+            }
+
+            public String getFillFailMaxRadius() {
+                return fillFailMaxRadius;
+            }
+
+            public String getFillFailNotEnough() {
+                return fillFailNotEnough;
+            }
+
+            public String getFillFailPositive() {
+                return fillFailPositive;
+            }
+
+            public String getSiphonDescription() {
+                return siphonDescription;
+            }
+
+            public String getSiphonMessage() {
+                return siphonMessage;
+            }
+
+            public String getSiphonFailPositive() {
+                return siphonFailPositive;
+            }
+
+            public String getSiphonFailFull() {
+                return siphonFailFull;
+            }
+
+            public String getSiphonFailMaxRadius() {
+                return siphonFailMaxRadius;
+            }
+
+            public String getWithdrawDescription() {
+                return withdrawDescription;
+            }
+
+            public String getWithdrawMessage() {
+                return withdrawMessage;
+            }
+
+            public String getWithdrawFailNotEnough() {
+                return withdrawFailNotEnough;
+            }
+
+            public String getWithdrawFailPositive() {
+                return withdrawFailPositive;
+            }
+
+            public String getSubCmdDeposit() {
+                return subCmdDeposit;
+            }
+
+            public String getSubCmdFill() {
+                return subCmdFill;
+            }
+
+            public String getSubCmdSiphon() {
+                return subCmdSiphon;
+            }
+
+            public String getSubCmdWithdraw() {
+                return subCmdWithdraw;
+            }
+        }
+
+        public static class ToggleLogins extends AbsCommand {
+            public ToggleLogins() {
+                super("Toggle login / logout notifications for Faction members", "logins");
+            }
+
+            @Comment("Supports <state>")
+            private String toggle = "<yellow>Set login / logout notifications for Faction members to: <gold><state>";
+
+            public String getToggle() {
+                return toggle;
+            }
+        }
+
+        public static class ToggleScoreboard extends AbsCommand {
+            public ToggleScoreboard() {
+                super("Scoreboardy things", "scoreboard");
+            }
+
+            private String disabled = "You can't toggle scoreboards while they are disabled.";
+            @Comment("Supports <value>")
+            private String toggleSb = "You now have scoreboards set to <value>";
+
+            public String getDisabled() {
+                return disabled;
+            }
+
+            public String getToggleSb() {
+                return toggleSb;
+            }
+        }
+
+        public static class ToggleSeeChunk extends AbsCommand {
+            public ToggleSeeChunk() {
+                super("Show chunk boundaries", "seechunk");
+            }
+
+            @Comment("Supports <state>")
+            private String toggle = "<yellow>Seechunk <light_purple><state>";
+
+            public String getToggle() {
+                return toggle;
+            }
+        }
+
+        public static class Top extends AbsCommand {
+            public Top() {
+                super("Sort Factions to see the top of some criteria.", "top");
+            }
+
+            @Comment("Supports <criteria>, <page_current>, <page_count>")
+            private String top = "Top Factions by <criteria>. Page <page_current>/<page_count>";
+            @Comment("Supports <rank>, <faction>, <value>")
+            private String line = "<rank>. <gold><faction>: <red><value>";
+            @Comment("Supports <criteria>")
+            private String invalid = "Could not sort by <criteria>. Try balance, online, members, power or land.";
+
+            public String getTop() {
+                return top;
+            }
+
+            public String getLine() {
+                return line;
+            }
+
+            public String getInvalid() {
+                return invalid;
+            }
+        }
+
+        public static class Unclaim extends AbsCommand {
+            public Unclaim() {
+                super("Unclaim the land where you are standing", "unclaim");
+            }
+
+            private String autoUnclaimEnabled = "<yellow>Now auto-unclaiming land for <light_purple><faction><yellow>.";
+            private String autoUnclaimDisabled = "<yellow>Auto-unclaiming of land disabled.";
+            private String autoUnclaimOtherFaction = "<red>You can't unclaim land for <light_purple><faction><red>.";
+            private String cantUnclaim = "<red>You can't unclaim land for <light_purple><faction><red>.";
+            @Comment("Supports <max>")
+            private String fillAboveMax = "<red>The maximum limit for unclaim fill is <max>.";
+            private String fillNotClaimed = "<red>Cannot unclaim fill using non-claimed land!";
+            @Comment("Supports <max>")
+            private String fillTooFar = "<red>This unclaim would exceed the maximum distance of <max>";
+            private String fillPastLimit = "<red>This unclaim would exceed the limit!";
+            @Comment("Supports <count>")
+            private String fillTooMuchFail = "<red>Aborting unclaim fill after <count> failures";
+            @Comment("Supports <faction>, <count>, <location>")
+            private String fillUnclaimed = "<faction><yellow> unclaimed <count> claims of your faction's land around <location>.";
+            @Comment("Supports <count>")
+            private String fillBypassComplete = "<yellow>Unclaimed <count> claims.";
+            @Comment("Supports <faction>, <command>")
+            private String unclaimAllConfirm = "<yellow>Are you sure you want to unclaim ALL <faction> territory? If so, run /<command>";
+            @Comment("Supports <player>")
+            private String unclaimAllUnclaimed = "<player><yellow> unclaimed ALL of your faction's land.";
+
+            public String getAutoUnclaimEnabled() {
+                return autoUnclaimEnabled;
+            }
+
+            public String getAutoUnclaimDisabled() {
+                return autoUnclaimDisabled;
+            }
+
+            public String getAutoUnclaimOtherFaction() {
+                return autoUnclaimOtherFaction;
+            }
+
+            public String getCantUnclaim() {
+                return cantUnclaim;
+            }
+
+            public String getFillAboveMax() {
+                return fillAboveMax;
+            }
+
+            public String getFillNotClaimed() {
+                return fillNotClaimed;
+            }
+
+            public String getFillTooFar() {
+                return fillTooFar;
+            }
+
+            public String getFillPastLimit() {
+                return fillPastLimit;
+            }
+
+            public String getFillTooMuchFail() {
+                return fillTooMuchFail;
+            }
+
+            public String getFillUnclaimed() {
+                return fillUnclaimed;
+            }
+
+            public String getFillBypassComplete() {
+                return fillBypassComplete;
+            }
+
+            public String getUnclaimAllConfirm() {
+                return unclaimAllConfirm;
+            }
+
+            public String getUnclaimAllUnclaimed() {
+                return unclaimAllUnclaimed;
+            }
+        }
+
+        public static class Unban extends AbsCommand {
+            public Unban() {
+                super("Unban someone from your Faction", "unban");
+            }
+
+            private String notBanned = "<gray><player> <red>isn't banned. Not doing anything.";
+            private String unbanned = "<yellow><player> <red>unbanned <gray><banTarget>";
+            private String target = "<green>You were unbanned from <reset><faction>";
+
+            public String getNotBanned() {
+                return notBanned;
+            }
+
+            public String getUnbanned() {
+                return unbanned;
+            }
+
+            public String getTarget() {
+                return target;
+            }
+        }
+
+        public static class Vault extends AbsCommand {
+            public Vault() {
+                super("/f vault <number> to open one of your Faction's vaults.", "vault");
+            }
+
+            @Comment("Supports <vault>, <max>")
+            private String tooHigh = "<red>You tried to open vault <vault> but your Faction only has <max> vaults.";
+
+            public String getTooHigh() {
+                return tooHigh;
+            }
+        }
+
+        public static class Version extends AbsCommand {
+            public Version() {
+                super("Show plugin and translation version information", "version");
+            }
+        }
+
         private Generic generic = new Generic();
 
         private Admin admin = new Admin();
 
+        private Announce announce = new Announce();
+        private Ban ban = new Ban();
         private Chat chat = new Chat();
+        private Claim claim = new Claim();
+        private Clear clear = new Clear();
         private Confirm confirm = new Confirm();
+        private Coords coords = new Coords();
+        private Create create = new Create();
         private Disband disband = new Disband();
+        private DTR dtr = new DTR();
+        private Fly fly = new Fly();
+        private Grace grace = new Grace();
         private Help help = new Help();
+        private Home home = new Home();
+        private Invite invite = new Invite();
         private Join join = new Join();
+        private Kick kick = new Kick();
+        private Leave leave = new Leave();
+        private Link link = new Link();
         private ListCmd list = new ListCmd();
         private MapCmd map = new MapCmd();
+        private MoneyCmd money = new MoneyCmd();
         private Near near = new Near();
+        private Role role = new Role();
+        private Power power = new Power();
         private SetCmd set = new SetCmd();
         private Show show = new Show();
         private Permissions permissions = new Permissions();
         private Relation relation = new Relation();
         private Shield shield = new Shield();
+        private Status status = new Status();
         private Upgrades upgrades = new Upgrades();
+        private Stuck stuck = new Stuck();
+        private TNTCmd tnt = new TNTCmd();
+        private ToggleLogins toggleLogins = new ToggleLogins();
+        private ToggleScoreboard toggleScoreboard = new ToggleScoreboard();
+        private ToggleSeeChunk toggleSeeChunk = new ToggleSeeChunk();
+        private Top top = new Top();
+        private Unclaim unclaim = new Unclaim();
+        private Unban unban = new Unban();
+        private Vault vault = new Vault();
+        private Version version = new Version();
         private Warp warp = new Warp();
         private Zone zone = new Zone();
 
@@ -1803,6 +3449,10 @@ public class TranslationsConfig {
             return help;
         }
 
+        public Link link() {
+            return link;
+        }
+
         public ListCmd list() {
             return list;
         }
@@ -1813,6 +3463,10 @@ public class TranslationsConfig {
 
         public Near near() {
             return near;
+        }
+
+        public Role role() {
+            return role;
         }
 
         public SetCmd set() {
@@ -1845,6 +3499,110 @@ public class TranslationsConfig {
 
         public Zone zone() {
             return zone;
+        }
+
+        public Announce announce() {
+            return announce;
+        }
+
+        public Ban ban() {
+            return ban;
+        }
+
+        public Claim claim() {
+            return claim;
+        }
+
+        public Clear clear() {
+            return clear;
+        }
+
+        public Coords coords() {
+            return coords;
+        }
+
+        public Create create() {
+            return create;
+        }
+
+        public DTR dtr() {
+            return dtr;
+        }
+
+        public Fly fly() {
+            return fly;
+        }
+
+        public Grace grace() {
+            return grace;
+        }
+
+        public Home home() {
+            return home;
+        }
+
+        public Invite invite() {
+            return invite;
+        }
+
+        public Kick kick() {
+            return kick;
+        }
+
+        public Leave leave() {
+            return leave;
+        }
+
+        public MoneyCmd money() {
+            return money;
+        }
+
+        public Power power() {
+            return power;
+        }
+
+        public Status status() {
+            return status;
+        }
+
+        public Stuck stuck() {
+            return stuck;
+        }
+
+        public TNTCmd tnt() {
+            return tnt;
+        }
+
+        public ToggleLogins toggleLogins() {
+            return toggleLogins;
+        }
+
+        public ToggleScoreboard toggleScoreboard() {
+            return toggleScoreboard;
+        }
+
+        public ToggleSeeChunk toggleSeeChunk() {
+            return toggleSeeChunk;
+        }
+
+        public Top top() {
+            return top;
+        }
+
+        public Unclaim unclaim() {
+            return unclaim;
+        }
+
+        public Unban unban() {
+            return unban;
+        }
+
+        public Vault vault() {
+            return vault;
+        }
+
+        public Version version() {
+            return version;
         }
     }
 
@@ -1884,6 +3642,48 @@ public class TranslationsConfig {
             private String relationTo = "to change a relation wish";
             private String titleFor = "for changing a player's title";
             private String titleTo = "to change a player's title";
+            private String createTo = "to create a new faction";
+            private String createFor = "for creating a new faction";
+            private String dtrTo = "to show faction DTR info";
+            private String dtrFor = "for showing faction DTR info";
+            private String homeFor = "for teleporting to your faction home";
+            private String homeTo = "to teleport to your faction home";
+            private String inviteTo = "to invite someone";
+            private String inviteFor = "for inviting someone";
+            private String kickTo = "to kick someone from the faction";
+            private String kickFor = "for kicking someone from the faction";
+            private String listFor = "for listing the factions";
+            private String listTo = "to list the factions";
+            private String mapFor = "for showing the map";
+            private String mapTo = "to show the map";
+            private String openFor = "for opening or closing the faction";
+            private String openTo = "to open or close the faction";
+            private String powerFor = "for showing player power info";
+            private String powerTo = "to show player power info";
+            private String showFor = "for showing faction information";
+            private String showTo = "to show faction information";
+            private String stuckFor = "for initiating a safe teleport out";
+            private String stuckTo = "to safely teleport out";
+            private String tagFor = "for changing the faction tag";
+            private String tagTo = "to change the faction tag";
+            private String setHomeFor = "for setting the faction home";
+            private String setHomeTo = "to set the faction home";
+            private String delHomeFor = "for unsetting the faction home";
+            private String delHomeTo = "to unset the faction home";
+            private String boomFor = "for toggling explosions";
+            private String boomTo = "to toggle explosions";
+            private String setWarpFor = "for setting warp";
+            private String setWarpTo = "to set warp";
+            private String delWarpFor = "for deleting warp";
+            private String delWarpTo = "to delete warp";
+            private String descriptionFor = "for changing faction description";
+            private String descriptionTo = "to change faction description";
+            private String upgradeFor = "for buying an upgrade";
+            private String upgradeTo = "to buy an upgrade";
+            private String unclaimFor = "for unclaiming this land";
+            private String unclaimTo = "to unclaim this land";
+            private String unclaimAllFor = "for unclaiming all faction land";
+            private String unclaimAllTo = "to unclaim all faction land";
 
             public String getJoinTo() {
                 return joinTo;
@@ -1915,6 +3715,174 @@ public class TranslationsConfig {
 
             public String getTitleTo() {
                 return titleTo;
+            }
+
+            public String getCreateTo() {
+                return createTo;
+            }
+
+            public String getCreateFor() {
+                return createFor;
+            }
+
+            public String getDtrTo() {
+                return dtrTo;
+            }
+
+            public String getDtrFor() {
+                return dtrFor;
+            }
+
+            public String getHomeFor() {
+                return homeFor;
+            }
+
+            public String getHomeTo() {
+                return homeTo;
+            }
+
+            public String getInviteTo() {
+                return inviteTo;
+            }
+
+            public String getInviteFor() {
+                return inviteFor;
+            }
+
+            public String getKickTo() {
+                return kickTo;
+            }
+
+            public String getKickFor() {
+                return kickFor;
+            }
+
+            public String getListFor() {
+                return listFor;
+            }
+
+            public String getListTo() {
+                return listTo;
+            }
+
+            public String getMapFor() {
+                return mapFor;
+            }
+
+            public String getMapTo() {
+                return mapTo;
+            }
+
+            public String getOpenFor() {
+                return openFor;
+            }
+
+            public String getOpenTo() {
+                return openTo;
+            }
+
+            public String getPowerFor() {
+                return powerFor;
+            }
+
+            public String getPowerTo() {
+                return powerTo;
+            }
+
+            public String getShowFor() {
+                return showFor;
+            }
+
+            public String getShowTo() {
+                return showTo;
+            }
+
+            public String getStuckFor() {
+                return stuckFor;
+            }
+
+            public String getStuckTo() {
+                return stuckTo;
+            }
+
+            public String getTagFor() {
+                return tagFor;
+            }
+
+            public String getTagTo() {
+                return tagTo;
+            }
+
+            public String getSetHomeFor() {
+                return setHomeFor;
+            }
+
+            public String getSetHomeTo() {
+                return setHomeTo;
+            }
+
+            public String getDelHomeFor() {
+                return delHomeFor;
+            }
+
+            public String getDelHomeTo() {
+                return delHomeTo;
+            }
+
+            public String getBoomFor() {
+                return boomFor;
+            }
+
+            public String getBoomTo() {
+                return boomTo;
+            }
+
+            public String getSetWarpFor() {
+                return setWarpFor;
+            }
+
+            public String getSetWarpTo() {
+                return setWarpTo;
+            }
+
+            public String getDelWarpFor() {
+                return delWarpFor;
+            }
+
+            public String getDelWarpTo() {
+                return delWarpTo;
+            }
+
+            public String getDescriptionFor() {
+                return descriptionFor;
+            }
+
+            public String getDescriptionTo() {
+                return descriptionTo;
+            }
+
+            public String getUpgradeFor() {
+                return upgradeFor;
+            }
+
+            public String getUpgradeTo() {
+                return upgradeTo;
+            }
+
+            public String getUnclaimFor() {
+                return unclaimFor;
+            }
+
+            public String getUnclaimTo() {
+                return unclaimTo;
+            }
+
+            public String getUnclaimAllFor() {
+                return unclaimAllFor;
+            }
+
+            public String getUnclaimAllTo() {
+                return unclaimAllTo;
             }
         }
 

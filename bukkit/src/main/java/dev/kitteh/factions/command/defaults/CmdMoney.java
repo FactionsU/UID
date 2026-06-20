@@ -1,5 +1,6 @@
 package dev.kitteh.factions.command.defaults;
 
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
@@ -18,15 +19,16 @@ public class CmdMoney implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> moneyBuilder = builder.literal("money")
-                    .permission(builder.commandPermission().and(Cloudy.predicate(s -> Econ.shouldBeUsedWithBanks())));
+            var tl = FactionsPlugin.instance().tl().commands().money();
+            Command.Builder<Sender> moneyBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .permission(builder.commandPermission().and(Cloudy.predicate(_ -> Econ.shouldBeUsedWithBanks())));
 
             new CmdMoneyBalance().consumer().accept(manager, moneyBuilder, help);
             new CmdMoneyDeposit().consumer().accept(manager, moneyBuilder, help);
             new CmdMoneySend().consumer().accept(manager, moneyBuilder, help);
             new CmdMoneyWithdraw().consumer().accept(manager, moneyBuilder, help);
 
-            manager.command(moneyBuilder.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " money *", ctx.sender())));
+            manager.command(moneyBuilder.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " " + tl.getFirstAlias() + " *", ctx.sender())));
         };
     }
 }

@@ -15,10 +15,12 @@ import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.SmokeUtil;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -35,24 +37,29 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdHome implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("home")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_HOME_DESCRIPTION))
-                        .permission(builder.commandPermission().and(
-                                Cloudy.hasPermission(Permission.HOME)
-                                        .and(Cloudy.hasFaction())
-                                        .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled()))
-                                        .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isTeleportCommandEnabled()))
-                        ))
-                        .flag(
-                                manager.flagBuilder("faction")
-                                        .withComponent(FactionParser.of())
-                        )
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().home();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(
+                                    Cloudy.hasPermission(Permission.HOME)
+                                            .and(Cloudy.hasFaction())
+                                            .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isEnabled()))
+                                            .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().homes().isTeleportCommandEnabled()))
+                            ))
+                            .flag(
+                                    manager.flagBuilder("faction")
+                                            .withComponent(FactionParser.of())
+                            )
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().home();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
 
@@ -68,29 +75,28 @@ public class CmdHome implements Cmd {
         }
 
         if (!targetFaction.hasAccess(sender, PermissibleActions.HOME, sender.lastStoodAt())) {
-            sender.msgLegacy(TL.COMMAND_HOME_DENIED, targetFaction.tagLegacy(sender));
+            sender.sendRichMessage(tl.getDenied(), FactionResolver.of(targetFaction));
             return;
         }
 
         if (!(targetFaction.home() instanceof Location destination)) {
-            sender.msgLegacy(TL.COMMAND_HOME_NOHOME);
+            sender.sendRichMessage(tl.getNoHome());
             return;
         }
 
         if (!FactionsPlugin.instance().conf().factions().homes().isTeleportAllowedFromEnemyTerritory() && sender.isInEnemyTerritory()) {
-            sender.msgLegacy(TL.COMMAND_HOME_INENEMY);
+            sender.sendRichMessage(tl.getInEnemy());
             return;
         }
 
         if (!FactionsPlugin.instance().conf().factions().homes().isTeleportAllowedFromDifferentWorld() && !player.getWorld().equals(destination.getWorld())) {
-            sender.msgLegacy(TL.COMMAND_HOME_WRONGWORLD);
+            sender.sendRichMessage(tl.getWrongWorld());
             return;
         }
 
         Faction faction = Board.board().factionAt(new FLocation(player.getLocation()));
         final Location loc = player.getLocation().clone();
 
-        // if player is not in a safe zone or their own faction territory, only allow teleport if no enemies are nearby
         if (FactionsPlugin.instance().conf().factions().homes().getTeleportAllowedEnemyDistance() > 0 &&
                 !faction.isSafeZone() &&
                 (!sender.isInOwnTerritory() || !FactionsPlugin.instance().conf().factions().homes().isTeleportIgnoreEnemiesIfInOwnTerritory())) {
@@ -115,12 +121,11 @@ public class CmdHome implements Cmd {
                 double dz = Math.abs(z - l.getZ());
                 double max = FactionsPlugin.instance().conf().factions().homes().getTeleportAllowedEnemyDistance();
 
-                // box-shaped distance check
                 if (dx > max || dy > max || dz > max) {
                     continue;
                 }
 
-                sender.msgLegacy(TL.COMMAND_HOME_ENEMYNEAR, String.valueOf(FactionsPlugin.instance().conf().factions().homes().getTeleportAllowedEnemyDistance()));
+                sender.sendRichMessage(tl.getEnemyNear(), Placeholder.unparsed("range", String.valueOf(FactionsPlugin.instance().conf().factions().homes().getTeleportAllowedEnemyDistance())));
                 return;
             }
         }
@@ -131,32 +136,32 @@ public class CmdHome implements Cmd {
             return;
         }
 
-        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostHome(), TL.COMMAND_HOME_TOTELEPORT, TL.COMMAND_HOME_FORTELEPORT)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostHome(), econTl.getHomeTo(), econTl.getHomeFor())) {
             return;
         }
 
         int delay = FactionsPlugin.instance().conf().commands().home().getDelay();
-        WarmUpUtil.process(sender, WarmUpUtil.Warmup.HOME, TL.WARMUPS_NOTIFY_HOME.format(delay), () -> {
-            Player plr = sender.asPlayer();
+        WarmUpUtil.process(sender, WarmUpUtil.Warmup.HOME,
+                Mini.parse(tl.getWarmup(), sender, Placeholder.unparsed("seconds", String.valueOf(delay))),
+                () -> {
+                    Player plr = sender.asPlayer();
 
-            if (plr == null) return;
+                    if (plr == null) return;
 
-            if (ExternalChecks.tryTeleport(plr, destination)) {
-                return;
-            }
+                    if (ExternalChecks.tryTeleport(plr, destination)) {
+                        return;
+                    }
 
-            // Create a smoke effect
-            if (FactionsPlugin.instance().conf().factions().homes().isTeleportCommandSmokeEffectEnabled()) {
-                List<Location> smokeLocations = new ArrayList<>();
-                smokeLocations.add(loc);
-                smokeLocations.add(loc.add(0, 1, 0));
-                smokeLocations.add(destination);
-                smokeLocations.add(destination.clone().add(0, 1, 0));
-                SmokeUtil.spawnCloudRandom(smokeLocations, FactionsPlugin.instance().conf().factions().homes().getTeleportCommandSmokeEffectThickness());
-            }
+                    if (FactionsPlugin.instance().conf().factions().homes().isTeleportCommandSmokeEffectEnabled()) {
+                        List<Location> smokeLocations = new ArrayList<>();
+                        smokeLocations.add(loc);
+                        smokeLocations.add(loc.add(0, 1, 0));
+                        smokeLocations.add(destination);
+                        smokeLocations.add(destination.clone().add(0, 1, 0));
+                        SmokeUtil.spawnCloudRandom(smokeLocations, FactionsPlugin.instance().conf().factions().homes().getTeleportCommandSmokeEffectThickness());
+                    }
 
-            AbstractFactionsPlugin.instance().teleport(plr, destination);
-        }, delay);
+                    AbstractFactionsPlugin.instance().teleport(plr, destination);
+                }, delay);
     }
 }

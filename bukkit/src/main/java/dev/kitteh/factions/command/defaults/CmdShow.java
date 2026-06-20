@@ -15,7 +15,6 @@ import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TriConsumer;
 import dev.kitteh.factions.util.TriFunction;
 import net.kyori.adventure.text.Component;
@@ -35,8 +34,7 @@ import java.util.List;
 public class CmdShow implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().show();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
@@ -68,24 +66,25 @@ public class CmdShow implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
+        var tl = FactionsPlugin.instance().tl().commands().show();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
+
         Faction faction = context.getOrDefault("faction", fPlayer == null ? Factions.factions().wilderness() : fPlayer.faction());
         if (faction.isWilderness()) {
-            context.sender().msgLegacy(TL.COMMAND_SHOW_NOFACTION_OTHER);
+            context.sender().sendRichMessage(tl.getNoFactionOther());
             return;
         }
 
         if (!context.sender().hasPermission(Permission.SHOW_BYPASS_EXEMPT)
                 && FactionsPlugin.instance().conf().commands().show().getExempt().contains(faction.tag())) {
-            context.sender().msgLegacy(TL.COMMAND_SHOW_EXEMPT);
+            context.sender().sendRichMessage(tl.getExempt());
             return;
         }
 
-        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostShow(), TL.COMMAND_SHOW_TOSHOW, TL.COMMAND_SHOW_FORSHOW)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostShow(), econTl.getShowTo(), econTl.getShowFor())) {
             return;
         }
 
-        var tl = FactionsPlugin.instance().tl().commands().show();
         List<String> show = tl.getNormalFormat();
         if (show == null || show.isEmpty()) {
             show = defaults;

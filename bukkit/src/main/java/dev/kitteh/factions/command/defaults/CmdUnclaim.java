@@ -15,9 +15,11 @@ import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.SpiralTask;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
@@ -35,52 +37,56 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdUnclaim implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("unclaim")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_UNCLAIM_DESCRIPTION))
-                        .permission(
-                                builder.commandPermission()
-                                        .and(Cloudy.hasPermission(Permission.UNCLAIM)
-                                                .and(
-                                                        Cloudy.hasFaction()
-                                                                .or(Cloudy.hasPermission(Permission.MANAGE_SAFE_ZONE).or(Cloudy.hasPermission(Permission.MANAGE_WAR_ZONE)))
-                                                )
-                                        )
-                        )
-                        .flag(manager.flagBuilder("faction").withComponent(FactionParser.of()))
-                        .flag(
-                                manager.flagBuilder("radius")
-                                        .withComponent(IntegerParser.integerParser(1))
-                                        .withPermission(Cloudy.hasPermission(Permission.CLAIM_RADIUS))
-                        )
-                        .flag(
-                                manager.flagBuilder("fill")
-                                        .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
-                        )
-                        .flag(
-                                manager.flagBuilder("fill-limit")
-                                        .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
-                                        .withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims()))
-                        )
-                        .flag(
-                                manager.flagBuilder("auto")
-                                        .withPermission(Cloudy.hasPermission(Permission.AUTOCLAIM))
-                        )
-                        .flag(
-                                manager.flagBuilder("all-territory")
-                                        .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_ALL).and(Cloudy.isAtLeastRole(Role.ADMIN).or(Cloudy.isBypass())))
-                        )
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().unclaim();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(
+                                    builder.commandPermission()
+                                            .and(Cloudy.hasPermission(Permission.UNCLAIM)
+                                                    .and(
+                                                            Cloudy.hasFaction()
+                                                                    .or(Cloudy.hasPermission(Permission.MANAGE_SAFE_ZONE).or(Cloudy.hasPermission(Permission.MANAGE_WAR_ZONE)))
+                                                    )
+                                            )
+                            )
+                            .flag(manager.flagBuilder("faction").withComponent(FactionParser.of()))
+                            .flag(
+                                    manager.flagBuilder("radius")
+                                            .withComponent(IntegerParser.integerParser(1))
+                                            .withPermission(Cloudy.hasPermission(Permission.CLAIM_RADIUS))
+                            )
+                            .flag(
+                                    manager.flagBuilder("fill")
+                                            .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
+                            )
+                            .flag(
+                                    manager.flagBuilder("fill-limit")
+                                            .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
+                                            .withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims()))
+                            )
+                            .flag(
+                                    manager.flagBuilder("auto")
+                                            .withPermission(Cloudy.hasPermission(Permission.AUTOCLAIM))
+                            )
+                            .flag(
+                                    manager.flagBuilder("all-territory")
+                                            .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_ALL).and(Cloudy.isAtLeastRole(Role.ADMIN).or(Cloudy.isBypass())))
+                            )
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().unclaim();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
 
         FLocation claimLocation = new FLocation(player);
 
-        final Faction forFaction = context.flags().get("faction") instanceof Faction fac ? fac : sender.faction(); // Default to own
+        final Faction forFaction = context.flags().get("faction") instanceof Faction fac ? fac : sender.faction();
 
         if (context.flags().hasFlag("all-territory")) {
             unclaimAll(sender, forFaction, false);
@@ -91,31 +97,27 @@ public class CmdUnclaim implements Cmd {
             if (sender.autoUnclaim() == null) {
                 if (sender.canClaimForFaction(forFaction)) {
                     sender.autoUnclaim(forFaction);
-
-                    sender.msgLegacy(TL.COMMAND_AUTOUNCLAIM_ENABLED, forFaction.describeToLegacy(sender));
+                    sender.sendRichMessage(tl.getAutoUnclaimEnabled(), Placeholder.unparsed("faction", forFaction.tag()));
                     sender.attemptUnclaim(forFaction, claimLocation, true);
                 } else {
-                    sender.msgLegacy(TL.COMMAND_AUTOUNCLAIM_OTHERFACTION, forFaction.describeToLegacy(sender));
+                    sender.sendRichMessage(tl.getAutoUnclaimOtherFaction(), Placeholder.unparsed("faction", forFaction.tag()));
                 }
             } else {
                 sender.autoUnclaim(null);
-                sender.msgLegacy(TL.COMMAND_AUTOUNCLAIM_DISABLED);
+                sender.sendRichMessage(tl.getAutoUnclaimDisabled());
             }
-
             return;
         }
 
         if (context.flags().hasFlag("fill")) {
             int limit = context.flags().get("fill-limit") instanceof Integer i ? i : FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims();
-
             this.fill(sender, claimLocation, forFaction, limit);
-
             return;
         }
 
         if (context.flags().get("radius") instanceof Integer radius && radius > 1) {
             if (!Permission.CLAIM_RADIUS.has(player)) {
-                sender.msgLegacy(TL.COMMAND_CLAIM_DENIED);
+                sender.sendRichMessage(tl.getCantUnclaim(), Placeholder.unparsed("faction", forFaction.tag()));
                 return;
             }
 
@@ -132,11 +134,9 @@ public class CmdUnclaim implements Cmd {
                         this.stop();
                         return false;
                     }
-
                     return true;
                 }
             };
-
             return;
         }
 
@@ -144,8 +144,10 @@ public class CmdUnclaim implements Cmd {
     }
 
     private void fill(FPlayer sender, FLocation loc, Faction forFaction, int limit) {
+        var tl = FactionsPlugin.instance().tl().commands().unclaim();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
         if (limit > FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims()) {
-            sender.msgLegacy(TL.COMMAND_UNCLAIMFILL_ABOVEMAX, FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims());
+            sender.sendRichMessage(tl.getFillAboveMax(), Placeholder.unparsed("max", String.valueOf(FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims())));
             return;
         }
 
@@ -154,7 +156,7 @@ public class CmdUnclaim implements Cmd {
         Faction currentFaction = Board.board().factionAt(loc);
 
         if (currentFaction != forFaction) {
-            sender.msgLegacy(TL.COMMAND_UNCLAIMFILL_NOTCLAIMED);
+            sender.sendRichMessage(tl.getFillNotClaimed());
             return;
         }
 
@@ -167,7 +169,7 @@ public class CmdUnclaim implements Cmd {
                                 (forFaction.isSafeZone() && !Permission.MANAGE_SAFE_ZONE.has(sender.asPlayer()))
                 )
         ) {
-            sender.msgLegacy(TL.CLAIM_CANTUNCLAIM, forFaction.describeToLegacy(sender));
+            sender.sendRichMessage(tl.getCantUnclaim(), Placeholder.unparsed("faction", forFaction.tag()));
             return;
         }
 
@@ -184,7 +186,7 @@ public class CmdUnclaim implements Cmd {
             currentHead = queue.poll();
 
             if (Math.abs(currentHead.x() - startX) > distance || Math.abs(currentHead.z() - startZ) > distance) {
-                sender.msgLegacy(TL.COMMAND_UNCLAIMFILL_TOOFAR, distance);
+                sender.sendRichMessage(tl.getFillTooFar(), Placeholder.unparsed("max", String.valueOf(distance)));
                 return;
             }
 
@@ -195,7 +197,7 @@ public class CmdUnclaim implements Cmd {
         }
 
         if (toClaim.size() > limit) {
-            sender.msgLegacy(TL.COMMAND_UNCLAIMFILL_PASTLIMIT);
+            sender.sendRichMessage(tl.getFillPastLimit());
             return;
         }
 
@@ -212,27 +214,30 @@ public class CmdUnclaim implements Cmd {
                 tracker.fails++;
             }
             if (tracker.fails >= limFail) {
-                sender.msgLegacy(TL.COMMAND_UNCLAIMFILL_TOOMUCHFAIL, tracker.fails);
+                sender.sendRichMessage(tl.getFillTooMuchFail(), Placeholder.unparsed("count", String.valueOf(tracker.fails)));
                 break;
             }
         }
         if (tracker.successes == 0) {
-            sender.msgLegacy(TL.COMMAND_UNCLAIMFILL_BYPASSCOMPLETE, 0);
+            sender.sendRichMessage(tl.getFillBypassComplete(), Placeholder.unparsed("count", "0"));
             return;
         }
         x = x / ((long) tracker.successes);
         z = z / ((long) tracker.successes);
         if (bypass) {
-            sender.msgLegacy(TL.COMMAND_UNCLAIMFILL_BYPASSCOMPLETE, tracker.count());
+            sender.sendRichMessage(tl.getFillBypassComplete(), Placeholder.unparsed("count", String.valueOf(tracker.count())));
         } else {
             if (tracker.refund != 0) {
                 if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysLandCosts()) {
-                    Econ.modifyMoney(forFaction, tracker.refund, TL.COMMAND_UNCLAIM_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIM_FORUNCLAIM.toString());
+                    Econ.modifyMoney(forFaction, tracker.refund, econTl.getUnclaimTo(), econTl.getUnclaimFor());
                 } else {
-                    Econ.modifyMoney(sender, tracker.refund, TL.COMMAND_UNCLAIM_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIM_FORUNCLAIM.toString());
+                    Econ.modifyMoney(sender, tracker.refund, econTl.getUnclaimTo(), econTl.getUnclaimFor());
                 }
             }
-            currentFaction.msgLegacy(TL.COMMAND_UNCLAIMFILL_UNCLAIMED, sender.describeToLegacy(currentFaction, true), tracker.count(), x + "," + z);
+            currentFaction.sendRichMessage(tl.getFillUnclaimed(),
+                    FPlayerResolver.of("player", sender),
+                    Placeholder.unparsed("count", String.valueOf(tracker.count())),
+                    Placeholder.unparsed("location", x + "," + z));
         }
     }
 
@@ -254,15 +259,16 @@ public class CmdUnclaim implements Cmd {
     }
 
     private boolean attemptUnclaimForFill(FPlayer fPlayer, FLocation target, Faction targetFaction, Tracker tracker) {
+        var tl = FactionsPlugin.instance().tl().commands().unclaim();
         if (targetFaction.isSafeZone() || targetFaction.isWarZone()) {
             Board.board().unclaim(target);
             if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.asCoordString(), targetFaction.tag()));
+                AbstractFactionsPlugin.instance().log(fPlayer.name() + " unclaimed " + target.asCoordString() + " from " + targetFaction.tag());
             }
             return true;
         }
         if (!fPlayer.adminBypass() && !targetFaction.hasAccess(fPlayer, PermissibleActions.TERRITORY, target)) {
-            fPlayer.msgLegacy(TL.CLAIM_CANTUNCLAIM, targetFaction.describeToLegacy(fPlayer));
+            fPlayer.sendRichMessage(tl.getCantUnclaim(), Placeholder.unparsed("faction", targetFaction.tag()));
             return false;
         }
         LandUnclaimEvent unclaimEvent = new LandUnclaimEvent(target, targetFaction, fPlayer);
@@ -278,20 +284,24 @@ public class CmdUnclaim implements Cmd {
         Board.board().unclaim(target);
 
         if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-            AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(fPlayer.name(), target.asCoordString(), targetFaction.tag()));
+            AbstractFactionsPlugin.instance().log(fPlayer.name() + " unclaimed " + target.asCoordString() + " from " + targetFaction.tag());
         }
         return true;
     }
 
     public static void unclaimAll(FPlayer sender, Faction faction, boolean confirmed) {
+        var tl = FactionsPlugin.instance().tl().commands().unclaim();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
         if (sender.role() != Role.ADMIN && !sender.adminBypass()) {
-            sender.msgLegacy(TL.CLAIM_CANTUNCLAIM, faction.describeToLegacy(sender));
+            sender.sendRichMessage(tl.getCantUnclaim(), FactionResolver.of(faction));
             return;
         }
 
         if (!confirmed) {
             String conf = CmdConfirm.add(sender, s -> unclaimAll(s, faction, true));
-            sender.msgLegacy(TL.COMMAND_UNCLAIMALL_CONFIRM, faction.tag(), conf);
+            sender.sendRichMessage(tl.getUnclaimAllConfirm(),
+                    FactionResolver.of(faction),
+                    Placeholder.unparsed("command", conf));
             return;
         }
 
@@ -304,21 +314,21 @@ public class CmdUnclaim implements Cmd {
         if (Econ.shouldBeUsed()) {
             double refund = Econ.calculateTotalLandRefund(faction.claimCount());
             if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysLandCosts()) {
-                if (!Econ.modifyMoney(faction, refund, TL.COMMAND_UNCLAIMALL_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIMALL_FORUNCLAIM.toString())) {
+                if (!Econ.modifyMoney(faction, refund, econTl.getUnclaimAllTo(), econTl.getUnclaimAllFor())) {
                     return;
                 }
             } else {
-                if (!Econ.modifyMoney(sender, refund, TL.COMMAND_UNCLAIMALL_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIMALL_FORUNCLAIM.toString())) {
+                if (!Econ.modifyMoney(sender, refund, econTl.getUnclaimAllTo(), econTl.getUnclaimAllFor())) {
                     return;
                 }
             }
         }
 
         Board.board().unclaimAll(faction);
-        faction.msgLegacy(TL.COMMAND_UNCLAIMALL_UNCLAIMED, sender.describeToLegacy(faction, true));
+        faction.sendRichMessage(tl.getUnclaimAllUnclaimed(), FPlayerResolver.of("player", sender));
 
         if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-            AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIMALL_LOG.format(sender.name(), faction.tag()));
+            AbstractFactionsPlugin.instance().log(sender.name() + " unclaimed all of " + faction.tag());
         }
     }
 }

@@ -12,7 +12,6 @@ import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
@@ -31,7 +30,7 @@ import java.util.function.Function;
 public class CmdListFactions implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().list().factions();
             manager.command(
                     builder
@@ -53,7 +52,8 @@ public class CmdListFactions implements Cmd {
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostList(), TL.COMMAND_LIST_TOLIST, TL.COMMAND_LIST_FORLIST)) {
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostList(), econTl.getListTo(), econTl.getListFor())) {
             return;
         }
 

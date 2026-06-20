@@ -8,8 +8,10 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -21,34 +23,42 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdSetOpen implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("open")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_OPEN_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.OPEN).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
-                        .optional("openstate", BooleanParser.booleanParser(true))
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().set().open();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.OPEN).and(Cloudy.isAtLeastRole(Role.MODERATOR))))
+                            .optional("openstate", BooleanParser.booleanParser(true))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().set().open();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
-        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostOpen(), TL.COMMAND_OPEN_TOOPEN, TL.COMMAND_OPEN_FOROPEN)) {
+
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostOpen(), econTl.getOpenTo(), econTl.getOpenFor())) {
             return;
         }
 
         faction.open(context.getOrDefault("openstate", !faction.open()));
 
-        String open = faction.open() ? TL.COMMAND_OPEN_OPEN.toString() : TL.COMMAND_OPEN_CLOSED.toString();
+        String open = faction.open() ? tl.getOpen() : tl.getClosed();
 
-        // Inform
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             if (fplayer.faction() == faction) {
-                fplayer.msgLegacy(TL.COMMAND_OPEN_CHANGES, sender.name(), open);
+                fplayer.sendRichMessage(tl.getChanges(),
+                        FPlayerResolver.of("player", sender),
+                        Placeholder.unparsed("state", open));
                 continue;
             }
-            fplayer.msgLegacy(TL.COMMAND_OPEN_CHANGED, faction.tagLegacy(fplayer.faction()), open);
+            fplayer.sendRichMessage(tl.getChanged(),
+                    FactionResolver.of(faction),
+                    Placeholder.unparsed("state", open));
         }
     }
 }

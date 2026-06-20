@@ -10,7 +10,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;
 import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Player;
@@ -26,45 +26,51 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdTNTSiphon implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("siphon")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_TNT_SIPHON_DESCRIPTION))
-                        .permission(
-                                builder.commandPermission()
-                                        .and(Cloudy.hasPermission(Permission.TNT_SIPHON))
-                                        .and(Cloudy.hasSelfFactionPerms(PermissibleActions.TNTDEPOSIT))
-                        )
-                        .required("radius", IntegerParser.integerParser(1))
-                        .optional("amount", IntegerParser.integerParser(1))
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().tnt();
+            manager.command(
+                    builder.literal(tl.getSubCmdSiphon())
+                            .commandDescription(Cloudy.desc(tl.getSiphonDescription()))
+                            .permission(
+                                    builder.commandPermission()
+                                            .and(Cloudy.hasPermission(Permission.TNT_SIPHON))
+                                            .and(Cloudy.hasSelfFactionPerms(PermissibleActions.TNTDEPOSIT))
+                            )
+                            .required("radius", IntegerParser.integerParser(1))
+                            .optional("amount", IntegerParser.integerParser(1))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().tnt();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
         Faction faction = sender.faction();
 
         if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
-            sender.msgLegacy(TL.COMMAND_TNT_TERRITORYONLY);
+            sender.sendRichMessage(tl.getTerritoryOnly());
             return;
         }
         final int radius = context.get("radius");
         final int amount = context.getOrDefault("amount", -1);
 
         if (radius <= 0) {
-            sender.msgLegacy(TL.COMMAND_TNT_SIPHON_FAIL_POSITIVE);
+            sender.sendRichMessage(tl.getSiphonFailPositive());
             return;
         }
 
         int bankMax = faction.tntBankMax();
         if (bankMax <= faction.tntBank()) {
-            sender.msgLegacy(TL.COMMAND_TNT_SIPHON_FAIL_FULL);
+            sender.sendRichMessage(tl.getSiphonFailFull());
             return;
         }
 
         if (radius > FactionsPlugin.instance().conf().commands().tnt().getMaxRadius()) {
-            sender.msgLegacy(TL.COMMAND_TNT_SIPHON_FAIL_MAXRADIUS, radius, FactionsPlugin.instance().conf().commands().tnt().getMaxRadius());
+            sender.sendRichMessage(tl.getSiphonFailMaxRadius(),
+                    Placeholder.unparsed("value", String.valueOf(radius)),
+                    Placeholder.unparsed("max", String.valueOf(FactionsPlugin.instance().conf().commands().tnt().getMaxRadius())));
             return;
         }
 
@@ -94,6 +100,8 @@ public class CmdTNTSiphon implements Cmd {
 
         faction.tntBank(faction.tntBank() + acquired);
 
-        sender.msgLegacy(TL.COMMAND_TNT_SIPHON_MESSAGE, acquired, faction.tntBank());
+        sender.sendRichMessage(tl.getSiphonMessage(),
+                Placeholder.unparsed("count", String.valueOf(acquired)),
+                Placeholder.unparsed("total", String.valueOf(faction.tntBank())));
     }
 }

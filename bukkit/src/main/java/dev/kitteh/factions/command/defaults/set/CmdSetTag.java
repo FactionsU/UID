@@ -11,9 +11,11 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FactionRenameEvent;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -28,8 +30,9 @@ public class CmdSetTag implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> build = builder.literal("tag")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_TAG_DESCRIPTION))
+            var tl = FactionsPlugin.instance().tl().commands().set().tag();
+            Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TAG).and(Cloudy.isAtLeastRole(Role.ADMIN))))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DESCRIPTION).and(Cloudy.isAtLeastRole(Role.MODERATOR))));
 
@@ -43,12 +46,14 @@ public class CmdSetTag implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().set().tag();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
         String tag = context.get("new tag");
 
         if (Factions.factions().get(tag) != null) {
-            sender.msgLegacy(TL.COMMAND_TAG_TAKEN);
+            sender.sendRichMessage(tl.getTaken());
             return;
         }
 
@@ -58,37 +63,35 @@ public class CmdSetTag implements Cmd {
             return;
         }
 
-        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make sure they can pay
-        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostTag(), TL.COMMAND_TAG_TOCHANGE)) {
+        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostTag(), econTl.getTagTo())) {
             return;
         }
 
-        // trigger the faction rename event (cancellable)
         FactionRenameEvent renameEvent = new FactionRenameEvent(sender, tag);
         Bukkit.getServer().getPluginManager().callEvent(renameEvent);
         if (renameEvent.isCancelled()) {
             return;
         }
 
-        // then make 'em pay (if applicable)
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostTag(), TL.COMMAND_TAG_TOCHANGE, TL.COMMAND_TAG_FORCHANGE)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostTag(), econTl.getTagTo(), econTl.getTagFor())) {
             return;
         }
 
         String oldTag = faction.tag();
         faction.tag(tag);
 
-        // Inform
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             if (fplayer.faction() == faction) {
-                fplayer.msgLegacy(TL.COMMAND_TAG_FACTION, sender.describeToLegacy(faction, true), faction.tagLegacy(faction));
+                fplayer.sendRichMessage(tl.getFactionMsg(),
+                        FPlayerResolver.of("player", sender),
+                        FactionResolver.of(faction));
                 continue;
             }
 
-            // Broadcast the tag change (if applicable)
             if (FactionsPlugin.instance().conf().factions().chat().isBroadcastTagChanges()) {
-                Faction fac = fplayer.faction();
-                fplayer.msgLegacy(TL.COMMAND_TAG_CHANGED, sender.colorLegacyStringTo(fac) + oldTag, faction.tagLegacy(fac));
+                fplayer.sendRichMessage(tl.getChanged(),
+                        Placeholder.unparsed("oldtag", oldTag),
+                        FactionResolver.of(faction));
             }
         }
 

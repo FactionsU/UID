@@ -7,43 +7,52 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.apache.commons.lang3.time.DurationFormatUtils;
-import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 
-import java.util.ArrayList;
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdStatus implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("status")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_STATUS_DESCRIPTION))
+        var tl = FactionsPlugin.instance().tl().commands().status();
+        return (manager, builder, _) -> manager.command(
+                builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                        .commandDescription(Cloudy.desc(tl.getDescription()))
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.STATUS).and(Cloudy.hasFaction())))
                         .handler(this::handle)
         );
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().status();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
-        ArrayList<String> ret = new ArrayList<>();
         for (FPlayer fp : sender.faction().members()) {
-            String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fp.lastLogin(), true, true) + TL.COMMAND_STATUS_AGOSUFFIX;
-            String last = fp.isOnline() ? ChatColor.GREEN + TL.COMMAND_STATUS_ONLINE.toString() : (System.currentTimeMillis() - fp.lastLogin() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
+            String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fp.lastLogin(), true, true) + tl.getAgoSuffix();
+            String lastSeen;
+            if (fp.isOnline()) {
+                lastSeen = tl.getOnline();
+            } else {
+                lastSeen = (System.currentTimeMillis() - fp.lastLogin() < 432000000 ? "<yellow>" : "<red>") + humanized;
+            }
+
             String power;
             if (FactionsPlugin.instance().landRaidControl() instanceof PowerControl) {
-                power = ChatColor.YELLOW + String.valueOf(fp.powerRounded()) + " / " + fp.powerMaxRounded() + ChatColor.RESET;
+                power = fp.powerRounded() + " / " + fp.powerMaxRounded();
             } else {
                 power = "n/a";
             }
-            ret.add(String.format(TL.COMMAND_STATUS_FORMAT.toString(), ChatColor.GOLD + fp.role().getPrefix() + fp.name() + ChatColor.RESET, power, last).trim());
+
+            String playerName = fp.role().getPrefix() + fp.name();
+            sender.sendRichMessage(tl.getFormat(),
+                    Placeholder.parsed("player", "<gold>" + playerName),
+                    Placeholder.parsed("power", power),
+                    Placeholder.parsed("last_seen", lastSeen));
         }
-        sender.sendMessageLegacy(ret);
     }
 }

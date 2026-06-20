@@ -9,24 +9,26 @@ import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FactionNewAdminEvent;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import dev.kitteh.factions.util.TriConsumer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.description.Description;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdForceRole implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().role();
             Command.Builder<Sender> build = builder
-                    .literal("role")
-                    .commandDescription(Description.of(TL.COMMAND_ROLE_DESCRIPTION.toString()));
+                    .literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()));
 
             Command.Builder<Sender> roleBuilder = build
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.FORCE_ROLE)))
@@ -66,7 +68,9 @@ public class CmdForceRole implements Cmd {
                             .handler(this::handleAdmin)
             );
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootAdminCommand() + " force role <member>", ctx.sender())));
+            String forceTl = FactionsPlugin.instance().tl().commands().admin().force().getFirstAlias();
+
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootAdminCommand() + " " + forceTl + " " + tl.getFirstAlias() + " <member>", ctx.sender())));
         };
     }
 
@@ -89,8 +93,9 @@ public class CmdForceRole implements Cmd {
     }
 
     private void handle(Sender sender, FPlayer target, Role targetNewRole) {
+        var tl = FactionsPlugin.instance().tl().commands().role();
         if (targetNewRole == null || targetNewRole == Role.ADMIN) {
-            sender.msgLegacy(TL.COMMAND_ROLE_NOT_ALLOWED);
+            sender.sendRichMessage(tl.getNotAllowed());
             return;
         }
 
@@ -98,7 +103,7 @@ public class CmdForceRole implements Cmd {
                 !FactionsPlugin.instance().conf().factions().other().isAllowMultipleColeaders() &&
                 !target.faction().members(Role.COLEADER).isEmpty()
         ) {
-            sender.msgLegacy(TL.COMMAND_COLEADER_ALREADY_COLEADER);
+            sender.sendRichMessage(tl.getAlreadyColeader());
             return;
         }
 
@@ -107,11 +112,13 @@ public class CmdForceRole implements Cmd {
             player.updateCommands();
         }
 
-        target.msgLegacy(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
-        sender.msgLegacy(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
+        var rolePlaceholder = Placeholder.unparsed("role", targetNewRole.nicename);
+        target.sendRichMessage(tl.getUpdated(), FPlayerResolver.of("player", target), rolePlaceholder);
+        sender.sendRichMessage(tl.getUpdated(), FPlayerResolver.of("player", target), rolePlaceholder);
     }
 
     private void handleAdmin(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().role();
         FPlayer target = context.get("member");
         FPlayer oldAdmin = target.faction().admin();
         Faction faction = target.faction();
@@ -136,10 +143,10 @@ public class CmdForceRole implements Cmd {
         }
 
         // Inform all players
-        faction.msgLegacy(TL.COMMAND_ADMIN_PROMOTED, "Server", target.describeToLegacy(faction), faction.describeToLegacy(faction));
+        faction.sendRichMessage(tl.getPromoted(), Placeholder.unparsed("player", "Server"), FPlayerResolver.of("target", target), FactionResolver.of(faction));
         FPlayer senderMaybe = context.sender().fPlayerOrNull();
         if (senderMaybe == null || senderMaybe.faction() != faction) {
-            context.sender().msgLegacy(TL.COMMAND_ADMIN_PROMOTED, "You", target.describeToLegacy(senderMaybe), faction.describeToLegacy(senderMaybe));
+            context.sender().sendRichMessage(tl.getPromoted(), Placeholder.unparsed("player", "You"), FPlayerResolver.of("target", target), FactionResolver.of(faction));
         }
     }
 }

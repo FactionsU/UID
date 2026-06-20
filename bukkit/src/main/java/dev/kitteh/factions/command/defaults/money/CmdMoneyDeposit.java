@@ -10,9 +10,6 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.TextUtil;
-import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -24,13 +21,17 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdMoneyDeposit implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("deposit")
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MONEY_DEPOSIT)).and(Cloudy.isPlayer()))
-                        .required("amount", DoubleParser.doubleParser(0))
-                        .flag(manager.flagBuilder("faction").withComponent(FactionParser.of(FactionParser.Include.SELF)))
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().money().deposit();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MONEY_DEPOSIT)).and(Cloudy.isPlayer()))
+                            .required("amount", DoubleParser.doubleParser(0))
+                            .flag(manager.flagBuilder("faction").withComponent(FactionParser.of(FactionParser.Include.SELF)))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
@@ -57,7 +58,7 @@ public class CmdMoneyDeposit implements Cmd {
         boolean success = Econ.transferMoney(sender, sender, faction, amount);
 
         if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
-            AbstractFactionsPlugin.instance().log(ChatColor.stripColor(TextUtil.parse(TL.COMMAND_MONEYDEPOSIT_DEPOSITED.toString(), sender.name(), Econ.moneyString(amount), faction.describeToLegacy(null))));
+            AbstractFactionsPlugin.instance().log(String.format("%s deposited %s in the faction bank: %s", sender.name(), Econ.moneyString(amount), faction.tag()));
         }
     }
 }

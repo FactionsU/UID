@@ -8,12 +8,13 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -26,8 +27,9 @@ public class CmdInvite implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> build = builder.literal("invite")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_INVITE_DESCRIPTION))
+            var tl = FactionsPlugin.instance().tl().commands().invite();
+            Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.INVITE).and(Cloudy.hasSelfFactionPerms(PermissibleActions.INVITE))));
 
             manager.command(
@@ -35,50 +37,61 @@ public class CmdInvite implements Cmd {
                             .flag(manager.flagBuilder("delete"))
                             .handler(this::handle)
             );
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " invite <player> [--delete]", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " " + tl.getFirstAlias() + " <player> [--delete]", ctx.sender())));
         };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().invite();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
 
         FPlayer target = context.get("player");
 
         if (target.faction() == faction) {
-            sender.msgLegacy(TL.COMMAND_INVITE_ALREADYMEMBER, target.name(), faction.tag());
+            sender.sendRichMessage(tl.getAlreadyMember(),
+                    FPlayerResolver.of("player", target),
+                    FactionResolver.of(faction));
             return;
         }
 
         if (context.flags().hasFlag("delete")) {
             faction.deInvite(target);
-            target.msgLegacy(TL.COMMAND_DEINVITE_REVOKED, sender.describeToLegacy(target), faction.describeToLegacy(target));
-            faction.msgLegacy(TL.COMMAND_DEINVITE_REVOKES, sender.describeToLegacy(faction), target.describeToLegacy(faction));
+            target.sendRichMessage(tl.getDeinviteRevoked(),
+                    FPlayerResolver.of("player", sender),
+                    FactionResolver.of(faction));
+            faction.sendRichMessage(tl.getDeinviteRevokes(),
+                    FPlayerResolver.of("player", sender),
+                    Placeholder.unparsed("target", target.name()));
             return;
         }
 
-        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostInvite(), TL.COMMAND_INVITE_TOINVITE, TL.COMMAND_INVITE_FORINVITE)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostInvite(), econTl.getInviteTo(), econTl.getInviteFor())) {
             return;
         }
 
         if (faction.isBanned(target)) {
-            sender.msgLegacy(TL.COMMAND_INVITE_BANNED, target.name());
+            sender.sendRichMessage(tl.getBanned(), FPlayerResolver.of("player", target));
             return;
         }
 
         faction.invite(target);
         if (target.isOnline()) {
-            LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
-            Component component = legacy.deserialize(sender.describeToLegacy(target))
-                    .append(legacy.deserialize(TL.COMMAND_INVITE_INVITEDYOU.toString()).color(NamedTextColor.YELLOW))
-                    .append(legacy.deserialize(faction.describeToLegacy(target)));
+            Component senderComponent = Mini.parse("<player>", target, FPlayerResolver.of("player", sender));
+            Component factionComponent = Mini.parse("<faction>", target, FactionResolver.of(faction));
+            Component component = senderComponent
+                    .append(Mini.parse("<yellow>" + tl.getInvitedYou(), target))
+                    .append(factionComponent);
 
-            component = component.hoverEvent(legacy.deserialize(TL.COMMAND_INVITE_CLICKTOJOIN.toString()).asHoverEvent())
+            component = component
+                    .hoverEvent(Mini.parse(tl.getClickToJoin(), target).asHoverEvent())
                     .clickEvent(ClickEvent.runCommand("/" + Cmd.rootCommand() + " join " + ChatColor.stripColor(faction.tag())));
             target.sendMessage(component);
         }
 
-        faction.msgLegacy(TL.COMMAND_INVITE_INVITED, sender.describeToLegacy(faction), target.describeToLegacy(faction));
+        faction.sendRichMessage(tl.getInvited(),
+                FPlayerResolver.of("player", sender),
+                Placeholder.unparsed("target", target.name()));
     }
 }

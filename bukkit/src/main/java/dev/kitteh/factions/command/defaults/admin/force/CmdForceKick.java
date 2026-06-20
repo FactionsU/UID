@@ -10,8 +10,10 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -23,16 +25,20 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdForceKick implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("kick")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_KICK_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.KICK_ANY)))
-                        .required("target", FPlayerParser.of(FPlayerParser.Include.ALL))
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().kick();
+            manager.command(
+                    builder.literal("kick")
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.KICK_ANY)))
+                            .required("target", FPlayerParser.of(FPlayerParser.Include.ALL))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().kick();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         FPlayer toKick = context.get("target");
@@ -40,7 +46,7 @@ public class CmdForceKick implements Cmd {
         Faction toKickFaction = toKick.faction();
 
         if (toKickFaction.isWilderness()) {
-            sender.sendMessageLegacy(TL.COMMAND_KICK_NONE.toString());
+            sender.sendRichMessage(tl.getNone());
             return;
         }
 
@@ -51,8 +57,8 @@ public class CmdForceKick implements Cmd {
             return;
         }
 
-        toKickFaction.msgLegacy(TL.COMMAND_KICK_FACTION, sender.describeToLegacy(toKickFaction, true), toKick.describeToLegacy(toKickFaction, true));
-        toKick.msgLegacy(TL.COMMAND_KICK_KICKED, sender.describeToLegacy(toKick, true), toKickFaction.describeToLegacy(toKick));
+        toKickFaction.sendRichMessage(tl.getFactionMsg(), FPlayerResolver.of("player", sender), Placeholder.unparsed("target", toKick.name()));
+        toKick.sendRichMessage(tl.getKicked(), FPlayerResolver.of("player", sender), FactionResolver.of(toKickFaction));
 
         if (FactionsPlugin.instance().conf().logging().isFactionKick()) {
             AbstractFactionsPlugin.instance().log(sender.name() + " kicked " + toKick.name() + " from the faction: " + toKickFaction.tag());

@@ -9,7 +9,7 @@ import dev.kitteh.factions.command.defaults.tnt.CmdTNTFill;
 import dev.kitteh.factions.command.defaults.tnt.CmdTNTSiphon;
 import dev.kitteh.factions.command.defaults.tnt.CmdTNTWithdraw;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -21,8 +21,9 @@ public class CmdTNT implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> tntBuilder = builder.literal("tnt")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_TNT_INFO_DESCRIPTION))
+            var tl = FactionsPlugin.instance().tl().commands().tnt();
+            Command.Builder<Sender> tntBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasFaction().and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().commands().tnt().isEnable()))));
 
             manager.command(tntBuilder.permission(tntBuilder.commandPermission().and(Cloudy.hasPermission(Permission.TNT_INFO))).handler(this::handle));
@@ -36,6 +37,7 @@ public class CmdTNT implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        context.sender().msgLegacy(TL.COMMAND_TNT_INFO_MESSAGE, ((Sender.Player) context.sender()).faction().tntBank());
+        var tl = FactionsPlugin.instance().tl().commands().tnt();
+        context.sender().sendRichMessage(tl.getMessage(), Placeholder.unparsed("count", String.valueOf(((Sender.Player) context.sender()).faction().tntBank())));
     }
 }

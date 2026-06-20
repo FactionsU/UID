@@ -6,9 +6,9 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -19,17 +19,20 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdMoneyBalance implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("balance")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_TNT_DEPOSIT_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MONEY_BALANCE)))
-                        .flag(
-                                manager.flagBuilder("faction")
-                                        .withComponent(FactionParser.of(FactionParser.Include.SELF))
-                                        .withPermission(Cloudy.hasPermission(Permission.MONEY_BALANCE_ANY))
-                        )
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().money().balance();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MONEY_BALANCE)))
+                            .flag(
+                                    manager.flagBuilder("faction")
+                                            .withComponent(FactionParser.of(FactionParser.Include.SELF))
+                                            .withPermission(Cloudy.hasPermission(Permission.MONEY_BALANCE_ANY))
+                            )
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
@@ -44,8 +47,9 @@ public class CmdMoneyBalance implements Cmd {
             faction = fPlayer.faction();
         }
 
+        var tl = FactionsPlugin.instance().tl().commands().money();
         if (faction == null || !faction.isNormal()) {
-            context.sender().msgLegacy(TL.GENERIC_MEMBERONLY);
+            context.sender().sendRichMessage(tl.getNoFaction());
             return;
         }
 

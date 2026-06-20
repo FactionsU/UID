@@ -10,20 +10,19 @@ import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdListBans implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().list().bans();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
@@ -36,30 +35,31 @@ public class CmdListBans implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().list().bans();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         Faction target = context.getOrDefault("faction", sender.faction());
 
         if (!target.isNormal()) {
-            sender.msgLegacy(TL.COMMAND_BANLIST_NOFACTION);
+            sender.sendRichMessage(tl.getNoFaction());
             return;
         }
 
-        List<String> lines = new ArrayList<>();
-        lines.add(TL.COMMAND_BANLIST_HEADER.format(target.bans().size(), target.tagLegacy(sender)));
-        int i = 1;
+        sender.sendRichMessage(tl.getHeader(),
+                Placeholder.unparsed("count", String.valueOf(target.bans().size())),
+                Placeholder.unparsed("faction", target.tag()));
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        int i = 1;
         for (BanInfo info : target.bans()) {
             FPlayer banned = FPlayers.fPlayers().get(info.banned());
             FPlayer banner = FPlayers.fPlayers().get(info.banner());
-            String timestamp = TL.sdf.format(info.time());
-
-            lines.add(TL.COMMAND_BANLIST_ENTRY.format(i, banned.name(), banner.name(), timestamp));
+            sender.sendRichMessage(tl.getEntry(),
+                    Placeholder.unparsed("index", String.valueOf(i)),
+                    Placeholder.unparsed("player", banned.name()),
+                    Placeholder.unparsed("banner", banner.name()),
+                    Placeholder.unparsed("date", sdf.format(info.time())));
             i++;
-        }
-
-        for (String s : lines) {
-            sender.sendMessageLegacy(s);
         }
     }
 }

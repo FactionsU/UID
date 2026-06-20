@@ -7,8 +7,10 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -21,8 +23,9 @@ public class CmdSetDescription implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> build = builder.literal("description")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_DESCRIPTION_DESCRIPTION))
+            var tl = FactionsPlugin.instance().tl().commands().set().description();
+            Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.DESCRIPTION).and(Cloudy.isAtLeastRole(Role.MODERATOR))));
 
             manager.command(
@@ -30,37 +33,35 @@ public class CmdSetDescription implements Cmd {
                             .handler(this::handle)
             );
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " description <description>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " " + tl.getFirstAlias() + " <description>", ctx.sender())));
         };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().set().description();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
 
-        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDesc(), TL.COMMAND_DESCRIPTION_TOCHANGE, TL.COMMAND_DESCRIPTION_FORCHANGE)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDesc(), econTl.getDescriptionTo(), econTl.getDescriptionFor())) {
             return;
         }
 
-        // since "&" color tags seem to work even through plain old FPlayer.sendMessage() for some reason, we need to break those up
-        // And replace all the % because it messes with string formatting and this is an easy way around that.
         String desc = context.get("description");
-        desc = desc.replaceAll("%", "").replaceAll("(&([a-f0-9klmnor]))", "& $2");
         int limit = FactionsPlugin.instance().conf().commands().description().getMaxLength();
         if (limit > 0 && desc.length() > limit) {
-            sender.msgLegacy(TL.COMMAND_DESCRIPTION_TOOLONG, String.valueOf(limit));
+            sender.sendRichMessage(tl.getToolong(), Placeholder.unparsed("limit", String.valueOf(limit)));
             return;
         }
         faction.description(desc);
 
         if (!FactionsPlugin.instance().conf().factions().chat().isBroadcastDescriptionChanges()) {
-            sender.msgLegacy(TL.COMMAND_DESCRIPTION_CHANGED, faction.describeToLegacy(sender));
-            sender.sendMessageLegacy(faction.description());
+            sender.sendRichMessage(tl.getChanged(), FactionResolver.of(faction));
+            sender.sendMessage(Component.text(faction.description()));
             return;
         }
 
-        sender.msgLegacy(TL.COMMAND_DESCRIPTION_CHANGES, faction.describeToLegacy(sender));
-        sender.sendMessageLegacy(faction.description());
+        faction.sendRichMessage(tl.getChanges(), FactionResolver.of(faction));
+        sender.sendMessage(Component.text(faction.description()));
     }
 }

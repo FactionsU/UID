@@ -46,7 +46,7 @@ public class CmdConfirm implements Cmd {
 
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var confirm = FactionsPlugin.instance().tl().commands().confirm();
             manager.command(
                     builder.literal(confirm.getFirstAlias(), confirm.getSecondaryAliases())

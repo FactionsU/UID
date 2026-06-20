@@ -18,7 +18,6 @@ import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -38,7 +37,7 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdUpgrades implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().upgrades();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
@@ -99,7 +98,8 @@ public class CmdUpgrades implements Cmd {
                         buyItem.setAction(ee -> {
                             ee.setCancelled(true);
 
-                            if (context.sender().payForCommand(settings.costAt(lvl + 1).doubleValue(), TL.COMMAND_UPGRADES_TOUPGRADE, TL.COMMAND_UPGRADES_FORUPGRADE)) {
+                            var econTl = FactionsPlugin.instance().tl().economy().actions();
+                            if (context.sender().payForCommand(settings.costAt(lvl + 1).doubleValue(), econTl.getUpgradeTo(), econTl.getUpgradeFor())) {
                                 faction.upgradeLevel(upgrade, lvl + 1);
                                 guiItem.setItem(buildStack(settings, sender));
                                 gui.show(player);

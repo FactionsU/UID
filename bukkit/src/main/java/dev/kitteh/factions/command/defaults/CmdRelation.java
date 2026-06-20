@@ -138,7 +138,7 @@ public class CmdRelation implements Cmd {
                     return true;
                 }
                 if (them.relationCount(targetRelation) >= max) {
-                    sender.sendRichMessage(tl.getRelationLimitSelf(), FactionResolver.of(them), Placeholder.unparsed("limit", String.valueOf(max)), Placeholder.component("relation", Component.text(relation, targetRelation.color())));
+                    sender.sendRichMessage(tl.getRelationLimitThem(), FactionResolver.of(them), Placeholder.unparsed("limit", String.valueOf(max)), Placeholder.component("relation", Component.text(relation, targetRelation.color())));
                     return true;
                 }
             }

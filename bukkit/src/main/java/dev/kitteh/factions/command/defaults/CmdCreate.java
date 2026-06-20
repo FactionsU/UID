@@ -12,9 +12,10 @@ import dev.kitteh.factions.event.FPlayerJoinEvent;
 import dev.kitteh.factions.event.FactionAttemptCreateEvent;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -22,6 +23,7 @@ import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.parser.standard.StringParser;
 
 import java.util.List;
+
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
@@ -29,8 +31,9 @@ public class CmdCreate implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            Command.Builder<Sender> build = builder.literal("create")
-                    .commandDescription(Cloudy.desc(TL.COMMAND_CREATE_DESCRIPTION))
+            var tl = FactionsPlugin.instance().tl().commands().create();
+            Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.CREATE).and(Cloudy.isPlayer())));
 
             manager.command(
@@ -38,22 +41,24 @@ public class CmdCreate implements Cmd {
                             .handler(this::handle)
             );
 
-            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " create <tag>", ctx.sender())));
+            manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx -> help.queryCommands(Cmd.rootCommand() + " " + tl.getFirstAlias() + " <tag>", ctx.sender())));
         };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().create();
+        var econTl = FactionsPlugin.instance().tl().economy().actions();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         String tag = context.get("tag");
 
         if (sender.hasFaction()) {
-            sender.msgLegacy(TL.COMMAND_CREATE_MUSTLEAVE);
+            sender.sendRichMessage(tl.getMustLeave());
             return;
         }
 
         if (Factions.factions().get(tag) != null) {
-            sender.msgLegacy(TL.COMMAND_CREATE_INUSE);
+            sender.sendRichMessage(tl.getInUse());
             return;
         }
 
@@ -63,8 +68,7 @@ public class CmdCreate implements Cmd {
             return;
         }
 
-        // if economy is enabled, they're not on the bypass list, and this command has a cost set, make sure they can pay
-        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostCreate(), TL.COMMAND_CREATE_TOCREATE)) {
+        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostCreate(), econTl.getCreateTo())) {
             return;
         }
 
@@ -74,29 +78,27 @@ public class CmdCreate implements Cmd {
             return;
         }
 
-        // then make 'em pay (if applicable)
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostCreate(), TL.COMMAND_CREATE_TOCREATE, TL.COMMAND_CREATE_FORCREATE)) {
+        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostCreate(), econTl.getCreateTo(), econTl.getCreateFor())) {
             return;
         }
 
         Faction faction = Factions.factions().create(sender, tag);
 
-        // trigger the faction join event for the creator
         FPlayerJoinEvent joinEvent = new FPlayerJoinEvent(sender, faction, FPlayerJoinEvent.Reason.CREATE);
         Bukkit.getServer().getPluginManager().callEvent(joinEvent);
-        // join event cannot be cancelled or you'll have an empty faction
 
-        // finish setting up the FPlayer
         sender.role(Role.ADMIN);
         sender.faction(faction);
         sender.asPlayer().updateCommands();
 
         for (FPlayer follower : FPlayers.fPlayers().online()) {
-            follower.msgLegacy(TL.COMMAND_CREATE_CREATED, sender.describeToLegacy(follower, true), faction.tagLegacy(follower));
+            follower.sendRichMessage(tl.getCreated(),
+                    FPlayerResolver.of("player", sender),
+                    FactionResolver.of(faction));
         }
 
         if (FactionsPlugin.instance().conf().logging().isFactionCreate()) {
-            AbstractFactionsPlugin.instance().log(sender.name() + TL.COMMAND_CREATE_CREATEDLOG + tag);
+            AbstractFactionsPlugin.instance().log(sender.name() + " created faction " + tag);
         }
     }
 }

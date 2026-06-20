@@ -10,8 +10,9 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.incendo.cloud.Command;
@@ -34,7 +35,7 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdListClaims implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> {
+        return (manager, builder, _) -> {
             var tl = FactionsPlugin.instance().tl().commands().list().claims();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
@@ -59,11 +60,12 @@ public class CmdListClaims implements Cmd {
             faction = fac;
         }
 
+        var tl = FactionsPlugin.instance().tl().commands().list().claims();
         World world = ((Sender.Player) context.sender()).player().getWorld();
         if (context.flags().get("world") instanceof String worldName) {
             world = Bukkit.getWorld(worldName);
             if (world == null) {
-                sender.msgLegacy(TL.COMMAND_LISTCLAIMS_INVALIDWORLD, worldName);
+                sender.sendRichMessage(tl.getInvalidWorld(), Placeholder.unparsed("world", worldName));
                 return;
             }
         }
@@ -75,7 +77,7 @@ public class CmdListClaims implements Cmd {
             }
         }
         if (worldClaims.isEmpty()) {
-            sender.msgLegacy(TL.COMMAND_LISTCLAIMS_NOCLAIMS, faction.tag(), world.getName());
+            sender.sendRichMessage(tl.getNoClaims(), FactionResolver.of(faction), Placeholder.unparsed("world", world.getName()));
             return;
         }
         Set<FLoc> set;
@@ -113,14 +115,14 @@ public class CmdListClaims implements Cmd {
             }
         }
 
-        sender.msgLegacy(TL.COMMAND_LISTCLAIMS_MESSAGE, faction.tag(), world.getName());
+        sender.sendRichMessage(tl.getMessage(), FactionResolver.of(faction), Placeholder.unparsed("world", world.getName()));
         StringBuilder builder = new StringBuilder();
         String str;
         final String separator = "   ";
         for (FLoc loc : displayList) {
             str = (loc.x << 4 | 8) + "," + (loc.z << 4 | 8) + (loc.total > 1 ? (" (" + loc.total + ")") : "");
             if (builder.length() + separator.length() + str.length() > 75) {
-                sender.msgLegacy(builder.toString());
+                sender.sendRichMessage(builder.toString());
                 builder.setLength(0);
             } else if (!builder.isEmpty()) {
                 builder.append(separator);
@@ -128,7 +130,7 @@ public class CmdListClaims implements Cmd {
             builder.append(str);
         }
         if (!builder.isEmpty()) {
-            sender.msgLegacy(builder.toString());
+            sender.sendRichMessage(builder.toString());
         }
     }
 

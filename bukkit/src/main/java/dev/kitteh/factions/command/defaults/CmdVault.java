@@ -11,7 +11,7 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -24,9 +24,10 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdVault implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("vault")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_VAULT_DESCRIPTION))
+        var tl = FactionsPlugin.instance().tl().commands().vault();
+        return (manager, builder, _) -> manager.command(
+                builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                        .commandDescription(Cloudy.desc(tl.getDescription()))
                         .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.VAULT).and(Cloudy.hasFaction())))
                         .required("number", IntegerParser.integerParser(1))
                         .handler(this::handle)
@@ -45,7 +46,10 @@ public class CmdVault implements Cmd {
 
         int max = faction.maxVaults();
         if (number > max) {
-            sender.sendMessageLegacy(TL.COMMAND_VAULT_TOOHIGH.format(number, max));
+            var tl = FactionsPlugin.instance().tl().commands().vault();
+            sender.sendRichMessage(tl.getTooHigh(),
+                    Placeholder.unparsed("vault", String.valueOf(number)),
+                    Placeholder.unparsed("max", String.valueOf(max)));
             return;
         }
 

@@ -5,11 +5,13 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.FlightUtil;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WarmUpUtil;
 import dev.kitteh.factions.util.ParticleProvider;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Particle;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -22,52 +24,54 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdFly implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("fly")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_FLY_DESCRIPTION))
-                        .permission(builder.commandPermission().and(
-                                Cloudy.predicate(s -> FactionsPlugin.instance().conf().commands().fly().isEnable())
-                                        .and(Cloudy.hasPermission(Permission.FLY))
-                                        .and(Cloudy.hasFaction())))
-                        .flag(manager.flagBuilder("auto").withPermission(Cloudy.hasPermission(Permission.FLY_AUTO)))
-                        .flag(
-                                manager.flagBuilder("trail")
-                                        .withPermission(Cloudy.hasPermission(Permission.FLY_TRAILS))
-                                        .withComponent(BooleanParser.booleanParser(true))
-                        )
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().fly();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(
+                                    Cloudy.predicate(s -> FactionsPlugin.instance().conf().commands().fly().isEnable())
+                                            .and(Cloudy.hasPermission(Permission.FLY))
+                                            .and(Cloudy.hasFaction())))
+                            .flag(manager.flagBuilder("auto").withPermission(Cloudy.hasPermission(Permission.FLY_AUTO)))
+                            .flag(
+                                    manager.flagBuilder("trail")
+                                            .withPermission(Cloudy.hasPermission(Permission.FLY_TRAILS))
+                                            .withComponent(BooleanParser.booleanParser(true))
+                            )
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().fly();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         boolean unhandled = true;
         if (context.flags().hasFlag("auto")) {
-            //if (Permission.FLY_AUTO.has(context.sender().sender(), true)) {
             sender.autoFlying(!sender.autoFlying());
-            sender.msgLegacy(TL.COMMAND_FLY_AUTO, sender.autoFlying() ? "enabled" : "disabled");
+            sender.sendRichMessage(tl.getAuto(), Placeholder.unparsed("state", sender.autoFlying() ? "enabled" : "disabled"));
             toggleFlight(sender, sender.autoFlying(), false);
             unhandled = false;
-            //}
         }
         if (context.flags().get("trail") instanceof Boolean bool) {
             sender.flyTrail(bool);
-            sender.msgLegacy(TL.COMMAND_FLYTRAILS_CHANGE, bool ? "enabled" : "disabled");
+            sender.sendRichMessage(tl.getTrailsChange(), Placeholder.unparsed("state", bool ? "enabled" : "disabled"));
             unhandled = false;
         }
         if (context.flags().get("particle") instanceof String effectName) {
             Particle particleEffect = ParticleProvider.effectFromString(effectName);
             if (particleEffect == null) {
-                sender.msgLegacy(TL.COMMAND_FLYTRAILS_PARTICLE_INVALID);
+                sender.sendRichMessage(tl.getTrailsParticleInvalid());
                 return;
             }
 
             if (context.sender().sender().hasPermission(Permission.FLY_TRAILS.node + "." + effectName)) {
                 sender.flyTrailEffect(effectName);
-                sender.msgLegacy(TL.COMMAND_FLYTRAILS_PARTICLE_CHANGE, effectName);
+                sender.sendRichMessage(tl.getTrailsParticleChange(), Placeholder.unparsed("particle", effectName));
             } else {
-                sender.msgLegacy(TL.COMMAND_FLYTRAILS_PARTICLE_PERMS, effectName);
+                sender.sendRichMessage(tl.getTrailsParticlePerms(), Placeholder.unparsed("particle", effectName));
             }
             unhandled = false;
         }
@@ -77,33 +81,35 @@ public class CmdFly implements Cmd {
     }
 
     private void toggleFlight(FPlayer fPlayer, final boolean toggle, boolean notify) {
-        // If false do nothing besides set
         if (!toggle) {
             fPlayer.flying(false);
             return;
         }
-        // Do checks if true
         if (!flyTest(fPlayer, notify)) {
             return;
         }
 
+        var tl = FactionsPlugin.instance().tl().commands().fly();
         int delay = FactionsPlugin.instance().conf().commands().fly().getDelay();
-        WarmUpUtil.process(fPlayer, WarmUpUtil.Warmup.FLIGHT, TL.WARMUPS_NOTIFY_FLY.format(delay), () -> {
-            if (flyTest(fPlayer, notify)) {
-                fPlayer.flying(true);
-            }
-        }, delay);
+        WarmUpUtil.process(fPlayer, WarmUpUtil.Warmup.FLIGHT,
+                Mini.parse(tl.getWarmup(), fPlayer, Placeholder.unparsed("seconds", String.valueOf(delay))),
+                () -> {
+                    if (flyTest(fPlayer, notify)) {
+                        fPlayer.flying(true);
+                    }
+                }, delay);
     }
 
     private boolean flyTest(FPlayer fPlayer, boolean notify) {
+        var tl = FactionsPlugin.instance().tl().commands().fly();
         if (!fPlayer.canFlyAtLocation()) {
             if (notify) {
-                fPlayer.msgLegacy(TL.COMMAND_FLY_NO_ACCESS, fPlayer.lastStoodAt().faction().tagLegacy(fPlayer));
+                fPlayer.sendRichMessage(tl.getNoAccess(), FactionResolver.of(fPlayer.lastStoodAt().faction()));
             }
             return false;
         } else if (FlightUtil.instance().enemiesNearby(fPlayer, FactionsPlugin.instance().conf().commands().fly().getEnemyRadius())) {
             if (notify) {
-                fPlayer.msgLegacy(TL.COMMAND_FLY_ENEMY_NEARBY);
+                fPlayer.sendRichMessage(tl.getEnemyNearby());
             }
             return false;
         }

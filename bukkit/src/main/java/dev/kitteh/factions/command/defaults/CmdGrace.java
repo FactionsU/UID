@@ -7,7 +7,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -19,24 +19,28 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdGrace implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("grace")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_GRACE_DESCRIPTION))
-                        .permission(builder.commandPermission()
-                                .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().protection().isGraceSystem()))
-                                .and(Cloudy.hasPermission(Permission.GRACE_VIEW))
-                        )
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().grace();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission()
+                                    .and(Cloudy.predicate(s -> FactionsPlugin.instance().conf().factions().protection().isGraceSystem()))
+                                    .and(Cloudy.hasPermission(Permission.GRACE_VIEW))
+                            )
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().grace();
         Duration remaining = Universe.universe().graceRemaining();
 
         if (remaining.isZero()) {
-            context.sender().msgLegacy(TL.COMMAND_GRACE_NOT_SET);
+            context.sender().sendRichMessage(tl.getNotSet());
         } else {
-            context.sender().msgLegacy(TL.COMMAND_GRACE_ACTIVE, MiscUtil.durationString(remaining));
+            context.sender().sendRichMessage(tl.getActive(), Placeholder.unparsed("duration", MiscUtil.durationString(remaining)));
         }
     }
 }

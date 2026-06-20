@@ -5,8 +5,10 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -18,22 +20,29 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdModifyPower implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("modify")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_MODIFYPOWER_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MODIFY_POWER)))
-                        .required("player", FPlayerParser.of(FPlayerParser.Include.ALL))
-                        .required("change", DoubleParser.doubleParser())
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().admin().power().modifyPower();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.MODIFY_POWER)))
+                            .required("player", FPlayerParser.of(FPlayerParser.Include.ALL))
+                            .required("change", DoubleParser.doubleParser())
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().admin().power().modifyPower();
         FPlayer player = context.get("player");
         Double number = context.get("change");
 
         player.alterPower(number);
-        int newPower = player.powerRounded(); // int so we don't have super long doubles.
-        context.sender().msgLegacy(TL.COMMAND_MODIFYPOWER_ADDED, number, player.name(), newPower);
+        int newPower = player.powerRounded();
+        context.sender().sendRichMessage(tl.getAdded(),
+                Placeholder.unparsed("change", String.valueOf(number)),
+                FPlayerResolver.of("player", player),
+                Placeholder.unparsed("power", String.valueOf(newPower)));
     }
 }

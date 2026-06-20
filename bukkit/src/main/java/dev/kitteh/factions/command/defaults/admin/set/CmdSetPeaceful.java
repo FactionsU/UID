@@ -7,8 +7,11 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -19,35 +22,38 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdSetPeaceful implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("peaceful")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_PEACEFUL_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SET_PEACEFUL)))
-                        .required("faction", FactionParser.of(FactionParser.Include.SELF))
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().admin().set().peaceful();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.SET_PEACEFUL)))
+                            .required("faction", FactionParser.of(FactionParser.Include.SELF))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().admin().set().peaceful();
         Faction faction = context.get("faction");
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
         String change;
         if (faction.isPeaceful()) {
-            change = TL.COMMAND_PEACEFUL_REVOKE.toString();
+            change = tl.getRevoke();
             faction.peaceful(false);
         } else {
-            change = TL.COMMAND_PEACEFUL_GRANT.toString();
+            change = tl.getGrant();
             faction.peaceful(true);
         }
 
-        // Inform all players
+        TagResolver blame = Placeholder.unparsed("player", fPlayer == null ? "A server admin" : fPlayer.name());
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-            String blame = (fPlayer == null ? TL.GENERIC_SERVERADMIN.toString() : fPlayer.describeToLegacy(fplayer, true));
             if (fplayer.faction() == faction) {
-                fplayer.msgLegacy(TL.COMMAND_PEACEFUL_YOURS, blame, change);
+                fplayer.sendRichMessage(tl.getYours(), blame, Placeholder.parsed("change", change));
             } else {
-                fplayer.msgLegacy(TL.COMMAND_PEACEFUL_OTHER, blame, change, faction.tagLegacy(fplayer));
+                fplayer.sendRichMessage(tl.getOther(), blame, Placeholder.parsed("change", change), FactionResolver.of(faction));
             }
         }
     }

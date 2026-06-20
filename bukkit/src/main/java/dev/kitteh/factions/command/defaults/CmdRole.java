@@ -9,14 +9,16 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FactionNewAdminEvent;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.description.Description;
 
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
@@ -25,9 +27,10 @@ public class CmdRole implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().role();
             Command.Builder<Sender> build = builder
-                    .literal("role")
-                    .commandDescription(Description.of(TL.COMMAND_ROLE_DESCRIPTION.toString()));
+                    .literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                    .commandDescription(Cloudy.desc(tl.getDescription()));
 
             Command.Builder<Sender> roleBuilder = build.required("member", FPlayerParser.of(FPlayerParser.Include.SAME_FACTION));
 
@@ -79,31 +82,29 @@ public class CmdRole implements Cmd {
     private void handleRole(CommandContext<Sender> context, Role role) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         FPlayer target = context.get("member");
-
         this.handle(sender, target, role);
     }
 
     private void handlePromote(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         FPlayer target = context.get("member");
-
         this.handle(sender, target, Role.getRelative(target.role(), 1));
     }
 
     private void handleDemote(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         FPlayer target = context.get("member");
-
         this.handle(sender, target, Role.getRelative(target.role(), -1));
     }
 
     private void handle(FPlayer sender, FPlayer target, Role targetNewRole) {
+        var tl = FactionsPlugin.instance().tl().commands().role();
         if (!target.faction().equals(sender.faction())) {
-            sender.msgLegacy(TL.COMMAND_ROLE_WRONGFACTION);
+            sender.sendRichMessage(tl.getWrongFaction());
             return;
         }
         if (target.role() == Role.ADMIN || targetNewRole == null || targetNewRole == Role.ADMIN || target.role().isAtLeast(sender.role()) || targetNewRole.isAtLeast(sender.role())) {
-            sender.msgLegacy(TL.COMMAND_ROLE_NOT_ALLOWED);
+            sender.sendRichMessage(tl.getNotAllowed());
             return;
         }
 
@@ -111,7 +112,7 @@ public class CmdRole implements Cmd {
                 !FactionsPlugin.instance().conf().factions().other().isAllowMultipleColeaders() &&
                 !target.faction().members(Role.COLEADER).isEmpty()
         ) {
-            sender.msgLegacy(TL.COMMAND_COLEADER_ALREADY_COLEADER);
+            sender.sendRichMessage(tl.getAlreadyColeader());
             return;
         }
 
@@ -120,32 +121,33 @@ public class CmdRole implements Cmd {
             player.updateCommands();
         }
 
-        target.msgLegacy(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
-        sender.msgLegacy(TL.COMMAND_ROLE_UPDATED, target.name(), targetNewRole.nicename);
+        TagResolver rolePlaceholder = Placeholder.unparsed("role", targetNewRole.nicename);
+        target.sendRichMessage(tl.getUpdated(), FPlayerResolver.of("player", target), rolePlaceholder);
+        sender.sendRichMessage(tl.getUpdated(), FPlayerResolver.of("player", target), rolePlaceholder);
     }
 
     private void handleAdmin(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().role();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         FPlayer target = context.get("member");
 
         if (!sender.hasFaction() || sender.role() != Role.ADMIN) {
-            sender.msgLegacy(TL.COMMAND_ADMIN_NOTADMIN);
+            sender.sendRichMessage(tl.getNotAdmin());
             return;
         }
 
         if (sender == target) {
-            sender.msgLegacy(TL.COMMAND_ADMIN_TARGETSELF);
+            sender.sendRichMessage(tl.getTargetSelf());
             return;
         }
 
         if (sender.faction() != target.faction()) {
-            sender.msgLegacy(TL.COMMAND_ADMIN_NOTMEMBER);
+            sender.sendRichMessage(tl.getNotMember(), FPlayerResolver.of("player", target));
             return;
         }
 
         Bukkit.getServer().getPluginManager().callEvent(new FactionNewAdminEvent(target, sender.faction()));
 
-        // promote target player, and demote existing admin
         boolean allowMultipleColeaders = FactionsPlugin.instance().conf().factions().other().isAllowMultipleColeaders();
         boolean noColeaders = sender.faction().members(Role.COLEADER).isEmpty();
         sender.role((allowMultipleColeaders || noColeaders) ? Role.COLEADER : Role.MODERATOR);
@@ -157,7 +159,9 @@ public class CmdRole implements Cmd {
             player.updateCommands();
         }
 
-        // Inform all players
-        sender.faction().msgLegacy(TL.COMMAND_ADMIN_PROMOTED, sender.describeToLegacy(target), target.describeToLegacy(sender), sender.faction().describeToLegacy(sender));
+        sender.faction().sendRichMessage(tl.getPromoted(),
+                FPlayerResolver.of("player", sender),
+                Placeholder.unparsed("target", target.name()),
+                FactionResolver.of(sender.faction()));
     }
 }

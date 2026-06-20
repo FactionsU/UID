@@ -10,9 +10,10 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.SpiralTask;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -29,9 +30,9 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdClaim implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
+        return (manager, builder, _) -> manager.command(
                 builder.literal("claim")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_CLAIM_DESCRIPTION))
+                        .commandDescription(Cloudy.desc(FactionsPlugin.instance().tl().commands().claim().getDescription()))
                         .permission(
                                 builder.commandPermission()
                                         .and(Cloudy.hasPermission(Permission.CLAIM)
@@ -66,6 +67,7 @@ public class CmdClaim implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().claim();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
 
@@ -77,15 +79,14 @@ public class CmdClaim implements Cmd {
             if (sender.autoClaim() == null) {
                 if (sender.canClaimForFaction(forFaction)) {
                     sender.autoClaim(forFaction);
-
-                    sender.msgLegacy(TL.COMMAND_AUTOCLAIM_ENABLED, forFaction.describeToLegacy(sender));
+                    sender.sendRichMessage(tl.getAutoClaimEnabled(), FactionResolver.of(forFaction));
                     sender.attemptClaim(forFaction, claimLocation, true);
                 } else {
-                    sender.msgLegacy(TL.COMMAND_AUTOCLAIM_OTHERFACTION, forFaction.describeToLegacy(sender));
+                    sender.sendRichMessage(tl.getAutoClaimOtherFaction(), FactionResolver.of(forFaction));
                 }
             } else {
                 sender.autoClaim(null);
-                sender.msgLegacy(TL.COMMAND_AUTOCLAIM_DISABLED);
+                sender.sendRichMessage(tl.getAutoClaimDisabled());
             }
 
             return;
@@ -93,15 +94,13 @@ public class CmdClaim implements Cmd {
 
         if (context.flags().hasFlag("fill")) {
             int limit = context.flags().get("fill-limit") instanceof Integer i ? i : FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims();
-
             this.fill(sender, claimLocation, forFaction, limit);
-
             return;
         }
 
         if (context.flags().get("radius") instanceof Integer radius && radius > 1) {
             if (!Permission.CLAIM_RADIUS.has(player)) {
-                sender.msgLegacy(TL.COMMAND_CLAIM_DENIED);
+                sender.sendRichMessage(tl.getClaimDenied());
                 return;
             }
 
@@ -125,13 +124,13 @@ public class CmdClaim implements Cmd {
             return;
         }
 
-        // Nothing else!
         sender.attemptClaim(forFaction, claimLocation, true);
     }
 
     private void fill(FPlayer sender, FLocation loc, Faction forFaction, int limit) {
+        var tl = FactionsPlugin.instance().tl().commands().claim();
         if (limit > FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims()) {
-            sender.msgLegacy(TL.COMMAND_CLAIMFILL_ABOVEMAX, FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims());
+            sender.sendRichMessage(tl.getFillAboveMax(), Placeholder.unparsed("max", String.valueOf(FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims())));
             return;
         }
 
@@ -140,12 +139,12 @@ public class CmdClaim implements Cmd {
         Faction currentFaction = Board.board().factionAt(loc);
 
         if (currentFaction.equals(forFaction)) {
-            sender.msgLegacy(TL.CLAIM_ALREADYOWN, forFaction.describeToLegacy(sender, true));
+            sender.sendRichMessage(tl.getAlreadyOwn(), FactionResolver.of(forFaction));
             return;
         }
 
         if (!bypass && !currentFaction.isWilderness()) {
-            sender.msgLegacy(TL.COMMAND_CLAIMFILL_ALREADYCLAIMED);
+            sender.sendRichMessage(tl.getFillAlreadyClaimed());
             return;
         }
 
@@ -158,7 +157,7 @@ public class CmdClaim implements Cmd {
                                 (forFaction.isSafeZone() && !Permission.MANAGE_SAFE_ZONE.has(sender.asPlayer()))
                 )
         ) {
-            sender.msgLegacy(TL.CLAIM_CANTCLAIM, forFaction.describeToLegacy(sender));
+            sender.sendRichMessage(tl.getCantClaim(), FactionResolver.of(forFaction));
             return;
         }
 
@@ -175,7 +174,7 @@ public class CmdClaim implements Cmd {
             currentHead = queue.poll();
 
             if (Math.abs(currentHead.x() - startX) > distance || Math.abs(currentHead.z() - startZ) > distance) {
-                sender.msgLegacy(TL.COMMAND_CLAIMFILL_TOOFAR, distance);
+                sender.sendRichMessage(tl.getFillTooFar(), Placeholder.unparsed("max", String.valueOf(distance)));
                 return;
             }
 
@@ -186,12 +185,14 @@ public class CmdClaim implements Cmd {
         }
 
         if (toClaim.size() > limit) {
-            sender.msgLegacy(TL.COMMAND_CLAIMFILL_PASTLIMIT);
+            sender.sendRichMessage(tl.getFillPastLimit());
             return;
         }
 
         if (forFaction.isNormal() && toClaim.size() > FactionsPlugin.instance().landRaidControl().possibleClaimCount(forFaction)) {
-            sender.msgLegacy(TL.COMMAND_CLAIMFILL_NOTENOUGHLANDLEFT, forFaction.describeToLegacy(sender), toClaim.size());
+            sender.sendRichMessage(tl.getFillNotEnoughLand(),
+                    Placeholder.unparsed("faction", forFaction.tag()),
+                    Placeholder.unparsed("count", String.valueOf(toClaim.size())));
             return;
         }
 
@@ -202,7 +203,7 @@ public class CmdClaim implements Cmd {
                 fails++;
             }
             if (fails >= limFail) {
-                sender.msgLegacy(TL.COMMAND_CLAIMFILL_TOOMUCHFAIL, fails);
+                sender.sendRichMessage(tl.getFillTooMuchFail(), Placeholder.unparsed("count", String.valueOf(fails)));
                 return;
             }
         }

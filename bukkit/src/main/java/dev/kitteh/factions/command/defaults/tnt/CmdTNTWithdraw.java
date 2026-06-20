@@ -7,9 +7,10 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -27,36 +28,40 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdTNTWithdraw implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("withdraw")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_TNT_WITHDRAW_DESCRIPTION))
-                        .permission(
-                                builder.commandPermission()
-                                        .and(Cloudy.hasPermission(Permission.TNT_WITHDRAW))
-                                        .and(Cloudy.hasSelfFactionPerms(PermissibleActions.TNTWITHDRAW))
-                        )
-                        .required("amount", IntegerParser.integerParser(1))
-                        .handler(this::handle)
-        );
+        return (manager, builder, _) -> {
+            var tl = FactionsPlugin.instance().tl().commands().tnt();
+            manager.command(
+                    builder.literal(tl.getSubCmdWithdraw())
+                            .commandDescription(Cloudy.desc(tl.getWithdrawDescription()))
+                            .permission(
+                                    builder.commandPermission()
+                                            .and(Cloudy.hasPermission(Permission.TNT_WITHDRAW))
+                                            .and(Cloudy.hasSelfFactionPerms(PermissibleActions.TNTWITHDRAW))
+                            )
+                            .required("amount", IntegerParser.integerParser(1))
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().tnt();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
         Faction faction = sender.faction();
 
         if (!faction.equals(Board.board().factionAt(new FLocation(player.getLocation())))) {
-            sender.msgLegacy(TL.COMMAND_TNT_TERRITORYONLY);
+            sender.sendRichMessage(tl.getTerritoryOnly());
             return;
         }
         int amount = context.get("amount");
         if (amount <= 0) {
-            sender.msgLegacy(TL.COMMAND_TNT_WITHDRAW_FAIL_POSITIVE, amount);
+            sender.sendRichMessage(tl.getWithdrawFailPositive());
             return;
         }
 
         if (faction.tntBank() < amount) {
-            sender.msgLegacy(TL.COMMAND_TNT_WITHDRAW_FAIL_NOTENOUGH, amount);
+            sender.sendRichMessage(tl.getWithdrawFailNotEnough(), Placeholder.unparsed("count", String.valueOf(amount)));
             return;
         }
 
@@ -76,6 +81,8 @@ public class CmdTNTWithdraw implements Cmd {
         }
 
         faction.tntBank(faction.tntBank() - amount + notTaken);
-        sender.msgLegacy(TL.COMMAND_TNT_WITHDRAW_MESSAGE, (amount - notTaken), faction.tntBank());
+        sender.sendRichMessage(tl.getWithdrawMessage(),
+                Placeholder.unparsed("count", String.valueOf(amount - notTaken)),
+                Placeholder.unparsed("remaining", String.valueOf(faction.tntBank())));
     }
 }

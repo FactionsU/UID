@@ -11,8 +11,10 @@ import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.event.FactionRenameEvent;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.MiscUtil;
-import dev.kitteh.factions.util.TL;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -26,24 +28,28 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 public class CmdSetTag implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        return (manager, builder, help) -> manager.command(
-                builder.literal("tag")
-                        .commandDescription(Cloudy.desc(TL.COMMAND_TAG_DESCRIPTION))
-                        .permission(builder.commandPermission().and(Cloudy.isBypass()))
-                        .required("faction", FactionParser.of(FactionParser.Include.SELF))
-                        .required("tag", StringParser.stringParser())
-                        .handler(this::handle)
-        );
+        return (manager, builder, help) -> {
+            var tl = FactionsPlugin.instance().tl().commands().set().tag();
+            manager.command(
+                    builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
+                            .commandDescription(Cloudy.desc(tl.getDescription()))
+                            .permission(builder.commandPermission().and(Cloudy.isBypass()))
+                            .required("faction", FactionParser.of(FactionParser.Include.SELF))
+                            .required("tag", StringParser.stringParser())
+                            .handler(this::handle)
+            );
+        };
     }
 
     private void handle(CommandContext<Sender> context) {
+        var tl = FactionsPlugin.instance().tl().commands().set().tag();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         Faction faction = context.get("faction");
         String tag = context.get("tag");
 
         if (Factions.factions().get(tag) != null) {
-            sender.msgLegacy(TL.COMMAND_TAG_TAKEN);
+            sender.sendRichMessage(tl.getTaken());
             return;
         }
 
@@ -66,14 +72,12 @@ public class CmdSetTag implements Cmd {
         // Inform
         for (FPlayer fplayer : FPlayers.fPlayers().online()) {
             if (fplayer.faction() == faction) {
-                fplayer.msgLegacy(TL.COMMAND_TAG_FACTION, sender.describeToLegacy(faction, true), faction.tagLegacy(faction));
+                fplayer.sendRichMessage(tl.getFactionMsg(), FPlayerResolver.of("player", sender), FactionResolver.of(faction));
                 continue;
             }
 
-            // Broadcast the tag change (if applicable)
             if (FactionsPlugin.instance().conf().factions().chat().isBroadcastTagChanges()) {
-                Faction fac = fplayer.faction();
-                fplayer.msgLegacy(TL.COMMAND_TAG_CHANGED, sender.colorLegacyStringTo(fac) + oldTag, faction.tagLegacy(fac));
+                fplayer.sendRichMessage(tl.getChanged(), Placeholder.unparsed("oldtag", oldTag), FactionResolver.of(faction));
             }
         }
 
