@@ -576,6 +576,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public void updatePower() {
+        long lastUpdate = this.lastPowerUpdateTime;
         if (!this.isOnline()) {
             losePowerFromBeingOffline();
             if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().isRegenOffline()) {
@@ -587,7 +588,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             return;
         }
         long now = System.currentTimeMillis();
-        long millisPassed = now - this.lastPowerUpdateTime;
+        long millisPassed = now - lastUpdate;
         this.lastPowerUpdateTime = now;
 
         Player thisPlayer = this.asPlayer();
