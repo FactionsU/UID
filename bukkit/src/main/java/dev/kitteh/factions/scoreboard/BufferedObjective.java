@@ -69,6 +69,7 @@ public class BufferedObjective {
     public void setAllLines(List<Component> lines) {
         if (lines.size() != contents.size()) {
             contents.clear();
+            requiresUpdate = true;
         }
         for (int i = 0; i < lines.size(); i++) {
             setLine(lines.size() - i, lines.get(i));
