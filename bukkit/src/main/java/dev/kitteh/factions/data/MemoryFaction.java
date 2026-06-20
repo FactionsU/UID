@@ -203,10 +203,7 @@ public abstract class MemoryFaction implements Faction {
         public Component greeting() {
             if (this.greetingComponent == null) {
                 if (this.greeting == null) {
-                    this.greetingComponent = this.faction.zones.main.greetingComponent;
-                    if (this.greetingComponent == null) {
-                        this.greetingComponent = Component.text("");
-                    }
+                    this.greetingComponent = this.id == 0 ? Component.text("") : this.faction.zones.main.greeting();
                 } else {
                     this.greetingComponent = Mini.parseLimited(this.greeting, Placeholder.unparsed("tag", this.faction.tag));
                 }
@@ -226,6 +223,7 @@ public abstract class MemoryFaction implements Faction {
             } else {
                 this.greeting = greeting;
             }
+            this.greetingComponent = null;
         }
 
         @Override
