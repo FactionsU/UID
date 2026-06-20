@@ -120,7 +120,7 @@ public class ListenCommandDeny implements Listener {
 
     private boolean isCommandInSet(String fullCmd, String shortCmd, Set<String> set) {
         for (String string : set) {
-            if (string == null) {
+            if (string == null || string.isEmpty()) {
                 continue;
             }
             string = string.toLowerCase();
