@@ -137,7 +137,10 @@ public class CmdTNTFill implements Cmd {
                         continue;
                     }
                     if (block.getType() == Material.DISPENSER) {
-                        list.add(Pair.of((Dispenser) block.getState(), Math.sqrt(((location.getBlockX() - x) ^ 2) + ((location.getBlockY() - y) ^ 2) + ((location.getBlockZ() - z) ^ 2))));
+                        int dx = location.getBlockX() - x;
+                        int dy = location.getBlockY() - y;
+                        int dz = location.getBlockZ() - z;
+                        list.add(Pair.of((Dispenser) block.getState(), Math.sqrt((dx * dx) + (dy * dy) + (dz * dz))));
                     }
                 }
             }
