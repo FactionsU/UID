@@ -72,6 +72,7 @@ public class CmdSetWarp implements Cmd {
 
         if (FactionsPlugin.instance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.hasHome()) {
             sender.sendRichMessage(tl.getHomeRequired());
+            return;
         }
 
         if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostSetWarp(), econTl.getSetWarpTo(), econTl.getSetWarpFor())) {
