@@ -895,8 +895,14 @@ public abstract class MemoryFaction implements Faction {
         for (FPlayer fplayer : fplayers) {
             ret += fplayer.power();
         }
-        if (FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax() > 0 && ret > FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax()) {
-            ret = FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax();
+        double confMax = FactionsPlugin.instance().conf().factions().landRaidControl().power().getFactionMax();
+        if (confMax > 0) {
+            double limit = confMax;
+            int lvl = this.upgradeLevel(Upgrades.POWER_MAX);
+            if (lvl > 0) {
+                limit += Universe.universe().upgradeSettings(Upgrades.POWER_MAX).valueAt(Upgrades.Variables.POSITIVE_INCREASE, lvl).doubleValue();
+            }
+            ret = Math.min(ret, limit);
         }
         return ret + this.powerBoost;
     }
