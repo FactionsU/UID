@@ -106,7 +106,8 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
                 return "";
             }
             row--;
-            return ChatColor.COLOR_CHAR + mapChars.substring(row, row + 1) + Mini.toLegacy(list.get(row));
+            int keyChar = row % mapChars.length();
+            return ChatColor.COLOR_CHAR + mapChars.substring(keyChar, keyChar + 1) + Mini.toLegacy(list.get(row));
         }
 
         return switch (placeholder) {
