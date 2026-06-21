@@ -153,7 +153,7 @@ public final class PowerControl implements LandRaidControl {
                         Placeholder.unparsed("amount", String.format("%.2f", powerChange)),
                         FPlayerResolver.of("player", fplayer),
                         Placeholder.unparsed("power", String.valueOf(fKiller.powerRounded())),
-                        Placeholder.unparsed("maxPower", String.valueOf(fKiller.powerMaxRounded())));
+                        Placeholder.unparsed("maxpower", String.valueOf(fKiller.powerMaxRounded())));
             }
         }
         // Send the message from the powerLossEvent
@@ -161,7 +161,7 @@ public final class PowerControl implements LandRaidControl {
         if (msg != null && !msg.isEmpty()) {
             fplayer.sendRichMessage(msg,
                     Placeholder.unparsed("power", String.valueOf(fplayer.powerRounded())),
-                    Placeholder.unparsed("maxPower", String.valueOf(fplayer.powerMaxRounded())));
+                    Placeholder.unparsed("maxpower", String.valueOf(fplayer.powerMaxRounded())));
         }
     }
 

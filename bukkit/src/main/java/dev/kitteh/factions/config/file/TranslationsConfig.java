@@ -3086,7 +3086,7 @@ public class TranslationsConfig {
             }
 
             @Comment("Supports <player>, <faction>, <power>, <power_max>, <bonus_penalty>")
-            private String power = "<player><gold> - Power / Maxpower: <yellow><power> / <power_max><bonus_penalty>";
+            private String power = "<player><gold> - Power / maxpower: <yellow><power> / <power_max><bonus_penalty>";
             private String bonus = " (bonus: ";
             private String penalty = " (penalty: ";
 
@@ -5723,15 +5723,15 @@ public class TranslationsConfig {
         public static class Power {
             private String noPowerLossRegion = "<yellow>You didn't lose any power due to the region you were in.";
             private String noPowerLossWarzone = "<yellow>You didn't lose any power since you were in a war zone.";
-            @Comment("Supports <power>, <maxPower>")
-            private String powerLossWarzone = "<red>The world you are in has power loss normally disabled, but you still lost power since you were in a war zone.\n<yellow>Your power is now <light_purple><power> / <maxPower>";
+            @Comment("Supports <power>, <maxpower>")
+            private String powerLossWarzone = "<red>The world you are in has power loss normally disabled, but you still lost power since you were in a war zone.\n<yellow>Your power is now <light_purple><power> / <maxpower>";
             private String noPowerLossWilderness = "<yellow>You didn't lose any power since you were in the wilderness.";
             private String noPowerLossWorld = "<yellow>You didn't lose any power due to the world you died in.";
             private String noPowerLossPeaceful = "<yellow>You didn't lose any power since you are in a peaceful faction.";
-            @Comment("Supports <power>, <maxPower>")
-            private String powerNow = "<yellow>Your power is now <light_purple><power> / <maxPower>";
-            @Comment("Supports <amount>, <player>, <power>, <maxPower>")
-            private String vampirismGain = "<yellow>Stole <light_purple><amount><yellow> power from <player><yellow>. Your power is now <light_purple><power> / <maxPower>";
+            @Comment("Supports <power>, <maxpower>")
+            private String powerNow = "<yellow>Your power is now <light_purple><power> / <maxpower>";
+            @Comment("Supports <amount>, <player>, <power>, <maxpower>")
+            private String vampirismGain = "<yellow>Stole <light_purple><amount><yellow> power from <player><yellow>. Your power is now <light_purple><power> / <maxpower>";
 
             public String getNoPowerLossRegion() {
                 return noPowerLossRegion;
