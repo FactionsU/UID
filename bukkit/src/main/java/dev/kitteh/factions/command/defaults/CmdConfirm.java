@@ -70,6 +70,7 @@ public class CmdConfirm implements Cmd {
         }
 
         if (conf.code.equals(string)) {
+            cache.invalidate(sender.uniqueId());
             conf.consumer.accept(sender);
         } else {
             sender.sendRichMessage(FactionsPlugin.instance().tl().commands().confirm().getInvalid());
