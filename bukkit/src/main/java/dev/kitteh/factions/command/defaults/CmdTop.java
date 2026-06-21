@@ -11,7 +11,7 @@ import dev.kitteh.factions.command.defaults.top.FTopFacValPair;
 import dev.kitteh.factions.command.defaults.top.FTopFoundedValue;
 import dev.kitteh.factions.command.defaults.top.FTopGTIntValue;
 import dev.kitteh.factions.command.defaults.top.FTopValue;
-import dev.kitteh.factions.integration.Econ;
+import dev.kitteh.factions.command.defaults.top.TopMoneyCache;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.util.Permission;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -55,13 +55,7 @@ public class CmdTop implements Cmd {
         topValueGenerators.put("power", f -> new FTopGTIntValue(f.power()));
         topValueGenerators.put("land", f -> new FTopGTIntValue(f.claimCount()));
         topValueGenerators.put("online", f -> new FTopGTIntValue(f.membersOnline(true).size()));
-        Function<Faction, FTopValue<?>> money = f -> {
-            double monies = FactionsPlugin.instance().conf().economy().isEnabled() ? Econ.getBalance(f) : 0;
-            monies += f.members().stream()
-                    .mapToDouble(Econ::getBalance)
-                    .sum();
-            return new FTopBalanceValue(monies);
-        };
+        Function<Faction, FTopValue<?>> money = f -> new FTopBalanceValue(TopMoneyCache.get().factionTotal(f));
 
         topValueGenerators.put("money", money);
         topValueGenerators.put("balance", money);

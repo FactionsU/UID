@@ -5,6 +5,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
+import dev.kitteh.factions.command.defaults.top.TopMoneyCache;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.ComponentDispatcher;
@@ -70,6 +71,8 @@ public class Econ {
 
         if (!FactionsPlugin.instance().conf().economy().isEnabled()) {
             AbstractFactionsPlugin.instance().getLogger().info("NOTE: Economy is disabled. You can enable it in config/main.conf");
+        } else {
+            TopMoneyCache.start(AbstractFactionsPlugin.instance());
         }
     }
 

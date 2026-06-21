@@ -2456,12 +2456,29 @@ public class MainConfig {
         @Comment("Locale, language_country, two characters each, must contain both or be rejected")
         private String locale = "en_US";
 
+        @Comment("""
+                The "/f top money" command caches balances instead of querying the economy for every player each time it is run.
+                How often (in seconds) to refresh cached balances of faction banks and online players. Set to 0 to disable caching/refreshing.""")
+        private int topBalanceCacheOnlineRefreshSeconds = 60;
+        @Comment("""
+                How often (in minutes) every offline player's cached balance is refreshed for "/f top money".
+                Offline players are refreshed gradually across this interval to avoid a burst of economy lookups.""")
+        private int topBalanceCacheOfflineRefreshMinutes = 30;
+
         public boolean isEnabled() {
             return enabled;
         }
 
         public String getLocale() {
             return locale;
+        }
+
+        public int getTopBalanceCacheOnlineRefreshSeconds() {
+            return topBalanceCacheOnlineRefreshSeconds;
+        }
+
+        public int getTopBalanceCacheOfflineRefreshMinutes() {
+            return topBalanceCacheOfflineRefreshMinutes;
         }
 
         public String getDefaultWorld() {
