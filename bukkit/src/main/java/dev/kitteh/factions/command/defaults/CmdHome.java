@@ -155,7 +155,7 @@ public class CmdHome implements Cmd {
                     if (FactionsPlugin.instance().conf().factions().homes().isTeleportCommandSmokeEffectEnabled()) {
                         List<Location> smokeLocations = new ArrayList<>();
                         smokeLocations.add(loc);
-                        smokeLocations.add(loc.add(0, 1, 0));
+                        smokeLocations.add(loc.clone().add(0, 1, 0));
                         smokeLocations.add(destination);
                         smokeLocations.add(destination.clone().add(0, 1, 0));
                         SmokeUtil.spawnCloudRandom(smokeLocations, FactionsPlugin.instance().conf().factions().homes().getTeleportCommandSmokeEffectThickness());
