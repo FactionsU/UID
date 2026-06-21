@@ -265,6 +265,15 @@ public class MainConfig {
             }
         }
 
+        public class Invite {
+            @Comment("How long, in minutes, before an invite expires. Set to 0 or -1 for no expiration.")
+            private int expiry = -1;
+
+            public int getExpiry() {
+                return expiry;
+            }
+        }
+
         public class Link {
             @Comment("Default URL")
             private String defaultURL = "No link set";
@@ -449,6 +458,7 @@ public class MainConfig {
         private Kick kick = new Kick();
         private Fly fly = new Fly();
         private Home home = new Home();
+        private Invite invite = new Invite();
         private Link link = new Link();
         private ListCmd list = new ListCmd();
         private MapCmd map = new MapCmd();
@@ -475,6 +485,10 @@ public class MainConfig {
 
         public Home home() {
             return home;
+        }
+
+        public Invite invite() {
+            return invite;
         }
 
         public Link link() {

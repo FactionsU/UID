@@ -314,11 +314,18 @@ public non-sealed interface Faction extends Participator, Selectable {
 
     Set<UUID> invites();
 
+    @ApiStatus.AvailableSince("4.6.0")
+    void clearInvites();
+
     void invite(FPlayer fplayer);
 
     void deInvite(FPlayer fplayer);
 
     boolean hasInvite(FPlayer fplayer);
+
+    @ApiStatus.AvailableSince("4.6.0")
+    @Nullable
+    Instant inviteExpiry(FPlayer fplayer);
 
     void ban(FPlayer target, FPlayer banner);
 

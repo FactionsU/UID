@@ -130,7 +130,7 @@ public class CmdClear implements Cmd {
     private void handleInviteConf(FPlayer sender) {
         var tl = FactionsPlugin.instance().tl().commands().clear();
         if (sender.asPlayer() instanceof Player p && p.hasPermission(Permission.DEINVITE.node) && sender.faction().hasAccess(sender, PermissibleActions.INVITE, sender.lastStoodAt())) {
-            sender.faction().invites().clear();
+            sender.faction().clearInvites();
             sender.sendRichMessage(tl.getInvitesClearSuccess());
         }
     }

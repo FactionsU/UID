@@ -366,7 +366,8 @@ public abstract class MemoryFaction implements Faction {
     protected long foundedDate;
     protected double powerBoost;
     protected ConcurrentHashMap<Integer, Relation> relationWish = new ConcurrentHashMap<>();
-    protected Set<UUID> invites = new HashSet<>();
+    protected Set<UUID> invites = new HashSet<>(); // legacy
+    protected Map<UUID, Long> invitations = new HashMap<>();
     protected HashMap<UUID, List<String>> announcements = new HashMap<>();
     protected ConcurrentHashMap<String, LazyLocation> warps = new ConcurrentHashMap<>();
     protected ConcurrentHashMap<String, String> warpPasswords = new ConcurrentHashMap<>();
@@ -408,6 +409,16 @@ public abstract class MemoryFaction implements Faction {
         }
         if (this.perms == null || !this.isNormal()) {
             this.resetPerms();
+        }
+        if (this.invitations == null) {
+            this.invitations = new HashMap<>();
+        }
+        if (this.invites != null && !this.invites.isEmpty()) {
+            long now = System.currentTimeMillis();
+            for (UUID id : this.invites) {
+                this.invitations.putIfAbsent(id, now);
+            }
+            this.invites.clear();
         }
         if (this.zones == null) {
             this.zones = new Zones(this);
@@ -500,7 +511,13 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public Set<UUID> invites() {
-        return invites;
+        purgeExpiredInvitations();
+        return Set.copyOf(this.invitations.keySet());
+    }
+
+    @Override
+    public void clearInvites() {
+        this.invitations.clear();
     }
 
     @Override
@@ -515,17 +532,40 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public void invite(FPlayer fplayer) {
-        this.invites.add(fplayer.uniqueId());
+        this.invitations.put(fplayer.uniqueId(), System.currentTimeMillis());
     }
 
     @Override
     public void deInvite(FPlayer fplayer) {
-        this.invites.remove(fplayer.uniqueId());
+        this.invitations.remove(fplayer.uniqueId());
     }
 
     @Override
     public boolean hasInvite(FPlayer fplayer) {
-        return this.invites.contains(fplayer.uniqueId());
+        purgeExpiredInvitations();
+        return this.invitations.containsKey(fplayer.uniqueId());
+    }
+
+    @Override
+    public @Nullable Instant inviteExpiry(FPlayer fplayer) {
+        Long invitedAt = this.invitations.get(fplayer.uniqueId());
+        if (invitedAt == null) {
+            return null;
+        }
+        int expiryMinutes = FactionsPlugin.instance().conf().commands().invite().getExpiry();
+        if (expiryMinutes <= 0) {
+            return null;
+        }
+        return Instant.ofEpochMilli(invitedAt).plus(Duration.ofMinutes(expiryMinutes));
+    }
+
+    private void purgeExpiredInvitations() {
+        int expiryMinutes = FactionsPlugin.instance().conf().commands().invite().getExpiry();
+        if (expiryMinutes <= 0) {
+            return;
+        }
+        long cutoff = System.currentTimeMillis() - Duration.ofMinutes(expiryMinutes).toMillis();
+        this.invitations.values().removeIf(invitedAt -> invitedAt < cutoff);
     }
 
     @Override
