@@ -184,7 +184,7 @@ public final class DTRControl implements LandRaidControl {
         long millisPassed = now - Math.max(faction.dtrLastUpdated(), faction.dtrFrozenUntil());
         Stream<Player> stream = faction.membersOnlineAsPlayers().stream().filter(WorldUtil::isEnabled);
         if (FactionsPlugin.instance().conf().plugins().general().isPreventRegenWhileAfk()) {
-            stream = stream.filter(ExternalChecks::isAfk);
+            stream = stream.filter(player -> !ExternalChecks.isAfk(player));
         }
         long onlineInEnabledWorlds = stream.count();
         double rate = Math.min(conf().getRegainPerMinuteMaxRate(), Math.max(0, onlineInEnabledWorlds - minusPlayer) * conf().getRegainPerMinutePerPlayer());
