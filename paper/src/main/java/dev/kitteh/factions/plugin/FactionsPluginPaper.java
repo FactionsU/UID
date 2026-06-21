@@ -7,6 +7,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.paper.CmdUpgrades;
 import dev.kitteh.factions.command.paper.CmdWarp;
+import dev.kitteh.factions.listener.ListenPaperBeacon;
 import dev.kitteh.factions.listener.ListenPaperChat;
 import dev.kitteh.factions.scoreboard.BufferedObjective;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
@@ -99,6 +100,7 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     @Override
     protected void registerServerSpecificEvents() {
         this.getServer().getPluginManager().registerEvents(new ListenPaperChat(), this);
+        this.getServer().getPluginManager().registerEvents(new ListenPaperBeacon(), this);
     }
 
     @Override

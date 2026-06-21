@@ -94,6 +94,7 @@ public class PermissionsConfig {
 
         this.defaultPermissionsOrder.add(new RoleAtLeastSelector(Role.RECRUIT).serialize());
         this.defaultPermissions.put(new RoleAtLeastSelector(Role.RECRUIT).serialize(), ImmutableMap.<String, Boolean>builder()
+                .put(PermissibleActions.BEACON.name(), true)
                 .put(PermissibleActions.BUILD.name(), true)
                 .put(PermissibleActions.BUTTON.name(), true)
                 .put(PermissibleActions.CONTAINER.name(), true)

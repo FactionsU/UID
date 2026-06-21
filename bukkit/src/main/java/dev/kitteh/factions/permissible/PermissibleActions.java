@@ -17,6 +17,7 @@ import java.util.function.Function;
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public enum PermissibleActions implements PermissibleAction {
+    BEACON(tl -> tl.getBeacon(), tl -> tl.getBeaconShort(), Upgrades.BEACON_EFFECT_CONTROL),
     BUILD(tl -> tl.getBuild(), tl -> tl.getBuildShort()),
     DESTROY(tl -> tl.getDestroy(), tl -> tl.getDestroyShort()),
     PAINBUILD(tl -> tl.getPainBuild(), tl -> tl.getPainBuildShort()),

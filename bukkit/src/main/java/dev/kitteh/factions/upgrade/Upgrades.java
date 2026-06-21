@@ -32,6 +32,9 @@ public final class Upgrades {
         public static final UpgradeVariable POSITIVE_INCREASE = UpgradeVariable.ofInteger("increase", BigDecimal.ONE, BigDecimal.valueOf(Integer.MAX_VALUE));
     }
 
+    @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade BEACON_EFFECT_CONTROL = new Upgrade.SimpleImpl("beacon_effect_control", TranslationsConfig.Upgrades::beaconEffectControl, 1, Set.of());
+
     public static final Upgrade DTR_CLAIM_LIMIT = new Upgrade.SimpleImpl("dtr_claim_limit", TranslationsConfig.Upgrades::dtrClaimLimit, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
     public static final Upgrade FALL_DAMAGE_REDUCTION = new Upgrade.SimpleImpl("fall_damage_reduction", TranslationsConfig.Upgrades::fallDamage, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
@@ -78,6 +81,13 @@ public final class Upgrades {
     }
 
     public static final List<UpgradeSettings> defaults = List.of(
+            new UpgradeSettings(
+                    Upgrades.BEACON_EFFECT_CONTROL,
+                    Map.of(),
+                    1,
+                    0,
+                    LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(100000))
+            ),
             new UpgradeSettings(
                     Upgrades.DTR_CLAIM_LIMIT,
                     Map.of(Variables.POSITIVE_INCREASE, LeveledValueProvider.Equation.of("level * 9")),

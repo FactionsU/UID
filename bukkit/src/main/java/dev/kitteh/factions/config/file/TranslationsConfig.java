@@ -4822,6 +4822,8 @@ public class TranslationsConfig {
             private String attack = "attack";
             private String ban = "Banning players from the faction";
             private String banShort = "ban";
+            private String beacon = "Receiving beacon effects in faction territory";
+            private String beaconShort = "receive beacon effects";
             private String build = "Building blocks";
             private String buildShort = "build";
             private String button = "Using buttons";
@@ -4887,6 +4889,14 @@ public class TranslationsConfig {
 
             public String getBanShort() {
                 return banShort;
+            }
+
+            public String getBeacon() {
+                return beacon;
+            }
+
+            public String getBeaconShort() {
+                return beaconShort;
             }
 
             public String getBuild() {
@@ -5355,6 +5365,8 @@ public class TranslationsConfig {
             }
         }
 
+        private UpgradeDetail beaconEffectControl = new UpgradeDetail("<green>Beacon Effect Control", "<green>Control who receives beacon effects in your territory", "");
+
         private UpgradeDetail dtrClaimLimit = new UpgradeDetail("<green>Claim Limit Increase", "<green>Increases maximum faction territory", "<green>+<increase> claims");
 
         private UpgradeDetail fallDamage = new UpgradeDetail("<green>Fall Damage Reduction", "<green>Decreases fall damage in your own territory", "<green>-<percent>% reduction");
@@ -5374,6 +5386,10 @@ public class TranslationsConfig {
         private UpgradeDetail warps = new UpgradeDetail("<green>Warps", "<green>Additional locations to which members can teleport", "<green><count> warps");
 
         private UpgradeDetail zones = new UpgradeDetail("<green>Zones", "<green>Assign your faction claims to zones to label or grant different permissions", "<green>Grants <increase> zones");
+
+        public UpgradeDetail beaconEffectControl() {
+            return this.beaconEffectControl;
+        }
 
         public UpgradeDetail dtrClaimLimit() {
             return this.dtrClaimLimit;
