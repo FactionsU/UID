@@ -20,10 +20,13 @@ public class SaveTask implements Runnable {
             return;
         }
         running = true;
-        Instances.PLAYERS.forceSave(false);
-        Instances.FACTIONS.forceSave(false);
-        Instances.BOARD.forceSave(false);
-        Instances.UNIVERSE.forceSave(false);
-        running = false;
+        try {
+            Instances.PLAYERS.forceSave(false);
+            Instances.FACTIONS.forceSave(false);
+            Instances.BOARD.forceSave(false);
+            Instances.UNIVERSE.forceSave(false);
+        } finally {
+            running = false;
+        }
     }
 }
