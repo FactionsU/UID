@@ -140,14 +140,14 @@ public final class DTRControl implements LandRaidControl {
         if (!dtrLossEvent.isCancelled()) {
             double startingDTR = faction.dtr();
             faction.dtr(Math.max(conf().getMinDTR(), faction.dtr() - conf().getLossPerDeath(player.getWorld())));
-            double diff = faction.dtr() - startingDTR;
+            double diff = startingDTR - faction.dtr();
             double vamp = conf().getVampirism();
             if (player.getKiller() != null && vamp != 0D && diff > 0) {
                 FPlayer fKiller = FPlayers.fPlayers().get(player.getKiller());
                 if (faction != fKiller.faction()) {
                     double change = vamp * diff;
                     double startingOther = fKiller.faction().dtr();
-                    fKiller.faction().dtr(Math.min(conf().getMaxDTR(), faction.dtr() + change));
+                    fKiller.faction().dtr(Math.min(conf().getMaxDTR(), startingOther + change));
                     double killDiff = fKiller.faction().dtr() - startingOther;
                     fKiller.sendRichMessage(FactionsPlugin.instance().tl().landRaid().dtr().getVampirismGain(),
                             Placeholder.unparsed("amount", String.format("%.2f", killDiff)),

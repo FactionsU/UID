@@ -142,7 +142,7 @@ public final class PowerControl implements LandRaidControl {
         if (!powerLossEvent.isCancelled()) {
             double startingPower = fplayer.power();
             fplayer.alterPower(-powerConf.getLossPerDeath());
-            double powerDiff = fplayer.power() - startingPower;
+            double powerDiff = startingPower - fplayer.power();
             double vamp = powerConf.getVampirism();
             Player killer = player.getKiller();
             if (killer != null && vamp != 0D && powerDiff > 0) {
