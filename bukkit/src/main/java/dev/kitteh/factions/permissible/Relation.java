@@ -53,6 +53,7 @@ public enum Relation implements Permissible {
         }
     }
 
+    @ApiStatus.AvailableSince("4.6.0")
     public int value() {
         return this.value;
     }

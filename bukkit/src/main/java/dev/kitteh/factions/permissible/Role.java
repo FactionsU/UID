@@ -33,6 +33,7 @@ public enum Role implements Permissible {
         this.value = value;
     }
 
+    @ApiStatus.AvailableSince("4.6.0")
     public int value() {
         return this.value;
     }

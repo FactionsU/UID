@@ -52,6 +52,7 @@ public sealed interface Participator permits FPlayer, Faction {
         return Mini.toLegacy(this.describeTo(that));
     }
 
+    @ApiStatus.AvailableSince("4.6.0")
     Component describeTo(@Nullable Participator that);
 
     default Relation relationTo(@Nullable Participator that) {

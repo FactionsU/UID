@@ -272,6 +272,7 @@ public non-sealed interface Faction extends Participator, Selectable {
         this.addAnnouncement(fPlayer, Component.text(ChatColor.stripColor(msg)));
     }
 
+    @ApiStatus.AvailableSince("4.6.0")
     void addAnnouncement(FPlayer fPlayer, Component msg);
 
     void sendUnreadAnnouncements(FPlayer fPlayer);
