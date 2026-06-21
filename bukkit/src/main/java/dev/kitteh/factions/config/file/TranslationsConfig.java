@@ -2528,6 +2528,12 @@ public class TranslationsConfig {
             public Announce() {
                 super("Announce a message to all faction members", "announce");
             }
+
+            private String format = "<green><faction></green> <yellow>[<gray><player></gray>]</yellow> <message>";
+
+            public String getFormat() {
+                return format;
+            }
         }
 
         public static class Ban extends AbsCommand {

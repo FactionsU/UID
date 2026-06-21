@@ -8,7 +8,12 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -41,14 +46,17 @@ public class CmdAnnounce implements Cmd {
             return;
         }
 
-        String prefix = ChatColor.GREEN + faction.tag() + ChatColor.YELLOW + " [" + ChatColor.GRAY + sender.name() + ChatColor.YELLOW + "] " + ChatColor.RESET;
-        String message = context.get("message");
+        var tl = FactionsPlugin.instance().tl().commands().announce();
 
-        faction.sendMessageLegacy(prefix + message);
+        FactionResolver factionResolver = FactionResolver.of(faction);
+        FPlayerResolver fPlayerResolver = FPlayerResolver.of("player", sender);
+        TagResolver message = Placeholder.unparsed("message", context.get("message"));
+
+        faction.sendRichMessage(tl.getFormat(), message, factionResolver, fPlayerResolver);
 
         // Add for offline players.
         for (FPlayer fp : faction.membersOnline(false)) {
-            faction.addAnnouncement(fp, prefix + message);
+            faction.addAnnouncement(fp, Mini.parse(tl.getFormat(), fp, message, factionResolver, fPlayerResolver));
         }
     }
 }

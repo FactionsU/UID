@@ -38,6 +38,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -418,8 +419,8 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public void addAnnouncement(FPlayer fPlayer, String msg) {
-        announcements.computeIfAbsent(fPlayer.uniqueId(), _ -> new ArrayList<>()).add(msg);
+    public void addAnnouncement(FPlayer fPlayer, Component msg) {
+        announcements.computeIfAbsent(fPlayer.uniqueId(), _ -> new ArrayList<>()).add(MiniMessage.miniMessage().serialize(msg));
     }
 
     @Override
@@ -430,7 +431,7 @@ public abstract class MemoryFaction implements Faction {
         }
         fPlayer.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getAnnouncementTop());
         for (String s : ann) {
-            fPlayer.sendMessageLegacy(s);
+            fPlayer.sendRichMessage(s);
         }
         fPlayer.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getAnnouncementBottom());
     }

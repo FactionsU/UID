@@ -13,6 +13,7 @@ import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -266,7 +267,12 @@ public non-sealed interface Faction extends Participator, Selectable {
 
     int id();
 
-    void addAnnouncement(FPlayer fPlayer, String msg);
+    @Deprecated(forRemoval = true, since = "4.6.0")
+    default void addAnnouncement(FPlayer fPlayer, String msg) {
+        this.addAnnouncement(fPlayer, Component.text(ChatColor.stripColor(msg)));
+    }
+
+    void addAnnouncement(FPlayer fPlayer, Component msg);
 
     void sendUnreadAnnouncements(FPlayer fPlayer);
 
