@@ -115,7 +115,7 @@ public class CmdClear implements Cmd {
                     return;
                 }
             }
-            sender.faction().warps().clear();
+            sender.faction().clearWarps();
             sender.sendRichMessage(tl.getWarpsClearSuccess());
         }
     }

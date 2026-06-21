@@ -484,6 +484,7 @@ public abstract class MemoryFaction implements Faction {
     @Override
     public void clearWarps() {
         warps.clear();
+        warpPasswords.clear();
     }
 
     @Override
