@@ -2,7 +2,6 @@ package dev.kitteh.factions.tagresolver;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.util.Mini;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
@@ -71,11 +70,6 @@ public sealed abstract class HelperResolver implements TagResolver permits Gener
 
     public static Tag tagLegacyIns(String string) {
         return Tag.preProcessParsed(MiniMessage.miniMessage().serialize(LegacyComponentSerializer.legacySection().deserialize(string)));
-    }
-
-    @Deprecated(forRemoval = true, since = "4.5.0")
-    public static Tag tagLegacy(TL tl) {
-        return Tag.selfClosingInserting(LegacyComponentSerializer.legacySection().deserialize(tl.toString()));
     }
 
     public static Tag tag(double d) {

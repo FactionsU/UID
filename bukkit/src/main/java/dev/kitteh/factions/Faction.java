@@ -571,6 +571,11 @@ public non-sealed interface Faction extends Participator, Selectable {
     void defaultRole(Role role);
 
     @Override
+    default Component describeTo(@Nullable Participator that) {
+        return Component.text().content(this.tag()).color(this.textColorTo(that)).build();
+    }
+
+    @Override
     default void sendMessage(Component component) {
         for (FPlayer fplayer : this.membersOnline(true)) {
             fplayer.sendMessage(component);

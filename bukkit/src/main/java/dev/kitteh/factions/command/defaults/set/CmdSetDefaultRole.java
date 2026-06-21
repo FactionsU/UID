@@ -48,6 +48,6 @@ public class CmdSetDefaultRole implements Cmd {
         }
 
         sender.faction().defaultRole(target);
-        sender.sendRichMessage(tl.getSuccess(), Placeholder.unparsed("role", target.nicename));
+        sender.sendRichMessage(tl.getSuccess(), Placeholder.unparsed("role", target.translation()));
     }
 }

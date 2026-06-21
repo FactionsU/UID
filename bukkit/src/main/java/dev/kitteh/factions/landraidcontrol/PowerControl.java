@@ -10,7 +10,7 @@ import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.event.PowerLossEvent;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -109,29 +109,30 @@ public final class PowerControl implements LandRaidControl {
         MainConfig.Factions.LandRaidControl.Power powerConf = FactionsPlugin.instance().conf().factions().landRaidControl().power();
         PowerLossEvent powerLossEvent = new PowerLossEvent(faction, fplayer);
         // Check for no power loss conditions
+        var power = FactionsPlugin.instance().tl().landRaid().power();
         if (AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().isNoLossFlag(player)) {
-            powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_REGION.toString());
+            powerLossEvent.setMessage(power.getNoPowerLossRegion());
             powerLossEvent.setCancelled(true);
         } else if (faction.isWarZone()) {
             // war zones always override worldsNoPowerLoss either way, thus this layout
             if (!powerConf.isWarZonePowerLoss()) {
-                powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WARZONE.toString());
+                powerLossEvent.setMessage(power.getNoPowerLossWarzone());
                 powerLossEvent.setCancelled(true);
             }
             if (powerConf.getWorldsNoPowerLoss().contains(player.getWorld().getName())) {
-                powerLossEvent.setMessage(TL.PLAYER_POWER_LOSS_WARZONE.toString());
+                powerLossEvent.setMessage(power.getPowerLossWarzone());
             }
         } else if (faction.isWilderness() && !powerConf.isWildernessPowerLoss() && !FactionsPlugin.instance().conf().factions().protection().getWorldsNoWildernessProtection().contains(player.getWorld().getName())) {
-            powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WILDERNESS.toString());
+            powerLossEvent.setMessage(power.getNoPowerLossWilderness());
             powerLossEvent.setCancelled(true);
         } else if (powerConf.getWorldsNoPowerLoss().contains(player.getWorld().getName())) {
-            powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_WORLD.toString());
+            powerLossEvent.setMessage(power.getNoPowerLossWorld());
             powerLossEvent.setCancelled(true);
         } else if (powerConf.isPeacefulMembersDisablePowerLoss() && fplayer.hasFaction() && fplayer.faction().isPeaceful()) {
-            powerLossEvent.setMessage(TL.PLAYER_POWER_NOLOSS_PEACEFUL.toString());
+            powerLossEvent.setMessage(power.getNoPowerLossPeaceful());
             powerLossEvent.setCancelled(true);
         } else {
-            powerLossEvent.setMessage(TL.PLAYER_POWER_NOW.toString());
+            powerLossEvent.setMessage(power.getPowerNow());
         }
 
         // call Event
@@ -148,13 +149,19 @@ public final class PowerControl implements LandRaidControl {
                 double powerChange = vamp * powerDiff;
                 FPlayer fKiller = FPlayers.fPlayers().get(killer);
                 fKiller.alterPower(powerChange);
-                fKiller.msgLegacy(TL.PLAYER_POWER_VAMPIRISM_GAIN, powerChange, fplayer.describeToLegacy(fKiller), fKiller.powerRounded(), fKiller.powerMaxRounded());
+                fKiller.sendRichMessage(FactionsPlugin.instance().tl().landRaid().power().getVampirismGain(),
+                        Placeholder.unparsed("amount", String.format("%.2f", powerChange)),
+                        FPlayerResolver.of("player", fplayer),
+                        Placeholder.unparsed("power", String.valueOf(fKiller.powerRounded())),
+                        Placeholder.unparsed("maxPower", String.valueOf(fKiller.powerMaxRounded())));
             }
         }
         // Send the message from the powerLossEvent
         final String msg = powerLossEvent.getMessage();
         if (msg != null && !msg.isEmpty()) {
-            fplayer.msgLegacy(msg, fplayer.powerRounded(), fplayer.powerMaxRounded());
+            fplayer.sendRichMessage(msg,
+                    Placeholder.unparsed("power", String.valueOf(fplayer.powerRounded())),
+                    Placeholder.unparsed("maxPower", String.valueOf(fplayer.powerMaxRounded())));
         }
     }
 

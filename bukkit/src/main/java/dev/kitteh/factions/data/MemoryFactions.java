@@ -4,9 +4,9 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.event.FactionCreateEvent;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.util.MiscUtil;
-import dev.kitteh.factions.util.TL;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -29,56 +29,57 @@ public abstract class MemoryFactions implements Factions {
             faction.cleanupDeserialization();
         }
 
+        var special = FactionsPlugin.instance().tl().factionEvents().specialFactions();
         // Make sure the default neutral faction exists
         if (!factions.containsKey(Factions.ID_WILDERNESS)) {
-            MemoryFaction faction = generateFactionObject(Factions.ID_WILDERNESS, TL.WILDERNESS.toString());
+            MemoryFaction faction = generateFactionObject(Factions.ID_WILDERNESS, special.getWildernessTag());
             factions.put(Factions.ID_WILDERNESS, faction);
-            faction.description(TL.WILDERNESS_DESCRIPTION.toString());
+            faction.description(special.getWildernessDescription());
         } else {
             Faction faction = factions.get(ID_WILDERNESS);
-            if (!faction.tag().equalsIgnoreCase(TL.WILDERNESS.toString())) {
-                faction.tag(TL.WILDERNESS.toString());
+            if (!faction.tag().equalsIgnoreCase(special.getWildernessTag())) {
+                faction.tag(special.getWildernessTag());
             }
-            if (!faction.description().equalsIgnoreCase(TL.WILDERNESS_DESCRIPTION.toString())) {
-                faction.description(TL.WILDERNESS_DESCRIPTION.toString());
+            if (!faction.description().equalsIgnoreCase(special.getWildernessDescription())) {
+                faction.description(special.getWildernessDescription());
             }
         }
 
         // Make sure the safe zone faction exists
         if (!factions.containsKey(Factions.ID_SAFEZONE)) {
-            MemoryFaction faction = generateFactionObject(Factions.ID_SAFEZONE, TL.SAFEZONE.toString());
+            MemoryFaction faction = generateFactionObject(Factions.ID_SAFEZONE, special.getSafeZoneTag());
             factions.put(Factions.ID_SAFEZONE, faction);
-            faction.description(TL.SAFEZONE_DESCRIPTION.toString());
+            faction.description(special.getSafeZoneDescription());
         } else {
             Faction faction = factions.get(ID_SAFEZONE);
-            if (!faction.tag().equalsIgnoreCase(TL.SAFEZONE.toString())) {
-                faction.tag(TL.SAFEZONE.toString());
+            if (!faction.tag().equalsIgnoreCase(special.getSafeZoneTag())) {
+                faction.tag(special.getSafeZoneTag());
             }
-            if (!faction.description().equalsIgnoreCase(TL.SAFEZONE_DESCRIPTION.toString())) {
-                faction.description(TL.SAFEZONE_DESCRIPTION.toString());
+            if (!faction.description().equalsIgnoreCase(special.getSafeZoneDescription())) {
+                faction.description(special.getSafeZoneDescription());
             }
             // if SafeZone has old pre-1.6.0 name, rename it to remove troublesome " "
             if (faction.tag().contains(" ")) {
-                faction.tag(TL.SAFEZONE.toString());
+                faction.tag(special.getSafeZoneTag());
             }
         }
 
         // Make sure the war zone faction exists
         if (!factions.containsKey(Factions.ID_WARZONE)) {
-            MemoryFaction faction = generateFactionObject(Factions.ID_WARZONE, TL.WARZONE.toString());
+            MemoryFaction faction = generateFactionObject(Factions.ID_WARZONE, special.getWarZoneTag());
             factions.put(Factions.ID_WARZONE, faction);
-            faction.description(TL.WARZONE_DESCRIPTION.toString());
+            faction.description(special.getWarZoneDescription());
         } else {
             Faction faction = factions.get(ID_WARZONE);
-            if (!faction.tag().equalsIgnoreCase(TL.WARZONE.toString())) {
-                faction.tag(TL.WARZONE.toString());
+            if (!faction.tag().equalsIgnoreCase(special.getWarZoneTag())) {
+                faction.tag(special.getWarZoneTag());
             }
-            if (!faction.description().equalsIgnoreCase(TL.WARZONE_DESCRIPTION.toString())) {
-                faction.description(TL.WARZONE_DESCRIPTION.toString());
+            if (!faction.description().equalsIgnoreCase(special.getWarZoneDescription())) {
+                faction.description(special.getWarZoneDescription());
             }
             // if WarZone has old pre-1.6.0 name, rename it to remove troublesome " "
             if (faction.tag().contains(" ")) {
-                faction.tag(TL.WARZONE.toString());
+                faction.tag(special.getWarZoneTag());
             }
         }
         return 0;

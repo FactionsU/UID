@@ -23,11 +23,11 @@ import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WarmUpUtil;
 import dev.kitteh.factions.util.WorldUtil;
@@ -711,7 +711,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         boolean perm = myFaction.isPermanent();
 
         if (!perm && this.role() == Role.ADMIN && myFaction.members().size() > 1) {
-            msgLegacy(TL.LEAVE_PASSADMIN);
+            sendRichMessage(FactionsPlugin.instance().tl().commands().leave().getPassAdmin());
             return;
         }
 
@@ -720,7 +720,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         // if economy is enabled and they're not on the bypass list, make sure they can pay
-        if (econMakePay && !Econ.hasAtLeast(this, FactionsPlugin.instance().conf().economy().getCostLeave(), TL.LEAVE_TOLEAVE.toString())) {
+        if (econMakePay && !Econ.hasAtLeast(this, FactionsPlugin.instance().conf().economy().getCostLeave(), FactionsPlugin.instance().tl().economy().actions().getLeaveTo())) {
             return;
         }
 
@@ -731,7 +731,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         // then make 'em pay (if applicable)
-        if (econMakePay && !Econ.modifyMoney(this, -FactionsPlugin.instance().conf().economy().getCostLeave(), TL.LEAVE_TOLEAVE.toString(), TL.LEAVE_FORLEAVE.toString())) {
+        if (econMakePay && !Econ.modifyMoney(this, -FactionsPlugin.instance().conf().economy().getCostLeave(), FactionsPlugin.instance().tl().economy().actions().getLeaveTo(), FactionsPlugin.instance().tl().economy().actions().getLeaveFor())) {
             return;
         }
 
@@ -755,11 +755,13 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         if (myFaction.isNormal()) {
             for (FPlayer fplayer : myFaction.membersOnline(true)) {
-                fplayer.msgLegacy(TL.LEAVE_LEFT, this.describeToLegacy(fplayer, true), myFaction.describeToLegacy(fplayer));
+                fplayer.sendMessage(Mini.parse(FactionsPlugin.instance().tl().commands().leave().getLeftNotice(), fplayer,
+                        FPlayerResolver.of("player", this),
+                        FactionResolver.of(myFaction)));
             }
 
             if (FactionsPlugin.instance().conf().logging().isFactionLeave()) {
-                AbstractFactionsPlugin.instance().log(TL.LEAVE_LEFT.format(this.name(), myFaction.tag()));
+                AbstractFactionsPlugin.instance().log(this.name() + " left faction " + myFaction.tag() + ".");
             }
         }
 
@@ -771,13 +773,14 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (myFaction.isNormal() && !perm && myFaction.members().isEmpty()) {
             // Remove this faction
             for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-                fplayer.msgLegacy(TL.LEAVE_DISBANDED, myFaction.describeToLegacy(fplayer, true));
+                fplayer.sendRichMessage(FactionsPlugin.instance().tl().commands().leave().getDisbanded(),
+                        FactionResolver.of(myFaction));
             }
 
             AbstractFactionsPlugin.instance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(myFaction));
             Factions.factions().remove(myFaction);
             if (FactionsPlugin.instance().conf().logging().isFactionDisband()) {
-                AbstractFactionsPlugin.instance().log(TL.LEAVE_DISBANDEDLOG.format(myFaction.tag(), "" + myFaction.id(), this.name()));
+                AbstractFactionsPlugin.instance().log("The faction " + myFaction.tag() + " (" + myFaction.id() + ") was disbanded due to the last player (" + this.name() + ") leaving.");
             }
         }
     }
@@ -820,19 +823,20 @@ public abstract class MemoryFPlayer implements FPlayer {
             return false;
         }
         AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
-        String denyReason = null;
+        Component denyReason = null;
         Faction myFaction = faction();
         Faction currentFaction = Board.board().factionAt(flocation);
         int ownedLand = forFaction.claimCount();
         int factionBuffer = plugin.conf().factions().claims().getBufferZone();
         int worldBuffer = plugin.conf().worldBorder().getBuffer();
+        var claimTl = FactionsPlugin.instance().tl().claiming().claim();
 
         if (plugin.conf().plugins().worldGuard().isCheckingEither() && plugin.getWorldguard() != null && plugin.getWorldguard().checkForRegionsInChunk(flocation.asChunk())) {
             // Checks for WorldGuard regions in the chunk attempting to be claimed
-            denyReason = TextUtil.parse(TL.CLAIM_PROTECTED.toString());
+            denyReason = Mini.parse(claimTl.getProtectedLand(), this);
         } else if (plugin.conf().factions().claims().getWorldsNoClaiming().contains(flocation.worldName())) {
             // Cannot claim in this world
-            denyReason = TextUtil.parse(TL.CLAIM_DISABLED.toString());
+            denyReason = Mini.parse(claimTl.getDisabled(), this);
         } else if (this.adminBypass()) {
             // Admin bypass
             return true;
@@ -844,68 +848,68 @@ public abstract class MemoryFPlayer implements FPlayer {
             return true;
         } else if (!forFaction.hasAccess(this, PermissibleActions.TERRITORY, null)) {
             // Lacking perms to territory claim
-            denyReason = TextUtil.parse(TL.CLAIM_CANTCLAIM.toString(), forFaction.describeToLegacy(this));
+            denyReason = Mini.parse(claimTl.getCantClaim(), this, FactionResolver.of("faction", forFaction));
         } else if (forFaction == currentFaction) {
             // Already owned by this faction, nitwit
-            denyReason = TextUtil.parse(TL.CLAIM_ALREADYOWN.toString(), forFaction.describeToLegacy(this, true));
+            denyReason = Mini.parse(claimTl.getAlreadyOwn(), this, FactionResolver.of("faction", forFaction));
         } else if (forFaction.members().size() < plugin.conf().factions().claims().getRequireMinFactionMembers()) {
             // Need more members in order to claim land
-            denyReason = TextUtil.parse(TL.CLAIM_MEMBERS.toString(), plugin.conf().factions().claims().getRequireMinFactionMembers());
+            denyReason = Mini.parse(claimTl.getMembers(), this, Placeholder.unparsed("count", String.valueOf(plugin.conf().factions().claims().getRequireMinFactionMembers())));
         } else if (currentFaction.isSafeZone()) {
             // Cannot claim safezone
-            denyReason = TextUtil.parse(TL.CLAIM_SAFEZONE.toString());
+            denyReason = Mini.parse(claimTl.getSafeZone(), this);
         } else if (currentFaction.isWarZone()) {
             // Cannot claim warzone
-            denyReason = TextUtil.parse(TL.CLAIM_WARZONE.toString());
+            denyReason = Mini.parse(claimTl.getWarZone(), this);
         } else if (plugin.landRaidControl() instanceof PowerControl && ownedLand >= forFaction.power()) {
             // Already own at least as much land as power
-            denyReason = TextUtil.parse(TL.CLAIM_POWER.toString());
+            denyReason = Mini.parse(claimTl.getPower(), this);
         } else if (plugin.landRaidControl() instanceof DTRControl && ownedLand >= plugin.landRaidControl().landLimit(forFaction)) {
             // Already own at least as much land as land limit (DTR)
-            denyReason = TextUtil.parse(TL.CLAIM_DTR_LAND.toString());
+            denyReason = Mini.parse(claimTl.getDtrLand(), this);
         } else if (plugin.conf().factions().claims().getLandsMax() != 0 && ownedLand >= plugin.conf().factions().claims().getLandsMax() && forFaction.isNormal()) {
             // Land limit reached
-            denyReason = TextUtil.parse(TL.CLAIM_LIMIT.toString());
+            denyReason = Mini.parse(claimTl.getLimit(), this);
         } else if (currentFaction.relationTo(forFaction) == Relation.ALLY) {
-            // // Can't claim ally
-            denyReason = TextUtil.parse(TL.CLAIM_ALLY.toString());
+            // Can't claim ally
+            denyReason = Mini.parse(claimTl.getAlly(), this);
         } else if (plugin.conf().factions().claims().isMustBeConnected() && !this.adminBypass() && myFaction.claimCount(flocation.world()) > 0 && Board.board().isDisconnectedLocation(flocation, myFaction) && (!plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction() || !currentFaction.isNormal())) {
             // Must be contiguous/connected
             if (plugin.conf().factions().claims().isCanBeUnconnectedIfOwnedByOtherFaction()) {
-                denyReason = TextUtil.parse(TL.CLAIM_CONTIGIOUS.toString());
+                denyReason = Mini.parse(claimTl.getContiguous(), this);
             } else {
-                denyReason = TextUtil.parse(TL.CLAIM_FACTIONCONTIGUOUS.toString());
+                denyReason = Mini.parse(claimTl.getFactionContiguous(), this);
             }
         } else if (!(currentFaction.isNormal() && plugin.conf().factions().claims().isAllowOverClaimAndIgnoringBuffer() && currentFaction.hasLandInflation()) && factionBuffer > 0 && Board.board().hasFactionWithin(flocation, myFaction, factionBuffer)) {
             // Too close to buffer
-            denyReason = TextUtil.parse(TL.CLAIM_TOOCLOSETOOTHERFACTION.format(factionBuffer));
+            denyReason = Mini.parse(claimTl.getTooCloseToOtherFaction(), this, Placeholder.unparsed("count", String.valueOf(factionBuffer)));
         } else if (flocation.isOutsideWorldBorder(worldBuffer)) {
             // Border buffer
             if (worldBuffer > 0) {
-                denyReason = TextUtil.parse(TL.CLAIM_OUTSIDEBORDERBUFFER.format(worldBuffer));
+                denyReason = Mini.parse(claimTl.getOutsideBorderBuffer(), this, Placeholder.unparsed("count", String.valueOf(worldBuffer)));
             } else {
-                denyReason = TextUtil.parse(TL.CLAIM_OUTSIDEWORLDBORDER.toString());
+                denyReason = Mini.parse(claimTl.getOutsideWorldBorder(), this);
             }
         } else if (currentFaction.isNormal()) {
             if (myFaction.isPeaceful()) {
                 // Cannot claim as peaceful
-                denyReason = TextUtil.parse(TL.CLAIM_PEACEFUL.toString(), currentFaction.tagLegacy(this));
+                denyReason = Mini.parse(claimTl.getPeaceful(), this, FactionResolver.of("faction", currentFaction));
             } else if (currentFaction.isPeaceful()) {
                 // Cannot claim from peaceful
-                denyReason = TextUtil.parse(TL.CLAIM_PEACEFULTARGET.toString(), currentFaction.tagLegacy(this));
+                denyReason = Mini.parse(claimTl.getPeacefulTarget(), this, FactionResolver.of("faction", currentFaction));
             } else if (!currentFaction.hasLandInflation()) {
                 // Cannot claim other faction (perhaps based on power/land ratio)
-                denyReason = TextUtil.parse(TL.CLAIM_THISISSPARTA.toString(), currentFaction.tagLegacy(this));
+                denyReason = Mini.parse(claimTl.getThisIsSparta(), this, FactionResolver.of("faction", currentFaction));
             } else if (currentFaction.hasLandInflation() && !plugin.conf().factions().claims().isAllowOverClaim()) {
                 // deny over claim when it normally would be allowed.
-                denyReason = TextUtil.parse(TL.CLAIM_OVERCLAIM_DISABLED.toString());
+                denyReason = Mini.parse(claimTl.getOverclaimDisabled(), this);
             } else if (!Board.board().isBorderLocation(flocation)) {
-                denyReason = TextUtil.parse(TL.CLAIM_BORDER.toString());
+                denyReason = Mini.parse(claimTl.getBorder(), this);
             }
         }
 
         if (notifyFailure && denyReason != null) {
-            msgLegacy(denyReason);
+            sendMessage(denyReason);
         }
         return denyReason == null;
     }
@@ -945,7 +949,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                 payee = this;
             }
 
-            if (!Econ.hasAtLeast(payee, cost, TL.CLAIM_TOCLAIM.toString())) {
+            if (!Econ.hasAtLeast(payee, cost, FactionsPlugin.instance().tl().economy().actions().getClaimTo())) {
                 return false;
             }
         }
@@ -957,14 +961,14 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         // then make 'em pay (if applicable)
-        if (mustPay && !Econ.modifyMoney(payee, -cost, TL.CLAIM_TOCLAIM.toString(), TL.CLAIM_FORCLAIM.toString())) {
+        if (mustPay && !Econ.modifyMoney(payee, -cost, FactionsPlugin.instance().tl().economy().actions().getClaimTo(), FactionsPlugin.instance().tl().economy().actions().getClaimFor())) {
             return false;
         }
 
         // Was an over claim
         if (mustPay && currentFaction.isNormal() && currentFaction.hasLandInflation()) {
             // Give them money for over claiming.
-            Econ.modifyMoney(payee, cost * FactionsPlugin.instance().conf().economy().getOverclaimRewardMultiplier(), TL.CLAIM_TOOVERCLAIM.toString(), TL.CLAIM_FOROVERCLAIM.toString());
+            Econ.modifyMoney(payee, cost * FactionsPlugin.instance().conf().economy().getOverclaimRewardMultiplier(), FactionsPlugin.instance().tl().economy().actions().getOverclaimTo(), FactionsPlugin.instance().tl().economy().actions().getOverclaimFor());
         }
 
         // announce success
@@ -972,13 +976,16 @@ public abstract class MemoryFPlayer implements FPlayer {
         informTheseFPlayers.add(this);
         informTheseFPlayers.addAll(forFaction.membersOnline(true));
         for (FPlayer fp : informTheseFPlayers) {
-            fp.msgLegacy(TL.CLAIM_CLAIMED, this.describeToLegacy(fp, true), forFaction.describeToLegacy(fp), currentFaction.describeToLegacy(fp));
+            fp.sendMessage(Mini.parse(FactionsPlugin.instance().tl().claiming().claim().getClaimed(), fp,
+                    FPlayerResolver.of("player", this),
+                    FactionResolver.of(forFaction),
+                    FactionResolver.of("fromFaction", currentFaction)));
         }
 
         Board.board().claim(flocation, forFaction);
 
         if (FactionsPlugin.instance().conf().logging().isLandClaims()) {
-            AbstractFactionsPlugin.instance().log(String.format(TL.CLAIM_CLAIMEDLOG.toString(), this.name(), flocation.asCoordString(), forFaction.tag()));
+            AbstractFactionsPlugin.instance().log(this.name() + " claimed land at (" + flocation.asCoordString() + ") for the faction: " + forFaction.tag());
         }
 
         return true;
@@ -989,7 +996,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         Faction targetFaction = Board.board().factionAt(flocation);
 
         if (!targetFaction.equals(forFaction)) {
-            this.msgLegacy(TL.COMMAND_UNCLAIM_WRONGFACTIONOTHER);
+            this.sendRichMessage(FactionsPlugin.instance().tl().claiming().unclaim().getWrongFactionOther());
             return false;
         }
 
@@ -998,33 +1005,34 @@ public abstract class MemoryFPlayer implements FPlayer {
             return false;
         }
 
+        var unclaimTl = FactionsPlugin.instance().tl().claiming().unclaim();
         if (targetFaction.isSafeZone()) {
             if (Permission.MANAGE_SAFE_ZONE.has(player)) {
                 Board.board().unclaim(flocation);
-                this.msgLegacy(TL.COMMAND_UNCLAIM_SAFEZONE_SUCCESS);
+                this.sendRichMessage(unclaimTl.getSafeZoneSuccess());
 
                 if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                    AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
+                    AbstractFactionsPlugin.instance().log(this.name() + " unclaimed land at (" + flocation.asCoordString() + ") from the faction: " + targetFaction.tag());
                 }
                 return true;
             } else {
                 if (notifyFailure) {
-                    this.msgLegacy(TL.COMMAND_UNCLAIM_SAFEZONE_NOPERM);
+                    this.sendRichMessage(unclaimTl.getSafeZoneNoPerm());
                 }
                 return false;
             }
         } else if (targetFaction.isWarZone()) {
             if (Permission.MANAGE_WAR_ZONE.has(player)) {
                 Board.board().unclaim(flocation);
-                this.msgLegacy(TL.COMMAND_UNCLAIM_WARZONE_SUCCESS);
+                this.sendRichMessage(unclaimTl.getWarZoneSuccess());
 
                 if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                    AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
+                    AbstractFactionsPlugin.instance().log(this.name() + " unclaimed land at (" + flocation.asCoordString() + ") from the faction: " + targetFaction.tag());
                 }
                 return true;
             } else {
                 if (notifyFailure) {
-                    this.msgLegacy(TL.COMMAND_UNCLAIM_WARZONE_NOPERM);
+                    this.sendRichMessage(unclaimTl.getWarZoneNoPerm());
                 }
                 return false;
             }
@@ -1039,11 +1047,12 @@ public abstract class MemoryFPlayer implements FPlayer {
 
             Board.board().unclaim(flocation);
 
-            targetFaction.msgLegacy(TL.COMMAND_UNCLAIM_UNCLAIMED, this.describeToLegacy(targetFaction, true));
-            this.msgLegacy(TL.COMMAND_UNCLAIM_UNCLAIMS);
+            targetFaction.sendRichMessage(unclaimTl.getUnclaimed(),
+                    FPlayerResolver.of("player", this));
+            this.sendRichMessage(unclaimTl.getUnclaims());
 
             if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-                AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
+                AbstractFactionsPlugin.instance().log(this.name() + " unclaimed land at (" + flocation.asCoordString() + ") from the faction: " + targetFaction.tag());
             }
 
             return true;
@@ -1051,21 +1060,22 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         if (!this.hasFaction()) {
             if (notifyFailure) {
-                this.msgLegacy(TL.COMMAND_UNCLAIM_NOTAMEMBER);
+                this.sendRichMessage(unclaimTl.getNotAMember());
             }
             return false;
         }
 
         if (!targetFaction.hasAccess(this, PermissibleActions.TERRITORY, flocation)) {
             if (notifyFailure) {
-                this.msgLegacy(TL.CLAIM_CANTUNCLAIM, targetFaction.describeToLegacy(this));
+                this.sendRichMessage(FactionsPlugin.instance().tl().claiming().claim().getCantUnclaim(),
+                        FactionResolver.of(targetFaction));
             }
             return false;
         }
 
         if (this.faction() != targetFaction) {
             if (notifyFailure) {
-                this.msgLegacy(TL.COMMAND_UNCLAIM_WRONGFACTION);
+                this.sendRichMessage(unclaimTl.getWrongFaction());
             }
             return false;
         }
@@ -1080,21 +1090,22 @@ public abstract class MemoryFPlayer implements FPlayer {
             double refund = Econ.calculateClaimRefund(this.faction().claimCount());
 
             if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysLandCosts()) {
-                if (!Econ.modifyMoney(this.faction(), refund, TL.COMMAND_UNCLAIM_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIM_FORUNCLAIM.toString())) {
+                if (!Econ.modifyMoney(this.faction(), refund, FactionsPlugin.instance().tl().economy().actions().getUnclaimTo(), FactionsPlugin.instance().tl().economy().actions().getUnclaimFor())) {
                     return false;
                 }
             } else {
-                if (!Econ.modifyMoney(this, refund, TL.COMMAND_UNCLAIM_TOUNCLAIM.toString(), TL.COMMAND_UNCLAIM_FORUNCLAIM.toString())) {
+                if (!Econ.modifyMoney(this, refund, FactionsPlugin.instance().tl().economy().actions().getUnclaimTo(), FactionsPlugin.instance().tl().economy().actions().getUnclaimFor())) {
                     return false;
                 }
             }
         }
 
         Board.board().unclaim(flocation);
-        this.faction().msgLegacy(TL.COMMAND_UNCLAIM_FACTIONUNCLAIMED, this.describeToLegacy(this.faction(), true));
+        this.faction().sendRichMessage(unclaimTl.getFactionUnclaimed(),
+                FPlayerResolver.of("player", this));
 
         if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
-            AbstractFactionsPlugin.instance().log(TL.COMMAND_UNCLAIM_LOG.format(this.name(), flocation.asCoordString(), targetFaction.tag()));
+            AbstractFactionsPlugin.instance().log(this.name() + " unclaimed land at (" + flocation.asCoordString() + ") from the faction: " + targetFaction.tag());
         }
 
         return true;
@@ -1149,7 +1160,8 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         if (notify) {
-            msgLegacy(TL.COMMAND_FLY_CHANGE, fly ? "enabled" : "disabled");
+            sendRichMessage(FactionsPlugin.instance().tl().commands().fly().getChange(),
+                    Placeholder.unparsed("state", fly ? "enabled" : "disabled"));
         }
 
         // If leaving fly mode, don't let them take fall damage for x seconds.

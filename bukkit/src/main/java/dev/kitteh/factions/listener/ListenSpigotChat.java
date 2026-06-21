@@ -54,7 +54,7 @@ public class ListenSpigotChat implements Listener {
                 if (qualifies || fPlayer.spyingChat()) {
                     fPlayer.sendRichMessage((qualifies ? format : spyFormat),
                             messagePlaceholder,
-                            Placeholder.component("role", legacy.deserialize(role.nicename)),
+                            Placeholder.unparsed("role", role.translation()),
                             FPlayerResolver.of("sender", me),
                             FactionResolver.of(faction)
                     );
@@ -73,7 +73,7 @@ public class ListenSpigotChat implements Listener {
                 if (qualifies || fPlayer.spyingChat()) {
                     fPlayer.sendRichMessage((qualifies ? format : spyFormat),
                             messagePlaceholder,
-                            Placeholder.component("relation", legacy.deserialize(relation.nicename)),
+                            Placeholder.unparsed("relation", relation.translation()),
                             FPlayerResolver.of("sender", me),
                             FactionResolver.of(faction)
                     );

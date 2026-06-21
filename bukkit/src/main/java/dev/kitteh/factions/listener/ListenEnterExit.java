@@ -9,9 +9,10 @@ import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -63,7 +64,8 @@ public class ListenEnterExit implements Listener {
         if (!myFaction.isWilderness()) {
             for (FPlayer fPlayer : myFaction.membersOnline(true)) {
                 if (fPlayer != me && fPlayer.monitorJoins()) {
-                    fPlayer.msgLegacy(TL.FACTION_LOGOUT, me.name());
+                    fPlayer.sendRichMessage(AbstractFactionsPlugin.instance().tl().factionEvents().getLogout(),
+                            FPlayerResolver.of("player", me));
                 }
             }
         }
@@ -185,7 +187,8 @@ public class ListenEnterExit implements Listener {
                     }
                     this.plugin.teleport(player, target).thenAccept(success -> {
                         if (success) {
-                            me.msgLegacy(TL.PLAYER_TELEPORTEDONJOIN, relation.nicename);
+                            me.sendRichMessage(AbstractFactionsPlugin.instance().tl().factionEvents().getTeleportedOnJoin(),
+                                    Placeholder.unparsed("relation", relation.translation()));
                         }
                     });
                 }
@@ -231,7 +234,8 @@ public class ListenEnterExit implements Listener {
         if (!myFaction.isWilderness()) {
             for (FPlayer other : myFaction.membersOnline(true)) {
                 if (other != me && other.monitorJoins()) {
-                    other.msgLegacy(TL.FACTION_LOGIN, me.name());
+                    other.sendRichMessage(AbstractFactionsPlugin.instance().tl().factionEvents().getLogin(),
+                            FPlayerResolver.of("player", me));
                 }
             }
         }

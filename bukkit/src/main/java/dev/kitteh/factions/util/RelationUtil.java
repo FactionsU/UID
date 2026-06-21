@@ -37,7 +37,7 @@ public class RelationUtil {
             return Relation.NEUTRAL;
         }
 
-        if (fme.relationWish(fthat).value >= fthat.relationWish(fme).value) {
+        if (fme.relationWish(fthat).value() >= fthat.relationWish(fme).value()) {
             return fthat.relationWish(fme);
         }
 
@@ -71,13 +71,13 @@ public class RelationUtil {
 
         if (that instanceof Faction) {
             if (me instanceof FPlayer && myFaction == thatFaction) {
-                ret = TL.GENERIC_YOURFACTION.toString();
+                ret = "your faction";
             } else {
                 ret = thatFaction.tag();
             }
         } else if (that instanceof FPlayer fplayerthat) {
             if (that == me) {
-                ret = TL.GENERIC_YOU.toString();
+                ret = "you";
             } else if (thatFaction == myFaction) {
                 ret = fplayerthat.nameWithTitleLegacy();
             } else {

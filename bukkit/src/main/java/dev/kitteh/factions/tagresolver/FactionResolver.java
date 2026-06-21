@@ -8,7 +8,6 @@ import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.MiscUtil;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.Context;
@@ -127,12 +126,16 @@ public final class FactionResolver extends ObservedResolver {
                     yield tag(DTRControl.round(faction.powerMax() / FactionsPlugin.instance().conf().factions().landRaidControl().power().getLossPerDeath()));
                 }
             }
-            case "dtr_frozen_status" -> tag(TL.DTR_FROZEN_STATUS_MESSAGE.format(faction.dtrFrozen() ? TL.DTR_FROZEN_STATUS_TRUE.toString() : TL.DTR_FROZEN_STATUS_FALSE.toString()));
-            case "dtr_frozen_time" -> tag(TL.DTR_FROZEN_TIME_MESSAGE.format(faction.dtrFrozen() ?
+            case "dtr_frozen_status" -> tag(faction.dtrFrozen() ?
+                    FactionsPlugin.instance().tl().placeholders().misc().getDtrFrozenTrue() :
+                    FactionsPlugin.instance().tl().placeholders().misc().getDtrFrozenFalse());
+            case "dtr_frozen_time" -> tag(faction.dtrFrozen() ?
                     DurationFormatUtils.formatDuration(faction.dtrFrozenUntil() - System.currentTimeMillis(), FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
-                    TL.DTR_FROZEN_TIME_NOTFROZEN.toString()));
+                    FactionsPlugin.instance().tl().placeholders().misc().getDtrFrozenTimeNotFrozen());
 
-            case "raidable" -> tagLegacy(FactionsPlugin.instance().landRaidControl().isRaidable(faction) ? TL.RAIDABLE_TRUE : TL.RAIDABLE_FALSE);
+            case "raidable" -> tag(FactionsPlugin.instance().landRaidControl().isRaidable(faction) ?
+                    FactionsPlugin.instance().tl().placeholders().misc().getRaidableTrue() :
+                    FactionsPlugin.instance().tl().placeholders().misc().getRaidableFalse());
 
             case "leader", "admin" -> faction.admin() instanceof FPlayer fp ? FPlayerResolver.of("leader", fp).solve(arguments, ctx) : tag("");
 
@@ -196,6 +199,6 @@ public final class FactionResolver extends ObservedResolver {
         if (FactionsPlugin.instance().conf().factions().maxRelations().isEnabled()) {
             return String.valueOf(relation.getMax());
         }
-        return TL.GENERIC_INFINITY.toString();
+        return FactionsPlugin.instance().tl().placeholders().misc().getInfinity();
     }
 }

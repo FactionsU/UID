@@ -24,13 +24,13 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.plugin.Instances;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Mini;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldTracker;
 import dev.kitteh.factions.util.WorldUtil;
@@ -428,11 +428,11 @@ public abstract class MemoryFaction implements Faction {
         if (ann == null) {
             return;
         }
-        fPlayer.msgLegacy(TL.FACTIONS_ANNOUNCEMENT_TOP);
+        fPlayer.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getAnnouncementTop());
         for (String s : ann) {
             fPlayer.sendMessageLegacy(s);
         }
-        fPlayer.msgLegacy(TL.FACTIONS_ANNOUNCEMENT_BOTTOM);
+        fPlayer.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getAnnouncementBottom());
     }
 
     @Override
@@ -671,7 +671,7 @@ public abstract class MemoryFaction implements Faction {
             return;
         }
 
-        msgLegacy(TL.FACTION_HOME_UNSET);
+        this.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getHomeUnset());
         this.home = null;
     }
 
@@ -811,7 +811,7 @@ public abstract class MemoryFaction implements Faction {
         this.id = id;
         this.open = FactionsPlugin.instance().conf().factions().other().isNewFactionsDefaultOpen();
         this.tag = tag;
-        this.description = TL.GENERIC_DEFAULTDESCRIPTION.toString();
+        this.description = FactionsPlugin.instance().tl().factionEvents().getDefaultDescription();
         this.lastPlayerLoggedOffTime = 0;
         this.peaceful = FactionsPlugin.instance().conf().factions().other().isNewFactionsDefaultPeaceful();
         this.peacefulExplosionsEnabled = false;
@@ -1179,7 +1179,8 @@ public abstract class MemoryFaction implements Faction {
             }
 
             for (FPlayer fplayer : FPlayers.fPlayers().online()) {
-                fplayer.msgLegacy(TL.LEAVE_DISBANDED, this.tagLegacy(fplayer));
+                fplayer.sendRichMessage(FactionsPlugin.instance().tl().commands().leave().getDisbanded(),
+                        FactionResolver.of(this));
             }
 
             AbstractFactionsPlugin.instance().getServer().getPluginManager().callEvent(new FactionAutoDisbandEvent(this));
@@ -1192,7 +1193,9 @@ public abstract class MemoryFaction implements Faction {
                 oldLeader.role(Role.COLEADER);
             }
             replacements.getFirst().role(Role.ADMIN);
-            this.msgLegacy(TL.FACTION_NEWLEADER, oldLeader == null ? "" : oldLeader.name(), replacements.getFirst().name());
+            this.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getNewLeader(),
+                    Placeholder.unparsed("old_leader", oldLeader == null ? "" : oldLeader.name()),
+                    Placeholder.unparsed("new_leader", replacements.getFirst().name()));
             AbstractFactionsPlugin.instance().log("Faction " + this.tag() + " (" + this.id() + ") admin was removed. Replacement admin: " + replacements.getFirst().name());
         }
     }

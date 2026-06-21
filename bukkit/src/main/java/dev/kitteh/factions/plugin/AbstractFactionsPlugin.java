@@ -56,7 +56,6 @@ import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Metrics;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.SeeChunkUtil;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldTracker;
 import dev.kitteh.factions.util.WorldUtil;
@@ -264,8 +263,6 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
                 }
             }
         }
-
-        loadLang(); // Call before config loading to run cleanup - TODO remove in 5.0
 
         this.gson = this.getGsonBuilder(true).create();
         // Load Conf from disk
@@ -651,108 +648,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
     @Deprecated(forRemoval = true, since = "4.5.0")
     public void loadLang() {
-        // TODO migrate part to conf transitioner in 5.0
-        Path langPath = this.getDataFolder().toPath().resolve("config/lang.yml");
-        if (!Files.exists(langPath)) {
-            Path oldLangPath = this.getDataFolder().toPath().resolve("lang.yml");
-            if (Files.exists(oldLangPath)) {
-                Map<String, String> rawTags = new LinkedHashMap<>();
-                rawTags.put("l", "<green>"); // logo
-                rawTags.put("a", "<gold>"); // art
-                rawTags.put("n", "<silver>"); // notice
-                rawTags.put("i", "<yellow>"); // info
-                rawTags.put("g", "<lime>"); // good
-                rawTags.put("b", "<rose>"); // bad
-                rawTags.put("h", "<pink>"); // highlight
-                rawTags.put("c", "<aqua>"); // command
-                rawTags.put("p", "<teal>"); // parameter
-
-                Path tagPath = this.getDataFolder().toPath().resolve("tags.json");
-                if (Files.exists(tagPath)) {
-                    try {
-                        rawTags.putAll(new Gson().fromJson(Files.readString(tagPath), new TypeToken<Map<String, String>>() {
-                        }.getType()));
-                        Files.deleteIfExists(tagPath);
-                    } catch (Exception ignored) {
-                    }
-                }
-
-                try {
-                    String fullFile = Files.readString(oldLangPath);
-                    fullFile = replace(fullFile, rawTags);
-                    Files.writeString(langPath, fullFile);
-                    Files.deleteIfExists(oldLangPath);
-                } catch (IOException e) {
-                    this.getLogger().log(Level.WARNING, "Failed to convert old lang file!", e);
-                }
-
-                try {
-                    Path mainConfPath = this.getDataFolder().toPath().resolve("config/main.conf");
-                    if (Files.exists(mainConfPath)) {
-                        String fullFile = Files.readString(mainConfPath);
-                        fullFile = replace(fullFile, rawTags);
-                        Files.writeString(mainConfPath, fullFile);
-                    }
-                } catch (IOException e) {
-                    this.getLogger().log(Level.WARNING, "Failed to convert old main.conf file!", e);
-                }
-            }
-        }
-
-
-        YamlConfiguration conf = YamlConfiguration.loadConfiguration(langPath.toFile());
-        for (TL item : TL.values()) {
-            if (conf.getString(item.getPath()) == null) {
-                conf.set(item.getPath(), item.getDefault());
-            }
-        }
-
-        TL.setFile(conf);
-        try {
-            conf.save(langPath.toFile());
-        } catch (IOException e) {
-            AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to save lang.yml", e);
-        }
-    }
-
-    private String replace(String fullFile, Map<String, String> rawTags) {
-        for (Map.Entry<String, String> entry : rawTags.entrySet()) {
-            fullFile = fullFile.replace("<" + entry.getKey() + ">", entry.getValue());
-        }
-        return fullFile.replace("`e", "")
-                .replace("`r", ChatColor.RED.toString())
-                .replace("`R", ChatColor.DARK_RED.toString())
-                .replace("`y", ChatColor.YELLOW.toString())
-                .replace("`Y", ChatColor.GOLD.toString())
-                .replace("`g", ChatColor.GREEN.toString())
-                .replace("`G", ChatColor.DARK_GREEN.toString())
-                .replace("`a", ChatColor.AQUA.toString())
-                .replace("`A", ChatColor.DARK_AQUA.toString())
-                .replace("`b", ChatColor.BLUE.toString())
-                .replace("`B", ChatColor.DARK_BLUE.toString())
-                .replace("`p", ChatColor.LIGHT_PURPLE.toString())
-                .replace("`P", ChatColor.DARK_PURPLE.toString())
-                .replace("`k", ChatColor.BLACK.toString())
-                .replace("`s", ChatColor.GRAY.toString())
-                .replace("`S", ChatColor.DARK_GRAY.toString())
-                .replace("`w", ChatColor.WHITE.toString())
-                .replace("<empty>", "")
-                .replace("<black>", ChatColor.BLACK.toString())
-                .replace("<navy>", ChatColor.DARK_BLUE.toString())
-                .replace("<green>", ChatColor.DARK_GREEN.toString())
-                .replace("<teal>", ChatColor.DARK_AQUA.toString())
-                .replace("<red>", ChatColor.DARK_RED.toString())
-                .replace("<purple>", ChatColor.DARK_PURPLE.toString())
-                .replace("<gold>", ChatColor.GOLD.toString())
-                .replace("<silver>", ChatColor.GRAY.toString())
-                .replace("<gray>", ChatColor.DARK_GRAY.toString())
-                .replace("<blue>", ChatColor.BLUE.toString())
-                .replace("<lime>", ChatColor.GREEN.toString())
-                .replace("<aqua>", ChatColor.AQUA.toString())
-                .replace("<rose>", ChatColor.RED.toString())
-                .replace("<pink>", ChatColor.LIGHT_PURPLE.toString())
-                .replace("<yellow>", ChatColor.YELLOW.toString())
-                .replace("<white>", ChatColor.WHITE.toString());
+        // NOOP
     }
 
     public UUID getServerUUID() {

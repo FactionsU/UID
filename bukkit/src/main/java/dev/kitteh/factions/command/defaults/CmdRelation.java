@@ -89,7 +89,7 @@ public class CmdRelation implements Cmd {
         Relation currentRelation = faction.relationTo(them, true);
 
         // if the relation change was successful
-        if (targetRelation.value == currentRelation.value) {
+        if (targetRelation.value() == currentRelation.value()) {
             // trigger the faction relation event
             FactionRelationEvent relationEvent = new FactionRelationEvent(faction, them, oldRelation, currentRelation);
             Bukkit.getServer().getPluginManager().callEvent(relationEvent);

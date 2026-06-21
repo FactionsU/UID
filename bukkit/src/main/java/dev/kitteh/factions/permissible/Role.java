@@ -2,7 +2,6 @@ package dev.kitteh.factions.permissible;
 
 import com.google.gson.annotations.SerializedName;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -17,22 +16,25 @@ import java.util.Set;
 @NullMarked
 public enum Role implements Permissible {
     @SerializedName(value = "ADMIN", alternate = {"LEADER"}) // Import
-    ADMIN(4, TL.ROLE_ADMIN),
-    COLEADER(3, TL.ROLE_COLEADER),
-    MODERATOR(2, TL.ROLE_MODERATOR),
-    NORMAL(1, TL.ROLE_NORMAL),
-    RECRUIT(0, TL.ROLE_RECRUIT);
+    ADMIN(4),
+    COLEADER(3),
+    MODERATOR(2),
+    NORMAL(1),
+    RECRUIT(0);
 
+    @Deprecated(forRemoval = true, since = "4.6.0")
     public final int value;
-    public final String nicename;
-    public final TL translation;
+    @Deprecated(forRemoval = true, since = "4.6.0")
+    public final String nicename = "";
     private @Nullable Set<String> roleNamesAtOrBelow;
     private @Nullable Set<String> roleNamesAtOrAbove;
 
-    Role(final int value, final TL translation) {
+    Role(final int value) {
         this.value = value;
-        this.nicename = translation.toString();
-        this.translation = translation;
+    }
+
+    public int value() {
+        return this.value;
     }
 
     public boolean isAtLeast(Role role) {
@@ -56,7 +58,6 @@ public enum Role implements Permissible {
             case 4 -> ADMIN;
             default -> null;
         };
-
     }
 
     public static @Nullable Role fromString(String check) {
@@ -72,36 +73,28 @@ public enum Role implements Permissible {
 
     @Override
     public String toString() {
-        return this.nicename;
+        return this.translation();
     }
 
     @Override
     public String translation() {
-        return translation.toString();
+        return switch (this) {
+            case ADMIN -> FactionsPlugin.instance().tl().general().roles().getAdmin();
+            case COLEADER -> FactionsPlugin.instance().tl().general().roles().getColeader();
+            case MODERATOR -> FactionsPlugin.instance().tl().general().roles().getModerator();
+            case NORMAL -> FactionsPlugin.instance().tl().general().roles().getNormal();
+            case RECRUIT -> FactionsPlugin.instance().tl().general().roles().getRecruit();
+        };
     }
 
     public String getPrefix() {
-        if (this == Role.ADMIN) {
-            return FactionsPlugin.instance().conf().factions().prefixes().getAdmin();
-        }
-
-        if (this == Role.COLEADER) {
-            return FactionsPlugin.instance().conf().factions().prefixes().getColeader();
-        }
-
-        if (this == Role.MODERATOR) {
-            return FactionsPlugin.instance().conf().factions().prefixes().getMod();
-        }
-
-        if (this == Role.NORMAL) {
-            return FactionsPlugin.instance().conf().factions().prefixes().getNormal();
-        }
-
-        if (this == Role.RECRUIT) {
-            return FactionsPlugin.instance().conf().factions().prefixes().getRecruit();
-        }
-
-        return "";
+        return switch (this) {
+            case ADMIN -> FactionsPlugin.instance().conf().factions().prefixes().getAdmin();
+            case COLEADER -> FactionsPlugin.instance().conf().factions().prefixes().getColeader();
+            case MODERATOR -> FactionsPlugin.instance().conf().factions().prefixes().getMod();
+            case NORMAL -> FactionsPlugin.instance().conf().factions().prefixes().getNormal();
+            case RECRUIT -> FactionsPlugin.instance().conf().factions().prefixes().getRecruit();
+        };
     }
 
     @Override

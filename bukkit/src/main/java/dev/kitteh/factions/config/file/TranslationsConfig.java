@@ -2770,6 +2770,8 @@ public class TranslationsConfig {
             private String warmup = "<yellow>Flight will enable in <light_purple><seconds> <yellow>seconds.";
             private String damage = "<yellow>Faction flight <light_purple>disabled<yellow> due to entering combat";
             private String enemyDisable = "<red>Enemy nearby, disabling fly";
+            @Comment("Supports <state>")
+            private String change = "<yellow>Faction flight <light_purple><state>";
 
             public String getAuto() {
                 return auto;
@@ -2809,6 +2811,10 @@ public class TranslationsConfig {
 
             public String getEnemyDisable() {
                 return enemyDisable;
+            }
+
+            public String getChange() {
+                return change;
             }
         }
 
@@ -2971,9 +2977,26 @@ public class TranslationsConfig {
             }
 
             private String negativePower = "<red>You cannot leave until your power is positive.";
+            private String passAdmin = "<red>You must give the admin role to someone else first.";
+            @Comment("Supports <player> (who left), <faction>")
+            private String leftNotice = "<yellow><player> left <faction>.";
+            @Comment("Supports <faction>")
+            private String disbanded = "<yellow><faction> was disbanded.";
 
             public String getNegativePower() {
                 return negativePower;
+            }
+
+            public String getPassAdmin() {
+                return passAdmin;
+            }
+
+            public String getLeftNotice() {
+                return leftNotice;
+            }
+
+            public String getDisbanded() {
+                return disbanded;
             }
         }
 
@@ -3722,6 +3745,185 @@ public class TranslationsConfig {
         public EnterTitles enterTitles() {
             return enterTitles;
         }
+
+        public static class Relations {
+            private String ally = "ally";
+            private String allies = "allies";
+            private String member = "member";
+            private String members = "members";
+            private String truce = "truce";
+            private String truces =  "truces";
+            private String enemy = "enemy";
+            private String enemies = "enemies";
+            private String neutral  = "neutral";
+            private String neutrals = "neutrals";
+
+            public String getAlly() {
+                return ally;
+            }
+
+            public String getAllies() {
+                return allies;
+            }
+
+            public String getMember() {
+                return member;
+            }
+
+            public String getMembers() {
+                return members;
+            }
+
+            public String getTruce() {
+                return truce;
+            }
+
+            public String getTruces() {
+                return truces;
+            }
+
+            public String getEnemy() {
+                return enemy;
+            }
+
+            public String getEnemies() {
+                return enemies;
+            }
+
+            public String getNeutral() {
+                return neutral;
+            }
+
+            public String getNeutrals() {
+                return neutrals;
+            }
+        }
+
+        private Relations relations = new Relations();
+
+        public Relations relations() {
+            return relations;
+        }
+
+        public static class Roles {
+            private String admin = "admin";
+            private String coleader = "coleader";
+            private String moderator = "moderator";
+            private String normal = "member";
+            private String recruit =  "recruit";
+
+            public String getAdmin() {
+                return admin;
+            }
+
+            public String getColeader() {
+                return coleader;
+            }
+
+            public String getModerator() {
+                return moderator;
+            }
+
+            public String getNormal() {
+                return normal;
+            }
+
+            public String getRecruit() {
+                return recruit;
+            }
+        }
+
+        private Roles roles = new Roles();
+
+        public Roles roles() {
+            return roles;
+        }
+
+        public static class FactionTag {
+            private String blacklisted = "<yellow>That faction tag is blacklisted.";
+            @Comment("Supports <min>")
+            private String tooShort = "<yellow>The faction tag can't be shorter than <light_purple><min><yellow> chars.";
+            @Comment("Supports <max>")
+            private String tooLong = "<yellow>The faction tag can't be longer than <light_purple><max><yellow> chars.";
+            @Comment("Supports <chars>")
+            private String alphanumeric = "<yellow>Faction tag must be alphanumeric. \"<light_purple><chars><yellow>\" is not allowed.";
+
+            public String getBlacklisted() {
+                return blacklisted;
+            }
+
+            public String getTooShort() {
+                return tooShort;
+            }
+
+            public String getTooLong() {
+                return tooLong;
+            }
+
+            public String getAlphanumeric() {
+                return alphanumeric;
+            }
+        }
+
+        private FactionTag factionTag = new FactionTag();
+
+        public FactionTag factionTag() {
+            return factionTag;
+        }
+
+        public static class Duration {
+            private String day = "%d day";
+            private String days = "%d days";
+            private String hour = "%d hour";
+            private String hours = "%d hours";
+            private String minute = "%d minute";
+            private String minutes = "%d minutes";
+            private String second = "%d second";
+            private String seconds = "%d seconds";
+            private String and = "and";
+
+            public String getDay() {
+                return day;
+            }
+
+            public String getDays() {
+                return days;
+            }
+
+            public String getHour() {
+                return hour;
+            }
+
+            public String getHours() {
+                return hours;
+            }
+
+            public String getMinute() {
+                return minute;
+            }
+
+            public String getMinutes() {
+                return minutes;
+            }
+
+            public String getSecond() {
+                return second;
+            }
+
+            public String getSeconds() {
+                return seconds;
+            }
+
+            public String getAnd() {
+                return and;
+            }
+        }
+
+        private Duration duration = new Duration();
+
+        public Duration duration() {
+            return duration;
+        }
     }
 
     public static class Economy {
@@ -3976,6 +4178,37 @@ public class TranslationsConfig {
             public String getUnclaimAllTo() {
                 return unclaimAllTo;
             }
+
+            private String leaveTo = "to leave your faction";
+            private String leaveFor = "for leaving your faction";
+            private String claimTo = "to claim this land";
+            private String claimFor = "for claiming this land";
+            private String overclaimTo = "to overclaim this land";
+            private String overclaimFor = "for over claiming this land";
+
+            public String getLeaveTo() {
+                return leaveTo;
+            }
+
+            public String getLeaveFor() {
+                return leaveFor;
+            }
+
+            public String getClaimTo() {
+                return claimTo;
+            }
+
+            public String getClaimFor() {
+                return claimFor;
+            }
+
+            public String getOverclaimTo() {
+                return overclaimTo;
+            }
+
+            public String getOverclaimFor() {
+                return overclaimFor;
+            }
         }
 
         public static class Modification {
@@ -4013,8 +4246,88 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Transfer {
+            private String format = "###,###.###";
+            @Comment("Supports <entity> (faction/player name), <amount> (money string)")
+            private String balance = "<gold><entity>'s<yellow> balance is <light_purple><amount><yellow>.";
+            @Comment("Supports <you>, <target>")
+            private String noPerm = "<light_purple><you><yellow> lacks permission to control <light_purple><target>'s<yellow> money.";
+            private String disabled = "Faction econ is disabled.";
+            @Comment("Supports <from>, <amount>, <to>")
+            private String cantAffordTransfer = "<light_purple><from><red> can't afford to transfer <light_purple><amount><red> to <to><red>.";
+            @Comment("Supports <amount>")
+            private String overBalCap = "<dark_red>The amount <yellow><amount> <dark_red>is over Essentials' balance cap.";
+            @Comment("Supports <amount>, <to>, <from>")
+            private String transferUnable = "Unable to transfer <amount><red> to <light_purple><to><red> from <light_purple><from><red>.";
+            @Comment("Supports <amount>, <from>, <to>")
+            private String transferNoinvoker = "<light_purple><amount><yellow> was transferred from <light_purple><from><yellow> to <light_purple><to><yellow>.";
+            @Comment("Supports <from>, <amount>, <to>")
+            private String transferGave = "<light_purple><from><yellow> gave <light_purple><amount><yellow> to <light_purple><to><yellow>.";
+            @Comment("Supports <to>, <amount>, <from>")
+            private String transferTook = "<light_purple><to><yellow> took <light_purple><amount><yellow> from <light_purple><from><yellow>.";
+            @Comment("Supports <invoker>, <amount>, <from>, <to>")
+            private String transferTransfer = "<light_purple><invoker><yellow> transferred <light_purple><amount><yellow> from <light_purple><from><yellow> to <light_purple><to><yellow>.";
+            @Comment("Supports <amount> (action noun like 'balance', 'value', 'refund')")
+            private String off = "no <amount>";
+            @Comment("Supports <entity> (name), <amount> (money), <action> (to do this)")
+            private String cantAffordAmount = "<light_purple><entity><yellow> can't afford <light_purple><amount><yellow> <action>.";
+
+            public String getFormat() {
+                return format;
+            }
+
+            public String getBalance() {
+                return balance;
+            }
+
+            public String getNoPerm() {
+                return noPerm;
+            }
+
+            public String getDisabled() {
+                return disabled;
+            }
+
+            public String getCantAffordTransfer() {
+                return cantAffordTransfer;
+            }
+
+            public String getOverBalCap() {
+                return overBalCap;
+            }
+
+            public String getTransferUnable() {
+                return transferUnable;
+            }
+
+            public String getTransferNoinvoker() {
+                return transferNoinvoker;
+            }
+
+            public String getTransferGave() {
+                return transferGave;
+            }
+
+            public String getTransferTook() {
+                return transferTook;
+            }
+
+            public String getTransferTransfer() {
+                return transferTransfer;
+            }
+
+            public String getOff() {
+                return off;
+            }
+
+            public String getCantAffordAmount() {
+                return cantAffordAmount;
+            }
+        }
+
         private Actions actions = new Actions();
         private Modification modification = new Modification();
+        private Transfer transfer = new Transfer();
 
         public Actions actions() {
             return actions;
@@ -4022,6 +4335,10 @@ public class TranslationsConfig {
 
         public Modification modification() {
             return modification;
+        }
+
+        public Transfer transfer() {
+            return transfer;
         }
     }
 
@@ -4195,7 +4512,7 @@ public class TranslationsConfig {
             @WipeOnReload
             private DateTimeFormatter banTimingFormatter;
 
-            private String factionCreationDate ="MM/d/yy h:ma";
+            private String factionCreationDate = "MM/d/yy h:ma";
             @WipeOnReload
             private DateTimeFormatter factionCreationDateFormatter;
 
@@ -4371,11 +4688,95 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Misc {
+            private String noFactionPrefix = "<gold>[<green>no-faction</green>>]";
+            private String factionless = "factionless";
+            private String infinity = "∞";
+            private String roleName = "None";
+            private String raidableTrue = "true";
+            private String raidableFalse = "false";
+            private String dtrFrozenTrue = "Frozen";
+            private String dtrFrozenFalse = "Not frozen";
+            private String dtrFrozenTimeNotFrozen = "";
+            private String joinOpen = "no invitation is needed";
+            private String joinInvite = "invitation is required";
+            private String peaceful = "This faction is Peaceful";
+            private String powerBonus = " (bonus: ";
+            private String powerPenalty = " (penalty: ";
+            private String online = "Online";
+            private String lastSeenSuffix = " ago.";
+
+            public String getNoFactionPrefix() {
+                return noFactionPrefix;
+            }
+
+            public String getFactionless() {
+                return factionless;
+            }
+
+            public String getInfinity() {
+                return infinity;
+            }
+
+            public String getRoleName() {
+                return roleName;
+            }
+
+            public String getRaidableTrue() {
+                return raidableTrue;
+            }
+
+            public String getRaidableFalse() {
+                return raidableFalse;
+            }
+
+            public String getDtrFrozenTrue() {
+                return dtrFrozenTrue;
+            }
+
+            public String getDtrFrozenFalse() {
+                return dtrFrozenFalse;
+            }
+
+            public String getDtrFrozenTimeNotFrozen() {
+                return dtrFrozenTimeNotFrozen;
+            }
+
+            public String getJoinOpen() {
+                return joinOpen;
+            }
+
+            public String getJoinInvite() {
+                return joinInvite;
+            }
+
+            public String getPeaceful() {
+                return peaceful;
+            }
+
+            public String getPowerBonus() {
+                return powerBonus;
+            }
+
+            public String getPowerPenalty() {
+                return powerPenalty;
+            }
+
+            public String getOnline() {
+                return online;
+            }
+
+            public String getLastSeenSuffix() {
+                return lastSeenSuffix;
+            }
+        }
+
         private DatesAndTimes datesAndTimes = new DatesAndTimes();
         private LastSeen lastSeen = new LastSeen();
         private Shield shield = new Shield();
         private Title title = new Title();
         private ToolTips tooltips = new ToolTips();
+        private Misc misc = new Misc();
 
         private boolean playerTitleColorContinuesIntoName = false;
 
@@ -4401,6 +4802,10 @@ public class TranslationsConfig {
 
         public ToolTips tooltips() {
             return tooltips;
+        }
+
+        public Misc misc() {
+            return misc;
         }
     }
 
@@ -5011,6 +5416,387 @@ public class TranslationsConfig {
         }
     }
 
+    public static class FactionEvents {
+        public static class SpecialFactions {
+            private String wildernessTag = "Wilderness";
+            private String wildernessDescription = "";
+            private String safeZoneTag = "Safezone";
+            private String safeZoneDescription = "Free from pvp and monsters.";
+            private String warZoneTag = "Warzone";
+            private String warZoneDescription = "Not the safest place to be.";
+
+            public String getWildernessTag() {
+                return wildernessTag;
+            }
+
+            public String getWildernessDescription() {
+                return wildernessDescription;
+            }
+
+            public String getSafeZoneTag() {
+                return safeZoneTag;
+            }
+
+            public String getSafeZoneDescription() {
+                return safeZoneDescription;
+            }
+
+            public String getWarZoneTag() {
+                return warZoneTag;
+            }
+
+            public String getWarZoneDescription() {
+                return warZoneDescription;
+            }
+        }
+
+        @Comment("Supports <player>")
+        private String login = "<yellow><player> <aqua>logged in.";
+        @Comment("Supports <player>")
+        private String logout = "<yellow><player> <aqua>logged out.";
+        private String announcementTop = "<light_purple>--Unread Faction Announcements--";
+        private String announcementBottom = "<light_purple>--Unread Faction Announcements--";
+        private String homeUnset = "<red>Your faction home has been un-set since it is no longer in your territory.";
+        @Comment("Supports <old_leader>, <new_leader>")
+        private String newLeader = "<yellow>Faction admin <light_purple><old_leader><yellow> has been removed. <light_purple><new_leader><yellow> has been promoted as the new faction admin.";
+        private String defaultDescription = "Default faction description :(";
+        @Comment("Supports <relation>")
+        private String teleportedOnJoin = "<yellow>You were teleported out of <relation> territory";
+        private String portalNotAllowed = "<red>Destination portal can't be created there.";
+        @Comment("Supports <faction> (the faction that became raidable)")
+        private String raidableNow = "<faction> <red>is now raidable!";
+        @Comment("Supports <faction> (the faction that is no longer raidable)")
+        private String raidableNoLonger = "<faction> <red>is no longer raidable!";
+        private SpecialFactions specialFactions = new SpecialFactions();
+
+        public String getLogin() {
+            return login;
+        }
+
+        public String getLogout() {
+            return logout;
+        }
+
+        public String getAnnouncementTop() {
+            return announcementTop;
+        }
+
+        public String getAnnouncementBottom() {
+            return announcementBottom;
+        }
+
+        public String getHomeUnset() {
+            return homeUnset;
+        }
+
+        public String getNewLeader() {
+            return newLeader;
+        }
+
+        public String getDefaultDescription() {
+            return defaultDescription;
+        }
+
+        public String getTeleportedOnJoin() {
+            return teleportedOnJoin;
+        }
+
+        public String getPortalNotAllowed() {
+            return portalNotAllowed;
+        }
+
+        public String getRaidableNow() {
+            return raidableNow;
+        }
+
+        public String getRaidableNoLonger() {
+            return raidableNoLonger;
+        }
+
+        public SpecialFactions specialFactions() {
+            return specialFactions;
+        }
+    }
+
+    public static class Claiming {
+        public static class Claim {
+            private String protectedLand = "<red>This land is protected";
+            private String disabled = "<red>Sorry, this world has land claiming disabled.";
+            @Comment("Supports <faction>")
+            private String cantClaim = "<red>You can't claim land for <light_purple><faction><red>.";
+            @Comment("Supports <faction>")
+            private String cantUnclaim = "<red>You can't unclaim land for <light_purple><faction><red>.";
+            @Comment("Supports <faction>")
+            private String alreadyOwn = "<faction><yellow> already own this land.";
+            @Comment("Supports <count>")
+            private String members = "<red>Factions must have at least <light_purple><count> <red>members to claim land.";
+            private String safeZone = "<red>You can not claim a safe zone.";
+            private String warZone = "<red>You can not claim a war zone.";
+            private String power = "<red>You can't claim more land! You need more power!";
+            private String dtrLand = "<red>You can't claim more land!";
+            private String limit = "<red>Limit reached. You can't claim more land!";
+            private String ally = "<red>You can't claim the land of your allies.";
+            private String contiguous = "<red>You can only claim additional land which is connected to your first claim or controlled by another faction!";
+            private String factionContiguous = "<red>You can only claim additional land which is connected to your first claim!";
+            @Comment("Supports <faction> (the faction that owns the land)")
+            private String peaceful = "<faction><yellow> owns this land. Your faction is peaceful, so you cannot claim land from other factions.";
+            @Comment("Supports <faction> (the faction that owns the land)")
+            private String peacefulTarget = "<faction><yellow> owns this land, and is a peaceful faction. You cannot claim land from them.";
+            @Comment("Supports <faction> (the faction that owns the land)")
+            private String thisIsSparta = "<faction><yellow> owns this land and is strong enough to keep it.";
+            private String border = "<red>You must start claiming land at the border of the territory.";
+            private String overclaimDisabled = "<yellow>Over claiming is disabled on this server.";
+            @Comment("Supports <count>")
+            private String tooCloseToOtherFaction = "<yellow>Your claim is too close to another Faction. Buffer required is <count>";
+            private String outsideWorldBorder = "<yellow>Your claim is outside the border.";
+            @Comment("Supports <count>")
+            private String outsideBorderBuffer = "<yellow>Your claim is outside the border. <count> chunks away from world edge required.";
+            @Comment("Supports <player> (claimant), <faction> (claimed for), <fromFaction> (claimed from)")
+            private String claimed = "<light_purple><player><yellow> claimed land for <light_purple><faction><yellow> from <light_purple><fromFaction><yellow>.";
+            private String youAreHere = "You are here";
+
+            public String getProtectedLand() {
+                return protectedLand;
+            }
+
+            public String getDisabled() {
+                return disabled;
+            }
+
+            public String getCantClaim() {
+                return cantClaim;
+            }
+
+            public String getCantUnclaim() {
+                return cantUnclaim;
+            }
+
+            public String getAlreadyOwn() {
+                return alreadyOwn;
+            }
+
+            public String getMembers() {
+                return members;
+            }
+
+            public String getSafeZone() {
+                return safeZone;
+            }
+
+            public String getWarZone() {
+                return warZone;
+            }
+
+            public String getPower() {
+                return power;
+            }
+
+            public String getDtrLand() {
+                return dtrLand;
+            }
+
+            public String getLimit() {
+                return limit;
+            }
+
+            public String getAlly() {
+                return ally;
+            }
+
+            public String getContiguous() {
+                return contiguous;
+            }
+
+            public String getFactionContiguous() {
+                return factionContiguous;
+            }
+
+            public String getPeaceful() {
+                return peaceful;
+            }
+
+            public String getPeacefulTarget() {
+                return peacefulTarget;
+            }
+
+            public String getThisIsSparta() {
+                return thisIsSparta;
+            }
+
+            public String getBorder() {
+                return border;
+            }
+
+            public String getOverclaimDisabled() {
+                return overclaimDisabled;
+            }
+
+            public String getTooCloseToOtherFaction() {
+                return tooCloseToOtherFaction;
+            }
+
+            public String getOutsideWorldBorder() {
+                return outsideWorldBorder;
+            }
+
+            public String getOutsideBorderBuffer() {
+                return outsideBorderBuffer;
+            }
+
+            public String getClaimed() {
+                return claimed;
+            }
+
+            public String getYouAreHere() {
+                return youAreHere;
+            }
+        }
+
+        public static class Unclaim {
+            private String wrongFactionOther = "<red>Attempted to unclaim land for incorrect faction.";
+            private String safeZoneSuccess = "<yellow>Safe zone was unclaimed.";
+            private String safeZoneNoPerm = "<red>This is a safe zone. You lack permissions to unclaim.";
+            private String warZoneSuccess = "<yellow>War zone was unclaimed.";
+            private String warZoneNoPerm = "<red>This is a war zone. You lack permissions to unclaim.";
+            @Comment("Supports <player> (who unclaimed)")
+            private String unclaimed = "<player><yellow> unclaimed some of your land.";
+            private String unclaims = "<yellow>You unclaimed this land.";
+            private String notAMember = "<red>You are not a member of any faction.";
+            private String wrongFaction = "<red>You don't own this land.";
+            @Comment("Supports <player> (who unclaimed)")
+            private String factionUnclaimed = "<player><yellow> unclaimed some land.";
+
+            public String getWrongFactionOther() {
+                return wrongFactionOther;
+            }
+
+            public String getSafeZoneSuccess() {
+                return safeZoneSuccess;
+            }
+
+            public String getSafeZoneNoPerm() {
+                return safeZoneNoPerm;
+            }
+
+            public String getWarZoneSuccess() {
+                return warZoneSuccess;
+            }
+
+            public String getWarZoneNoPerm() {
+                return warZoneNoPerm;
+            }
+
+            public String getUnclaimed() {
+                return unclaimed;
+            }
+
+            public String getUnclaims() {
+                return unclaims;
+            }
+
+            public String getNotAMember() {
+                return notAMember;
+            }
+
+            public String getWrongFaction() {
+                return wrongFaction;
+            }
+
+            public String getFactionUnclaimed() {
+                return factionUnclaimed;
+            }
+        }
+
+        private Claim claim = new Claim();
+        private Unclaim unclaim = new Unclaim();
+
+        public Claim claim() {
+            return claim;
+        }
+
+        public Unclaim unclaim() {
+            return unclaim;
+        }
+    }
+
+    public static class LandRaid {
+        public static class Power {
+            private String noPowerLossRegion = "<yellow>You didn't lose any power due to the region you were in.";
+            private String noPowerLossWarzone = "<yellow>You didn't lose any power since you were in a war zone.";
+            @Comment("Supports <power>, <maxPower>")
+            private String powerLossWarzone = "<red>The world you are in has power loss normally disabled, but you still lost power since you were in a war zone.\n<yellow>Your power is now <light_purple><power> / <maxPower>";
+            private String noPowerLossWilderness = "<yellow>You didn't lose any power since you were in the wilderness.";
+            private String noPowerLossWorld = "<yellow>You didn't lose any power due to the world you died in.";
+            private String noPowerLossPeaceful = "<yellow>You didn't lose any power since you are in a peaceful faction.";
+            @Comment("Supports <power>, <maxPower>")
+            private String powerNow = "<yellow>Your power is now <light_purple><power> / <maxPower>";
+            @Comment("Supports <amount>, <player>, <power>, <maxPower>")
+            private String vampirismGain = "<yellow>Stole <light_purple><amount><yellow> power from <player><yellow>. Your power is now <light_purple><power> / <maxPower>";
+
+            public String getNoPowerLossRegion() {
+                return noPowerLossRegion;
+            }
+
+            public String getNoPowerLossWarzone() {
+                return noPowerLossWarzone;
+            }
+
+            public String getPowerLossWarzone() {
+                return powerLossWarzone;
+            }
+
+            public String getNoPowerLossWilderness() {
+                return noPowerLossWilderness;
+            }
+
+            public String getNoPowerLossWorld() {
+                return noPowerLossWorld;
+            }
+
+            public String getNoPowerLossPeaceful() {
+                return noPowerLossPeaceful;
+            }
+
+            public String getPowerNow() {
+                return powerNow;
+            }
+
+            public String getVampirismGain() {
+                return vampirismGain;
+            }
+        }
+
+        public static class DTR {
+            private String cannotFrozen = "<red>Action denied due to frozen DTR";
+            private String kickPenalty = "<red>Penalty DTR lost due to kicking with frozen DTR";
+            @Comment("Supports <amount>, <player>, <dtr>")
+            private String vampirismGain = "<yellow>Stole <light_purple><amount><yellow> DTR from <player><yellow>. Your DTR is now <light_purple><dtr>";
+
+            public String getCannotFrozen() {
+                return cannotFrozen;
+            }
+
+            public String getKickPenalty() {
+                return kickPenalty;
+            }
+
+            public String getVampirismGain() {
+                return vampirismGain;
+            }
+        }
+
+        private Power power = new Power();
+        private DTR dtr = new DTR();
+
+        public Power power() {
+            return power;
+        }
+
+        public DTR dtr() {
+            return dtr;
+        }
+    }
+
     @Comment("This config file will slowly become the location for all text content\n" +
             "All information here uses MiniMessage. https://docs.papermc.io/adventure/minimessage/")
     private Commands commands = new Commands();
@@ -5021,6 +5807,9 @@ public class TranslationsConfig {
     private Protection protection = new Protection();
     private Scoreboard scoreboard = new Scoreboard();
     private Upgrades upgrades = new Upgrades();
+    private FactionEvents factionEvents = new FactionEvents();
+    private Claiming claiming = new Claiming();
+    private LandRaid landRaid = new LandRaid();
 
     public Commands commands() {
         return this.commands;
@@ -5052,5 +5841,17 @@ public class TranslationsConfig {
 
     public Upgrades upgrades() {
         return this.upgrades;
+    }
+
+    public FactionEvents factionEvents() {
+        return factionEvents;
+    }
+
+    public Claiming claiming() {
+        return claiming;
+    }
+
+    public LandRaid landRaid() {
+        return landRaid;
     }
 }

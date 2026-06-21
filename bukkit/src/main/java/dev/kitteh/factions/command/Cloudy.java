@@ -3,8 +3,6 @@ package dev.kitteh.factions.command;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
-import org.bukkit.ChatColor;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.permission.PredicatePermission;
 import org.jetbrains.annotations.ApiStatus;
@@ -48,11 +46,6 @@ public final class Cloudy {
 
     public static PredicatePermission<Sender> hasSelfFactionPerms(PermissibleAction action) {
         return PredicatePermission.of(s -> s instanceof Sender.Player player && player.faction().isNormal() && player.faction().hasAccess(player.fPlayer(), action, player.fPlayer().lastStoodAt()));
-    }
-
-    @Deprecated(forRemoval = true, since = "4.5.0")
-    public static Description desc(TL tl) {
-        return Description.of(ChatColor.stripColor(tl.toString()));
     }
 
     @ApiStatus.AvailableSince("4.5.0")

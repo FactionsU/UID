@@ -14,6 +14,7 @@ import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.MiscUtil;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
@@ -53,9 +54,9 @@ public class CmdSetTag implements Cmd {
             return;
         }
 
-        List<String> errors = MiscUtil.validateTag(tag);
+        List<Component> errors = MiscUtil.validateTag(tag);
         if (!errors.isEmpty()) {
-            sender.sendMessageLegacy(errors);
+            errors.forEach(sender::sendMessage);
             return;
         }
 

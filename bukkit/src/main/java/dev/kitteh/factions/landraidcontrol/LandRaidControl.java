@@ -5,7 +5,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
-import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -56,7 +56,8 @@ public sealed interface LandRaidControl permits DTRControl, PowerControl {
             if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
                 stream = stream.filter(fp -> fp.faction() == faction || fp.relationTo(faction) == Relation.ENEMY);
             }
-            stream.forEach(fp -> fp.sendMessageLegacy(TL.RAIDABLE_NOWRAIDABLE.format(faction.tagLegacy(fp))));
+            stream.forEach(fp -> fp.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getRaidableNow(),
+                    FactionResolver.of(faction)));
         }
     }
 
@@ -66,7 +67,8 @@ public sealed interface LandRaidControl permits DTRControl, PowerControl {
             if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
                 stream = stream.filter(fp -> fp.faction() == faction || fp.relationTo(faction) == Relation.ENEMY);
             }
-            stream.forEach(fp -> fp.sendMessageLegacy(TL.RAIDABLE_NOLONGERRAIDABLE.format(faction.tagLegacy(fp))));
+            stream.forEach(fp -> fp.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getRaidableNoLonger(),
+                    FactionResolver.of(faction)));
         }
     }
 }

@@ -259,4 +259,13 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
     void addWarmup(WarmUpUtil.Warmup warmup, int taskId);
 
     void cancelWarmup();
+
+    @Override
+    default Component describeTo(@Nullable Participator that) {
+        if (that instanceof FPlayer fp && fp.faction() == this.faction()) {
+            return this.nameWithTitle();
+        } else {
+            return this.nameWithTag();
+        }
+    }
 }

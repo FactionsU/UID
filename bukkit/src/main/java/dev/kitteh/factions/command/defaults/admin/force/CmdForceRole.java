@@ -112,7 +112,7 @@ public class CmdForceRole implements Cmd {
             player.updateCommands();
         }
 
-        var rolePlaceholder = Placeholder.unparsed("role", targetNewRole.nicename);
+        var rolePlaceholder = Placeholder.unparsed("role", targetNewRole.translation());
         target.sendRichMessage(tl.getUpdated(), FPlayerResolver.of("player", target), rolePlaceholder);
         sender.sendRichMessage(tl.getUpdated(), FPlayerResolver.of("player", target), rolePlaceholder);
     }

@@ -58,7 +58,13 @@ public final class FPlayerResolver extends ObservedResolver {
         String main = arguments.hasNext() ? arguments.pop().lowerValue() : "";
 
         return switch (main) {
-            case "", "name_decorated" -> tagLegacy(observed.describeToLegacy(this.observer(ctx)));
+            case "", "name_decorated" -> {
+                if (this.observer(ctx) instanceof FPlayer fp && fp.faction() == observed.faction()) {
+                    yield tag(observed.nameWithTitle());
+                } else {
+                    yield tag(observed.nameWithTag());
+                }
+            }
 
             case "name" -> tag(observed.name());
 

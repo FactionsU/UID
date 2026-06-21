@@ -6,7 +6,6 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -58,7 +57,7 @@ public class ListenPortal implements Listener {
                 });
         if (match) {
             event.setCancelled(true);
-            player.sendMessage(TL.PLAYER_PORTAL_NOTALLOWED.toString());
+            fPlayer.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getPortalNotAllowed());
         }
     }
 }

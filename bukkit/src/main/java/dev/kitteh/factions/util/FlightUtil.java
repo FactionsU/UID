@@ -5,6 +5,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -59,11 +60,12 @@ public class FlightUtil {
                 FPlayer pilot = FPlayers.fPlayers().get(player);
                 if (pilot.flying() && !pilot.adminBypass()) {
                     if (enemiesNearby(pilot, FactionsPlugin.instance().conf().commands().fly().getEnemyRadius(), players)) {
-                        pilot.msgLegacy(TL.COMMAND_FLY_ENEMY_DISABLE);
+                        pilot.sendRichMessage(FactionsPlugin.instance().tl().commands().fly().getEnemyDisable());
                         pilot.flying(false);
                         if (pilot.autoFlying()) {
                             pilot.autoFlying(false);
-                            pilot.msgLegacy(TL.COMMAND_FLY_AUTO, "disabled");
+                            pilot.sendRichMessage(FactionsPlugin.instance().tl().commands().fly().getAuto(),
+                                    Placeholder.unparsed("state", "disabled"));
                         }
                     }
                 }

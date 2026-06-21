@@ -3,6 +3,8 @@ package dev.kitteh.factions.util;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -75,25 +77,26 @@ public class MiscUtil {
         return ret.toString().toLowerCase();
     }
 
-    public static List<String> validateTag(String str) {
-        ArrayList<String> errors = new ArrayList<>();
+    public static List<Component> validateTag(String str) {
+        var tl = FactionsPlugin.instance().tl().general().factionTag();
+        var conf = FactionsPlugin.instance().conf().factions().other();
+        ArrayList<Component> errors = new ArrayList<>();
 
-        for (String blacklistItem : FactionsPlugin.instance().conf().factions().other().getNameBlacklist()) {
+        for (String blacklistItem : conf.getNameBlacklist()) {
             if (str.toLowerCase().contains(blacklistItem.toLowerCase())) {
-                errors.add(TextUtil.parse(TL.GENERIC_FACTIONTAG_BLACKLIST.toString()));
+                errors.add(Mini.parse(tl.getBlacklisted()));
                 break;
             }
         }
 
-        if (getComparisonString(str).length() < FactionsPlugin.instance().conf().factions().other().getTagLengthMin()) {
-            errors.add(TextUtil.parse(TL.GENERIC_FACTIONTAG_TOOSHORT.toString(), FactionsPlugin.instance().conf().factions().other().getTagLengthMin()));
+        if (getComparisonString(str).length() < conf.getTagLengthMin()) {
+            errors.add(Mini.parse(tl.getTooShort(), Placeholder.unparsed("min", String.valueOf(conf.getTagLengthMin()))));
         }
 
-        if (str.length() > FactionsPlugin.instance().conf().factions().other().getTagLengthMax()) {
-            errors.add(TextUtil.parse(TL.GENERIC_FACTIONTAG_TOOLONG.toString(), FactionsPlugin.instance().conf().factions().other().getTagLengthMax()));
+        if (str.length() > conf.getTagLengthMax()) {
+            errors.add(Mini.parse(tl.getTooLong(), Placeholder.unparsed("max", String.valueOf(conf.getTagLengthMax()))));
         }
 
-        MainConfig.Factions.Other conf = FactionsPlugin.instance().conf().factions().other();
         List<String> badChars = null;
         for (char c : str.toCharArray()) {
             if (!conf.isValidTagCharacter(c)) {
@@ -104,7 +107,7 @@ public class MiscUtil {
             }
         }
         if (badChars != null) {
-            errors.add(TextUtil.parse(TL.GENERIC_FACTIONTAG_ALPHANUMERIC.toString(), String.join("", badChars)));
+            errors.add(Mini.parse(tl.getAlphanumeric(), Placeholder.unparsed("chars", String.join("", badChars))));
         }
 
         return errors;
@@ -115,6 +118,7 @@ public class MiscUtil {
     }
 
     public static String durationString(Duration duration) {
+        var dur = FactionsPlugin.instance().tl().general().duration();
         long days = duration.toDays();
         long hours = duration.toHoursPart();
         long minutes = duration.toMinutesPart();
@@ -122,21 +126,21 @@ public class MiscUtil {
 
         List<String> items = new ArrayList<>();
         if (days > 0) {
-            items.add((days == 1 ? TL.DURATION_DAY : TL.DURATION_DAYS).format(days));
+            items.add(String.format(days == 1 ? dur.getDay() : dur.getDays(), days));
         }
         if (hours > 0) {
-            items.add((hours == 1 ? TL.DURATION_HOUR : TL.DURATION_HOURS).format(hours));
+            items.add(String.format(hours == 1 ? dur.getHour() : dur.getHours(), hours));
         }
         if (minutes > 0) {
-            items.add((minutes == 1 ? TL.DURATION_MINUTE : TL.DURATION_MINUTES).format(minutes));
+            items.add(String.format(minutes == 1 ? dur.getMinute() : dur.getMinutes(), minutes));
         }
         if (seconds > 0) {
-            items.add((seconds == 1 ? TL.DURATION_SECOND : TL.DURATION_SECONDS).format(seconds));
+            items.add(String.format(seconds == 1 ? dur.getSecond() : dur.getSeconds(), seconds));
         }
         if (items.size() == 1) {
             return items.getFirst();
         } else if (items.size() == 2) {
-            String and = TL.DURATION_AND.toString();
+            String and = dur.getAnd();
             and = and.isBlank() ? " " : " " + and + " ";
             return items.getFirst() + and + items.getLast();
         }
@@ -146,7 +150,7 @@ public class MiscUtil {
             if (i < items.size() - 2) {
                 builder.append(", ");
             } else if (i == items.size() - 2) {
-                String and = TL.DURATION_AND.toString();
+                String and = dur.getAnd();
                 and = and.isBlank() ? "" : and + " ";
                 builder.append(", ").append(and);
             }

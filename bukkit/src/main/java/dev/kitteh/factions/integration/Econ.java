@@ -7,13 +7,13 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.util.ComponentDispatcher;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.RelationUtil;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -45,9 +45,9 @@ public class Econ {
         DecimalFormat f;
         try {
             String[] split = localeString.split("_");
-            f = new DecimalFormat(TL.ECON_FORMAT.toString(), DecimalFormatSymbols.getInstance(Locale.of(split[0], split[1])));
+            f = new DecimalFormat(FactionsPlugin.instance().tl().economy().transfer().getFormat(), DecimalFormatSymbols.getInstance(Locale.of(split[0], split[1])));
         } catch (Exception e) {
-            AbstractFactionsPlugin.instance().getLogger().warning("Fell over on invalid default econ format '" + TL.ECON_FORMAT + "' with locale '" + localeString + "'");
+            AbstractFactionsPlugin.instance().getLogger().warning("Fell over on invalid default econ format " + FactionsPlugin.instance().tl().economy().transfer().getFormat() + " with locale '" + localeString + "'");
             f = new DecimalFormat("###,###.###");
         }
         format = f;
@@ -127,7 +127,9 @@ public class Econ {
             AbstractFactionsPlugin.instance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
-        to.msgLegacy(TL.ECON_BALANCE, about.describeToLegacy(to, true), Econ.moneyString(getBalance(about)));
+        to.sendMessage(Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getBalance(), to,
+                Placeholder.component("entity", about.describeTo(to)),
+                Placeholder.unparsed("amount", Econ.moneyString(getBalance(about)))));
     }
 
     public static void sendBalanceInfo(CommandSender to, Faction about) {
@@ -135,7 +137,9 @@ public class Econ {
             AbstractFactionsPlugin.instance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
-        to.sendMessage(ChatColor.stripColor(String.format(TL.ECON_BALANCE.toString(), about.tag(), Econ.moneyString(getBalance(about)))));
+        ComponentDispatcher.send(to, Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getBalance(),
+                Placeholder.unparsed("entity", about.tag()),
+                Placeholder.unparsed("amount", Econ.moneyString(getBalance(about)))));
     }
 
     public static boolean canIControlYou(Participator i, Participator you) {
@@ -175,7 +179,9 @@ public class Econ {
         }
 
         // Otherwise you may not! ;,,;
-        i.msgLegacy(TL.ECON_NOPERM, i.describeToLegacy(i, true), you.describeToLegacy(i));
+        i.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getNoPerm(),
+                Placeholder.component("you", i.describeTo(i)),
+                Placeholder.component("target", you.describeTo(i)));
         return false;
     }
 
@@ -185,7 +191,7 @@ public class Econ {
 
     public static boolean transferMoney(Participator invoker, Participator from, Participator to, double amount, boolean notify) {
         if (!shouldBeUsed()) {
-            invoker.msgLegacy(TL.ECON_DISABLED);
+            invoker.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getDisabled());
             return false;
         }
 
@@ -210,7 +216,10 @@ public class Econ {
         if (!has(fromAcc, amount)) {
             // There was not enough money to pay
             if (invoker != null && notify) {
-                invoker.msgLegacy(TL.ECON_CANTAFFORD_TRANSFER, from.describeToLegacy(invoker, true), moneyString(amount), to.describeToLegacy(invoker));
+                invoker.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getCantAffordTransfer(),
+                        Placeholder.component("from", from.describeTo(invoker)),
+                        Placeholder.unparsed("amount", moneyString(amount)),
+                        Placeholder.component("to", to.describeTo(invoker)));
             }
 
             return false;
@@ -218,7 +227,8 @@ public class Econ {
 
         // Check if the new balance is over Essential's money cap.
         if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.isOverBalCap(getBalance(toAcc) + amount)) {
-            invoker.msgLegacy(TL.ECON_OVER_BAL_CAP, amount);
+            invoker.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getOverBalCap(),
+                    Placeholder.unparsed("amount", moneyString(amount)));
             return false;
         }
 
@@ -238,7 +248,10 @@ public class Econ {
 
         // if we get here something with the transaction failed
         if (notify) {
-            invoker.msgLegacy(TL.ECON_TRANSFER_UNABLE, moneyString(amount), to.describeToLegacy(invoker), from.describeToLegacy(invoker, true));
+            invoker.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getTransferUnable(),
+                    Placeholder.unparsed("amount", moneyString(amount)),
+                    Placeholder.component("to", to.describeTo(invoker)),
+                    Placeholder.component("from", from.describeTo(invoker)));
         }
 
         return false;
@@ -258,21 +271,35 @@ public class Econ {
         addFPlayers(recipients, from);
         addFPlayers(recipients, to);
 
+        var transfer = FactionsPlugin.instance().tl().economy().transfer();
         if (invoker == null) {
             for (FPlayer recipient : recipients) {
-                recipient.msgLegacy(TL.ECON_TRANSFER_NOINVOKER, moneyString(amount), from.describeToLegacy(recipient), to.describeToLegacy(recipient));
+                recipient.sendMessage(Mini.parse(transfer.getTransferNoinvoker(), recipient,
+                        Placeholder.unparsed("amount", moneyString(amount)),
+                        Placeholder.component("from", from.describeTo(recipient)),
+                        Placeholder.component("to", to.describeTo(recipient))));
             }
         } else if (invoker == from) {
             for (FPlayer recipient : recipients) {
-                recipient.msgLegacy(TL.ECON_TRANSFER_GAVE, from.describeToLegacy(recipient, true), moneyString(amount), to.describeToLegacy(recipient));
+                recipient.sendMessage(Mini.parse(transfer.getTransferGave(), recipient,
+                        Placeholder.component("from", from.describeTo(recipient)),
+                        Placeholder.unparsed("amount", moneyString(amount)),
+                        Placeholder.component("to", to.describeTo(recipient))));
             }
         } else if (invoker == to) {
             for (FPlayer recipient : recipients) {
-                recipient.msgLegacy(TL.ECON_TRANSFER_TOOK, to.describeToLegacy(recipient, true), moneyString(amount), from.describeToLegacy(recipient));
+                recipient.sendMessage(Mini.parse(transfer.getTransferTook(), recipient,
+                        Placeholder.component("to", to.describeTo(recipient)),
+                        Placeholder.unparsed("amount", moneyString(amount)),
+                        Placeholder.component("from", from.describeTo(recipient))));
             }
         } else {
             for (FPlayer recipient : recipients) {
-                recipient.msgLegacy(TL.ECON_TRANSFER_TRANSFER, invoker.describeToLegacy(recipient, true), moneyString(amount), from.describeToLegacy(recipient), to.describeToLegacy(recipient));
+                recipient.sendMessage(Mini.parse(transfer.getTransferTransfer(), recipient,
+                        Placeholder.component("invoker", invoker.describeTo(recipient)),
+                        Placeholder.unparsed("amount", moneyString(amount)),
+                        Placeholder.component("from", from.describeTo(recipient)),
+                        Placeholder.component("to", to.describeTo(recipient))));
             }
         }
     }
@@ -291,7 +318,10 @@ public class Econ {
 
         if (!affordable) {
             if (toDoThis != null && !toDoThis.isEmpty()) {
-                ep.msgLegacy(TL.ECON_CANTAFFORD_AMOUNT, ep.describeToLegacy(ep, true), moneyString(delta), toDoThis);
+                ep.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getCantAffordAmount(),
+                        Placeholder.component("entity", ep.describeTo(ep)),
+                        Placeholder.unparsed("amount", moneyString(delta)),
+                        Placeholder.unparsed("action", toDoThis));
             }
             return false;
         }
@@ -315,7 +345,7 @@ public class Econ {
 
         var tl = FactionsPlugin.instance().tl().economy().modification();
 
-        String you = participator instanceof FPlayer? tl.getYou() : tl.getYourFaction();
+        String you = participator instanceof FPlayer ? tl.getYou() : tl.getYourFaction();
 
         if (delta > 0) {
             // The player should gain money

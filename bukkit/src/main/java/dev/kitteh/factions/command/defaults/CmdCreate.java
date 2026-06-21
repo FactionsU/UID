@@ -16,6 +16,7 @@ import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.Permission;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -62,9 +63,9 @@ public class CmdCreate implements Cmd {
             return;
         }
 
-        List<String> tagValidationErrors = MiscUtil.validateTag(tag);
+        List<Component> tagValidationErrors = MiscUtil.validateTag(tag);
         if (!tagValidationErrors.isEmpty()) {
-            sender.sendMessageLegacy(tagValidationErrors);
+            tagValidationErrors.forEach(sender::sendMessage);
             return;
         }
 

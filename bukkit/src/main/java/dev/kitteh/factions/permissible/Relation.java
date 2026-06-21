@@ -1,7 +1,7 @@
 package dev.kitteh.factions.permissible;
 
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.integration.permcontext.Contexts;
 import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -12,19 +12,20 @@ import java.util.Set;
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public enum Relation implements Permissible {
-    MEMBER(4, TL.RELATION_MEMBER_SINGULAR.toString()),
-    ALLY(3, TL.RELATION_ALLY_SINGULAR.toString()),
-    TRUCE(2, TL.RELATION_TRUCE_SINGULAR.toString()),
-    NEUTRAL(1, TL.RELATION_NEUTRAL_SINGULAR.toString()),
-    ENEMY(0, TL.RELATION_ENEMY_SINGULAR.toString());
+    MEMBER(4),
+    ALLY(3),
+    TRUCE(2),
+    NEUTRAL(1),
+    ENEMY(0);
 
+    @Deprecated(forRemoval = true, since = "4.6.0")
     public final int value;
-    public final String nicename;
+    @Deprecated(forRemoval = true, since = "4.6.0")
+    public final String nicename = "";
     private final Set<String> justMyNameInASet;
 
-    Relation(final int value, final String nicename) {
+    Relation(final int value) {
         this.value = value;
-        this.nicename = nicename;
         this.justMyNameInASet = Collections.singleton(this.name().toLowerCase());
     }
 
@@ -52,27 +53,34 @@ public enum Relation implements Permissible {
         }
     }
 
+    public int value() {
+        return this.value;
+    }
+
     @Override
     public String toString() {
-        return this.nicename;
+        return this.translation();
     }
 
     @Override
     public String translation() {
-        try {
-            return TL.valueOf("RELATION_" + name() + "_SINGULAR").toString();
-        } catch (IllegalArgumentException e) {
-            return toString();
-        }
+        return switch(this) {
+            case MEMBER -> FactionsPlugin.instance().tl().general().relations().getMember();
+            case ALLY -> FactionsPlugin.instance().tl().general().relations().getAlly();
+            case TRUCE -> FactionsPlugin.instance().tl().general().relations().getTruce();
+            case NEUTRAL -> FactionsPlugin.instance().tl().general().relations().getNeutral();
+            case ENEMY -> FactionsPlugin.instance().tl().general().relations().getEnemy();
+        };
     }
 
     public String getPluralTranslation() {
-        for (TL t : TL.values()) {
-            if (t.name().equalsIgnoreCase("RELATION_" + name() + "_PLURAL")) {
-                return t.toString();
-            }
-        }
-        return toString();
+        return switch(this) {
+            case MEMBER -> FactionsPlugin.instance().tl().general().relations().getMembers();
+            case ALLY -> FactionsPlugin.instance().tl().general().relations().getAllies();
+            case TRUCE -> FactionsPlugin.instance().tl().general().relations().getTruces();
+            case NEUTRAL -> FactionsPlugin.instance().tl().general().relations().getNeutrals();
+            case ENEMY -> FactionsPlugin.instance().tl().general().relations().getEnemies();
+        };
     }
 
     public boolean isMember() {
@@ -110,7 +118,7 @@ public enum Relation implements Permissible {
             case ALLY -> FactionsPlugin.instance().conf().colors().relations().getAlly();
             case NEUTRAL -> FactionsPlugin.instance().conf().colors().relations().getNeutral();
             case TRUCE -> FactionsPlugin.instance().conf().colors().relations().getTruce();
-            default -> FactionsPlugin.instance().conf().colors().relations().getEnemy();
+            case ENEMY -> FactionsPlugin.instance().conf().colors().relations().getEnemy();
         };
     }
 
@@ -119,7 +127,9 @@ public enum Relation implements Permissible {
             case ALLY -> FactionsPlugin.instance().conf().factions().maxRelations().getAlly();
             case ENEMY -> FactionsPlugin.instance().conf().factions().maxRelations().getEnemy();
             case TRUCE -> FactionsPlugin.instance().conf().factions().maxRelations().getTruce();
-            default -> FactionsPlugin.instance().conf().factions().maxRelations().getNeutral();
+            case NEUTRAL -> FactionsPlugin.instance().conf().factions().maxRelations().getNeutral();
+
+            case MEMBER -> -1;
         };
     }
 
@@ -137,7 +147,7 @@ public enum Relation implements Permissible {
 
     /**
      * Gets this enum name, in lower case, for fastest possible access for
-     * {@link dev.kitteh.factions.integration.permcontext.Contexts#TERRITORY_RELATION}
+     * {@link Contexts#TERRITORY_RELATION}
      *
      * @return an immutable set of just this name
      */

@@ -9,8 +9,6 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TL;
-import dev.kitteh.factions.util.TextUtil;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
@@ -81,16 +79,6 @@ public interface Sender {
         return this instanceof Player p ? p.fPlayer() : null;
     }
 
-    @Deprecated(forRemoval = true, since = "4.0.0")
-    default void msgLegacy(TL translation, Object... args) {
-        sender().sendMessage(TextUtil.parse(translation.toString(), args));
-    }
-
-    @Deprecated(forRemoval = true, since = "4.1.0")
-    default void msg(TL translation, Object... args) {
-        this.msgLegacy(translation, args);
-    }
-
     default boolean hasPermission(Permission perm) {
         return sender().hasPermission(perm.node);
     }
@@ -127,13 +115,4 @@ public interface Sender {
         return true;
     }
 
-    @Deprecated(forRemoval = true, since = "4.5.0")
-    default boolean payForCommand(double cost, TL toDoThis, TL forDoingThis) {
-        return this.payForCommand(cost, toDoThis.toString(), forDoingThis.toString());
-    }
-
-    @Deprecated(forRemoval = true, since = "4.5.0")
-    default boolean canAffordCommand(double cost, TL toDoThis) {
-        return this.canAffordCommand(cost, toDoThis.toString());
-    }
 }

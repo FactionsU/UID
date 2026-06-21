@@ -12,7 +12,7 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.AsciiCompass;
-import dev.kitteh.factions.util.TL;
+import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldTracker;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -26,7 +26,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -99,7 +98,7 @@ public abstract class MemoryBoard implements Board {
                     }
                     if (fPlayer.warmingUp()) {
                         fPlayer.cancelWarmup();
-                        fPlayer.msgLegacy(TL.WARMUPS_NOTIFY_CANCELLED);
+                        fPlayer.sendRichMessage(FactionsPlugin.instance().tl().commands().generic().getWarmupCancelled());
                     }
                 }
             }
@@ -160,7 +159,7 @@ public abstract class MemoryBoard implements Board {
                 }
                 if (fPlayer.warmingUp()) {
                     fPlayer.cancelWarmup();
-                    fPlayer.msgLegacy(TL.WARMUPS_NOTIFY_CANCELLED);
+                    fPlayer.sendRichMessage(FactionsPlugin.instance().tl().commands().generic().getWarmupCancelled());
                 }
             }
         }
@@ -236,7 +235,7 @@ public abstract class MemoryBoard implements Board {
             }
             for (int dx = (dz < 3 ? 6 : 3); dx < width; dx++) {
                 if (dx == halfWidth && dz == halfHeight) {
-                    builder.append(Component.text().content("+").color(FactionsPlugin.instance().conf().map().getSelfColor()).hoverEvent(HoverEvent.showText(LegacyComponentSerializer.legacySection().deserialize(TextUtil.parse(TL.CLAIM_YOUAREHERE.toString())))));
+                    builder.append(Component.text().content("+").color(FactionsPlugin.instance().conf().map().getSelfColor()).hoverEvent(HoverEvent.showText(Mini.parse(FactionsPlugin.instance().tl().claiming().claim().getYouAreHere()))));
                 } else {
                     FLocation flocationHere = topLeft.relative(dx, dz);
                     Faction factionHere = factionAt(flocationHere);

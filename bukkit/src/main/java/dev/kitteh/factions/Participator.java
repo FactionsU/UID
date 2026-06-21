@@ -3,7 +3,6 @@ package dev.kitteh.factions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.RelationUtil;
-import dev.kitteh.factions.util.TL;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -35,17 +34,6 @@ public sealed interface Participator permits FPlayer, Faction {
     void msgLegacy(String str, Object... args);
 
     /**
-     * Sends a String.format-able message.
-     *
-     * @param translation translatable
-     * @param args args
-     */
-    @Deprecated(forRemoval = true, since = "4.0.0")
-    default void msgLegacy(TL translation, Object... args) {
-        this.msgLegacy(translation.toString(), args);
-    }
-
-    /**
      * Sends a component.
      *
      * @param component component
@@ -53,8 +41,14 @@ public sealed interface Participator permits FPlayer, Faction {
     void sendMessage(Component component);
 
     default void sendRichMessage(String miniMessage, TagResolver... resolvers) {
-        // TODO is changing this from default an ABI break?
-        this.sendMessage(Mini.parse(miniMessage, resolvers));
+        // TODO is changing this from default an ABI break? Shouldn't even end up here now, but keeping until 5.0.
+        if (this instanceof FPlayer fp) {
+            fp.sendRichMessage(miniMessage, resolvers);
+        } else if (this instanceof Faction f) {
+            f.sendRichMessage(miniMessage, resolvers);
+        } else { // How did I get here?
+            this.sendMessage(Mini.parse(miniMessage, resolvers));
+        }
     }
 
     @Deprecated(forRemoval = true, since = "4.0.0")
@@ -66,6 +60,8 @@ public sealed interface Participator permits FPlayer, Faction {
     default String describeToLegacy(@Nullable Participator that, boolean uppercaseFirst) {
         return RelationUtil.describeThatToMeLegacy(this, that, uppercaseFirst);
     }
+
+    Component describeTo(@Nullable Participator that);
 
     default Relation relationTo(@Nullable Participator that) {
         return RelationUtil.getRelationTo(this, that);
