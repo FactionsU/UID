@@ -60,7 +60,7 @@ public interface Sender {
             if (fPlayer.adminBypass()) {
                 return true;
             }
-            if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction()) {
+            if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.faction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.lastStoodAt())) {
                 return Econ.hasAtLeast(fPlayer.faction(), cost, toDoThis);
             } else {
                 return Econ.hasAtLeast(fPlayer, cost, toDoThis);
