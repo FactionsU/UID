@@ -69,6 +69,8 @@ dependencies {
     }
     compileOnly(libs.paper)
     compileOnly(libs.bundles.cloud)
+
+    compileOnly(libs.immutables.value.annotations)
 }
 
 tasks.runServer {

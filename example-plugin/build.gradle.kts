@@ -11,6 +11,9 @@ indra {
 dependencies {
     compileOnly(project(":paper", configuration = "shadow"))
     compileOnly(libs.paper)
+
+    compileOnly(libs.apiguardian)
+    compileOnly(libs.immutables.value.annotations)
 }
 
 tasks.processResources {

@@ -19,6 +19,7 @@ shadow = { id = "com.gradleup.shadow", version = "9.3.1" }
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
 adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure" }
 adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure" }
+apiguardian = { module = "org.apiguardian:apiguardian-api", version = "1.1.2" }
 authlib = { module = "com.mojang:authlib", version = "6.0.54" }
 brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
 citizens = { module = "net.citizensnpcs:citizens-main", version = "2.0.38-SNAPSHOT" }
@@ -35,6 +36,7 @@ essentialsx = { module = "net.essentialsx:EssentialsX", version.ref = "essential
 fastutil = { module = "it.unimi.dsi:fastutil", version = "8.5.6" }
 graves = { module = "com.ranull:GravesX", version = "4.9.10.10-api"}
 ifchestonly = { module = "dev.kitteh.forkedproject:IF-ChestOnly", version = "0.10.19" }
+immutables-value-annotations = { module = "org.immutables:value-annotations", version = "2.12.2" }
 jetbrains = { module = "org.jetbrains:annotations", version = "26.0.2" }
 jspecify = { module = "org.jspecify:jspecify", version = "0.3.0" }
 luckperms-api = { module = "net.luckperms:api", version = "5.0" }
