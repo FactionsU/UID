@@ -5544,6 +5544,10 @@ public class TranslationsConfig {
             private String ally = "<red>You can't claim the land of your allies.";
             private String contiguous = "<red>You can only claim additional land which is connected to your first claim or controlled by another faction!";
             private String factionContiguous = "<red>You can only claim additional land which is connected to your first claim!";
+            @Comment("Supports <count> (the maximum number of chunks allowed in a connected claim)")
+            private String contiguousTotalChunks = "<red>You can't claim more than <light_purple><count>/<light_purple> chunks in one connected area!";
+            @Comment("Supports <count> (the maximum X or Z distance, in chunks, allowed across a connected claim)")
+            private String contiguousDistance = "<red>Your connected claim can't span more than <light_purple><count></light_purple> chunks!";
             @Comment("Supports <faction> (the faction that owns the land)")
             private String peaceful = "<faction><yellow> owns this land. Your faction is peaceful, so you cannot claim land from other factions.";
             @Comment("Supports <faction> (the faction that owns the land)")
@@ -5615,6 +5619,14 @@ public class TranslationsConfig {
 
             public String getFactionContiguous() {
                 return factionContiguous;
+            }
+
+            public String getContiguousTotalChunks() {
+                return contiguousTotalChunks;
+            }
+
+            public String getContiguousDistance() {
+                return contiguousDistance;
             }
 
             public String getPeaceful() {

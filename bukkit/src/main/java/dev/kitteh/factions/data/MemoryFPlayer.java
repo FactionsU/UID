@@ -51,6 +51,8 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.time.Instant;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -880,6 +882,11 @@ public abstract class MemoryFPlayer implements FPlayer {
             } else {
                 denyReason = Mini.parse(claimTl.getFactionContiguous(), this);
             }
+        } else if (forFaction.isNormal() && (plugin.conf().factions().claims().getContiguousTotalChunks() != 0 || plugin.conf().factions().claims().getContiguousDistance() != 0)) {
+            Component maybeDeny = contiguousChecks(forFaction, flocation);
+            if (maybeDeny != null) {
+                denyReason = maybeDeny;
+            }
         } else if (!(currentFaction.isNormal() && plugin.conf().factions().claims().isAllowOverClaimAndIgnoringBuffer() && currentFaction.hasLandInflation()) && factionBuffer > 0 && Board.board().hasFactionWithin(flocation, myFaction, factionBuffer)) {
             // Too close to buffer
             denyReason = Mini.parse(claimTl.getTooCloseToOtherFaction(), this, Placeholder.unparsed("count", String.valueOf(factionBuffer)));
@@ -912,6 +919,41 @@ public abstract class MemoryFPlayer implements FPlayer {
             sendMessage(denyReason);
         }
         return denyReason == null;
+    }
+
+    private @Nullable Component contiguousChecks(Faction forFaction, FLocation fLocation) {
+        var claims = AbstractFactionsPlugin.instance().conf().factions().claims();
+        int maxChunks = claims.getContiguousTotalChunks();
+        int maxDistance = claims.getContiguousDistance();
+
+        Set<FLocation> group = new HashSet<>();
+        Deque<FLocation> queue = new ArrayDeque<>();
+        group.add(fLocation);
+        queue.add(fLocation);
+        int minX = fLocation.x(), maxX = fLocation.x(), minZ = fLocation.z(), maxZ = fLocation.z();
+        while (!queue.isEmpty()) {
+            FLocation current = queue.poll();
+            for (FLocation neighbor : new FLocation[]{current.relative(1, 0), current.relative(-1, 0), current.relative(0, 1), current.relative(0, -1)}) {
+                if (group.contains(neighbor) || neighbor.faction() != forFaction) {
+                    continue;
+                }
+                group.add(neighbor);
+                queue.add(neighbor);
+                minX = Math.min(minX, neighbor.x());
+                maxX = Math.max(maxX, neighbor.x());
+                minZ = Math.min(minZ, neighbor.z());
+                maxZ = Math.max(maxZ, neighbor.z());
+            }
+        }
+
+        var claimTl = FactionsPlugin.instance().tl().claiming().claim();
+        if (maxChunks > 0 && group.size() > maxChunks) {
+            return Mini.parse(claimTl.getContiguousTotalChunks(), this, Placeholder.unparsed("count", String.valueOf(maxChunks)));
+        }
+        if (maxDistance > 0 && ((maxX - minX + 1) > maxDistance || (maxZ - minZ + 1) > maxDistance)) {
+            return Mini.parse(claimTl.getContiguousDistance(), this, Placeholder.unparsed("count", String.valueOf(maxDistance)));
+        }
+        return null;
     }
 
     @Override

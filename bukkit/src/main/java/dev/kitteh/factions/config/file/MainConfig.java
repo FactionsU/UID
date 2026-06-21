@@ -1246,6 +1246,16 @@ public class MainConfig {
             private boolean allowOverClaim = true;
             @Comment("If true (and allowOverClaim is true, claiming over another faction's land will ignore buffer zone settings.")
             private boolean allowOverClaimIgnoringBuffer = false;
+            @Comment("""
+                    The maximum number of chunks allowed in a single contiguous claim for a normal faction.
+                    
+                    Set to 0 to disable this check.""")
+            private int contiguousTotalChunks = 0;
+            @Comment("""
+                    The maximum width, in chunks, allowed across a single contiguous claim for a normal faction.
+                    
+                    Set to 0 to disable this check.""")
+            private int contiguousDistance = 0;
 
             public boolean isAllowOverClaim() {
                 return allowOverClaim;
@@ -1257,6 +1267,14 @@ public class MainConfig {
 
             public int getBufferZone() {
                 return bufferZone;
+            }
+
+            public int getContiguousTotalChunks() {
+                return contiguousTotalChunks;
+            }
+
+            public int getContiguousDistance() {
+                return contiguousDistance;
             }
 
             public boolean isMustBeConnected() {
