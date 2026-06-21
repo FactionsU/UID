@@ -457,7 +457,7 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public boolean removeWarp(String name) {
-        warpPasswords.remove(name); // remove password no matter what.
+        warpPasswords.remove(name.toLowerCase()); // remove password no matter what.
         return warps.remove(name) != null;
     }
 
