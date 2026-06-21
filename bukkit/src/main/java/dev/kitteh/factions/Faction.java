@@ -10,6 +10,7 @@ import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.LazyLocation;
+import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Location;
@@ -352,7 +353,9 @@ public non-sealed interface Faction extends Participator, Selectable {
     void tag(String str);
 
     @Deprecated(forRemoval = true, since = "4.0.0")
-    String tagLegacy(@Nullable Participator participator);
+    default String tagLegacy(@Nullable Participator participator) {
+        return Mini.toLegacy(this.describeTo(participator));
+    }
 
     String description();
 

@@ -48,7 +48,7 @@ public class CmdSetTitle implements Cmd {
 
         var tl = FactionsPlugin.instance().tl().commands().set().title();
 
-        if (sender.faction() != target.faction() || (sender.role() != Role.ADMIN && sender.role().value <= target.role().value)) {
+        if (sender.faction() != target.faction() || (sender.role() != Role.ADMIN && sender.role().value() <= target.role().value())) {
             sender.sendRichMessage(tl.getCannotChange());
             return;
         }

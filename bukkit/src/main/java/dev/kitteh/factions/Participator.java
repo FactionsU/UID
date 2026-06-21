@@ -40,25 +40,16 @@ public sealed interface Participator permits FPlayer, Faction {
      */
     void sendMessage(Component component);
 
-    default void sendRichMessage(String miniMessage, TagResolver... resolvers) {
-        // TODO is changing this from default an ABI break? Shouldn't even end up here now, but keeping until 5.0.
-        if (this instanceof FPlayer fp) {
-            fp.sendRichMessage(miniMessage, resolvers);
-        } else if (this instanceof Faction f) {
-            f.sendRichMessage(miniMessage, resolvers);
-        } else { // How did I get here?
-            this.sendMessage(Mini.parse(miniMessage, resolvers));
-        }
-    }
+    void sendRichMessage(String miniMessage, TagResolver... resolvers);
 
     @Deprecated(forRemoval = true, since = "4.0.0")
     default String describeToLegacy(@Nullable Participator that) {
-        return RelationUtil.describeThatToMeLegacy(this, that);
+        return Mini.toLegacy(this.describeTo(that));
     }
 
     @Deprecated(forRemoval = true, since = "4.0.0")
     default String describeToLegacy(@Nullable Participator that, boolean uppercaseFirst) {
-        return RelationUtil.describeThatToMeLegacy(this, that, uppercaseFirst);
+        return Mini.toLegacy(this.describeTo(that));
     }
 
     Component describeTo(@Nullable Participator that);

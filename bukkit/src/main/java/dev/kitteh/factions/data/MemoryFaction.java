@@ -610,14 +610,6 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public String tagLegacy(@Nullable Participator other) {
-        if (other == null) {
-            return tag();
-        }
-        return this.colorLegacyStringTo(other) + this.tag();
-    }
-
-    @Override
     public void tag(String str) {
         if (FactionsPlugin.instance().conf().factions().other().isTagForceUpperCase()) {
             str = str.toUpperCase();

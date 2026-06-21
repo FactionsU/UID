@@ -3,6 +3,7 @@ package dev.kitteh.factions.util;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.ApiStatus;
@@ -42,7 +43,7 @@ public class WarmUpUtil {
             delay = 0;
         }
         if (delay > 0) {
-            player.msgLegacy(message);
+            player.sendMessage(LegacyComponentSerializer.legacySection().deserialize(message));
             int id = new BukkitRunnable() {
                 @Override
                 public void run() {

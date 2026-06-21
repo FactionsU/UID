@@ -9,6 +9,8 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Permission;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -16,6 +18,11 @@ import org.incendo.cloud.parser.standard.StringParser;
 
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class CmdSetLink implements Cmd {
     @Override
@@ -54,9 +61,17 @@ public class CmdSetLink implements Cmd {
             return;
         }
 
+        URL url;
+        try {
+            url = new URI(link).toURL();
+        } catch (MalformedURLException | URISyntaxException _) {
+            sender.sendRichMessage(tl.getInvalidUrl());
+            return;
+        }
+
         faction.link(link);
 
         faction.sendRichMessage(tl.getChanged(), FPlayerResolver.of("player", sender));
-        faction.sendMessageLegacy(link);
+        faction.sendMessage(Component.text().content(link).clickEvent(ClickEvent.openUrl(url)).build());
     }
 }
