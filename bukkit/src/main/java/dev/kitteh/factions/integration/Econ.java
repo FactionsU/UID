@@ -11,7 +11,6 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.RelationUtil;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -20,12 +19,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -33,8 +34,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
+@NullMarked
 public class Econ {
-    private static Economy econ = null;
+    private static @Nullable Economy econ = null;
     private static final Pattern FACTION_PATTERN = Pattern.compile("^faction-(\\d+)$");
 
     public static void setup() {
@@ -47,11 +49,10 @@ public class Econ {
         try {
             String[] split = localeString.split("_");
             f = new DecimalFormat(FactionsPlugin.instance().tl().economy().transfer().getFormat(), DecimalFormatSymbols.getInstance(Locale.of(split[0], split[1])));
+            format = f;
         } catch (Exception e) {
             AbstractFactionsPlugin.instance().getLogger().warning("Fell over on invalid default econ format " + FactionsPlugin.instance().tl().economy().transfer().getFormat() + " with locale '" + localeString + "'");
-            f = new DecimalFormat("###,###.###");
         }
-        format = f;
 
         String integrationFail = "Economy integration is " + (FactionsPlugin.instance().conf().economy().isEnabled() ? "enabled, but" : "disabled, and") + " the plugin \"Vault\" ";
 
@@ -89,7 +90,7 @@ public class Econ {
         return econ != null;
     }
 
-    public static Economy getEcon() {
+    public static @Nullable Economy getEcon() {
         return econ;
     }
 
@@ -146,13 +147,8 @@ public class Econ {
     }
 
     public static boolean canIControlYou(Participator i, Participator you) {
-        Faction fI = RelationUtil.getFaction(i);
-        Faction fYou = RelationUtil.getFaction(you);
-
-        // This is a system invoker. Accept it.
-        if (fI == null) {
-            return true;
-        }
+        Faction fI = i.faction();
+        Faction fYou = you.faction();
 
         // Bypassing players can do any kind of transaction
         if (i instanceof FPlayer fPlayer && fPlayer.adminBypass()) {
@@ -218,7 +214,7 @@ public class Econ {
         // Is there enough money for the transaction to happen?
         if (!has(fromAcc, amount)) {
             // There was not enough money to pay
-            if (invoker != null && notify) {
+            if (notify) {
                 invoker.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getCantAffordTransfer(),
                         Placeholder.component("from", from.describeTo(invoker)),
                         Placeholder.unparsed("amount", moneyString(amount)),
@@ -275,14 +271,7 @@ public class Econ {
         addFPlayers(recipients, to);
 
         var transfer = FactionsPlugin.instance().tl().economy().transfer();
-        if (invoker == null) {
-            for (FPlayer recipient : recipients) {
-                recipient.sendMessage(Mini.parse(transfer.getTransferNoinvoker(), recipient,
-                        Placeholder.unparsed("amount", moneyString(amount)),
-                        Placeholder.component("from", from.describeTo(recipient)),
-                        Placeholder.component("to", to.describeTo(recipient))));
-            }
-        } else if (invoker == from) {
+        if (invoker == from) {
             for (FPlayer recipient : recipients) {
                 recipient.sendMessage(Mini.parse(transfer.getTransferGave(), recipient,
                         Placeholder.component("from", from.describeTo(recipient)),
@@ -320,7 +309,7 @@ public class Econ {
         }
 
         if (!affordable) {
-            if (toDoThis != null && !toDoThis.isEmpty()) {
+            if (!toDoThis.isEmpty()) {
                 ep.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getCantAffordAmount(),
                         Placeholder.component("entity", ep.describeTo(ep)),
                         Placeholder.unparsed("amount", moneyString(delta)),
@@ -451,7 +440,7 @@ public class Econ {
     }
 
     private static boolean needsAccount(OfflinePlayer op) {
-        return !econ.hasAccount(op, getWorld(op));
+        return !Objects.requireNonNull(econ).hasAccount(op, getWorld(op));
     }
 
     public static double getBalance(Participator ep) {
@@ -459,7 +448,7 @@ public class Econ {
     }
 
     private static double getBalance(OfflinePlayer op) {
-        return econ.getBalance(checkStatus(op), getWorld(op));
+        return Objects.requireNonNull(econ).getBalance(checkStatus(op), getWorld(op));
     }
 
     public static boolean has(Participator ep, double amount) {
@@ -467,10 +456,10 @@ public class Econ {
     }
 
     private static boolean has(OfflinePlayer op, double amount) {
-        return econ.has(checkStatus(op), getWorld(op), amount);
+        return Objects.requireNonNull(econ).has(checkStatus(op), getWorld(op), amount);
     }
 
-    private static DecimalFormat format;
+    private static DecimalFormat format = new DecimalFormat("###,###.###");
 
     public static String getFriendlyBalance(FPlayer player) {
         OfflinePlayer p;
@@ -487,9 +476,9 @@ public class Econ {
     private static boolean setBalance(OfflinePlayer op, double amount) {
         double current = getBalance(op); // Already checks status
         if (current > amount) {
-            return econ.withdrawPlayer(op, getWorld(op), current - amount).transactionSuccess();
+            return Objects.requireNonNull(econ).withdrawPlayer(op, getWorld(op), current - amount).transactionSuccess();
         } else {
-            return econ.depositPlayer(op, getWorld(op), amount - current).transactionSuccess();
+            return Objects.requireNonNull(econ).depositPlayer(op, getWorld(op), amount - current).transactionSuccess();
         }
     }
 
@@ -499,9 +488,9 @@ public class Econ {
 
     private static boolean modifyBalance(OfflinePlayer op, double amount) {
         if (amount < 0) {
-            return econ.withdrawPlayer(checkStatus(op), getWorld(op), -amount).transactionSuccess();
+            return Objects.requireNonNull(econ).withdrawPlayer(checkStatus(op), getWorld(op), -amount).transactionSuccess();
         } else {
-            return econ.depositPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
+            return Objects.requireNonNull(econ).depositPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
         }
     }
 
@@ -510,7 +499,7 @@ public class Econ {
     }
 
     private static boolean deposit(OfflinePlayer op, double amount) {
-        return econ.depositPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
+        return Objects.requireNonNull(econ).depositPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
     }
 
     public static boolean withdraw(Participator ep, double amount) {
@@ -518,11 +507,11 @@ public class Econ {
     }
 
     private static boolean withdraw(OfflinePlayer op, double amount) {
-        return econ.withdrawPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
+        return Objects.requireNonNull(econ).withdrawPlayer(checkStatus(op), getWorld(op), amount).transactionSuccess();
     }
 
     private static void createAccount(OfflinePlayer op) {
-        if (!econ.createPlayerAccount(op, getWorld(op))) {
+        if (!Objects.requireNonNull(econ).createPlayerAccount(op, getWorld(op))) {
             AbstractFactionsPlugin.instance().getLogger().warning("FAILED TO CREATE ECONOMY ACCOUNT " + op.getName() + '/' + op.getUniqueId());
         }
     }

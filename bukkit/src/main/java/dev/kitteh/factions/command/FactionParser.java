@@ -19,6 +19,7 @@ import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -147,6 +148,9 @@ public class FactionParser implements ArgumentParser<Sender, Faction>, BlockingS
     }
 
     public static final class FactionParseException extends ParserException {
+        @Serial
+        private static final long serialVersionUID = 1L;
+
         public FactionParseException(final String input, final CommandContext<Sender> context) {
             super(FactionParser.class, context, Captioner.NO_FACTION_FOUND, CaptionVariable.of("input", input));
         }

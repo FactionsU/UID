@@ -82,10 +82,6 @@ public class FactionTag implements ObjectTag {
         return faction;
     }
 
-    /////////////////////
-    //   ObjectTag Methods
-    /////////////////
-
     private String prefix = "Faction";
 
     @Override

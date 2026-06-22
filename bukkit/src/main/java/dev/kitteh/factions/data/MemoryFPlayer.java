@@ -30,7 +30,6 @@ import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WarmUpUtil;
 import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.Component;

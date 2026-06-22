@@ -17,6 +17,7 @@ import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -220,6 +221,9 @@ public class FPlayerParser implements ArgumentParser<Sender, FPlayer>, BlockingS
     }
 
     public static final class FPlayerParseException extends ParserException {
+        @Serial
+        private static final long serialVersionUID = 1L;
+
         public FPlayerParseException(final String input, final CommandContext<Sender> context) {
             super(FPlayerParser.class, context, Captioner.NO_PLAYER_FOUND, CaptionVariable.of("input", input));
         }

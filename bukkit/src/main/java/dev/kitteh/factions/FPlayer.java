@@ -32,6 +32,7 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
 
     String name();
 
+    @Override
     Faction faction();
 
     boolean hasFaction();

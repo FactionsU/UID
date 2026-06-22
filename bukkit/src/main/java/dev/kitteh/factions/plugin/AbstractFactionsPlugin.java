@@ -56,7 +56,6 @@ import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Metrics;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.SeeChunkUtil;
-import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldTracker;
 import dev.kitteh.factions.util.WorldUtil;
 import dev.kitteh.factions.util.adapter.ChatTargetAdapter;

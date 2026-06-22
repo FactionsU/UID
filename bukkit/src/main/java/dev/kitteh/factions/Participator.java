@@ -3,7 +3,6 @@ package dev.kitteh.factions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.LegacyCruft;
 import dev.kitteh.factions.util.Mini;
-import dev.kitteh.factions.util.RelationUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
