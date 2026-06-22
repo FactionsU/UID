@@ -3174,10 +3174,10 @@ public class TranslationsConfig {
                 }
             }
 
-            private MoneyBalanceCmd moneyBalanceCmd;
-            private MoneyDepositCmd moneyDepositCmd;
-            private MoneyDepositSend moneyDepositSend;
-            private MoneyWithdrawCmd moneyWithdrawCmd;
+            private MoneyBalanceCmd moneyBalanceCmd = new MoneyBalanceCmd();
+            private MoneyDepositCmd moneyDepositCmd = new MoneyDepositCmd();
+            private MoneyDepositSend moneyDepositSend = new MoneyDepositSend();
+            private MoneyWithdrawCmd moneyWithdrawCmd = new MoneyWithdrawCmd();
 
             public MoneyBalanceCmd balance() {
                 return moneyBalanceCmd;
