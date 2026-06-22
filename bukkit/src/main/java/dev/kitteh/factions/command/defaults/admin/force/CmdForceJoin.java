@@ -53,7 +53,7 @@ public class CmdForceJoin implements Cmd {
         }
 
         if (target.hasFaction()) {
-            sender.sendRichMessage(tl.getDeniedAlreadyHasFaction());
+            sender.sendRichMessage(tl.getDeniedAlreadyHasFaction(), FPlayerResolver.of("player", target));
             return;
         }
 

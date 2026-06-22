@@ -190,9 +190,9 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_home_x" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockX()) : "";
             case "faction_home_y" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockY()) : "";
             case "faction_home_z" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockZ()) : "";
-            case "faction_land_value" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(faction.claimCount())) : FactionsPlugin.instance().tl().economy().transfer().getOff().replace("<amount>", "value");
-            case "faction_land_refund" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.claimCount())) : FactionsPlugin.instance().tl().economy().transfer().getOff().replace("<amount>", "refund");
-            case "faction_bank_balance" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.getBalance(faction)) : FactionsPlugin.instance().tl().economy().transfer().getOff().replace("<amount>", "balance");
+            case "faction_land_value" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(faction.claimCount())) : Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "value")));
+            case "faction_land_refund" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.claimCount())) : Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "refund")));
+            case "faction_bank_balance" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.getBalance(faction)) : Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "balance")));
             case "faction_tnt_balance" -> FactionsPlugin.instance().conf().commands().tnt().isEnable() ? String.valueOf(faction.tntBank()) : "";
             case "faction_tnt_max_balance" -> FactionsPlugin.instance().conf().commands().tnt().isEnable() ? String.valueOf(faction.tntBankMax()) : "";
             case "faction_allies" -> String.valueOf(faction.relationCount(Relation.ALLY));
