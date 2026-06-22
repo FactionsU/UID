@@ -12,8 +12,8 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.util.LegacyCruft;
 import dev.kitteh.factions.util.Mini;
-import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -190,7 +190,7 @@ public class ListenSpigotChat implements Listener {
 
     private String chatTagLegacy(FPlayer me, FPlayer participator) {
         return me.hasFaction() ?
-                TextUtil.getLegacyString(me.relationTo(participator).color()) + chatTagLegacy(me) :
+                LegacyCruft.getLegacyString(me.relationTo(participator).color()) + chatTagLegacy(me) :
                 FactionsPlugin.instance().conf().factions().chat().spigot().getTagNoFaction();
     }
 }

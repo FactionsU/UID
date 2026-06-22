@@ -608,8 +608,10 @@ public non-sealed interface Faction extends Participator, Selectable {
 
     @Deprecated(forRemoval = true, since = "4.0.0")
     default void sendMessageLegacy(String message) {
-        for (FPlayer fplayer : this.membersOnline(true)) {
-            fplayer.sendMessageLegacy(message);
+        for (FPlayer fplayer : this.members()) {
+            if (fplayer.asPlayer() instanceof Player player) {
+                player.sendMessage(message);
+            }
         }
     }
 
@@ -631,4 +633,9 @@ public non-sealed interface Faction extends Participator, Selectable {
      * @return zones
      */
     Zones zones();
+
+    @Override
+    default Faction faction() {
+        return this;
+    }
 }

@@ -41,6 +41,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -1242,10 +1243,12 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public void msgLegacy(String message, Object... args) {
-        message = TextUtil.parse(message, args);
+        message = String.format(ChatColor.translateAlternateColorCodes('&', message), args);
 
-        for (FPlayer fplayer : this.membersOnline(true)) {
-            fplayer.sendMessageLegacy(message);
+        for (FPlayer fplayer : this.members()) {
+            if (fplayer.asPlayer() instanceof Player player) {
+                player.sendMessage(message);
+            }
         }
     }
 

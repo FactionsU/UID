@@ -1,6 +1,7 @@
 package dev.kitteh.factions;
 
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.util.LegacyCruft;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.RelationUtil;
 import net.kyori.adventure.text.Component;
@@ -56,19 +57,61 @@ public sealed interface Participator permits FPlayer, Faction {
     Component describeTo(@Nullable Participator that);
 
     default Relation relationTo(@Nullable Participator that) {
-        return RelationUtil.getRelationTo(this, that);
+        return this.relationTo(that, false);
     }
 
     default Relation relationTo(@Nullable Participator that, boolean ignorePeaceful) {
-        return RelationUtil.getRelationTo(this, that, ignorePeaceful);
+        if (that == null) {
+            return Relation.NEUTRAL;
+        }
+
+        Faction thisFaction = this.faction();
+        Faction thatFaction = that.faction();
+
+        if (!thatFaction.isNormal() || !thisFaction.isNormal()) {
+            return Relation.NEUTRAL;
+        }
+
+        if (thatFaction == thisFaction) {
+            return Relation.MEMBER;
+        }
+
+        if (!ignorePeaceful && (thisFaction.isPeaceful() || thatFaction.isPeaceful())) {
+            return Relation.NEUTRAL;
+        }
+
+        if (thisFaction.relationWish(thatFaction).value() >= thatFaction.relationWish(thisFaction).value()) {
+            return thatFaction.relationWish(thisFaction);
+        }
+
+        return thisFaction.relationWish(thatFaction);
     }
 
     default TextColor textColorTo(@Nullable Participator that) {
-        return RelationUtil.getTextColorOfThatToMe(this, that);
+        Faction thisFaction = this.faction();
+        Faction thatFaction = that == null ? null : that.faction();
+
+        if (thisFaction != thatFaction) {
+            if (thisFaction.isPeaceful()) {
+                return FactionsPlugin.instance().conf().colors().relations().getPeaceful();
+            }
+
+            if (thisFaction.isSafeZone()) {
+                return FactionsPlugin.instance().conf().colors().factions().getSafezone();
+            }
+
+            if (thisFaction.isWarZone()) {
+                return FactionsPlugin.instance().conf().colors().factions().getWarzone();
+            }
+        }
+
+        return this.relationTo(that).color();
     }
 
     @Deprecated(forRemoval = true, since = "4.0.0")
     default String colorLegacyStringTo(@Nullable Participator that) {
-        return RelationUtil.getLegacyColorStringOfThatToMe(this, that);
+        return LegacyCruft.getLegacyString(this.textColorTo(that));
     }
+
+    Faction faction();
 }

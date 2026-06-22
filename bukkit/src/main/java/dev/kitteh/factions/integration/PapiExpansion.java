@@ -11,9 +11,9 @@ import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.plugin.Instances;
+import dev.kitteh.factions.util.LegacyCruft;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.MiscUtil;
-import dev.kitteh.factions.util.TextUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
 import net.kyori.adventure.text.Component;
@@ -66,7 +66,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
 
         return switch (placeholder) {
             case "relation" -> fp1.relationTo(fp2).translation();
-            case "relation_color" -> TextUtil.getLegacyString(fp1.textColorTo(fp2));
+            case "relation_color" -> LegacyCruft.getLegacyString(fp1.textColorTo(fp2));
             default -> null;
         };
     }
@@ -170,7 +170,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_claims" -> String.valueOf(faction.claims().size());
             case "faction_founded" -> FactionsPlugin.instance().tl().placeholders().datesAndTimes().formatFactionCreationDate(faction.founded());
             case "faction_joining" -> (faction.open() ? FactionsPlugin.instance().tl().placeholders().misc().getJoinOpen() : FactionsPlugin.instance().tl().placeholders().misc().getJoinInvite());
-            case "faction_peaceful" -> faction.isPeaceful() ? TextUtil.getLegacyString(FactionsPlugin.instance().conf().colors().relations().getPeaceful()) + FactionsPlugin.instance().tl().placeholders().misc().getPeaceful() : "";
+            case "faction_peaceful" -> faction.isPeaceful() ? LegacyCruft.getLegacyString(FactionsPlugin.instance().conf().colors().relations().getPeaceful()) + FactionsPlugin.instance().tl().placeholders().misc().getPeaceful() : "";
             case "faction_powerboost" -> {
                 double powerBoost = faction.powerBoost();
                 var misc = FactionsPlugin.instance().tl().placeholders().misc();
@@ -213,7 +213,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_kills" -> String.valueOf(faction.kills());
             case "faction_deaths" -> String.valueOf(faction.deaths());
             case "faction_maxvaults" -> String.valueOf(faction.maxVaults());
-            case "faction_relation_color" -> TextUtil.getLegacyString(fPlayer.textColorTo(faction));
+            case "faction_relation_color" -> LegacyCruft.getLegacyString(fPlayer.textColorTo(faction));
             case "faction_shield_active" -> {
                 if (faction.shieldActive()) {
                     yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveTrue(), fPlayer,

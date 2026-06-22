@@ -37,6 +37,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
@@ -1162,7 +1163,11 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public void msgLegacy(String str, Object... args) {
-        this.sendMessageLegacy(TextUtil.parse(str, args));
+        Player player = this.asPlayer();
+        if (player == null) {
+            return;
+        }
+        player.sendMessage(String.format(ChatColor.translateAlternateColorCodes('&', str), args));
     }
 
     @Override
@@ -1317,27 +1322,21 @@ public abstract class MemoryFPlayer implements FPlayer {
 
     @Override
     public void sendMessageLegacy(String msg) {
-        if (msg.contains("{null}")) {
-            return; // user wants this message to not send
-        }
         Player player = this.asPlayer();
         if (player == null) {
             return;
         }
-        if (msg.contains("/n/")) {
-            for (String s : msg.split("/n/")) {
-                player.sendMessage(s);
-            }
-            return;
-        }
-
         player.sendMessage(msg);
     }
 
     @Override
     public void sendMessageLegacy(List<String> msgs) {
+        Player player = this.asPlayer();
+        if (player == null) {
+            return;
+        }
         for (String msg : msgs) {
-            this.sendMessageLegacy(msg);
+            player.sendMessage(msg);
         }
     }
 
