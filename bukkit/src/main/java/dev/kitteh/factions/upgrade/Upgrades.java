@@ -72,6 +72,9 @@ public final class Upgrades {
     @ApiStatus.AvailableSince("4.6.0")
     public static final Upgrade TERRITORY_DAMAGE_RESISTANCE = new Upgrade.SimpleImpl("territory_damage_resistance", TranslationsConfig.Upgrades::territoryDamageResistance, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
+    @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade VAULTS = new Upgrade.SimpleImpl("vaults", TranslationsConfig.Upgrades::vaults, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
+
     @ApiStatus.AvailableSince("4.2.0")
     public static final Upgrade WARPS = new Upgrade.ReactiveImpl("warps", TranslationsConfig.Upgrades::warps, Integer.MAX_VALUE, Set.of(Variables.COUNT), Upgrade.Reactor.UPDATE_COMMANDS);
 
@@ -289,6 +292,13 @@ public final class Upgrades {
                             BigDecimal.valueOf(500000),
                             BigDecimal.valueOf(1000000)
                     )
+            ),
+            new UpgradeSettings(
+                    Upgrades.VAULTS,
+                    Map.of(Variables.POSITIVE_INCREASE, LeveledValueProvider.Equation.of("level")),
+                    5,
+                    0,
+                    LeveledValueProvider.Equation.of("100000 * level")
             ),
             new UpgradeSettings( // If modifying this, also modify the hackily added one to MemoryUniverse
                     Upgrades.WARPS,

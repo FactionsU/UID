@@ -373,7 +373,7 @@ public abstract class MemoryFaction implements Faction {
     protected ConcurrentHashMap<String, LazyLocation> warps = new ConcurrentHashMap<>();
     protected ConcurrentHashMap<String, String> warpPasswords = new ConcurrentHashMap<>();
     protected long lastDeath;
-    protected int maxVaults;
+    protected @Nullable Integer maxVaults;
     protected Role defaultRole;
     protected @Nullable LinkedHashMap<PermSelector, Map<String, Boolean>> permissions; // legacy importing, lazier this way
     protected Set<BanInfo> bans = new HashSet<>();
@@ -400,6 +400,18 @@ public abstract class MemoryFaction implements Faction {
         this.asOfflinePlayer();
         if (this.upgrades == null) {
             this.upgrades = new Object2IntOpenHashMap<>();
+        }
+        if (this.maxVaults != null && Universe.universe().isUpgradeEnabled(Upgrades.VAULTS)) {
+            int target = this.maxVaults;
+            UpgradeSettings settings = Universe.universe().upgradeSettings(Upgrades.VAULTS);
+            int level = 0;
+            for (int candidate = 1; candidate <= settings.maxLevel(); candidate++) {
+                if (settings.valueAt(Upgrades.Variables.POSITIVE_INCREASE, candidate).intValue() <= target) {
+                    level = candidate;
+                }
+            }
+            this.upgrades.put(Upgrades.VAULTS.name(), level);
+            this.maxVaults = null;
         }
         if (this.permissions != null) {
             this.perms = new MemoryFaction.Permissions();
@@ -503,7 +515,11 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public int maxVaults() {
-        return this.maxVaults;
+        int lvl = this.upgradeLevel(Upgrades.VAULTS);
+        if (lvl > 0) {
+            return Universe.universe().upgradeSettings(Upgrades.VAULTS).valueAt(Upgrades.Variables.POSITIVE_INCREASE, lvl).intValue();
+        }
+        return 0;
     }
 
     @Override
