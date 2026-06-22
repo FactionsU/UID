@@ -23,6 +23,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -452,11 +453,35 @@ public non-sealed interface Faction extends Participator, Selectable {
         return this.shieldRemaining().isPositive();
     }
 
+    @ApiStatus.AvailableSince("4.6.0")
+    default boolean shieldCooldownActive() {
+        return this.shieldCooldownRemaining().isPositive();
+    }
+
     Duration shieldCooldownRemaining();
 
     Duration shieldRemaining();
 
-    void shield(Duration duration, Duration cooldown);
+    @ApiStatus.AvailableSince("4.6.0")
+    @Nullable LocalTime shieldDailyScheduledTime();
+
+    /**
+     * Sets the daily scheduled start time for this faction's shield, or {@code null} to clear it.
+     * <p>
+     * Shield scheduling operates on 30-minute blocks, so the provided time is floored to the
+     * start of its block (:00 or :30) before being stored.
+     *
+     * @param time daily start time, floored to the half-hour, or {@code null} to clear
+     */
+    @ApiStatus.AvailableSince("4.6.0")
+    void shieldDailyScheduledTime(@Nullable LocalTime time);
+
+    default void shield(Duration duration, Duration cooldown) {
+        this.shield(Instant.now(), duration, cooldown);
+    }
+
+    @ApiStatus.AvailableSince("4.6.0")
+    void shield(Instant start, Duration duration, Duration cooldown);
 
     int upgradeLevel(Upgrade upgrade);
 

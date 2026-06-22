@@ -5,10 +5,12 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.command.paper.CmdShield;
 import dev.kitteh.factions.command.paper.CmdUpgrades;
 import dev.kitteh.factions.command.paper.CmdWarp;
 import dev.kitteh.factions.listener.ListenPaperBeacon;
 import dev.kitteh.factions.listener.ListenPaperChat;
+import dev.kitteh.factions.listener.ListenTiming;
 import dev.kitteh.factions.scoreboard.BufferedObjective;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.util.ComponentDispatcher;
@@ -81,6 +83,7 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     public void addCommands(BiConsumer<String, Cmd> reg, Consumer<Supplier<CommandManager<Sender>>> commandManager) {
         reg.accept("upgrades", new CmdUpgrades());
         reg.accept("warp", new CmdWarp());
+        reg.accept("shield", new CmdShield());
         commandManager.accept(() ->
                 PaperCommandManager.<Sender>builder(SenderMapper.create(
                                 css -> {
@@ -101,6 +104,10 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     protected void registerServerSpecificEvents() {
         this.getServer().getPluginManager().registerEvents(new ListenPaperChat(), this);
         this.getServer().getPluginManager().registerEvents(new ListenPaperBeacon(), this);
+
+        ListenTiming listenTiming = new ListenTiming();
+        listenTiming.start();
+        this.getServer().getPluginManager().registerEvents(listenTiming, this);
     }
 
     @Override

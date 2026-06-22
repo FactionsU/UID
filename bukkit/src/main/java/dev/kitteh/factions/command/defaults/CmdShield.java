@@ -39,7 +39,12 @@ public class CmdShield implements Cmd {
             manager.command(shield.handler(ctx -> this.handle(ctx, false)));
             manager.command(shield.literal(tl.getCommandStatus()).handler(ctx -> this.handle(ctx, false)));
             manager.command(shield.literal(tl.getCommandActivate()).handler(ctx -> this.handle(ctx, true)));
+            this.registerSchedule(manager, shield);
         };
+    }
+
+    protected void registerSchedule(CommandManager<Sender> manager, Command.Builder<Sender> shield) {
+        // NOOP - Only implemented on Paper
     }
 
     private void handle(CommandContext<Sender> context, boolean exec) {

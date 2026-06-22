@@ -30,6 +30,7 @@ import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Mini;
+import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.WorldTracker;
 import dev.kitteh.factions.util.WorldUtil;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -49,6 +50,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -381,6 +383,7 @@ public abstract class MemoryFaction implements Faction {
     protected int tntBank;
     protected long shieldEnd;
     protected long shieldCooldownEnd;
+    protected @Nullable LocalTime shieldDailyScheduleTime;
     protected Object2IntOpenHashMap<String> upgrades = new Object2IntOpenHashMap<>();
     protected MemoryFaction.Permissions perms = new MemoryFaction.Permissions();
     protected Zones zones = new Zones(this);
@@ -1023,9 +1026,19 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public void shield(Duration duration, Duration cooldown) {
-        this.shieldEnd = System.currentTimeMillis() + duration.toMillis();
+    public void shield(Instant start, Duration duration, Duration cooldown) {
+        this.shieldEnd = start.toEpochMilli() + duration.toMillis();
         this.shieldCooldownEnd = this.shieldEnd + cooldown.toMillis();
+    }
+
+    @Override
+    public @Nullable LocalTime shieldDailyScheduledTime() {
+        return this.shieldDailyScheduleTime;
+    }
+
+    @Override
+    public void shieldDailyScheduledTime(@Nullable LocalTime time) {
+        this.shieldDailyScheduleTime = time == null ? null : MiscUtil.floorToHalfHour(time);
     }
 
     @Override

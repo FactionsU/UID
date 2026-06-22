@@ -14,6 +14,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -115,6 +116,12 @@ public class MiscUtil {
 
     public static String durationString(long seconds) {
         return durationString(Duration.ofSeconds(seconds));
+    }
+
+    @ApiStatus.AvailableSince("4.6.0")
+    public static LocalTime floorToHalfHour(LocalTime time) {
+        LocalTime floored = time.withSecond(0).withNano(0);
+        return floored.withMinute(floored.getMinute() >= 30 ? 30 : 0);
     }
 
     public static String durationString(Duration duration) {
