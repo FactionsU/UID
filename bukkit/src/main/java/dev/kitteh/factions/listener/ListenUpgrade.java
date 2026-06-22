@@ -1,17 +1,36 @@
 package dev.kitteh.factions.listener;
 
 import dev.kitteh.factions.FLocation;
+import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.block.data.Ageable;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public class ListenUpgrade implements Listener {
+    @EventHandler(ignoreCancelled = true)
+    public void hunger(FoodLevelChangeEvent event) {
+        if (!(event.getEntity() instanceof Player player) || !WorldUtil.isEnabled(player)) {
+            return;
+        }
+
+        if (event.getFoodLevel() >= player.getFoodLevel()) {
+            return;
+        }
+
+        Faction faction = FPlayers.fPlayers().get(player).faction();
+        if (faction.upgradeLevel(Upgrades.NO_HUNGER) > 0 && new FLocation(player).faction() == faction) {
+            event.setCancelled(true);
+        }
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void grow(BlockGrowEvent event) {
         if (!WorldUtil.isEnabled(event.getBlock())) {

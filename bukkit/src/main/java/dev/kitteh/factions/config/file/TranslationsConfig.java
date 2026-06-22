@@ -5381,6 +5381,8 @@ public class TranslationsConfig {
 
         private UpgradeDetail maxMembers = new UpgradeDetail("<green>Member Limit Increase", "<green>Increases maximum number of faction members", "<green>+<increase> members");
 
+        private UpgradeDetail noHunger = new UpgradeDetail("<green>No Hunger Loss", "<green>Members do not lose hunger while in their own territory", "");
+
         private UpgradeDetail powerLossReduction = new UpgradeDetail("<green>Power Loss Reduction", "<green>Lose less power when members die", "<green>-<percent>% power lost on death");
 
         private UpgradeDetail powerMax = new UpgradeDetail("<green>Maximum Power Limit Increase", "<green>Increases the maximum limit on faction power", "<green>+<increase> power");
@@ -5465,6 +5467,10 @@ public class TranslationsConfig {
 
         public UpgradeDetail dtrRegen() {
             return this.dtrRegen;
+        }
+
+        public UpgradeDetail noHunger() {
+            return this.noHunger;
         }
 
         private String unlimited = "unlimited";

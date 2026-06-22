@@ -51,6 +51,9 @@ public final class Upgrades {
 
     public static final Upgrade MAX_MEMBERS = new Upgrade.SimpleImpl("max_members", TranslationsConfig.Upgrades::maxMembers, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
+    @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade NO_HUNGER = new Upgrade.SimpleImpl("no_hunger", TranslationsConfig.Upgrades::noHunger, 1, Set.of());
+
     public static final Upgrade POWER_MAX = new Upgrade.SimpleImpl("power_max", TranslationsConfig.Upgrades::powerMax, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
     @ApiStatus.AvailableSince("4.6.0")
@@ -185,6 +188,13 @@ public final class Upgrades {
                     4,
                     0,
                     LeveledValueProvider.Equation.of("100000 * (level + 1)")
+            ),
+            new UpgradeSettings(
+                    Upgrades.NO_HUNGER,
+                    Map.of(),
+                    1,
+                    0,
+                    LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(250000))
             ),
             new UpgradeSettings(
                     Upgrades.POWER_MAX,
