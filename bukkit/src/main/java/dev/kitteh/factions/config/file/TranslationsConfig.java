@@ -5383,6 +5383,10 @@ public class TranslationsConfig {
 
         private UpgradeDetail shield = new UpgradeDetail("<green>Shield", "<green>Protect territory from explosions", "<green><duration> shield, cooldown <cooldown>");
 
+        private UpgradeDetail territoryDamageBoost = new UpgradeDetail("<green>Territory Damage Boost", "<green>Deal extra damage in your territory", "<green>+<percent>% damage from members and allies");
+
+        private UpgradeDetail territoryDamageResistance = new UpgradeDetail("<green>Territory Damage Resistance", "<green>Take less damage from players in your territory", "<green>-<percent>% damage taken by members and allies");
+
         private UpgradeDetail warps = new UpgradeDetail("<green>Warps", "<green>Additional locations to which members can teleport", "<green><count> warps");
 
         private UpgradeDetail zones = new UpgradeDetail("<green>Zones", "<green>Assign your faction claims to zones to label or grant different permissions", "<green>Grants <increase> zones");
@@ -5429,6 +5433,14 @@ public class TranslationsConfig {
 
         public UpgradeDetail zones() {
             return this.zones;
+        }
+
+        public UpgradeDetail territoryDamageBoost() {
+            return this.territoryDamageBoost;
+        }
+
+        public UpgradeDetail territoryDamageResistance() {
+            return this.territoryDamageResistance;
         }
 
         private String unlimited = "unlimited";

@@ -6,6 +6,7 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.protection.Protection;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
@@ -85,6 +86,64 @@ public class ListenDamage implements Listener {
 
     private boolean isPlayerInSafeZone(Entity damagee) {
         return damagee instanceof Player plr && new FLocation(plr.getLocation()).faction().isSafeZone();
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onTerritoryDamageBoost(EntityDamageByEntityEvent event) {
+        if (!WorldUtil.isEnabled(event.getEntity())) {
+            return;
+        }
+
+        Entity damager = event.getDamager();
+        if (damager instanceof Projectile projectile && projectile.getShooter() instanceof Entity shooter) {
+            damager = shooter;
+        }
+        if (!(damager instanceof Player player)) {
+            return;
+        }
+
+        Faction territoryFaction = new FLocation(player).faction();
+        Faction playerFaction = FPlayers.fPlayers().get(player).faction();
+
+        int lvl = territoryFaction.upgradeLevel(Upgrades.TERRITORY_DAMAGE_BOOST);
+        if (lvl <= 0 || !(territoryFaction == playerFaction || playerFaction.relationTo(territoryFaction) == Relation.ALLY)) {
+            return;
+        }
+
+        double boost = Universe.universe().upgradeSettings(Upgrades.TERRITORY_DAMAGE_BOOST).valueAt(Upgrades.Variables.PERCENT, lvl).doubleValue();
+        boost = Math.max(0, boost);
+        event.setDamage(event.getDamage() * (1 + boost));
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onTerritoryDamageResistance(EntityDamageByEntityEvent event) {
+        if (!WorldUtil.isEnabled(event.getEntity())) {
+            return;
+        }
+
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
+        Entity damager = event.getDamager();
+        if (damager instanceof Projectile projectile && projectile.getShooter() instanceof Entity shooter) {
+            damager = shooter;
+        }
+        if (!(damager instanceof Player)) {
+            return;
+        }
+
+        Faction territoryFaction = new FLocation(player).faction();
+        Faction playerFaction = FPlayers.fPlayers().get(player).faction();
+
+        int lvl = territoryFaction.upgradeLevel(Upgrades.TERRITORY_DAMAGE_RESISTANCE);
+        if (lvl <= 0 || !(territoryFaction == playerFaction || playerFaction.relationTo(territoryFaction) == Relation.ALLY)) {
+            return;
+        }
+
+        double reduction = Universe.universe().upgradeSettings(Upgrades.TERRITORY_DAMAGE_RESISTANCE).valueAt(Upgrades.Variables.PERCENT, lvl).doubleValue();
+        reduction = Math.clamp(reduction, 0, 1);
+        event.setDamage(event.getDamage() * (1 - reduction));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

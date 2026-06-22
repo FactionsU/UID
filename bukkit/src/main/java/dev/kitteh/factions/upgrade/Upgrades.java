@@ -51,6 +51,12 @@ public final class Upgrades {
 
     public static final Upgrade SHIELD = new Upgrade.ReactiveImpl("shield", TranslationsConfig.Upgrades::shield, Integer.MAX_VALUE, Set.of(Variables.DURATION, Variables.COOLDOWN), Upgrade.Reactor.UPDATE_COMMANDS);
 
+    @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade TERRITORY_DAMAGE_BOOST = new Upgrade.SimpleImpl("territory_damage_boost", TranslationsConfig.Upgrades::territoryDamageBoost, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
+
+    @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade TERRITORY_DAMAGE_RESISTANCE = new Upgrade.SimpleImpl("territory_damage_resistance", TranslationsConfig.Upgrades::territoryDamageResistance, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
+
     @ApiStatus.AvailableSince("4.2.0")
     public static final Upgrade WARPS = new Upgrade.ReactiveImpl("warps", TranslationsConfig.Upgrades::warps, Integer.MAX_VALUE, Set.of(Variables.COUNT), Upgrade.Reactor.UPDATE_COMMANDS);
 
@@ -171,6 +177,36 @@ public final class Upgrades {
                     3,
                     0,
                     LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(50000), BigDecimal.valueOf(100000), BigDecimal.valueOf(1000000))
+            ),
+            new UpgradeSettings(
+                    Upgrades.TERRITORY_DAMAGE_BOOST,
+                    Map.of(Variables.PERCENT, LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(0.05),
+                            BigDecimal.valueOf(0.10),
+                            BigDecimal.valueOf(0.15)
+                    )),
+                    3,
+                    0,
+                    LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(250000),
+                            BigDecimal.valueOf(500000),
+                            BigDecimal.valueOf(1000000)
+                    )
+            ),
+            new UpgradeSettings(
+                    Upgrades.TERRITORY_DAMAGE_RESISTANCE,
+                    Map.of(Variables.PERCENT, LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(0.05),
+                            BigDecimal.valueOf(0.10),
+                            BigDecimal.valueOf(0.15)
+                    )),
+                    3,
+                    0,
+                    LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(250000),
+                            BigDecimal.valueOf(500000),
+                            BigDecimal.valueOf(1000000)
+                    )
             ),
             new UpgradeSettings( // If modifying this, also modify the hackily added one to MemoryUniverse
                     Upgrades.WARPS,
