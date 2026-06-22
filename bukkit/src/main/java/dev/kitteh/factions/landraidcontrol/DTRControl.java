@@ -139,13 +139,31 @@ public final class DTRControl implements LandRaidControl {
 
         if (!dtrLossEvent.isCancelled()) {
             double startingDTR = faction.dtr();
-            faction.dtr(Math.max(conf().getMinDTR(), faction.dtr() - conf().getLossPerDeath(player.getWorld())));
-            double diff = startingDTR - faction.dtr();
+
+            double fullLoss = conf().getLossPerDeath(player.getWorld());
+            double loss = fullLoss;
+
+            int reductionLevel = fplayer.faction().upgradeLevel(Upgrades.DTR_LOSS_REDUCTION);
+            if (reductionLevel > 0) {
+                double reduction = Universe.universe().upgradeSettings(Upgrades.DTR_LOSS_REDUCTION).valueAt(Upgrades.Variables.PERCENT, reductionLevel).doubleValue();
+                reduction = Math.clamp(reduction, 0, 1);
+                loss *= (1 - reduction);
+            }
+
+            faction.dtr(Math.max(conf().getMinDTR(), faction.dtr() - loss));
+
+            double vampLoss;
+            if (conf().isDtrLossReductionAffectsVampirism()) {
+                vampLoss = startingDTR - faction.dtr();
+            } else {
+                vampLoss = Math.clamp(fullLoss, 0, startingDTR - conf().getMinDTR());
+            }
+
             double vamp = conf().getVampirism();
-            if (player.getKiller() != null && vamp != 0D && diff > 0) {
+            if (player.getKiller() != null && vamp != 0D && vampLoss > 0) {
                 FPlayer fKiller = FPlayers.fPlayers().get(player.getKiller());
                 if (faction != fKiller.faction()) {
-                    double change = vamp * diff;
+                    double change = vamp * vampLoss;
                     double startingOther = fKiller.faction().dtr();
                     fKiller.faction().dtr(Math.min(conf().getMaxDTR(), startingOther + change));
                     double killDiff = fKiller.faction().dtr() - startingOther;
@@ -181,14 +199,22 @@ public final class DTRControl implements LandRaidControl {
             // Not yet time to regen
             return;
         }
+        double millisPerMinute = 60 * 1000;
         long millisPassed = now - Math.max(faction.dtrLastUpdated(), faction.dtrFrozenUntil());
         Stream<Player> stream = faction.membersOnlineAsPlayers().stream().filter(WorldUtil::isEnabled);
         if (FactionsPlugin.instance().conf().plugins().general().isPreventRegenWhileAfk()) {
             stream = stream.filter(player -> !ExternalChecks.isAfk(player));
         }
         long onlineInEnabledWorlds = stream.count();
-        double rate = Math.min(conf().getRegainPerMinuteMaxRate(), Math.max(0, onlineInEnabledWorlds - minusPlayer) * conf().getRegainPerMinutePerPlayer());
-        double regain = (millisPassed / (60D * 1000D)) * rate;
+        double perMinute = Math.min(conf().getRegainPerMinuteMaxRate(), Math.max(0, onlineInEnabledWorlds - minusPlayer) * conf().getRegainPerMinutePerPlayer());
+
+        int lvl = faction.upgradeLevel(Upgrades.DTR_REGEN);
+        if (lvl > 0) {
+            double boost = Math.max(0, Universe.universe().upgradeSettings(Upgrades.DTR_REGEN).valueAt(Upgrades.Variables.PERCENT, lvl).doubleValue());
+            perMinute *= (1 + boost);
+        }
+
+        double regain = perMinute * (millisPassed / millisPerMinute);
         faction.dtr(Math.min(faction.dtrWithoutUpdate() + regain, this.getMaxDTR(faction)));
     }
 

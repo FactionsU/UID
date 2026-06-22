@@ -567,6 +567,11 @@ public class MainConfig {
                         Negative values will give the incredibly wild option of taking DTR from the killer's faction too.""")
                 private double vampirism = 0;
 
+                @Comment("""
+                        If true, the DTR loss reduction upgrade also reduces how much DTR a killer steals via vampirism.
+                        If false, vampirism is based on the full DTR loss, ignoring the reduction.""")
+                private boolean dtrLossReductionAffectsVampirism = false;
+
                 public int getDecimalDigits() {
                     return decimalDigits;
                 }
@@ -648,6 +653,10 @@ public class MainConfig {
                 public double getVampirism() {
                     return vampirism;
                 }
+
+                public boolean isDtrLossReductionAffectsVampirism() {
+                    return dtrLossReductionAffectsVampirism;
+                }
             }
 
             public class Power {
@@ -697,6 +706,10 @@ public class MainConfig {
                         0.5 to give the killing player half of what was lost, etc.
                         Negative values will give the incredibly wild option of taking power from the killer too.""")
                 private double vampirism = 0;
+                @Comment("""
+                        If true, the power loss reduction upgrade also reduces how much power a killer steals via vampirism.
+                        If false, vampirism is based on the full power loss, ignoring the reduction.""")
+                private boolean powerLossReductionAffectsVampirism = false;
 
                 public boolean isRaidability() {
                     return raidability;
@@ -772,6 +785,10 @@ public class MainConfig {
 
                 public double getVampirism() {
                     return vampirism;
+                }
+
+                public boolean isPowerLossReductionAffectsVampirism() {
+                    return powerLossReductionAffectsVampirism;
                 }
             }
 

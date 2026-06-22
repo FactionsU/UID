@@ -37,6 +37,12 @@ public final class Upgrades {
 
     public static final Upgrade DTR_CLAIM_LIMIT = new Upgrade.SimpleImpl("dtr_claim_limit", TranslationsConfig.Upgrades::dtrClaimLimit, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
+    @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade DTR_LOSS_REDUCTION = new Upgrade.SimpleImpl("dtr_loss_reduction", TranslationsConfig.Upgrades::powerLossReduction, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
+
+    @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade DTR_REGEN = new Upgrade.SimpleImpl("dtr_regen", TranslationsConfig.Upgrades::powerRegen, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
+
     public static final Upgrade FALL_DAMAGE_REDUCTION = new Upgrade.SimpleImpl("fall_damage_reduction", TranslationsConfig.Upgrades::fallDamage, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
     public static final Upgrade FLIGHT = new Upgrade.ReactiveImpl("flight", TranslationsConfig.Upgrades::flight, 1, Set.of(), Upgrade.Reactor.UPDATE_COMMANDS);
@@ -46,6 +52,12 @@ public final class Upgrades {
     public static final Upgrade MAX_MEMBERS = new Upgrade.SimpleImpl("max_members", TranslationsConfig.Upgrades::maxMembers, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
     public static final Upgrade POWER_MAX = new Upgrade.SimpleImpl("power_max", TranslationsConfig.Upgrades::powerMax, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
+
+    @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade POWER_LOSS_REDUCTION = new Upgrade.SimpleImpl("power_loss_reduction", TranslationsConfig.Upgrades::powerLossReduction, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
+
+    @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade POWER_REGEN = new Upgrade.SimpleImpl("power_regen", TranslationsConfig.Upgrades::powerRegen, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
     public static final Upgrade REDSTONE_PROTECT = new Upgrade.SimpleImpl("redstone_anti_flood", TranslationsConfig.Upgrades::redstoneAntiFlood, 1, Set.of());
 
@@ -102,6 +114,36 @@ public final class Upgrades {
                     LeveledValueProvider.Equation.of("100000 * level ^ 2")
             ),
             new UpgradeSettings(
+                    Upgrades.DTR_LOSS_REDUCTION,
+                    Map.of(Variables.PERCENT, LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(0.15),
+                            BigDecimal.valueOf(0.30),
+                            BigDecimal.valueOf(0.50)
+                    )),
+                    3,
+                    0,
+                    LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(200000),
+                            BigDecimal.valueOf(500000),
+                            BigDecimal.valueOf(1000000)
+                    )
+            ),
+            new UpgradeSettings(
+                    Upgrades.DTR_REGEN,
+                    Map.of(Variables.PERCENT, LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(0.25),
+                            BigDecimal.valueOf(0.50),
+                            BigDecimal.valueOf(1)
+                    )),
+                    3,
+                    0,
+                    LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(200000),
+                            BigDecimal.valueOf(500000),
+                            BigDecimal.valueOf(1000000)
+                    )
+            ),
+            new UpgradeSettings(
                     Upgrades.FALL_DAMAGE_REDUCTION,
                     Map.of(Variables.PERCENT, LeveledValueProvider.LevelMap.of(
                             BigDecimal.valueOf(0.25),
@@ -152,6 +194,36 @@ public final class Upgrades {
                     10,
                     0,
                     LeveledValueProvider.Equation.of("100000 * (level * level)")
+            ),
+            new UpgradeSettings(
+                    Upgrades.POWER_LOSS_REDUCTION,
+                    Map.of(Variables.PERCENT, LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(0.15),
+                            BigDecimal.valueOf(0.30),
+                            BigDecimal.valueOf(0.50)
+                    )),
+                    3,
+                    0,
+                    LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(200000),
+                            BigDecimal.valueOf(500000),
+                            BigDecimal.valueOf(1000000)
+                    )
+            ),
+            new UpgradeSettings(
+                    Upgrades.POWER_REGEN,
+                    Map.of(Variables.PERCENT, LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(0.25),
+                            BigDecimal.valueOf(0.50),
+                            BigDecimal.valueOf(1)
+                    )),
+                    3,
+                    0,
+                    LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(200000),
+                            BigDecimal.valueOf(500000),
+                            BigDecimal.valueOf(1000000)
+                    )
             ),
             new UpgradeSettings(
                     Upgrades.REDSTONE_PROTECT,
@@ -211,7 +283,7 @@ public final class Upgrades {
             new UpgradeSettings( // If modifying this, also modify the hackily added one to MemoryUniverse
                     Upgrades.WARPS,
                     Map.of(
-                            Variables.COUNT,  LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(5))
+                            Variables.COUNT, LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(5))
                     ),
                     1,
                     1,

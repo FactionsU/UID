@@ -6,11 +6,13 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.event.PowerLossEvent;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.upgrade.Upgrades;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -141,12 +143,29 @@ public final class PowerControl implements LandRaidControl {
         fplayer.onDeath();
         if (!powerLossEvent.isCancelled()) {
             double startingPower = fplayer.power();
-            fplayer.alterPower(-powerConf.getLossPerDeath());
-            double powerDiff = startingPower - fplayer.power();
+            double fullLoss = powerConf.getLossPerDeath();
+            double loss = fullLoss;
+
+            int reductionLevel = fplayer.faction().upgradeLevel(Upgrades.POWER_LOSS_REDUCTION);
+            if (reductionLevel > 0) {
+                double reduction = Universe.universe().upgradeSettings(Upgrades.POWER_LOSS_REDUCTION).valueAt(Upgrades.Variables.PERCENT, reductionLevel).doubleValue();
+                reduction = Math.clamp(reduction, 0, 1);
+                loss *= (1 - reduction);
+            }
+
+            fplayer.alterPower(-loss);
+
+            double vampLoss;
+            if (powerConf.isPowerLossReductionAffectsVampirism()) {
+                vampLoss = startingPower - fplayer.power();
+            } else {
+                vampLoss = Math.clamp(fullLoss, 0, startingPower - fplayer.powerMin());
+            }
+
             double vamp = powerConf.getVampirism();
             Player killer = player.getKiller();
-            if (killer != null && vamp != 0D && powerDiff > 0) {
-                double powerChange = vamp * powerDiff;
+            if (killer != null && vamp != 0D && vampLoss > 0) {
+                double powerChange = vamp * vampLoss;
                 FPlayer fKiller = FPlayers.fPlayers().get(killer);
                 fKiller.alterPower(powerChange);
                 fKiller.sendRichMessage(FactionsPlugin.instance().tl().landRaid().power().getVampirismGain(),

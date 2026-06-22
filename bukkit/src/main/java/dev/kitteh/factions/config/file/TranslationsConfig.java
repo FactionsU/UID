@@ -3758,10 +3758,10 @@ public class TranslationsConfig {
             private String member = "member";
             private String members = "members";
             private String truce = "truce";
-            private String truces =  "truces";
+            private String truces = "truces";
             private String enemy = "enemy";
             private String enemies = "enemies";
-            private String neutral  = "neutral";
+            private String neutral = "neutral";
             private String neutrals = "neutrals";
 
             public String getAlly() {
@@ -3816,7 +3816,7 @@ public class TranslationsConfig {
             private String coleader = "coleader";
             private String moderator = "moderator";
             private String normal = "member";
-            private String recruit =  "recruit";
+            private String recruit = "recruit";
 
             public String getAdmin() {
                 return admin;
@@ -5369,6 +5369,10 @@ public class TranslationsConfig {
 
         private UpgradeDetail dtrClaimLimit = new UpgradeDetail("<green>Claim Limit Increase", "<green>Increases maximum faction territory", "<green>+<increase> claims");
 
+        private UpgradeDetail dtrLossReduction = new UpgradeDetail("<green>DTR Loss Reduction", "<green>Lose less DTR when members die", "<green>-<percent>% DTR lost on death");
+
+        private UpgradeDetail dtrRegen = new UpgradeDetail("<green>DTR Regeneration Boost", "<green>Regain DTR more quickly", "<green>+<percent>% DTR regeneration");
+
         private UpgradeDetail fallDamage = new UpgradeDetail("<green>Fall Damage Reduction", "<green>Decreases fall damage in your own territory", "<green>-<percent>% reduction");
 
         private UpgradeDetail flight = new UpgradeDetail("<green>Flight", "<green>Enables flying in faction territory", "");
@@ -5377,7 +5381,11 @@ public class TranslationsConfig {
 
         private UpgradeDetail maxMembers = new UpgradeDetail("<green>Member Limit Increase", "<green>Increases maximum number of faction members", "<green>+<increase> members");
 
+        private UpgradeDetail powerLossReduction = new UpgradeDetail("<green>Power Loss Reduction", "<green>Lose less power when members die", "<green>-<percent>% power lost on death");
+
         private UpgradeDetail powerMax = new UpgradeDetail("<green>Maximum Power Limit Increase", "<green>Increases the maximum limit on faction power", "<green>+<increase> power");
+
+        private UpgradeDetail powerRegen = new UpgradeDetail("<green>Power Regeneration Boost", "<green>Members regain power more quickly", "<green>+<percent>% power regeneration");
 
         private UpgradeDetail redstoneAntiFlood = new UpgradeDetail("<green>Redstone Anti-Flood", "<green>Protect circuits from flooding", "");
 
@@ -5441,6 +5449,22 @@ public class TranslationsConfig {
 
         public UpgradeDetail territoryDamageResistance() {
             return this.territoryDamageResistance;
+        }
+
+        public UpgradeDetail powerLossReduction() {
+            return this.powerLossReduction;
+        }
+
+        public UpgradeDetail powerRegen() {
+            return this.powerRegen;
+        }
+
+        public UpgradeDetail dtrLossReduction() {
+            return this.dtrLossReduction;
+        }
+
+        public UpgradeDetail dtrRegen() {
+            return this.dtrRegen;
         }
 
         private String unlimited = "unlimited";

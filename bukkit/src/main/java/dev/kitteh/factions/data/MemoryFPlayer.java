@@ -8,6 +8,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
+import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.command.defaults.CmdZone;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
@@ -25,6 +26,7 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
@@ -592,6 +594,9 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
         long now = System.currentTimeMillis();
         long millisPassed = now - lastUpdate;
+        if (millisPassed < 500) { // Don't need to update every single call!
+            return;
+        }
         this.lastPowerUpdateTime = now;
 
         Player thisPlayer = this.asPlayer();
@@ -600,7 +605,15 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         int millisPerMinute = 60 * 1000;
-        this.alterPower(millisPassed * FactionsPlugin.instance().conf().factions().landRaidControl().power().getPowerPerMinute() / millisPerMinute);
+        double perMinute = FactionsPlugin.instance().conf().factions().landRaidControl().power().getPowerPerMinute();
+        if (this.hasFaction()) {
+            int lvl = this.faction().upgradeLevel(Upgrades.POWER_REGEN);
+            if (lvl > 0) {
+                double boost = Math.max(0, Universe.universe().upgradeSettings(Upgrades.POWER_REGEN).valueAt(Upgrades.Variables.PERCENT, lvl).doubleValue());
+                perMinute *= (1 + boost);
+            }
+        }
+        this.alterPower(millisPassed * perMinute / millisPerMinute);
     }
 
     @Override
