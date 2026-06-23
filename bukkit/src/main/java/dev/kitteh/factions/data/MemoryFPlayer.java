@@ -895,11 +895,8 @@ public abstract class MemoryFPlayer implements FPlayer {
             } else {
                 denyReason = Mini.parse(claimTl.getFactionContiguous(), this);
             }
-        } else if (forFaction.isNormal() && (plugin.conf().factions().claims().getContiguousTotalChunks() != 0 || plugin.conf().factions().claims().getContiguousDistance() != 0)) {
-            Component maybeDeny = contiguousChecks(forFaction, flocation);
-            if (maybeDeny != null) {
-                denyReason = maybeDeny;
-            }
+        } else if (contiguousChecks(forFaction, flocation) instanceof Component deny) {
+            denyReason = deny;
         } else if (!(currentFaction.isNormal() && plugin.conf().factions().claims().isAllowOverClaimAndIgnoringBuffer() && currentFaction.hasLandInflation()) && factionBuffer > 0 && Board.board().hasFactionWithin(flocation, myFaction, factionBuffer)) {
             // Too close to buffer
             denyReason = Mini.parse(claimTl.getTooCloseToOtherFaction(), this, Placeholder.unparsed("count", String.valueOf(factionBuffer)));
@@ -938,6 +935,10 @@ public abstract class MemoryFPlayer implements FPlayer {
         var claims = AbstractFactionsPlugin.instance().conf().factions().claims();
         int maxChunks = claims.getContiguousTotalChunks();
         int maxDistance = claims.getContiguousDistance();
+
+        if (maxChunks == 0 && maxDistance == 0) {
+            return null;
+        }
 
         Set<FLocation> group = new HashSet<>();
         Deque<FLocation> queue = new ArrayDeque<>();
