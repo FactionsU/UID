@@ -524,6 +524,9 @@ public final class Protection {
         }
 
         MainConfig.Factions facConf = FactionsPlugin.instance().conf().factions();
+        if (notify && facConf.pvp().isDisableNotificationWhenAttackerVanished() && attacker.isVanished()) {
+            notify = false;
+        }
         if (facConf.protection().getPlayersWhoBypassAllProtection().contains(attacker.name())) {
             return false;
         }

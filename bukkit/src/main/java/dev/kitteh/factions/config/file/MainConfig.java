@@ -1136,6 +1136,8 @@ public class MainConfig {
             private boolean disablePVPForFactionlessPlayers = false;
             private boolean enablePVPAgainstFactionlessInAttackersLand = false;
             private boolean disablePeacefulPVPInWarzone = true;
+            @Comment("If true, the \"damage attempted\" warning normally sent to a defender is suppressed when the attacker is vanished")
+            private boolean disableNotificationWhenAttackerVanished = true;
             private int noPVPDamageToOthersForXSecondsAfterLogin = 3;
             private Set<String> worldsIgnorePvP = new HashSet<>() {
                 {
@@ -1153,6 +1155,10 @@ public class MainConfig {
 
             public boolean isDisablePeacefulPVPInWarzone() {
                 return disablePeacefulPVPInWarzone;
+            }
+
+            public boolean isDisableNotificationWhenAttackerVanished() {
+                return disableNotificationWhenAttackerVanished;
             }
 
             public boolean isEnablePVPAgainstFactionlessInAttackersLand() {
