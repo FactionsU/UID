@@ -2481,7 +2481,7 @@ public class MainConfig {
 
         @Comment("""
                 The "/f top money" command caches balances instead of querying the economy for every player each time it is run.
-                How often (in seconds) to refresh cached balances of faction banks and online players. Set to 0 to disable caching/refreshing.""")
+                How often (in seconds) to refresh cached balances of faction banks and online players.""")
         private int topBalanceCacheOnlineRefreshSeconds = 60;
         @Comment("""
                 How often (in minutes) every offline player's cached balance is refreshed for "/f top money".
@@ -2497,11 +2497,11 @@ public class MainConfig {
         }
 
         public int getTopBalanceCacheOnlineRefreshSeconds() {
-            return topBalanceCacheOnlineRefreshSeconds;
+            return topBalanceCacheOnlineRefreshSeconds < 1 ? 30 : topBalanceCacheOnlineRefreshSeconds;
         }
 
         public int getTopBalanceCacheOfflineRefreshMinutes() {
-            return topBalanceCacheOfflineRefreshMinutes;
+            return topBalanceCacheOfflineRefreshMinutes < 1 ? 30 : topBalanceCacheOfflineRefreshMinutes;
         }
 
         public String getDefaultWorld() {
