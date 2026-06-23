@@ -312,7 +312,10 @@ public non-sealed interface Faction extends Participator, Selectable {
 
     int maxVaults();
 
-    void maxVaults(int value);
+    @Deprecated(forRemoval = true, since = "4.6.0")
+    default void maxVaults(int value) {
+        // NOOP
+    }
 
     Set<UUID> invites();
 

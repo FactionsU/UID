@@ -523,11 +523,6 @@ public abstract class MemoryFaction implements Faction {
     }
 
     @Override
-    public void maxVaults(int value) {
-        this.maxVaults = value;
-    }
-
-    @Override
     public Set<UUID> invites() {
         purgeExpiredInvitations();
         return Set.copyOf(this.invitations.keySet());
@@ -870,7 +865,6 @@ public abstract class MemoryFaction implements Faction {
         this.permanent = false;
         this.powerBoost = 0.0;
         this.foundedDate = System.currentTimeMillis();
-        this.maxVaults = FactionsPlugin.instance().conf().plugins().playerVaults().getDefaultMaxVaults();
         this.defaultRole = FactionsPlugin.instance().conf().factions().other().getDefaultRole();
         this.dtr = FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getStartingDTR();
         this.resetPerms();

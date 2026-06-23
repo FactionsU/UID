@@ -509,19 +509,6 @@ public class TranslationsConfig {
                     }
                 }
 
-                public static class MaxVaults extends AbsCommand {
-                    public MaxVaults() {
-                        super("Set max vaults for a Faction", "max-vaults");
-                    }
-
-                    @Comment("Supports <faction>, <value>")
-                    private String success = "<green>Set max vaults for <yellow><faction> <green>to <aqua><value>";
-
-                    public String getSuccess() {
-                        return success;
-                    }
-                }
-
                 public static class Grace extends AbsCommand {
                     public Grace() {
                         super("Set grace status", "grace");
@@ -544,7 +531,6 @@ public class TranslationsConfig {
                 private Peaceful peaceful = new Peaceful();
                 private Permanent permanent = new Permanent();
                 private AutoSave autoSave = new AutoSave();
-                private MaxVaults maxVaults = new MaxVaults();
                 private Grace grace = new Grace();
 
                 public Boom boom() {
@@ -561,10 +547,6 @@ public class TranslationsConfig {
 
                 public AutoSave autoSave() {
                     return autoSave;
-                }
-
-                public MaxVaults maxVaults() {
-                    return maxVaults;
                 }
 
                 public Grace grace() {

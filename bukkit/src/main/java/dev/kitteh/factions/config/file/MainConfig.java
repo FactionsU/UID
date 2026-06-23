@@ -2889,14 +2889,9 @@ public class MainConfig {
         public class PlayerVaults {
             @Comment("The %s is for the faction id")
             private String vaultPrefix = "faction-%s";
-            private int defaultMaxVaults = 0;
 
             public String getVaultPrefix() {
                 return vaultPrefix;
-            }
-
-            public int getDefaultMaxVaults() {
-                return defaultMaxVaults;
             }
         }
 
