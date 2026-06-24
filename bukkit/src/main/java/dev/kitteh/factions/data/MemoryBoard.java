@@ -11,9 +11,9 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.AsciiCompass;
 import dev.kitteh.factions.util.Mini;
-import dev.kitteh.factions.util.TextUtil;
 import dev.kitteh.factions.util.WorldTracker;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -26,6 +26,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -45,9 +46,6 @@ import java.util.stream.Collectors;
 @ApiStatus.Internal
 @NullMarked
 public abstract class MemoryBoard implements Board {
-
-    private final char[] mapKeyChrs = "\\/#$%=&^ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890abcdeghjmnopqrsuvwxyz?".toCharArray();
-
     protected Object2ObjectMap<String, WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
 
     protected WorldTracker getAndCreate(String world) {
@@ -202,19 +200,38 @@ public abstract class MemoryBoard implements Board {
      * The map is relative to a coord and a faction north is in the direction of decreasing x east is in the direction
      * of decreasing z
      */
-    public List<Component> getMap(FPlayer fplayer, FLocation flocation, double inDegrees) {
-        Faction faction = fplayer.faction();
+    public List<Component> getMap(FPlayer fPlayer, FLocation fLocation, double inDegrees) {
+        Faction playerFaction = fPlayer.faction();
         ArrayList<Component> ret = new ArrayList<>();
-        Faction factionLoc = factionAt(flocation);
-        ret.add(TextUtil.titleize("(" + flocation.asCoordString() + ") " + factionLoc.tagLegacy(fplayer)));
+        Faction factionLoc = factionAt(fLocation);
+
+        var tl = FactionsPlugin.instance().tl().commands().map();
+
+        char[] mapChars = tl.getMapOutputFactionCharacters().toCharArray();
+        if (mapChars.length == 0) {
+            mapChars = "\\/#$%=&^ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890abcdeghjmnopqrsuvwxyz?".toCharArray();
+        }
+
+        Component other = Mini.parse(tl.getMapOutputOther());
+        Component safezone = Mini.parse(tl.getMapOutputSafezone());
+        Component warzone = Mini.parse(tl.getMapOutputWarzone());
+        Component wilderness = Mini.parse(tl.getMapOutputWilderness());
+
+        Component title = Mini.parse(tl.getMapOutputTitle(), fPlayer,
+                Placeholder.unparsed("x", String.valueOf(fLocation.x())),
+                Placeholder.unparsed("z", String.valueOf(fLocation.z())),
+                FactionResolver.of(factionLoc)
+        );
+
+        ret.add(title);
 
         // Get the compass
-        List<Component> asciiCompass = AsciiCompass.of(inDegrees, "<red>", "<gold>");
+        List<Component> asciiCompass = AsciiCompass.of(inDegrees, "<" + tl.getCompassColorActive() + ">", "<" + tl.getCompassColorDefault() + ">");
 
         int halfWidth = FactionsPlugin.instance().conf().map().getWidth() / 2;
         // Use player's value for height
-        int halfHeight = fplayer.mapHeight() / 2;
-        FLocation topLeft = flocation.relative(-halfWidth, -halfHeight);
+        int halfHeight = fPlayer.mapHeight() / 2;
+        FLocation topLeft = fLocation.relative(-halfWidth, -halfHeight);
         int width = halfWidth * 2 + 1;
         int height = halfHeight * 2 + 1;
 
@@ -222,7 +239,7 @@ public abstract class MemoryBoard implements Board {
             height--;
         }
 
-        Map<String, String> fList = new HashMap<>();
+        Map<Faction, Component> fList = new HashMap<>();
         int chrIdx = 0;
 
         // For each row
@@ -237,26 +254,25 @@ public abstract class MemoryBoard implements Board {
                 if (dx == halfWidth && dz == halfHeight) {
                     builder.append(Component.text().content("+").color(FactionsPlugin.instance().conf().map().getSelfColor()).hoverEvent(HoverEvent.showText(Mini.parse(FactionsPlugin.instance().tl().claiming().claim().getYouAreHere()))));
                 } else {
-                    FLocation flocationHere = topLeft.relative(dx, dz);
-                    Faction factionHere = factionAt(flocationHere);
-                    Relation relation = fplayer.relationTo(factionHere);
+                    FLocation fLocationHere = topLeft.relative(dx, dz);
+                    Faction factionHere = factionAt(fLocationHere);
+                    Relation relation = fPlayer.relationTo(factionHere);
                     if (factionHere.isWilderness()) {
-                        builder.append(Component.text().content("-").color(FactionsPlugin.instance().conf().colors().factions().getWilderness()));
+                        builder.append(wilderness);
                     } else if (factionHere.isSafeZone()) {
-                        builder.append(Component.text().content("+").color(FactionsPlugin.instance().conf().colors().factions().getSafezone()));
+                        builder.append(safezone);
                     } else if (factionHere.isWarZone()) {
-                        builder.append(Component.text().content("+").color(FactionsPlugin.instance().conf().colors().factions().getWarzone()));
-                    } else if (factionHere == faction || factionHere == factionLoc || relation.isAtLeast(Relation.ALLY) ||
+                        builder.append(warzone);
+                    } else if (factionHere == playerFaction || factionHere == factionLoc || relation.isAtLeast(Relation.ALLY) ||
                             (FactionsPlugin.instance().conf().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
                             (FactionsPlugin.instance().conf().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
                             FactionsPlugin.instance().conf().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
-                        if (!fList.containsKey(factionHere.tag())) {
-                            fList.put(factionHere.tag(), String.valueOf(this.mapKeyChrs[Math.min(chrIdx++, this.mapKeyChrs.length - 1)]));
+                        if (!fList.containsKey(factionHere)) {
+                            fList.put(factionHere, Component.text().content(String.valueOf(mapChars[Math.min(chrIdx++, mapChars.length - 1)])).color(factionHere.textColorTo(playerFaction)).build());
                         }
-                        String tag = fList.get(factionHere.tag());
-                        builder.append(Component.text().content(tag).color(factionHere.textColorTo(faction)));
+                        builder.append(fList.get(factionHere));
                     } else {
-                        builder.append(Component.text().content("-").color(NamedTextColor.GRAY));
+                        builder.append(other);
                     }
                 }
             }
@@ -266,10 +282,11 @@ public abstract class MemoryBoard implements Board {
         // Add the faction key
         if (FactionsPlugin.instance().conf().map().isShowFactionKey()) {
             TextComponent.Builder builder = Component.text();
-            for (String key : fList.keySet()) {
-                final Relation relation = fplayer.relationTo(Factions.factions().get(key));
-                builder.append(Component.text().content(String.format("%s: %s ", fList.get(key), key)).color(relation.color()));
-            }
+            fList.forEach((fac, label) ->
+                    builder.append(Mini.parse(tl.getMapOutputKeyItem(), fPlayer,
+                            FactionResolver.of(fac),
+                            Placeholder.component("label", label)
+                    )));
             ret.add(builder.build());
         }
 

@@ -1113,6 +1113,10 @@ public class TranslationsConfig {
             private String compassLetterSouth = "S";
             private String compassLetterEast = "E";
             private String compassLetterWest = "W";
+            @Comment("Takes MiniMessage color names or hex (with # in front, e.g. #abcdef)")
+            private String compassColorDefault = "gold";
+            @Comment("Takes MiniMessage color names or hex (with # in front, e.g. #abcdef)")
+            private String compassColorActive = "red";
 
             public String getCompassLetterNorth() {
                 return compassLetterNorth;
@@ -1130,6 +1134,14 @@ public class TranslationsConfig {
                 return compassLetterWest;
             }
 
+            public String getCompassColorActive() {
+                return compassColorActive;
+            }
+
+            public String getCompassColorDefault() {
+                return compassColorDefault;
+            }
+
             @Comment("Supports <lines>")
             private String heightSet = "<yellow>Set /f map lines to <green><lines>";
             private String updateEnabled = "<yellow>Map auto update <dark_green>ENABLED.";
@@ -1145,6 +1157,51 @@ public class TranslationsConfig {
 
             public String getUpdateDisabled() {
                 return updateDisabled;
+            }
+
+            @Comment("Supports <x>, <z>, <faction>")
+            private String mapOutputTitle = "(<x>, <z>) <faction>";
+            @Comment("Characters picked from, in order, for faction labeling. Loops back to beginning if more factions than options.")
+            private String mapOutputFactionCharacters = "\\/#$%=&^ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890abcdeghjmnopqrsuvwxyz?";
+            @Comment("Single character, with formatting, for wilderness chunks.")
+            private String mapOutputWilderness = "<fuuid:color:wilderness>-";
+            @Comment("Single character, with formatting, for warzone chunks.")
+            private String mapOutputWarzone = "<fuuid:color:warzone>+";
+            @Comment("Single character, with formatting, for safezone chunks.")
+            private String mapOutputSafezone = "<fuuid:color:safezone>+";
+            @Comment("""
+                    Single character, with formatting, for any faction chunks deliberately not identified.
+                    By default, matches the wilderness setup, but you could choose another format""")
+            private String mapOutputOther = "<fuuid:color:wilderness>-";
+            @Comment("Single entry for the key. Supports <label>, <faction>")
+            private String mapOutputKeyItem = "<label>: <faction>";
+
+            public String getMapOutputTitle() {
+                return mapOutputTitle;
+            }
+
+            public String getMapOutputFactionCharacters() {
+                return mapOutputFactionCharacters;
+            }
+
+            public String getMapOutputKeyItem() {
+                return mapOutputKeyItem;
+            }
+
+            public String getMapOutputOther() {
+                return mapOutputOther;
+            }
+
+            public String getMapOutputSafezone() {
+                return mapOutputSafezone;
+            }
+
+            public String getMapOutputWarzone() {
+                return mapOutputWarzone;
+            }
+
+            public String getMapOutputWilderness() {
+                return mapOutputWilderness;
             }
         }
 
