@@ -1270,6 +1270,7 @@ public abstract class MemoryFaction implements Faction {
         }
     }
 
+    @SuppressWarnings("removal")
     @Override
     public void msgLegacy(String message, Object... args) {
         message = String.format(ChatColor.translateAlternateColorCodes('&', message), args);

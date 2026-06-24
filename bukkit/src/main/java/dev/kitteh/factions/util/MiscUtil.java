@@ -41,6 +41,7 @@ public class MiscUtil {
         }
         ENTITY_TYPE_FUNCTION = (string) -> entityTypeMap.get(string.toUpperCase());
 
+        //noinspection removal
         MATERIAL_FUNCTION = (string) -> MaterialDb.get(string, null);
 
         spawnReasonMap = new HashMap<>();

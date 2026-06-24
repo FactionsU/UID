@@ -332,6 +332,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         }
 
         // Load Material database - TODO remove in 5.0
+        //noinspection removal
         dev.kitteh.factions.util.MaterialDb.load();
 
         // Hit all material lookups in config

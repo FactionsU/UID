@@ -49,6 +49,7 @@ public final class FPlayerResolver extends ObservedResolver {
     }
 
     private FPlayerResolver(String name, @Nullable Player forcedObserver, FPlayer observed) {
+        //noinspection removal
         super(name, forcedObserver);
         this.observed = observed;
     }

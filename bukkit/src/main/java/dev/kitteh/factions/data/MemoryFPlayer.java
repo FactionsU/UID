@@ -1174,6 +1174,7 @@ public abstract class MemoryFPlayer implements FPlayer {
                                 this.powerBoost() != 0));
     }
 
+    @SuppressWarnings("removal")
     @Override
     public void msgLegacy(String str, Object... args) {
         Player player = this.asPlayer();
@@ -1333,6 +1334,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
     }
 
+    @SuppressWarnings("removal")
     @Override
     public void sendMessageLegacy(String msg) {
         Player player = this.asPlayer();
@@ -1342,6 +1344,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         player.sendMessage(msg);
     }
 
+    @SuppressWarnings("removal")
     @Override
     public void sendMessageLegacy(List<String> msgs) {
         Player player = this.asPlayer();
