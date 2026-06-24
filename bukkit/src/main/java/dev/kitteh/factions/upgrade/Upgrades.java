@@ -35,6 +35,9 @@ public final class Upgrades {
     @ApiStatus.AvailableSince("4.6.0")
     public static final Upgrade BEACON_EFFECT_CONTROL = new Upgrade.SimpleImpl("beacon_effect_control", TranslationsConfig.Upgrades::beaconEffectControl, 1, Set.of());
 
+    @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade CROP_YIELD = new Upgrade.SimpleImpl("crop_yield", TranslationsConfig.Upgrades::cropYield, Integer.MAX_VALUE, Set.of(Variables.CHANCE, Variables.POSITIVE_INCREASE));
+
     public static final Upgrade DTR_CLAIM_LIMIT = new Upgrade.SimpleImpl("dtr_claim_limit", TranslationsConfig.Upgrades::dtrClaimLimit, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
     @ApiStatus.AvailableSince("4.6.0")
@@ -120,6 +123,28 @@ public final class Upgrades {
                     1,
                     0,
                     LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(100000))
+            ),
+            new UpgradeSettings(
+                    Upgrades.CROP_YIELD,
+                    Map.of(
+                            Variables.CHANCE, LeveledValueProvider.LevelMap.of(
+                                    BigDecimal.valueOf(0.05),
+                                    BigDecimal.valueOf(0.10),
+                                    BigDecimal.valueOf(0.15)
+                            ),
+                            Variables.POSITIVE_INCREASE, LeveledValueProvider.LevelMap.of(
+                                    BigDecimal.TWO,
+                                    BigDecimal.TWO,
+                                    BigDecimal.TWO
+                            )
+                    ),
+                    3,
+                    0,
+                    LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(250000),
+                            BigDecimal.valueOf(500000),
+                            BigDecimal.valueOf(1000000)
+                    )
             ),
             new UpgradeSettings(
                     Upgrades.DTR_CLAIM_LIMIT,

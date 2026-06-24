@@ -5643,6 +5643,8 @@ public class TranslationsConfig {
 
         private UpgradeDetail beaconEffectControl = new UpgradeDetail("<green>Beacon Effect Control", "<green>Control who receives beacon effects in your territory", "");
 
+        private UpgradeDetail cropYield = new UpgradeDetail("<green>Crop Yield Boost", "<green>Harvesting grown crops in your territory has a chance to drop extra", "<green><chance>% chance to multiply harvest by <increase>");
+
         private UpgradeDetail dtrClaimLimit = new UpgradeDetail("<green>Claim Limit Increase", "<green>Increases maximum faction territory", "<green>+<increase> claims");
 
         private UpgradeDetail dtrLossReduction = new UpgradeDetail("<green>DTR Loss Reduction", "<green>Lose less DTR when members die", "<green>-<percent>% DTR lost on death");
@@ -5687,6 +5689,10 @@ public class TranslationsConfig {
 
         public UpgradeDetail beaconEffectControl() {
             return this.beaconEffectControl;
+        }
+
+        public UpgradeDetail cropYield() {
+            return this.cropYield;
         }
 
         public UpgradeDetail dtrClaimLimit() {

@@ -12,11 +12,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.Ageable;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
@@ -132,6 +134,39 @@ public class ListenUpgrade implements Listener {
             if (drop != null && !drop.getType().isAir()) {
                 drop.setAmount(drop.getAmount() * multiplier);
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void cropYield(BlockDropItemEvent event) {
+        if (!(event.getBlockState().getBlockData() instanceof Ageable ageable) || ageable.getAge() < ageable.getMaximumAge()) {
+            return;
+        }
+
+        if (!WorldUtil.isEnabled(event.getBlock())) {
+            return;
+        }
+
+        Faction territoryFaction = new FLocation(event.getBlock().getLocation()).faction();
+
+        int lvl = territoryFaction.upgradeLevel(Upgrades.CROP_YIELD);
+        if (lvl == 0 || FPlayers.fPlayers().get(event.getPlayer()).faction() != territoryFaction) {
+            return;
+        }
+
+        UpgradeSettings settings = Universe.universe().upgradeSettings(Upgrades.CROP_YIELD);
+        double chance = settings.valueAt(Upgrades.Variables.CHANCE, lvl).doubleValue();
+        if (Math.random() >= chance) {
+            return;
+        }
+        int multiplier = settings.valueAt(Upgrades.Variables.POSITIVE_INCREASE, lvl).intValue();
+        if (multiplier <= 1) {
+            return;
+        }
+        for (Item item : event.getItems()) {
+            ItemStack stack = item.getItemStack();
+            stack.setAmount(stack.getAmount() * multiplier);
+            item.setItemStack(stack);
         }
     }
 }
