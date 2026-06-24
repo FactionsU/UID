@@ -52,6 +52,9 @@ public final class Upgrades {
     public static final Upgrade MAX_MEMBERS = new Upgrade.SimpleImpl("max_members", TranslationsConfig.Upgrades::maxMembers, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
     @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade MOB_DROP = new Upgrade.SimpleImpl("mob_drop", TranslationsConfig.Upgrades::mobDrop, Integer.MAX_VALUE, Set.of(Variables.CHANCE, Variables.POSITIVE_INCREASE));
+
+    @ApiStatus.AvailableSince("4.6.0")
     public static final Upgrade MOB_EXP = new Upgrade.SimpleImpl("mob_exp", TranslationsConfig.Upgrades::mobExp, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
     @ApiStatus.AvailableSince("4.6.0")
@@ -197,6 +200,28 @@ public final class Upgrades {
                     4,
                     0,
                     LeveledValueProvider.Equation.of("100000 * (level + 1)")
+            ),
+            new UpgradeSettings(
+                    Upgrades.MOB_DROP,
+                    Map.of(
+                            Variables.CHANCE, LeveledValueProvider.LevelMap.of(
+                                    BigDecimal.valueOf(0.05),
+                                    BigDecimal.valueOf(0.10),
+                                    BigDecimal.valueOf(0.15)
+                            ),
+                            Variables.POSITIVE_INCREASE, LeveledValueProvider.LevelMap.of(
+                                    BigDecimal.TWO,
+                                    BigDecimal.TWO,
+                                    BigDecimal.TWO
+                            )
+                    ),
+                    3,
+                    0,
+                    LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(250000),
+                            BigDecimal.valueOf(500000),
+                            BigDecimal.valueOf(1000000)
+                    )
             ),
             new UpgradeSettings(
                     Upgrades.MOB_EXP,

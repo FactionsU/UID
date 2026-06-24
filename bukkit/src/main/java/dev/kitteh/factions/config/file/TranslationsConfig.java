@@ -5657,6 +5657,8 @@ public class TranslationsConfig {
 
         private UpgradeDetail maxMembers = new UpgradeDetail("<green>Member Limit Increase", "<green>Increases maximum number of faction members", "<green>+<increase> members");
 
+        private UpgradeDetail mobDrop = new UpgradeDetail("<green>Mob Drop Boost", "<green>Mobs killed in your territory have a chance to drop extra loot", "<green><chance>% chance to multiply drops by <increase>");
+
         private UpgradeDetail mobExp = new UpgradeDetail("<green>Mob Experience Boost", "<green>Gain extra experience from mobs killed in your territory", "<green>+<percent>% experience");
 
         private UpgradeDetail noHunger = new UpgradeDetail("<green>No Hunger Loss", "<green>Members do not lose hunger while in their own territory", "");
@@ -5753,6 +5755,10 @@ public class TranslationsConfig {
 
         public UpgradeDetail dtrRegen() {
             return this.dtrRegen;
+        }
+
+        public UpgradeDetail mobDrop() {
+            return this.mobDrop;
         }
 
         public UpgradeDetail mobExp() {

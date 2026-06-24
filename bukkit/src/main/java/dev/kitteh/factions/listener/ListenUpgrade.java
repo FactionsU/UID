@@ -4,9 +4,7 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Universe;
-import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.WorldUtil;
@@ -23,6 +21,7 @@ import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class ListenUpgrade implements Listener {
     @EventHandler(ignoreCancelled = true)
@@ -104,5 +103,35 @@ public class ListenUpgrade implements Listener {
         double boost = Universe.universe().upgradeSettings(Upgrades.MOB_EXP).valueAt(Upgrades.Variables.PERCENT, lvl).doubleValue();
         boost = Math.max(0, boost);
         event.setDroppedExp((int) Math.round(event.getDroppedExp() * (1 + boost)));
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void mobDrops(EntityDeathEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (entity instanceof Player || !WorldUtil.isEnabled(entity) || entity.getKiller() == null) {
+            return;
+        }
+
+        Faction territoryFaction = new FLocation(entity.getLocation()).faction();
+
+        int lvl = territoryFaction.upgradeLevel(Upgrades.MOB_DROP);
+        if (lvl == 0 || FPlayers.fPlayers().get(entity.getKiller()).faction() != territoryFaction) {
+            return;
+        }
+
+        UpgradeSettings settings = Universe.universe().upgradeSettings(Upgrades.MOB_DROP);
+        double chance = settings.valueAt(Upgrades.Variables.CHANCE, lvl).doubleValue();
+        if (Math.random() >= chance) {
+            return;
+        }
+        int multiplier = settings.valueAt(Upgrades.Variables.POSITIVE_INCREASE, lvl).intValue();
+        if (multiplier <= 1) {
+            return;
+        }
+        for (ItemStack drop : event.getDrops()) {
+            if (drop != null && !drop.getType().isAir()) {
+                drop.setAmount(drop.getAmount() * multiplier);
+            }
+        }
     }
 }
