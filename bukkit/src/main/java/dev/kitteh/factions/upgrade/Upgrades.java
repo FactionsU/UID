@@ -88,6 +88,9 @@ public final class Upgrades {
     public static final Upgrade TERRITORY_DAMAGE_RESISTANCE = new Upgrade.SimpleImpl("territory_damage_resistance", TranslationsConfig.Upgrades::territoryDamageResistance, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
     @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade TNT_BANK_CAPACITY = new Upgrade.SimpleImpl("tnt_bank_capacity", TranslationsConfig.Upgrades::tntBankCapacity, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
+
+    @ApiStatus.AvailableSince("4.6.0")
     public static final Upgrade TNT_BANK_FILL = new Upgrade.SimpleImpl("tnt_bank_fill", TranslationsConfig.Upgrades::tntBankFill, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
     @ApiStatus.AvailableSince("4.6.0")
@@ -399,6 +402,13 @@ public final class Upgrades {
                             BigDecimal.valueOf(500000),
                             BigDecimal.valueOf(1000000)
                     )
+            ),
+            new UpgradeSettings(
+                    Upgrades.TNT_BANK_CAPACITY,
+                    Map.of(Variables.POSITIVE_INCREASE, LeveledValueProvider.Equation.of("level * 500")),
+                    5,
+                    0,
+                    LeveledValueProvider.Equation.of("100000 * level")
             ),
             new UpgradeSettings(
                     Upgrades.TNT_BANK_FILL,

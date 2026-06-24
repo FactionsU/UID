@@ -5685,6 +5685,8 @@ public class TranslationsConfig {
 
         private UpgradeDetail tntBankFill = new UpgradeDetail("<green>TNT Bank Passive Fill", "<green>Adds free TNT into your faction's bank over time", "<green>+<increase> TNT per minute");
 
+        private UpgradeDetail tntBankCapacity = new UpgradeDetail("<green>TNT Bank Capacity", "<green>Increases the maximum TNT your faction's TNT bank can hold", "<green>+<increase> TNT capacity");
+
         private UpgradeDetail vaults = new UpgradeDetail("<green>Vaults", "<green>Increases the number of faction vaults", "<green>+<increase> vaults");
 
         private UpgradeDetail warps = new UpgradeDetail("<green>Warps", "<green>Additional locations to which members can teleport", "<green><count> warps");
@@ -5781,6 +5783,10 @@ public class TranslationsConfig {
 
         public UpgradeDetail noHunger() {
             return this.noHunger;
+        }
+
+        public UpgradeDetail tntBankCapacity() {
+            return this.tntBankCapacity;
         }
 
         public UpgradeDetail tntBankFill() {

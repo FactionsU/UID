@@ -383,7 +383,7 @@ public class MainConfig {
 
         public class TNT {
             private boolean enable = false;
-            @Comment("Maximum storage. Set to -1 (or lower) to disable")
+            @Comment("Starting maximum storage (can be boosted with upgrade). Set to -1 to disable limit.")
             private int maxStorage = -1;
             private int maxRadius = 5;
 
