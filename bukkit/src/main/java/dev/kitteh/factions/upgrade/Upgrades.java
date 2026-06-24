@@ -33,6 +33,9 @@ public final class Upgrades {
     }
 
     @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade ARMOR_DURABILITY = new Upgrade.SimpleImpl("armor_durability", TranslationsConfig.Upgrades::armorDurability, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
+
+    @ApiStatus.AvailableSince("4.6.0")
     public static final Upgrade BEACON_EFFECT_CONTROL = new Upgrade.SimpleImpl("beacon_effect_control", TranslationsConfig.Upgrades::beaconEffectControl, 1, Set.of());
 
     @ApiStatus.AvailableSince("4.6.0")
@@ -117,6 +120,21 @@ public final class Upgrades {
     }
 
     public static final List<UpgradeSettings> defaults = List.of(
+            new UpgradeSettings(
+                    Upgrades.ARMOR_DURABILITY,
+                    Map.of(Variables.PERCENT, LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(0.15),
+                            BigDecimal.valueOf(0.30),
+                            BigDecimal.valueOf(0.50)
+                    )),
+                    3,
+                    0,
+                    LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(250000),
+                            BigDecimal.valueOf(500000),
+                            BigDecimal.valueOf(1000000)
+                    )
+            ),
             new UpgradeSettings(
                     Upgrades.BEACON_EFFECT_CONTROL,
                     Map.of(),

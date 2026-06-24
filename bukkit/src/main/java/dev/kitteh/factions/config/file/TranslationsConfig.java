@@ -5641,6 +5641,8 @@ public class TranslationsConfig {
             }
         }
 
+        private UpgradeDetail armorDurability = new UpgradeDetail("<green>Armor Durability Protection", "<green>Armor and shields lose durability slower while in your territory", "<green>-<percent>% durability loss for members and allies");
+
         private UpgradeDetail beaconEffectControl = new UpgradeDetail("<green>Beacon Effect Control", "<green>Control who receives beacon effects in your territory", "");
 
         private UpgradeDetail cropYield = new UpgradeDetail("<green>Crop Yield Boost", "<green>Harvesting grown crops in your territory has a chance to drop extra", "<green><chance>% chance to multiply harvest by <increase>");
@@ -5686,6 +5688,10 @@ public class TranslationsConfig {
         private UpgradeDetail warps = new UpgradeDetail("<green>Warps", "<green>Additional locations to which members can teleport", "<green><count> warps");
 
         private UpgradeDetail zones = new UpgradeDetail("<green>Zones", "<green>Assign your faction claims to zones to label or grant different permissions", "<green>Grants <increase> zones");
+
+        public UpgradeDetail armorDurability() {
+            return this.armorDurability;
+        }
 
         public UpgradeDetail beaconEffectControl() {
             return this.beaconEffectControl;

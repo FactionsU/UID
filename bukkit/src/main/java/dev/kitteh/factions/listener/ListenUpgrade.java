@@ -4,11 +4,13 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.Ageable;
@@ -23,6 +25,8 @@ import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 public class ListenUpgrade implements Listener {
@@ -168,5 +172,52 @@ public class ListenUpgrade implements Listener {
             stack.setAmount(stack.getAmount() * multiplier);
             item.setItemStack(stack);
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void armorDurability(PlayerItemDamageEvent event) {
+        Player player = event.getPlayer();
+        if (!WorldUtil.isEnabled(player) || !this.isArmorOrShieldEquipped(player, event.getItem())) {
+            return;
+        }
+
+        Faction territoryFaction = new FLocation(player).faction();
+        int lvl = territoryFaction.upgradeLevel(Upgrades.ARMOR_DURABILITY);
+        if (lvl == 0) {
+            return;
+        }
+        Faction playerFaction = FPlayers.fPlayers().get(player).faction();
+        if (playerFaction != territoryFaction && playerFaction.relationTo(territoryFaction) != Relation.ALLY) {
+            return;
+        }
+
+        double reduction = Universe.universe().upgradeSettings(Upgrades.ARMOR_DURABILITY).valueAt(Upgrades.Variables.PERCENT, lvl).doubleValue();
+        reduction = Math.clamp(reduction, 0, 1);
+
+        // Roll per durability amount. Not perfect, but better than infinite durability.
+        int damage = 0;
+        for (int i = 0; i < event.getDamage(); i++) {
+            if (Math.random() >= reduction) {
+                damage++;
+            }
+        }
+        event.setDamage(damage);
+    }
+
+    private boolean isArmorOrShieldEquipped(Player player, ItemStack item) {
+        EntityEquipment equipment = player.getEquipment();
+        if (equipment == null) { // Just in case I guess
+            return false;
+        }
+
+        if (item.equals(equipment.getHelmet())
+                || item.equals(equipment.getChestplate())
+                || item.equals(equipment.getLeggings())
+                || item.equals(equipment.getBoots())) {
+            return true;
+        }
+
+        return item.getType() == Material.SHIELD
+                && (item.equals(equipment.getItemInOffHand()) || item.equals(equipment.getItemInMainHand()));
     }
 }
