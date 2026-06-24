@@ -5683,6 +5683,8 @@ public class TranslationsConfig {
 
         private UpgradeDetail territoryDamageResistance = new UpgradeDetail("<green>Territory Damage Resistance", "<green>Take less damage from players in your territory", "<green>-<percent>% damage taken by members and allies");
 
+        private UpgradeDetail tntBankFill = new UpgradeDetail("<green>TNT Bank Passive Fill", "<green>Adds free TNT into your faction's bank over time", "<green>+<increase> TNT per minute");
+
         private UpgradeDetail vaults = new UpgradeDetail("<green>Vaults", "<green>Increases the number of faction vaults", "<green>+<increase> vaults");
 
         private UpgradeDetail warps = new UpgradeDetail("<green>Warps", "<green>Additional locations to which members can teleport", "<green><count> warps");
@@ -5779,6 +5781,10 @@ public class TranslationsConfig {
 
         public UpgradeDetail noHunger() {
             return this.noHunger;
+        }
+
+        public UpgradeDetail tntBankFill() {
+            return this.tntBankFill;
         }
 
         public UpgradeDetail vaults() {

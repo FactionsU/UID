@@ -56,6 +56,7 @@ import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Metrics;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.SeeChunkUtil;
+import dev.kitteh.factions.util.TNTFillTask;
 import dev.kitteh.factions.util.WorldTracker;
 import dev.kitteh.factions.util.WorldUtil;
 import dev.kitteh.factions.util.adapter.ChatTargetAdapter;
@@ -140,6 +141,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     private ConfigManager configManager;
 
     private Integer saveTask = null;
+    private Integer tntFillTask = null;
     private boolean autoSave = true;
     private boolean loadSuccessful = false;
 
@@ -358,6 +360,10 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         if (saveTask == null && this.conf().factions().other().getSaveToFileEveryXMinutes() > 0.0) {
             long saveTicks = (long) (20 * 60 * this.conf().factions().other().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
             saveTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new SaveTask(this), saveTicks, saveTicks);
+        }
+        if (tntFillTask == null) {
+            long minuteTicks = 20L * 60L;
+            tntFillTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TNTFillTask(), minuteTicks, minuteTicks);
         }
 
         int loadedPlayers = Instances.PLAYERS.load();
@@ -662,6 +668,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         return this.startupExceptionLog;
     }
 
+    @SuppressWarnings("removal")
     @Override
     public Gson gson() {
         return gson;
@@ -753,6 +760,12 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
             this.getServer().getScheduler().cancelTask(saveTask);
             saveTask = null;
         }
+
+        if (tntFillTask != null) {
+            this.getServer().getScheduler().cancelTask(tntFillTask);
+            tntFillTask = null;
+        }
+
         // only save data if plugin actually loaded successfully
         if (loadSuccessful) {
             Instances.FACTIONS.forceSave(true);
