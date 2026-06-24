@@ -67,6 +67,9 @@ public final class Upgrades {
     public static final Upgrade SHIELD = new Upgrade.ReactiveImpl("shield", TranslationsConfig.Upgrades::shield, Integer.MAX_VALUE, Set.of(Variables.DURATION, Variables.COOLDOWN), Upgrade.Reactor.UPDATE_COMMANDS);
 
     @ApiStatus.AvailableSince("4.6.0")
+    public static final Upgrade SPAWNER_RATE = new Upgrade.SimpleImpl("spawner_rate", TranslationsConfig.Upgrades::spawnerRate, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
+
+    @ApiStatus.AvailableSince("4.6.0")
     public static final Upgrade TERRITORY_DAMAGE_BOOST = new Upgrade.SimpleImpl("territory_damage_boost", TranslationsConfig.Upgrades::territoryDamageBoost, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
     @ApiStatus.AvailableSince("4.6.0")
@@ -262,6 +265,21 @@ public final class Upgrades {
                     3,
                     0,
                     LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(50000), BigDecimal.valueOf(100000), BigDecimal.valueOf(1000000))
+            ),
+            new UpgradeSettings(
+                    Upgrades.SPAWNER_RATE,
+                    Map.of(Variables.PERCENT, LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(0.10),
+                            BigDecimal.valueOf(0.20),
+                            BigDecimal.valueOf(0.30)
+                    )),
+                    3,
+                    0,
+                    LeveledValueProvider.LevelMap.of(
+                            BigDecimal.valueOf(250000),
+                            BigDecimal.valueOf(500000),
+                            BigDecimal.valueOf(1000000)
+                    )
             ),
             new UpgradeSettings(
                     Upgrades.TERRITORY_DAMAGE_BOOST,

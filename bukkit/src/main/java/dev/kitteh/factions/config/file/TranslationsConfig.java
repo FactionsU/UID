@@ -5669,6 +5669,8 @@ public class TranslationsConfig {
 
         private UpgradeDetail shield = new UpgradeDetail("<green>Shield", "<green>Protect territory from explosions", "<green><duration> shield, cooldown <cooldown>");
 
+        private UpgradeDetail spawnerRate = new UpgradeDetail("<green>Spawner Spawn Rate", "<green>Spawners in your territory spawn more often", "<green>-<percent>% spawner delay");
+
         private UpgradeDetail territoryDamageBoost = new UpgradeDetail("<green>Territory Damage Boost", "<green>Deal extra damage in your territory", "<green>+<percent>% damage from members and allies");
 
         private UpgradeDetail territoryDamageResistance = new UpgradeDetail("<green>Territory Damage Resistance", "<green>Take less damage from players in your territory", "<green>-<percent>% damage taken by members and allies");
@@ -5721,6 +5723,10 @@ public class TranslationsConfig {
 
         public UpgradeDetail zones() {
             return this.zones;
+        }
+
+        public UpgradeDetail spawnerRate() {
+            return this.spawnerRate;
         }
 
         public UpgradeDetail territoryDamageBoost() {
