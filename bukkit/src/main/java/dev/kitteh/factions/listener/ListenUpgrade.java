@@ -4,7 +4,9 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.WorldUtil;
@@ -12,10 +14,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.Ageable;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 
@@ -80,5 +85,24 @@ public class ListenUpgrade implements Listener {
                 current.update();
             }
         });
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void mobExp(EntityDeathEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (entity instanceof Player || !WorldUtil.isEnabled(entity) || entity.getKiller() == null) {
+            return;
+        }
+
+        Faction territoryFaction = new FLocation(entity.getEyeLocation()).faction();
+
+        int lvl = territoryFaction.upgradeLevel(Upgrades.MOB_EXP);
+        if (lvl == 0 || FPlayers.fPlayers().get(entity.getKiller()).faction() != territoryFaction) {
+            return;
+        }
+
+        double boost = Universe.universe().upgradeSettings(Upgrades.MOB_EXP).valueAt(Upgrades.Variables.PERCENT, lvl).doubleValue();
+        boost = Math.max(0, boost);
+        event.setDroppedExp((int) Math.round(event.getDroppedExp() * (1 + boost)));
     }
 }
