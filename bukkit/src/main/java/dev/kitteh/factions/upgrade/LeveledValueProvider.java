@@ -8,6 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 /**
@@ -32,6 +33,32 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
             return new Equation(new Expression(expression));
         }
 
+        /**
+         * Gets the raw expression string backing this equation.
+         *
+         * @return expression string
+         */
+        @ApiStatus.AvailableSince("4.6.0")
+        public String expressionString() {
+            return this.expression.getExpressionString();
+        }
+
+        /**
+         * Tests if a given expression string can be parsed and evaluated.
+         *
+         * @param expression expression to test, using 'level' as the level
+         * @return true if the expression is valid
+         */
+        @ApiStatus.AvailableSince("4.6.0")
+        public static boolean isValidExpression(String expression) {
+            try {
+                new Expression(expression).with("level", BigDecimal.ONE).evaluate();
+                return true;
+            } catch (RuntimeException | EvaluationException | ParseException e) {
+                return false;
+            }
+        }
+
         @Override
         public BigDecimal get(int level) {
             try {
@@ -50,6 +77,19 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
      * @param levels levels available
      */
     record LevelMap(Int2ObjectArrayMap<BigDecimal> levels) implements LeveledValueProvider {
+        /**
+         * Helper to create a provider from a map of level to value.
+         *
+         * @param levels map of level number to value at that level
+         * @return new value provider
+         */
+        @ApiStatus.AvailableSince("4.6.0")
+        public static LevelMap of(Map<Integer, BigDecimal> levels) {
+            Int2ObjectArrayMap<BigDecimal> map = new Int2ObjectArrayMap<>();
+            levels.forEach((level, value) -> map.put((int) level, value));
+            return new LevelMap(map);
+        }
+
         @Deprecated(forRemoval = true, since = "4.2.2")
         public static LevelMap of(int level1, BigDecimal val1) {
             Int2ObjectArrayMap<BigDecimal> levels = new Int2ObjectArrayMap<>();

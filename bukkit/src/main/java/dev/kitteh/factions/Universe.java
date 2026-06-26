@@ -72,4 +72,23 @@ public interface Universe {
      * @return settings for the upgrade
      */
     UpgradeSettings upgradeSettings(Upgrade upgrade);
+
+    /**
+     * Sets whether a given upgrade is enabled.
+     *
+     * @param upgrade upgrade to modify
+     * @param enabled true to enable, false to disable
+     * @throws IllegalArgumentException if the upgrade is not registered
+     */
+    @ApiStatus.AvailableSince("4.6.0")
+    void upgradeEnabled(Upgrade upgrade, boolean enabled);
+
+    /**
+     * Sets the upgrade settings for an upgrade.
+     *
+     * @param settings new settings
+     * @throws IllegalArgumentException if the upgrade is not registered or the settings are flawed
+     */
+    @ApiStatus.AvailableSince("4.6.0")
+    void upgradeSettings(UpgradeSettings settings);
 }

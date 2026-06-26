@@ -682,6 +682,439 @@ public class TranslationsConfig {
                 }
             }
 
+            public static class Upgrades extends AbsCommand {
+                public Upgrades() {
+                    super("Manage faction upgrades", "upgrades");
+                }
+
+                public static class General {
+                    private String done = "Done";
+                    private String back = "Back";
+                    private String cancel = "Cancel";
+                    private String returnToList = "Return to Upgrade List";
+                    @Comment("Label used for the upgrade cost (the <target> placeholder) on provider pages")
+                    private String costLabel = "Cost";
+
+                    public String getDone() {
+                        return done;
+                    }
+
+                    public String getBack() {
+                        return back;
+                    }
+
+                    public String getCancel() {
+                        return cancel;
+                    }
+
+                    public String getReturnToList() {
+                        return returnToList;
+                    }
+
+                    public String getCostLabel() {
+                        return costLabel;
+                    }
+                }
+
+                public static class ListPage {
+                    private String title = "Manage Upgrades";
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Select an upgrade to view or modify it.");
+                            this.add("Changes are staged and only applied when you review and confirm them.");
+                        }
+                    };
+                    @Comment("Supports <upgrade>")
+                    private String buttonEnabled = "<green>✔</green> <upgrade>";
+                    @Comment("Supports <upgrade>")
+                    private String buttonDisabled = "<red>✘</red> <upgrade>";
+                    @Comment("Supports <upgrade> (modified upgrades are marked)")
+                    private String buttonModified = "<gold>✎</gold> <upgrade>";
+                    @Comment("Supports <count>")
+                    private String reviewButton = "Review Changes (<count>)";
+                    private String reviewButtonNone = "No Pending Changes";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+
+                    public String getButtonEnabled() {
+                        return buttonEnabled;
+                    }
+
+                    public String getButtonDisabled() {
+                        return buttonDisabled;
+                    }
+
+                    public String getButtonModified() {
+                        return buttonModified;
+                    }
+
+                    public String getReviewButton() {
+                        return reviewButton;
+                    }
+
+                    public String getReviewButtonNone() {
+                        return reviewButtonNone;
+                    }
+                }
+
+                public static class EditPage {
+                    @Comment("Supports <upgrade>")
+                    private String title = "Edit: <upgrade>";
+                    @Comment("Supports <upgrade>, <description>, <enabled>, <maxlevel>, <upgrademaxlevel>, <startinglevel>")
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("<description>");
+                            this.add("");
+                            this.add("Status: <enabled>");
+                            this.add("Max level: <maxlevel> (up to: <upgrademaxlevel>)");
+                            this.add("Starting level: <startinglevel>");
+                        }
+                    };
+                    private String enabledYes = "<green>Enabled";
+                    private String enabledNo = "<red>Disabled";
+                    private String unlimited = "Unlimited";
+                    private String enableButton = "Enable";
+                    private String disableButton = "Disable";
+                    private String maxLevelButton = "Set Max Level";
+                    private String costButton = "Edit Cost";
+                    @Comment("Supports <variable>")
+                    private String variableButton = "Edit '<variable>'";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+
+                    public String getEnabledYes() {
+                        return enabledYes;
+                    }
+
+                    public String getEnabledNo() {
+                        return enabledNo;
+                    }
+
+                    public String getUnlimited() {
+                        return unlimited;
+                    }
+
+                    public String getEnableButton() {
+                        return enableButton;
+                    }
+
+                    public String getDisableButton() {
+                        return disableButton;
+                    }
+
+                    public String getMaxLevelButton() {
+                        return maxLevelButton;
+                    }
+
+                    public String getCostButton() {
+                        return costButton;
+                    }
+
+                    public String getVariableButton() {
+                        return variableButton;
+                    }
+                }
+
+                public static class MaxLevelPage {
+                    @Comment("Supports <upgrade>")
+                    private String title = "Max Level: <upgrade>";
+                    @Comment("Supports <upgrademaxlevel>")
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Set the highest level factions may unlock.");
+                            this.add("Must be between 1 and <upgrademaxlevel>.");
+                        }
+                    };
+                    private String inputLabel = "Max level";
+                    private String confirm = "Set max Level";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+
+                    public String getInputLabel() {
+                        return inputLabel;
+                    }
+
+                    public String getConfirm() {
+                        return confirm;
+                    }
+                }
+
+                public static class ProviderPage {
+                    @Comment("Supports <upgrade>, <target> (cost or variable name)")
+                    private String title = "<target>: <upgrade>";
+                    @Comment("Supports <type> (current provider type)")
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Choose how values are calculated per level.");
+                            this.add("Currently: <type>");
+                        }
+                    };
+                    private String typeEquation = "Equation";
+                    private String typeLevelMap = "Per-Level Map";
+                    private String equationButton = "Use Equation";
+                    private String levelMapButton = "Use Per-Level Map";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+
+                    public String getTypeEquation() {
+                        return typeEquation;
+                    }
+
+                    public String getTypeLevelMap() {
+                        return typeLevelMap;
+                    }
+
+                    public String getEquationButton() {
+                        return equationButton;
+                    }
+
+                    public String getLevelMapButton() {
+                        return levelMapButton;
+                    }
+                }
+
+                public static class EquationPage {
+                    @Comment("Supports <upgrade>, <target>")
+                    private String title = "Equation: <target>";
+                    @Comment("Supports <upgrade>, <target>")
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Enter an expression using 'level' as the variable.");
+                            this.add("Example: 100000 * level ^ 2");
+                        }
+                    };
+                    private String inputLabel = "Expression";
+                    private String confirm = "Save Equation";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+
+                    public String getInputLabel() {
+                        return inputLabel;
+                    }
+
+                    public String getConfirm() {
+                        return confirm;
+                    }
+                }
+
+                public static class LevelMapPage {
+                    @Comment("Supports <upgrade>, <target>")
+                    private String title = "Per-Level: <target>";
+                    @Comment("Supports <upgrade>, <target>, <maxlevel>")
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Enter a value for each level up to <maxlevel>.");
+                        }
+                    };
+                    @Comment("Supports <level>")
+                    private String inputLabel = "Level <level>";
+                    private String confirm = "Save Values";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+
+                    public String getInputLabel() {
+                        return inputLabel;
+                    }
+
+                    public String getConfirm() {
+                        return confirm;
+                    }
+                }
+
+                public static class ReviewPage {
+                    private String title = "Review Changes";
+                    private List<String> bodyHeader = new ArrayList<>() {
+                        {
+                            this.add("The following changes are staged:");
+                            this.add("");
+                        }
+                    };
+                    @Comment("Supports <upgrade>, <from>, <to>")
+                    private String lineEnabled = "<gold><upgrade></gold>: status <from> → <to>";
+                    @Comment("Supports <upgrade>")
+                    private String lineSettings = "<gold><upgrade></gold>: settings updated";
+                    private List<String> bodyNone = new ArrayList<>() {
+                        {
+                            this.add("There are no staged changes to apply.");
+                        }
+                    };
+                    private String applyButton = "Apply Changes";
+                    private String reEditButton = "Keep Editing";
+                    private String cancelButton = "Discard All";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBodyHeader() {
+                        return bodyHeader;
+                    }
+
+                    public String getLineEnabled() {
+                        return lineEnabled;
+                    }
+
+                    public String getLineSettings() {
+                        return lineSettings;
+                    }
+
+                    public List<String> getBodyNone() {
+                        return bodyNone;
+                    }
+
+                    public String getApplyButton() {
+                        return applyButton;
+                    }
+
+                    public String getReEditButton() {
+                        return reEditButton;
+                    }
+
+                    public String getCancelButton() {
+                        return cancelButton;
+                    }
+                }
+
+                public static class Applied {
+                    private String title = "Changes Applied";
+                    @Comment("Supports <count>")
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Applied <count> change(s) successfully.");
+                        }
+                    };
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+                }
+
+                public static class Error {
+                    private String title = "Error";
+                    @Comment("Supports <reason>")
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("<reason>");
+                        }
+                    };
+                    private String invalidNumber = "That is not a valid number.";
+                    private String invalidEquation = "That equation could not be parsed.";
+                    @Comment("Supports <limit>")
+                    private String mapLimitExceeded = "Max level is too high for a per-level map (limit <limit>). Use an equation.";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+
+                    public String getInvalidNumber() {
+                        return invalidNumber;
+                    }
+
+                    public String getInvalidEquation() {
+                        return invalidEquation;
+                    }
+
+                    public String getMapLimitExceeded() {
+                        return mapLimitExceeded;
+                    }
+                }
+
+                private General general = new General();
+                private ListPage listPage = new ListPage();
+                private EditPage editPage = new EditPage();
+                private MaxLevelPage maxLevelPage = new MaxLevelPage();
+                private ProviderPage providerPage = new ProviderPage();
+                private EquationPage equationPage = new EquationPage();
+                private LevelMapPage levelMapPage = new LevelMapPage();
+                private ReviewPage reviewPage = new ReviewPage();
+                private Applied applied = new Applied();
+                private Error error = new Error();
+
+                public General general() {
+                    return general;
+                }
+
+                public ListPage listPage() {
+                    return listPage;
+                }
+
+                public EditPage editPage() {
+                    return editPage;
+                }
+
+                public MaxLevelPage maxLevelPage() {
+                    return maxLevelPage;
+                }
+
+                public ProviderPage providerPage() {
+                    return providerPage;
+                }
+
+                public EquationPage equationPage() {
+                    return equationPage;
+                }
+
+                public LevelMapPage levelMapPage() {
+                    return levelMapPage;
+                }
+
+                public ReviewPage reviewPage() {
+                    return reviewPage;
+                }
+
+                public Applied applied() {
+                    return applied;
+                }
+
+                public Error error() {
+                    return error;
+                }
+            }
+
             private DTR dtr = new DTR();
             private Force force = new Force();
             private Power power = new Power();
@@ -692,6 +1125,10 @@ public class TranslationsConfig {
             private Money money = new Money();
             private Reload reload = new Reload();
             private SaveAll saveAll = new SaveAll();
+            @Comment("""
+                    The Paper-only command to manage upgrades using dialogs.
+                    Each section represents a dialog page.""")
+            private Upgrades upgrades = new Upgrades();
 
             public DTR dtr() {
                 return dtr;
@@ -731,6 +1168,10 @@ public class TranslationsConfig {
 
             public SaveAll saveAll() {
                 return saveAll;
+            }
+
+            public Upgrades upgrades() {
+                return upgrades;
             }
         }
 

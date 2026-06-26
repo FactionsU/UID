@@ -79,6 +79,36 @@ public abstract class MemoryUniverse implements Universe {
         return this.data.upgrades.settings.get(upgrade.name());
     }
 
+    @Override
+    public void upgradeEnabled(Upgrade upgrade, boolean enabled) {
+        String name = upgrade.name();
+        if (!UpgradeRegistry.getUpgrades().contains(upgrade)) {
+            throw new IllegalArgumentException("Upgrade '" + name + "' is not registered");
+        }
+        if (!this.data.upgrades.settings.containsKey(name)) {
+            // Shouldn't get here but let's be sure!
+            throw new IllegalArgumentException("Upgrade '" + name + "' has no settings to enable or disable");
+        }
+        if (enabled) {
+            this.data.upgrades.disabled.remove(name);
+        } else if (!this.data.upgrades.disabled.contains(name)) {
+            this.data.upgrades.disabled.add(name);
+        }
+    }
+
+    @Override
+    public void upgradeSettings(UpgradeSettings settings) {
+        Upgrade upgrade = settings.upgrade();
+        String name = upgrade.name();
+        if (!UpgradeRegistry.getUpgrades().contains(upgrade)) {
+            throw new IllegalArgumentException("Upgrade '" + name + "' is not registered");
+        }
+        if (settings.findFlaw() instanceof String issue) {
+            throw new IllegalArgumentException(issue);
+        }
+        this.data.upgrades.settings.put(name, settings);
+    }
+
     public abstract void forceSave(boolean sync);
 
     public void load() {

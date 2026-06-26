@@ -58,7 +58,7 @@ public class FactionsPluginSpigot extends AbstractFactionsPlugin {
     }
 
     @Override
-    public void addCommands(BiConsumer<String, Cmd> reg, Consumer<Supplier<CommandManager<Sender>>> commandManager) {
+    public void addCommands(BiConsumer<String, Cmd> reg, BiConsumer<String, Cmd> regAdmin, Consumer<Supplier<CommandManager<Sender>>> commandManager) {
         commandManager.accept(() -> {
             LegacyPaperCommandManager<Sender> manager = new LegacyPaperCommandManager<>(
                     FactionsPluginSpigot.this,

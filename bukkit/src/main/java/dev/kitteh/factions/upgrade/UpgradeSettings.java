@@ -47,10 +47,10 @@ public final class UpgradeSettings {
         }
         for (UpgradeVariable var : upgrade.variables()) {
             if (!variableSettings.containsKey(var)) {
-                return "Variable '" + var.name() + "' does not exist in settings";
+                return "Variable '" + var.name() + "' must exist in settings";
             }
             if (!variableSettings.get(var).supportsUpToLevel(maxLevel)) {
-                return "Variable '" + var.name() + "' does not support up to max level";
+                return "Variable '" + var.name() + "' must support up to max level";
             }
         }
         if (!costSettings.supportsUpToLevel(maxLevel)) {
@@ -77,6 +77,27 @@ public final class UpgradeSettings {
      */
     public BigDecimal valueAt(UpgradeVariable variable, int level) {
         return variable.get(Objects.requireNonNull(this.variableSettings.get(variable)).get(level));
+    }
+
+    /**
+     * Gets the value provider for a given variable.
+     *
+     * @param variable variable
+     * @return value provider or null if the variable is not present
+     */
+    @ApiStatus.AvailableSince("4.6.0")
+    public @Nullable LeveledValueProvider variableProvider(UpgradeVariable variable) {
+        return this.variableSettings.get(variable);
+    }
+
+    /**
+     * Gets the value provider for the cost of this upgrade.
+     *
+     * @return cost value provider
+     */
+    @ApiStatus.AvailableSince("4.6.0")
+    public LeveledValueProvider costProvider() {
+        return this.costSettings;
     }
 
     /**

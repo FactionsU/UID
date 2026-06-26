@@ -86,7 +86,7 @@ public class CommandsRoot {
         registry = new ConcurrentHashMap<>();
         adminRegistry = new ConcurrentHashMap<>();
         register();
-        AbstractFactionsPlugin.instance().addCommands(CommandsRoot::registerInternal, CommandsRoot::setCommandManagerSupplier);
+        AbstractFactionsPlugin.instance().addCommands(CommandsRoot::registerInternal, CommandsRoot::registerAdminInternal, CommandsRoot::setCommandManagerSupplier);
     }
 
     private record Register(TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer,
