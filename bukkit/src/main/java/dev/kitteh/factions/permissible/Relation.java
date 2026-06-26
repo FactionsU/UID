@@ -33,13 +33,13 @@ public enum Relation implements Permissible {
         if (s == null) {
             return NEUTRAL;
         }
-        if (s.equalsIgnoreCase(MEMBER.nicename)) {
+        if (s.equalsIgnoreCase(MEMBER.translation())) {
             return MEMBER;
-        } else if (s.equalsIgnoreCase(ALLY.nicename)) {
+        } else if (s.equalsIgnoreCase(ALLY.translation())) {
             return ALLY;
-        } else if (s.equalsIgnoreCase(TRUCE.nicename)) {
+        } else if (s.equalsIgnoreCase(TRUCE.translation())) {
             return TRUCE;
-        } else if (s.equalsIgnoreCase(ENEMY.nicename)) {
+        } else if (s.equalsIgnoreCase(ENEMY.translation())) {
             return ENEMY;
         } else {
             return switch (s.toUpperCase()) {
@@ -47,6 +47,7 @@ public enum Relation implements Permissible {
                 case "ALLY" -> ALLY;
                 case "TRUCE" -> TRUCE;
                 case "ENEMY" -> ENEMY;
+                case "NEUTRAL" -> NEUTRAL;
                 default -> // If they somehow mess things up, go back to default behavior.
                         NEUTRAL;
             };
