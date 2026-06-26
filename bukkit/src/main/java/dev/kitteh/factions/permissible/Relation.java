@@ -21,11 +21,12 @@ public enum Relation implements Permissible {
     @Deprecated(forRemoval = true, since = "4.6.0")
     public final int value;
     @Deprecated(forRemoval = true, since = "4.6.0")
-    public final String nicename = "";
+    public final String nicename;
     private final Set<String> justMyNameInASet;
 
     Relation(final int value) {
         this.value = value;
+        this.nicename = this.name();
         this.justMyNameInASet = Collections.singleton(this.name().toLowerCase());
     }
 
