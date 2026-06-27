@@ -27,23 +27,23 @@ public enum Contexts implements Context {
     }, Set.of(String.valueOf(Factions.ID_WILDERNESS))),
     IS_PEACEFUL((player) -> {
         FPlayer p = FPlayers.fPlayers().get(player);
-        return Set.of(p.hasFaction() && p.faction().isPeaceful() ? "true" : "false");
+        return Set.of(Boolean.toString(p.hasFaction() && p.faction().isPeaceful()));
     }, Set.of("true", "false")),
     IS_PERMANENT((player) -> {
         FPlayer p = FPlayers.fPlayers().get(player);
-        return Set.of(p.hasFaction() && p.faction().isPermanent() ? "true" : "false");
+        return Set.of(Boolean.toString(p.hasFaction() && p.faction().isPermanent()));
     }, Set.of("true", "false")),
     TERRITORY_RELATION((player) ->
             FPlayers.fPlayers().get(player).relationTo(Board.board().factionAt(new FLocation(player.getLocation()))).getNameInASet(),
             Arrays.stream(Relation.values()).map(relation -> relation.name().toLowerCase()).collect(Collectors.toSet())),
     TERRITORY_IS_SAFEZONE((player) ->
-            Set.of(new FLocation(player).faction().isSafeZone() ? "true" : "false"),
+            Set.of(Boolean.toString(new FLocation(player).faction().isSafeZone())),
             Set.of("true", "false")),
     TERRITORY_IS_WILDERNESS((player) ->
-            Set.of(new FLocation(player).faction().isWilderness() ? "true" : "false"),
+            Set.of(Boolean.toString(new FLocation(player).faction().isWilderness())),
             Set.of("true", "false")),
     TERRITORY_IS_WARZONE((player) ->
-            Set.of(new FLocation(player).faction().isWarZone() ? "true" : "false"),
+            Set.of(Boolean.toString(new FLocation(player).faction().isWarZone())),
             Set.of("true", "false")),
     TERRITORY_ID((player) ->
             Set.of(String.valueOf(new FLocation(player).faction().id())),
