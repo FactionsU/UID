@@ -3,9 +3,11 @@ package dev.kitteh.factions.tagresolver;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.MiscUtil;
 import net.kyori.adventure.text.Component;
@@ -147,8 +149,8 @@ public final class FactionResolver extends ObservedResolver {
                 yield tag(0);
             }
 
-            case "tnt_bank_balance" -> tag(FactionsPlugin.instance().conf().commands().tnt().isEnable() ? faction.tntBank() : 0);
-            case "tnt_bank_max" -> tag(FactionsPlugin.instance().conf().commands().tnt().isEnable() ? faction.tntBankMax() : 0);
+            case "tnt_bank_balance" -> tag(faction.tntBank());
+            case "tnt_bank_max" -> tag(faction.tntBankMax());
 
             case "allies_count" -> tag(faction.relationCount(Relation.ALLY));
             case "allies_max" -> tagLegacy(getRelation(Relation.ALLY));

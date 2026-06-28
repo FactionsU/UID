@@ -88,7 +88,7 @@ public final class Upgrades {
     public static final Upgrade TERRITORY_DAMAGE_RESISTANCE = new Upgrade.SimpleImpl("territory_damage_resistance", TranslationsConfig.Upgrades::territoryDamageResistance, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
     @ApiStatus.AvailableSince("4.6.0")
-    public static final Upgrade TNT_BANK_CAPACITY = new Upgrade.SimpleImpl("tnt_bank_capacity", TranslationsConfig.Upgrades::tntBankCapacity, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
+    public static final Upgrade TNT_BANK = new Upgrade.ReactiveImpl("tnt_bank", TranslationsConfig.Upgrades::tntBankCapacity, Integer.MAX_VALUE, Set.of(Variables.COUNT), Upgrade.Reactor.UPDATE_COMMANDS);
 
     @ApiStatus.AvailableSince("4.6.0")
     public static final Upgrade TNT_BANK_FILL = new Upgrade.SimpleImpl("tnt_bank_fill", TranslationsConfig.Upgrades::tntBankFill, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
@@ -404,11 +404,11 @@ public final class Upgrades {
                     )
             ),
             new UpgradeSettings(
-                    Upgrades.TNT_BANK_CAPACITY,
-                    Map.of(Variables.POSITIVE_INCREASE, LeveledValueProvider.Equation.of("level * 500")),
-                    5,
+                    Upgrades.TNT_BANK,
+                    Map.of(Variables.COUNT, LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(Integer.MAX_VALUE))),
+                    1,
                     0,
-                    LeveledValueProvider.Equation.of("100000 * level")
+                    LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(10000))
             ),
             new UpgradeSettings(
                     Upgrades.TNT_BANK_FILL,

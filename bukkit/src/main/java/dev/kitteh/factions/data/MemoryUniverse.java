@@ -2,6 +2,8 @@ package dev.kitteh.factions.data;
 
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.annotation.NoFinalFields;
+import dev.kitteh.factions.config.transition.Transitioner;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.upgrade.LeveledValueProvider;
 import dev.kitteh.factions.upgrade.Upgrade;
@@ -23,7 +25,8 @@ import java.util.Map;
 @ApiStatus.Internal
 @NullMarked
 public abstract class MemoryUniverse implements Universe {
-    @SuppressWarnings({"FieldMayBeFinal"})
+    @NoFinalFields
+    @SuppressWarnings("FieldMayBeFinal")
     protected static class Data {
         static class Grace {
             private long graceTimeEnd = 0L;
@@ -139,11 +142,25 @@ public abstract class MemoryUniverse implements Universe {
                             LeveledValueProvider.LevelMap.of(BigDecimal.ZERO)
                     );
                 }
+                if (upgrade.upgrade() == Upgrades.TNT_BANK) {
+                    if (Transitioner.migrateTNT()) {
+                        upgrade = new UpgradeSettings(
+                                Upgrades.TNT_BANK,
+                                Map.of(Upgrades.Variables.COUNT, LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(Transitioner.migrateTNTMax()))),
+                                1,
+                                1,
+                                LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(10000))
+                        );
+                    }
+                }
+
                 this.data.upgrades.settings.put(name, upgrade);
+
                 if (
                         !( // Negate the conditions for if-should-default-enable, which my brain finds easier to read.
                                 (upgrade.upgrade() == Upgrades.FLIGHT && FactionsPlugin.instance().conf().commands().fly().isEnable()) ||
-                                        (upgrade.upgrade() == Upgrades.WARPS && FactionsPlugin.instance().conf().commands().warp().getMaxWarps() > 0)
+                                        (upgrade.upgrade() == Upgrades.WARPS && FactionsPlugin.instance().conf().commands().warp().getMaxWarps() > 0) ||
+                                        (upgrade.upgrade() == Upgrades.TNT_BANK && Transitioner.migrateTNT())
                         )
                 ) {
                     this.data.upgrades.disabled.add(name);

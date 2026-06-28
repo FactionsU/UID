@@ -11,7 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 public class TNTFillTask implements Runnable {
     @Override
     public void run() {
-        if (!FactionsPlugin.instance().conf().commands().tnt().isEnable()) {
+        if (!Universe.universe().isUpgradeEnabled(Upgrades.TNT_BANK)) {
             return;
         }
         if (!Universe.universe().isUpgradeEnabled(Upgrades.TNT_BANK_FILL)) {

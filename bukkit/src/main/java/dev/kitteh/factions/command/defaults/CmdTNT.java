@@ -8,6 +8,7 @@ import dev.kitteh.factions.command.defaults.tnt.CmdTNTDeposit;
 import dev.kitteh.factions.command.defaults.tnt.CmdTNTFill;
 import dev.kitteh.factions.command.defaults.tnt.CmdTNTSiphon;
 import dev.kitteh.factions.command.defaults.tnt.CmdTNTWithdraw;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Permission;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
@@ -24,7 +25,7 @@ public class CmdTNT implements Cmd {
             var tl = FactionsPlugin.instance().tl().commands().tnt();
             Command.Builder<Sender> tntBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
-                    .permission(builder.commandPermission().and(Cloudy.hasFaction().and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().commands().tnt().isEnable()))));
+                    .permission(builder.commandPermission().and(Cloudy.hasFaction().and(Cloudy.hasUpgrade(Upgrades.TNT_BANK))));
 
             manager.command(tntBuilder.permission(tntBuilder.commandPermission().and(Cloudy.hasPermission(Permission.TNT_INFO))).handler(this::handle));
             manager.command(tntBuilder.literal("info").permission(tntBuilder.commandPermission().and(Cloudy.hasPermission(Permission.TNT_INFO))).handler(this::handle));

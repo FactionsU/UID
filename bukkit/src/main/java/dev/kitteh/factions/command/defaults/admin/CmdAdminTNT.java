@@ -2,11 +2,13 @@ package dev.kitteh.factions.command.defaults.admin;
 
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.tagresolver.FactionResolver;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -23,7 +25,7 @@ public class CmdAdminTNT implements Cmd {
             var tl = FactionsPlugin.instance().tl().commands().admin().tnt();
             Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .permission(builder.commandPermission()
-                            .and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().commands().tnt().isEnable()))
+                            .and(Cloudy.predicate(_ -> Universe.universe().isUpgradeEnabled(Upgrades.TNT_BANK)))
                             .and(Cloudy.hasPermission(Permission.TNT_MODIFY)))
                     .required("faction", FactionParser.of(FactionParser.Include.SELF));
 

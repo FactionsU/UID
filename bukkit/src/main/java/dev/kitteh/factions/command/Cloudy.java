@@ -2,6 +2,7 @@ package dev.kitteh.factions.command;
 
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.util.Permission;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.permission.PredicatePermission;
@@ -46,6 +47,11 @@ public final class Cloudy {
 
     public static PredicatePermission<Sender> hasSelfFactionPerms(PermissibleAction action) {
         return PredicatePermission.of(s -> s instanceof Sender.Player player && player.faction().isNormal() && player.faction().hasAccess(player.fPlayer(), action, player.fPlayer().lastStoodAt()));
+    }
+
+    @ApiStatus.AvailableSince("4.6.0")
+    public static PredicatePermission<Sender> hasUpgrade(Upgrade upgrade) {
+        return PredicatePermission.of(s -> s instanceof Sender.Player player && player.faction().upgradeLevel(upgrade) > 0);
     }
 
     @ApiStatus.AvailableSince("4.5.0")

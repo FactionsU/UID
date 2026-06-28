@@ -26,7 +26,7 @@ public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @SuppressWarnings("unused")
         @Comment("This is the config version, used for migrating on plugin updates. Don't change this value yourself, unless you WANT a broken config!")
-        private int version = 9;
+        private int version = 12;
 
         @Comment("""
                 Debug
@@ -382,29 +382,25 @@ public class MainConfig {
         }
 
         public class TNT {
-            private boolean enable = false;
-            @Comment("Starting maximum storage (can be boosted with upgrade). Set to -1 to disable limit.")
-            private int maxStorage = -1;
             private int maxRadius = 5;
 
             public int getMaxRadius() {
                 return maxRadius;
             }
 
+            @Deprecated(forRemoval = true, since = "4.6.0")
             public int getMaxStorage() {
-                return maxStorage;
+                return 0;
             }
 
             @Deprecated(forRemoval = true, since = "4.1.0")
             public boolean isAboveMaxStorage(int amount) {
-                if (maxStorage < 0) {
-                    return false;
-                }
-                return amount > maxStorage;
+                return true;
             }
 
+            @Deprecated(forRemoval = true, since = "4.6.0")
             public boolean isEnable() {
-                return enable;
+                return false;
             }
         }
 

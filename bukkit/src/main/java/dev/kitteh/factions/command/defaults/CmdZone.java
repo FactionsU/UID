@@ -33,7 +33,7 @@ public class CmdZone implements Cmd {
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission()
                             .and(Cloudy.predicate(Sender::hasFaction))
-                            .and(Cloudy.predicate(s -> s.fPlayerOrNull() instanceof FPlayer fp && fp.faction().upgradeLevel(Upgrades.ZONES) > 0))
+                            .and(Cloudy.hasUpgrade(Upgrades.ZONES))
                             .and(Cloudy.hasSelfFactionPerms(PermissibleActions.ZONE))
                     );
 

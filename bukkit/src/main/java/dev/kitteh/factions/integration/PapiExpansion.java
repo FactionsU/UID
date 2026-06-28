@@ -11,6 +11,7 @@ import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.plugin.Instances;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.LegacyCruft;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.MiscUtil;
@@ -193,8 +194,8 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_land_value" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(faction.claimCount())) : Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "value")));
             case "faction_land_refund" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.claimCount())) : Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "refund")));
             case "faction_bank_balance" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.getBalance(faction)) : Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "balance")));
-            case "faction_tnt_balance" -> FactionsPlugin.instance().conf().commands().tnt().isEnable() ? String.valueOf(faction.tntBank()) : "";
-            case "faction_tnt_max_balance" -> FactionsPlugin.instance().conf().commands().tnt().isEnable() ? String.valueOf(faction.tntBankMax()) : "";
+            case "faction_tnt_balance" -> Universe.universe().isUpgradeEnabled(Upgrades.TNT_BANK) ? String.valueOf(faction.tntBank()) : "";
+            case "faction_tnt_max_balance" -> Universe.universe().isUpgradeEnabled(Upgrades.TNT_BANK) ? String.valueOf(faction.tntBankMax()) : "";
             case "faction_allies" -> String.valueOf(faction.relationCount(Relation.ALLY));
             case "faction_allies_players" -> String.valueOf(this.countOn(faction, Relation.ALLY, null, fPlayer));
             case "faction_allies_players_online" -> String.valueOf(this.countOn(faction, Relation.ALLY, true, fPlayer));

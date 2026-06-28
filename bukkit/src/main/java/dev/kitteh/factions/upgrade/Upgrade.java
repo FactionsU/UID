@@ -133,7 +133,7 @@ public interface Upgrade {
     Component nameComponent();
 
     /**
-     * Get's the upgrade's generic description as a decorated component.
+     * Gets the upgrade's generic description as a decorated component.
      *
      * @return decorated description
      */
@@ -149,7 +149,7 @@ public interface Upgrade {
     Component details(UpgradeSettings settings, int level);
 
     /**
-     * Gets the max level this upgrade could possible be configured, typically 1 for boolean upgrades and {@link Integer#MAX_VALUE} otherwise.
+     * Gets the max level this upgrade could possibly be configured to, typically 1 for boolean upgrades and {@link Integer#MAX_VALUE} otherwise.
      *
      * @return max level configurable
      */

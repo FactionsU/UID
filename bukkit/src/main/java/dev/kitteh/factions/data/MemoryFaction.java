@@ -1010,21 +1010,20 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public int tntBank() {
-        return this.tntBank;
+        int level = this.upgradeLevel(Upgrades.TNT_BANK);
+        if (level > 0) {
+            return this.tntBank;
+        }
+        return 0;
     }
 
     @Override
     public int tntBankMax() {
-        int configMax = FactionsPlugin.instance().conf().commands().tnt().getMaxStorage();
-        if (configMax < 0) {
-            return Integer.MAX_VALUE;
-        }
-        long max = configMax;
-        int level = this.upgradeLevel(Upgrades.TNT_BANK_CAPACITY);
+        int level = this.upgradeLevel(Upgrades.TNT_BANK);
         if (level > 0) {
-            max += Universe.universe().upgradeSettings(Upgrades.TNT_BANK_CAPACITY).valueAt(Upgrades.Variables.POSITIVE_INCREASE, level).longValue();
+            return Universe.universe().upgradeSettings(Upgrades.TNT_BANK).valueAt(Upgrades.Variables.COUNT, level).intValue();
         }
-        return (int) Math.min(Integer.MAX_VALUE, max);
+        return 0;
     }
 
     @Override

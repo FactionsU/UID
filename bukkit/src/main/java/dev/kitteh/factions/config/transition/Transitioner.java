@@ -19,9 +19,19 @@ public class Transitioner {
     private static final String A_VERY_FRIENDLY_FACTIONS_CONFIG = "aVeryFriendlyFactionsConfig";
     private static final String VERSION_STRING = "version";
     private static boolean fixplosion;
+    private static boolean migrateTNT;
+    private static int migrateTNTMax;
 
     public static boolean fixplosion() {
         return fixplosion;
+    }
+
+    public static boolean migrateTNT() {
+        return migrateTNT;
+    }
+
+    public static int migrateTNTMax() {
+        return migrateTNTMax;
     }
 
     private final AbstractFactionsPlugin plugin;
@@ -74,10 +84,12 @@ public class Transitioner {
                 transitioner.migrateV10_11(version);
             }
             // No test for <11 (aka 10), due to skipping from 9->11
-            // if (version < 12) is next!
+            if (version < 12) {
+                transitioner.migrateV12(rootNode);
+            }
 
             // Update the below when bumping version!
-            rootNode.getNode(A_VERY_FRIENDLY_FACTIONS_CONFIG, VERSION_STRING).setValue(11);
+            rootNode.getNode(A_VERY_FRIENDLY_FACTIONS_CONFIG, VERSION_STRING).setValue(12);
 
             loader.save(rootNode);
         } catch (IOException e) {
@@ -109,8 +121,7 @@ public class Transitioner {
         this.plugin.getLogger().info("Detected a config from before 0.5.14");
         this.plugin.getLogger().info("  1. Be aware that \"warZonePreventMonsterSpawns\" has been removed entirely, and there is");
         this.plugin.getLogger().info("     now a new spawning control system added.");
-        this.plugin.getLogger().info("  2. The perms gui hover text can now be customized in config, and the allow/deny/locked text");
-        this.plugin.getLogger().info("     can now be customized in lang.yml under GUI->PERMS->ACTION");
+        this.plugin.getLogger().info("  2. The perms gui hover text can now be customized in config");
     }
 
     private void migrateV4(CommentedConfigurationNode node) {
@@ -265,6 +276,23 @@ public class Transitioner {
 
     private void migrateV10_11(int version) {
         fixplosion = version == 9;
+    }
+
+    private void migrateV12(CommentedConfigurationNode node) {
+        CommentedConfigurationNode tnt = node.getNode("commands", "tnt", "enable");
+        CommentedConfigurationNode tntMax = node.getNode("commands", "tnt", "maxStorage");
+        if (!tnt.isVirtual() && !tntMax.isVirtual()) {
+            if (tnt.getBoolean() && tntMax.getInt() != 0) {
+                migrateTNT = true;
+                migrateTNTMax = tntMax.getInt();
+                if (migrateTNTMax < 0) {
+                    migrateTNTMax = Integer.MAX_VALUE;
+                }
+                this.plugin.getLogger().info("");
+                this.plugin.getLogger().info("  Migrating TNT bank to an upgrade. Creating a single upgrade level with the previous max bank, and granting it to everyone by default.");
+                this.plugin.getLogger().info("");
+            }
+        }
     }
 
     private void shift(CommentedConfigurationNode from, CommentedConfigurationNode to, String name) {
