@@ -61,6 +61,7 @@ permissions:
       factions.ahome: true
       factions.setmaxvaults: true
       factions.updates: true
+      factions.upgrades.manage: true
       factions.debug: true
   factions.*:
     description: This is just an alias for factions.kit.admin
@@ -354,6 +355,8 @@ permissions:
     description: List claims of other factions
   factions.upgrades:
     description: Show faction upgrades
+  factions.upgrades.manage:
+    description: Manage server-wide faction upgrade settings
   factions.force.role:
     description: Modify roles anywhere
   factions.force.join:
