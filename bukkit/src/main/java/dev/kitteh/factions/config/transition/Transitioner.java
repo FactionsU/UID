@@ -293,6 +293,15 @@ public class Transitioner {
                 this.plugin.getLogger().info("");
             }
         }
+
+        Path langPath = configFolder.resolve("lang.yml");
+        Path newLangPath = this.plugin.getDataFolder().toPath().resolve("outdated_lang_can_delete.yml");
+        if (Files.exists(langPath)) {
+            try {
+                Files.move(langPath, newLangPath);
+            } catch (IOException _) {
+            }
+        }
     }
 
     private void shift(CommentedConfigurationNode from, CommentedConfigurationNode to, String name) {
