@@ -9,6 +9,7 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.annotation.NoFinalFields;
 import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.command.defaults.CmdZone;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
@@ -73,7 +74,9 @@ import java.util.UUID;
  * necessary.
  */
 @ApiStatus.Internal
+@NoFinalFields
 @NullMarked
+@SuppressWarnings("FieldMayBeFinal")
 public abstract class MemoryFPlayer implements FPlayer {
 
     protected int factionId;

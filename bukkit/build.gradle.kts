@@ -14,6 +14,9 @@ configurations.implementation {
 }
 
 dependencies {
+    compileOnly(project(":annotation-processor"))
+    annotationProcessor(project(":annotation-processor"))
+
     compileOnlyApi(libs.bundles.annotations)
 
     implementation(libs.spigot)

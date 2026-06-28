@@ -1,6 +1,7 @@
 # Gradle
 /.gradle/
 /build/
+/annotation-processor/build/
 /bukkit/build/
 /paper/build/
 /paper/run/

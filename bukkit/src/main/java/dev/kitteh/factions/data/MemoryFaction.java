@@ -7,6 +7,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.annotation.NoFinalFields;
 import dev.kitteh.factions.config.file.PermissionsConfig;
 import dev.kitteh.factions.config.transition.Transitioner;
 import dev.kitteh.factions.event.FactionAutoDisbandEvent;
@@ -66,9 +67,13 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ApiStatus.Internal
+@NoFinalFields
 @NullMarked
+@SuppressWarnings("FieldMayBeFinal")
 public abstract class MemoryFaction implements Faction {
+    @NoFinalFields
     public static class Permissions implements Faction.Permissions {
+        @NoFinalFields
         public static class SelectorPerms implements Faction.Permissions.SelectorPerms {
             private Map<String, Boolean> perms;
 
@@ -170,6 +175,7 @@ public abstract class MemoryFaction implements Faction {
         }
     }
 
+    @NoFinalFields
     protected static class Zone implements Faction.Zone {
         private int id;
         private String name;
@@ -252,6 +258,7 @@ public abstract class MemoryFaction implements Faction {
         }
     }
 
+    @NoFinalFields
     protected static class Zones implements Faction.Zones {
         private Object2ObjectOpenHashMap<String, WorldTracker> worldTrackers = new Object2ObjectOpenHashMap<>();
         private Int2ObjectOpenHashMap<Zone> zones = new Int2ObjectOpenHashMap<>();

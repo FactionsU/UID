@@ -4,6 +4,7 @@ plugins {
 
 rootProject.name = "factionsuuid"
 
+include("annotation-processor")
 include("bukkit")
 include("paper")
 include("example-plugin")
