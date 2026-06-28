@@ -1,11 +1,14 @@
 package dev.kitteh.factions.upgrade;
 
+import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.Universe;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -20,13 +23,20 @@ public final class UpgradeSettings {
     private final int maxLevel;
     private final int startingLevel;
     private final LeveledValueProvider costSettings;
+    private final List<UpgradePrerequisite> prerequisites;
 
     public UpgradeSettings(Upgrade upgrade, Map<UpgradeVariable, LeveledValueProvider> variableSettings, int maxLevel, int startingLevel, LeveledValueProvider costSettings) {
+        this(upgrade, variableSettings, maxLevel, startingLevel, costSettings, List.of());
+    }
+
+    @ApiStatus.AvailableSince("4.6.0")
+    public UpgradeSettings(Upgrade upgrade, Map<UpgradeVariable, LeveledValueProvider> variableSettings, int maxLevel, int startingLevel, LeveledValueProvider costSettings, List<UpgradePrerequisite> prerequisites) {
         this.upgrade = upgrade;
         this.variableSettings = new HashMap<>(variableSettings);
         this.maxLevel = maxLevel;
         this.startingLevel = startingLevel;
         this.costSettings = costSettings;
+        this.prerequisites = List.copyOf(prerequisites);
         if (this.findFlaw() instanceof String issue) {
             throw new IllegalArgumentException(issue);
         }
@@ -55,6 +65,18 @@ public final class UpgradeSettings {
         }
         if (!costSettings.supportsUpToLevel(maxLevel)) {
             return "Cost settings must support up to max level";
+        }
+        for (UpgradePrerequisite prerequisite : prerequisites()) {
+            if (prerequisite.upgrade().equalsIgnoreCase(upgrade.name())) {
+                return "Upgrade cannot be its own prerequisite";
+            }
+            Upgrade required = UpgradeRegistry.getUpgrade(prerequisite.upgrade());
+            if (required == null) {
+                return "Prerequisite '" + prerequisite.upgrade() + "' is not a registered upgrade";
+            }
+            if (prerequisite.minLevel() > required.maxLevel()) {
+                return "Prerequisite '" + prerequisite.upgrade() + "' min level exceeds its max level";
+            }
         }
         return null;
     }
@@ -129,5 +151,33 @@ public final class UpgradeSettings {
             throw new IllegalArgumentException("Level must be between 1 and max level");
         }
         return this.costSettings.get(level);
+    }
+
+    /**
+     * Gets the prerequisites for purchase.
+     *
+     * @return list of prerequisites, possibly empty
+     */
+    @ApiStatus.AvailableSince("4.6.0")
+    public List<UpgradePrerequisite> prerequisites() {
+        //noinspection ConstantValue
+        return this.prerequisites == null ? List.of() : this.prerequisites;
+    }
+
+    /**
+     * Tests whether a faction satisfies every prerequisite.
+     *
+     * @param faction faction to test
+     * @return true if all prerequisites are met
+     */
+    @ApiStatus.AvailableSince("4.6.0")
+    public boolean prerequisitesMet(Faction faction) {
+        for (UpgradePrerequisite prerequisite : prerequisites()) {
+            Upgrade required = UpgradeRegistry.getUpgrade(prerequisite.upgrade());
+            if (required == null || faction.upgradeLevel(required) < prerequisite.minLevel()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

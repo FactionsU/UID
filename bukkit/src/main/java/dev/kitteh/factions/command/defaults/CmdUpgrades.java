@@ -14,6 +14,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrade;
+import dev.kitteh.factions.upgrade.UpgradePrerequisite;
 import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.util.Mini;
@@ -82,6 +83,10 @@ public class CmdUpgrades implements Cmd {
                             return;
                         }
 
+                        if (!settings.prerequisitesMet(faction)) {
+                            return;
+                        }
+
                         int buyHeight = 3;
                         ChestGui buyGui = new ChestGui(buyHeight, "Purchase " + Mini.toLegacy(upgrade.nameComponent()) + "?");
                         buyGui.setOnGlobalDrag(_ -> e.setCancelled(true));
@@ -97,6 +102,11 @@ public class CmdUpgrades implements Cmd {
                         GuiItem buyItem = new GuiItem(buy);
                         buyItem.setAction(ee -> {
                             ee.setCancelled(true);
+
+                            if (!settings.prerequisitesMet(sender.faction())) {
+                                gui.show(player);
+                                return;
+                            }
 
                             var econTl = FactionsPlugin.instance().tl().economy().actions();
                             if (context.sender().payForCommand(settings.costAt(lvl + 1).doubleValue(), econTl.getUpgradeTo(), econTl.getUpgradeFor())) {
@@ -197,14 +207,27 @@ public class CmdUpgrades implements Cmd {
         }
         lore.add(" ");
         if (lvl < settings.maxLevel()) {
-            lore.add("Upgrade available: Costs " + settings.costAt(lvl + 1));
-            if (sender.faction().hasAccess(sender, PermissibleActions.UPGRADE, null)) {
-                lore.add("  Click to purchase!");
+            if (settings.prerequisitesMet(sender.faction())) {
+                lore.add("Upgrade available: Costs " + settings.costAt(lvl + 1));
+                if (sender.faction().hasAccess(sender, PermissibleActions.UPGRADE, null)) {
+                    lore.add("  Click to purchase!");
+                } else {
+                    lore.add("  You lack permission to purchase upgrades");
+                }
+                lore.add(Mini.toLegacy(upgrade.nameComponent()) + " " + (lvl + 1));
+                lore.add(Mini.toLegacy(upgrade.details(settings, lvl + 1)));
             } else {
-                lore.add("  You lack permission to purchase upgrades");
+                lore.add(ChatColor.RED + "Locked - requires:");
+                for (UpgradePrerequisite prerequisite : settings.prerequisites()) {
+                    Upgrade required = UpgradeRegistry.getUpgrade(prerequisite.upgrade());
+                    if (required == null
+                            || !Universe.universe().isUpgradeEnabled(required)
+                            || sender.faction().upgradeLevel(required) < prerequisite.minLevel()) {
+                        String name = required == null ? prerequisite.upgrade() : Mini.toLegacy(required.nameComponent());
+                        lore.add("  " + name + (prerequisite.minLevel() > 1 ? " " + prerequisite.minLevel() : ""));
+                    }
+                }
             }
-            lore.add(Mini.toLegacy(upgrade.nameComponent()) + " " + (lvl + 1));
-            lore.add(Mini.toLegacy(upgrade.details(settings, lvl + 1)));
         } else {
             lore.add("Max level!");
         }

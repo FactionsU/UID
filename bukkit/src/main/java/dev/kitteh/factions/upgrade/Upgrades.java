@@ -423,7 +423,8 @@ public final class Upgrades {
                             BigDecimal.valueOf(250000),
                             BigDecimal.valueOf(500000),
                             BigDecimal.valueOf(1000000)
-                    )
+                    ),
+                    List.of(UpgradePrerequisite.of(Upgrades.TNT_BANK, 1))
             ),
             new UpgradeSettings(
                     Upgrades.VAULTS,

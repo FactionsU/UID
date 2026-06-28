@@ -12,6 +12,7 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrade;
+import dev.kitteh.factions.upgrade.UpgradePrerequisite;
 import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.util.Mini;
@@ -34,6 +35,7 @@ import org.incendo.cloud.context.CommandContext;
 
 import java.util.Comparator;
 import java.util.List;
+
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
@@ -81,8 +83,8 @@ public class CmdUpgrades implements Cmd {
 
         TagResolver click = Placeholder.component("click",
                 Mini.parse(Econ.shouldBeUsed()
-                        ? tl.mainPage().getClickValueIfEconEnabled()
-                        : tl.mainPage().getClickValueIfEconDisabled(),
+                                ? tl.mainPage().getClickValueIfEconEnabled()
+                                : tl.mainPage().getClickValueIfEconDisabled(),
                         sender)
         );
 
@@ -125,16 +127,33 @@ public class CmdUpgrades implements Cmd {
                     .appendNewline();
         }
 
+        boolean prerequisitesMet = settings.prerequisitesMet(faction);
+
         if (econ) {
             if (lvl < settings.maxLevel()) {
-                builder.appendNewline().appendNewline()
-                        .append(Mini.parse(info.getUpgradeAvailable(), fPlayer)).appendNewline()
-                        .append(Mini.parse(info.getUpgradeAvailableCosts(), fPlayer, Placeholder.parsed("cost", String.valueOf(settings.costAt(lvl + 1).doubleValue())))).appendNewline()
-                        .appendNewline();
-                if (settings.maxLevel() > 1) {
-                    builder.append(Mini.parse(info.getUpgradeAvailableLevelNumberIfNotSingleLevel(), fPlayer, Placeholder.parsed("level", String.valueOf(lvl + 1)))).appendNewline();
+                if (prerequisitesMet) {
+                    builder.appendNewline().appendNewline()
+                            .append(Mini.parse(info.getUpgradeAvailable(), fPlayer)).appendNewline()
+                            .append(Mini.parse(info.getUpgradeAvailableCosts(), fPlayer, Placeholder.parsed("cost", String.valueOf(settings.costAt(lvl + 1).doubleValue())))).appendNewline()
+                            .appendNewline();
+                    if (settings.maxLevel() > 1) {
+                        builder.append(Mini.parse(info.getUpgradeAvailableLevelNumberIfNotSingleLevel(), fPlayer, Placeholder.parsed("level", String.valueOf(lvl + 1)))).appendNewline();
+                    }
+                    builder.append(upgrade.details(settings, lvl + 1));
+                } else {
+                    builder.appendNewline().appendNewline()
+                            .append(Mini.parse(info.getPrerequisitesHeader(), fPlayer));
+                    for (UpgradePrerequisite prerequisite : settings.prerequisites()) {
+                        Upgrade required = UpgradeRegistry.getUpgrade(prerequisite.upgrade());
+                        if (required == null || !Universe.universe().isUpgradeEnabled(required) || faction.upgradeLevel(required) < prerequisite.minLevel()) {
+                            Component upgrd = Mini.parse(prerequisite.minLevel() > 1 ? info.getPrerequisiteEntryLevelOverOne() : info.getPrerequisiteEntryLevelOne(), fPlayer,
+                                    Placeholder.component("upgrade", required == null ? Component.text(prerequisite.upgrade()) : required.nameComponent()),
+                                    Placeholder.parsed("level", String.valueOf(prerequisite.minLevel())));
+                            builder.appendNewline().append(Mini.parse(info.getPrerequisiteEntry(), fPlayer,
+                                    Placeholder.component("upgrade", upgrd)));
+                        }
+                    }
                 }
-                builder.append(upgrade.details(settings, lvl + 1));
             } else if (lvl != 1) {
                 builder.appendNewline()
                         .append(Mini.parse(info.getUpgradeAtMaxLevel(), fPlayer));
@@ -142,7 +161,7 @@ public class CmdUpgrades implements Cmd {
         }
 
         List<ActionButton> actions;
-        if (lvl < settings.maxLevel() && econ && faction.hasAccess(fPlayer, PermissibleActions.UPGRADE, null)) {
+        if (lvl < settings.maxLevel() && econ && prerequisitesMet && faction.hasAccess(fPlayer, PermissibleActions.UPGRADE, null)) {
             actions = List.of(
                     ActionButton.builder(Mini.parse(info.getPurchaseButton(), fPlayer))
                             .action(DialogAction.customClick((_, aud) ->
@@ -188,6 +207,10 @@ public class CmdUpgrades implements Cmd {
                     .base(DialogBase.builder(Mini.parse(tl.alreadyMax().getTitle(), fPlayer))
                             .body(Dialogue.body(tl.alreadyMax().getBody())).build())
                     .type(DialogType.notice(this.returnToUpgrade(upgrade))));
+        }
+
+        if (!settings.prerequisitesMet(faction)) {
+            return this.prerequisitesNotMet(upgrade);
         }
 
         double cost = settings.costAt(lvl + 1).doubleValue();
@@ -240,6 +263,10 @@ public class CmdUpgrades implements Cmd {
 
         UpgradeSettings settings = Universe.universe().upgradeSettings(upgrade);
 
+        if (!settings.prerequisitesMet(faction)) {
+            return this.prerequisitesNotMet(upgrade);
+        }
+
         double cost = settings.costAt(newLvl).doubleValue();
 
         Participator purchaser;
@@ -273,6 +300,14 @@ public class CmdUpgrades implements Cmd {
         return Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(Mini.parse(tl.cannotAfford().getTitle()))
                         .body(Dialogue.body(tl.cannotAfford().getBody())).build())
+                .type(DialogType.notice(this.returnToUpgrade(upgrade))));
+    }
+
+    private Dialog prerequisitesNotMet(Upgrade upgrade) {
+        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+        return Dialog.create(b -> b.empty()
+                .base(DialogBase.builder(Mini.parse(tl.prerequisitesNotMet().getTitle()))
+                        .body(Dialogue.body(tl.prerequisitesNotMet().getBody())).build())
                 .type(DialogType.notice(this.returnToUpgrade(upgrade))));
     }
 

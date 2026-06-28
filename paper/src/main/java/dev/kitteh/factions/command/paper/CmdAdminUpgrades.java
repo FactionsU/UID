@@ -9,6 +9,7 @@ import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.upgrade.LeveledValueProvider;
 import dev.kitteh.factions.upgrade.Upgrade;
+import dev.kitteh.factions.upgrade.UpgradePrerequisite;
 import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.UpgradeVariable;
@@ -95,6 +96,7 @@ public class CmdAdminUpgrades implements Cmd {
         private boolean settingsDirty;
         private final DraftProvider cost;
         private final Map<UpgradeVariable, DraftProvider> variables = new LinkedHashMap<>();
+        private final List<UpgradePrerequisite> prerequisites = new ArrayList<>();
 
         private DraftSettings(Upgrade upgrade, boolean enabled, UpgradeSettings settings) {
             this.upgrade = upgrade;
@@ -107,6 +109,7 @@ public class CmdAdminUpgrades implements Cmd {
                 LeveledValueProvider provider = settings.variableProvider(variable);
                 this.variables.put(variable, DraftProvider.from(provider));
             }
+            this.prerequisites.addAll(settings.prerequisites());
         }
 
         private static DraftSettings fresh(Upgrade upgrade) {
@@ -124,7 +127,7 @@ public class CmdAdminUpgrades implements Cmd {
         private UpgradeSettings toSettings() {
             Map<UpgradeVariable, LeveledValueProvider> vars = new LinkedHashMap<>();
             this.variables.forEach((variable, draftProvider) -> vars.put(variable, draftProvider.built()));
-            return new UpgradeSettings(this.upgrade, vars, this.maxLevel, this.startingLevel, this.cost.built());
+            return new UpgradeSettings(this.upgrade, vars, this.maxLevel, this.startingLevel, this.cost.built(), new ArrayList<>(this.prerequisites));
         }
     }
 
@@ -229,6 +232,10 @@ public class CmdAdminUpgrades implements Cmd {
                     .action(DialogAction.customClick((_, aud) -> aud.showDialog(this.providerMenu(aud, upgrade, variable)), Dialogue.CLICK_CALLBACK))
                     .build());
         }
+
+        buttons.add(ActionButton.builder(Mini.parse(edit.getPrerequisitesButton()))
+                .action(DialogAction.customClick((_, aud) -> aud.showDialog(this.prerequisitesMenu(aud, upgrade)), Dialogue.CLICK_CALLBACK))
+                .build());
 
         return Dialog.create(builder -> builder.empty()
                 .base(DialogBase.builder(Mini.parse(edit.getTitle(), upgradeTag))
@@ -401,6 +408,115 @@ public class CmdAdminUpgrades implements Cmd {
                                 }, Dialogue.CLICK_CALLBACK)).build(),
                         this.back(() -> this.providerMenu(audience, upgrade, variable))
                 )));
+    }
+
+    private Dialog prerequisitesMenu(Audience audience, Upgrade upgrade) {
+        DraftSettings draftSettings = this.draftSettings(audience, upgrade);
+        var tl = tl();
+        var page = tl.prerequisitesPage();
+
+        TagResolver upgradeTag = Placeholder.component("upgrade", upgrade.nameComponent());
+
+        List<ActionButton> buttons = new ArrayList<>();
+        List<DialogBody> body;
+        if (draftSettings.prerequisites.isEmpty()) {
+            body = Dialogue.body(page.getBodyNone());
+        } else {
+            Component component = Mini.parse(page.getBodyHeader(), upgradeTag);
+            for (UpgradePrerequisite prerequisite : draftSettings.prerequisites) {
+                Component requiredName = prerequisiteName(prerequisite);
+                TagResolver requiredTag = Placeholder.component("upgrade", requiredName);
+                TagResolver levelTag = Placeholder.unparsed("level", String.valueOf(prerequisite.minLevel()));
+                component = component.appendNewline().append(Mini.parse(page.getLineEntry(), requiredTag, levelTag));
+                buttons.add(ActionButton.builder(Mini.parse(page.getRemoveButton(), requiredTag, levelTag))
+                        .action(DialogAction.customClick((_, aud) -> {
+                            draftSettings.prerequisites.remove(prerequisite);
+                            draftSettings.settingsDirty = true;
+                            aud.showDialog(this.prerequisitesMenu(aud, upgrade));
+                        }, Dialogue.CLICK_CALLBACK))
+                        .build());
+            }
+            body = List.of(DialogBody.plainMessage(component, 400));
+        }
+
+        buttons.add(ActionButton.builder(Mini.parse(page.getAddButton()))
+                .action(DialogAction.customClick((_, aud) -> aud.showDialog(this.addPrerequisiteMenu(aud, upgrade)), Dialogue.CLICK_CALLBACK))
+                .build());
+
+        List<DialogBody> finalBody = body;
+        return Dialog.create(builder -> builder.empty()
+                .base(DialogBase.builder(Mini.parse(page.getTitle(), upgradeTag))
+                        .body(finalBody)
+                        .build())
+                .type(DialogType.multiAction(buttons, this.back(() -> this.editMenu(audience, upgrade)), 1)));
+    }
+
+    private Dialog addPrerequisiteMenu(Audience audience, Upgrade upgrade) {
+        DraftSettings draftSettings = this.draftSettings(audience, upgrade);
+        var tl = tl();
+        var page = tl.addPrerequisitePage();
+
+        TagResolver upgradeTag = Placeholder.component("upgrade", upgrade.nameComponent());
+
+        List<ActionButton> buttons = UpgradeRegistry.getUpgrades().stream()
+                .sorted(Comparator.comparing(Upgrade::name))
+                .filter(candidate -> candidate != upgrade
+                        && draftSettings.prerequisites.stream().noneMatch(p -> p.upgrade().equalsIgnoreCase(candidate.name())))
+                .map(candidate -> ActionButton.builder(Mini.parse(page.getEntryButton(), Placeholder.component("upgrade", candidate.nameComponent())))
+                        .action(DialogAction.customClick((_, aud) -> aud.showDialog(this.prerequisiteLevelMenu(aud, upgrade, candidate)), Dialogue.CLICK_CALLBACK))
+                        .build())
+                .toList();
+
+        List<DialogBody> body = buttons.isEmpty() ? Dialogue.body(page.getBodyNone()) : Dialogue.body(page.getBody());
+
+        return Dialog.create(builder -> builder.empty()
+                .base(DialogBase.builder(Mini.parse(page.getTitle(), upgradeTag))
+                        .body(body)
+                        .build())
+                .type(DialogType.multiAction(buttons, this.back(() -> this.prerequisitesMenu(audience, upgrade)), 2)));
+    }
+
+    private Dialog prerequisiteLevelMenu(Audience audience, Upgrade upgrade, Upgrade required) {
+        var tl = tl();
+        var page = tl.prerequisiteLevelPage();
+
+        TagResolver upgradeTag = Placeholder.component("upgrade", required.nameComponent());
+        TagResolver parentTag = Placeholder.component("parent", upgrade.nameComponent());
+        TagResolver maxTag = Placeholder.unparsed("upgrademaxlevel", capLabel(required.maxLevel()));
+
+        return Dialog.create(builder -> builder.empty()
+                .base(DialogBase.builder(Mini.parse(page.getTitle(), upgradeTag, parentTag))
+                        .body(Dialogue.body(page.getBody(), upgradeTag, parentTag, maxTag))
+                        .inputs(List.of(
+                                DialogInput.text("level", Mini.parse(page.getInputLabel()))
+                                        .width(200)
+                                        .initial("1")
+                                        .maxLength(12)
+                                        .build()
+                        ))
+                        .build())
+                .type(DialogType.confirmation(
+                        ActionButton.builder(Mini.parse(page.getConfirm()))
+                                .action(DialogAction.customClick((r, aud) -> {
+                                    Integer value = parseInt(r.getText("level"));
+                                    if (value == null || value < 1) {
+                                        aud.showDialog(this.error(tl.error().getInvalidNumber(), () -> this.prerequisiteLevelMenu(aud, upgrade, required)));
+                                        return;
+                                    }
+                                    int clamped = Math.min(value, required.maxLevel());
+                                    DraftSettings draftSettings = this.draftSettings(aud, upgrade);
+                                    draftSettings.prerequisites.removeIf(p -> p.upgrade().equalsIgnoreCase(required.name()));
+                                    draftSettings.prerequisites.add(new UpgradePrerequisite(required.name(), clamped));
+                                    draftSettings.settingsDirty = true;
+                                    aud.showDialog(this.prerequisitesMenu(aud, upgrade));
+                                }, Dialogue.CLICK_CALLBACK)).build(),
+                        this.back(() -> this.addPrerequisiteMenu(audience, upgrade))
+                )));
+    }
+
+    private static Component prerequisiteName(UpgradePrerequisite prerequisite) {
+        Upgrade required = UpgradeRegistry.getUpgrade(prerequisite.upgrade());
+        return required == null ? Component.text(prerequisite.upgrade()) : required.nameComponent();
     }
 
     private Dialog reviewMenu(Audience audience) {

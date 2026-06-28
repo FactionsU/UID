@@ -785,6 +785,7 @@ public class TranslationsConfig {
                     private String costButton = "Edit Cost";
                     @Comment("Supports <variable>")
                     private String variableButton = "Edit '<variable>'";
+                    private String prerequisitesButton = "Edit Prerequisites";
 
                     public String getTitle() {
                         return title;
@@ -792,6 +793,10 @@ public class TranslationsConfig {
 
                     public List<String> getBody() {
                         return body;
+                    }
+
+                    public String getPrerequisitesButton() {
+                        return prerequisitesButton;
                     }
 
                     public String getEnabledYes() {
@@ -957,6 +962,115 @@ public class TranslationsConfig {
                     }
                 }
 
+                public static class PrerequisitesPage {
+                    @Comment("Supports <upgrade>")
+                    private String title = "Prerequisites: <upgrade>";
+                    @Comment("Supports <upgrade>")
+                    private List<String> bodyHeader = new ArrayList<>() {
+                        {
+                            this.add("Factions must own these upgrades before purchasing <upgrade>:");
+                            this.add("");
+                        }
+                    };
+                    @Comment("Supports <upgrade>, <level>")
+                    private String lineEntry = "<gray>- <upgrade> (level <level>)";
+                    private List<String> bodyNone = new ArrayList<>() {
+                        {
+                            this.add("No prerequisites are set.");
+                        }
+                    };
+                    private String addButton = "Add Prerequisite";
+                    @Comment("Supports <upgrade>, <level>")
+                    private String removeButton = "Remove <upgrade>";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBodyHeader() {
+                        return bodyHeader;
+                    }
+
+                    public String getLineEntry() {
+                        return lineEntry;
+                    }
+
+                    public List<String> getBodyNone() {
+                        return bodyNone;
+                    }
+
+                    public String getAddButton() {
+                        return addButton;
+                    }
+
+                    public String getRemoveButton() {
+                        return removeButton;
+                    }
+                }
+
+                public static class AddPrerequisitePage {
+                    @Comment("Supports <upgrade>")
+                    private String title = "Add Prerequisite: <upgrade>";
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Select an upgrade to require.");
+                        }
+                    };
+                    private List<String> bodyNone = new ArrayList<>() {
+                        {
+                            this.add("There are no other upgrades available to require.");
+                        }
+                    };
+                    @Comment("Supports <upgrade>")
+                    private String entryButton = "<upgrade>";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+
+                    public List<String> getBodyNone() {
+                        return bodyNone;
+                    }
+
+                    public String getEntryButton() {
+                        return entryButton;
+                    }
+                }
+
+                public static class PrerequisiteLevelPage {
+                    @Comment("Supports <upgrade> (the required upgrade), <parent> (the upgrade being edited)")
+                    private String title = "Required Level: <upgrade>";
+                    @Comment("Supports <upgrade>, <parent>, <upgrademaxlevel>")
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Minimum level of <upgrade> a faction must own.");
+                            this.add("Must be between 1 and <upgrademaxlevel>.");
+                        }
+                    };
+                    private String inputLabel = "Required level";
+                    private String confirm = "Add Prerequisite";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+
+                    public String getInputLabel() {
+                        return inputLabel;
+                    }
+
+                    public String getConfirm() {
+                        return confirm;
+                    }
+                }
+
                 public static class ReviewPage {
                     private String title = "Review Changes";
                     private List<String> bodyHeader = new ArrayList<>() {
@@ -1070,6 +1184,9 @@ public class TranslationsConfig {
                 private ProviderPage providerPage = new ProviderPage();
                 private EquationPage equationPage = new EquationPage();
                 private LevelMapPage levelMapPage = new LevelMapPage();
+                private PrerequisitesPage prerequisitesPage = new PrerequisitesPage();
+                private AddPrerequisitePage addPrerequisitePage = new AddPrerequisitePage();
+                private PrerequisiteLevelPage prerequisiteLevelPage = new PrerequisiteLevelPage();
                 private ReviewPage reviewPage = new ReviewPage();
                 private Applied applied = new Applied();
                 private Error error = new Error();
@@ -1100,6 +1217,18 @@ public class TranslationsConfig {
 
                 public LevelMapPage levelMapPage() {
                     return levelMapPage;
+                }
+
+                public PrerequisitesPage prerequisitesPage() {
+                    return prerequisitesPage;
+                }
+
+                public AddPrerequisitePage addPrerequisitePage() {
+                    return addPrerequisitePage;
+                }
+
+                public PrerequisiteLevelPage prerequisiteLevelPage() {
+                    return prerequisiteLevelPage;
                 }
 
                 public ReviewPage reviewPage() {
@@ -2721,8 +2850,32 @@ public class TranslationsConfig {
                     private String upgradeAvailableLevelNumberIfNotSingleLevel = "Level <level>";
                     private String purchaseButton = "Purchase Upgrade";
 
+                    private String prerequisitesHeader = "<red>Locked - requires:";
+                    @Comment("Supports <upgrade> and fills that in with either prerequisiteEntryLevelOne or prerequisiteEntryLevelOverOne based on the level")
+                    private String prerequisiteEntry = "<red>- <upgrade>";
+                    @Comment("Supports <upgrade>, <level>")
+                    private String prerequisiteEntryLevelOne = "<upgrade>";
+                    @Comment("Supports <upgrade>, <level>")
+                    private String prerequisiteEntryLevelOverOne = "<upgrade> (level <level>)";
+
                     public String getTitle() {
                         return title;
+                    }
+
+                    public String getPrerequisitesHeader() {
+                        return prerequisitesHeader;
+                    }
+
+                    public String getPrerequisiteEntry() {
+                        return prerequisiteEntry;
+                    }
+
+                    public String getPrerequisiteEntryLevelOne() {
+                        return prerequisiteEntryLevelOne;
+                    }
+
+                    public String getPrerequisiteEntryLevelOverOne() {
+                        return prerequisiteEntryLevelOverOne;
                     }
 
                     public String getStatusLocked() {
@@ -2851,6 +3004,23 @@ public class TranslationsConfig {
                     }
                 }
 
+                public static class PrerequisitesNotMet {
+                    private String title = "Cannot Purchase";
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("You do not meet the prerequisites for this upgrade.");
+                        }
+                    };
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+                }
+
                 public static class AlreadyMax {
                     private String title = "Error";
                     private List<String> body = new ArrayList<>() {
@@ -2877,6 +3047,7 @@ public class TranslationsConfig {
                 private AlreadyMax alreadyMax = new AlreadyMax();
                 private NoLongerInFaction noLongerInFaction = new NoLongerInFaction();
                 private NoLongerSameLevel noLongerSameLevel = new NoLongerSameLevel();
+                private PrerequisitesNotMet prerequisitesNotMet = new PrerequisitesNotMet();
 
                 public General general() {
                     return general;
@@ -2912,6 +3083,10 @@ public class TranslationsConfig {
 
                 public NoLongerSameLevel noLongerSameLevel() {
                     return noLongerSameLevel;
+                }
+
+                public PrerequisitesNotMet prerequisitesNotMet() {
+                    return prerequisitesNotMet;
                 }
             }
 
