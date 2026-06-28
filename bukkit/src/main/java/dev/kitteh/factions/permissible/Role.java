@@ -25,12 +25,13 @@ public enum Role implements Permissible {
     @Deprecated(forRemoval = true, since = "4.6.0")
     public final int value;
     @Deprecated(forRemoval = true, since = "4.6.0")
-    public final String nicename = "";
+    public final String nicename;
     private @Nullable Set<String> roleNamesAtOrBelow;
     private @Nullable Set<String> roleNamesAtOrAbove;
 
     Role(final int value) {
         this.value = value;
+        this.nicename = this.name();
     }
 
     @ApiStatus.AvailableSince("4.6.0")
