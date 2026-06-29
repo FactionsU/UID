@@ -29,7 +29,7 @@ public class CmdRelation implements Cmd {
             Command.Builder<Sender> build = builder
                     .literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Description.of(tl.getDescription()))
-                    .permission(builder.commandPermission().and(Cloudy.isAtLeastRole(Role.MODERATOR)));
+                    .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.RELATION)).and(Cloudy.isAtLeastRole(Role.MODERATOR)));
 
             Command.Builder<Sender> relationBuilder = build.required("faction", FactionParser.of(FactionParser.Include.PLAYERS));
 
