@@ -23,7 +23,6 @@ permissions:
       factions.save: true
       factions.modifypower: true
       factions.ahome: true
-      factions.setmaxvaults: true
       factions.updates: true
       factions.debug: true
   factions.*:
@@ -276,8 +275,6 @@ permissions:
     description: Bypass autoleave.
   factions.vault:
     description: Access faction vault.
-  factions.setmaxvault:
-    description: Set a faction's max vaults.
   factions.ban:
     description: Ban players from Factions
   factions.fly:
