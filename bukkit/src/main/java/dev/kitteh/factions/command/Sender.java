@@ -80,7 +80,7 @@ public interface Sender {
     }
 
     default boolean hasPermission(Permission perm) {
-        return sender().hasPermission(perm.node);
+        return perm.has(sender());
     }
 
     default boolean isPlayer() {

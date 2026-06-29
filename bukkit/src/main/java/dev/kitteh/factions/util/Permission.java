@@ -115,6 +115,7 @@ public enum Permission {
     UPGRADES_MANAGE("upgrades.manage"),
     WARMUP_EXEMPT("warmups.exempt");
 
+    @Deprecated(forRemoval = true, since = "4.6.1")
     public final String node;
 
     Permission(final String node) {

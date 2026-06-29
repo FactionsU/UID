@@ -26,7 +26,7 @@ public final class Cloudy {
     }
 
     public static PredicatePermission<Sender> hasPermission(Permission permission) {
-        return PredicatePermission.of(s -> s.sender().hasPermission(permission.node));
+        return PredicatePermission.of(s -> s.hasPermission(permission));
     }
 
     public static PredicatePermission<Sender> isPlayer() {

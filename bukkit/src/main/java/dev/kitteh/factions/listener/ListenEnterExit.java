@@ -198,12 +198,12 @@ public class ListenEnterExit implements Listener {
         ((MemoryFPlayer) me).onLogInOut();
         ((MemoryFPlayer) me).setOfflinePlayer(player);
 
-        if (me.spyingChat() && !player.hasPermission(Permission.CHATSPY.node)) {
+        if (me.spyingChat() && !Permission.CHATSPY.has(player)) {
             me.spyingChat(false);
             this.plugin.log(Level.INFO, "Found " + player.getName() + " spying chat without permission on login. Disabled their chat spying.");
         }
 
-        if (me.adminBypass() && !player.hasPermission(Permission.BYPASS.node)) {
+        if (me.adminBypass() && !Permission.BYPASS.has(player)) {
             me.adminBypass(false);
             this.plugin.log(Level.INFO, "Found " + player.getName() + " on admin Bypass without permission on login. Disabled it for them.");
         }

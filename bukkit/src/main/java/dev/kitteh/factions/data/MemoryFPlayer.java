@@ -134,7 +134,7 @@ public abstract class MemoryFPlayer implements FPlayer {
         if (this.asPlayer() instanceof Player player) {
             this.kills = player.getStatistic(Statistic.PLAYER_KILLS);
             this.deaths = player.getStatistic(Statistic.DEATHS);
-            this.autoLeaveExempt(player.hasPermission(Permission.AUTO_LEAVE_BYPASS.node));
+            this.autoLeaveExempt(Permission.AUTO_LEAVE_BYPASS.has(player));
         }
         this.lastLoginTime = System.currentTimeMillis();
         if (FactionsPlugin.instance().conf().factions().pvp().getNoPVPDamageToOthersForXSecondsAfterLogin() > 0) {

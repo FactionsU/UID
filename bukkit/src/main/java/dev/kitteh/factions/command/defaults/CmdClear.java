@@ -78,7 +78,7 @@ public class CmdClear implements Cmd {
 
     private void handleBanConf(FPlayer sender) {
         var tl = FactionsPlugin.instance().tl().commands().clear();
-        if (sender.asPlayer() instanceof Player p && p.hasPermission(Permission.BAN.node) && sender.faction().hasAccess(sender, PermissibleActions.BAN, sender.lastStoodAt())) {
+        if (sender.asPlayer() instanceof Player p && Permission.BAN.has(p) && sender.faction().hasAccess(sender, PermissibleActions.BAN, sender.lastStoodAt())) {
             sender.faction().bans().clear();
             sender.sendRichMessage(tl.getBansClearSuccess());
         }
@@ -99,7 +99,7 @@ public class CmdClear implements Cmd {
     private void handleWarpConf(FPlayer sender) {
         var tl = FactionsPlugin.instance().tl().commands().clear();
         var econTl = FactionsPlugin.instance().tl().economy().actions();
-        if (sender.asPlayer() instanceof Player p && p.hasPermission(Permission.SETWARP.node) && sender.faction().hasAccess(sender, PermissibleActions.SETWARP, sender.lastStoodAt())) {
+        if (sender.asPlayer() instanceof Player p && Permission.SETWARP.has(p) && sender.faction().hasAccess(sender, PermissibleActions.SETWARP, sender.lastStoodAt())) {
             double cost = FactionsPlugin.instance().conf().economy().getCostDelWarp();
             if (cost > 0D && Econ.shouldBeUsed()) {
                 Participator purchaser;
@@ -129,7 +129,7 @@ public class CmdClear implements Cmd {
 
     private void handleInviteConf(FPlayer sender) {
         var tl = FactionsPlugin.instance().tl().commands().clear();
-        if (sender.asPlayer() instanceof Player p && p.hasPermission(Permission.DEINVITE.node) && sender.faction().hasAccess(sender, PermissibleActions.INVITE, sender.lastStoodAt())) {
+        if (sender.asPlayer() instanceof Player p && Permission.DEINVITE.has(p) && sender.faction().hasAccess(sender, PermissibleActions.INVITE, sender.lastStoodAt())) {
             sender.faction().clearInvites();
             sender.sendRichMessage(tl.getInvitesClearSuccess());
         }

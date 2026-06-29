@@ -55,6 +55,7 @@ import dev.kitteh.factions.util.FlightUtil;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Metrics;
 import dev.kitteh.factions.util.Mini;
+import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.SeeChunkUtil;
 import dev.kitteh.factions.util.TNTFillTask;
 import dev.kitteh.factions.util.WorldTracker;
@@ -882,7 +883,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     private final Set<UUID> told = new HashSet<>();
 
     public void updateNotification(Player player) {
-        if (updateResponse == null || !player.hasPermission("factions.updates")) {
+        if (updateResponse == null || !Permission.UPDATES.has(player)) {
             return;
         }
         if (!updateResponse.isUrgent() && this.told.contains(player.getUniqueId())) {

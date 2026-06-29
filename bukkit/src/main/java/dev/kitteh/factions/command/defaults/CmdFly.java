@@ -67,7 +67,7 @@ public class CmdFly implements Cmd {
                 return;
             }
 
-            if (context.sender().sender().hasPermission(Permission.FLY_TRAILS.node + "." + effectName)) {
+            if (context.sender().sender().hasPermission(Permission.FLY_TRAILS + "." + effectName)) {
                 sender.flyTrailEffect(effectName);
                 sender.sendRichMessage(tl.getTrailsParticleChange(), Placeholder.unparsed("particle", effectName));
             } else {
