@@ -16,12 +16,15 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 @ApiStatus.Internal
+@NullMarked
 public class SeeChunkUtil extends BukkitRunnable {
 
     private final Set<UUID> playersSeeingChunks = new HashSet<>();
@@ -94,7 +97,7 @@ public class SeeChunkUtil extends BukkitRunnable {
         showPillar(me, world, blockX, blockZ, effect, color);
     }
 
-    public static void showPillar(Player player, World world, int blockX, int blockZ, Particle effect, Color color) {
+    public static void showPillar(Player player, World world, int blockX, int blockZ, Particle effect, @Nullable Color color) {
         // Let's start at the player's Y spot -30 to optimize
         for (int blockY = player.getLocation().getBlockY() - 30; blockY < player.getLocation().getBlockY() + 30; blockY++) {
             Location loc = new Location(world, blockX, blockY, blockZ);

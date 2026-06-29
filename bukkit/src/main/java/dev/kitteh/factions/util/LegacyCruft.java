@@ -3,7 +3,11 @@ package dev.kitteh.factions.util;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
+@ApiStatus.Internal
+@NullMarked
 public class LegacyCruft {
     private LegacyCruft() {}
 

@@ -12,9 +12,11 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @ApiStatus.AvailableSince("4.0.0")
+@NullMarked
 public class TextUtil {
     private TextUtil() {
     }
