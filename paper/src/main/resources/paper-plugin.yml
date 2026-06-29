@@ -114,7 +114,6 @@ permissions:
       factions.disband: true
       factions.dtr: true
       factions.grace.view: true
-      factions.help: true
       factions.home: true
       factions.invite: true
       factions.join: true
@@ -146,7 +145,6 @@ permissions:
       factions.monitorlogins: true
       factions.top: true
       factions.vault: true
-      factions.mapheight: true
       factions.ban: true
       factions.fly: true
       factions.near: true
@@ -184,8 +182,6 @@ permissions:
     description: view grace status
   factions.grace.set:
     description: set grace
-  factions.help:
-    description: display a help page
   factions.home:
     description: teleport to the faction home
   factions.invite:
@@ -319,8 +315,6 @@ permissions:
     description: Access faction vault.
   factions.setmaxvault:
     description: Set a faction's max vaults.
-  factions.mapheight:
-    description: Set your /f map height.
   factions.ban:
     description: Ban players from Factions
   factions.fly:
