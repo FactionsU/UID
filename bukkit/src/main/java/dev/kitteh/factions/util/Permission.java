@@ -43,6 +43,7 @@ public enum Permission {
     FORCE_ROLE("force.role"),
     GRACE_VIEW("grace.view"),
     GRACE_SET("grace.set"),
+    @Deprecated(forRemoval = true, since = "4.6.1")
     HELP("help"),
     HOME("home"),
     INVITE("invite"),
@@ -56,6 +57,7 @@ public enum Permission {
     LISTCLAIMS_OTHER("listclaims.other"),
     MAP("map"),
     MAP_AUTO("map.auto"),
+    @Deprecated(forRemoval = true, since = "4.6.1")
     MAPHEIGHT("mapheight"),
     MODIFY_DTR("modifydtr"),
     MODIFY_POWER("modifypower"),
@@ -106,6 +108,7 @@ public enum Permission {
     SHIELD("shield"),
     TOP("top"),
     VAULT("vault"),
+    @Deprecated(forRemoval = true, since = "4.6.1")
     SETMAXVAULTS("setmaxvaults"),
     NEAR("near"),
     WARP("warp"),
