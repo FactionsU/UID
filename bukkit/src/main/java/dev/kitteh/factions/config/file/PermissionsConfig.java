@@ -13,12 +13,14 @@ import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.selector.RelationAtLeastSelector;
 import dev.kitteh.factions.permissible.selector.RoleAtLeastSelector;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@ApiStatus.Internal
 @SuppressWarnings({"FieldMayBeFinal", "unused", "MismatchedQueryAndUpdateOfCollection"})
 public class PermissionsConfig {
     @Comment("This is an auto-updating list of known actions and descriptions.\n" +

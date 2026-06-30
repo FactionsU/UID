@@ -10,7 +10,6 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.integration.Econ;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
@@ -18,7 +17,6 @@ import java.util.Deque;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-@ApiStatus.Internal
 public final class TopMoneyCache {
     private static final TopMoneyCache INSTANCE = new TopMoneyCache();
 

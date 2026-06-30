@@ -3,8 +3,10 @@ package dev.kitteh.factions.event;
 import dev.kitteh.factions.FPlayer;
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FactionSetHomeEvent extends FactionPlayerEvent implements Cancellable {
     private final Location location;

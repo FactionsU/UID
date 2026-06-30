@@ -3,11 +3,13 @@ package dev.kitteh.factions.event;
 import dev.kitteh.factions.FPlayer;
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FPlayerTeleportEvent extends FactionPlayerEvent implements Cancellable {
     public enum Reason {

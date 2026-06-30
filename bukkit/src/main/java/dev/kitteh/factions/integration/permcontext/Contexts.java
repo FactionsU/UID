@@ -8,6 +8,7 @@ import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Default FactionsUUID contexts.
  */
+@ApiStatus.Internal
 @NullMarked
 public enum Contexts implements Context {
     FACTION_ID((player) -> {

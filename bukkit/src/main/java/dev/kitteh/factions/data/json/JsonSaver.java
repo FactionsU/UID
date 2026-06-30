@@ -2,7 +2,6 @@ package dev.kitteh.factions.data.json;
 
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
@@ -14,7 +13,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 
-@ApiStatus.Internal
 @NullMarked
 public class JsonSaver {
     private static final HashMap<String, Lock> locks = new HashMap<>();

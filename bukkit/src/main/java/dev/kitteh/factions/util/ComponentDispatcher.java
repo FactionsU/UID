@@ -23,6 +23,7 @@ public class ComponentDispatcher {
     private static HexConsumer<Player, ComponentLike, ComponentLike, Integer, Integer, Integer> titleSender = (player, title, subtitle, fadeIn, stay, fadeOut) ->
             player.sendTitle(Mini.toLegacy(title), Mini.toLegacy(subtitle), fadeIn, stay, fadeOut);
 
+    @ApiStatus.Internal
     public static void setSenders(BiConsumer<CommandSender, ComponentLike> componentSender, BiConsumer<Player, ComponentLike> actionBarSender,
                                   HexConsumer<Player, ComponentLike, ComponentLike, Integer, Integer, Integer> titleSender) {
         ComponentDispatcher.componentSender = componentSender;

@@ -9,12 +9,14 @@ import dev.kitteh.factions.integration.dynmap.DynmapStyle;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@ApiStatus.Internal
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "InnerClassMayBeStatic"})
 public class DynmapConfig {
     public class Dynmap {

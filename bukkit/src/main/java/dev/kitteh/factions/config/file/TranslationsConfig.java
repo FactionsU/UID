@@ -5,6 +5,7 @@ import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
 import java.time.ZoneId;
@@ -16,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
+@ApiStatus.Internal
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
 public class TranslationsConfig {
     public static class AbsCommand {

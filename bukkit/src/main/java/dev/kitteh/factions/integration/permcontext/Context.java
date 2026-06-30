@@ -1,6 +1,7 @@
 package dev.kitteh.factions.integration.permcontext;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.Set;
  *
  * @see ContextManager#registerContext(Context)
  */
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public interface Context {
     /**

@@ -4,11 +4,13 @@ import dev.kitteh.factions.FPlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
  * Event called when a Faction is soon to be created.
  */
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FactionAttemptCreateEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();

@@ -5,8 +5,10 @@ import net.luckperms.api.context.ContextConsumer;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+@ApiStatus.Internal
 @NullMarked
 public class LuckpermsContextCalculator implements ContextCalculator<Player> {
     @Override

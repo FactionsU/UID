@@ -3,11 +3,13 @@ package dev.kitteh.factions.event;
 import dev.kitteh.factions.Faction;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
  * Represents an event involving a Faction.
  */
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FactionEvent extends Event {
     private static final HandlerList handlers = new HandlerList();

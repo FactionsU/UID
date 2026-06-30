@@ -4,11 +4,13 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import org.bukkit.event.Cancellable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 /**
  * Event called when an FPlayer claims land for a Faction.
  */
+@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class LandClaimEvent extends FactionPlayerEvent implements Cancellable {
     private boolean cancelled;
