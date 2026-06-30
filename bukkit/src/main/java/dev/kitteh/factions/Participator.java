@@ -31,6 +31,7 @@ public sealed interface Participator permits FPlayer, Faction {
      * @param args args
      */
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     void msgLegacy(String str, Object... args);
 
     /**
@@ -43,11 +44,13 @@ public sealed interface Participator permits FPlayer, Faction {
     void sendRichMessage(String miniMessage, TagResolver... resolvers);
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default String describeToLegacy(@Nullable Participator that) {
         return Mini.toLegacy(this.describeTo(that));
     }
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default String describeToLegacy(@Nullable Participator that, boolean uppercaseFirst) {
         return Mini.toLegacy(this.describeTo(that));
     }
@@ -108,6 +111,7 @@ public sealed interface Participator permits FPlayer, Faction {
     }
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default String colorLegacyStringTo(@Nullable Participator that) {
         return LegacyCruft.getLegacyString(this.textColorTo(that));
     }

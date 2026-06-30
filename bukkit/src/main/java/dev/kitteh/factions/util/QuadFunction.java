@@ -4,6 +4,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 @Deprecated(forRemoval = true, since = "4.3.0")
+@ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
 @FunctionalInterface
 public interface QuadFunction<T, U, V, W, R> {
     R apply(T t, U u, V v, W w);

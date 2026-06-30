@@ -39,6 +39,7 @@ public final class FactionResolver extends ObservedResolver {
     }
 
     @Deprecated(forRemoval = true, since = "4.5.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public static FactionResolver of(@Nullable Player forcedObserver, Faction faction) {
         return new FactionResolver("faction", forcedObserver, faction);
     }
@@ -51,12 +52,14 @@ public final class FactionResolver extends ObservedResolver {
     }
 
     @Deprecated(forRemoval = true, since = "4.5.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public FactionResolver(String name, @Nullable FPlayer forcedObserver, Faction faction) {
         super(name, forcedObserver);
         this.faction = faction;
     }
 
     @Deprecated(forRemoval = true, since = "4.5.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public FactionResolver(String name, @Nullable Player forcedObserver, Faction faction) {
         //noinspection removal
         super(name, forcedObserver);

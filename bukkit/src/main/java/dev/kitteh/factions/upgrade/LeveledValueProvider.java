@@ -91,6 +91,7 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
         }
 
         @Deprecated(forRemoval = true, since = "4.2.2")
+        @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
         public static LevelMap of(int level1, BigDecimal val1) {
             Int2ObjectArrayMap<BigDecimal> levels = new Int2ObjectArrayMap<>();
             levels.put(level1, val1);
@@ -110,6 +111,7 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
         }
 
         @Deprecated(forRemoval = true, since = "4.2.2")
+        @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
         public static LevelMap of(int level1, BigDecimal val1, int level2, BigDecimal val2) {
             Int2ObjectArrayMap<BigDecimal> levels = new Int2ObjectArrayMap<>();
             levels.put(level1, val1);
@@ -132,6 +134,7 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
         }
 
         @Deprecated(forRemoval = true, since = "4.2.2")
+        @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
         public static LevelMap of(int level1, BigDecimal val1, int level2, BigDecimal val2, int level3, BigDecimal val3) {
             Int2ObjectArrayMap<BigDecimal> levels = new Int2ObjectArrayMap<>();
             levels.put(level1, val1);
@@ -157,6 +160,7 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
         }
 
         @Deprecated(forRemoval = true, since = "4.2.2")
+        @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
         public static LevelMap of(int level1, BigDecimal val1, int level2, BigDecimal val2, int level3, BigDecimal val3, int level4, BigDecimal val4) {
             Int2ObjectArrayMap<BigDecimal> levels = new Int2ObjectArrayMap<>();
             levels.put(level1, val1);

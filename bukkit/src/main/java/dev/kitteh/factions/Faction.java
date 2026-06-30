@@ -269,6 +269,7 @@ public non-sealed interface Faction extends Participator, Selectable {
     int id();
 
     @Deprecated(forRemoval = true, since = "4.6.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default void addAnnouncement(FPlayer fPlayer, String msg) {
         this.addAnnouncement(fPlayer, Component.text(ChatColor.stripColor(msg)));
     }
@@ -313,6 +314,7 @@ public non-sealed interface Faction extends Participator, Selectable {
     int maxVaults();
 
     @Deprecated(forRemoval = true, since = "4.6.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default void maxVaults(int value) {
         // NOOP
     }
@@ -371,6 +373,7 @@ public non-sealed interface Faction extends Participator, Selectable {
     void tag(String str);
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default String tagLegacy(@Nullable Participator participator) {
         return Mini.toLegacy(this.describeTo(participator));
     }
@@ -635,6 +638,7 @@ public non-sealed interface Faction extends Participator, Selectable {
     }
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default void sendMessageLegacy(String message) {
         for (FPlayer fplayer : this.members()) {
             if (fplayer.asPlayer() instanceof Player player) {

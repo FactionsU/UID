@@ -117,6 +117,7 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
     void lastStoodAt(FLocation flocation);
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default String titleLegacy() {
         return Mini.toLegacy(this.title());
     }
@@ -128,6 +129,7 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
     Component nameWithTitle();
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default String nameWithTitleLegacy() {
         return Mini.toLegacy(this.nameWithTitle());
     }
@@ -135,6 +137,7 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
     Component nameWithTag();
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default String nameWithTagLegacy() {
         return Mini.toLegacy(this.nameWithTag());
     }
@@ -207,9 +210,11 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
     boolean isOnline();
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     void sendMessageLegacy(String message);
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     void sendMessageLegacy(List<String> messages);
 
     int mapHeight();

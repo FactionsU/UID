@@ -32,6 +32,7 @@ public final class FPlayerResolver extends ObservedResolver {
     }
 
     @Deprecated(forRemoval = true, since = "4.5.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public static FPlayerResolver of(String name, @Nullable Player forcedObserver, FPlayer observed) {
         return new FPlayerResolver(name, forcedObserver, observed);
     }

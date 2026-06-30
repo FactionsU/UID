@@ -391,16 +391,19 @@ public class MainConfig {
             }
 
             @Deprecated(forRemoval = true, since = "4.6.0")
+            @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
             public int getMaxStorage() {
                 return 0;
             }
 
             @Deprecated(forRemoval = true, since = "4.1.0")
+            @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
             public boolean isAboveMaxStorage(int amount) {
                 return true;
             }
 
             @Deprecated(forRemoval = true, since = "4.6.0")
+            @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
             public boolean isEnable() {
                 return false;
             }
@@ -1418,6 +1421,7 @@ public class MainConfig {
                 }
 
                 @Deprecated(forRemoval = true, since = "4.0.0")
+                @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
                 public boolean isRelationToTeleportOut(Relation relation) {
                     if (relations == null) {
                         relations = new HashSet<>();

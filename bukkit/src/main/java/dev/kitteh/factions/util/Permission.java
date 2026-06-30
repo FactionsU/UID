@@ -44,6 +44,7 @@ public enum Permission {
     GRACE_VIEW("grace.view"),
     GRACE_SET("grace.set"),
     @Deprecated(forRemoval = true, since = "4.6.1")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     HELP("help"),
     HOME("home"),
     INVITE("invite"),
@@ -58,6 +59,7 @@ public enum Permission {
     MAP("map"),
     MAP_AUTO("map.auto"),
     @Deprecated(forRemoval = true, since = "4.6.1")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     MAPHEIGHT("mapheight"),
     MODIFY_DTR("modifydtr"),
     MODIFY_POWER("modifypower"),
@@ -109,6 +111,7 @@ public enum Permission {
     TOP("top"),
     VAULT("vault"),
     @Deprecated(forRemoval = true, since = "4.6.1")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     SETMAXVAULTS("setmaxvaults"),
     NEAR("near"),
     WARP("warp"),
@@ -119,6 +122,7 @@ public enum Permission {
     WARMUP_EXEMPT("warmups.exempt");
 
     @Deprecated(forRemoval = true, since = "4.6.1")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public final String node;
 
     Permission(final String node) {

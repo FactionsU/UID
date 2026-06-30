@@ -19,8 +19,10 @@ public enum Relation implements Permissible {
     ENEMY(0);
 
     @Deprecated(forRemoval = true, since = "4.6.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public final int value;
     @Deprecated(forRemoval = true, since = "4.6.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public final String nicename;
     private final Set<String> justMyNameInASet;
 

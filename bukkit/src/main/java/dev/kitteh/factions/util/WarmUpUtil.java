@@ -37,6 +37,7 @@ public class WarmUpUtil {
     }
 
     @Deprecated(forRemoval = true, since = "4.5.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public static void process(final FPlayer player, Warmup warmup, String message, final Runnable runnable, long delay) {
         Player plr = player.asPlayer();
         if (plr != null && Permission.WARMUP_EXEMPT.has(plr)) {

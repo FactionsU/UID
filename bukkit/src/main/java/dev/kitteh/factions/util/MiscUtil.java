@@ -207,6 +207,7 @@ public class MiscUtil {
     }
 
     @Deprecated(forRemoval = true, since = "4.5.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public static String commandRoot() {
         return FactionsPlugin.instance().tl().commands().generic().getCommandRoot().getFirstAlias();
     }

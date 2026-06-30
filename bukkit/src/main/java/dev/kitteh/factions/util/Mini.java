@@ -69,6 +69,7 @@ public class Mini {
     }
 
     @Deprecated(forRemoval = true, since = "4.5.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public static Component parse(String input, Iterable<TagResolver> tagResolvers) {
         return miniMessage.deserialize(input, TagResolver.resolver(tagResolvers));
     }

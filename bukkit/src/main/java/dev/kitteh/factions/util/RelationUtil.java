@@ -8,6 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.AvailableSince("4.0.0")
 @Deprecated(forRemoval = true, since = "4.6.0")
+@ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
 public class RelationUtil {
     public static Relation getRelationTo(Participator me, Participator that) {
         return me.relationTo(that, false);
@@ -26,16 +27,19 @@ public class RelationUtil {
     }
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public static String describeThatToMeLegacy(Participator that, Participator me, boolean ucfirst) {
         return Mini.toLegacy(that.describeTo(me));
     }
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public static String describeThatToMeLegacy(Participator that, Participator me) {
         return Mini.toLegacy(that.describeTo(me));
     }
 
     @Deprecated(forRemoval = true, since = "4.0.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public static String getLegacyColorStringOfThatToMe(Participator that, Participator me) {
         return LegacyCruft.getLegacyString(that.textColorTo(me));
     }

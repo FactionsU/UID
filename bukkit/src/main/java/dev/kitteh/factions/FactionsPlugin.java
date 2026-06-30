@@ -20,6 +20,7 @@ public interface FactionsPlugin {
     }
 
     @Deprecated(forRemoval = true, since = "4.3.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     Gson gson();
 
     SeeChunkUtil seeChunkUtil();

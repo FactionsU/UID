@@ -20,6 +20,7 @@ public abstract sealed class ObservedResolver extends HelperResolver permits FPl
 
     @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated(forRemoval = true, since = "4.5.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     protected ObservedResolver(String name, @Nullable Player forcedObserver) {
         super(name);
         this.forcedObserver = forcedObserver == null ? null : FPlayers.fPlayers().get(forcedObserver);
