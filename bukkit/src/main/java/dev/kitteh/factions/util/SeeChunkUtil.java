@@ -20,6 +20,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
@@ -41,10 +42,12 @@ public class SeeChunkUtil extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (UUID playerId : playersSeeingChunks) {
+        Iterator<UUID> iterator = playersSeeingChunks.iterator();
+        while (iterator.hasNext()) {
+            UUID playerId = iterator.next();
             Player player = Bukkit.getPlayer(playerId);
             if (player == null) {
-                playersSeeingChunks.remove(playerId);
+                iterator.remove();
                 continue;
             }
             if (!WorldUtil.isEnabled(player)) {
