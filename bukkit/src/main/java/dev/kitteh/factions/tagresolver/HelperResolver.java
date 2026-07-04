@@ -80,6 +80,10 @@ public sealed abstract class HelperResolver implements TagResolver permits Gener
         return Tag.selfClosingInserting(Component.text(in));
     }
 
+    public static Tag tag(long l) {
+        return Tag.selfClosingInserting(Component.text(l));
+    }
+
     public static Tag tag(ComponentLike component) {
         return Tag.selfClosingInserting(component);
     }
