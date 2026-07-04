@@ -89,8 +89,8 @@ public class CmdUpgrades implements Cmd {
 
                         int buyHeight = 3;
                         ChestGui buyGui = new ChestGui(buyHeight, "Purchase " + Mini.toLegacy(upgrade.nameComponent()) + "?");
-                        buyGui.setOnGlobalDrag(_ -> e.setCancelled(true));
-                        buyGui.setOnGlobalClick(_ -> e.setCancelled(true));
+                        buyGui.setOnGlobalDrag(ev -> ev.setCancelled(true));
+                        buyGui.setOnGlobalClick(ev -> ev.setCancelled(true));
 
                         StaticPane buyMenu = new StaticPane(0, 0, 9, buyHeight);
 
@@ -132,8 +132,8 @@ public class CmdUpgrades implements Cmd {
                         cancel.setItemMeta(met);
 
                         GuiItem cancelItem = new GuiItem(cancel);
-                        cancelItem.setAction(_ -> {
-                            e.setCancelled(true);
+                        cancelItem.setAction(ev -> {
+                            ev.setCancelled(true);
                             gui.show(player);
                         });
 
