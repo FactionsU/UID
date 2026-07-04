@@ -383,7 +383,7 @@ public class Econ {
                 if (toDoThis != null && !toDoThis.isEmpty()) {
                     participator.sendRichMessage(tl.getLossFailure(),
                             Placeholder.parsed("you", you),
-                            Placeholder.parsed("amount", moneyString(delta)),
+                            Placeholder.parsed("amount", moneyString(-delta)),
                             Placeholder.parsed("to", toDoThis)
                     );
                 }
