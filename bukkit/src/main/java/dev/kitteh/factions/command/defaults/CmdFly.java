@@ -17,6 +17,7 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.parser.standard.BooleanParser;
+import org.incendo.cloud.parser.standard.StringParser;
 
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
@@ -38,6 +39,11 @@ public class CmdFly implements Cmd {
                                     manager.flagBuilder("trail")
                                             .withPermission(Cloudy.hasPermission(Permission.FLY_TRAILS))
                                             .withComponent(BooleanParser.booleanParser(true))
+                            )
+                            .flag(
+                                    manager.flagBuilder("particle")
+                                            .withPermission(Cloudy.hasPermission(Permission.FLY_TRAILS))
+                                            .withComponent(StringParser.stringParser())
                             )
                             .handler(this::handle)
             );
