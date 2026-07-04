@@ -90,16 +90,20 @@ public final class FPlayerResolver extends ObservedResolver {
             case "deaths" -> tag(observed.deaths());
 
             case "last_seen" -> {
-                long last = observed.lastLogin();
-                long since = (last == 0 ? -1 : (System.currentTimeMillis() - last)) / 1000L;
                 var tl = FactionsPlugin.instance().tl().placeholders().lastSeen();
+                if (observed.isOnline() && !observed.isVanished()) {
+                    yield tagMini(tl.getOnlineText(), this.observer(ctx), this);
+                }
+                long last = observed.lastLogin();
+                if (last == 0) {
+                    yield tagMini(tl.getUnknownText(), this.observer(ctx), this);
+                }
+                long since = (System.currentTimeMillis() - last) / 1000L;
 
-                since = since - (since % tl.getIntervalSeconds());
+                since -= (since % tl.getIntervalSeconds());
                 String duration = MiscUtil.durationString(since);
 
-                if (since == -1) {
-                    yield tagMini(tl.getUnknownText(), this.observer(ctx), this);
-                } else if (since >= tl.getRecentSeconds()) {
+                if (since >= tl.getRecentSeconds()) {
                     yield tagMini(tl.getOlderText(), this.observer(ctx), Placeholder.unparsed("duration", duration), this);
                 } else if (since >= tl.getTooRecentSeconds()) {
                     yield tagMini(tl.getRecentText(), this.observer(ctx), Placeholder.unparsed("duration", duration), this);
