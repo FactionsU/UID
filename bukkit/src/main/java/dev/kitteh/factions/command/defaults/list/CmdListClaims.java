@@ -142,7 +142,7 @@ public class CmdListClaims implements Cmd {
     }
 
     private long getLong(long x, int z) {
-        return (x << 32) | z;
+        return (x << 32) | (z & 0xFFFFFFFFL);
     }
 
     private static class FLoc {
