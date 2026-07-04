@@ -140,7 +140,7 @@ public class CmdZone implements Cmd {
         String newName = context.get("newName");
 
         if (faction.zones().get(newName) != null) {
-            sender.sendRichMessage(tl.getNameAlreadyInUse(), Placeholder.unparsed("name", name));
+            sender.sendRichMessage(tl.getNameAlreadyInUse(), Placeholder.unparsed("name", newName));
             return;
         }
 
@@ -302,7 +302,7 @@ public class CmdZone implements Cmd {
             return; // Lost perms while confirming, just silently die, meh
         }
 
-        var tl = FactionsPlugin.instance().tl().commands().zone().set().greeting();
+        var tl = FactionsPlugin.instance().tl().commands().zone().delete();
 
         Faction.Zone zone = faction.zones().get(name);
 
