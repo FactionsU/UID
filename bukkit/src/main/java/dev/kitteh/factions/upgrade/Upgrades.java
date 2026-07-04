@@ -44,10 +44,10 @@ public final class Upgrades {
     public static final Upgrade DTR_CLAIM_LIMIT = new Upgrade.SimpleImpl("dtr_claim_limit", TranslationsConfig.Upgrades::dtrClaimLimit, Integer.MAX_VALUE, Set.of(Variables.POSITIVE_INCREASE));
 
     @ApiStatus.AvailableSince("4.6.0")
-    public static final Upgrade DTR_LOSS_REDUCTION = new Upgrade.SimpleImpl("dtr_loss_reduction", TranslationsConfig.Upgrades::powerLossReduction, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
+    public static final Upgrade DTR_LOSS_REDUCTION = new Upgrade.SimpleImpl("dtr_loss_reduction", TranslationsConfig.Upgrades::dtrLossReduction, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
     @ApiStatus.AvailableSince("4.6.0")
-    public static final Upgrade DTR_REGEN = new Upgrade.SimpleImpl("dtr_regen", TranslationsConfig.Upgrades::powerRegen, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
+    public static final Upgrade DTR_REGEN = new Upgrade.SimpleImpl("dtr_regen", TranslationsConfig.Upgrades::dtrRegen, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
     public static final Upgrade FALL_DAMAGE_REDUCTION = new Upgrade.SimpleImpl("fall_damage_reduction", TranslationsConfig.Upgrades::fallDamage, Integer.MAX_VALUE, Set.of(Variables.PERCENT));
 
