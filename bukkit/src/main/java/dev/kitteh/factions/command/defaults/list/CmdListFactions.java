@@ -80,7 +80,7 @@ public class CmdListFactions implements Cmd {
 
         final int pageheight = 9;
         int pagenumber = context.getOrDefault("page", 1);
-        int pagecount = (factionList.size() / pageheight) + 1;
+        int pagecount = Math.max(1, (factionList.size() + pageheight - 1) / pageheight);
         if (pagenumber > pagecount) {
             pagenumber = pagecount;
         } else if (pagenumber < 1) {
