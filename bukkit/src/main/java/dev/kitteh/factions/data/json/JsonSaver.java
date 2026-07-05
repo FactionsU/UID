@@ -5,8 +5,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -35,7 +37,13 @@ public class JsonSaver {
     private static void write(Lock lock, Path path, Supplier<String> content) {
         lock.lock();
         try {
-            Files.writeString(path, content.get());
+            Path temp = path.resolveSibling(path.getFileName() + ".tmp");
+            Files.writeString(temp, content.get());
+            try {
+                Files.move(temp, path, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+            } catch (AtomicMoveNotSupportedException e) {
+                Files.move(temp, path, StandardCopyOption.REPLACE_EXISTING);
+            }
         } catch (IOException e) {
             AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to write file " + path.toAbsolutePath(), e);
         } finally {
