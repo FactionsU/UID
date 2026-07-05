@@ -27,7 +27,7 @@ public class TextUtil {
         var tiTL = FactionsPlugin.instance().tl().placeholders().title();
         Component center = Mini.parse(tiTL.getTitleCenter(), observer, Placeholder.component("content", title));
         int centerLen = PlainTextComponentSerializer.plainText().serialize(center).length();
-        int sideLen = 26 - (centerLen / 2);
+        int sideLen = Math.max(0, 26 - (centerLen / 2));
 
         String leftRepeat = tiTL.getLeftRepeat().repeat(sideLen / tiTL.getLeftRepeat().length());
         String rightRepeat = tiTL.getRightRepeat().repeat(sideLen / tiTL.getRightRepeat().length());
