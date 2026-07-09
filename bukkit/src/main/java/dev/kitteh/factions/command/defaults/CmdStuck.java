@@ -73,7 +73,7 @@ public class CmdStuck implements Cmd {
                     Mini.parse(tl.getWarmup(), sender, Placeholder.unparsed("seconds", String.valueOf(delay))),
                     () -> {
                         final World world = chunk.world();
-                        if (world.getUID() != player.getWorld().getUID() || sentAt.distance(player.getLocation()) > radius) {
+                        if (!world.getUID().equals(player.getWorld().getUID()) || sentAt.distance(player.getLocation()) > radius) {
                             sender.sendRichMessage(tl.getOutside(), Placeholder.unparsed("range", String.valueOf(radius)));
                             return;
                         }
