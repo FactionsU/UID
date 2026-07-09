@@ -342,6 +342,8 @@ public non-sealed interface Faction extends Participator, Selectable {
 
     Set<BanInfo> bans();
 
+    void clearBans();
+
     boolean open();
 
     void open(boolean isOpen);

@@ -119,6 +119,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected transient long lastFrostwalkerMessage;
     protected transient boolean shouldTakeFallDamage = true;
     protected transient @Nullable OfflinePlayer offlinePlayer;
+    protected transient Set<String> bannedBy = new HashSet<>();
 
     public void cleanupDeserialization() {
         this.shouldTakeFallDamage = true;
@@ -128,6 +129,11 @@ public abstract class MemoryFPlayer implements FPlayer {
             this.titleMM = MiniMessage.miniMessage().serialize(this.titleComponent);
         }
         this.title = null;
+        this.bannedBy = new HashSet<>();
+        for (Faction faction : Factions.factions().all()) {
+            if (!faction.isBanned(this)) continue;
+            this.bannedBy.add(String.valueOf(faction.id()));
+        }
     }
 
     public void onLogInOut() {
@@ -1398,5 +1404,9 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
         this.warmup = warmup;
         this.warmupTask = taskId;
+    }
+
+    public Set<String> bannedBy() {
+        return bannedBy;
     }
 }

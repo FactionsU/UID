@@ -31,6 +31,7 @@ public class ContextManager implements Listener {
      *
      * @param plugin the plugin
      */
+    @ApiStatus.Internal
     public static void init(AbstractFactionsPlugin plugin) {
         registeredContexts = Multimaps.synchronizedMultimap(ArrayListMultimap.create());
         registeredContexts.putAll(plugin.getName(), Arrays.asList(Contexts.values()));
@@ -40,6 +41,7 @@ public class ContextManager implements Listener {
     /**
      * Should be called by FactionsUUID only.
      */
+    @ApiStatus.Internal
     public static void shutdown() {
         registeredContexts = null;
     }
@@ -82,6 +84,7 @@ public class ContextManager implements Listener {
         // Honk!
     }
 
+    @ApiStatus.Internal
     @EventHandler
     public void onDisable(PluginDisableEvent event) {
         if (event.getPlugin().equals(FactionsPlugin.instance())) {

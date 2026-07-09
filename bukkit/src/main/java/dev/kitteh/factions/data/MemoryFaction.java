@@ -592,11 +592,13 @@ public abstract class MemoryFaction implements Faction {
     public void ban(FPlayer target, FPlayer banner) {
         BanInfo info = new BanInfo(banner.uniqueId(), target.uniqueId(), System.currentTimeMillis());
         this.bans.add(info);
+        ((MemoryFPlayer) target).bannedBy.add(String.valueOf(this.id));
     }
 
     @Override
-    public void unban(FPlayer player) {
-        bans.removeIf(banInfo -> banInfo.banned().equals(player.uniqueId()));
+    public void unban(FPlayer target) {
+        bans.removeIf(banInfo -> banInfo.banned().equals(target.uniqueId()));
+        ((MemoryFPlayer) target).bannedBy.remove(String.valueOf(this.id));
     }
 
     @Override
@@ -612,7 +614,14 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public Set<BanInfo> bans() {
-        return this.bans;
+        return Set.copyOf(this.bans);
+    }
+
+    @Override
+    public void clearBans() {
+        String str = String.valueOf(this.id);
+        this.bans.stream().map(BanInfo::banned).map(FPlayers.fPlayers()::get).forEach(fp -> ((MemoryFPlayer) fp).bannedBy.remove(str));
+        this.bans.clear();
     }
 
     @Override

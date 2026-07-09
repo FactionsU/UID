@@ -5,6 +5,7 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Factions;
+import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import org.bukkit.entity.Player;
@@ -61,7 +62,9 @@ public enum Contexts implements Context {
         FPlayer p = FPlayers.fPlayers().get(player);
         return p.hasFaction() ? p.role().getRoleNamesAtOrAbove() : Collections.emptySet();
     },
-            Arrays.stream(Role.values()).map(role -> role.name().toLowerCase()).collect(Collectors.toSet()));
+            Arrays.stream(Role.values()).map(role -> role.name().toLowerCase()).collect(Collectors.toSet())),
+    BANNED_BY((player) -> ((MemoryFPlayer) FPlayers.fPlayers().get(player.getUniqueId())).bannedBy(), Set.of("0")),
+    ;
 
 
     /**

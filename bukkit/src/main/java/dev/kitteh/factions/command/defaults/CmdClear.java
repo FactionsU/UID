@@ -79,7 +79,7 @@ public class CmdClear implements Cmd {
     private void handleBanConf(FPlayer sender) {
         var tl = FactionsPlugin.instance().tl().commands().clear();
         if (sender.asPlayer() instanceof Player p && Permission.BAN.has(p) && sender.faction().hasAccess(sender, PermissibleActions.BAN, sender.lastStoodAt())) {
-            sender.faction().bans().clear();
+            sender.faction().clearBans();
             sender.sendRichMessage(tl.getBansClearSuccess());
         }
     }
