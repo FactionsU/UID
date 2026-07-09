@@ -1061,7 +1061,9 @@ public abstract class MemoryFPlayer implements FPlayer {
         Faction targetFaction = Board.board().factionAt(flocation);
 
         if (!targetFaction.equals(forFaction)) {
-            this.sendRichMessage(FactionsPlugin.instance().tl().claiming().unclaim().getWrongFactionOther());
+            if (notifyFailure) {
+                this.sendRichMessage(FactionsPlugin.instance().tl().claiming().unclaim().getWrongFactionOther());
+            }
             return false;
         }
 
