@@ -35,6 +35,8 @@ import dev.kitteh.factions.util.MiscUtil;
 import dev.kitteh.factions.util.WorldTracker;
 import dev.kitteh.factions.util.WorldUtil;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
@@ -285,6 +287,14 @@ public abstract class MemoryFaction implements Faction {
             for (Zone zone : this.zones.values()) {
                 zone.faction = faction;
             }
+            this.worldTrackers.forEach((_, wt) -> {
+                IntList tracked = new IntArrayList(wt.ids());
+                tracked.removeAll(this.zones.keySet());
+                if (!tracked.isEmpty()) {
+                    tracked.forEach(wt::removeAllClaims);
+                    AbstractFactionsPlugin.instance().getLogger().info("Found and removed outdated zone data for faction " + faction.tag);
+                }
+            });
         }
 
         @Override
@@ -304,7 +314,10 @@ public abstract class MemoryFaction implements Faction {
 
         @Override
         public void delete(String name) {
-            this.zones.values().stream().filter(zone -> zone.name().equals(name)).findFirst().ifPresent(zone -> this.zones.remove(zone.id));
+            this.zones.values().stream().filter(zone -> zone.name().equals(name)).findFirst().ifPresent(zone -> {
+                this.zones.remove(zone.id);
+                this.worldTrackers.forEach((_, wt) -> wt.removeAllClaims(zone.id));
+            });
         }
 
         @Override
