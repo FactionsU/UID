@@ -292,6 +292,18 @@ public class TranslationsConfig {
                 }
             }
 
+            public static class Get extends AbsCommand {
+                public Get() {
+                    super("Get faction details", "get");
+                }
+
+                private String output = "<faction> <yellow><key>:</yellow> <value>";
+
+                public String getOutput() {
+                    return output;
+                }
+            }
+
             public static class Power extends AbsCommand {
                 public Power() {
                     super("Change faction power", "power");
@@ -1248,6 +1260,7 @@ public class TranslationsConfig {
 
             private DTR dtr = new DTR();
             private Force force = new Force();
+            private Get get = new Get();
             private Power power = new Power();
             private SetCmd set = new SetCmd();
             private TNT tnt = new TNT();
@@ -1263,6 +1276,10 @@ public class TranslationsConfig {
 
             public DTR dtr() {
                 return dtr;
+            }
+
+            public Get get() {
+                return get;
             }
 
             public Force force() {

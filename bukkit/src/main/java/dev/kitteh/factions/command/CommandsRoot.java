@@ -48,6 +48,7 @@ import dev.kitteh.factions.command.defaults.admin.CmdAdminSet;
 import dev.kitteh.factions.command.defaults.admin.CmdAdminTNT;
 import dev.kitteh.factions.command.defaults.admin.CmdBypass;
 import dev.kitteh.factions.command.defaults.admin.CmdChatSpy;
+import dev.kitteh.factions.command.defaults.admin.CmdGet;
 import dev.kitteh.factions.command.defaults.admin.CmdMoneyModify;
 import dev.kitteh.factions.command.defaults.admin.CmdReload;
 import dev.kitteh.factions.command.defaults.admin.CmdSaveAll;
@@ -256,6 +257,7 @@ public class CommandsRoot {
         registerAdminInternal("chatspy", new CmdChatSpy());
         registerAdminInternal("dtr", new CmdAdminDTR());
         registerAdminInternal("force", new CmdAdminForce());
+        registerAdminInternal("get", new CmdGet());
         registerAdminInternal("money", new CmdMoneyModify());
         registerAdminInternal("power", new CmdAdminPower());
         registerAdminInternal("reload", new CmdReload());
