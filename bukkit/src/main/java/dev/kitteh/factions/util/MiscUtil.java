@@ -4,9 +4,12 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.file.MainConfig;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.jetbrains.annotations.ApiStatus;
@@ -204,6 +207,23 @@ public class MiscUtil {
         ret.addAll(normal);
         ret.addAll(recruit);
         return ret;
+    }
+
+    public static @Nullable Object colorToParticleColor(TextColor color, Class<?> dataClass) {
+        return colorToParticleColor(Color.fromRGB(color.red(), color.green(), color.blue()), dataClass);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public static @Nullable Object colorToParticleColor(Color color, Class<?> dataClass) {
+        if (dataClass == Color.class) {
+            return color;
+        } else if (dataClass == Particle.DustOptions.class) {
+            return new Particle.DustOptions(color, 1);
+        } else if (dataClass == Particle.Spell.class) {
+            return new Particle.Spell(color, 0.5F);
+        } else {
+            return null;
+        }
     }
 
     @Deprecated(forRemoval = true, since = "4.5.0")

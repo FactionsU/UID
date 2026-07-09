@@ -117,12 +117,21 @@ public class FlightUtil {
                 if (pilot.flying()) {
                     if (pilot.flyTrailEffect() != null && Permission.FLY_TRAILS.has(player) && pilot.flyTrail()) {
                         Particle effect = ParticleProvider.effectFromString(pilot.flyTrailEffect());
-                        ParticleProvider.spawn(effect, player.getLocation(), amount, speed, 0, 0, 0);
+                        if (effect == null) {
+                            return;
+                        }
+                        Collection<Player> viewers = player.getWorld().getPlayersSeeingChunk(player.getLocation().getChunk());
+                        Class<?> dataType = effect.getDataType();
+                        if (FactionsPlugin.instance().conf().commands().fly().particles().isColorRelationally()) {
+                            viewers.forEach(p -> p.spawnParticle(effect, player.getLocation(), amount, speed, 0, 0, 0,
+                                    MiscUtil.colorToParticleColor(pilot.relationTo(FPlayers.fPlayers().get(p)).color(), dataType)));
+                        } else {
+                            Object color = MiscUtil.colorToParticleColor(FactionsPlugin.instance().conf().commands().fly().particles().getColorARGB(), dataType);
+                            viewers.forEach(p -> p.spawnParticle(effect, player.getLocation(), amount, speed, 0, 0, 0, color));
+                        }
                     }
                 }
             }
         }
-
     }
-
 }

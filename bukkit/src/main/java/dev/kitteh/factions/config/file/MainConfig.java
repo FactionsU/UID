@@ -5,9 +5,11 @@ import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.MiscUtil;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
@@ -166,6 +168,10 @@ public class MainConfig {
                 @Comment("How often should we spawn these particles?\n" +
                         "0 disables this completely")
                 private double spawnRate = 0.2;
+                private boolean colorRelationally = true;
+                @Comment("Particle color as a hex string. Only relevant if colorRelationally is false and the particle can be colored")
+                private String colorARGB = Integer.toHexString(Color.GREEN.asARGB());
+                private transient Color color;
 
                 public double getSpeed() {
                     return speed;
@@ -177,6 +183,22 @@ public class MainConfig {
 
                 public double getSpawnRate() {
                     return spawnRate;
+                }
+
+                public boolean isColorRelationally() {
+                    return colorRelationally;
+                }
+
+                public Color getColorARGB() {
+                    if (color == null) {
+                        try {
+                            color = Color.fromARGB(Integer.parseInt(colorARGB, 16));
+                        } catch (NumberFormatException _) {
+                            AbstractFactionsPlugin.instance().getLogger().warning("Invalid colorARGB value: " + colorARGB);
+                            color = Color.GREEN;
+                        }
+                    }
+                    return color;
                 }
             }
 

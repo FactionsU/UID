@@ -108,11 +108,7 @@ public class SeeChunkUtil extends BukkitRunnable {
                 continue;
             }
 
-            if (color == null) {
-                ParticleProvider.spawn(player, effect, loc, 1);
-            } else {
-                ParticleProvider.spawn(player, effect, loc, color);
-            }
+            player.spawnParticle(effect, loc, 1, color == null ? null : MiscUtil.colorToParticleColor(color, effect.getDataType()));
         }
     }
 }
