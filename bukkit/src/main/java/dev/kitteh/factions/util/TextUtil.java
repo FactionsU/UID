@@ -29,8 +29,8 @@ public class TextUtil {
         int centerLen = PlainTextComponentSerializer.plainText().serialize(center).length();
         int sideLen = Math.max(0, 26 - (centerLen / 2));
 
-        String leftRepeat = tiTL.getLeftRepeat().repeat(sideLen / tiTL.getLeftRepeat().length());
-        String rightRepeat = tiTL.getRightRepeat().repeat(sideLen / tiTL.getRightRepeat().length());
+        String leftRepeat = tiTL.getLeftRepeat().repeat(sideLen / Math.max(1, tiTL.getLeftRepeat().length()));
+        String rightRepeat = tiTL.getRightRepeat().repeat(sideLen / Math.max(1, tiTL.getRightRepeat().length()));
 
         TagResolver tagResolver = TagResolver.resolver(Placeholder.parsed("left_repeat", leftRepeat),
                 Placeholder.parsed("right_repeat", rightRepeat),
