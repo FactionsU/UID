@@ -52,7 +52,7 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
         @ApiStatus.AvailableSince("4.6.0")
         public static boolean isValidExpression(String expression) {
             try {
-                new Expression(expression).with("level", BigDecimal.ONE).evaluate();
+                new Expression(expression).copy().with("level", BigDecimal.ONE).evaluate();
                 return true;
             } catch (RuntimeException | EvaluationException | ParseException e) {
                 return false;
@@ -62,7 +62,7 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
         @Override
         public BigDecimal get(int level) {
             try {
-                return this.expression
+                return this.expression.copy()
                         .with("level", level)
                         .evaluate().getNumberValue();
             } catch (EvaluationException | ParseException e) {
