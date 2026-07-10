@@ -1,1 +1,2 @@
 dev.kitteh.factions.annotation.processor.NoFinalFieldsProcessor
+dev.kitteh.factions.annotation.processor.WipeOnReloadProcessor

@@ -23,25 +23,10 @@ import java.util.Map;
 @ApiStatus.Internal
 @SuppressWarnings({"FieldMayBeFinal", "unused", "MismatchedQueryAndUpdateOfCollection"})
 public class PermissionsConfig {
-    @Comment("This is an auto-updating list of known actions and descriptions.\n" +
-            "Editing this list has no effect.")
-    @WipeOnReload
-    private List<String> availableActions = new ArrayList<>() {
-        {
-            for (PermissibleAction action : PermissibleActionRegistry.getActions()) {
-                this.add(action.name() + " - " + action.description());
-            }
-        }
-    };
-
-    @Comment("This is an auto-updating list of known selectors.\n" +
-            "Editing this list has no effect.")
-    @WipeOnReload
-    private List<String> availableSelectors = new ArrayList<>() {
-        {
-            this.addAll(PermSelectorRegistry.getSelectors());
-        }
-    };
+    @Comment("""
+            Actions (like BUILD or DOOR) and selectors (like role-atleast:moderator) available on the documentation site:
+            https://factions.support/permissions/""")
+    private boolean availableActionsAndSelectorsOnDocs = true;
 
     @Comment("List actions here to hide from visibility. Comma separated, in quotes.\n" +
             "Defaults and forced perms defined here will still be used.")

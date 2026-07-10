@@ -2678,7 +2678,7 @@ public class TranslationsConfig {
             private int scheduleMenuSetWidth = 50;
             private String scheduleMenuTimeFormat = "h:mm a";
             @WipeOnReload
-            private @Nullable DateTimeFormatter scheduleMenuTimeFormatter;
+            private transient @Nullable DateTimeFormatter scheduleMenuTimeFormatter;
 
             private String scheduleMenuStatusTitle = "<green>Schedule Shield";
             private List<String> scheduleMenuStatusBodyNotSet = new ArrayList<>() {
@@ -5460,11 +5460,11 @@ public class TranslationsConfig {
         public static class DatesAndTimes {
             private String banTiming = "MM/d/yy h:ma";
             @WipeOnReload
-            private DateTimeFormatter banTimingFormatter;
+            private transient DateTimeFormatter banTimingFormatter;
 
             private String factionCreationDate = "MM/d/yy h:ma";
             @WipeOnReload
-            private DateTimeFormatter factionCreationDateFormatter;
+            private transient DateTimeFormatter factionCreationDateFormatter;
 
             public String getFactionCreationDate() {
                 return factionCreationDate;
