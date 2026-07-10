@@ -1580,7 +1580,7 @@ public class TranslationsConfig {
                 @Comment("Supports <count>, <faction>")
                 private String header = "<gold>There are <red><count><gold> bans for <faction>";
                 @Comment("Supports <index>, <player>, <banner>, <date>")
-                private String entry = "<gray><index>. <red><player> <reset>- <green><banner> <reset>- <yellow><date>";
+                private String entry = "<gray><index>. <red><player> <red>- <green><banner> </green>- <yellow><date>";
 
                 public String getNoFaction() {
                     return noFaction;
@@ -4400,7 +4400,7 @@ public class TranslationsConfig {
             @Comment("Supports <player>, <target>")
             private String unbanned = "<yellow><player> <red>unbanned <gray><target>";
             @Comment("Supports <faction>")
-            private String target = "<green>You were unbanned from <reset><faction>";
+            private String target = "<green>You were unbanned from <faction>";
 
             public String getNotBanned() {
                 return notBanned;
