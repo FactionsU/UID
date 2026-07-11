@@ -6,6 +6,7 @@ import dev.kitteh.factions.config.file.PermissionsConfig;
 import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.config.transition.Transitioner;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.ConfigColorResolver;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -30,6 +31,7 @@ public class ConfigManager {
     public void loadConfigs() {
         this.loadConfig("main", this.mainConfig);
         this.loadConfig("translations", this.translationsConfig);
+        ConfigColorResolver.update();
 
         if (this.permissionsConfig == null) {
             this.permissionsConfig = new PermissionsConfig();

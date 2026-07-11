@@ -8,6 +8,7 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.Permission;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -58,8 +59,8 @@ public class CmdListBans implements Cmd {
             FPlayer banner = FPlayers.fPlayers().get(info.banner());
             sender.sendRichMessage(tl.getEntry(),
                     Placeholder.unparsed("index", String.valueOf(i)),
-                    Placeholder.unparsed("player", banned.name()),
-                    Placeholder.unparsed("banner", banner.name()),
+                    FPlayerResolver.of("player", banned),
+                    FPlayerResolver.of("banner", banner),
                     Placeholder.unparsed("date", date.formatBanTiming(Instant.ofEpochMilli(info.time()))));
             i++;
         }
