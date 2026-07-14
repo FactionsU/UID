@@ -105,6 +105,10 @@ public sealed interface Participator permits FPlayer, Faction {
             if (thisFaction.isWarZone()) {
                 return FactionsPlugin.instance().conf().colors().factions().getWarzone();
             }
+
+            if (thisFaction.isWilderness()) {
+                return FactionsPlugin.instance().conf().colors().factions().getWilderness();
+            }
         }
 
         return this.relationTo(that).color();

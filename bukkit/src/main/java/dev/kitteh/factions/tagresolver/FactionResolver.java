@@ -71,7 +71,7 @@ public final class FactionResolver extends ObservedResolver {
         String main = arguments.hasNext() ? arguments.pop().lowerValue() : "";
 
         return switch (main) {
-            case "", "name_decorated" -> tag(Component.text().content(faction.tag()).color(faction.textColorTo(this.observer(ctx))));
+            case "", "name_decorated" -> tag(faction.describeTo(this.observer(ctx)));
 
             case "name", "tag" -> tag(faction.tag());
 

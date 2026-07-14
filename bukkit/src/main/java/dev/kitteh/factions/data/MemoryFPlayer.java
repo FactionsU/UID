@@ -1044,7 +1044,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             fp.sendMessage(Mini.parse(FactionsPlugin.instance().tl().claiming().claim().getClaimed(), fp,
                     FPlayerResolver.of("player", this),
                     FactionResolver.of(forFaction),
-                    FactionResolver.of("fromFaction", currentFaction)));
+                    FactionResolver.of("fromfaction", currentFaction)));
         }
 
         Board.board().claim(flocation, forFaction);

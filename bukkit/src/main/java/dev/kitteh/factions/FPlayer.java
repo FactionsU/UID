@@ -269,9 +269,9 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
     @Override
     default Component describeTo(@Nullable Participator that) {
         if (that instanceof FPlayer fp && fp.faction() == this.faction()) {
-            return this.nameWithTitle();
+            return this.nameWithTitle().color(this.textColorTo(that));
         } else {
-            return this.nameWithTag();
+            return this.nameWithTag().color(this.textColorTo(that));
         }
     }
 }

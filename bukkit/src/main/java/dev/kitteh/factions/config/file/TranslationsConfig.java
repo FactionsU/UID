@@ -25,11 +25,18 @@ public class TranslationsConfig {
     public static class AColorfulMessage {
         private Map<String, String> colors = new HashMap<>() {
             {
-                this.put("info", "yellow");
-                this.put("deny", "red");
-                this.put("negative", "red");
-                this.put("error", "red");
-                this.put("focus", "white");
+                this.put("info", "#85d2e7");
+                this.put("focus", "#acedff");
+                this.put("deny", "#ffb4ab");
+                this.put("negative", "#ffb4ab");
+                this.put("fail", "#ffb4ab");
+                this.put("denyfocus", "#ffdad6");
+                this.put("failfocus", "#ffdad6");
+                this.put("negativefocus", "#ffdad6");
+                this.put("positive", "#8ad6b7");
+                this.put("golden", "#e6c36c");
+                this.put("goldenfocus", "#ffdf95");
+                this.put("titling", "#6ce677");
             }
         };
 
@@ -366,7 +373,7 @@ public class TranslationsConfig {
                     }
 
                     @Comment("Supports <change>, <player>, <power>")
-                    private String added = "<info>Added <gold><change></gold> power to <player>. New total rounded power: <gold><power></gold>";
+                    private String added = "<info>Added <focus><change></focus> power to <player>. New total rounded power: <focus><power></focus>";
 
                     public String getAdded() {
                         return added;
@@ -408,7 +415,7 @@ public class TranslationsConfig {
                     }
 
                     @Comment("Supports <value>, <player>")
-                    private String set = "<info>Set <gold><value></gold> power to <player>.";
+                    private String set = "<info>Set <focus><value></focus> power to <player>.";
 
                     public String getSet() {
                         return set;
@@ -761,7 +768,7 @@ public class TranslationsConfig {
                     @Comment("Supports <upgrade>")
                     private String buttonDisabled = "<negative>✘</negative> <upgrade>";
                     @Comment("Supports <upgrade> (modified upgrades are marked)")
-                    private String buttonModified = "<gold>✎</gold> <upgrade>";
+                    private String buttonModified = "<golden>✎</golden> <upgrade>";
                     @Comment("Supports <count>")
                     private String reviewButton = "Review Changes (<count>)";
                     private String reviewButtonNone = "No Pending Changes";
@@ -1112,9 +1119,9 @@ public class TranslationsConfig {
                         }
                     };
                     @Comment("Supports <upgrade>, <from>, <to>")
-                    private String lineEnabled = "<gold><upgrade></gold>: status <from> → <to>";
+                    private String lineEnabled = "<golden><upgrade></golden>: status <from> → <to>";
                     @Comment("Supports <upgrade>")
-                    private String lineSettings = "<gold><upgrade></gold>: settings updated";
+                    private String lineSettings = "<golden><upgrade></golden>: settings updated";
                     private List<String> bodyNone = new ArrayList<>() {
                         {
                             this.add("There are no staged changes to apply.");
@@ -1565,7 +1572,7 @@ public class TranslationsConfig {
             private String invalidUrl = "<fail>Invalid URL!";
             @Comment("Supports <player>")
             private String changed = "<player><info> changed their link to:";
-            private String youMustBeModerator = "<deny>You must be <focus>Moderator</focus>.";
+            private String youMustBeModerator = "<deny>You must be <denyfocus>Moderator</denyfocus>.";
 
             public String getShow() {
                 return show;
@@ -1594,9 +1601,9 @@ public class TranslationsConfig {
                     super("View faction bans", "bans");
                 }
 
-                private String noFaction = "<deny>You are not in a Faction.";
+                private String noFaction = "<deny>You are not in a faction.";
                 @Comment("Supports <count>, <faction>")
-                private String header = "<gold>There are <negative><count></negative> bans for <faction>";
+                private String header = "<info>There are <negative><count></negative> bans for <faction>.";
                 @Comment("Supports <index>, <player>, <banner>, <date>")
                 private String entry = "<gray><index>. <negative><player:name> </negative>- <positive><banner:name> </positive>- <info><date>";
 
@@ -1641,14 +1648,14 @@ public class TranslationsConfig {
             public static class ListFactions extends AbsCommand {
                 @Comment("You can also use <page_current> and <page_count> in the header.\n" +
                         "Blank entry results in nothing being displayed.")
-                private String header = "<fuuid:title><dark_green>Faction List</dark_green> <gold><page_current></gold>/<gold><page_count></gold>";
+                private String header = "<fuuid:title>Faction List <focus><page_current></focus>/<focus><page_count></focus>";
                 @Comment("You can also use <page_current> and <page_count> in the header.\n" +
                         "Blank entry results in nothing being displayed.")
                 private String footer = "";
                 @Comment("You can use per-faction <faction:thing> placeholders here")
                 private String factionlessEntry = "<info>Factionless <faction:members_online_count> online";
                 @Comment("You can use per-faction <faction:thing> placeholders here")
-                private String entry = "<info><faction> <faction:members_online_count>/<faction:members_total_count> online, <gold>Land/Power/Max Power: <info><faction:claims_count></info>/<info><faction:power></info>/<info><faction:power_max>";
+                private String entry = "<info><faction> <faction:members_online_count>/<faction:members_total_count> online, Land/Power/Max Power: <focus><faction:claims_count></focus>/<focus><faction:power></focus>/<focus><faction:power_max>";
 
                 public String getHeader() {
                     return header;
@@ -1721,9 +1728,9 @@ public class TranslationsConfig {
             private String compassLetterEast = "E";
             private String compassLetterWest = "W";
             @Comment("Takes MiniMessage color names or hex (with # in front, e.g. #abcdef)")
-            private String compassColorDefault = "gold";
+            private String compassColorDefault = "#e6c36c";
             @Comment("Takes MiniMessage color names or hex (with # in front, e.g. #abcdef)")
-            private String compassColorActive = "red";
+            private String compassColorActive = "#ba1a1a";
 
             public String getCompassLetterNorth() {
                 return compassLetterNorth;
@@ -2195,16 +2202,16 @@ public class TranslationsConfig {
             private List<String> normalFormat = new ArrayList<>() {
                 {
                     this.add("<fuuid:title><faction>");
-                    this.add("<gold>Description: <info><faction:description>");
-                    this.add("<gold><faction:if_open>No invitation required</faction:if_open><faction:if_open:else>Invitation required</faction:if_open:else><faction:if_peaceful>.    <fuuid:color:peaceful>Peaceful");
-                    this.add("<gold>Land / Power / Max Power: <info><faction:claims_count></info> / <info><faction:power></info> / <info><faction:power_max>");
-                    this.add("<gold>Raidable: <faction:if_raidable><positive>Yes</faction:if_raidable><faction:if_raidable:else><negative>No");
-                    this.add("<gold>Founded: <info><faction:creation_date>");
-                    this.add("<faction:if_permanent><gold>This faction is permanent, remaining even with no members.");
-                    this.add("<fuuid:if_economy><fuuid:if_banks><gold>Balance: <info><faction:bank_balance></fuuid:if_banks>     <gold>Land value: <info><faction:claims_value>");
-                    this.add("<faction:if_allies><gold>Allies (<info><faction:allies_count></info>/<info><faction:allies_max></info>): {allies-list}");
-                    this.add("<faction:if_online><gold>Online: (<info><faction:members_online_count></info>/<info><faction:members_total_count></info>)<faction:if_online>: {online-list}");
-                    this.add("<faction:if_offline><gold>Offline: (<info><faction:members_offline_count></info>/<info><faction:members_total_count></info>)<faction:if_offline>: {offline-list}");
+                    this.add("<info>Description: <focus><faction:description>");
+                    this.add("<info><faction:if_open>No invitation required</faction:if_open><faction:if_open:else>Invitation required</faction:if_open:else><faction:if_peaceful>.    <fuuid:color:peaceful>Peaceful");
+                    this.add("<info>Land / Power / Max Power: <focus><faction:claims_count></focus> / <focus><faction:power></focus> / <focus><faction:power_max>");
+                    this.add("<info>Raidable: <faction:if_raidable><positive>Yes</faction:if_raidable><faction:if_raidable:else><negative>No");
+                    this.add("<info>Founded: <focus><faction:creation_date>");
+                    this.add("<faction:if_permanent><focus>This faction is permanent, remaining even with no members.");
+                    this.add("<fuuid:if_economy><info><fuuid:if_banks>Balance: <focus><faction:bank_balance></focus></fuuid:if_banks>     Land value: <focus><faction:claims_value>");
+                    this.add("<faction:if_allies><info>Allies (<focus><faction:allies_count></focus>/<focus><faction:allies_max></focus>): {allies-list}");
+                    this.add("<faction:if_online><info>Online: (<focus><faction:members_online_count></focus>/<focus><faction:members_total_count></focus>)<faction:if_online>: {online-list}");
+                    this.add("<faction:if_offline><info>Offline: (<focus><faction:members_offline_count></focus>/<focus><faction:members_total_count></focus>)<faction:if_offline>: {offline-list}");
                 }
             };
 
@@ -2448,8 +2455,8 @@ public class TranslationsConfig {
 
             public static class SubCmdReset extends AbsCommand {
                 @Comment("Supports <command>")
-                private String warning = "<#ff6666>Warning:</#ff6666> Are you sure you wish to reset all permissions? <click:run_command:\"<command>\"><#ff6666>[CONFIRM]</#ff6666></click>";
-                private String resetComplete = "<color:#66ebff>Permissions reset!";
+                private String warning = "<negative>Warning:</negative><info> Are you sure you wish to reset all permissions? <click:run_command:\"<command>\"><negative>[CONFIRM]</negative></click>";
+                private String resetComplete = "<info>Permissions reset!";
                 @Comment("must be a single word, to confirm resetting")
                 private String confirmWord = "confirm";
 
@@ -2681,7 +2688,7 @@ public class TranslationsConfig {
             @Comment("Supports <duration>")
             private String activatedScheduled = "<info>Scheduled shield activated! No explosions for <duration>.";
 
-            private String scheduleMenuSetTitle = "<green>Schedule Shield";
+            private String scheduleMenuSetTitle = "<titling>Schedule Shield";
             private List<String> scheduleMenuSetBody = new ArrayList<>() {
                 {
                     this.add("Choose the daily start time of your shield!");
@@ -2698,7 +2705,7 @@ public class TranslationsConfig {
             @WipeOnReload
             private transient @Nullable DateTimeFormatter scheduleMenuTimeFormatter;
 
-            private String scheduleMenuStatusTitle = "<green>Schedule Shield";
+            private String scheduleMenuStatusTitle = "<titling>Schedule Shield";
             private List<String> scheduleMenuStatusBodyNotSet = new ArrayList<>() {
                 {
                     this.add("No schedule currently set");
@@ -3157,7 +3164,7 @@ public class TranslationsConfig {
             @Comment("Supports <warp>")
             private String warped = "<info>Warped to <focus><warp></focus>.";
             @Comment("Supports <warp>")
-            private String invalidWarp = "<fail>Couldn't find warp <focus><warp></focus>.";
+            private String invalidWarp = "<fail>Couldn't find warp <failfocus><warp></failfocus>.";
             @Comment("Supports <warp>, <seconds>")
             private String warmup = "<info>You will teleport to <focus><warp></focus> in <focus><seconds></focus> seconds.";
             @Comment("Supports <faction>")
@@ -3248,15 +3255,15 @@ public class TranslationsConfig {
 
                 private String notInTerritory = "<deny>Not standing in faction territory";
                 @Comment("Supports <zone>")
-                private String alreadyZone = "<deny>Already standing in <green><zone></green>";
+                private String alreadyZone = "<deny>Already standing in <denyfocus><zone></denyfocus>";
                 @Comment("Supports <zone>")
-                private String cannotManage = "<deny>Cannot manage zone <green><zone></green>!";
+                private String cannotManage = "<deny>Cannot manage zone <denyfocus><zone></denyfocus>!";
                 @Comment("Supports <newzone>")
-                private String success = "<info>Successfully set zone <green><newzone></green>!";
+                private String success = "<info>Successfully set zone <focus><newzone></focus>!";
                 @Comment("Supports <zone>")
-                private String attemptingRadius = "<info>Setting zone <green><zone></green> for any chunks you can update";
+                private String attemptingRadius = "<info>Setting zone <focus><zone></focus> for any chunks you can update";
                 @Comment("Supports <zone>")
-                private String autoSetOn = "<info>Automatically setting zone for <green><zone></green> as you enter chunks";
+                private String autoSetOn = "<info>Automatically setting zone for <focus><zone></focus> as you enter chunks";
                 private String autoSetOff = "<info>Disabled automatic zone setting";
 
                 public Claim() {
@@ -3688,7 +3695,7 @@ public class TranslationsConfig {
             }
 
             @Comment("Supports <faction>, <faction:dtr_rounded>, <faction:dtr_max_rounded>")
-            private String dtr = "<faction><gold> - DTR / Max DTR: <info><faction:dtr_rounded> / <faction:dtr_max_rounded>";
+            private String dtr = "<info><faction> - DTR / Max DTR: <focus><faction:dtr_rounded></focus> / <focus><faction:dtr_max_rounded>";
 
             public String getDtr() {
                 return dtr;
@@ -3706,7 +3713,7 @@ public class TranslationsConfig {
             private String trailsChange = "<info>Faction flight trail <focus><state></focus>.";
             private String trailsParticleInvalid = "<fail>Invalid particle effect.";
             @Comment("Supports <particle>")
-            private String trailsParticlePerms = "<deny>Insufficient permission to use <focus><particle></focus>.";
+            private String trailsParticlePerms = "<deny>Insufficient permission to use <denyfocus><particle></denyfocus>.";
             @Comment("Supports <particle>")
             private String trailsParticleChange = "<info>Faction flight trail effect set to <focus><particle></focus>.";
             @Comment("Supports <faction>")
@@ -3828,11 +3835,11 @@ public class TranslationsConfig {
             }
 
             @Comment("Supports <player>, <faction>")
-            private String alreadyMember = "<player><info> is already a member of <faction>.";
+            private String alreadyMember = "<info><player> is already a member of <faction>.";
             @Comment("Supports <player>, <faction>")
-            private String deinviteRevoked = "<player><info> revoked your invitation to <focus><faction></focus>.";
+            private String deinviteRevoked = "<info><player> revoked your invitation to <focus><faction></focus>.";
             @Comment("Supports <player>, <target>")
-            private String deinviteRevokes = "<player><info> revoked <target>'s<info> invitation.";
+            private String deinviteRevokes = "<info><player> revoked <target>'s<info> invitation.";
             @Comment("Supports <player>")
             private String banned = "<deny><player> is banned from your Faction. Not sending an invite.";
             @Comment("Supports <player>, <target>")
@@ -4045,7 +4052,7 @@ public class TranslationsConfig {
             }
 
             @Comment("Supports <player>, <power>, <power_max>, <bonus_penalty>")
-            private String power = "<player><gold> - Power / maxpower: <info><power> / <power_max><bonus_penalty>";
+            private String power = "<info><player> - Power / maxpower: <focus><power></focus> / <focus><power_max><bonus_penalty></focus>";
             private String bonus = " (bonus: ";
             private String penalty = " (penalty: ";
 
@@ -4092,9 +4099,9 @@ public class TranslationsConfig {
 
             private String alreadyExists = "<deny>You are already teleporting, you must wait!";
             @Comment("Supports <range>")
-            private String outside = "<negative>Teleport cancelled because you left <focus><range></focus> block radius.";
+            private String outside = "<deny>Teleport cancelled because you left <denyfocus><range></denyfocus> block radius.";
             @Comment("Supports <x>, <y>, <z>")
-            private String teleport = "<deny>Teleported safely to <focus><x></focus>, <focus><y></focus>, <focus><z></focus>.";
+            private String teleport = "<info>Teleported safely to <focus><x></focus>, <focus><y></focus>, <focus><z></focus>.";
             private String failed = "<fail>Failed to find a safe place to get you out.";
             @Comment("Supports <seconds>")
             private String warmup = "<info>You will find a safe place to become unstuck in <focus><seconds></focus> seconds.";
@@ -4309,7 +4316,7 @@ public class TranslationsConfig {
             @Comment("Supports <criteria>, <page_current>, <page_count>")
             private String top = "Top Factions by <criteria>. Page <page_current>/<page_count>";
             @Comment("Supports <rank>, <faction>, <value>")
-            private String line = "<rank>. <gold><faction>: <red><value>";
+            private String line = "<rank>. <golden><faction>: <value>";
             @Comment("Supports <criteria>")
             private String invalid = "Could not sort by <criteria>. Try balance, online, members, power or land.";
 
@@ -4693,7 +4700,7 @@ public class TranslationsConfig {
             @Comment("Supports <faction>, <faction:description>")
             private String subtitle = "<gray><faction:description>";
             @Comment("Supports <oldfaction>, <newfaction>")
-            private String chat = "<gold>Leaving <oldfaction>. Entering <newfaction>.";
+            private String chat = "<info>Leaving <oldfaction>. Entering <newfaction>.";
 
             public String getTitle() {
                 return title;
@@ -5182,13 +5189,13 @@ public class TranslationsConfig {
         public static class Modification {
             @Comment("Example: You gained $30 for unclaiming land\n" +
                     "Supports <you>, <amount>, <for>")
-            private String gainSuccess = "<you> gained <focus><amount></focus> <for>.";
+            private String gainSuccess = "<info><you> gained <focus><amount></focus> <for>.";
             @Comment("Supports <you>, <amount>, <for>")
             private String gainFailure = "<info><you> would have gained <focus><amount></focus> <for>, but the deposit failed.";
             @Comment("Supports <you>, <amount>, <for>")
-            private String lossSuccess = "<you> lost <focus><amount></focus> <for>.";
+            private String lossSuccess = "<info><you> lost <focus><amount></focus> <for>.";
             @Comment("Supports <you>, <amount>, <to>")
-            private String lossFailure = "<you> cannot afford <focus><amount></focus> <to>.";
+            private String lossFailure = "<info><you> cannot afford <focus><amount></focus> <to>.";
 
             private String you = "You";
             private String yourFaction = "Your faction";
@@ -5221,16 +5228,16 @@ public class TranslationsConfig {
         public static class Transfer {
             private String format = "###,###.###";
             @Comment("Supports <entity> (faction/player name), <amount> (money string)")
-            private String balance = "<gold><entity>'s<info> balance is <focus><amount></focus>.";
+            private String balance = "<info><entity>'s balance is <focus><amount></focus>.";
             @Comment("Supports <you>, <target>")
             private String noPerm = "<deny><you> lacks permission to control <target>'s money.";
             private String disabled = "Faction econ is disabled.";
             @Comment("Supports <from>, <amount>, <to>")
-            private String cantAffordTransfer = "<fail><from> can't afford to transfer <focus><amount></focus> to <to>.";
+            private String cantAffordTransfer = "<fail><from> can't afford to transfer <failfocus><amount></failfocus> to <to>.";
             @Comment("Supports <amount>")
-            private String overBalCap = "<fail>The amount <focus><amount></focus> is over Essentials' balance cap.";
+            private String overBalCap = "<fail>The amount <failfocus><amount></failfocus> is over Essentials' balance cap.";
             @Comment("Supports <amount>, <to>, <from>")
-            private String transferUnable = "<fail>Unable to transfer <focus><amount></focus> to <focus><to></focus> from <from>.";
+            private String transferUnable = "<fail>Unable to transfer <failfocus><amount></failfocus> to <failfocus><to></failfocus> from <from>.";
             @Comment("Supports <from>, <amount>, <to>")
             private String transferGave = "<info><from> gave <focus><amount></focus> to <to>.";
             @Comment("Supports <to>, <amount>, <from>")
@@ -5240,7 +5247,7 @@ public class TranslationsConfig {
             @Comment("Supports <thing> (action noun like 'balance', 'value', 'refund')")
             private String off = "no <thing>";
             @Comment("Supports <entity> (name), <amount> (money), <action> (to do this)")
-            private String cantAffordAmount = "<negative><entity> can't afford <focus><amount></focus> <action>.";
+            private String cantAffordAmount = "<deny><entity> can't afford <denyfocus><amount></denyfocus> <action>.";
 
             public String getFormat() {
                 return format;
@@ -5544,15 +5551,15 @@ public class TranslationsConfig {
             @Comment("Supports <left_color>, <left_repeat>, <center>, <right_color>, <right_repeat>")
             private String titleMain = "<left_color><st><left_repeat></st></left_color><center><right_color><st><right_repeat></st></right_color>";
             @Comment("Supports <content>")
-            private String titleCenter = "<gold>[ </gold><dark_green><content></dark_green><gold> ]</gold>";
+            private String titleCenter = "<golden>[ </golden><titling><content></titling><golden> ]</golden>";
             private String leftRepeat = " ";
             private String rightRepeat = " ";
             @WipeOnReload
             private transient TextColor leftColorColor;
-            private String leftColor = "gold";
+            private String leftColor = "golden";
             @WipeOnReload
             private transient TextColor rightColorColor;
-            private String rightColor = "gold";
+            private String rightColor = "golden";
 
             public String getTitleMain() {
                 return this.titleMain;
@@ -5639,18 +5646,18 @@ public class TranslationsConfig {
                     "Supports per-faction <faction:thing> placeholders")
             private List<String> faction = new ArrayList<>() {
                 {
-                    this.add("<faction:if_leader><gold>Leader: <info><faction:leader>");
-                    this.add("<gold>Land / Power / Max Power: <info><faction:claims_count></info> / <info><faction:power></info> / <info><faction:power_max>");
-                    this.add("<gold>Raidable: <faction:if_raidable><positive>Yes</faction:if_raidable><faction:if_raidable:else><negative>No");
-                    this.add("<gold>Online: <info><faction:members_online_count></info>/<info><faction:members_total_count></info>");
+                    this.add("<faction:if_leader><info>Leader: <faction:leader>");
+                    this.add("<info>Land / Power / Max Power: <focus><faction:claims_count></focus> / <focus><faction:power></focus> / <focus><faction:power_max>");
+                    this.add("<info>Raidable: <faction:if_raidable><positive>Yes</faction:if_raidable><faction:if_raidable:else><negative>No");
+                    this.add("<info>Online: <focus><faction:members_online_count></focus>/<focus><faction:members_total_count></focus>");
                 }
             };
             @Comment("Player on-hover tooltip information\n" +
                     "Supports per-player <player:thing> placeholders")
             private List<String> player = new ArrayList<>() {
                 {
-                    this.add("<gold>Last Seen: <info><player:last_seen>");
-                    this.add("<gold>Power: <info><player:power></info> / <info><player:power_max>");
+                    this.add("<info>Last Seen: <focus><player:last_seen>");
+                    this.add("<info>Power: <focus><player:power></focus> / <focus><player:power_max>");
                 }
             };
 
@@ -5664,7 +5671,7 @@ public class TranslationsConfig {
         }
 
         public static class Misc {
-            private String noFactionPrefix = "<gold>[<positive>no-faction</positive>>]";
+            private String noFactionPrefix = "<info>[<focus>no-faction</focus>]";
             private String factionless = "factionless";
             private String infinity = "∞";
             private String roleName = "None";
@@ -6115,13 +6122,13 @@ public class TranslationsConfig {
             private String pvpSafezone = "<info>You may not harm other players in a <fuuid:color:safezone>safe zone</fuuid:color:peaceful>.";
 
             @Comment("Supports <thing>")
-            private String useWilderness = "<deny>You cannot use <focus><thing></focus> in the wilderness.";
+            private String useWilderness = "<deny>You cannot use <denyfocus><thing></denyfocus> in the wilderness.";
             @Comment("Supports <thing>")
-            private String useSafezone = "<deny>You cannot use <focus><thing></focus> in a safe zone.";
+            private String useSafezone = "<deny>You cannot use <denyfocus><thing></denyfocus> in a safe zone.";
             @Comment("Supports <thing>")
-            private String useWarzone = "<deny>You cannot use <focus><thing></focus> in a war zone.";
+            private String useWarzone = "<deny>You cannot use <denyfocus><thing></denyfocus> in a war zone.";
             @Comment("Supports <thing>, <faction>")
-            private String useTerritory = "<deny>You cannot use <focus><thing></focus> in the territory of <faction>.";
+            private String useTerritory = "<deny>You cannot use <denyfocus><thing></denyfocus> in the territory of <faction>.";
             @Comment("When not possible to display a more specific description, message like \"You cannot use this\" instead occurs.")
             private String useThis = "this";
 
@@ -6238,10 +6245,10 @@ public class TranslationsConfig {
 
             private List<String> normalContent = new ArrayList<>() {
                 {
-                    this.add("<gold>Your Faction");
+                    this.add("<golden>Your Faction");
                     this.add("<fuuid:color:relation:member><faction:name>");
-                    this.add("<gold>Your Power");
-                    this.add("<player:power>");
+                    this.add("<info>Your Power");
+                    this.add("<focus><player:power>");
                 }
             };
 
@@ -6250,10 +6257,10 @@ public class TranslationsConfig {
 
             private List<String> factionlessContent = new ArrayList<>() {
                 {
-                    this.add("<gold>Not in a faction");
+                    this.add("<golden>Not in a faction");
                     this.add("");
-                    this.add("<gold>Join a faction");
-                    this.add("<gold>  or make your own!");
+                    this.add("<info>Join a faction");
+                    this.add("<info>  or make your own!");
                 }
             };
 
@@ -6288,13 +6295,13 @@ public class TranslationsConfig {
             @Comment("Supports <player>, <faction>")
             private List<String> content = new ArrayList<>() {
                 {
-                    this.add("<gold>Power");
+                    this.add("<info>Power");
                     this.add("<faction:power>");
-                    this.add("<gold>Members");
+                    this.add("<info>Members");
                     this.add("<faction:members_online_count>/<faction:members_total_count>");
-                    this.add("<gold>Leader");
+                    this.add("<info>Leader");
                     this.add("<faction:leader>");
-                    this.add("<gold>Territory");
+                    this.add("<info>Territory");
                     this.add("<faction:claims_count>");
                 }
             };
@@ -6351,51 +6358,51 @@ public class TranslationsConfig {
             }
         }
 
-        private UpgradeDetail armorDurability = new UpgradeDetail("<green>Armor Durability Protection", "<green>Armor and shields lose durability slower while in your territory", "<green>-<percent>% durability loss for members and allies");
+        private UpgradeDetail armorDurability = new UpgradeDetail("<titling>Armor Durability Protection", "<titling>Armor and shields lose durability slower while in your territory", "<titling>-<percent>% durability loss for members and allies");
 
-        private UpgradeDetail beaconEffectControl = new UpgradeDetail("<green>Beacon Effect Control", "<green>Control who receives beacon effects in your territory", "");
+        private UpgradeDetail beaconEffectControl = new UpgradeDetail("<titling>Beacon Effect Control", "<titling>Control who receives beacon effects in your territory", "");
 
-        private UpgradeDetail cropYield = new UpgradeDetail("<green>Crop Yield Boost", "<green>Harvesting grown crops in your territory has a chance to drop extra", "<green><chance>% chance to multiply harvest by <increase>");
+        private UpgradeDetail cropYield = new UpgradeDetail("<titling>Crop Yield Boost", "<titling>Harvesting grown crops in your territory has a chance to drop extra", "<titling><chance>% chance to multiply harvest by <increase>");
 
-        private UpgradeDetail dtrClaimLimit = new UpgradeDetail("<green>Claim Limit Increase", "<green>Increases maximum faction territory", "<green>+<increase> claims");
+        private UpgradeDetail dtrClaimLimit = new UpgradeDetail("<titling>Claim Limit Increase", "<titling>Increases maximum faction territory", "<titling>+<increase> claims");
 
-        private UpgradeDetail dtrLossReduction = new UpgradeDetail("<green>DTR Loss Reduction", "<green>Lose less DTR when members die", "<green>-<percent>% DTR lost on death");
+        private UpgradeDetail dtrLossReduction = new UpgradeDetail("<titling>DTR Loss Reduction", "<titling>Lose less DTR when members die", "<titling>-<percent>% DTR lost on death");
 
-        private UpgradeDetail dtrRegen = new UpgradeDetail("<green>DTR Regeneration Boost", "<green>Regain DTR more quickly", "<green>+<percent>% DTR regeneration");
+        private UpgradeDetail dtrRegen = new UpgradeDetail("<titling>DTR Regeneration Boost", "<titling>Regain DTR more quickly", "<titling>+<percent>% DTR regeneration");
 
-        private UpgradeDetail fallDamage = new UpgradeDetail("<green>Fall Damage Reduction", "<green>Decreases fall damage in your own territory", "<green>-<percent>% reduction");
+        private UpgradeDetail fallDamage = new UpgradeDetail("<titling>Fall Damage Reduction", "<titling>Decreases fall damage in your own territory", "<titling>-<percent>% reduction");
 
-        private UpgradeDetail flight = new UpgradeDetail("<green>Flight", "<green>Enables flying in faction territory", "");
+        private UpgradeDetail flight = new UpgradeDetail("<titling>Flight", "<titling>Enables flying in faction territory", "");
 
-        private UpgradeDetail growth = new UpgradeDetail("<green>Growth", "<green>Boosts plant growth in faction land", "<green><chance>% chance to grow <boost> extra step");
+        private UpgradeDetail growth = new UpgradeDetail("<titling>Growth", "<titling>Boosts plant growth in faction land", "<titling><chance>% chance to grow <boost> extra step");
 
-        private UpgradeDetail maxMembers = new UpgradeDetail("<green>Member Limit Increase", "<green>Increases maximum number of faction members", "<green>+<increase> members");
+        private UpgradeDetail maxMembers = new UpgradeDetail("<titling>Member Limit Increase", "<titling>Increases maximum number of faction members", "<titling>+<increase> members");
 
-        private UpgradeDetail mobDrop = new UpgradeDetail("<green>Mob Drop Boost", "<green>Mobs killed in your territory have a chance to drop extra loot", "<green><chance>% chance to multiply drops by <increase>");
+        private UpgradeDetail mobDrop = new UpgradeDetail("<titling>Mob Drop Boost", "<titling>Mobs killed in your territory have a chance to drop extra loot", "<titling><chance>% chance to multiply drops by <increase>");
 
-        private UpgradeDetail mobExp = new UpgradeDetail("<green>Mob Experience Boost", "<green>Gain extra experience from mobs killed in your territory", "<green>+<percent>% experience");
+        private UpgradeDetail mobExp = new UpgradeDetail("<titling>Mob Experience Boost", "<titling>Gain extra experience from mobs killed in your territory", "<titling>+<percent>% experience");
 
-        private UpgradeDetail noHunger = new UpgradeDetail("<green>No Hunger Loss", "<green>Members do not lose hunger while in their own territory", "");
+        private UpgradeDetail noHunger = new UpgradeDetail("<titling>No Hunger Loss", "<titling>Members do not lose hunger while in their own territory", "");
 
-        private UpgradeDetail powerLossReduction = new UpgradeDetail("<green>Power Loss Reduction", "<green>Lose less power when members die", "<green>-<percent>% power lost on death");
+        private UpgradeDetail powerLossReduction = new UpgradeDetail("<titling>Power Loss Reduction", "<titling>Lose less power when members die", "<titling>-<percent>% power lost on death");
 
-        private UpgradeDetail powerMax = new UpgradeDetail("<green>Maximum Power Limit Increase", "<green>Increases the maximum limit on faction power", "<green>+<increase> power");
+        private UpgradeDetail powerMax = new UpgradeDetail("<titling>Maximum Power Limit Increase", "<titling>Increases the maximum limit on faction power", "<titling>+<increase> power");
 
-        private UpgradeDetail powerRegen = new UpgradeDetail("<green>Power Regeneration Boost", "<green>Members regain power more quickly", "<green>+<percent>% power regeneration");
+        private UpgradeDetail powerRegen = new UpgradeDetail("<titling>Power Regeneration Boost", "<titling>Members regain power more quickly", "<titling>+<percent>% power regeneration");
 
-        private UpgradeDetail redstoneAntiFlood = new UpgradeDetail("<green>Redstone Anti-Flood", "<green>Protect circuits from flooding", "");
+        private UpgradeDetail redstoneAntiFlood = new UpgradeDetail("<titling>Redstone Anti-Flood", "<titling>Protect circuits from flooding", "");
 
-        private UpgradeDetail shield = new UpgradeDetail("<green>Shield", "<green>Protect territory from explosions", "<green><duration> shield, cooldown <cooldown>");
+        private UpgradeDetail shield = new UpgradeDetail("<titling>Shield", "<titling>Protect territory from explosions", "<titling><duration> shield, cooldown <cooldown>");
 
-        private UpgradeDetail spawnerRate = new UpgradeDetail("<green>Spawner Spawn Rate", "<green>Spawners in your territory spawn more often", "<green>-<percent>% spawner delay");
+        private UpgradeDetail spawnerRate = new UpgradeDetail("<titling>Spawner Spawn Rate", "<titling>Spawners in your territory spawn more often", "<titling>-<percent>% spawner delay");
 
-        private UpgradeDetail territoryDamageBoost = new UpgradeDetail("<green>Territory Damage Boost", "<green>Deal extra damage in your territory", "<green>+<percent>% damage from members and allies");
+        private UpgradeDetail territoryDamageBoost = new UpgradeDetail("<titling>Territory Damage Boost", "<titling>Deal extra damage in your territory", "<titling>+<percent>% damage from members and allies");
 
-        private UpgradeDetail territoryDamageResistance = new UpgradeDetail("<green>Territory Damage Resistance", "<green>Take less damage from players in your territory", "<green>-<percent>% damage taken by members and allies");
+        private UpgradeDetail territoryDamageResistance = new UpgradeDetail("<titling>Territory Damage Resistance", "<titling>Take less damage from players in your territory", "<titling>-<percent>% damage taken by members and allies");
 
-        private UpgradeDetail tntBankFill = new UpgradeDetail("<green>TNT Bank Passive Fill", "<green>Adds free TNT into your faction's bank over time", "<green>+<increase> TNT per minute");
+        private UpgradeDetail tntBankFill = new UpgradeDetail("<titling>TNT Bank Passive Fill", "<titling>Adds free TNT into your faction's bank over time", "<titling>+<increase> TNT per minute");
 
-        private UpgradeDetail tntBankCapacity = new UpgradeDetail("<green>TNT Bank", "<green>Increases the maximum TNT your faction's TNT bank can hold", "<green><count> TNT capacity");
+        private UpgradeDetail tntBankCapacity = new UpgradeDetail("<titling>TNT Bank", "<titling>Increases the maximum TNT your faction's TNT bank can hold", "<green><count> TNT capacity");
 
         private UpgradeDetail vaults = new UpgradeDetail("<green>Vaults", "<green>Increases the number of faction vaults", "<green>+<increase> vaults");
 
@@ -6627,7 +6634,7 @@ public class TranslationsConfig {
             @Comment("Supports <faction>")
             private String alreadyOwn = "<faction><info> already own this land.";
             @Comment("Supports <count>")
-            private String members = "<deny>Factions must have at least <focus><count></focus> members to claim land.";
+            private String members = "<deny>Factions must have at least <denyfocus><count></denyfocus> members to claim land.";
             private String safeZone = "<deny>You can not claim a safe zone.";
             private String warZone = "<deny>You can not claim a war zone.";
             private String power = "<deny>You can't claim more land! You need more power!";
@@ -6637,9 +6644,9 @@ public class TranslationsConfig {
             private String contiguous = "<deny>You can only claim additional land which is connected to your first claim or controlled by another faction!";
             private String factionContiguous = "<deny>You can only claim additional land which is connected to your first claim!";
             @Comment("Supports <count> (the maximum number of chunks allowed in a connected claim)")
-            private String contiguousTotalChunks = "<deny>You can't claim more than <focus><count></focus> chunks in one connected area!";
+            private String contiguousTotalChunks = "<deny>You can't claim more than <denyfocus><count></denyfocus> chunks in one connected area!";
             @Comment("Supports <count> (the maximum X or Z distance, in chunks, allowed across a connected claim)")
-            private String contiguousDistance = "<deny>Your connected claim can't span more than <focus><count></focus> chunks!";
+            private String contiguousDistance = "<deny>Your connected claim can't span more than <denyfocus><count></denyfocus> chunks!";
             @Comment("Supports <faction> (the faction that owns the land)")
             private String peaceful = "<faction><info> owns this land. Your faction is peaceful, so you cannot claim land from other factions.";
             @Comment("Supports <faction> (the faction that owns the land)")
@@ -6653,8 +6660,8 @@ public class TranslationsConfig {
             private String outsideWorldBorder = "<info>Your claim is outside the border.";
             @Comment("Supports <count>")
             private String outsideBorderBuffer = "<info>Your claim is outside the border. <count> chunks away from world edge required.";
-            @Comment("Supports <player> (claimant), <faction> (claimed for), <fromFaction> (claimed from)")
-            private String claimed = "<info><player> claimed land for <focus><faction></focus> from <focus><fromFaction></focus>.";
+            @Comment("Supports <player> (claimant), <faction> (claimed for), <fromfaction> (claimed from)")
+            private String claimed = "<info><player> claimed land for <focus><faction></focus> from <focus><fromfaction></focus>.";
             private String youAreHere = "You are here";
 
             public String getProtectedLand() {
@@ -6774,7 +6781,7 @@ public class TranslationsConfig {
             private String notAMember = "<deny>You are not a member of any faction.";
             private String wrongFaction = "<deny>You don't own this land.";
             @Comment("Supports <player> (who unclaimed)")
-            private String factionUnclaimed = "<player><info> unclaimed some land.";
+            private String factionUnclaimed = "<info><player> unclaimed some land.";
 
             public String getWrongFactionOther() {
                 return wrongFactionOther;
@@ -6834,7 +6841,7 @@ public class TranslationsConfig {
             private String noPowerLossRegion = "<info>You didn't lose any power due to the region you were in.";
             private String noPowerLossWarzone = "<info>You didn't lose any power since you were in a war zone.";
             @Comment("Supports <power>, <maxpower>")
-            private String powerLossWarzone = "<negative>The world you are in has power loss normally disabled, but you still lost power since you were in a war zone.\n<info>Your power is now <focus><power> / <maxpower></focus>.";
+            private String powerLossWarzone = "<negative>The world you are in has power loss normally disabled, but you still lost power since you were in a war zone.\n<info>Your power is now <negativefocus><power> / <maxpower></negativefocus>.";
             private String noPowerLossWilderness = "<info>You didn't lose any power since you were in the wilderness.";
             private String noPowerLossWorld = "<info>You didn't lose any power due to the world you died in.";
             private String noPowerLossPeaceful = "<info>You didn't lose any power since you are in a peaceful faction.";

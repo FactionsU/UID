@@ -60,13 +60,7 @@ public final class FPlayerResolver extends ObservedResolver {
         String main = arguments.hasNext() ? arguments.pop().lowerValue() : "";
 
         return switch (main) {
-            case "", "name_decorated" -> {
-                if (this.observer(ctx) instanceof FPlayer fp && fp.faction() == observed.faction()) {
-                    yield tag(observed.nameWithTitle());
-                } else {
-                    yield tag(observed.nameWithTag());
-                }
-            }
+            case "", "name_decorated" -> tag(observed.describeTo(this.observer(ctx)));
 
             case "name" -> tag(observed.name());
 

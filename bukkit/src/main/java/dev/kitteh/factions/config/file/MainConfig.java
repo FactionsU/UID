@@ -6,6 +6,7 @@ import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.ConfigColorResolver;
 import dev.kitteh.factions.util.MiscUtil;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -51,7 +52,7 @@ public class MainConfig {
 
         if (name.startsWith("#")) {
             ret = TextColor.fromHexString(name);
-        } else {
+        } else if ((ret = ConfigColorResolver.resolver().color(name)) == null) {
             ret = NamedTextColor.NAMES.value(name.toLowerCase());
         }
 
@@ -60,71 +61,71 @@ public class MainConfig {
 
     public class Colors {
         public class Relations {
-            private String member = "GREEN";
+            private String member = "#8ad6b7";
             @WipeOnReload
             private transient TextColor memberColor;
-            private String ally = "LIGHT_PURPLE";
+            private String ally = "#f0b3e7";
             @WipeOnReload
             private transient TextColor allyColor;
-            private String truce = "DARK_PURPLE";
+            private String truce = "#cebdfe";
             @WipeOnReload
             private transient TextColor truceColor;
-            private String neutral = "WHITE";
+            private String neutral = "#dee3e5";
             @WipeOnReload
             private transient TextColor neutralColor;
-            private String enemy = "RED";
+            private String enemy = "#ff8b81";
             @WipeOnReload
             private transient TextColor enemyColor;
-            private String peaceful = "GOLD";
+            private String peaceful = "#ffdf95";
             @WipeOnReload
             private transient TextColor peacefulColor;
 
             public TextColor getMember() {
-                return memberColor = getColor(this.member, this.memberColor, NamedTextColor.GREEN);
+                return memberColor = getColor(this.member, this.memberColor, TextColor.fromHexString("#8ad6b7"));
             }
 
             public TextColor getAlly() {
-                return allyColor = getColor(this.ally, this.allyColor, NamedTextColor.LIGHT_PURPLE);
+                return allyColor = getColor(this.ally, this.allyColor, TextColor.fromHexString("#f0b3e7"));
             }
 
             public TextColor getTruce() {
-                return truceColor = getColor(this.truce, this.truceColor, NamedTextColor.DARK_PURPLE);
+                return truceColor = getColor(this.truce, this.truceColor, TextColor.fromHexString("#cebdfe"));
             }
 
             public TextColor getNeutral() {
-                return neutralColor = getColor(this.neutral, this.neutralColor, NamedTextColor.WHITE);
+                return neutralColor = getColor(this.neutral, this.neutralColor, TextColor.fromHexString("#dee3e5"));
             }
 
             public TextColor getEnemy() {
-                return enemyColor = getColor(this.enemy, this.enemyColor, NamedTextColor.RED);
+                return enemyColor = getColor(this.enemy, this.enemyColor, TextColor.fromHexString("#ff8b81"));
             }
 
             public TextColor getPeaceful() {
-                return peacefulColor = getColor(this.peaceful, this.peacefulColor, NamedTextColor.GOLD);
+                return peacefulColor = getColor(this.peaceful, this.peacefulColor, TextColor.fromHexString("#ffdf95"));
             }
         }
 
         public class Factions {
-            private String wilderness = "GRAY";
+            private String wilderness = "#91d689";
             @WipeOnReload
             private transient TextColor wildernessColor;
-            private String safezone = "GOLD";
+            private String safezone = "#87e8de";
             @WipeOnReload
             private transient TextColor safezoneColor;
-            private String warzone = "DARK_RED";
+            private String warzone = "#e6b46c";
             @WipeOnReload
             private transient TextColor warzoneColor;
 
             public TextColor getWilderness() {
-                return wildernessColor = getColor(this.wilderness, this.wildernessColor, NamedTextColor.GRAY);
+                return wildernessColor = getColor(this.wilderness, this.wildernessColor, TextColor.fromHexString("#91d689"));
             }
 
             public TextColor getSafezone() {
-                return safezoneColor = getColor(this.safezone, this.safezoneColor, NamedTextColor.GOLD);
+                return safezoneColor = getColor(this.safezone, this.safezoneColor, TextColor.fromHexString("#87e8de"));
             }
 
             public TextColor getWarzone() {
-                return warzoneColor = getColor(this.warzone, this.warzoneColor, NamedTextColor.DARK_RED);
+                return warzoneColor = getColor(this.warzone, this.warzoneColor, TextColor.fromHexString("#e6b46c"));
             }
         }
 
@@ -2694,12 +2695,12 @@ public class MainConfig {
         private boolean showNeutralFactionsOnMap = true;
         private boolean showEnemyFactions = true;
         private boolean showTruceFactions = true;
-        private String selfColor = "AQUA";
+        private String selfColor = "#89d6d2";
         @WipeOnReload
         private transient TextColor selfColorColor; // Quality name, self.
 
         public TextColor getSelfColor() {
-            return selfColorColor = getColor(this.selfColor, this.selfColorColor, NamedTextColor.GREEN);
+            return selfColorColor = getColor(this.selfColor, this.selfColorColor, TextColor.fromHexString("#89d6d2"));
         }
 
         public int getHeight() {
