@@ -121,25 +121,12 @@ allprojects {
 
         exclusiveContent {
             forRepository {
-                maven("https://repo.cwhead.dev/repository/maven-releases/") {
-                    metadataSources {
-                        artifact()
-                    }
-                }
-            }
-
-            filter {
-                includeGroup("com.ranull")
-            }
-        }
-
-        exclusiveContent {
-            forRepository {
                 maven("https://dependency.download/thirdparty")
             }
 
             filter {
                 includeModule("com.meteordevelopments", "duels-api")
+                includeModule("com.ranull", "GravesX")
                 includeModule("me.youhavetrouble", "YardWatch")
                 includeModule("net.milkbowl.vault", "VaultAPI")
             }
