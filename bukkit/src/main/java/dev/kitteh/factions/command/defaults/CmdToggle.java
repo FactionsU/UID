@@ -7,10 +7,9 @@ import dev.kitteh.factions.command.defaults.toggle.CmdToggleChat;
 import dev.kitteh.factions.command.defaults.toggle.CmdToggleLogins;
 import dev.kitteh.factions.command.defaults.toggle.CmdToggleScoreboard;
 import dev.kitteh.factions.command.defaults.toggle.CmdToggleSeeChunk;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdToggle implements Cmd {

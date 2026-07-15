@@ -4,12 +4,12 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.defaults.CmdConfirm;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.event.FactionDisbandEvent;
 import dev.kitteh.factions.integration.Econ;
@@ -17,20 +17,19 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdForceDisband implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().disband();
+            var tl = Confs.tl().commands().disband();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -47,7 +46,7 @@ public class CmdForceDisband implements Cmd {
     }
 
     private void doIt(Sender sender, Faction faction, boolean confirmed) {
-        var tl = FactionsPlugin.instance().tl().commands().disband();
+        var tl = Confs.tl().commands().disband();
 
         if (!faction.isNormal()) {
             sender.sendRichMessage(tl.getDeniedSpecial(), FactionResolver.of(faction));
@@ -91,7 +90,7 @@ public class CmdForceDisband implements Cmd {
             }
         }
 
-        if (FactionsPlugin.instance().conf().logging().isFactionDisband()) {
+        if (Confs.main().logging().isFactionDisband()) {
             AbstractFactionsPlugin.instance().log("The faction " + faction.tag() + " (" + faction.id() + ") was disbanded by " + nameForLog + ".");
         }
 

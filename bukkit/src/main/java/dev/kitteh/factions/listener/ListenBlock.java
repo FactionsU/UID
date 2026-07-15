@@ -4,9 +4,10 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.protection.Protection;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.WorldUtil;
@@ -38,9 +39,9 @@ import org.bukkit.material.Directional;
 import java.util.Set;
 
 public class ListenBlock implements Listener {
-    private final FactionsPlugin plugin;
+    private final AbstractFactionsPlugin plugin;
 
-    public ListenBlock(FactionsPlugin plugin) {
+    public ListenBlock(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -60,7 +61,7 @@ public class ListenBlock implements Listener {
         }
 
         Faction targetFaction = new FLocation(event.getBlock().getLocation()).faction();
-        if (targetFaction.isNormal() && !targetFaction.isPeaceful() && this.plugin.conf().factions().specialCase().getIgnoreBuildMaterials().contains(event.getBlock().getType())) {
+        if (targetFaction.isNormal() && !targetFaction.isPeaceful() && Confs.main().factions().specialCase().getIgnoreBuildMaterials().contains(event.getBlock().getType())) {
             return;
         }
 
@@ -75,7 +76,7 @@ public class ListenBlock implements Listener {
             return;
         }
 
-        if (this.plugin.conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
+        if (Confs.main().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
                 new FLocation(event.getBlock().getLocation()).faction().isNormal()) {
             return;
         }
@@ -91,7 +92,7 @@ public class ListenBlock implements Listener {
             return;
         }
 
-        if (this.plugin.conf().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
+        if (Confs.main().factions().protection().getBreakExceptions().contains(event.getBlock().getType()) &&
                 new FLocation(event.getBlock().getLocation()).faction().isNormal()) {
             return;
         }
@@ -130,7 +131,7 @@ public class ListenBlock implements Listener {
             return;
         }
 
-        MainConfig.Factions.Protection protConf = this.plugin.conf().factions().protection();
+        MainConfig.Factions.Protection protConf = Confs.main().factions().protection();
 
         if (endFaction.hasMembersOnline()) {
             if (!protConf.getTerritoryDenyUsageMaterials().contains(material)) {
@@ -168,9 +169,9 @@ public class ListenBlock implements Listener {
             return;
         }
 
-        boolean exp = this.plugin.conf().exploits().isLiquidFlow();
-        boolean safe = this.plugin.conf().factions().protection().isSafeZonePreventLiquidFlowIn();
-        boolean war = this.plugin.conf().factions().protection().isWarZonePreventLiquidFlowIn();
+        boolean exp = Confs.main().exploits().isLiquidFlow();
+        boolean safe = Confs.main().factions().protection().isSafeZonePreventLiquidFlowIn();
+        boolean war = Confs.main().factions().protection().isWarZonePreventLiquidFlowIn();
 
         if ((exp || safe || war) && event.getBlock().isLiquid() && event.getToBlock().isEmpty()) {
             Faction from = new FLocation(event.getBlock()).faction();
@@ -203,7 +204,7 @@ public class ListenBlock implements Listener {
         }
 
         if (event.getBlock().getType() == Material.ICE &&
-                this.plugin.conf().factions().protection().isTerritoryDenyIceFormation() &&
+                Confs.main().factions().protection().isTerritoryDenyIceFormation() &&
                 new FLocation(event.getBlock()).faction().isNormal()) {
             event.setCancelled(true);
         }
@@ -250,7 +251,7 @@ public class ListenBlock implements Listener {
             }
 
             boolean online = faction.hasMembersOnline();
-            MainConfig.Factions.Protection protection = FactionsPlugin.instance().conf().factions().protection();
+            MainConfig.Factions.Protection protection = Confs.main().factions().protection();
 
             if ((faction.isWilderness() && !protection.getWorldsNoWildernessProtection().contains(loc.getWorld().getName()) && (protection.isWildernessBlockCreepers() || protection.isWildernessBlockFireballs() || protection.isWildernessBlockTNT())) ||
                     (faction.isNormal() && (online ? (protection.isTerritoryBlockCreepers() || protection.isTerritoryBlockFireballs() || protection.isTerritoryBlockTNT()) : (protection.isTerritoryBlockCreepersWhenOffline() || protection.isTerritoryBlockFireballsWhenOffline() || protection.isTerritoryBlockTNTWhenOffline()))) ||
@@ -311,7 +312,7 @@ public class ListenBlock implements Listener {
             }
             case Wither ignored -> {
                 Faction faction = new FLocation(loc).faction();
-                MainConfig.Factions.Protection protection = FactionsPlugin.instance().conf().factions().protection();
+                MainConfig.Factions.Protection protection = Confs.main().factions().protection();
                 // it's a bit crude just using fireball protection, but I'd rather not add in a whole new set of xxxBlockWitherExplosion or whatever
                 if ((faction.isWilderness() && protection.isWildernessBlockFireballs() && !protection.getWorldsNoWildernessProtection().contains(loc.getWorld().getName())) ||
                         (faction.isNormal() && (faction.hasMembersOnline() ? protection.isTerritoryBlockFireballs() : protection.isTerritoryBlockFireballsWhenOffline())) ||
@@ -331,7 +332,7 @@ public class ListenBlock implements Listener {
             return false;
         }
         // quick check to see if all Enderman deny options are enabled; if so, no need to check location
-        MainConfig.Factions.Protection protection = FactionsPlugin.instance().conf().factions().protection();
+        MainConfig.Factions.Protection protection = Confs.main().factions().protection();
         if (protection.isWildernessDenyEndermanBlocks() &&
                 protection.isTerritoryDenyEndermanBlocks() &&
                 protection.isTerritoryDenyEndermanBlocksWhenOffline() &&

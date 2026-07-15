@@ -1,6 +1,6 @@
 package dev.kitteh.factions.tagresolver;
 
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -40,7 +40,7 @@ public class ConfigColorResolver implements TagResolver {
     public static void update() {
         Map<String, Tag> newMap = new HashMap<>();
         Map<String, TextColor> newColors = new HashMap<>();
-        FactionsPlugin.instance().tl().aColorfulMessage().getColors().forEach((name, color) -> {
+        Confs.tl().aColorfulMessage().getColors().forEach((name, color) -> {
             TextColor textColor;
             if (color.startsWith("#")) {
                 textColor = TextColor.fromHexString(color);

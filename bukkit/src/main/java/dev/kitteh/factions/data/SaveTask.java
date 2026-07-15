@@ -1,6 +1,6 @@
 package dev.kitteh.factions.data;
 
-import dev.kitteh.factions.*;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.plugin.Instances;
 import org.jetbrains.annotations.ApiStatus;
 

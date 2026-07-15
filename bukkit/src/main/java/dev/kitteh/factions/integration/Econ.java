@@ -3,9 +3,9 @@ package dev.kitteh.factions.integration;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.command.defaults.top.TopMoneyCache;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.ComponentDispatcher;
@@ -44,17 +44,17 @@ public class Econ {
             return;
         }
 
-        String localeString = FactionsPlugin.instance().conf().economy().getLocale();
+        String localeString = Confs.main().economy().getLocale();
         DecimalFormat f;
         try {
             String[] split = localeString.split("_");
-            f = new DecimalFormat(FactionsPlugin.instance().tl().economy().transfer().getFormat(), DecimalFormatSymbols.getInstance(Locale.of(split[0], split[1])));
+            f = new DecimalFormat(Confs.tl().economy().transfer().getFormat(), DecimalFormatSymbols.getInstance(Locale.of(split[0], split[1])));
             format = f;
         } catch (Exception e) {
-            AbstractFactionsPlugin.instance().getLogger().warning("Fell over on invalid default econ format " + FactionsPlugin.instance().tl().economy().transfer().getFormat() + " with locale '" + localeString + "'");
+            AbstractFactionsPlugin.instance().getLogger().warning("Fell over on invalid default econ format " + Confs.tl().economy().transfer().getFormat() + " with locale '" + localeString + "'");
         }
 
-        String integrationFail = "Economy integration is " + (FactionsPlugin.instance().conf().economy().isEnabled() ? "enabled, but" : "disabled, and") + " the plugin \"Vault\" ";
+        String integrationFail = "Economy integration is " + (Confs.main().economy().isEnabled() ? "enabled, but" : "disabled, and") + " the plugin \"Vault\" ";
 
         if (Bukkit.getServer().getPluginManager().getPlugin("Vault") == null) {
             AbstractFactionsPlugin.instance().getLogger().info(integrationFail + "is not installed.");
@@ -70,7 +70,7 @@ public class Econ {
 
         AbstractFactionsPlugin.instance().getLogger().info("Found economy plugin through Vault: " + econ.getName());
 
-        if (!FactionsPlugin.instance().conf().economy().isEnabled()) {
+        if (!Confs.main().economy().isEnabled()) {
             AbstractFactionsPlugin.instance().getLogger().info("NOTE: Economy is disabled. You can enable it in config/main.conf");
         } else {
             TopMoneyCache.start(AbstractFactionsPlugin.instance());
@@ -78,12 +78,12 @@ public class Econ {
     }
 
     public static boolean shouldBeUsed() {
-        return FactionsPlugin.instance().conf().economy().isEnabled() && econ != null && econ.isEnabled();
+        return Confs.main().economy().isEnabled() && econ != null && econ.isEnabled();
     }
 
     @ApiStatus.AvailableSince("4.3.0")
     public static boolean shouldBeUsedWithBanks() {
-        return shouldBeUsed() && FactionsPlugin.instance().conf().economy().isBankEnabled();
+        return shouldBeUsed() && Confs.main().economy().isBankEnabled();
     }
 
     public static boolean isSetup() {
@@ -95,7 +95,7 @@ public class Econ {
     }
 
     private static String getWorld(OfflinePlayer op) {
-        return (op instanceof Player) ? ((Player) op).getWorld().getName() : FactionsPlugin.instance().conf().economy().getDefaultWorld();
+        return (op instanceof Player) ? ((Player) op).getWorld().getName() : Confs.main().economy().getDefaultWorld();
     }
 
     public static void modifyUniverseMoney(double delta) {
@@ -103,7 +103,7 @@ public class Econ {
             return;
         }
 
-        String universeAccount = FactionsPlugin.instance().conf().economy().getUniverseAccount();
+        String universeAccount = Confs.main().economy().getUniverseAccount();
 
         if (universeAccount == null || universeAccount.isEmpty()) {
             return;
@@ -117,8 +117,8 @@ public class Econ {
     }
 
     private static OfflinePlayer getUniverseOfflinePlayer() {
-        String universeAccount = FactionsPlugin.instance().conf().economy().getUniverseAccount();
-        String universeUUID = FactionsPlugin.instance().conf().economy().getUniverseAccountUUID();
+        String universeAccount = Confs.main().economy().getUniverseAccount();
+        String universeUUID = Confs.main().economy().getUniverseAccountUUID();
 
         if (universeUUID == null) {
             return getOfflinePlayerForName(universeAccount);
@@ -131,7 +131,7 @@ public class Econ {
             AbstractFactionsPlugin.instance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
-        to.sendMessage(Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getBalance(), to,
+        to.sendMessage(Mini.parse(Confs.tl().economy().transfer().getBalance(), to,
                 Placeholder.component("entity", about.describeTo(to)),
                 Placeholder.unparsed("amount", Econ.moneyString(getBalance(about)))));
     }
@@ -141,7 +141,7 @@ public class Econ {
             AbstractFactionsPlugin.instance().log(Level.WARNING, "Vault does not appear to be hooked into an economy plugin.");
             return;
         }
-        ComponentDispatcher.send(to, Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getBalance(),
+        ComponentDispatcher.send(to, Mini.parse(Confs.tl().economy().transfer().getBalance(),
                 Placeholder.unparsed("entity", about.tag()),
                 Placeholder.unparsed("amount", Econ.moneyString(getBalance(about)))));
     }
@@ -178,7 +178,7 @@ public class Econ {
         }
 
         // Otherwise you may not! ;,,;
-        i.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getNoPerm(),
+        i.sendRichMessage(Confs.tl().economy().transfer().getNoPerm(),
                 Placeholder.component("you", i.describeTo(i)),
                 Placeholder.component("target", you.describeTo(i)));
         return false;
@@ -190,7 +190,7 @@ public class Econ {
 
     public static boolean transferMoney(Participator invoker, Participator from, Participator to, double amount, boolean notify) {
         if (!shouldBeUsed()) {
-            invoker.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getDisabled());
+            invoker.sendRichMessage(Confs.tl().economy().transfer().getDisabled());
             return false;
         }
 
@@ -215,7 +215,7 @@ public class Econ {
         if (!has(fromAcc, amount)) {
             // There was not enough money to pay
             if (notify) {
-                invoker.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getCantAffordTransfer(),
+                invoker.sendRichMessage(Confs.tl().economy().transfer().getCantAffordTransfer(),
                         Placeholder.component("from", from.describeTo(invoker)),
                         Placeholder.unparsed("amount", moneyString(amount)),
                         Placeholder.component("to", to.describeTo(invoker)));
@@ -225,8 +225,8 @@ public class Econ {
         }
 
         // Check if the new balance is over Essential's money cap.
-        if (FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.isOverBalCap(getBalance(toAcc) + amount)) {
-            invoker.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getOverBalCap(),
+        if (AbstractFactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.isOverBalCap(getBalance(toAcc) + amount)) {
+            invoker.sendRichMessage(Confs.tl().economy().transfer().getOverBalCap(),
                     Placeholder.unparsed("amount", moneyString(amount)));
             return false;
         }
@@ -247,7 +247,7 @@ public class Econ {
 
         // if we get here something with the transaction failed
         if (notify) {
-            invoker.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getTransferUnable(),
+            invoker.sendRichMessage(Confs.tl().economy().transfer().getTransferUnable(),
                     Placeholder.unparsed("amount", moneyString(amount)),
                     Placeholder.component("to", to.describeTo(invoker)),
                     Placeholder.component("from", from.describeTo(invoker)));
@@ -270,7 +270,7 @@ public class Econ {
         addFPlayers(recipients, from);
         addFPlayers(recipients, to);
 
-        var transfer = FactionsPlugin.instance().tl().economy().transfer();
+        var transfer = Confs.tl().economy().transfer();
         if (invoker == from) {
             for (FPlayer recipient : recipients) {
                 recipient.sendMessage(Mini.parse(transfer.getTransferGave(), recipient,
@@ -310,7 +310,7 @@ public class Econ {
 
         if (!affordable) {
             if (!toDoThis.isEmpty()) {
-                ep.sendRichMessage(FactionsPlugin.instance().tl().economy().transfer().getCantAffordAmount(),
+                ep.sendRichMessage(Confs.tl().economy().transfer().getCantAffordAmount(),
                         Placeholder.component("entity", ep.describeTo(ep)),
                         Placeholder.unparsed("amount", moneyString(delta)),
                         Placeholder.unparsed("action", toDoThis));
@@ -335,7 +335,7 @@ public class Econ {
 
         OfflinePlayer acc = checkStatus(participator.asOfflinePlayer());
 
-        var tl = FactionsPlugin.instance().tl().economy().modification();
+        var tl = Confs.tl().economy().modification();
 
         String you = participator instanceof FPlayer ? tl.getYou() : tl.getYourFaction();
 
@@ -403,12 +403,12 @@ public class Econ {
         }
 
         // basic claim cost, plus land inflation cost, minus the potential bonus given for claiming from another faction
-        return FactionsPlugin.instance().conf().economy().getCostClaimWilderness() + (FactionsPlugin.instance().conf().economy().getCostClaimWilderness() * FactionsPlugin.instance().conf().economy().getClaimAdditionalMultiplier() * ownedLand) - (takingFromAnotherFaction ? FactionsPlugin.instance().conf().economy().getCostClaimFromFactionBonus() : 0);
+        return Confs.main().economy().getCostClaimWilderness() + (Confs.main().economy().getCostClaimWilderness() * Confs.main().economy().getClaimAdditionalMultiplier() * ownedLand) - (takingFromAnotherFaction ? Confs.main().economy().getCostClaimFromFactionBonus() : 0);
     }
 
     // calculate refund amount for unclaiming land
     public static double calculateClaimRefund(int ownedLand) {
-        return calculateClaimCost(ownedLand - 1, false) * FactionsPlugin.instance().conf().economy().getClaimRefundMultiplier();
+        return calculateClaimCost(ownedLand - 1, false) * Confs.main().economy().getClaimRefundMultiplier();
     }
 
     // calculate value of all owned land
@@ -422,7 +422,7 @@ public class Econ {
 
     // calculate refund amount for all owned land
     public static double calculateTotalLandRefund(int ownedLand) {
-        return calculateTotalLandValue(ownedLand) * FactionsPlugin.instance().conf().economy().getClaimRefundMultiplier();
+        return calculateTotalLandValue(ownedLand) * Confs.main().economy().getClaimRefundMultiplier();
     }
 
 

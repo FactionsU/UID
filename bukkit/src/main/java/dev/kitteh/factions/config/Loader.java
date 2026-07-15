@@ -11,7 +11,6 @@ import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -24,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@ApiStatus.Internal
 public class Loader {
     public static void loadAndSave(String file, Object config) throws IOException, IllegalAccessException {
         HoconConfigurationLoader loader = getLoader(file);

@@ -2,22 +2,21 @@ package dev.kitteh.factions.command.defaults.set;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.parser.standard.StringParser;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.parser.standard.StringParser;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -28,7 +27,7 @@ public class CmdSetLink implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().link();
+            var tl = Confs.tl().commands().link();
             Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.LINK).and(Cloudy.isAtLeastRole(Role.MODERATOR))));
@@ -39,13 +38,13 @@ public class CmdSetLink implements Cmd {
             );
             manager.command(build.meta(HIDE_IN_HELP, true)
                     .handler(ctx -> help.queryCommands(
-                            Cmd.rootCommand() + " " + FactionsPlugin.instance().tl().commands().set().getFirstAlias() + " " + tl.getFirstAlias() + " <url>", ctx.sender())
+                            Cmd.rootCommand() + " " + Confs.tl().commands().set().getFirstAlias() + " " + tl.getFirstAlias() + " <url>", ctx.sender())
                     ));
         };
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().link();
+        var tl = Confs.tl().commands().link();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
 

@@ -3,7 +3,7 @@ package dev.kitteh.factions.landraidcontrol;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import org.bukkit.entity.Player;
@@ -51,23 +51,23 @@ public sealed interface LandRaidControl permits DTRControl, PowerControl {
     void update(FPlayer player);
 
     default void announceRaidable(Faction faction) {
-        if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceRaidable()) {
+        if (Confs.main().factions().landRaidControl().isAnnounceRaidable()) {
             Stream<FPlayer> stream = FPlayers.fPlayers().online().stream();
-            if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
+            if (Confs.main().factions().landRaidControl().isAnnounceToEnemyOnly()) {
                 stream = stream.filter(fp -> fp.faction() == faction || fp.relationTo(faction) == Relation.ENEMY);
             }
-            stream.forEach(fp -> fp.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getRaidableNow(),
+            stream.forEach(fp -> fp.sendRichMessage(Confs.tl().factionEvents().getRaidableNow(),
                     FactionResolver.of(faction)));
         }
     }
 
     default void announceNotRaidable(Faction faction) {
-        if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceNotRaidable()) {
+        if (Confs.main().factions().landRaidControl().isAnnounceNotRaidable()) {
             Stream<FPlayer> stream = FPlayers.fPlayers().online().stream();
-            if (FactionsPlugin.instance().conf().factions().landRaidControl().isAnnounceToEnemyOnly()) {
+            if (Confs.main().factions().landRaidControl().isAnnounceToEnemyOnly()) {
                 stream = stream.filter(fp -> fp.faction() == faction || fp.relationTo(faction) == Relation.ENEMY);
             }
-            stream.forEach(fp -> fp.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getRaidableNoLonger(),
+            stream.forEach(fp -> fp.sendRichMessage(Confs.tl().factionEvents().getRaidableNoLonger(),
                     FactionResolver.of(faction)));
         }
     }

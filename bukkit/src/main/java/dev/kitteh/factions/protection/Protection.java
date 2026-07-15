@@ -5,6 +5,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActions;
@@ -60,7 +61,7 @@ public final class Protection {
                         materialName.endsWith("FURNACE") ||
                         materialName.endsWith("_SHELF") ||
                         materialName.endsWith("COPPER_CHEST") ||
-                        FactionsPlugin.instance().conf().factions().protection().getCustomContainers().contains(material)) {
+                        Confs.main().factions().protection().getCustomContainers().contains(material)) {
                     yield PermissibleActions.CONTAINER;
                 }
 
@@ -75,7 +76,7 @@ public final class Protection {
 
     public static boolean denyBuildOrDestroyBlock(Player player, Location location, PermissibleAction permissibleAction, boolean notify) {
         String name = player.getName();
-        MainConfig conf = FactionsPlugin.instance().conf();
+        MainConfig conf = Confs.main();
         if (conf.factions().protection().getPlayersWhoBypassAllProtection().contains(name)) {
             return false;
         }
@@ -98,7 +99,7 @@ public final class Protection {
             }
 
             if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionWilderness(), Placeholder.unparsed("action", permissibleAction.shortDescription()));
+                me.sendRichMessage(Confs.tl().protection().denied().getActionWilderness(), Placeholder.unparsed("action", permissibleAction.shortDescription()));
             }
 
             return true;
@@ -112,7 +113,7 @@ public final class Protection {
             }
 
             if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionSafezone(), Placeholder.unparsed("action", permissibleAction.shortDescription()));
+                me.sendRichMessage(Confs.tl().protection().denied().getActionSafezone(), Placeholder.unparsed("action", permissibleAction.shortDescription()));
             }
 
             return true;
@@ -126,7 +127,7 @@ public final class Protection {
             }
 
             if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionWarzone(), Placeholder.unparsed("action", permissibleAction.shortDescription()));
+                me.sendRichMessage(Confs.tl().protection().denied().getActionWarzone(), Placeholder.unparsed("action", permissibleAction.shortDescription()));
             }
 
             return true;
@@ -142,10 +143,10 @@ public final class Protection {
         if (!otherFaction.hasAccess(me, permissibleAction, loc)) {
             if (pain && permissibleAction != PermissibleActions.FROSTWALK) {
                 player.damage(conf.factions().other().getActionDeniedPainAmount());
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritoryPain(), FactionResolver.of(otherFaction), Placeholder.unparsed("action", permissibleAction.shortDescription()));
+                me.sendRichMessage(Confs.tl().protection().denied().getActionTerritoryPain(), FactionResolver.of(otherFaction), Placeholder.unparsed("action", permissibleAction.shortDescription()));
                 return false;
             } else if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(), FactionResolver.of(otherFaction), Placeholder.unparsed("action", permissibleAction.shortDescription()));
+                me.sendRichMessage(Confs.tl().protection().denied().getActionTerritory(), FactionResolver.of(otherFaction), Placeholder.unparsed("action", permissibleAction.shortDescription()));
             }
             return true;
         }
@@ -156,8 +157,8 @@ public final class Protection {
     public static boolean denyExplode(@Nullable Entity boomer, FLocation location) {
         Faction faction = location.faction();
         boolean online = faction.hasMembersOnline();
-        MainConfig.Factions.Protection protection = FactionsPlugin.instance().conf().factions().protection();
-        if (faction.noExplosionsInTerritory() || (faction.isPeaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
+        MainConfig.Factions.Protection protection = Confs.main().factions().protection();
+        if (faction.noExplosionsInTerritory() || (faction.isPeaceful() && Confs.main().factions().specialCase().isPeacefulTerritoryDisableBoom())) {
             // faction is peaceful and has explosions set to disabled
             return true;
         }
@@ -223,7 +224,7 @@ public final class Protection {
 
     public static boolean denyInteract(Player player, Location location, boolean notify) {
         String name = player.getName();
-        if (FactionsPlugin.instance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(name)) {
+        if (Confs.main().factions().protection().getPlayersWhoBypassAllProtection().contains(name)) {
             return false;
         }
 
@@ -239,14 +240,14 @@ public final class Protection {
             return false;
         }
 
-        MainConfig.Factions.Protection protection = FactionsPlugin.instance().conf().factions().protection();
+        MainConfig.Factions.Protection protection = Confs.main().factions().protection();
         if (otherFaction.isWilderness()) {
             if (!protection.isWildernessDenyUsage() || protection.getWorldsNoWildernessProtection().contains(location.getWorld().getName())) {
                 return false; // This is not faction territory. Use whatever you like here.
             }
             if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseWilderness(),
-                        Placeholder.parsed("thing", FactionsPlugin.instance().tl().protection().denied().getUseThis()));
+                me.sendRichMessage(Confs.tl().protection().denied().getUseWilderness(),
+                        Placeholder.parsed("thing", Confs.tl().protection().denied().getUseThis()));
             }
             return true;
         } else if (otherFaction.isSafeZone()) {
@@ -254,8 +255,8 @@ public final class Protection {
                 return false;
             }
             if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseSafezone(),
-                        Placeholder.parsed("thing", FactionsPlugin.instance().tl().protection().denied().getUseThis()));
+                me.sendRichMessage(Confs.tl().protection().denied().getUseSafezone(),
+                        Placeholder.parsed("thing", Confs.tl().protection().denied().getUseThis()));
             }
             return true;
         } else if (otherFaction.isWarZone()) {
@@ -263,8 +264,8 @@ public final class Protection {
                 return false;
             }
             if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseWarzone(),
-                        Placeholder.parsed("thing", FactionsPlugin.instance().tl().protection().denied().getUseThis()));
+                me.sendRichMessage(Confs.tl().protection().denied().getUseWarzone(),
+                        Placeholder.parsed("thing", Confs.tl().protection().denied().getUseThis()));
             }
 
             return true;
@@ -275,9 +276,9 @@ public final class Protection {
         // Cancel if we are not in our own territory
         if (!access) {
             if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseTerritory(),
+                me.sendRichMessage(Confs.tl().protection().denied().getUseTerritory(),
                         FactionResolver.of(otherFaction),
-                        Placeholder.parsed("thing", FactionsPlugin.instance().tl().protection().denied().getUseThis()));
+                        Placeholder.parsed("thing", Confs.tl().protection().denied().getUseThis()));
             }
             return true;
         }
@@ -286,7 +287,7 @@ public final class Protection {
     }
 
     public static boolean denyUseBlock(Player player, Material material, Location location, boolean notify) {
-        if (FactionsPlugin.instance().conf().factions().protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
+        if (Confs.main().factions().protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
             return false;
         }
 
@@ -319,12 +320,12 @@ public final class Protection {
         }
 
         if (action == PermissibleActions.CONTAINER) {
-            if (FactionsPlugin.instance().conf().factions().protection().getContainerExceptions().contains(material)) {
+            if (Confs.main().factions().protection().getContainerExceptions().contains(material)) {
                 return false;
             }
             if (otherFaction.isNormal() &&
                     material == Material.LECTERN &&
-                    FactionsPlugin.instance().conf().factions().protection().isTerritoryAllowLecternReading()) {
+                    Confs.main().factions().protection().isTerritoryAllowLecternReading()) {
                 return false;
             }
         }
@@ -334,14 +335,14 @@ public final class Protection {
         }
 
         if (action != PermissibleActions.PLATE && notify) {
-            me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(), FactionResolver.of(otherFaction), Placeholder.unparsed("action", action.shortDescription()));
+            me.sendRichMessage(Confs.tl().protection().denied().getActionTerritory(), FactionResolver.of(otherFaction), Placeholder.unparsed("action", action.shortDescription()));
         }
         return true;
     }
 
     public static boolean denyUseItem(Player player, Location location, Material material, boolean checkDenyList, boolean notify) {
         String name = player.getName();
-        MainConfig.Factions facConf = FactionsPlugin.instance().conf().factions();
+        MainConfig.Factions facConf = Confs.main().factions();
         if (facConf.protection().getPlayersWhoBypassAllProtection().contains(name)) {
             return false;
         }
@@ -376,7 +377,7 @@ public final class Protection {
             }
 
             if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseWilderness(),
+                me.sendRichMessage(Confs.tl().protection().denied().getUseWilderness(),
                         Placeholder.component("thing", Component.translatable(material.getTranslationKey())));
             }
 
@@ -387,7 +388,7 @@ public final class Protection {
             }
 
             if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseSafezone(),
+                me.sendRichMessage(Confs.tl().protection().denied().getUseSafezone(),
                         Placeholder.component("thing", Component.translatable(material.getTranslationKey())));
             }
 
@@ -398,7 +399,7 @@ public final class Protection {
             }
 
             if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseWarzone(),
+                me.sendRichMessage(Confs.tl().protection().denied().getUseWarzone(),
                         Placeholder.component("thing", Component.translatable(material.getTranslationKey())));
             }
 
@@ -407,7 +408,7 @@ public final class Protection {
 
         if (!otherFaction.hasAccess(me, PermissibleActions.ITEM, loc)) {
             if (notify) {
-                me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getUseTerritory(),
+                me.sendRichMessage(Confs.tl().protection().denied().getUseTerritory(),
                         FactionResolver.of(otherFaction),
                         Placeholder.component("thing", Component.translatable(material.getTranslationKey())));
             }
@@ -453,29 +454,29 @@ public final class Protection {
         }
 
         if (!(damagee instanceof Player damagedPlayer)) {
-            if (FactionsPlugin.instance().conf().factions().protection().isSafeZoneBlockAllEntityDamage() && defLocFaction.isSafeZone()) {
+            if (Confs.main().factions().protection().isSafeZoneBlockAllEntityDamage() && defLocFaction.isSafeZone()) {
                 if (damager instanceof Player && notify) {
-                    FPlayers.fPlayers().get((Player) damager).sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionSafezone(),
-                            Placeholder.unparsed("action", FactionsPlugin.instance().tl().protection().permissions().getAttack()));
+                    FPlayers.fPlayers().get((Player) damager).sendRichMessage(Confs.tl().protection().denied().getActionSafezone(),
+                            Placeholder.unparsed("action", Confs.tl().protection().permissions().getAttack()));
                 }
                 return true;
             }
-            if (FactionsPlugin.instance().conf().factions().protection().isPeacefulBlockAllEntityDamage() && defLocFaction.isPeaceful()) {
+            if (Confs.main().factions().protection().isPeacefulBlockAllEntityDamage() && defLocFaction.isPeaceful()) {
                 if (damager instanceof Player && notify) {
                     FPlayer fPlayer = FPlayers.fPlayers().get((Player) damager);
-                    fPlayer.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(),
+                    fPlayer.sendRichMessage(Confs.tl().protection().denied().getActionTerritory(),
                             FactionResolver.of(defLocFaction),
-                            Placeholder.unparsed("action", FactionsPlugin.instance().tl().protection().permissions().getAttack()));
+                            Placeholder.unparsed("action", Confs.tl().protection().permissions().getAttack()));
                 }
                 return true;
             }
-            if (FactionsPlugin.instance().conf().factions().protection().isTerritoryBlockEntityDamageMatchingPerms() && damager instanceof Player && defLocFaction.isNormal()) {
+            if (Confs.main().factions().protection().isTerritoryBlockEntityDamageMatchingPerms() && damager instanceof Player && defLocFaction.isNormal()) {
                 FPlayer fPlayer = FPlayers.fPlayers().get((Player) damager);
                 if (!defLocFaction.hasAccess(fPlayer, PermissibleActions.DESTROY, defLoc)) {
                     if (notify) {
-                        fPlayer.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(),
+                        fPlayer.sendRichMessage(Confs.tl().protection().denied().getActionTerritory(),
                                 FactionResolver.of(defLocFaction),
-                                Placeholder.unparsed("action", FactionsPlugin.instance().tl().protection().permissions().getAttack()));
+                                Placeholder.unparsed("action", Confs.tl().protection().permissions().getAttack()));
                     }
                     return true;
                 }
@@ -491,7 +492,7 @@ public final class Protection {
             return false;
         }
 
-        if (FactionsPlugin.instance().conf().plugins().worldGuard().isPVPPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().isCustomPVPFlag(damagedPlayer)) {
+        if (Confs.main().plugins().worldGuard().isPVPPriority() && AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().isCustomPVPFlag(damagedPlayer)) {
             return false;
         }
 
@@ -501,11 +502,11 @@ public final class Protection {
                 if (notify) {
                     FPlayer attacker = FPlayers.fPlayers().get(plr);
                     if (defLocFaction.isSafeZone()) {
-                        attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpSafezone());
+                        attacker.sendRichMessage(Confs.tl().protection().denied().getPvpSafezone());
                     } else if (defLocFaction.isPeaceful()) {
-                        attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpPeacefulTerritory());
+                        attacker.sendRichMessage(Confs.tl().protection().denied().getPvpPeacefulTerritory());
                     } else { // Unexpected, maybe new feature!
-                        attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpCantHurt(), FPlayerResolver.of("target", defender));
+                        attacker.sendRichMessage(Confs.tl().protection().denied().getPvpCantHurt(), FPlayerResolver.of("target", defender));
                     }
                 }
                 return true;
@@ -524,7 +525,7 @@ public final class Protection {
             return false;
         }
 
-        MainConfig.Factions facConf = FactionsPlugin.instance().conf().factions();
+        MainConfig.Factions facConf = Confs.main().factions();
         if (notify && facConf.pvp().isDisableNotificationWhenAttackerVanished() && attacker.isVanished()) {
             notify = false;
         }
@@ -534,7 +535,7 @@ public final class Protection {
 
         if (attacker.loginPVPDisabled()) {
             if (notify) {
-                attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpLogin(), Placeholder.unparsed("seconds", String.valueOf(facConf.pvp().getNoPVPDamageToOthersForXSecondsAfterLogin())));
+                attacker.sendRichMessage(Confs.tl().protection().denied().getPvpLogin(), Placeholder.unparsed("seconds", String.valueOf(facConf.pvp().getNoPVPDamageToOthersForXSecondsAfterLogin())));
             }
             return true;
         }
@@ -545,11 +546,11 @@ public final class Protection {
         if (locFaction.noPvPInTerritory()) {
             if (notify) {
                 if (locFaction.isSafeZone()) {
-                    attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpSafezone());
+                    attacker.sendRichMessage(Confs.tl().protection().denied().getPvpSafezone());
                 } else if (locFaction.isPeaceful()) {
-                    attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpPeacefulTerritory());
+                    attacker.sendRichMessage(Confs.tl().protection().denied().getPvpPeacefulTerritory());
                 } else { // Unexpected, maybe new feature!
-                    attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpCantHurt(), FPlayerResolver.of("target", defender));
+                    attacker.sendRichMessage(Confs.tl().protection().denied().getPvpCantHurt(), FPlayerResolver.of("target", defender));
                 }
             }
             return true;
@@ -568,7 +569,7 @@ public final class Protection {
 
         if (attackFaction.isWilderness() && facConf.pvp().isDisablePVPForFactionlessPlayers()) {
             if (notify) {
-                attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpRequireFaction());
+                attacker.sendRichMessage(Confs.tl().protection().denied().getPvpRequireFaction());
             }
             return true;
         } else if (defendFaction.isWilderness()) {
@@ -577,7 +578,7 @@ public final class Protection {
                 return false;
             } else if (facConf.pvp().isDisablePVPForFactionlessPlayers()) {
                 if (notify) {
-                    attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpFactionless());
+                    attacker.sendRichMessage(Confs.tl().protection().denied().getPvpFactionless());
                 }
                 return true;
             }
@@ -586,7 +587,7 @@ public final class Protection {
         if (!defLocFaction.isWarZone() || facConf.pvp().isDisablePeacefulPVPInWarzone()) {
             if (defendFaction.isPeaceful() || attackFaction.isPeaceful()) {
                 if (notify) {
-                    attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpPeaceful());
+                    attacker.sendRichMessage(Confs.tl().protection().denied().getPvpPeaceful());
                 }
                 return true;
             }
@@ -597,7 +598,7 @@ public final class Protection {
         // You can not hurt neutral factions
         if (facConf.pvp().isDisablePVPBetweenNeutralFactions() && relation.isNeutral()) {
             if (notify) {
-                attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpNeutral());
+                attacker.sendRichMessage(Confs.tl().protection().denied().getPvpNeutral());
             }
             return true;
         }
@@ -610,7 +611,7 @@ public final class Protection {
         // You can never hurt faction members or allies
         if (relation.isMember() || relation.isAlly() || relation.isTruce()) {
             if (notify) {
-                attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpCantHurt(), FPlayerResolver.of("target", defender));
+                attacker.sendRichMessage(Confs.tl().protection().denied().getPvpCantHurt(), FPlayerResolver.of("target", defender));
             }
             return true;
         }
@@ -620,8 +621,8 @@ public final class Protection {
         // You can not hurt neutrals in their own territory.
         if (ownTerritory && relation.isNeutral()) {
             if (notify) {
-                attacker.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpNeutralFail(), FPlayerResolver.of("target", defender));
-                defender.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getPvpTried(), FPlayerResolver.of("attacker", attacker));
+                attacker.sendRichMessage(Confs.tl().protection().denied().getPvpNeutralFail(), FPlayerResolver.of("target", defender));
+                defender.sendRichMessage(Confs.tl().protection().denied().getPvpTried(), FPlayerResolver.of("attacker", attacker));
             }
             return true;
         }

@@ -4,10 +4,11 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.integration.Graves;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.PermissibleActions;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.protection.Protection;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.WorldUtil;
@@ -34,9 +35,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ListenInteract implements Listener {
-    private final FactionsPlugin plugin;
+    private final AbstractFactionsPlugin plugin;
 
-    public ListenInteract(FactionsPlugin plugin) {
+    public ListenInteract(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -67,7 +68,7 @@ public class ListenInteract implements Listener {
             check = true;
         }
 
-        if (check && !this.plugin.conf().factions().protection().getEntityInteractExceptions().contains(event.getRightClicked().getType().name()) &&
+        if (check && !Confs.main().factions().protection().getEntityInteractExceptions().contains(event.getRightClicked().getType().name()) &&
                 Protection.denyInteract(event.getPlayer(), event.getRightClicked().getLocation(), true)) {
             event.setCancelled(true);
         }
@@ -106,13 +107,13 @@ public class ListenInteract implements Listener {
             if (block.getType().name().endsWith("_PLATE")) {
                 return;
             }
-            if (this.plugin.conf().exploits().isInteractionSpam()) {
+            if (Confs.main().exploits().isInteractionSpam()) {
                 String name = player.getName();
                 InteractAttemptSpam attempt = interactSpammers.computeIfAbsent(name, _ -> new InteractAttemptSpam());
                 int count = attempt.increment();
                 if (count >= 10) {
                     FPlayer me = FPlayers.fPlayers().get(player);
-                    me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getInteractionSpamHurtOuch());
+                    me.sendRichMessage(Confs.tl().protection().denied().getInteractionSpamHurtOuch());
                     player.damage(NumberConversions.floor((double) count / 10));
                 }
             }
@@ -128,7 +129,7 @@ public class ListenInteract implements Listener {
             Material material = item.getType();
             String materialName = item.getType().name();
             if (material == Material.ARMOR_STAND || material == Material.END_CRYSTAL || materialName.contains("MINECART")) {
-                if (!this.plugin.conf().factions().specialCase().getIgnoreBuildMaterials().contains(item.getType()) &&
+                if (!Confs.main().factions().specialCase().getIgnoreBuildMaterials().contains(item.getType()) &&
                         Protection.denyBuildOrDestroyBlock(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()), PermissibleActions.BUILD, true)) {
                     event.setCancelled(true);
                 }
@@ -208,7 +209,7 @@ public class ListenInteract implements Listener {
         }
 
         Player player = event.getPlayer();
-        if (this.plugin.conf().factions().protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
+        if (Confs.main().factions().protection().getPlayersWhoBypassAllProtection().contains(player.getName())) {
             return;
         }
 
@@ -230,7 +231,7 @@ public class ListenInteract implements Listener {
 
         PermissibleAction action = PermissibleActions.CONTAINER;
         if (!otherFaction.hasAccess(me, action, location)) {
-            me.sendRichMessage(FactionsPlugin.instance().tl().protection().denied().getActionTerritory(), FactionResolver.of(otherFaction), Placeholder.unparsed("action", action.shortDescription()));
+            me.sendRichMessage(Confs.tl().protection().denied().getActionTerritory(), FactionResolver.of(otherFaction), Placeholder.unparsed("action", action.shortDescription()));
             event.setCancelled(true);
         }
     }

@@ -1,6 +1,6 @@
 package dev.kitteh.factions.integration.dynmap;
 
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.DynmapConfig;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -35,7 +35,7 @@ public class DynmapStyle {
     }
 
     private static DynmapConfig.Style styleConf() {
-        return FactionsPlugin.instance().configManager().dynmapConfig().style();
+        return Confs.dynmap().style();
     }
 
     private String lineColor = null;

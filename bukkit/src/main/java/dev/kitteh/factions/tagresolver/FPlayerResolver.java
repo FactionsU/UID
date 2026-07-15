@@ -1,8 +1,9 @@
 package dev.kitteh.factions.tagresolver;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.integration.IntegrationManager;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.util.MiscUtil;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -84,7 +85,7 @@ public final class FPlayerResolver extends ObservedResolver {
             case "deaths" -> tag(observed.deaths());
 
             case "last_seen" -> {
-                var tl = FactionsPlugin.instance().tl().placeholders().lastSeen();
+                var tl = Confs.tl().placeholders().lastSeen();
                 if (observed.isOnline() && !observed.isVanished()) {
                     yield tagMini(tl.getOnlineText(), this.observer(ctx), this);
                 }
@@ -119,7 +120,7 @@ public final class FPlayerResolver extends ObservedResolver {
                 yield empty();
             }
 
-            case "tooltip" -> tagTip(FactionsPlugin.instance().tl().placeholders().tooltips().getPlayer(), this.observer(ctx), this);
+            case "tooltip" -> tagTip(Confs.tl().placeholders().tooltips().getPlayer(), this.observer(ctx), this);
 
             case "standing_in_faction" -> FactionResolver.of(observed.lastStoodAt().faction()).solve(arguments, ctx);
 
@@ -128,7 +129,7 @@ public final class FPlayerResolver extends ObservedResolver {
             case "space_if_faction" -> tag(observed.hasFaction() ? " " : "");
 
             case "papi", "papi_open", "papi_mini" -> {
-                if (!arguments.hasNext() || !FactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.PLACEHOLDERAPI)) {
+                if (!arguments.hasNext() || !AbstractFactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.PLACEHOLDERAPI)) {
                     yield tag(Component.empty());
                 }
                 String papi = arguments.pop().value();

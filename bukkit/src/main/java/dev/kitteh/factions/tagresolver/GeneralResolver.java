@@ -2,7 +2,7 @@ package dev.kitteh.factions.tagresolver;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
@@ -54,11 +54,11 @@ public final class GeneralResolver extends HelperResolver {
                             }
                         }
 
-                        case "peaceful" -> tag(FactionsPlugin.instance().conf().colors().relations().getPeaceful());
+                        case "peaceful" -> tag(Confs.main().colors().relations().getPeaceful());
 
-                        case "safezone" -> tag(FactionsPlugin.instance().conf().colors().factions().getSafezone());
-                        case "warzone" -> tag(FactionsPlugin.instance().conf().colors().factions().getWarzone());
-                        case "wilderness" -> tag(FactionsPlugin.instance().conf().colors().factions().getWilderness());
+                        case "safezone" -> tag(Confs.main().colors().factions().getSafezone());
+                        case "warzone" -> tag(Confs.main().colors().factions().getWarzone());
+                        case "wilderness" -> tag(Confs.main().colors().factions().getWilderness());
 
                         default -> empty();
                     };

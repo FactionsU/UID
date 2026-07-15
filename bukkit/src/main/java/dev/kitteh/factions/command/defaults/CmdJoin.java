@@ -7,25 +7,25 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.event.FPlayerJoinEvent;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdJoin implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().join();
+            var tl = Confs.tl().commands().join();
             Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.JOIN).and(Cloudy.isPlayer())));
@@ -40,7 +40,7 @@ public class CmdJoin implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().join();
+        var tl = Confs.tl().commands().join();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         Faction faction = context.get("faction");
@@ -79,7 +79,7 @@ public class CmdJoin implements Cmd {
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make sure they can pay
-        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostJoin(), FactionsPlugin.instance().tl().economy().actions().getJoinTo())) {
+        if (!context.sender().canAffordCommand(Confs.main().economy().getCostJoin(), Confs.tl().economy().actions().getJoinTo())) {
             return;
         }
 
@@ -97,8 +97,8 @@ public class CmdJoin implements Cmd {
         }
 
         // then make 'em pay (if applicable)
-        var econ = FactionsPlugin.instance().conf().economy();
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        var econ = Confs.main().economy();
+        var econTl = Confs.tl().economy().actions();
         if (!context.sender().payForCommand(econ.getCostJoin(), econTl.getJoinTo(), econTl.getJoinFor())) {
             return;
         }
@@ -113,7 +113,7 @@ public class CmdJoin implements Cmd {
         sender.role(faction.defaultRole());
         ((Sender.Player) context.sender()).player().updateCommands();
 
-        if (FactionsPlugin.instance().conf().logging().isFactionJoin()) {
+        if (Confs.main().logging().isFactionJoin()) {
             AbstractFactionsPlugin.instance().log(sender.name() + " joined the faction " + faction.tag());
         }
     }

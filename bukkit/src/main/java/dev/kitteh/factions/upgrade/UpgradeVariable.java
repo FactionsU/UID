@@ -1,6 +1,6 @@
 package dev.kitteh.factions.upgrade;
 
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.util.MiscUtil;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -48,7 +48,7 @@ public record UpgradeVariable(String name, BigDecimal min, BigDecimal max, Funct
         return new UpgradeVariable(name, min, max, b -> {
             BigInteger bigInteger = b.toBigInteger();
             if (bigInteger.equals(INT_MAX)) {
-                return FactionsPlugin.instance().tl().upgrades().getUnlimited();
+                return Confs.tl().upgrades().getUnlimited();
             }
             return b.toBigInteger().toString();
         });

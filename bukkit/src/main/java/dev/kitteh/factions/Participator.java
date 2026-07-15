@@ -1,5 +1,6 @@
 package dev.kitteh.factions;
 
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.util.LegacyCruft;
 import dev.kitteh.factions.util.Mini;
@@ -95,19 +96,19 @@ public sealed interface Participator permits FPlayer, Faction {
 
         if (thisFaction != thatFaction) {
             if (thisFaction.isPeaceful()) {
-                return FactionsPlugin.instance().conf().colors().relations().getPeaceful();
+                return Confs.main().colors().relations().getPeaceful();
             }
 
             if (thisFaction.isSafeZone()) {
-                return FactionsPlugin.instance().conf().colors().factions().getSafezone();
+                return Confs.main().colors().factions().getSafezone();
             }
 
             if (thisFaction.isWarZone()) {
-                return FactionsPlugin.instance().conf().colors().factions().getWarzone();
+                return Confs.main().colors().factions().getWarzone();
             }
 
             if (thisFaction.isWilderness()) {
-                return FactionsPlugin.instance().conf().colors().factions().getWilderness();
+                return Confs.main().colors().factions().getWilderness();
             }
         }
 

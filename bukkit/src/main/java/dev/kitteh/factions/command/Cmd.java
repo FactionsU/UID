@@ -1,12 +1,11 @@
 package dev.kitteh.factions.command;
 
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.key.CloudKey;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
@@ -22,7 +21,7 @@ public interface Cmd {
      * @return primary root command
      */
     static String rootCommand() {
-        return FactionsPlugin.instance().tl().commands().generic().getCommandRoot().getFirstAlias();
+        return Confs.tl().commands().generic().getCommandRoot().getFirstAlias();
     }
 
     /**
@@ -31,6 +30,6 @@ public interface Cmd {
      * @return primary root admin command
      */
     static String rootAdminCommand() {
-        return FactionsPlugin.instance().tl().commands().generic().getCommandAdminRoot().getFirstAlias();
+        return Confs.tl().commands().generic().getCommandAdminRoot().getFirstAlias();
     }
 }

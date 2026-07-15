@@ -2,13 +2,14 @@ package dev.kitteh.factions.command.defaults;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -16,19 +17,17 @@ import org.bukkit.Location;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
-
 public class CmdNear implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().near();
+            var tl = Confs.tl().commands().near();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -42,7 +41,7 @@ public class CmdNear implements Cmd {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
 
-        int radius = FactionsPlugin.instance().conf().commands().near().getRadius();
+        int radius = Confs.main().commands().near().getRadius();
         Set<FPlayer> onlineMembers = faction.membersOnline(true, sender);
         List<FPlayer> nearbyMembers = new ArrayList<>();
 
@@ -60,7 +59,7 @@ public class CmdNear implements Cmd {
             }
         }
 
-        var tl = FactionsPlugin.instance().tl().commands().near();
+        var tl = Confs.tl().commands().near();
         if (nearbyMembers.isEmpty()) {
             sender.sendRichMessage(tl.getNoneNearby());
             return;

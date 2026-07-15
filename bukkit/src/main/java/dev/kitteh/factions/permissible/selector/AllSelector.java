@@ -1,7 +1,7 @@
 package dev.kitteh.factions.permissible.selector;
 
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class AllSelector extends AbstractSelector {
     public static final String NAME = "all";
-    public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, FactionsPlugin.instance().tl().permissions().selectors().all()::getDisplayName, _ -> new AllSelector()).acceptEmpty();
+    public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, Confs.tl().permissions().selectors().all()::getDisplayName, _ -> new AllSelector()).acceptEmpty();
 
     public AllSelector() {
         super(DESCRIPTOR);
@@ -30,6 +30,6 @@ public class AllSelector extends AbstractSelector {
 
     @Override
     public Component displayValue(Faction context) {
-        return Mini.parse(FactionsPlugin.instance().tl().permissions().selectors().all().getDisplayValue());
+        return Mini.parse(Confs.tl().permissions().selectors().all().getDisplayValue());
     }
 }

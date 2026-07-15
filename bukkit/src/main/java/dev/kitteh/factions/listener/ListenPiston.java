@@ -2,9 +2,10 @@ package dev.kitteh.factions.listener;
 
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -17,9 +18,9 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import java.util.List;
 
 public class ListenPiston implements Listener {
-    private final FactionsPlugin plugin;
+    private final AbstractFactionsPlugin plugin;
 
-    public ListenPiston(FactionsPlugin plugin) {
+    public ListenPiston(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -29,7 +30,7 @@ public class ListenPiston implements Listener {
             return;
         }
 
-        if (!this.plugin.conf().factions().protection().isPistonProtectionThroughDenyBuild()) {
+        if (!Confs.main().factions().protection().isPistonProtectionThroughDenyBuild()) {
             return;
         }
 
@@ -54,7 +55,7 @@ public class ListenPiston implements Listener {
             return;
         }
 
-        if (!this.plugin.conf().factions().protection().isPistonProtectionThroughDenyBuild()) {
+        if (!Confs.main().factions().protection().isPistonProtectionThroughDenyBuild()) {
             return;
         }
 
@@ -80,10 +81,10 @@ public class ListenPiston implements Listener {
                 .distinct()
                 .toList();
 
-        boolean disableOverall = this.plugin.conf().factions().other().isDisablePistonsInTerritory();
-        boolean denyWilderness = this.plugin.conf().factions().protection().isWildernessDenyBuild() && !this.plugin.conf().factions().protection().getWorldsNoWildernessProtection().contains(world);
-        boolean denySafezone = this.plugin.conf().factions().protection().isSafeZoneDenyBuild();
-        boolean denyWarzone = this.plugin.conf().factions().protection().isWarZoneDenyBuild();
+        boolean disableOverall = Confs.main().factions().other().isDisablePistonsInTerritory();
+        boolean denyWilderness = Confs.main().factions().protection().isWildernessDenyBuild() && !Confs.main().factions().protection().getWorldsNoWildernessProtection().contains(world);
+        boolean denySafezone = Confs.main().factions().protection().isSafeZoneDenyBuild();
+        boolean denyWarzone = Confs.main().factions().protection().isWarZoneDenyBuild();
 
         for (FLocation location : locations) {
             Faction otherFaction = location.faction();

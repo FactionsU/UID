@@ -1,6 +1,5 @@
 package dev.kitteh.factions.command.defaults.admin;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
@@ -9,17 +8,17 @@ import dev.kitteh.factions.command.defaults.admin.force.CmdForceHome;
 import dev.kitteh.factions.command.defaults.admin.force.CmdForceJoin;
 import dev.kitteh.factions.command.defaults.admin.force.CmdForceKick;
 import dev.kitteh.factions.command.defaults.admin.force.CmdForceRole;
+import dev.kitteh.factions.config.Confs;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdAdminForce implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().admin().force();
+            var tl = Confs.tl().commands().admin().force();
             Command.Builder<Sender> forceBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()));
 

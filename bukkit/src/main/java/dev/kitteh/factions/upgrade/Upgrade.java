@@ -1,7 +1,7 @@
 package dev.kitteh.factions.upgrade;
 
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
@@ -82,18 +82,18 @@ public interface Upgrade {
     interface Impl extends Upgrade {
         @Override
         default Component nameComponent() {
-            return Mini.parse(tl().apply(FactionsPlugin.instance().tl().upgrades()).getName());
+            return Mini.parse(tl().apply(Confs.tl().upgrades()).getName());
         }
 
         @Override
         default Component description() {
-            return Mini.parse(tl().apply(FactionsPlugin.instance().tl().upgrades()).getDescription());
+            return Mini.parse(tl().apply(Confs.tl().upgrades()).getDescription());
         }
 
         @Override
         default Component details(UpgradeSettings settings, int level) {
             return Mini.parse(
-                    tl().apply(FactionsPlugin.instance().tl().upgrades()).getDetail(),
+                    tl().apply(Confs.tl().upgrades()).getDetail(),
                     TagResolver.resolver(this.variables().stream().map(up -> Placeholder.unparsed(up.name(), up.formatter().apply(settings.valueAt(up, level)))).toList())
             );
         }

@@ -1,6 +1,9 @@
 package dev.kitteh.factions.util.adapter;
 
-import com.google.gson.*;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import dev.kitteh.factions.upgrade.LeveledValueProvider;
 
 import java.lang.reflect.Type;

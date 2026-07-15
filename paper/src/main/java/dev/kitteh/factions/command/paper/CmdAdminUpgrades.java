@@ -1,10 +1,10 @@
 package dev.kitteh.factions.command.paper;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.upgrade.LeveledValueProvider;
@@ -55,7 +55,7 @@ public class CmdAdminUpgrades implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().admin().upgrades();
+            var tl = Confs.tl().commands().admin().upgrades();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -72,7 +72,7 @@ public class CmdAdminUpgrades implements Cmd {
     }
 
     private static TranslationsConfig.Commands.Admin.Upgrades tl() {
-        return FactionsPlugin.instance().tl().commands().admin().upgrades();
+        return Confs.tl().commands().admin().upgrades();
     }
 
     private static final class Draft {

@@ -4,12 +4,13 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,18 +18,16 @@ import org.bukkit.inventory.ItemStack;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.IntegerParser;
 
 import java.util.Map;
-
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdTNTDeposit implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().tnt();
+            var tl = Confs.tl().commands().tnt();
             manager.command(
                     builder.literal(tl.getSubCmdDeposit())
                             .commandDescription(Cloudy.desc(tl.getDepositDescription()))
@@ -44,7 +43,7 @@ public class CmdTNTDeposit implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().tnt();
+        var tl = Confs.tl().commands().tnt();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
         Faction faction = sender.faction();

@@ -1,6 +1,5 @@
 package dev.kitteh.factions.command.defaults;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
@@ -15,17 +14,17 @@ import dev.kitteh.factions.command.defaults.set.CmdSetTag;
 import dev.kitteh.factions.command.defaults.set.CmdSetTitle;
 import dev.kitteh.factions.command.defaults.set.CmdSetWarp;
 import dev.kitteh.factions.command.defaults.set.CmdSetWarpProperty;
+import dev.kitteh.factions.config.Confs;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdSet implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().set();
+            var tl = Confs.tl().commands().set();
             Command.Builder<Sender> setBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases()).permission(builder.commandPermission().and(Cloudy.hasFaction()));
 
             new CmdSetBoom().consumer().accept(manager, setBuilder, help);

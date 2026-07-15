@@ -9,30 +9,31 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.SpiralTask;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.IntegerParser;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdClaim implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> manager.command(
                 builder.literal("claim")
-                        .commandDescription(Cloudy.desc(FactionsPlugin.instance().tl().commands().claim().getDescription()))
+                        .commandDescription(Cloudy.desc(Confs.tl().commands().claim().getDescription()))
                         .permission(
                                 builder.commandPermission()
                                         .and(Cloudy.hasPermission(Permission.CLAIM)
@@ -56,7 +57,7 @@ public class CmdClaim implements Cmd {
                         .flag(
                                 manager.flagBuilder("fill-limit")
                                         .withPermission(Cloudy.hasPermission(Permission.CLAIM_FILL))
-                                        .withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims()))
+                                        .withComponent(IntegerParser.integerParser(1, Confs.main().factions().claims().getFillClaimMaxClaims()))
                         )
                         .flag(
                                 manager.flagBuilder("auto")
@@ -67,7 +68,7 @@ public class CmdClaim implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().claim();
+        var tl = Confs.tl().commands().claim();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
 
@@ -93,7 +94,7 @@ public class CmdClaim implements Cmd {
         }
 
         if (context.flags().hasFlag("fill")) {
-            int limit = context.flags().get("fill-limit") instanceof Integer i ? i : FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims();
+            int limit = context.flags().get("fill-limit") instanceof Integer i ? i : Confs.main().factions().claims().getFillClaimMaxClaims();
             this.fill(sender, claimLocation, forFaction, limit);
             return;
         }
@@ -106,7 +107,7 @@ public class CmdClaim implements Cmd {
 
             new SpiralTask(claimLocation, radius) {
                 private int failCount = 0;
-                private final int limit = FactionsPlugin.instance().conf().factions().claims().getRadiusClaimFailureLimit() - 1;
+                private final int limit = Confs.main().factions().claims().getRadiusClaimFailureLimit() - 1;
 
                 @Override
                 public boolean work() {
@@ -128,9 +129,9 @@ public class CmdClaim implements Cmd {
     }
 
     private void fill(FPlayer sender, FLocation loc, Faction forFaction, int limit) {
-        var tl = FactionsPlugin.instance().tl().commands().claim();
-        if (limit > FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims()) {
-            sender.sendRichMessage(tl.getFillAboveMax(), Placeholder.unparsed("max", String.valueOf(FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxClaims())));
+        var tl = Confs.tl().commands().claim();
+        if (limit > Confs.main().factions().claims().getFillClaimMaxClaims()) {
+            sender.sendRichMessage(tl.getFillAboveMax(), Placeholder.unparsed("max", String.valueOf(Confs.main().factions().claims().getFillClaimMaxClaims())));
             return;
         }
 
@@ -161,7 +162,7 @@ public class CmdClaim implements Cmd {
             return;
         }
 
-        final double distance = FactionsPlugin.instance().conf().factions().claims().getFillClaimMaxDistance();
+        final double distance = Confs.main().factions().claims().getFillClaimMaxDistance();
         int startX = loc.x();
         int startZ = loc.z();
 
@@ -196,7 +197,7 @@ public class CmdClaim implements Cmd {
             return;
         }
 
-        final int limFail = FactionsPlugin.instance().conf().factions().claims().getRadiusClaimFailureLimit();
+        final int limFail = Confs.main().factions().claims().getRadiusClaimFailureLimit();
         int fails = 0;
         for (FLocation currentLocation : toClaim) {
             if (!sender.attemptClaim(forFaction, currentLocation, true)) {

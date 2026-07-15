@@ -1,9 +1,9 @@
 package dev.kitteh.factions.command.defaults.admin;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TriConsumer;
@@ -16,7 +16,7 @@ public class CmdSaveAll implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().admin().saveAll();
+            var tl = Confs.tl().commands().admin().saveAll();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -31,6 +31,6 @@ public class CmdSaveAll implements Cmd {
         Instances.FACTIONS.forceSave(false);
         Instances.BOARD.forceSave(false);
         Instances.UNIVERSE.forceSave(false);
-        context.sender().sendRichMessage(FactionsPlugin.instance().tl().commands().admin().saveAll().getSuccess());
+        context.sender().sendRichMessage(Confs.tl().commands().admin().saveAll().getSuccess());
     }
 }

@@ -3,14 +3,16 @@ package dev.kitteh.factions.command.defaults;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.jspecify.annotations.NullMarked;
 
@@ -18,8 +20,6 @@ import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import java.util.function.Consumer;
 
 @NullMarked
@@ -39,7 +39,7 @@ public class CmdConfirm implements Cmd {
         cache.put(fPlayer.uniqueId(), new Conf(code, consumer));
         return Cmd.rootCommand() +
                 " " +
-                FactionsPlugin.instance().tl().commands().confirm().getFirstAlias() +
+                Confs.tl().commands().confirm().getFirstAlias() +
                 " " +
                 code;
     }
@@ -47,7 +47,7 @@ public class CmdConfirm implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var confirm = FactionsPlugin.instance().tl().commands().confirm();
+            var confirm = Confs.tl().commands().confirm();
             manager.command(
                     builder.literal(confirm.getFirstAlias(), confirm.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(confirm.getDescription()))
@@ -65,7 +65,7 @@ public class CmdConfirm implements Cmd {
 
         Conf conf = cache.getIfPresent(sender.uniqueId());
         if (conf == null) {
-            sender.sendRichMessage(FactionsPlugin.instance().tl().commands().confirm().getNotFound());
+            sender.sendRichMessage(Confs.tl().commands().confirm().getNotFound());
             return;
         }
 
@@ -73,7 +73,7 @@ public class CmdConfirm implements Cmd {
             cache.invalidate(sender.uniqueId());
             conf.consumer.accept(sender);
         } else {
-            sender.sendRichMessage(FactionsPlugin.instance().tl().commands().confirm().getInvalid());
+            sender.sendRichMessage(Confs.tl().commands().confirm().getInvalid());
         }
     }
 }

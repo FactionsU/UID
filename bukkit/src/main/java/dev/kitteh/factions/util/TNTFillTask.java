@@ -2,7 +2,6 @@ package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.upgrade.Upgrades;
 import org.jetbrains.annotations.ApiStatus;

@@ -5,21 +5,21 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdStatus implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        var tl = FactionsPlugin.instance().tl().commands().status();
+        var tl = Confs.tl().commands().status();
         return (manager, builder, _) -> manager.command(
                 builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                         .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -29,7 +29,7 @@ public class CmdStatus implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().status();
+        var tl = Confs.tl().commands().status();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         for (FPlayer fp : sender.faction().members()) {

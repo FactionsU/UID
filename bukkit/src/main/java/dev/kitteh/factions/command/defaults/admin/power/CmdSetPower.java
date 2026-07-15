@@ -5,23 +5,22 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.parser.standard.DoubleParser;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.parser.standard.DoubleParser;
 
 public class CmdSetPower implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().admin().power().setPower();
+            var tl = Confs.tl().commands().admin().power().setPower();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -34,7 +33,7 @@ public class CmdSetPower implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().admin().power().setPower();
+        var tl = Confs.tl().commands().admin().power().setPower();
         FPlayer player = context.get("player");
         Double number = context.get("value");
 

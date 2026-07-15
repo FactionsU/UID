@@ -4,7 +4,7 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.DynmapConfig;
 import dev.kitteh.factions.data.MemoryBoard;
 import dev.kitteh.factions.permissible.Role;
@@ -90,7 +90,7 @@ public class EngineDynmap {
     public boolean init(Plugin dynmap) {
         this.dynmapApi = (DynmapAPI) dynmap;
 
-        dynmapConf = FactionsPlugin.instance().configManager().dynmapConfig();
+        dynmapConf = Confs.dynmap();
 
         // Should we even use dynmap?
         if (!dynmapConf.dynmap().isEnabled()) {
@@ -114,7 +114,7 @@ public class EngineDynmap {
         }, 101L, 100L);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(AbstractFactionsPlugin.instance(), () -> {
             boolean doIt = true;
-            if (FactionsPlugin.instance().configManager().dynmapConfig().dynmap().isOnlyUpdateWorldOnce()) {
+            if (Confs.dynmap().dynmap().isOnlyUpdateWorldOnce()) {
                 if (this.stillNeedsToRunOnce) {
                     this.stillNeedsToRunOnce = false;
                 } else {
@@ -227,7 +227,7 @@ public class EngineDynmap {
     public Map<String, TempMarker> createHomes() {
         Map<String, TempMarker> ret = new HashMap<>();
 
-        if (!FactionsPlugin.instance().configManager().dynmapConfig().dynmap().isShowMarkers()) {
+        if (!Confs.dynmap().dynmap().isShowMarkers()) {
             return ret;
         }
 
@@ -296,7 +296,7 @@ public class EngineDynmap {
     public Map<String, TempMarker> createWarps() {
         Map<String, TempMarker> ret = new HashMap<>();
 
-        if (!FactionsPlugin.instance().configManager().dynmapConfig().dynmap().isShowWarpMarkers()) {
+        if (!Confs.dynmap().dynmap().isShowWarpMarkers()) {
             return ret;
         }
 

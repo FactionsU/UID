@@ -4,20 +4,22 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.StringParser;
 
 import java.util.ArrayList;
@@ -29,14 +31,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdListClaims implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().list().claims();
+            var tl = Confs.tl().commands().list().claims();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -60,7 +60,7 @@ public class CmdListClaims implements Cmd {
             faction = fac;
         }
 
-        var tl = FactionsPlugin.instance().tl().commands().list().claims();
+        var tl = Confs.tl().commands().list().claims();
         World world = ((Sender.Player) context.sender()).player().getWorld();
         if (context.flags().get("world") instanceof String worldName) {
             world = Bukkit.getWorld(worldName);

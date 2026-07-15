@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@ApiStatus.Internal
 @NoFinalFields
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "BooleanMethodIsAlwaysInverted", "MismatchedQueryAndUpdateOfCollection"})
 public class MainConfig {

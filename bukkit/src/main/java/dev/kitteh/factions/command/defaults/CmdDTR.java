@@ -7,21 +7,21 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdDTR implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().dtr();
+            var tl = Confs.tl().commands().dtr();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -36,8 +36,8 @@ public class CmdDTR implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().dtr();
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        var tl = Confs.tl().commands().dtr();
+        var econTl = Confs.tl().economy().actions();
         FPlayer fPlayer = context.sender().fPlayerOrNull();
         Faction faction = fPlayer != null && fPlayer.hasFaction() ? fPlayer.faction() : null;
 
@@ -50,7 +50,7 @@ public class CmdDTR implements Cmd {
             return;
         }
 
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDTR(), econTl.getDtrTo(), econTl.getDtrFor())) {
+        if (!context.sender().payForCommand(Confs.main().economy().getCostDTR(), econTl.getDtrTo(), econTl.getDtrFor())) {
             return;
         }
 

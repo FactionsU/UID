@@ -3,7 +3,7 @@ package dev.kitteh.factions.data.json;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.data.MemoryFPlayers;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
@@ -36,7 +36,7 @@ public final class JSONFPlayers extends MemoryFPlayers {
     @Override
     public void forceSave(boolean sync) {
         final List<JSONFPlayer> entitiesThatShouldBeSaved = new ArrayList<>();
-        boolean saveAll = FactionsPlugin.instance().conf().data().json().isSaveAllPlayers();
+        boolean saveAll = Confs.main().data().json().isSaveAllPlayers();
         for (FPlayer entity : this.fPlayers.values()) {
             if (saveAll || ((MemoryFPlayer) entity).shouldBeSaved()) {
                 entitiesThatShouldBeSaved.add((JSONFPlayer) entity);

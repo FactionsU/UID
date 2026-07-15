@@ -7,14 +7,12 @@ import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.config.transition.Transitioner;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tagresolver.ConfigColorResolver;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.logging.Level;
 
-@ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class ConfigManager {
     private final AbstractFactionsPlugin plugin;

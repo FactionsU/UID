@@ -4,7 +4,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tagresolver.FactionResolver;
@@ -54,7 +54,7 @@ public class FTeamWrapper {
             return;
         }
 
-        if (!FactionsPlugin.instance().conf().scoreboard().constant().isPrefixes() && !FactionsPlugin.instance().conf().scoreboard().constant().isSuffixes()) {
+        if (!Confs.main().scoreboard().constant().isPrefixes() && !Confs.main().scoreboard().constant().isSuffixes()) {
             return;
         }
 
@@ -75,7 +75,7 @@ public class FTeamWrapper {
             return;
         }
 
-        if (!FactionsPlugin.instance().conf().scoreboard().constant().isPrefixes() && !FactionsPlugin.instance().conf().scoreboard().constant().isSuffixes()) {
+        if (!Confs.main().scoreboard().constant().isPrefixes() && !Confs.main().scoreboard().constant().isSuffixes()) {
             return;
         }
 
@@ -168,7 +168,7 @@ public class FTeamWrapper {
     }
 
     private void updatePrefixesAndSuffixes() {
-        if (FactionsPlugin.instance().conf().scoreboard().constant().isPrefixes() || FactionsPlugin.instance().conf().scoreboard().constant().isSuffixes()) {
+        if (Confs.main().scoreboard().constant().isPrefixes() || Confs.main().scoreboard().constant().isSuffixes()) {
             for (FScoreboard fboard : teams.keySet()) {
                 updatePrefixAndSuffix(fboard);
             }
@@ -176,8 +176,8 @@ public class FTeamWrapper {
     }
 
     private void updatePrefixAndSuffix(FScoreboard scoreboard) {
-        MainConfig.Scoreboard.Constant conf = FactionsPlugin.instance().conf().scoreboard().constant();
-        var tl = FactionsPlugin.instance().tl().scoreboard().constant();
+        MainConfig.Scoreboard.Constant conf = Confs.main().scoreboard().constant();
+        var tl = Confs.tl().scoreboard().constant();
         if (conf.isPrefixes()) {
             prefixSetter.accept(teams.get(scoreboard), Mini.parse(tl.getPrefixTemplate(), scoreboard.getFPlayer(), FactionResolver.of(faction)));
         }

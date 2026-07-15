@@ -1,12 +1,12 @@
 package dev.kitteh.factions.command.defaults.admin;
 
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Permission;
@@ -22,7 +22,7 @@ public class CmdAdminTNT implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().admin().tnt();
+            var tl = Confs.tl().commands().admin().tnt();
             Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .permission(builder.commandPermission()
                             .and(Cloudy.predicate(_ -> Universe.universe().isUpgradeEnabled(Upgrades.TNT_BANK)))
@@ -56,7 +56,7 @@ public class CmdAdminTNT implements Cmd {
         newVal = Math.max(0, newVal);
 
         faction.tntBank(newVal);
-        sender.sendRichMessage(FactionsPlugin.instance().tl().commands().admin().tnt().getSuccess(),
+        sender.sendRichMessage(Confs.tl().commands().admin().tnt().getSuccess(),
                 FactionResolver.of(faction),
                 Placeholder.parsed("oldamount", String.valueOf(oldVal))
                 );

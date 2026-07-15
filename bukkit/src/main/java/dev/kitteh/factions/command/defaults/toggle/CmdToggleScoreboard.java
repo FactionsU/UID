@@ -1,24 +1,23 @@
 package dev.kitteh.factions.command.defaults.toggle;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdToggleScoreboard implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        var tl = FactionsPlugin.instance().tl().commands().toggleScoreboard();
+        var tl = Confs.tl().commands().toggleScoreboard();
         return (manager, builder, _) -> manager.command(
                 builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                         .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -28,7 +27,7 @@ public class CmdToggleScoreboard implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().toggleScoreboard();
+        var tl = Confs.tl().commands().toggleScoreboard();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         boolean toggleTo = !sender.showScoreboard();

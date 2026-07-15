@@ -3,35 +3,34 @@ package dev.kitteh.factions.command.defaults.list;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
-import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.IntegerParser;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import java.util.function.Function;
 
 public class CmdListFactions implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().list().factions();
+            var tl = Confs.tl().commands().list().factions();
             manager.command(
                     builder
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -52,8 +51,8 @@ public class CmdListFactions implements Cmd {
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostList(), econTl.getListTo(), econTl.getListFor())) {
+        var econTl = Confs.tl().economy().actions();
+        if (!context.sender().payForCommand(Confs.main().economy().getCostList(), econTl.getListTo(), econTl.getListFor())) {
             return;
         }
 
@@ -64,7 +63,7 @@ public class CmdListFactions implements Cmd {
 
         // remove exempt factions
         if (!context.sender().hasPermission(Permission.SHOW_BYPASS_EXEMPT)) {
-            List<String> exemptFactions = FactionsPlugin.instance().conf().commands().show().getExempt();
+            List<String> exemptFactions = Confs.main().commands().show().getExempt();
             factionList.removeIf(next -> exemptFactions.contains(next.tag()));
         }
 
@@ -92,12 +91,10 @@ public class CmdListFactions implements Cmd {
             end = factionList.size();
         }
 
-        AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
-
-        String header = plugin.tl().commands().list().factions().getHeader();
-        String footer = plugin.tl().commands().list().factions().getFooter();
-        String factionlessEntry = plugin.tl().commands().list().factions().getFactionlessEntry();
-        String factionEntry = plugin.tl().commands().list().factions().getEntry();
+        String header = Confs.tl().commands().list().factions().getHeader();
+        String footer = Confs.tl().commands().list().factions().getFooter();
+        String factionlessEntry = Confs.tl().commands().list().factions().getFactionlessEntry();
+        String factionEntry = Confs.tl().commands().list().factions().getEntry();
 
         if (!header.isEmpty()) {
             lines.add(Mini.parse(header, fPlayer,

@@ -1,6 +1,6 @@
 package dev.kitteh.factions.permissible;
 
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.Upgrades;
@@ -69,8 +69,8 @@ public enum PermissibleActions implements PermissibleAction {
     private @Nullable Upgrade prerequisite;
 
     PermissibleActions(Function<TranslationsConfig.Protection.Permissions, String> desc, Function<TranslationsConfig.Protection.Permissions, String> shortDesc) {
-        this.desc = desc.apply(FactionsPlugin.instance().tl().protection().permissions());
-        this.shortDesc = shortDesc.apply(FactionsPlugin.instance().tl().protection().permissions());
+        this.desc = desc.apply(Confs.tl().protection().permissions());
+        this.shortDesc = shortDesc.apply(Confs.tl().protection().permissions());
     }
 
     PermissibleActions(Function<TranslationsConfig.Protection.Permissions, String> desc, Function<TranslationsConfig.Protection.Permissions, String> shortDesc, Upgrade prerequisite) {

@@ -1,7 +1,7 @@
 package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -73,7 +73,7 @@ public class MiscUtil {
         str = ChatColor.stripColor(str);
         str = str.toLowerCase();
 
-        MainConfig.Factions.Other conf = FactionsPlugin.instance().conf().factions().other();
+        MainConfig.Factions.Other conf = Confs.main().factions().other();
         for (char c : str.toCharArray()) {
             if (conf.isValidTagCharacter(c)) {
                 ret.append(c);
@@ -83,8 +83,8 @@ public class MiscUtil {
     }
 
     public static List<Component> validateTag(String str) {
-        var tl = FactionsPlugin.instance().tl().general().factionTag();
-        var conf = FactionsPlugin.instance().conf().factions().other();
+        var tl = Confs.tl().general().factionTag();
+        var conf = Confs.main().factions().other();
         ArrayList<Component> errors = new ArrayList<>();
 
         for (String blacklistItem : conf.getNameBlacklist()) {
@@ -129,7 +129,7 @@ public class MiscUtil {
     }
 
     public static String durationString(Duration duration) {
-        var dur = FactionsPlugin.instance().tl().general().duration();
+        var dur = Confs.tl().general().duration();
         long days = duration.toDays();
         long hours = duration.toHoursPart();
         long minutes = duration.toMinutesPart();
@@ -229,6 +229,6 @@ public class MiscUtil {
     @Deprecated(forRemoval = true, since = "4.5.0")
     @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public static String commandRoot() {
-        return FactionsPlugin.instance().tl().commands().generic().getCommandRoot().getFirstAlias();
+        return Confs.tl().commands().generic().getCommandRoot().getFirstAlias();
     }
 }

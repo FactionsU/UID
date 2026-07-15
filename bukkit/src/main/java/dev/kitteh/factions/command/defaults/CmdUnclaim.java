@@ -4,41 +4,41 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.event.LandUnclaimAllEvent;
 import dev.kitteh.factions.event.LandUnclaimEvent;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.SpiralTask;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.IntegerParser;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdUnclaim implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().unclaim();
+            var tl = Confs.tl().commands().unclaim();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -64,7 +64,7 @@ public class CmdUnclaim implements Cmd {
                             .flag(
                                     manager.flagBuilder("fill-limit")
                                             .withPermission(Cloudy.hasPermission(Permission.UNCLAIM_FILL))
-                                            .withComponent(IntegerParser.integerParser(1, FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims()))
+                                            .withComponent(IntegerParser.integerParser(1, Confs.main().factions().claims().getFillUnClaimMaxClaims()))
                             )
                             .flag(
                                     manager.flagBuilder("auto")
@@ -80,7 +80,7 @@ public class CmdUnclaim implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().unclaim();
+        var tl = Confs.tl().commands().unclaim();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
 
@@ -110,7 +110,7 @@ public class CmdUnclaim implements Cmd {
         }
 
         if (context.flags().hasFlag("fill")) {
-            int limit = context.flags().get("fill-limit") instanceof Integer i ? i : FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims();
+            int limit = context.flags().get("fill-limit") instanceof Integer i ? i : Confs.main().factions().claims().getFillUnClaimMaxClaims();
             this.fill(sender, claimLocation, forFaction, limit);
             return;
         }
@@ -123,7 +123,7 @@ public class CmdUnclaim implements Cmd {
 
             new SpiralTask(claimLocation, radius) {
                 private int failCount = 0;
-                private final int limit = FactionsPlugin.instance().conf().factions().claims().getRadiusClaimFailureLimit() - 1;
+                private final int limit = Confs.main().factions().claims().getRadiusClaimFailureLimit() - 1;
 
                 @Override
                 public boolean work() {
@@ -144,10 +144,10 @@ public class CmdUnclaim implements Cmd {
     }
 
     private void fill(FPlayer sender, FLocation loc, Faction forFaction, int limit) {
-        var tl = FactionsPlugin.instance().tl().commands().unclaim();
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
-        if (limit > FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims()) {
-            sender.sendRichMessage(tl.getFillAboveMax(), Placeholder.unparsed("max", String.valueOf(FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxClaims())));
+        var tl = Confs.tl().commands().unclaim();
+        var econTl = Confs.tl().economy().actions();
+        if (limit > Confs.main().factions().claims().getFillUnClaimMaxClaims()) {
+            sender.sendRichMessage(tl.getFillAboveMax(), Placeholder.unparsed("max", String.valueOf(Confs.main().factions().claims().getFillUnClaimMaxClaims())));
             return;
         }
 
@@ -173,7 +173,7 @@ public class CmdUnclaim implements Cmd {
             return;
         }
 
-        final double distance = FactionsPlugin.instance().conf().factions().claims().getFillUnClaimMaxDistance();
+        final double distance = Confs.main().factions().claims().getFillUnClaimMaxDistance();
         int startX = loc.x();
         int startZ = loc.z();
 
@@ -201,7 +201,7 @@ public class CmdUnclaim implements Cmd {
             return;
         }
 
-        final int limFail = FactionsPlugin.instance().conf().factions().claims().getRadiusClaimFailureLimit();
+        final int limFail = Confs.main().factions().claims().getRadiusClaimFailureLimit();
         Tracker tracker = new Tracker();
         long x = 0;
         long z = 0;
@@ -228,7 +228,7 @@ public class CmdUnclaim implements Cmd {
             sender.sendRichMessage(tl.getFillBypassComplete(), Placeholder.unparsed("count", String.valueOf(tracker.count())));
         } else {
             if (tracker.refund != 0) {
-                if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysLandCosts()) {
+                if (Confs.main().economy().isBankEnabled() && Confs.main().economy().isBankFactionPaysLandCosts()) {
                     Econ.modifyMoney(forFaction, tracker.refund, econTl.getUnclaimTo(), econTl.getUnclaimFor());
                 } else {
                     Econ.modifyMoney(sender, tracker.refund, econTl.getUnclaimTo(), econTl.getUnclaimFor());
@@ -259,10 +259,10 @@ public class CmdUnclaim implements Cmd {
     }
 
     private boolean attemptUnclaimForFill(FPlayer fPlayer, FLocation target, Faction targetFaction, Tracker tracker) {
-        var tl = FactionsPlugin.instance().tl().commands().unclaim();
+        var tl = Confs.tl().commands().unclaim();
         if (targetFaction.isSafeZone() || targetFaction.isWarZone()) {
             Board.board().unclaim(target);
-            if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
+            if (Confs.main().logging().isLandUnclaims()) {
                 AbstractFactionsPlugin.instance().log(fPlayer.name() + " unclaimed " + target.asCoordString() + " from " + targetFaction.tag());
             }
             return true;
@@ -283,15 +283,15 @@ public class CmdUnclaim implements Cmd {
 
         Board.board().unclaim(target);
 
-        if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
+        if (Confs.main().logging().isLandUnclaims()) {
             AbstractFactionsPlugin.instance().log(fPlayer.name() + " unclaimed " + target.asCoordString() + " from " + targetFaction.tag());
         }
         return true;
     }
 
     public static void unclaimAll(FPlayer sender, Faction faction, boolean confirmed) {
-        var tl = FactionsPlugin.instance().tl().commands().unclaim();
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        var tl = Confs.tl().commands().unclaim();
+        var econTl = Confs.tl().economy().actions();
         if (sender.role() != Role.ADMIN && !sender.adminBypass()) {
             sender.sendRichMessage(tl.getCantUnclaim(), FactionResolver.of(faction));
             return;
@@ -313,7 +313,7 @@ public class CmdUnclaim implements Cmd {
 
         if (Econ.shouldBeUsed()) {
             double refund = Econ.calculateTotalLandRefund(faction.claimCount());
-            if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysLandCosts()) {
+            if (Confs.main().economy().isBankEnabled() && Confs.main().economy().isBankFactionPaysLandCosts()) {
                 if (!Econ.modifyMoney(faction, refund, econTl.getUnclaimAllTo(), econTl.getUnclaimAllFor())) {
                     return;
                 }
@@ -327,7 +327,7 @@ public class CmdUnclaim implements Cmd {
         Board.board().unclaimAll(faction);
         faction.sendRichMessage(tl.getUnclaimAllUnclaimed(), FPlayerResolver.of("player", sender));
 
-        if (FactionsPlugin.instance().conf().logging().isLandUnclaims()) {
+        if (Confs.main().logging().isLandUnclaims()) {
             AbstractFactionsPlugin.instance().log(sender.name() + " unclaimed all of " + faction.tag());
         }
     }

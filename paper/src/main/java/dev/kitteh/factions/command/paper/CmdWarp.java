@@ -1,11 +1,11 @@
 package dev.kitteh.factions.command.paper;
 
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.LazyLocation;
@@ -33,7 +33,7 @@ public class CmdWarp implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().warp();
+            var tl = Confs.tl().commands().warp();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -54,7 +54,7 @@ public class CmdWarp implements Cmd {
 
     private Dialog menuWarp(Sender sender, Faction faction) {
         FactionResolver factionResolver = FactionResolver.of(faction);
-        var tl = FactionsPlugin.instance().tl().commands().warp();
+        var tl = Confs.tl().commands().warp();
         List<ActionButton> warps = faction.warps().keySet().stream()
                 .map(warp -> {
                     ActionButton.Builder builder = ActionButton.builder(Mini.parse(tl.getMenuWarpName(), sender.fPlayerOrNull(), Placeholder.unparsed("warp", warp)));
@@ -79,7 +79,7 @@ public class CmdWarp implements Cmd {
     }
 
     private Dialog password(Sender sender, String warpName, Faction faction, FactionResolver factionResolver) {
-        var tl = FactionsPlugin.instance().tl().commands().warp();
+        var tl = Confs.tl().commands().warp();
         TagResolver warp = Placeholder.unparsed("warp", warpName);
         return Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(Mini.parse(tl.getMenuPassTitle(), sender.fPlayerOrNull(), warp, factionResolver))
@@ -110,7 +110,7 @@ public class CmdWarp implements Cmd {
     }
 
     private void warp(Faction faction, String warp, Sender sender) {
-        var tl = FactionsPlugin.instance().tl().commands().warp();
+        var tl = Confs.tl().commands().warp();
         LazyLocation destination = faction.warp(warp);
         if (destination == null) {
             sender.sendRichMessage(tl.getInvalidWarp(), Placeholder.unparsed("warp", warp));

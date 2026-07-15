@@ -2,29 +2,28 @@ package dev.kitteh.factions.command.defaults.money;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.parser.standard.DoubleParser;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.parser.standard.DoubleParser;
 
 public class CmdMoneySend implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().money().send();
+            var tl = Confs.tl().commands().money().send();
 
             Command.Builder<Sender> sendBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -73,7 +72,7 @@ public class CmdMoneySend implements Cmd {
 
         boolean success = Econ.transferMoney(sender, from, to, amount);
 
-        if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
+        if (success && Confs.main().logging().isMoneyTransactions()) {
             AbstractFactionsPlugin.instance().log(String.format("%s transferred %s from the faction \"%s\" to the faction \"%s\"", context.sender().sender().getName(), Econ.moneyString(amount), from.tag(), to.tag()));
         }
     }
@@ -92,7 +91,7 @@ public class CmdMoneySend implements Cmd {
 
         boolean success = Econ.transferMoney(sender, from, to, amount);
 
-        if (success && FactionsPlugin.instance().conf().logging().isMoneyTransactions()) {
+        if (success && Confs.main().logging().isMoneyTransactions()) {
             AbstractFactionsPlugin.instance().log(String.format("%s transferred %s from the faction \"%s\" to the player \"%s\"", sender.name(), Econ.moneyString(amount), from.tag(), to.name()));
         }
     }

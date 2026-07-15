@@ -1,8 +1,9 @@
 package dev.kitteh.factions.listener;
 
 import dev.kitteh.factions.FLocation;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.config.Confs;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.protection.Protection;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Chunk;
@@ -30,9 +31,9 @@ import java.util.stream.Collectors;
 
 @NullMarked
 public class ListenExplode implements Listener {
-    private final FactionsPlugin plugin;
+    private final AbstractFactionsPlugin plugin;
     
-    public ListenExplode(FactionsPlugin plugin) {
+    public ListenExplode(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
     
@@ -58,7 +59,7 @@ public class ListenExplode implements Listener {
 
         // Block wind charges from triggering blocks (like doors, levers, buttons)
         if (result == ExplosionResult.TRIGGER_BLOCK && boomer instanceof WindCharge charge &&
-                this.plugin.conf().factions().protection().isTerritoryBlockWindChargeInteractionMatchingPerms() &&
+                Confs.main().factions().protection().isTerritoryBlockWindChargeInteractionMatchingPerms() &&
                 charge.getShooter() instanceof Player shooter) {
             blockList.removeIf(block -> Protection.denyUseBlock(shooter, block.getType(), block.getLocation(), false));
         }
@@ -70,7 +71,7 @@ public class ListenExplode implements Listener {
         }
 
         // Anti-Waterlog feature
-        if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && this.plugin.conf().exploits().isTntWaterlog() && !Universe.universe().grace()) {
+        if ((boomer instanceof TNTPrimed || boomer instanceof ExplosiveMinecart) && Confs.main().exploits().isTntWaterlog() && !Universe.universe().grace()) {
             // TNT in water/lava doesn't normally destroy any surrounding blocks, which is usually desired behavior, but...
             // this change below provides workaround for waterwalling providing perfect protection,
             // and makes cheap (non-obsidian) TNT cannons require minor maintenance between shots

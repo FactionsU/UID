@@ -2,7 +2,7 @@ package dev.kitteh.factions.command;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Role;
@@ -44,7 +44,7 @@ public interface Sender {
                 return true;
             }
 
-            if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.faction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.lastStoodAt())) {
+            if (Confs.main().economy().isBankEnabled() && Confs.main().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.faction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.lastStoodAt())) {
                 return Econ.modifyMoney(fPlayer.faction(), -cost, toDoThis, forDoingThis);
             } else {
                 return Econ.modifyMoney(fPlayer, -cost, toDoThis, forDoingThis);
@@ -60,7 +60,7 @@ public interface Sender {
             if (fPlayer.adminBypass()) {
                 return true;
             }
-            if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.faction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.lastStoodAt())) {
+            if (Confs.main().economy().isBankEnabled() && Confs.main().economy().isBankFactionPaysCosts() && fPlayer.hasFaction() && fPlayer.faction().hasAccess(fPlayer, PermissibleActions.ECONOMY, fPlayer.lastStoodAt())) {
                 return Econ.hasAtLeast(fPlayer.faction(), cost, toDoThis);
             } else {
                 return Econ.hasAtLeast(fPlayer, cost, toDoThis);

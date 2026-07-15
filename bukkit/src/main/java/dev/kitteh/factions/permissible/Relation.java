@@ -1,6 +1,6 @@
 package dev.kitteh.factions.permissible;
 
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.integration.permcontext.Contexts;
 import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.ApiStatus;
@@ -70,21 +70,21 @@ public enum Relation implements Permissible {
     @Override
     public String translation() {
         return switch(this) {
-            case MEMBER -> FactionsPlugin.instance().tl().general().relations().getMember();
-            case ALLY -> FactionsPlugin.instance().tl().general().relations().getAlly();
-            case TRUCE -> FactionsPlugin.instance().tl().general().relations().getTruce();
-            case NEUTRAL -> FactionsPlugin.instance().tl().general().relations().getNeutral();
-            case ENEMY -> FactionsPlugin.instance().tl().general().relations().getEnemy();
+            case MEMBER -> Confs.tl().general().relations().getMember();
+            case ALLY -> Confs.tl().general().relations().getAlly();
+            case TRUCE -> Confs.tl().general().relations().getTruce();
+            case NEUTRAL -> Confs.tl().general().relations().getNeutral();
+            case ENEMY -> Confs.tl().general().relations().getEnemy();
         };
     }
 
     public String getPluralTranslation() {
         return switch(this) {
-            case MEMBER -> FactionsPlugin.instance().tl().general().relations().getMembers();
-            case ALLY -> FactionsPlugin.instance().tl().general().relations().getAllies();
-            case TRUCE -> FactionsPlugin.instance().tl().general().relations().getTruces();
-            case NEUTRAL -> FactionsPlugin.instance().tl().general().relations().getNeutrals();
-            case ENEMY -> FactionsPlugin.instance().tl().general().relations().getEnemies();
+            case MEMBER -> Confs.tl().general().relations().getMembers();
+            case ALLY -> Confs.tl().general().relations().getAllies();
+            case TRUCE -> Confs.tl().general().relations().getTruces();
+            case NEUTRAL -> Confs.tl().general().relations().getNeutrals();
+            case ENEMY -> Confs.tl().general().relations().getEnemies();
         };
     }
 
@@ -119,20 +119,20 @@ public enum Relation implements Permissible {
     @Override
     public TextColor color() {
         return switch (this) {
-            case MEMBER -> FactionsPlugin.instance().conf().colors().relations().getMember();
-            case ALLY -> FactionsPlugin.instance().conf().colors().relations().getAlly();
-            case NEUTRAL -> FactionsPlugin.instance().conf().colors().relations().getNeutral();
-            case TRUCE -> FactionsPlugin.instance().conf().colors().relations().getTruce();
-            case ENEMY -> FactionsPlugin.instance().conf().colors().relations().getEnemy();
+            case MEMBER -> Confs.main().colors().relations().getMember();
+            case ALLY -> Confs.main().colors().relations().getAlly();
+            case NEUTRAL -> Confs.main().colors().relations().getNeutral();
+            case TRUCE -> Confs.main().colors().relations().getTruce();
+            case ENEMY -> Confs.main().colors().relations().getEnemy();
         };
     }
 
     public int getMax() {
         return switch (this) {
-            case ALLY -> FactionsPlugin.instance().conf().factions().maxRelations().getAlly();
-            case ENEMY -> FactionsPlugin.instance().conf().factions().maxRelations().getEnemy();
-            case TRUCE -> FactionsPlugin.instance().conf().factions().maxRelations().getTruce();
-            case NEUTRAL -> FactionsPlugin.instance().conf().factions().maxRelations().getNeutral();
+            case ALLY -> Confs.main().factions().maxRelations().getAlly();
+            case ENEMY -> Confs.main().factions().maxRelations().getEnemy();
+            case TRUCE -> Confs.main().factions().maxRelations().getTruce();
+            case NEUTRAL -> Confs.main().factions().maxRelations().getNeutral();
 
             case MEMBER -> -1;
         };
@@ -140,13 +140,13 @@ public enum Relation implements Permissible {
 
     public double getRelationCost() {
         if (isEnemy()) {
-            return FactionsPlugin.instance().conf().economy().getCostEnemy();
+            return Confs.main().economy().getCostEnemy();
         } else if (isAlly()) {
-            return FactionsPlugin.instance().conf().economy().getCostAlly();
+            return Confs.main().economy().getCostAlly();
         } else if (isTruce()) {
-            return FactionsPlugin.instance().conf().economy().getCostTruce();
+            return Confs.main().economy().getCostTruce();
         } else {
-            return FactionsPlugin.instance().conf().economy().getCostNeutral();
+            return Confs.main().economy().getCostNeutral();
         }
     }
 

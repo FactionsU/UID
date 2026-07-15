@@ -6,22 +6,18 @@ import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.permissible.PermSelector;
 import dev.kitteh.factions.permissible.PermSelectorRegistry;
-import dev.kitteh.factions.permissible.PermissibleAction;
-import dev.kitteh.factions.permissible.PermissibleActionRegistry;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.selector.RelationAtLeastSelector;
 import dev.kitteh.factions.permissible.selector.RoleAtLeastSelector;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@ApiStatus.Internal
 @NoFinalFields
 @SuppressWarnings({"FieldMayBeFinal", "MismatchedQueryAndUpdateOfCollection"})
 public class PermissionsConfig {

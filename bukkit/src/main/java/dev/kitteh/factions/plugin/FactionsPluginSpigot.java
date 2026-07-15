@@ -22,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 
 @ApiStatus.Internal
 public class FactionsPluginSpigot extends AbstractFactionsPlugin {
@@ -43,7 +44,8 @@ public class FactionsPluginSpigot extends AbstractFactionsPlugin {
             for (String depend : this.integrationManager().integrationNames()) {
                 putEdge.invoke(graph, pluginName, depend);
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            this.getLogger().log(Level.WARNING, "Failed to add dependencies to dependency graph, this may cause issues with some integrations", e);
         }
     }
 

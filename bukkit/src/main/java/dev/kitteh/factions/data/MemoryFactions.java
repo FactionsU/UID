@@ -3,8 +3,8 @@ package dev.kitteh.factions.data;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.event.FactionCreateEvent;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.util.MiscUtil;
 import org.bukkit.Bukkit;
@@ -29,7 +29,7 @@ public abstract class MemoryFactions implements Factions {
             faction.cleanupDeserialization();
         }
 
-        var special = FactionsPlugin.instance().tl().factionEvents().specialFactions();
+        var special = Confs.tl().factionEvents().specialFactions();
         // Make sure the default neutral faction exists
         if (!factions.containsKey(Factions.ID_WILDERNESS)) {
             MemoryFaction faction = generateFactionObject(Factions.ID_WILDERNESS, special.getWildernessTag());

@@ -4,12 +4,13 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;
 import org.bukkit.block.Dispenser;
@@ -17,17 +18,16 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.IntegerParser;
 
 import java.util.List;
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdTNTSiphon implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().tnt();
+            var tl = Confs.tl().commands().tnt();
             manager.command(
                     builder.literal(tl.getSubCmdSiphon())
                             .commandDescription(Cloudy.desc(tl.getSiphonDescription()))
@@ -44,7 +44,7 @@ public class CmdTNTSiphon implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().tnt();
+        var tl = Confs.tl().commands().tnt();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
         Faction faction = sender.faction();
@@ -67,10 +67,10 @@ public class CmdTNTSiphon implements Cmd {
             return;
         }
 
-        if (radius > FactionsPlugin.instance().conf().commands().tnt().getMaxRadius()) {
+        if (radius > Confs.main().commands().tnt().getMaxRadius()) {
             sender.sendRichMessage(tl.getSiphonFailMaxRadius(),
                     Placeholder.unparsed("value", String.valueOf(radius)),
-                    Placeholder.unparsed("max", String.valueOf(FactionsPlugin.instance().conf().commands().tnt().getMaxRadius())));
+                    Placeholder.unparsed("max", String.valueOf(Confs.main().commands().tnt().getMaxRadius())));
             return;
         }
 

@@ -3,8 +3,8 @@ package dev.kitteh.factions.listener;
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
@@ -92,7 +92,7 @@ public class ListenTiming implements Listener {
             faction.shield(start, duration, cooldown);
 
             faction.sendRichMessage(
-                    FactionsPlugin.instance().tl().commands().shield().getActivatedScheduled(),
+                    Confs.tl().commands().shield().getActivatedScheduled(),
                     Placeholder.unparsed("duration", MiscUtil.durationString(faction.shieldRemaining()))
             );
         }

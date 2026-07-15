@@ -6,7 +6,9 @@ import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.protection.Protection;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.upgrade.Upgrades;
@@ -34,9 +36,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ListenDamage implements Listener {
-    private final FactionsPlugin plugin;
+    private final AbstractFactionsPlugin plugin;
 
-    public ListenDamage(FactionsPlugin plugin) {
+    public ListenDamage(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -73,7 +75,7 @@ public class ListenDamage implements Listener {
             if (Protection.denyDamage(sub.getDamager(), sub.getEntity(), true)) {
                 event.setCancelled(true);
             }
-        } else if (FactionsPlugin.instance().conf().factions().protection().isSafeZonePreventAllDamageToPlayers() && isPlayerInSafeZone(event.getEntity())) {
+        } else if (Confs.main().factions().protection().isSafeZonePreventAllDamageToPlayers() && isPlayerInSafeZone(event.getEntity())) {
             // Players can not take any damage in a Safe Zone
             event.setCancelled(true);
         } else if (event.getCause() == EntityDamageEvent.DamageCause.FALL && event.getEntity() instanceof Player player) {
@@ -166,14 +168,14 @@ public class ListenDamage implements Listener {
 
             if (playerHurt) {
                 cancelWarmup((Player) damagee);
-                if ((damager instanceof Player) || plugin.conf().commands().fly().isDisableOnHurtByMobs()) {
+                if ((damager instanceof Player) || Confs.main().commands().fly().isDisableOnHurtByMobs()) {
                     cancelFFly((Player) damagee);
                 }
             }
             if (damager instanceof Player) {
                 cancelWarmup((Player) damager);
-                if ((playerHurt && plugin.conf().commands().fly().isDisableOnHurtingPlayers()) ||
-                        (!playerHurt && plugin.conf().commands().fly().isDisableOnHurtingMobs())) {
+                if ((playerHurt && Confs.main().commands().fly().isDisableOnHurtingPlayers()) ||
+                        (!playerHurt && Confs.main().commands().fly().isDisableOnHurtingMobs())) {
                     cancelFFly((Player) damager);
                 }
             }
@@ -183,7 +185,7 @@ public class ListenDamage implements Listener {
         if (playerHurt) {
             Player player = (Player) damagee;
             cancelWarmup(player);
-            if (plugin.conf().commands().fly().isDisableOnGenericDamage()) {
+            if (Confs.main().commands().fly().isDisableOnGenericDamage()) {
                 cancelFFly(player);
             }
         }
@@ -194,7 +196,7 @@ public class ListenDamage implements Listener {
             return;
         }
 
-        var flyTl = FactionsPlugin.instance().tl().commands().fly();
+        var flyTl = Confs.tl().commands().fly();
         FPlayer fPlayer = FPlayers.fPlayers().get(player);
         if (fPlayer.flying()) {
             fPlayer.flying(false, false);
@@ -213,7 +215,7 @@ public class ListenDamage implements Listener {
         FPlayer me = FPlayers.fPlayers().get(player);
         if (me.warmingUp()) {
             me.cancelWarmup();
-            me.sendRichMessage(FactionsPlugin.instance().tl().commands().generic().getWarmupCancelled());
+            me.sendRichMessage(Confs.tl().commands().generic().getWarmupCancelled());
         }
     }
 

@@ -12,12 +12,15 @@ import dev.kitteh.factions.command.defaults.top.FTopFoundedValue;
 import dev.kitteh.factions.command.defaults.top.FTopGTIntValue;
 import dev.kitteh.factions.command.defaults.top.FTopValue;
 import dev.kitteh.factions.command.defaults.top.TopMoneyCache;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.IntegerParser;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.SuggestionProvider;
@@ -25,15 +28,13 @@ import org.incendo.cloud.suggestion.SuggestionProvider;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import java.util.function.Function;
 
 public class CmdTop implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().top();
+            var tl = Confs.tl().commands().top();
             Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TOP)));
@@ -70,7 +71,7 @@ public class CmdTop implements Cmd {
         criteria = criteria.toLowerCase();
 
         Function<Faction, FTopValue<?>> ftopGenerator = topValueGenerators.get(criteria);
-        var tl = FactionsPlugin.instance().tl().commands().top();
+        var tl = Confs.tl().commands().top();
         if (ftopGenerator == null || (!(FactionsPlugin.instance().landRaidControl() instanceof PowerControl) && criteria.equalsIgnoreCase("power"))) {
             context.sender().sendRichMessage(tl.getInvalid(), Placeholder.unparsed("criteria", criteria));
             return;

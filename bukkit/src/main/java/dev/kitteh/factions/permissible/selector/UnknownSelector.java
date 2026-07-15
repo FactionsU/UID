@@ -1,7 +1,7 @@
 package dev.kitteh.factions.permissible.selector;
 
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Selectable;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus;
@@ -13,7 +13,7 @@ public class UnknownSelector extends AbstractSelector {
     private final String text;
 
     public UnknownSelector(String text) {
-        super(new BasicDescriptor("unknown", FactionsPlugin.instance().tl().permissions().selectors().unknown()::getDisplayName, UnknownSelector::new));
+        super(new BasicDescriptor("unknown", Confs.tl().permissions().selectors().unknown()::getDisplayName, UnknownSelector::new));
         this.text = text;
     }
 

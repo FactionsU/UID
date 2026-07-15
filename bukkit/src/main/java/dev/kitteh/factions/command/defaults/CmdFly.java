@@ -1,37 +1,36 @@
 package dev.kitteh.factions.command.defaults;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.FlightUtil;
 import dev.kitteh.factions.util.Mini;
-import dev.kitteh.factions.util.Permission;
-import dev.kitteh.factions.util.WarmUpUtil;
 import dev.kitteh.factions.util.ParticleProvider;
+import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
+import dev.kitteh.factions.util.WarmUpUtil;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Particle;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.BooleanParser;
 import org.incendo.cloud.parser.standard.StringParser;
-
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdFly implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().fly();
+            var tl = Confs.tl().commands().fly();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
                             .permission(builder.commandPermission().and(
-                                    Cloudy.predicate(_ -> FactionsPlugin.instance().conf().commands().fly().isEnable())
+                                    Cloudy.predicate(_ -> Confs.main().commands().fly().isEnable())
                                             .and(Cloudy.hasPermission(Permission.FLY))
                                             .and(Cloudy.hasFaction())))
                             .flag(manager.flagBuilder("auto").withPermission(Cloudy.hasPermission(Permission.FLY_AUTO)))
@@ -51,7 +50,7 @@ public class CmdFly implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().fly();
+        var tl = Confs.tl().commands().fly();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
 
         boolean unhandled = true;
@@ -95,8 +94,8 @@ public class CmdFly implements Cmd {
             return;
         }
 
-        var tl = FactionsPlugin.instance().tl().commands().fly();
-        int delay = FactionsPlugin.instance().conf().commands().fly().getDelay();
+        var tl = Confs.tl().commands().fly();
+        int delay = Confs.main().commands().fly().getDelay();
         WarmUpUtil.process(fPlayer, WarmUpUtil.Warmup.FLIGHT,
                 Mini.parse(tl.getWarmup(), fPlayer, Placeholder.unparsed("seconds", String.valueOf(delay))),
                 () -> {
@@ -107,13 +106,13 @@ public class CmdFly implements Cmd {
     }
 
     private boolean flyTest(FPlayer fPlayer, boolean notify) {
-        var tl = FactionsPlugin.instance().tl().commands().fly();
+        var tl = Confs.tl().commands().fly();
         if (!fPlayer.canFlyAtLocation()) {
             if (notify) {
                 fPlayer.sendRichMessage(tl.getNoAccess(), FactionResolver.of(fPlayer.lastStoodAt().faction()));
             }
             return false;
-        } else if (FlightUtil.instance().enemiesNearby(fPlayer, FactionsPlugin.instance().conf().commands().fly().getEnemyRadius())) {
+        } else if (FlightUtil.instance().enemiesNearby(fPlayer, Confs.main().commands().fly().getEnemyRadius())) {
             if (notify) {
                 fPlayer.sendRichMessage(tl.getEnemyNearby());
             }

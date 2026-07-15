@@ -1,19 +1,18 @@
 package dev.kitteh.factions;
 
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.PermSelector;
 import dev.kitteh.factions.permissible.PermState;
 import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
-import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.BanInfo;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -406,11 +405,11 @@ public non-sealed interface Faction extends Participator, Selectable {
     void founded(Instant when);
 
     default boolean noPvPInTerritory() {
-        return isSafeZone() || (isPeaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisablePVP());
+        return isSafeZone() || (isPeaceful() && Confs.main().factions().specialCase().isPeacefulTerritoryDisablePVP());
     }
 
     default boolean noMonstersInTerritory() {
-        return isSafeZone() || (isPeaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters());
+        return isSafeZone() || (isPeaceful() && Confs.main().factions().specialCase().isPeacefulTerritoryDisableMonsters());
     }
 
     default boolean isNormal() {
@@ -587,7 +586,7 @@ public non-sealed interface Faction extends Participator, Selectable {
     int size();
 
     default int memberLimit() {
-        int confMax = FactionsPlugin.instance().conf().factions().other().getFactionMemberLimit();
+        int confMax = Confs.main().factions().other().getFactionMemberLimit();
         if (confMax < 1) {
             return Integer.MAX_VALUE;
         }

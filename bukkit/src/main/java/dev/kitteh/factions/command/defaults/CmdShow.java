@@ -3,11 +3,11 @@ package dev.kitteh.factions.command.defaults;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.tagresolver.FactionResolver;
@@ -35,7 +35,7 @@ public class CmdShow implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().show();
+            var tl = Confs.tl().commands().show();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -66,8 +66,8 @@ public class CmdShow implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer fPlayer = context.sender().fPlayerOrNull();
 
-        var tl = FactionsPlugin.instance().tl().commands().show();
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        var tl = Confs.tl().commands().show();
+        var econTl = Confs.tl().economy().actions();
 
         Faction faction = context.getOrDefault("faction", fPlayer == null ? Factions.factions().wilderness() : fPlayer.faction());
         if (faction.isWilderness()) {
@@ -76,12 +76,12 @@ public class CmdShow implements Cmd {
         }
 
         if (!context.sender().hasPermission(Permission.SHOW_BYPASS_EXEMPT)
-                && FactionsPlugin.instance().conf().commands().show().getExempt().contains(faction.tag())) {
+                && Confs.main().commands().show().getExempt().contains(faction.tag())) {
             context.sender().sendRichMessage(tl.getExempt());
             return;
         }
 
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostShow(), econTl.getShowTo(), econTl.getShowFor())) {
+        if (!context.sender().payForCommand(Confs.main().economy().getCostShow(), econTl.getShowTo(), econTl.getShowFor())) {
             return;
         }
 

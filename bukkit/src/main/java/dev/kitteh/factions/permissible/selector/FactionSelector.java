@@ -3,7 +3,7 @@ package dev.kitteh.factions.permissible.selector;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
@@ -17,8 +17,8 @@ import java.util.Objects;
 @NullMarked
 public class FactionSelector extends AbstractSelector {
     public static final String NAME = "faction";
-    public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, FactionsPlugin.instance().tl().permissions().selectors().faction()::getDisplayName, FactionSelector::new)
-            .withInstructions(FactionsPlugin.instance().tl().permissions().selectors().faction()::getInstructions);
+    public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, Confs.tl().permissions().selectors().faction()::getDisplayName, FactionSelector::new)
+            .withInstructions(Confs.tl().permissions().selectors().faction()::getInstructions);
 
     private final int id;
     private final String lastKnown;
@@ -66,7 +66,7 @@ public class FactionSelector extends AbstractSelector {
     public Component displayValue(Faction context) {
         Faction faction = Factions.factions().get(this.id);
         return faction == null ?
-                Mini.parse(FactionsPlugin.instance().tl().permissions().selectors().faction().getDisbandedValue(), Placeholder.unparsed("lastknown", this.lastKnown)) :
+                Mini.parse(Confs.tl().permissions().selectors().faction().getDisbandedValue(), Placeholder.unparsed("lastknown", this.lastKnown)) :
                 Component.text().color(faction.textColorTo(context)).content(faction.tag()).build();
     }
 

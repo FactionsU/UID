@@ -3,8 +3,8 @@ package dev.kitteh.factions.listener;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.Relation;
@@ -40,7 +40,7 @@ public class ListenSpigotChat implements Listener {
         ChatTarget chatTarget = me.chatTarget();
 
         Faction faction = me.faction();
-        MainConfig.Factions.Chat.InternalChat chatConf = FactionsPlugin.instance().conf().factions().chat().internalChat();
+        MainConfig.Factions.Chat.InternalChat chatConf = Confs.main().factions().chat().internalChat();
         LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
 
         TagResolver messagePlaceholder = Placeholder.component("message", message);
@@ -114,7 +114,7 @@ public class ListenSpigotChat implements Listener {
 
         // Are we to insert the Faction tag into the format?
         // If we are not to insert it - we are done.
-        if (this.plugin.conf().factions().chat().spigot().isTagHandledByAnotherPlugin()) {
+        if (Confs.main().factions().chat().spigot().isTagHandledByAnotherPlugin()) {
             return;
         }
 
@@ -126,7 +126,7 @@ public class ListenSpigotChat implements Listener {
         String msg = event.getMessage();
         String eventFormat = event.getFormat();
         FPlayer me = FPlayers.fPlayers().get(talkingPlayer);
-        MainConfig.Factions.Chat.Spigot chatConf = this.plugin.conf().factions().chat().spigot();
+        MainConfig.Factions.Chat.Spigot chatConf = Confs.main().factions().chat().spigot();
         int InsertIndex = chatConf.getTagInsertIndex();
 
         boolean padBefore = chatConf.isTagPadBefore();
@@ -184,13 +184,13 @@ public class ListenSpigotChat implements Listener {
 
     private String chatTagLegacy(FPlayer me) {
         return me.hasFaction() ?
-                String.format(FactionsPlugin.instance().conf().factions().chat().spigot().getTagFormat(), me.role().getPrefix() + (me.hasFaction() ? me.faction().tag() : "")) :
-                FactionsPlugin.instance().conf().factions().chat().spigot().getTagNoFaction();
+                String.format(Confs.main().factions().chat().spigot().getTagFormat(), me.role().getPrefix() + (me.hasFaction() ? me.faction().tag() : "")) :
+                Confs.main().factions().chat().spigot().getTagNoFaction();
     }
 
     private String chatTagLegacy(FPlayer me, FPlayer participator) {
         return me.hasFaction() ?
                 LegacyCruft.getLegacyString(me.relationTo(participator).color()) + chatTagLegacy(me) :
-                FactionsPlugin.instance().conf().factions().chat().spigot().getTagNoFaction();
+                Confs.main().factions().chat().spigot().getTagNoFaction();
     }
 }

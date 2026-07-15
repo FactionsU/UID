@@ -4,7 +4,7 @@ import dev.cwhead.GravesX.event.GraveCreateEvent;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.WorldUtil;
@@ -24,7 +24,7 @@ public class Graves {
         plugin = (com.ranull.graves.Graves) graves;
         AbstractFactionsPlugin plugin = AbstractFactionsPlugin.instance();
         plugin.getLogger().info("Found Graves plugin");
-        MainConfig.Plugins.Graves g = plugin.conf().plugins().graves();
+        MainConfig.Plugins.Graves g = Confs.main().plugins().graves();
         if (g.isAllowAnyoneToOpenGraves()) {
             plugin.getLogger().info("Configured to allow anyone to open graves regardless of permissions.");
         }
@@ -45,7 +45,7 @@ public class Graves {
 
     public static boolean allowAnyway(Block block) {
         try {
-            if (plugin != null && FactionsPlugin.instance().conf().plugins().graves().isAllowAnyoneToOpenGraves()) {
+            if (plugin != null && Confs.main().plugins().graves().isAllowAnyoneToOpenGraves()) {
                 return plugin.getBlockManager().getGraveFromBlock(block) != null;
             }
         } catch (Exception oops) {
@@ -57,8 +57,8 @@ public class Graves {
     private static class GraveListener implements Listener {
         @EventHandler
         public void graveCreate(GraveCreateEvent event) {
-            boolean safe = FactionsPlugin.instance().conf().plugins().graves().isPreventGravesInSafezone();
-            boolean war = FactionsPlugin.instance().conf().plugins().graves().isPreventGravesInWarzone();
+            boolean safe = Confs.main().plugins().graves().isPreventGravesInSafezone();
+            boolean war = Confs.main().plugins().graves().isPreventGravesInWarzone();
             if (!safe && !war) {
                 return;
             }

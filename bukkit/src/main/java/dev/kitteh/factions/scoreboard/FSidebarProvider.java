@@ -2,7 +2,7 @@ package dev.kitteh.factions.scoreboard;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Mini;
@@ -33,10 +33,10 @@ public abstract class FSidebarProvider {
         @Override
         public Component getTitle(FPlayer fplayer) {
             String title;
-            if (FactionsPlugin.instance().conf().scoreboard().constant().isFactionlessEnabled() && !fplayer.hasFaction()) {
-                title = FactionsPlugin.instance().tl().scoreboard().constant().getFactionlessTitle();
+            if (Confs.main().scoreboard().constant().isFactionlessEnabled() && !fplayer.hasFaction()) {
+                title = Confs.tl().scoreboard().constant().getFactionlessTitle();
             } else {
-                title = FactionsPlugin.instance().tl().scoreboard().constant().getNormalTitle();
+                title = Confs.tl().scoreboard().constant().getNormalTitle();
             }
             return this.process(title, fplayer, fplayer.faction());
         }
@@ -44,10 +44,10 @@ public abstract class FSidebarProvider {
         @Override
         public List<Component> getLines(FPlayer fplayer) {
             List<String> content;
-            if (FactionsPlugin.instance().conf().scoreboard().constant().isFactionlessEnabled() && !fplayer.hasFaction()) {
-                content = FactionsPlugin.instance().tl().scoreboard().constant().getFactionlessContent();
+            if (Confs.main().scoreboard().constant().isFactionlessEnabled() && !fplayer.hasFaction()) {
+                content = Confs.tl().scoreboard().constant().getFactionlessContent();
             } else {
-                content = FactionsPlugin.instance().tl().scoreboard().constant().getNormalContent();
+                content = Confs.tl().scoreboard().constant().getNormalContent();
             }
             return content.stream()
                     .map(line -> this.process(line, fplayer, fplayer.faction()))
@@ -64,12 +64,12 @@ public abstract class FSidebarProvider {
 
         @Override
         public Component getTitle(FPlayer fPlayer) {
-            return this.process(FactionsPlugin.instance().tl().scoreboard().info().getTitle(), fPlayer, this.faction);
+            return this.process(Confs.tl().scoreboard().info().getTitle(), fPlayer, this.faction);
         }
 
         @Override
         public List<Component> getLines(FPlayer fplayer) {
-            return FactionsPlugin.instance().tl().scoreboard().info().getContent()
+            return Confs.tl().scoreboard().info().getContent()
                     .stream()
                     .map(line -> this.process(line, fplayer, this.faction))
                     .toList();

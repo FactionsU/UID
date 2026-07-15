@@ -1,7 +1,7 @@
 package dev.kitteh.factions.permissible;
 
 import com.google.gson.annotations.SerializedName;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -83,21 +83,21 @@ public enum Role implements Permissible {
     @Override
     public String translation() {
         return switch (this) {
-            case ADMIN -> FactionsPlugin.instance().tl().general().roles().getAdmin();
-            case COLEADER -> FactionsPlugin.instance().tl().general().roles().getColeader();
-            case MODERATOR -> FactionsPlugin.instance().tl().general().roles().getModerator();
-            case NORMAL -> FactionsPlugin.instance().tl().general().roles().getNormal();
-            case RECRUIT -> FactionsPlugin.instance().tl().general().roles().getRecruit();
+            case ADMIN -> Confs.tl().general().roles().getAdmin();
+            case COLEADER -> Confs.tl().general().roles().getColeader();
+            case MODERATOR -> Confs.tl().general().roles().getModerator();
+            case NORMAL -> Confs.tl().general().roles().getNormal();
+            case RECRUIT -> Confs.tl().general().roles().getRecruit();
         };
     }
 
     public String getPrefix() {
         return switch (this) {
-            case ADMIN -> FactionsPlugin.instance().conf().factions().prefixes().getAdmin();
-            case COLEADER -> FactionsPlugin.instance().conf().factions().prefixes().getColeader();
-            case MODERATOR -> FactionsPlugin.instance().conf().factions().prefixes().getMod();
-            case NORMAL -> FactionsPlugin.instance().conf().factions().prefixes().getNormal();
-            case RECRUIT -> FactionsPlugin.instance().conf().factions().prefixes().getRecruit();
+            case ADMIN -> Confs.main().factions().prefixes().getAdmin();
+            case COLEADER -> Confs.main().factions().prefixes().getColeader();
+            case MODERATOR -> Confs.main().factions().prefixes().getMod();
+            case NORMAL -> Confs.main().factions().prefixes().getNormal();
+            case RECRUIT -> Confs.main().factions().prefixes().getRecruit();
         };
     }
 

@@ -3,11 +3,10 @@ package dev.kitteh.factions.tagresolver;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.permissible.Relation;
-import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.MiscUtil;
 import net.kyori.adventure.text.Component;
@@ -79,13 +78,13 @@ public final class FactionResolver extends ObservedResolver {
 
             case "link" -> tag(Component.text().content(faction.link()).clickEvent(ClickEvent.openUrl(faction.link())));
 
-            case "create-date", "creation_date" -> tag(FactionsPlugin.instance().tl().placeholders().datesAndTimes().formatFactionCreationDate(faction.founded()));
+            case "create-date", "creation_date" -> tag(Confs.tl().placeholders().datesAndTimes().formatFactionCreationDate(faction.founded()));
 
             case "members_total_count" -> tag(faction.members().size());
             case "members_online_count" -> tag(faction.membersOnline(true, this.observer(ctx)).size());
             case "members_offline_count" -> tag(faction.membersOnline(false, this.observer(ctx)).size());
 
-            case "tooltip" -> tagTip(FactionsPlugin.instance().tl().placeholders().tooltips().getFaction(), this.observer(ctx), this);
+            case "tooltip" -> tagTip(Confs.tl().placeholders().tooltips().getFaction(), this.observer(ctx), this);
 
             case "id" -> tag(faction.id());
 
@@ -108,40 +107,40 @@ public final class FactionResolver extends ObservedResolver {
                 if (FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
                     yield tag(faction.dtr());
                 } else {
-                    yield tag((faction.power() - faction.claimCount()) / FactionsPlugin.instance().conf().factions().landRaidControl().power().getLossPerDeath());
+                    yield tag((faction.power() - faction.claimCount()) / Confs.main().factions().landRaidControl().power().getLossPerDeath());
                 }
             }
             case "dtr_rounded", "dtr" -> {
                 if (FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
                     yield tag(DTRControl.round(faction.dtr()));
                 } else {
-                    yield tag(DTRControl.round((faction.power() - faction.claimCount()) / FactionsPlugin.instance().conf().factions().landRaidControl().power().getLossPerDeath()));
+                    yield tag(DTRControl.round((faction.power() - faction.claimCount()) / Confs.main().factions().landRaidControl().power().getLossPerDeath()));
                 }
             }
             case "dtr_max_exact" -> {
                 if (FactionsPlugin.instance().landRaidControl() instanceof DTRControl dtrControl) {
                     yield tag(dtrControl.getMaxDTR(faction));
                 } else {
-                    yield tag(faction.powerMax() / FactionsPlugin.instance().conf().factions().landRaidControl().power().getLossPerDeath());
+                    yield tag(faction.powerMax() / Confs.main().factions().landRaidControl().power().getLossPerDeath());
                 }
             }
             case "dtr_max_rounded" -> {
                 if (FactionsPlugin.instance().landRaidControl() instanceof DTRControl dtrControl) {
                     yield tag(DTRControl.round(dtrControl.getMaxDTR(faction)));
                 } else {
-                    yield tag(DTRControl.round(faction.powerMax() / FactionsPlugin.instance().conf().factions().landRaidControl().power().getLossPerDeath()));
+                    yield tag(DTRControl.round(faction.powerMax() / Confs.main().factions().landRaidControl().power().getLossPerDeath()));
                 }
             }
             case "dtr_frozen_status" -> tag(faction.dtrFrozen() ?
-                    FactionsPlugin.instance().tl().placeholders().misc().getDtrFrozenTrue() :
-                    FactionsPlugin.instance().tl().placeholders().misc().getDtrFrozenFalse());
+                    Confs.tl().placeholders().misc().getDtrFrozenTrue() :
+                    Confs.tl().placeholders().misc().getDtrFrozenFalse());
             case "dtr_frozen_time" -> tag(faction.dtrFrozen() ?
-                    DurationFormatUtils.formatDuration(faction.dtrFrozenUntil() - System.currentTimeMillis(), FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
-                    FactionsPlugin.instance().tl().placeholders().misc().getDtrFrozenTimeNotFrozen());
+                    DurationFormatUtils.formatDuration(faction.dtrFrozenUntil() - System.currentTimeMillis(), Confs.main().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
+                    Confs.tl().placeholders().misc().getDtrFrozenTimeNotFrozen());
 
             case "raidable" -> tag(FactionsPlugin.instance().landRaidControl().isRaidable(faction) ?
-                    FactionsPlugin.instance().tl().placeholders().misc().getRaidableTrue() :
-                    FactionsPlugin.instance().tl().placeholders().misc().getRaidableFalse());
+                    Confs.tl().placeholders().misc().getRaidableTrue() :
+                    Confs.tl().placeholders().misc().getRaidableFalse());
 
             case "leader", "admin" -> faction.admin() instanceof FPlayer fp ? FPlayerResolver.of("leader", fp).solve(arguments, ctx) : tag("");
 
@@ -169,18 +168,18 @@ public final class FactionResolver extends ObservedResolver {
 
             case "shield_active" -> {
                 if (faction.shieldActive()) {
-                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveTrue(), this.observer(ctx),
+                    yield tag(Mini.parse(Confs.tl().placeholders().shield().getActiveTrue(), this.observer(ctx),
                             Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
                 } else {
-                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveFalse(), this.observer(ctx)));
+                    yield tag(Mini.parse(Confs.tl().placeholders().shield().getActiveFalse(), this.observer(ctx)));
                 }
             }
             case "shield_status" -> {
                 if (faction.shieldActive()) {
-                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusTrue(), this.observer(ctx),
+                    yield tag(Mini.parse(Confs.tl().placeholders().shield().getStatusTrue(), this.observer(ctx),
                             Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
                 } else {
-                    yield tag(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusFalse(), this.observer(ctx)));
+                    yield tag(Mini.parse(Confs.tl().placeholders().shield().getStatusFalse(), this.observer(ctx)));
                 }
             }
             case "shield_remaining" -> tagLegacy(MiscUtil.durationString(faction.shieldRemaining()));
@@ -202,9 +201,9 @@ public final class FactionResolver extends ObservedResolver {
     }
 
     private String getRelation(Relation relation) {
-        if (FactionsPlugin.instance().conf().factions().maxRelations().isEnabled()) {
+        if (Confs.main().factions().maxRelations().isEnabled()) {
             return String.valueOf(relation.getMax());
         }
-        return FactionsPlugin.instance().tl().placeholders().misc().getInfinity();
+        return Confs.tl().placeholders().misc().getInfinity();
     }
 }

@@ -1,10 +1,10 @@
 package dev.kitteh.factions.command.defaults.set;
 
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.PermissionsConfig;
 import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.data.MemoryFaction;
@@ -18,6 +18,7 @@ import dev.kitteh.factions.permissible.selector.UnknownSelector;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.TextComponent;
@@ -26,6 +27,7 @@ import org.bukkit.ChatColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.IntegerParser;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.SuggestionProvider;
@@ -37,8 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -53,8 +53,8 @@ public class CmdSetPerm implements Cmd {
 
     public CmdSetPerm() {
         this.firstCmdBit = (_) -> '/' + Cmd.rootCommand() + ' ' +
-                FactionsPlugin.instance().tl().commands().set().getFirstAlias() + ' ' +
-                FactionsPlugin.instance().tl().commands().permissions().getFirstAlias() + ' ';
+                Confs.tl().commands().set().getFirstAlias() + ' ' +
+                Confs.tl().commands().permissions().getFirstAlias() + ' ';
         this.permissionsGetter = context -> ((Sender.Player) context.sender()).faction().permissions();
         this.resetter = context -> {
             ((MemoryFaction) ((Sender.Player) context.sender()).faction()).resetPerms();
@@ -71,7 +71,7 @@ public class CmdSetPerm implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().permissions();
+            var tl = Confs.tl().commands().permissions();
             List<String> aliases = new ArrayList<>(tl.getAliases());
             Command.Builder<Sender> permBuilder = builder.literal(aliases.removeFirst(), aliases.toArray(new String[0]))
                     .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -140,15 +140,15 @@ public class CmdSetPerm implements Cmd {
         if (permissions == null) {
             return;
         }
-        listSelectors(context, ((Sender.Player) context.sender()).faction(), context.sender(), permissions, FactionsPlugin.instance().tl().commands().permissions());
+        listSelectors(context, ((Sender.Player) context.sender()).faction(), context.sender(), permissions, Confs.tl().commands().permissions());
     }
 
     private void handleListOverrides(CommandContext<Sender> context) {
-        listOverrideSelectors(context, ((Sender.Player) context.sender()).faction(), context.sender(), FactionsPlugin.instance().tl().commands().permissions());
+        listOverrideSelectors(context, ((Sender.Player) context.sender()).faction(), context.sender(), Confs.tl().commands().permissions());
     }
 
     private void handleAdd(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().permissions();
+        var tl = Confs.tl().commands().permissions();
         Faction faction = ((Sender.Player) context.sender()).faction();
         Faction.Permissions permissions = this.permissionsGetter.apply(context);
         if (permissions == null) {
@@ -259,7 +259,7 @@ public class CmdSetPerm implements Cmd {
                     .filter(action -> !(action.prerequisite() instanceof Upgrade prereq) || faction.upgradeLevel(prereq) > 0)
                     .map(PermissibleAction::name).collect(Collectors.toCollection(ArrayList::new));
             // Remove hidden actions
-            actions.removeAll(FactionsPlugin.instance().configManager().permissionsConfig().getHiddenActions());
+            actions.removeAll(Confs.perms().getHiddenActions());
             // Remove actions already in use
             actions.removeAll(permissions.get(selector).actions());
             Collections.sort(actions);
@@ -300,7 +300,7 @@ public class CmdSetPerm implements Cmd {
             sender.sendRichMessage(tl.add().getSelectorNotFound());
         } else {
             PermissibleAction action = PermissibleActionRegistry.get(argAction);
-            if (action == null || FactionsPlugin.instance().configManager().permissionsConfig().getHiddenActions().contains(action.name())) {
+            if (action == null || Confs.perms().getHiddenActions().contains(action.name())) {
                 sender.sendRichMessage(tl.add().getActionNotFound());
             } else {
                 Boolean allow = null;
@@ -322,7 +322,7 @@ public class CmdSetPerm implements Cmd {
     }
 
     private void handleMove(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().permissions();
+        var tl = Confs.tl().commands().permissions();
         Faction faction = ((Sender.Player) context.sender()).faction();
         Faction.Permissions permissions = this.permissionsGetter.apply(context);
         if (permissions == null) {
@@ -366,7 +366,7 @@ public class CmdSetPerm implements Cmd {
     }
 
     private void handleRemove(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().permissions();
+        var tl = Confs.tl().commands().permissions();
         Faction faction = ((Sender.Player) context.sender()).faction();
         Faction.Permissions permissions = this.permissionsGetter.apply(context);
         if (permissions == null) {
@@ -390,7 +390,7 @@ public class CmdSetPerm implements Cmd {
     }
 
     private void handleReset(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().permissions();
+        var tl = Confs.tl().commands().permissions();
 
         Optional<String> confirm = context.optional("confirm");
 
@@ -406,7 +406,7 @@ public class CmdSetPerm implements Cmd {
     }
 
     private void handleShow(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().permissions();
+        var tl = Confs.tl().commands().permissions();
         Faction faction = ((Sender.Player) context.sender()).faction();
         Faction.Permissions permissions = this.permissionsGetter.apply(context);
         if (permissions == null) {
@@ -429,7 +429,7 @@ public class CmdSetPerm implements Cmd {
     }
 
     private void handleShowOverride(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().permissions();
+        var tl = Confs.tl().commands().permissions();
         Faction faction = ((Sender.Player) context.sender()).faction();
 
         String argSelector = context.get("selector");
@@ -482,7 +482,7 @@ public class CmdSetPerm implements Cmd {
     }
 
     private void listOverrideSelectors(CommandContext<Sender> context, Faction faction, Sender sender, TranslationsConfig.Commands.Permissions tl) {
-        PermissionsConfig conf = FactionsPlugin.instance().configManager().permissionsConfig();
+        PermissionsConfig conf = Confs.perms();
         List<PermSelector> order = conf.getOverridePermissionsOrder();
         Map<PermSelector, Map<String, Boolean>> permissions = conf.getOverridePermissions();
         int x = 0;
@@ -526,7 +526,7 @@ public class CmdSetPerm implements Cmd {
                 }
                 Faction.Permissions.SelectorPerms perms = permissions.get(sel);
                 for (String actionName : permissions.get(sel).actions()) {
-                    if (FactionsPlugin.instance().configManager().permissionsConfig().getHiddenActions().contains(actionName.toUpperCase())) {
+                    if (Confs.perms().getHiddenActions().contains(actionName.toUpperCase())) {
                         continue;
                     }
                     PermissibleAction action = PermissibleActionRegistry.get(actionName);
@@ -551,7 +551,7 @@ public class CmdSetPerm implements Cmd {
     }
 
     private void showOverrideSelector(Faction faction, int index, PermSelector selector, Sender sender, TranslationsConfig.Commands.Permissions tl) {
-        PermissionsConfig conf = FactionsPlugin.instance().configManager().permissionsConfig();
+        PermissionsConfig conf = Confs.perms();
         List<PermSelector> order = conf.getOverridePermissionsOrder();
         Map<PermSelector, Map<String, Boolean>> permissions = conf.getOverridePermissions();
         int x = 0;
@@ -592,7 +592,7 @@ public class CmdSetPerm implements Cmd {
                     Placeholder.unparsed("rownumber", Integer.toString(x)));
         }
         for (Map.Entry<String, Boolean> e : permissions.get(selector).entrySet()) {
-            if (FactionsPlugin.instance().configManager().permissionsConfig().getHiddenActions().contains(e.getKey())) {
+            if (Confs.perms().getHiddenActions().contains(e.getKey())) {
                 continue;
             }
             PermissibleAction action = PermissibleActionRegistry.get(e.getKey());

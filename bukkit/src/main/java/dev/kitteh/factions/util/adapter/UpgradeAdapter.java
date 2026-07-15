@@ -9,7 +9,6 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 
 import java.io.IOException;
 import java.util.Set;

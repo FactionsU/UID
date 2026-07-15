@@ -4,34 +4,34 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.event.FactionRenameEvent;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
-import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.MiscUtil;
-import net.kyori.adventure.text.Component;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.StringParser;
 
 import java.util.List;
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdSetTag implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().set().tag();
+            var tl = Confs.tl().commands().set().tag();
             Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TAG).and(Cloudy.isAtLeastRole(Role.ADMIN))))
@@ -47,8 +47,8 @@ public class CmdSetTag implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().set().tag();
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        var tl = Confs.tl().commands().set().tag();
+        var econTl = Confs.tl().economy().actions();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
         String tag = context.get("new tag");
@@ -64,7 +64,7 @@ public class CmdSetTag implements Cmd {
             return;
         }
 
-        if (!context.sender().canAffordCommand(FactionsPlugin.instance().conf().economy().getCostTag(), econTl.getTagTo())) {
+        if (!context.sender().canAffordCommand(Confs.main().economy().getCostTag(), econTl.getTagTo())) {
             return;
         }
 
@@ -74,7 +74,7 @@ public class CmdSetTag implements Cmd {
             return;
         }
 
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostTag(), econTl.getTagTo(), econTl.getTagFor())) {
+        if (!context.sender().payForCommand(Confs.main().economy().getCostTag(), econTl.getTagTo(), econTl.getTagFor())) {
             return;
         }
 
@@ -89,7 +89,7 @@ public class CmdSetTag implements Cmd {
                 continue;
             }
 
-            if (FactionsPlugin.instance().conf().factions().chat().isBroadcastTagChanges()) {
+            if (Confs.main().factions().chat().isBroadcastTagChanges()) {
                 fplayer.sendRichMessage(tl.getChanged(),
                         Placeholder.unparsed("oldtag", oldTag),
                         FactionResolver.of(faction));

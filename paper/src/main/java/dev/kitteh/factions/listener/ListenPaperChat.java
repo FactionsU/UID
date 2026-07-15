@@ -2,8 +2,8 @@ package dev.kitteh.factions.listener;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
@@ -50,7 +50,7 @@ public class ListenPaperChat implements Listener {
             return;
         }
 
-        MainConfig.Factions.Chat.Paper chatConf = FactionsPlugin.instance().conf().factions().chat().paper();
+        MainConfig.Factions.Chat.Paper chatConf = Confs.main().factions().chat().paper();
 
         if (chatConf.isEnabled()) {
             FPlayer fPlayer = FPlayers.fPlayers().get(event.getPlayer());

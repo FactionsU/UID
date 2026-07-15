@@ -1,17 +1,18 @@
 package dev.kitteh.factions.command.defaults;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.event.FactionNewAdminEvent;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
@@ -19,15 +20,13 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdRole implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().role();
+            var tl = Confs.tl().commands().role();
             Command.Builder<Sender> build = builder
                     .literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()));
@@ -98,7 +97,7 @@ public class CmdRole implements Cmd {
     }
 
     private void handle(FPlayer sender, FPlayer target, Role targetNewRole) {
-        var tl = FactionsPlugin.instance().tl().commands().role();
+        var tl = Confs.tl().commands().role();
         if (!target.faction().equals(sender.faction())) {
             sender.sendRichMessage(tl.getWrongFaction());
             return;
@@ -109,7 +108,7 @@ public class CmdRole implements Cmd {
         }
 
         if (targetNewRole == Role.COLEADER &&
-                !FactionsPlugin.instance().conf().factions().other().isAllowMultipleColeaders() &&
+                !Confs.main().factions().other().isAllowMultipleColeaders() &&
                 !target.faction().members(Role.COLEADER).isEmpty()
         ) {
             sender.sendRichMessage(tl.getAlreadyColeader());
@@ -127,7 +126,7 @@ public class CmdRole implements Cmd {
     }
 
     private void handleAdmin(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().role();
+        var tl = Confs.tl().commands().role();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         FPlayer target = context.get("member");
 
@@ -148,7 +147,7 @@ public class CmdRole implements Cmd {
 
         Bukkit.getServer().getPluginManager().callEvent(new FactionNewAdminEvent(target, sender.faction()));
 
-        boolean allowMultipleColeaders = FactionsPlugin.instance().conf().factions().other().isAllowMultipleColeaders();
+        boolean allowMultipleColeaders = Confs.main().factions().other().isAllowMultipleColeaders();
         boolean noColeaders = sender.faction().members(Role.COLEADER).isEmpty();
         sender.role((allowMultipleColeaders || noColeaders) ? Role.COLEADER : Role.MODERATOR);
         target.role(Role.ADMIN);

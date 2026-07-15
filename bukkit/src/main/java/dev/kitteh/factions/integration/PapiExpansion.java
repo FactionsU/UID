@@ -7,6 +7,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
 import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
@@ -115,9 +116,9 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "grace_status" -> {
                 Duration remaining = Universe.universe().graceRemaining();
                 if (remaining.isZero()) {
-                    yield FactionsPlugin.instance().tl().commands().grace().getNotSet();
+                    yield Confs.tl().commands().grace().getNotSet();
                 } else {
-                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().commands().grace().getActive(),
+                    yield Mini.toLegacy(Mini.parse(Confs.tl().commands().grace().getActive(),
                             Placeholder.unparsed("duration", MiscUtil.durationString(remaining))));
                 }
             }
@@ -126,20 +127,20 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "player_name_and_title" -> fPlayer.hasFaction() ? Mini.toLegacy(fPlayer.nameWithTitle()) : fPlayer.name();
             case "player_title" -> fPlayer.hasFaction() ? Mini.toLegacy(fPlayer.title()) : "";
             case "player_lastseen" -> {
-                var misc = FactionsPlugin.instance().tl().placeholders().misc();
+                var misc = Confs.tl().placeholders().misc();
                 String humanized = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - fPlayer.lastLogin(), true, true) + misc.getLastSeenSuffix();
                 yield fPlayer.isOnline() ? ChatColor.GREEN + misc.getOnline() : (System.currentTimeMillis() - fPlayer.lastLogin() < 432000000 ? ChatColor.YELLOW + humanized : ChatColor.RED + humanized);
             }
-            case "player_balance" -> Econ.isSetup() ? Econ.getFriendlyBalance(fPlayer) : FactionsPlugin.instance().tl().economy().transfer().getOff().replace("<amount>", "balance");
+            case "player_balance" -> Econ.isSetup() ? Econ.getFriendlyBalance(fPlayer) : Confs.tl().economy().transfer().getOff().replace("<amount>", "balance");
             case "player_power" -> String.valueOf(fPlayer.powerRounded());
             case "player_maxpower" -> String.valueOf(fPlayer.powerMaxRounded());
             case "player_kills" -> String.valueOf(fPlayer.kills());
             case "player_deaths" -> String.valueOf(fPlayer.deaths());
             case "player_role" -> fPlayer.hasFaction() ? fPlayer.role().getPrefix() : "";
-            case "player_role_name" -> fPlayer.hasFaction() ? fPlayer.role().translation() : FactionsPlugin.instance().tl().placeholders().misc().getRoleName();
-            case "player_factionless" -> fPlayer.hasFaction() ? "" : FactionsPlugin.instance().tl().placeholders().misc().getFactionless();
+            case "player_role_name" -> fPlayer.hasFaction() ? fPlayer.role().translation() : Confs.tl().placeholders().misc().getRoleName();
+            case "player_factionless" -> fPlayer.hasFaction() ? "" : Confs.tl().placeholders().misc().getFactionless();
 
-            case "faction_name" -> (fPlayer.hasFaction() || territory) ? faction.tag() : Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().misc().getNoFactionPrefix()));
+            case "faction_name" -> (fPlayer.hasFaction() || territory) ? faction.tag() : Mini.toLegacy(Mini.parse(Confs.tl().placeholders().misc().getNoFactionPrefix()));
             case "faction_only_space" -> (fPlayer.hasFaction() || territory) ? " " : "";
             case "faction_internal_id" -> faction.id() + "";
             case "faction_power" -> String.valueOf(faction.power());
@@ -153,7 +154,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             }
             case "faction_dtr_frozen" -> {
                 if ((fPlayer.hasFaction() || territory) && FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
-                    var misc = FactionsPlugin.instance().tl().placeholders().misc();
+                    var misc = Confs.tl().placeholders().misc();
                     yield faction.dtrFrozen() ? misc.getDtrFrozenTrue() : misc.getDtrFrozenFalse();
                 }
                 yield "";
@@ -161,20 +162,20 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_dtr_frozen_time" -> {
                 if ((fPlayer.hasFaction() || territory) && FactionsPlugin.instance().landRaidControl() instanceof DTRControl) {
                     yield faction.dtrFrozen() ?
-                            DurationFormatUtils.formatDuration(faction.dtrFrozenUntil() - System.currentTimeMillis(), FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
-                            FactionsPlugin.instance().tl().placeholders().misc().getDtrFrozenTimeNotFrozen();
+                            DurationFormatUtils.formatDuration(faction.dtrFrozenUntil() - System.currentTimeMillis(), Confs.main().factions().landRaidControl().dtr().getFreezeTimeFormat()) :
+                            Confs.tl().placeholders().misc().getDtrFrozenTimeNotFrozen();
                 }
                 yield "";
             }
             case "faction_maxclaims" -> (fPlayer.hasFaction() || territory) ? String.valueOf(FactionsPlugin.instance().landRaidControl().landLimit(faction)) : "";
             case "faction_description" -> faction.description();
             case "faction_claims" -> String.valueOf(faction.claims().size());
-            case "faction_founded" -> FactionsPlugin.instance().tl().placeholders().datesAndTimes().formatFactionCreationDate(faction.founded());
-            case "faction_joining" -> (faction.open() ? FactionsPlugin.instance().tl().placeholders().misc().getJoinOpen() : FactionsPlugin.instance().tl().placeholders().misc().getJoinInvite());
-            case "faction_peaceful" -> faction.isPeaceful() ? LegacyCruft.getLegacyString(FactionsPlugin.instance().conf().colors().relations().getPeaceful()) + FactionsPlugin.instance().tl().placeholders().misc().getPeaceful() : "";
+            case "faction_founded" -> Confs.tl().placeholders().datesAndTimes().formatFactionCreationDate(faction.founded());
+            case "faction_joining" -> (faction.open() ? Confs.tl().placeholders().misc().getJoinOpen() : Confs.tl().placeholders().misc().getJoinInvite());
+            case "faction_peaceful" -> faction.isPeaceful() ? LegacyCruft.getLegacyString(Confs.main().colors().relations().getPeaceful()) + Confs.tl().placeholders().misc().getPeaceful() : "";
             case "faction_powerboost" -> {
                 double powerBoost = faction.powerBoost();
-                var misc = FactionsPlugin.instance().tl().placeholders().misc();
+                var misc = Confs.tl().placeholders().misc();
                 yield (powerBoost == 0.0) ? "" : (powerBoost > 0.0 ? misc.getPowerBonus() : misc.getPowerPenalty()) + powerBoost + ")";
             }
             case "faction_leader" -> {
@@ -184,16 +185,16 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_warps" -> String.valueOf(faction.warps().size());
             case "faction_raidable" -> {
                 boolean raid = FactionsPlugin.instance().landRaidControl().isRaidable(faction);
-                var misc = FactionsPlugin.instance().tl().placeholders().misc();
+                var misc = Confs.tl().placeholders().misc();
                 yield raid ? misc.getRaidableTrue() : misc.getRaidableFalse();
             }
             case "faction_home_world" -> faction.home() instanceof Location home ? (home.getWorld() instanceof World w ? w.getName() : "?????") : "";
             case "faction_home_x" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockX()) : "";
             case "faction_home_y" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockY()) : "";
             case "faction_home_z" -> faction.home() instanceof Location home ? String.valueOf(home.getBlockZ()) : "";
-            case "faction_land_value" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(faction.claimCount())) : Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "value")));
-            case "faction_land_refund" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.claimCount())) : Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "refund")));
-            case "faction_bank_balance" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.getBalance(faction)) : Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "balance")));
+            case "faction_land_value" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandValue(faction.claimCount())) : Mini.toLegacy(Mini.parse(Confs.tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "value")));
+            case "faction_land_refund" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.calculateTotalLandRefund(faction.claimCount())) : Mini.toLegacy(Mini.parse(Confs.tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "refund")));
+            case "faction_bank_balance" -> Econ.shouldBeUsed() ? Econ.moneyString(Econ.getBalance(faction)) : Mini.toLegacy(Mini.parse(Confs.tl().economy().transfer().getOff(), Placeholder.unparsed("thing", "balance")));
             case "faction_tnt_balance" -> Universe.universe().isUpgradeEnabled(Upgrades.TNT_BANK) ? String.valueOf(faction.tntBank()) : "";
             case "faction_tnt_max_balance" -> Universe.universe().isUpgradeEnabled(Upgrades.TNT_BANK) ? String.valueOf(faction.tntBankMax()) : "";
             case "faction_allies" -> String.valueOf(faction.relationCount(Relation.ALLY));
@@ -217,18 +218,18 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_relation_color" -> LegacyCruft.getLegacyString(fPlayer.textColorTo(faction));
             case "faction_shield_active" -> {
                 if (faction.shieldActive()) {
-                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveTrue(), fPlayer,
+                    yield Mini.toLegacy(Mini.parse(Confs.tl().placeholders().shield().getActiveTrue(), fPlayer,
                             Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
                 } else {
-                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getActiveFalse(), fPlayer));
+                    yield Mini.toLegacy(Mini.parse(Confs.tl().placeholders().shield().getActiveFalse(), fPlayer));
                 }
             }
             case "faction_shield_status" -> {
                 if (faction.shieldActive()) {
-                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusTrue(), fPlayer,
+                    yield Mini.toLegacy(Mini.parse(Confs.tl().placeholders().shield().getStatusTrue(), fPlayer,
                             Placeholder.unparsed("remaining", MiscUtil.durationString(faction.shieldRemaining()))));
                 } else {
-                    yield Mini.toLegacy(Mini.parse(FactionsPlugin.instance().tl().placeholders().shield().getStatusFalse(), fPlayer));
+                    yield Mini.toLegacy(Mini.parse(Confs.tl().placeholders().shield().getStatusFalse(), fPlayer));
                 }
             }
             case "faction_shield_remaining" -> MiscUtil.durationString(faction.shieldRemaining());

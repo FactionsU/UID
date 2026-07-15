@@ -1,11 +1,11 @@
 package dev.kitteh.factions.command.defaults;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Role;
@@ -23,7 +23,7 @@ public class CmdClear implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().clear();
+            var tl = Confs.tl().commands().clear();
             Command.Builder<Sender> build = builder
                     .literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .permission(builder.commandPermission().and(
@@ -70,14 +70,14 @@ public class CmdClear implements Cmd {
     }
 
     private void handleBan(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().clear();
+        var tl = Confs.tl().commands().clear();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         String conf = CmdConfirm.add(sender, this::handleBanConf);
         sender.sendRichMessage(tl.getBansClearConfirm(), Placeholder.unparsed("command", conf));
     }
 
     private void handleBanConf(FPlayer sender) {
-        var tl = FactionsPlugin.instance().tl().commands().clear();
+        var tl = Confs.tl().commands().clear();
         if (sender.asPlayer() instanceof Player p && Permission.BAN.has(p) && sender.faction().hasAccess(sender, PermissibleActions.BAN, sender.lastStoodAt())) {
             sender.faction().clearBans();
             sender.sendRichMessage(tl.getBansClearSuccess());
@@ -90,20 +90,20 @@ public class CmdClear implements Cmd {
     }
 
     private void handleWarp(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().clear();
+        var tl = Confs.tl().commands().clear();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         String conf = CmdConfirm.add(sender, this::handleWarpConf);
         sender.sendRichMessage(tl.getWarpsClearConfirm(), Placeholder.unparsed("command", conf));
     }
 
     private void handleWarpConf(FPlayer sender) {
-        var tl = FactionsPlugin.instance().tl().commands().clear();
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        var tl = Confs.tl().commands().clear();
+        var econTl = Confs.tl().economy().actions();
         if (sender.asPlayer() instanceof Player p && Permission.SETWARP.has(p) && sender.faction().hasAccess(sender, PermissibleActions.SETWARP, sender.lastStoodAt())) {
-            double cost = FactionsPlugin.instance().conf().economy().getCostDelWarp();
+            double cost = Confs.main().economy().getCostDelWarp();
             if (cost > 0D && Econ.shouldBeUsed()) {
                 Participator purchaser;
-                if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts()) {
+                if (Confs.main().economy().isBankEnabled() && Confs.main().economy().isBankFactionPaysCosts()) {
                     purchaser = sender.faction();
                 } else {
                     purchaser = sender;
@@ -121,14 +121,14 @@ public class CmdClear implements Cmd {
     }
 
     private void handleInvite(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().clear();
+        var tl = Confs.tl().commands().clear();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         String conf = CmdConfirm.add(sender, this::handleInviteConf);
         sender.sendRichMessage(tl.getInvitesClearConfirm(), Placeholder.unparsed("command", conf));
     }
 
     private void handleInviteConf(FPlayer sender) {
-        var tl = FactionsPlugin.instance().tl().commands().clear();
+        var tl = Confs.tl().commands().clear();
         if (sender.asPlayer() instanceof Player p && Permission.DEINVITE.has(p) && sender.faction().hasAccess(sender, PermissibleActions.INVITE, sender.lastStoodAt())) {
             sender.faction().clearInvites();
             sender.sendRichMessage(tl.getInvitesClearSuccess());

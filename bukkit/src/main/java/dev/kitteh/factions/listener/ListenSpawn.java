@@ -3,7 +3,7 @@ package dev.kitteh.factions.listener;
 import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.entity.Entity;
@@ -25,10 +25,10 @@ public class ListenSpawn implements Listener {
         Faction faction = Board.board().factionAt(new FLocation(event.getLocation()));
         CreatureSpawnEvent.SpawnReason reason = event.getSpawnReason();
         EntityType type = event.getEntityType();
-        MainConfig.Factions.Spawning spawning = FactionsPlugin.instance().conf().factions().spawning();
+        MainConfig.Factions.Spawning spawning = Confs.main().factions().spawning();
 
         if (faction.isNormal()) {
-            if (faction.isPeaceful() && FactionsPlugin.instance().conf().factions().specialCase().isPeacefulTerritoryDisableMonsters()) {
+            if (faction.isPeaceful() && Confs.main().factions().specialCase().isPeacefulTerritoryDisableMonsters()) {
                 if (event.getEntity() instanceof Monster) {
                     event.setCancelled(true);
                 }

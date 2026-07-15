@@ -1,8 +1,8 @@
 package dev.kitteh.factions.data;
 
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.annotation.NoFinalFields;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.transition.Transitioner;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.upgrade.LeveledValueProvider;
@@ -135,7 +135,7 @@ public abstract class MemoryUniverse implements Universe {
                     upgrade = new UpgradeSettings(
                             Upgrades.WARPS,
                             Map.of(
-                                    Upgrades.Variables.COUNT, LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(FactionsPlugin.instance().conf().commands().warp().getMaxWarps()))
+                                    Upgrades.Variables.COUNT, LeveledValueProvider.LevelMap.of(BigDecimal.valueOf(Confs.main().commands().warp().getMaxWarps()))
                             ),
                             1,
                             1,
@@ -158,8 +158,8 @@ public abstract class MemoryUniverse implements Universe {
 
                 if (
                         !( // Negate the conditions for if-should-default-enable, which my brain finds easier to read.
-                                (upgrade.upgrade() == Upgrades.FLIGHT && FactionsPlugin.instance().conf().commands().fly().isEnable()) ||
-                                        (upgrade.upgrade() == Upgrades.WARPS && FactionsPlugin.instance().conf().commands().warp().getMaxWarps() > 0) ||
+                                (upgrade.upgrade() == Upgrades.FLIGHT && Confs.main().commands().fly().isEnable()) ||
+                                        (upgrade.upgrade() == Upgrades.WARPS && Confs.main().commands().warp().getMaxWarps() > 0) ||
                                         (upgrade.upgrade() == Upgrades.TNT_BANK && Transitioner.migrateTNT())
                         )
                 ) {

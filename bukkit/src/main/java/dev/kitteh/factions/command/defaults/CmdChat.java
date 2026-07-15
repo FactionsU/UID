@@ -1,32 +1,31 @@
 package dev.kitteh.factions.command.defaults;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdChat implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().chat();
+            var tl = Confs.tl().commands().chat();
             manager.command(builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases()).literal("public")
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission()
                             .and(Cloudy.predicate(_ ->
-                                    FactionsPlugin.instance().conf().factions().chat().internalChat().isFactionMemberChatEnabled() ||
-                                            FactionsPlugin.instance().conf().factions().chat().internalChat().isRelationChatEnabled()))
+                                    Confs.main().factions().chat().internalChat().isFactionMemberChatEnabled() ||
+                                            Confs.main().factions().chat().internalChat().isRelationChatEnabled()))
                             .and(Cloudy.hasPermission(Permission.CHAT))
                             .and(Cloudy.hasFaction()))
                     .handler(ctx -> this.handle(ctx, ChatTarget.PUBLIC))
@@ -35,7 +34,7 @@ public class CmdChat implements Cmd {
             Command.Builder<Sender> roleBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission()
-                            .and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().factions().chat().internalChat().isFactionMemberChatEnabled()))
+                            .and(Cloudy.predicate(_ -> Confs.main().factions().chat().internalChat().isFactionMemberChatEnabled()))
                             .and(Cloudy.hasPermission(Permission.CHAT))
                             .and(Cloudy.hasFaction()));
             manager.command(roleBuilder.handler(ctx -> this.handle(ctx, ChatTarget.Role.ALL)));
@@ -47,7 +46,7 @@ public class CmdChat implements Cmd {
             Command.Builder<Sender> relationBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission()
-                            .and(Cloudy.predicate(_ -> FactionsPlugin.instance().conf().factions().chat().internalChat().isRelationChatEnabled()))
+                            .and(Cloudy.predicate(_ -> Confs.main().factions().chat().internalChat().isRelationChatEnabled()))
                             .and(Cloudy.hasPermission(Permission.CHAT))
                             .and(Cloudy.hasFaction()));
             manager.command(relationBuilder.literal("ally").handler(ctx -> this.handle(ctx, ChatTarget.Relation.ALLY)));
@@ -60,7 +59,7 @@ public class CmdChat implements Cmd {
 
         sender.chatTarget(target);
 
-        var tl = FactionsPlugin.instance().tl().commands().chat();
+        var tl = Confs.tl().commands().chat();
         String message = switch (target) {
             case ChatTarget.Relation r -> r.relation() == Relation.ALLY ? tl.getModeAlliance() : tl.getModeTruce();
             case ChatTarget.Role r -> switch (r.role()) {

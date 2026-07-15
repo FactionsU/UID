@@ -53,7 +53,9 @@ import dev.kitteh.factions.command.defaults.admin.CmdMoneyModify;
 import dev.kitteh.factions.command.defaults.admin.CmdReload;
 import dev.kitteh.factions.command.defaults.admin.CmdSaveAll;
 import dev.kitteh.factions.command.defaults.admin.CmdTicketInfo;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.util.TriConsumer;
 import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
@@ -73,9 +75,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-
-import dev.kitteh.factions.util.TriConsumer;
-
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -146,8 +145,8 @@ public class CommandsRoot {
 
         manager.captionRegistry().registerProvider(new Captioner());
 
-        var main = plugin.tl().commands().generic().getCommandRoot();
-        var helpTl = plugin.tl().commands().help();
+        var main = Confs.tl().commands().generic().getCommandRoot();
+        var helpTl = Confs.tl().commands().help();
 
         MinecraftHelp<Sender> help = MinecraftHelp.<Sender>builder()
                 .commandManager(manager)
@@ -171,7 +170,7 @@ public class CommandsRoot {
             }
         });
 
-        var admin = plugin.tl().commands().generic().getCommandAdminRoot();
+        var admin = Confs.tl().commands().generic().getCommandAdminRoot();
         Command.Builder<Sender> builderAdmin = manager.commandBuilder(admin.getFirstAlias(), admin.getSecondaryAliases())
                 .permission(Cloudy.predicate(sender -> WorldUtil.isEnabled(sender.sender())));
         adminRegistry.values().forEach(reg -> {

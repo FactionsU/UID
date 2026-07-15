@@ -6,25 +6,24 @@ import com.drtshock.playervaults.vaultmanagement.VaultOperations;
 import com.drtshock.playervaults.vaultmanagement.VaultViewInfo;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.parser.standard.IntegerParser;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.parser.standard.IntegerParser;
 
 public class CmdVault implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
-        var tl = FactionsPlugin.instance().tl().commands().vault();
+        var tl = Confs.tl().commands().vault();
         return (manager, builder, _) -> manager.command(
                 builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                         .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -46,7 +45,7 @@ public class CmdVault implements Cmd {
 
         int max = faction.maxVaults();
         if (number > max) {
-            var tl = FactionsPlugin.instance().tl().commands().vault();
+            var tl = Confs.tl().commands().vault();
             sender.sendRichMessage(tl.getTooHigh(),
                     Placeholder.unparsed("vault", String.valueOf(number)),
                     Placeholder.unparsed("max", String.valueOf(max)));
@@ -54,7 +53,7 @@ public class CmdVault implements Cmd {
         }
 
         // Something like faction-id
-        String vaultName = String.format(FactionsPlugin.instance().conf().plugins().playerVaults().getVaultPrefix(), "" + faction.id());
+        String vaultName = String.format(Confs.main().plugins().playerVaults().getVaultPrefix(), "" + faction.id());
 
         if (number < 1) {
             // Message about which vaults that Faction has.

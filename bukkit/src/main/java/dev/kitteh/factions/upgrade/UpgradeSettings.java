@@ -1,7 +1,6 @@
 package dev.kitteh.factions.upgrade;
 
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.Universe;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

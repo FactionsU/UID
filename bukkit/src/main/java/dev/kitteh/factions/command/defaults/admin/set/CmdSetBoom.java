@@ -1,11 +1,11 @@
 package dev.kitteh.factions.command.defaults.admin.set;
 
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TriConsumer;
@@ -18,7 +18,7 @@ public class CmdSetBoom implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().admin().set().boom();
+            var tl = Confs.tl().commands().admin().set().boom();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -35,7 +35,7 @@ public class CmdSetBoom implements Cmd {
 
         Faction faction = context.get("faction");
 
-        var tl = FactionsPlugin.instance().tl().commands().admin().set().boom();
+        var tl = Confs.tl().commands().admin().set().boom();
 
         if (!faction.isNormal()) {
             sender.sendRichMessage(tl.getNotNormal());

@@ -1,6 +1,6 @@
 package dev.kitteh.factions.integration.dynmap;
 
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerIcon;
@@ -52,7 +52,7 @@ public class TempMarker {
     public static MarkerIcon getMarkerIcon(MarkerAPI markerApi, String name) {
         MarkerIcon ret = markerApi.getMarkerIcon(name);
         if (ret == null) {
-            ret = markerApi.getMarkerIcon(FactionsPlugin.instance().configManager().dynmapConfig().style().getHomeMarker());
+            ret = markerApi.getMarkerIcon(Confs.dynmap().style().getHomeMarker());
         }
         return ret;
     }

@@ -3,8 +3,8 @@ package dev.kitteh.factions.command.paper;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Mini;
 import io.papermc.paper.dialog.Dialog;
@@ -28,7 +28,7 @@ import java.util.List;
 public class CmdShield extends dev.kitteh.factions.command.defaults.CmdShield {
     @Override
     protected void registerSchedule(CommandManager<Sender> manager, Command.Builder<Sender> shield) {
-        var tl = FactionsPlugin.instance().tl().commands().shield();
+        var tl = Confs.tl().commands().shield();
         manager.command(shield.literal(tl.getCommandSchedule()).handler(this::handleSchedule));
     }
 
@@ -48,7 +48,7 @@ public class CmdShield extends dev.kitteh.factions.command.defaults.CmdShield {
     private void statusDialog(FPlayer fPlayer, Player player) {
         Faction faction = fPlayer.faction();
 
-        var tl = FactionsPlugin.instance().tl().commands().shield();
+        var tl = Confs.tl().commands().shield();
 
         FactionResolver factionResolver = FactionResolver.of(faction);
         List<DialogBody> dialogBody;
@@ -96,7 +96,7 @@ public class CmdShield extends dev.kitteh.factions.command.defaults.CmdShield {
         FPlayer fPlayer = FPlayers.fPlayers().get(player);
         Faction faction = fPlayer.faction();
 
-        var tl = FactionsPlugin.instance().tl().commands().shield();
+        var tl = Confs.tl().commands().shield();
 
         FactionResolver factionResolver = FactionResolver.of(faction);
 

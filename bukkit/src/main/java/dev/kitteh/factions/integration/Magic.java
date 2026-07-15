@@ -11,7 +11,7 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Relation;
@@ -77,13 +77,13 @@ public class Magic implements BlockBuildManager, BlockBreakManager, PVPManager, 
 
     @Override
     public boolean isPVPAllowed(Player player, Location location) {
-        if (player == null && !FactionsPlugin.instance().conf().plugins().magic().isUsePVPSettingForMagicMobs()) {
+        if (player == null && !Confs.main().plugins().magic().isUsePVPSettingForMagicMobs()) {
             return true;
         }
         if (!WorldUtil.isEnabled(location)) {
             return true;
         }
-        MainConfig.Factions facConf = FactionsPlugin.instance().conf().factions();
+        MainConfig.Factions facConf = Confs.main().factions();
         if (facConf.pvp().getWorldsIgnorePvP().contains(location.getWorld().getName())) {
             return true;
         }

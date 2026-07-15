@@ -3,12 +3,12 @@ package dev.kitteh.factions.command.paper;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrade;
@@ -17,6 +17,7 @@ import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import io.papermc.paper.dialog.Dialog;
 import io.papermc.paper.registry.data.dialog.ActionButton;
 import io.papermc.paper.registry.data.dialog.DialogBase;
@@ -32,19 +33,17 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 import java.util.Comparator;
 import java.util.List;
-
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 @SuppressWarnings("UnstableApiUsage")
 public class CmdUpgrades implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().upgrades();
+            var tl = Confs.tl().commands().upgrades();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.UPGRADES).and(Cloudy.hasFaction())))
@@ -71,7 +70,7 @@ public class CmdUpgrades implements Cmd {
             return this.noLongerInFaction();
         }
 
-        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+        var tl = Confs.tl().commands().upgrades().paper();
 
         List<ActionButton> upgrades = UpgradeRegistry.getUpgrades().stream()
                 .sorted(Comparator.comparing(Upgrade::name))
@@ -104,7 +103,7 @@ public class CmdUpgrades implements Cmd {
             return this.noLongerInFaction();
         }
 
-        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+        var tl = Confs.tl().commands().upgrades().paper();
         var info = tl.infoPage();
 
         int lvl = faction.upgradeLevel(upgrade);
@@ -200,7 +199,7 @@ public class CmdUpgrades implements Cmd {
         int lvl = faction.upgradeLevel(upgrade);
         UpgradeSettings settings = Universe.universe().upgradeSettings(upgrade);
 
-        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+        var tl = Confs.tl().commands().upgrades().paper();
 
         if (lvl == settings.maxLevel()) {
             return Dialog.create(b -> b.empty()
@@ -216,7 +215,7 @@ public class CmdUpgrades implements Cmd {
         double cost = settings.costAt(lvl + 1).doubleValue();
 
         Participator purchaser;
-        if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts()) {
+        if (Confs.main().economy().isBankEnabled() && Confs.main().economy().isBankFactionPaysCosts()) {
             purchaser = faction;
         } else {
             purchaser = fPlayer;
@@ -252,7 +251,7 @@ public class CmdUpgrades implements Cmd {
             return this.noLongerInFaction();
         }
 
-        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+        var tl = Confs.tl().commands().upgrades().paper();
 
         if (newLvl != (1 + faction.upgradeLevel(upgrade))) {
             return Dialog.create(b -> b.empty()
@@ -270,7 +269,7 @@ public class CmdUpgrades implements Cmd {
         double cost = settings.costAt(newLvl).doubleValue();
 
         Participator purchaser;
-        if (FactionsPlugin.instance().conf().economy().isBankEnabled() && FactionsPlugin.instance().conf().economy().isBankFactionPaysCosts()) {
+        if (Confs.main().economy().isBankEnabled() && Confs.main().economy().isBankFactionPaysCosts()) {
             purchaser = faction;
         } else {
             purchaser = fPlayer;
@@ -288,7 +287,7 @@ public class CmdUpgrades implements Cmd {
     }
 
     private Dialog noLongerInFaction() {
-        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper().noLongerInFaction();
+        var tl = Confs.tl().commands().upgrades().paper().noLongerInFaction();
         return Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(Mini.parse(tl.getTitle()))
                         .body(Dialogue.body(tl.getBody())).build())
@@ -296,7 +295,7 @@ public class CmdUpgrades implements Cmd {
     }
 
     private Dialog cannotAfford(Upgrade upgrade) {
-        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+        var tl = Confs.tl().commands().upgrades().paper();
         return Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(Mini.parse(tl.cannotAfford().getTitle()))
                         .body(Dialogue.body(tl.cannotAfford().getBody())).build())
@@ -304,7 +303,7 @@ public class CmdUpgrades implements Cmd {
     }
 
     private Dialog prerequisitesNotMet(Upgrade upgrade) {
-        var tl = FactionsPlugin.instance().tl().commands().upgrades().paper();
+        var tl = Confs.tl().commands().upgrades().paper();
         return Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(Mini.parse(tl.prerequisitesNotMet().getTitle()))
                         .body(Dialogue.body(tl.prerequisitesNotMet().getBody())).build())
@@ -312,14 +311,14 @@ public class CmdUpgrades implements Cmd {
     }
 
     private ActionButton returnToUpgrade(Upgrade upgrade) {
-        return ActionButton.builder(Mini.parse(FactionsPlugin.instance().tl().commands().upgrades().paper().general().getReturnToInfo()))
+        return ActionButton.builder(Mini.parse(Confs.tl().commands().upgrades().paper().general().getReturnToInfo()))
                 .action(DialogAction.customClick((_, aud) ->
                         aud.showDialog(this.upgradeMenu(aud, upgrade)), Dialogue.CLICK_CALLBACK))
                 .build();
     }
 
     private ActionButton returnToList() {
-        return ActionButton.builder(Mini.parse(FactionsPlugin.instance().tl().commands().upgrades().paper().general().getReturnToList()))
+        return ActionButton.builder(Mini.parse(Confs.tl().commands().upgrades().paper().general().getReturnToList()))
                 .action(DialogAction.customClick((_, aud) ->
                         aud.showDialog(this.mainMenu(aud)), Dialogue.CLICK_CALLBACK))
                 .build();

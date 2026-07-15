@@ -4,8 +4,8 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.chat.ChatTarget;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
@@ -34,14 +34,14 @@ public class ListenCommandDeny implements Listener {
 
         String cmd = event.getMessage().split(" ")[0];
 
-        if (this.plugin.conf().factions().chat().internalChat().isTriggerPublicChat(cmd.startsWith("/") ? cmd.substring(1) : cmd)) {
+        if (Confs.main().factions().chat().internalChat().isTriggerPublicChat(cmd.startsWith("/") ? cmd.substring(1) : cmd)) {
             FPlayer p = FPlayers.fPlayers().get(event.getPlayer());
             p.chatTarget(ChatTarget.PUBLIC);
-            p.sendRichMessage(FactionsPlugin.instance().tl().commands().chat().getModePublic());
+            p.sendRichMessage(Confs.tl().commands().chat().getModePublic());
         }
 
         if (this.denyCommand(event.getMessage(), event.getPlayer())) {
-            if (plugin.conf().logging().isPlayerCommands()) {
+            if (Confs.main().logging().isPlayerCommands()) {
                 plugin.getLogger().info("[PLAYER_COMMAND] " + event.getPlayer().getName() + ": " + event.getMessage());
             }
             event.setCancelled(true);
@@ -50,7 +50,7 @@ public class ListenCommandDeny implements Listener {
 
     // Planned for removal, or would be in Protection
     private boolean denyCommand(String fullCmd, Player player) {
-        MainConfig.Factions.Protection protection = FactionsPlugin.instance().conf().factions().protection();
+        MainConfig.Factions.Protection protection = Confs.main().factions().protection();
         if ((protection.getTerritoryNeutralDenyCommands().isEmpty() &&
                 protection.getTerritoryEnemyDenyCommands().isEmpty() &&
                 protection.getPermanentFactionMemberDenyCommands().isEmpty() &&
@@ -73,7 +73,7 @@ public class ListenCommandDeny implements Listener {
             fullCmd = "/" + fullCmd;
         }
 
-        var tl = FactionsPlugin.instance().tl().commands().generic().commandDeny();
+        var tl = Confs.tl().commands().generic().commandDeny();
         if (me.hasFaction() &&
                 !me.adminBypass() &&
                 !protection.getPermanentFactionMemberDenyCommands().isEmpty() &&

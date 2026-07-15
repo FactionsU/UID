@@ -3,7 +3,7 @@ package dev.kitteh.factions.permissible.selector;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Selectable;
 import dev.kitteh.factions.util.Mini;
 import net.kyori.adventure.text.Component;
@@ -19,8 +19,8 @@ import java.util.UUID;
 @NullMarked
 public class PlayerSelector extends AbstractSelector {
     public static final String NAME = "player";
-    public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, FactionsPlugin.instance().tl().permissions().selectors().player()::getDisplayName, PlayerSelector::new)
-            .withInstructions(FactionsPlugin.instance().tl().permissions().selectors().player()::getInstructions);
+    public static final Descriptor DESCRIPTOR = new BasicDescriptor(NAME, Confs.tl().permissions().selectors().player()::getDisplayName, PlayerSelector::new)
+            .withInstructions(Confs.tl().permissions().selectors().player()::getInstructions);
 
     private final UUID uuid;
 
@@ -60,7 +60,7 @@ public class PlayerSelector extends AbstractSelector {
     public Component displayValue(Faction context) {
         FPlayer player = FPlayers.fPlayers().get(this.uuid);
         return player.name().equals(player.uniqueId().toString()) ?
-                Mini.parse(FactionsPlugin.instance().tl().permissions().selectors().player().getUuidValue(), Placeholder.unparsed("uuid", this.uuid.toString()))
+                Mini.parse(Confs.tl().permissions().selectors().player().getUuidValue(), Placeholder.unparsed("uuid", this.uuid.toString()))
                 : Component.text().color(player.textColorTo(context)).content(player.name()).build();
     }
 }

@@ -1,6 +1,7 @@
 package dev.kitteh.factions.listener;
 
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,9 +13,9 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import java.util.Objects;
 
 public class ListenEnderPearl implements Listener {
-    public final FactionsPlugin plugin;
+    public final AbstractFactionsPlugin plugin;
 
-    public ListenEnderPearl(FactionsPlugin plugin) {
+    public ListenEnderPearl(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -24,7 +25,7 @@ public class ListenEnderPearl implements Listener {
             return;
         }
 
-        if (!this.plugin.conf().exploits().isEnderPearlClipping()) {
+        if (!Confs.main().exploits().isEnderPearlClipping()) {
             return;
         }
         if (event.getCause() != PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {

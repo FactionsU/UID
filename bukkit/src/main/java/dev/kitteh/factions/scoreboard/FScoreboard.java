@@ -2,7 +2,7 @@ package dev.kitteh.factions.scoreboard;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -104,7 +104,7 @@ public class FScoreboard {
                     updateObjective();
                 }
             }
-        }.runTaskLater(AbstractFactionsPlugin.instance(), FactionsPlugin.instance().conf().scoreboard().info().getExpiration() * 20L);
+        }.runTaskLater(AbstractFactionsPlugin.instance(), Confs.main().scoreboard().info().getExpiration() * 20L);
     }
 
     private void updateObjective() {

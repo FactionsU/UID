@@ -14,6 +14,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.CommandsRoot;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.config.ConfigManager;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.data.SaveTask;
@@ -272,7 +273,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         this.configManager.loadConfigs();
         this.gson = this.getGsonBuilder(false).create();
 
-        if (this.conf().data().json().useEfficientStorage()) {
+        if (Confs.main().data().json().useEfficientStorage()) {
             getLogger().info("Using space efficient (less readable) storage.");
         }
     }
@@ -324,7 +325,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         this.getLogger().info("Server UUID " + this.serverUUID);
 
-        this.landRaidControl = LandRaidControl.getByName(this.conf().factions().landRaidControl().getSystem());
+        this.landRaidControl = LandRaidControl.getByName(Confs.main().factions().landRaidControl().getSystem());
 
         File dataFolder = new File(this.getDataFolder(), "data");
         if (!dataFolder.exists()) {
@@ -356,11 +357,11 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         }
 
         // Create Utility Instances
-        WorldUtil.init(this.conf().restrictWorlds());
+        WorldUtil.init(Confs.main().restrictWorlds());
 
         // Register recurring tasks
-        if (saveTask == null && this.conf().factions().other().getSaveToFileEveryXMinutes() > 0.0) {
-            long saveTicks = (long) (20 * 60 * this.conf().factions().other().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
+        if (saveTask == null && Confs.main().factions().other().getSaveToFileEveryXMinutes() > 0.0) {
+            long saveTicks = (long) (20 * 60 * Confs.main().factions().other().getSaveToFileEveryXMinutes()); // Approximately every 30 min by default
             saveTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new SaveTask(this), saveTicks, saveTicks);
         }
         if (tntFillTask == null) {
@@ -402,7 +403,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         startAutoLeaveTask(false);
 
         // Run before initializing listeners to handle reloads properly.
-        double delay = Math.floor(conf().commands().seeChunk().getParticleUpdateTime() * 20);
+        double delay = Math.floor(Confs.main().commands().seeChunk().getParticleUpdateTime() * 20);
         seeChunkUtil = new SeeChunkUtil();
         seeChunkUtil.runTaskTimer(this, 0, (long) delay);
         // End run before registering event handlers.
@@ -424,7 +425,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         this.getServer().getPluginManager().registerEvents(this.integrationManager, this);
         this.registerServerSpecificEvents();
 
-        if (conf().commands().fly().isEnable()) {
+        if (Confs.main().commands().fly().isEnable()) {
             FlightUtil.start();
         }
 
@@ -551,8 +552,8 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
             Plugin ess = Essentials.getEssentials();
             this.metricsDrillPie("essentials", () -> this.metricsPluginInfo(ess));
             if (ess != null) {
-                this.metricsSimplePie("essentials_delete_homes", () -> "" + conf().factions().other().isDeleteEssentialsHomes());
-                this.metricsSimplePie("essentials_home_teleport", () -> "" + this.conf().factions().homes().isTeleportCommandEssentialsIntegration());
+                this.metricsSimplePie("essentials_delete_homes", () -> "" + Confs.main().factions().other().isDeleteEssentialsHomes());
+                this.metricsSimplePie("essentials_home_teleport", () -> "" + Confs.main().factions().homes().isTeleportCommandEssentialsIntegration());
             }
         }
 
@@ -565,7 +566,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
                 Map<String, Map<String, Integer>> map = new HashMap<>();
                 Map<String, Integer> entry = new HashMap<>();
                 entry.put(Econ.getEcon() == null ? "none" : Econ.getEcon().getName(), 1);
-                map.put((this.conf().economy().isEnabled() && Econ.getEcon() != null) ? "enabled" : "disabled", entry);
+                map.put((Confs.main().economy().isEnabled() && Econ.getEcon() != null) ? "enabled" : "disabled", entry);
                 return map;
             });
         }
@@ -595,7 +596,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         // Overall stats
         this.metricsLine("factions", () -> Factions.factions().all().size() - 3);
-        this.metricsSimplePie("scoreboard", () -> "" + conf().scoreboard().constant().isEnabled());
+        this.metricsSimplePie("scoreboard", () -> "" + Confs.main().scoreboard().constant().isEnabled());
 
         // Event listeners
         this.metricsDrillPie("event_listeners", () -> {
@@ -671,12 +672,13 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         return this.startupExceptionLog;
     }
 
-    @SuppressWarnings("removal")
+    @SuppressWarnings({"removal", "NullableProblems"})
     @Override
     public Gson gson() {
         return gson;
     }
 
+    @SuppressWarnings({"removal", "NullableProblems"})
     @Override
     public SeeChunkUtil seeChunkUtil() {
         return seeChunkUtil;
@@ -711,6 +713,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         this.autoSave = enabled;
     }
 
+    @SuppressWarnings({"removal", "NullableProblems"})
     @Override
     public ConfigManager configManager() {
         return this.configManager;
@@ -733,7 +736,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         GsonBuilder builder = new GsonBuilder();
 
-        if (confNotLoaded || !this.conf().data().json().useEfficientStorage()) {
+        if (confNotLoaded || !Confs.main().data().json().useEfficientStorage()) {
             builder.setPrettyPrinting();
         }
 
@@ -793,14 +796,14 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
             this.getServer().getScheduler().cancelTask(autoLeaveTask);
         }
 
-        if (this.conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes() > 0.0) {
-            long ticks = (long) (20 * 60 * this.conf().factions().other().getAutoLeaveRoutineRunsEveryXMinutes());
+        if (Confs.main().factions().other().getAutoLeaveRoutineRunsEveryXMinutes() > 0.0) {
+            long ticks = (long) (20 * 60 * Confs.main().factions().other().getAutoLeaveRoutineRunsEveryXMinutes());
             autoLeaveTask = getServer().getScheduler().scheduleSyncRepeatingTask(this, new AutoLeaveTask(), ticks, ticks);
         }
     }
 
     public void debug(Level level, String s) {
-        if (conf().getaVeryFriendlyFactionsConfig().isDebug()) {
+        if (Confs.main().getaVeryFriendlyFactionsConfig().isDebug()) {
             getLogger().log(level, s);
         }
     }
@@ -906,6 +909,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         player.sendMessage(ChatColor.GREEN + "Get it at " + ChatColor.DARK_AQUA + "https://www.spigotmc.org/resources/factionsuuid.1035/");
     }
 
+    @SuppressWarnings("removal")
     @Override
     public IntegrationManager integrationManager() {
         return this.integrationManager;

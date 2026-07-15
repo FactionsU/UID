@@ -2,15 +2,19 @@ package dev.kitteh.factions.command.defaults;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
-import dev.kitteh.factions.command.*;
+import dev.kitteh.factions.command.Cloudy;
+import dev.kitteh.factions.command.Cmd;
+import dev.kitteh.factions.command.FactionParser;
+import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.event.FactionRelationEvent;
 import dev.kitteh.factions.event.FactionRelationWishEvent;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.scoreboard.FTeamWrapper;
 import dev.kitteh.factions.tagresolver.FactionResolver;
-import dev.kitteh.factions.util.*;
+import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
@@ -18,14 +22,13 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.description.Description;
-
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdRelation implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().relation();
+            var tl = Confs.tl().commands().relation();
             Command.Builder<Sender> build = builder
                     .literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Description.of(tl.getDescription()))
@@ -50,7 +53,7 @@ public class CmdRelation implements Cmd {
 
         Faction them = context.get("faction");
 
-        var tl = FactionsPlugin.instance().tl().commands().relation();
+        var tl = Confs.tl().commands().relation();
 
         if (!them.isNormal()) {
             sender.sendRichMessage(tl.getDenySystemFaction());
@@ -79,7 +82,7 @@ public class CmdRelation implements Cmd {
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        var econTl = Confs.tl().economy().actions();
         if (!context.sender().payForCommand(targetRelation.getRelationCost(), econTl.getRelationTo(), econTl.getRelationFor())) {
             return;
         }
@@ -128,10 +131,10 @@ public class CmdRelation implements Cmd {
     }
 
     private boolean hasMaxRelations(Faction them, Relation targetRelation, Faction us, FPlayer sender) {
-        if (FactionsPlugin.instance().conf().factions().maxRelations().isEnabled()) {
+        if (Confs.main().factions().maxRelations().isEnabled()) {
             int max = targetRelation.getMax();
             if (max != -1) {
-                var tl = FactionsPlugin.instance().tl().commands().relation();
+                var tl = Confs.tl().commands().relation();
                 String relation = max == 1 ? targetRelation.translation() : targetRelation.getPluralTranslation();
                 if (us.relationCount(targetRelation) >= max) {
                     sender.sendRichMessage(tl.getRelationLimitSelf(), FactionResolver.of(us), Placeholder.unparsed("limit", String.valueOf(max)), Placeholder.component("relation", Component.text(relation, targetRelation.color())));

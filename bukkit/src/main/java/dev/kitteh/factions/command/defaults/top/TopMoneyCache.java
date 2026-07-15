@@ -6,7 +6,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.integration.Econ;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -32,7 +32,7 @@ public final class TopMoneyCache {
             scheduler.cancelTask(taskId);
             taskId = -1;
         }
-        int seconds = FactionsPlugin.instance().conf().economy().getTopBalanceCacheOnlineRefreshSeconds();
+        int seconds = Confs.main().economy().getTopBalanceCacheOnlineRefreshSeconds();
         if (seconds <= 0) {
             return;
         }
@@ -46,7 +46,7 @@ public final class TopMoneyCache {
     private static final int EXPIRE_INTERVAL_MULTIPLE = 10;
 
     private static long expireSeconds() {
-        var economy = FactionsPlugin.instance().conf().economy();
+        var economy = Confs.main().economy();
         long onlineSeconds = Math.max(1, economy.getTopBalanceCacheOnlineRefreshSeconds());
         long offlineSeconds = Math.max(1, economy.getTopBalanceCacheOfflineRefreshMinutes() * 60L);
         return EXPIRE_INTERVAL_MULTIPLE * Math.max(onlineSeconds, offlineSeconds);
@@ -80,7 +80,7 @@ public final class TopMoneyCache {
             return;
         }
 
-        if (FactionsPlugin.instance().conf().economy().isBankEnabled()) {
+        if (Confs.main().economy().isBankEnabled()) {
             for (Faction faction : Factions.factions().all()) {
                 if (faction.isNormal()) {
                     factionBalances.put(faction.id(), Econ.getBalance(faction));
@@ -105,7 +105,7 @@ public final class TopMoneyCache {
             return;
         }
 
-        var economy = FactionsPlugin.instance().conf().economy();
+        var economy = Confs.main().economy();
         double refreshSeconds = Math.max(1, economy.getTopBalanceCacheOnlineRefreshSeconds());
         double offlineSeconds = Math.max(refreshSeconds, economy.getTopBalanceCacheOfflineRefreshMinutes() * 60.0);
         double runsPerOfflineInterval = offlineSeconds / refreshSeconds;

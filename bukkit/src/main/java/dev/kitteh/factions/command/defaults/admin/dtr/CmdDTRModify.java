@@ -6,22 +6,22 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.parser.standard.DoubleParser;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.parser.standard.DoubleParser;
 
 public class CmdDTRModify implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().admin().dtr().modify();
+            var tl = Confs.tl().commands().admin().dtr().modify();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -42,8 +42,8 @@ public class CmdDTRModify implements Cmd {
         }
 
         DTRControl dtr = (DTRControl) FactionsPlugin.instance().landRaidControl();
-        target.dtr(Math.clamp(target.dtr() + amount, FactionsPlugin.instance().conf().factions().landRaidControl().dtr().getMinDTR(), dtr.getMaxDTR(target)));
-        context.sender().sendRichMessage(FactionsPlugin.instance().tl().commands().admin().dtr().modify().getSuccess(),
+        target.dtr(Math.clamp(target.dtr() + amount, Confs.main().factions().landRaidControl().dtr().getMinDTR(), dtr.getMaxDTR(target)));
+        context.sender().sendRichMessage(Confs.tl().commands().admin().dtr().modify().getSuccess(),
                 FactionResolver.of(target));
     }
 }

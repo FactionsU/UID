@@ -5,8 +5,8 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.event.PowerLossEvent;
 import dev.kitteh.factions.permissible.Relation;
@@ -28,8 +28,8 @@ public final class PowerControl implements LandRaidControl {
     }
 
     public boolean isRaidable(Faction faction, int power) {
-        return FactionsPlugin.instance().conf().factions().landRaidControl().power().isRaidability() && faction.isNormal() && !faction.isPeaceful() &&
-                (FactionsPlugin.instance().conf().factions().landRaidControl().power().isRaidabilityOnEqualLandAndPower() ?
+        return Confs.main().factions().landRaidControl().power().isRaidability() && faction.isNormal() && !faction.isPeaceful() &&
+                (Confs.main().factions().landRaidControl().power().isRaidabilityOnEqualLandAndPower() ?
                         (faction.claimCount() >= power) :
                         (faction.claimCount() > power)
                 );
@@ -47,8 +47,8 @@ public final class PowerControl implements LandRaidControl {
 
     @Override
     public boolean canJoinFaction(Faction faction, FPlayer player) {
-        if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
-            player.sendRichMessage(FactionsPlugin.instance().tl().commands().join().getNegativePower(), Placeholder.unparsed("player", player.name()));
+        if (!Confs.main().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
+            player.sendRichMessage(Confs.tl().commands().join().getNegativePower(), Placeholder.unparsed("player", player.name()));
             return false;
         }
         return true;
@@ -56,8 +56,8 @@ public final class PowerControl implements LandRaidControl {
 
     @Override
     public boolean canLeaveFaction(FPlayer player) {
-        if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
-            player.sendRichMessage(FactionsPlugin.instance().tl().commands().leave().getNegativePower());
+        if (!Confs.main().factions().landRaidControl().power().canLeaveWithNegativePower() && player.power() < 0) {
+            player.sendRichMessage(Confs.tl().commands().leave().getNegativePower());
             return false;
         }
         return true;
@@ -70,12 +70,12 @@ public final class PowerControl implements LandRaidControl {
 
     @Override
     public boolean canKick(FPlayer toKick, FPlayer playerAttempting) {
-        var kickTl = FactionsPlugin.instance().tl().commands().kick();
-        if (!FactionsPlugin.instance().conf().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.power() < 0) {
+        var kickTl = Confs.tl().commands().kick();
+        if (!Confs.main().factions().landRaidControl().power().canLeaveWithNegativePower() && toKick.power() < 0) {
             playerAttempting.sendRichMessage(kickTl.getNegativePower());
             return false;
         }
-        if (toKick.isOnline() && !FactionsPlugin.instance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
+        if (toKick.isOnline() && !Confs.main().commands().kick().isAllowKickInEnemyTerritory() &&
                 Board.board().factionAt(toKick.lastStoodAt()).relationTo(toKick.faction()) == Relation.ENEMY) {
             playerAttempting.sendRichMessage(kickTl.getEnemyTerritory());
             return false;
@@ -108,10 +108,10 @@ public final class PowerControl implements LandRaidControl {
         FPlayer fplayer = FPlayers.fPlayers().get(player);
         Faction faction = Board.board().factionAt(new FLocation(player.getLocation()));
 
-        MainConfig.Factions.LandRaidControl.Power powerConf = FactionsPlugin.instance().conf().factions().landRaidControl().power();
+        MainConfig.Factions.LandRaidControl.Power powerConf = Confs.main().factions().landRaidControl().power();
         PowerLossEvent powerLossEvent = new PowerLossEvent(faction, fplayer);
         // Check for no power loss conditions
-        var power = FactionsPlugin.instance().tl().landRaid().power();
+        var power = Confs.tl().landRaid().power();
         if (AbstractFactionsPlugin.instance().getWorldguard() != null && AbstractFactionsPlugin.instance().getWorldguard().isNoLossFlag(player)) {
             powerLossEvent.setMessage(power.getNoPowerLossRegion());
             powerLossEvent.setCancelled(true);
@@ -124,7 +124,7 @@ public final class PowerControl implements LandRaidControl {
             if (powerConf.getWorldsNoPowerLoss().contains(player.getWorld().getName())) {
                 powerLossEvent.setMessage(power.getPowerLossWarzone());
             }
-        } else if (faction.isWilderness() && !powerConf.isWildernessPowerLoss() && !FactionsPlugin.instance().conf().factions().protection().getWorldsNoWildernessProtection().contains(player.getWorld().getName())) {
+        } else if (faction.isWilderness() && !powerConf.isWildernessPowerLoss() && !Confs.main().factions().protection().getWorldsNoWildernessProtection().contains(player.getWorld().getName())) {
             powerLossEvent.setMessage(power.getNoPowerLossWilderness());
             powerLossEvent.setCancelled(true);
         } else if (powerConf.getWorldsNoPowerLoss().contains(player.getWorld().getName())) {
@@ -168,7 +168,7 @@ public final class PowerControl implements LandRaidControl {
                 double powerChange = vamp * vampLoss;
                 FPlayer fKiller = FPlayers.fPlayers().get(killer);
                 fKiller.alterPower(powerChange);
-                fKiller.sendRichMessage(FactionsPlugin.instance().tl().landRaid().power().getVampirismGain(),
+                fKiller.sendRichMessage(Confs.tl().landRaid().power().getVampirismGain(),
                         Placeholder.unparsed("amount", String.format("%.2f", powerChange)),
                         FPlayerResolver.of("player", fplayer),
                         Placeholder.unparsed("power", String.valueOf(fKiller.powerRounded())),

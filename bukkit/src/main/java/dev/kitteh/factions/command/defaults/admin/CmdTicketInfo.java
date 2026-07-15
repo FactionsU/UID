@@ -8,6 +8,7 @@ import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -19,6 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -38,8 +40,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import java.util.logging.Level;
 import java.util.zip.GZIPOutputStream;
 

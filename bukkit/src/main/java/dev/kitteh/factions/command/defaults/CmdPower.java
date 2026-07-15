@@ -6,22 +6,22 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdPower implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().power();
+            var tl = Confs.tl().commands().power();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -36,8 +36,8 @@ public class CmdPower implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().power();
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        var tl = Confs.tl().commands().power();
+        var econTl = Confs.tl().economy().actions();
         FPlayer sender = context.sender().fPlayerOrNull();
 
         FPlayer target = context.getOrDefault("player", sender);
@@ -49,7 +49,7 @@ public class CmdPower implements Cmd {
             return;
         }
 
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostPower(), econTl.getPowerTo(), econTl.getPowerFor())) {
+        if (!context.sender().payForCommand(Confs.main().economy().getCostPower(), econTl.getPowerTo(), econTl.getPowerFor())) {
             return;
         }
 

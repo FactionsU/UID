@@ -4,27 +4,26 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.util.LazyLocation;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
-import org.incendo.cloud.parser.standard.StringParser;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.parser.standard.StringParser;
 
 public class CmdSetWarp implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().set().warp();
+            var tl = Confs.tl().commands().set().warp();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -38,8 +37,8 @@ public class CmdSetWarp implements Cmd {
     }
 
     private void handle(org.incendo.cloud.context.CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().set().warp();
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        var tl = Confs.tl().commands().set().warp();
+        var econTl = Confs.tl().economy().actions();
         Player player = ((Sender.Player) context.sender()).player();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Faction faction = sender.faction();
@@ -48,7 +47,7 @@ public class CmdSetWarp implements Cmd {
 
         if (context.flags().hasFlag("delete")) {
             if (faction.isWarp(warp)) {
-                if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostDelWarp(), econTl.getDelWarpTo(), econTl.getDelWarpFor())) {
+                if (!context.sender().payForCommand(Confs.main().economy().getCostDelWarp(), econTl.getDelWarpTo(), econTl.getDelWarpFor())) {
                     return;
                 }
                 faction.removeWarp(warp);
@@ -70,12 +69,12 @@ public class CmdSetWarp implements Cmd {
             return;
         }
 
-        if (FactionsPlugin.instance().conf().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.hasHome()) {
+        if (Confs.main().factions().homes().isRequiredToHaveHomeBeforeSettingWarps() && !faction.hasHome()) {
             sender.sendRichMessage(tl.getHomeRequired());
             return;
         }
 
-        if (!context.sender().payForCommand(FactionsPlugin.instance().conf().economy().getCostSetWarp(), econTl.getSetWarpTo(), econTl.getSetWarpFor())) {
+        if (!context.sender().payForCommand(Confs.main().economy().getCostSetWarp(), econTl.getSetWarpTo(), econTl.getSetWarpFor())) {
             return;
         }
 

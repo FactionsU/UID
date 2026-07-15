@@ -7,18 +7,18 @@ import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.defaults.admin.dtr.CmdDTRModify;
 import dev.kitteh.factions.command.defaults.admin.dtr.CmdDTRResetAll;
 import dev.kitteh.factions.command.defaults.admin.dtr.CmdDTRSet;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdAdminDTR implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().admin().dtr();
+            var tl = Confs.tl().commands().admin().dtr();
             Command.Builder<Sender> dtrBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .permission(builder.commandPermission().and(Cloudy.predicate(_ -> FactionsPlugin.instance().landRaidControl() instanceof DTRControl)));
 

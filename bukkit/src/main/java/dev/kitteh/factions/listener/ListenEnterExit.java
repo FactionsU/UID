@@ -4,6 +4,7 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.permissible.Relation;
@@ -64,7 +65,7 @@ public class ListenEnterExit implements Listener {
         if (!myFaction.isWilderness()) {
             for (FPlayer fPlayer : myFaction.membersOnline(true)) {
                 if (fPlayer != me && fPlayer.monitorJoins()) {
-                    fPlayer.sendRichMessage(AbstractFactionsPlugin.instance().tl().factionEvents().getLogout(),
+                    fPlayer.sendRichMessage(Confs.tl().factionEvents().getLogout(),
                             FPlayerResolver.of("player", me));
                 }
             }
@@ -87,7 +88,7 @@ public class ListenEnterExit implements Listener {
         this.plugin.landRaidControl().onRespawn(me);
 
         Location home = me.faction().home();
-        MainConfig.Factions facConf = this.plugin.conf().factions();
+        MainConfig.Factions facConf = Confs.main().factions();
         if (facConf.homes().isEnabled() &&
                 facConf.homes().isTeleportToOnDeath() &&
                 home != null &&
@@ -154,9 +155,9 @@ public class ListenEnterExit implements Listener {
         // Store player's current FLocation
         me.lastStoodAt(standing);
 
-        if (this.plugin.conf().factions().protection().territoryTeleport().isEnabled()) {
+        if (Confs.main().factions().protection().territoryTeleport().isEnabled()) {
             long diff = System.currentTimeMillis() - me.lastLogin();
-            MainConfig.Factions.Protection.TerritoryTeleport terry = this.plugin.conf().factions().protection().territoryTeleport();
+            MainConfig.Factions.Protection.TerritoryTeleport terry = Confs.main().factions().protection().territoryTeleport();
             if (diff > (1000L * terry.getTimeSinceLastSignedIn())) {
                 Faction standingFaction = standing.faction();
                 Relation relation = me.relationTo(standingFaction);
@@ -187,7 +188,7 @@ public class ListenEnterExit implements Listener {
                     }
                     this.plugin.teleport(player, target).thenAccept(success -> {
                         if (success) {
-                            me.sendRichMessage(AbstractFactionsPlugin.instance().tl().factionEvents().getTeleportedOnJoin(),
+                            me.sendRichMessage(Confs.tl().factionEvents().getTeleportedOnJoin(),
                                     Placeholder.unparsed("relation", relation.translation()));
                         }
                     });
@@ -225,7 +226,7 @@ public class ListenEnterExit implements Listener {
             }
         }.runTaskLater(this.plugin, 33L); // Don't ask me why.
 
-        if (this.plugin.conf().scoreboard().constant().isEnabled()) {
+        if (Confs.main().scoreboard().constant().isEnabled()) {
             FScoreboard.init(player, me);
             FScoreboard.get(me).setSidebarVisibility(me.showScoreboard());
         }
@@ -234,7 +235,7 @@ public class ListenEnterExit implements Listener {
         if (!myFaction.isWilderness()) {
             for (FPlayer other : myFaction.membersOnline(true)) {
                 if (other != me && other.monitorJoins()) {
-                    other.sendRichMessage(AbstractFactionsPlugin.instance().tl().factionEvents().getLogin(),
+                    other.sendRichMessage(Confs.tl().factionEvents().getLogin(),
                             FPlayerResolver.of("player", me));
                 }
             }

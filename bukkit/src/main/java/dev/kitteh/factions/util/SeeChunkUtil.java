@@ -4,7 +4,7 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
@@ -33,9 +33,9 @@ public class SeeChunkUtil extends BukkitRunnable {
     private final Particle effect;
 
     public SeeChunkUtil() {
-        String effectName = FactionsPlugin.instance().conf().commands().seeChunk().getParticleName();
+        String effectName = Confs.main().commands().seeChunk().getParticleName();
         this.effect = ParticleProvider.effectFromString(effectName);
-        this.useColor = FactionsPlugin.instance().conf().commands().seeChunk().isRelationalColor();
+        this.useColor = Confs.main().commands().seeChunk().isRelationalColor();
 
         AbstractFactionsPlugin.instance().getLogger().info(String.format("Using %s as the particle effect for seechunk", effect.name()));
     }

@@ -4,15 +4,15 @@ import dev.kitteh.factions.Board;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.event.DTRLossEvent;
 import dev.kitteh.factions.integration.ExternalChecks;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
@@ -27,18 +27,12 @@ import java.util.stream.Stream;
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public final class DTRControl implements LandRaidControl {
-    private static FactionsPlugin plugin = FactionsPlugin.instance();
-
     public static String round(double dtr) {
         return BigDecimal.valueOf(dtr).setScale(conf().getDecimalDigits(), RoundingMode.UP).toPlainString();
     }
 
     private static MainConfig.Factions.LandRaidControl.DTR conf() {
-        return plugin.conf().factions().landRaidControl().dtr();
-    }
-
-    public DTRControl() {
-        plugin = FactionsPlugin.instance();
+        return Confs.main().factions().landRaidControl().dtr();
     }
 
     @Override
@@ -68,7 +62,7 @@ public final class DTRControl implements LandRaidControl {
     @Override
     public boolean canJoinFaction(Faction faction, FPlayer player) {
         if (faction.dtrFrozen() && conf().isFreezePreventsJoin()) {
-            player.sendRichMessage(FactionsPlugin.instance().tl().landRaid().dtr().getCannotFrozen());
+            player.sendRichMessage(Confs.tl().landRaid().dtr().getCannotFrozen());
             return false;
         }
         return true;
@@ -77,7 +71,7 @@ public final class DTRControl implements LandRaidControl {
     @Override
     public boolean canLeaveFaction(FPlayer player) {
         if (player.faction().dtrFrozen() && conf().isFreezePreventsLeave()) {
-            player.sendRichMessage(FactionsPlugin.instance().tl().landRaid().dtr().getCannotFrozen());
+            player.sendRichMessage(Confs.tl().landRaid().dtr().getCannotFrozen());
             return false;
         }
         return true;
@@ -86,7 +80,7 @@ public final class DTRControl implements LandRaidControl {
     @Override
     public boolean canDisbandFaction(Faction faction, FPlayer playerAttempting) {
         if (faction.dtrFrozen() && conf().isFreezePreventsDisband()) {
-            playerAttempting.sendRichMessage(FactionsPlugin.instance().tl().landRaid().dtr().getCannotFrozen());
+            playerAttempting.sendRichMessage(Confs.tl().landRaid().dtr().getCannotFrozen());
             return false;
         }
         return true;
@@ -96,14 +90,14 @@ public final class DTRControl implements LandRaidControl {
     public boolean canKick(FPlayer toKick, FPlayer playerAttempting) {
         if (toKick.faction().isNormal()) {
             Faction faction = toKick.faction();
-            if (!FactionsPlugin.instance().conf().commands().kick().isAllowKickInEnemyTerritory() &&
+            if (!Confs.main().commands().kick().isAllowKickInEnemyTerritory() &&
                     Board.board().factionAt(toKick.lastStoodAt()).relationTo(faction) == Relation.ENEMY) {
-                playerAttempting.sendRichMessage(FactionsPlugin.instance().tl().commands().kick().getEnemyTerritory());
+                playerAttempting.sendRichMessage(Confs.tl().commands().kick().getEnemyTerritory());
                 return false;
             }
             if (faction.dtrFrozen() && conf().getFreezeKickPenalty() > 0) {
                 faction.dtr(Math.max(conf().getMinDTR(), faction.dtr() - conf().getFreezeKickPenalty()));
-                playerAttempting.sendRichMessage(FactionsPlugin.instance().tl().landRaid().dtr().getKickPenalty());
+                playerAttempting.sendRichMessage(Confs.tl().landRaid().dtr().getKickPenalty());
             }
         }
         return true;
@@ -167,7 +161,7 @@ public final class DTRControl implements LandRaidControl {
                     double startingOther = fKiller.faction().dtr();
                     fKiller.faction().dtr(Math.min(conf().getMaxDTR(), startingOther + change));
                     double killDiff = fKiller.faction().dtr() - startingOther;
-                    fKiller.sendRichMessage(FactionsPlugin.instance().tl().landRaid().dtr().getVampirismGain(),
+                    fKiller.sendRichMessage(Confs.tl().landRaid().dtr().getVampirismGain(),
                             Placeholder.unparsed("amount", String.format("%.2f", killDiff)),
                             FPlayerResolver.of("player", fplayer),
                             Placeholder.unparsed("dtr", DTRControl.round(fKiller.faction().dtr())));
@@ -202,7 +196,7 @@ public final class DTRControl implements LandRaidControl {
         double millisPerMinute = 60 * 1000;
         long millisPassed = now - Math.max(faction.dtrLastUpdated(), faction.dtrFrozenUntil());
         Stream<Player> stream = faction.membersOnlineAsPlayers().stream().filter(WorldUtil::isEnabled);
-        if (FactionsPlugin.instance().conf().plugins().general().isPreventRegenWhileAfk()) {
+        if (Confs.main().plugins().general().isPreventRegenWhileAfk()) {
             stream = stream.filter(player -> !ExternalChecks.isAfk(player));
         }
         long onlineInEnabledWorlds = stream.count();

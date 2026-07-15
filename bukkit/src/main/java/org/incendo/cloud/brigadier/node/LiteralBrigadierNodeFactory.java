@@ -33,12 +33,6 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.leangen.geantyref.GenericTypeReflector;
 import io.leangen.geantyref.TypeToken;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.CommandManager;
@@ -58,6 +52,13 @@ import org.incendo.cloud.parser.ArgumentParser;
 import org.incendo.cloud.parser.MappedArgumentParser;
 import org.incendo.cloud.parser.aggregate.AggregateParser;
 import org.incendo.cloud.suggestion.SuggestionFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 @API(status = API.Status.STABLE, since = "2.0.0")

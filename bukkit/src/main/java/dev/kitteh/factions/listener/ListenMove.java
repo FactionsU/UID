@@ -4,7 +4,8 @@ import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.plugin.Instances;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import dev.kitteh.factions.util.Permission;
@@ -23,11 +24,11 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class ListenMove implements Listener {
-    private final FactionsPlugin plugin;
+    private final AbstractFactionsPlugin plugin;
     // Holds the next time a player can have a map shown.
     private final HashMap<UUID, Long> mapLastShown = new HashMap<>();
 
-    public ListenMove(FactionsPlugin plugin) {
+    public ListenMove(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -52,7 +53,7 @@ public class ListenMove implements Listener {
         if (fromLoc.getBlockX() != toLoc.getBlockX() || fromLoc.getBlockY() != toLoc.getBlockY() || fromLoc.getBlockZ() != toLoc.getBlockZ() || fromLoc.getWorld() != toLoc.getWorld()) {
             if (me.warmup() instanceof WarmUpUtil.Warmup warmup && warmup != WarmUpUtil.Warmup.STUCK) {
                 me.cancelWarmup();
-                me.sendRichMessage(FactionsPlugin.instance().tl().commands().generic().getWarmupCancelled());
+                me.sendRichMessage(Confs.tl().commands().generic().getWarmupCancelled());
             }
         }
 
@@ -95,10 +96,10 @@ public class ListenMove implements Listener {
         }
 
         free:
-        if (plugin.conf().commands().fly().isEnable() && !me.adminBypass()) {
+        if (Confs.main().commands().fly().isEnable() && !me.adminBypass()) {
             boolean canFly = me.canFlyAtLocation(to);
             if (!changedFaction) {
-                if (canFly && !canFlyPreClaim && me.flying() && plugin.conf().commands().fly().isDisableFlightDuringAutoclaim()) {
+                if (canFly && !canFlyPreClaim && me.flying() && Confs.main().commands().fly().isDisableFlightDuringAutoclaim()) {
                     me.flying(false);
                 }
                 break free;
@@ -120,7 +121,7 @@ public class ListenMove implements Listener {
                 for (Component component : Instances.BOARD.getMap(me, to, player.getLocation().getYaw())) {
                     me.sendMessage(component);
                 }
-                mapLastShown.put(player.getUniqueId(), System.currentTimeMillis() + this.plugin.conf().commands().map().getCooldown());
+                mapLastShown.put(player.getUniqueId(), System.currentTimeMillis() + Confs.main().commands().map().getCooldown());
             }
         }
         if (changedFaction) {

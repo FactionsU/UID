@@ -1,34 +1,37 @@
 package dev.kitteh.factions.command.defaults;
 
-import dev.kitteh.factions.*;
+import dev.kitteh.factions.Board;
+import dev.kitteh.factions.FLocation;
+import dev.kitteh.factions.FPlayer;
+import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.defaults.set.CmdSetPerm;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.SpiralTask;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.parser.standard.IntegerParser;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.BlockingSuggestionProvider;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
-
 public class CmdZone implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().zone();
+            var tl = Confs.tl().commands().zone();
             Command.Builder<Sender> zoneBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission()
@@ -74,7 +77,7 @@ public class CmdZone implements Cmd {
             );
 
             new CmdSetPerm((ctx) -> '/' + Cmd.rootCommand() + ' ' + tl.getFirstAlias() +
-                    ' ' + tl.set().getFirstAlias() + ' ' + ctx.get("zone") + ' ' + FactionsPlugin.instance().tl().commands().permissions().getFirstAlias() + ' ', context -> {
+                    ' ' + tl.set().getFirstAlias() + ' ' + ctx.get("zone") + ' ' + Confs.tl().commands().permissions().getFirstAlias() + ' ', context -> {
                 FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
                 Faction faction = sender.faction();
                 String name = context.get("zone");
@@ -111,7 +114,7 @@ public class CmdZone implements Cmd {
 
         String name = context.get("zone");
 
-        var tl = FactionsPlugin.instance().tl().commands().zone().create();
+        var tl = Confs.tl().commands().zone().create();
 
         if (faction.zones().get(name) != null) {
             sender.sendRichMessage(tl.getNameAlreadyInUse(), Placeholder.unparsed("name", name));
@@ -128,7 +131,7 @@ public class CmdZone implements Cmd {
 
         String name = context.get("zone");
 
-        var tl = FactionsPlugin.instance().tl().commands().zone().set().name();
+        var tl = Confs.tl().commands().zone().set().name();
 
         Faction.Zone zone = faction.zones().get(name);
 
@@ -158,7 +161,7 @@ public class CmdZone implements Cmd {
 
         String name = context.get("zone");
 
-        var tl = FactionsPlugin.instance().tl().commands().zone().set().greeting();
+        var tl = Confs.tl().commands().zone().set().greeting();
 
         Faction.Zone zone = faction.zones().get(name);
 
@@ -184,7 +187,7 @@ public class CmdZone implements Cmd {
 
         String name = context.get("zone");
 
-        var tl = FactionsPlugin.instance().tl().commands().zone().claim();
+        var tl = Confs.tl().commands().zone().claim();
 
         Faction.Zone zone = faction.zones().get(name);
 
@@ -231,7 +234,7 @@ public class CmdZone implements Cmd {
     }
 
     public static boolean claim(FPlayer sender, Faction faction, FLocation location, Faction.Zone zone, boolean msg) {
-        return claim(sender, faction, location, zone, FactionsPlugin.instance().tl().commands().zone().claim(), msg);
+        return claim(sender, faction, location, zone, Confs.tl().commands().zone().claim(), msg);
     }
 
     private static boolean claim(FPlayer sender, Faction faction, FLocation location, Faction.Zone zone, TranslationsConfig.Commands.Zone.Claim tl, boolean msg) {
@@ -278,7 +281,7 @@ public class CmdZone implements Cmd {
 
         String name = context.get("zone");
 
-        var tl = FactionsPlugin.instance().tl().commands().zone().delete();
+        var tl = Confs.tl().commands().zone().delete();
 
         Faction.Zone zone = faction.zones().get(name);
 
@@ -302,7 +305,7 @@ public class CmdZone implements Cmd {
             return; // Lost perms while confirming, just silently die, meh
         }
 
-        var tl = FactionsPlugin.instance().tl().commands().zone().delete();
+        var tl = Confs.tl().commands().zone().delete();
 
         Faction.Zone zone = faction.zones().get(name);
 

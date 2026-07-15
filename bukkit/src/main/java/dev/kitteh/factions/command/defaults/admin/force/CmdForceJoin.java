@@ -2,12 +2,12 @@ package dev.kitteh.factions.command.defaults.admin.force;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.event.FPlayerJoinEvent;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
@@ -25,7 +25,7 @@ public class CmdForceJoin implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().admin().force().join();
+            var tl = Confs.tl().commands().admin().force().join();
             Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.FORCE_JOIN)));
@@ -42,7 +42,7 @@ public class CmdForceJoin implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context) {
-        var tl = FactionsPlugin.instance().tl().commands().admin().force().join();
+        var tl = Confs.tl().commands().admin().force().join();
         Sender sender = context.sender();
         FPlayer target = context.get("player");
         Faction faction = context.get("faction");
@@ -76,7 +76,7 @@ public class CmdForceJoin implements Cmd {
             p.updateCommands();
         }
 
-        if (FactionsPlugin.instance().conf().logging().isFactionJoin()) {
+        if (Confs.main().logging().isFactionJoin()) {
             AbstractFactionsPlugin.instance().log(target.name() + " force-joined the faction " + faction.tag());
         }
     }

@@ -7,11 +7,11 @@ import com.github.stefvanschie.inventoryframework.pane.PaginatedPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradePrerequisite;
@@ -19,6 +19,7 @@ import dev.kitteh.factions.upgrade.UpgradeRegistry;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -28,18 +29,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import dev.kitteh.factions.util.TriConsumer;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdUpgrades implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().upgrades();
+            var tl = Confs.tl().commands().upgrades();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.UPGRADES).and(Cloudy.hasFaction())))
@@ -108,7 +108,7 @@ public class CmdUpgrades implements Cmd {
                                 return;
                             }
 
-                            var econTl = FactionsPlugin.instance().tl().economy().actions();
+                            var econTl = Confs.tl().economy().actions();
                             if (context.sender().payForCommand(settings.costAt(lvl + 1).doubleValue(), econTl.getUpgradeTo(), econTl.getUpgradeFor())) {
                                 faction.upgradeLevel(upgrade, lvl + 1);
                                 guiItem.setItem(buildStack(settings, sender));

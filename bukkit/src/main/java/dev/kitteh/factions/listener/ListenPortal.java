@@ -3,8 +3,9 @@ package dev.kitteh.factions.listener;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Relation;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.WorldUtil;
 import org.bukkit.entity.Entity;
@@ -14,9 +15,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.PortalCreateEvent;
 
 public class ListenPortal implements Listener {
-    public final FactionsPlugin plugin;
+    public final AbstractFactionsPlugin plugin;
 
-    public ListenPortal(FactionsPlugin plugin) {
+    public ListenPortal(AbstractFactionsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -27,7 +28,7 @@ public class ListenPortal implements Listener {
         }
         Entity entity = event.getEntity();
 
-        if (!this.plugin.conf().factions().portals().isLimit()) {
+        if (!Confs.main().factions().portals().isLimit()) {
             return;
         }
 
@@ -36,7 +37,7 @@ public class ListenPortal implements Listener {
         }
 
         FPlayer fPlayer = FPlayers.fPlayers().get(player);
-        Relation minimumRelation = this.plugin.conf().factions().portals().getMinimumRelation();
+        Relation minimumRelation = Confs.main().factions().portals().getMinimumRelation();
 
         boolean match = event.getBlocks().stream().map(bs -> new FLocation(bs.getLocation()).faction())
                 .distinct()
@@ -57,7 +58,7 @@ public class ListenPortal implements Listener {
                 });
         if (match) {
             event.setCancelled(true);
-            fPlayer.sendRichMessage(FactionsPlugin.instance().tl().factionEvents().getPortalNotAllowed());
+            fPlayer.sendRichMessage(Confs.tl().factionEvents().getPortalNotAllowed());
         }
     }
 }

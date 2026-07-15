@@ -1,11 +1,11 @@
 package dev.kitteh.factions.command.defaults.admin;
 
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FactionParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -20,7 +20,7 @@ public class CmdGet implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().admin().get();
+            var tl = Confs.tl().commands().admin().get();
 
             Command.Builder<Sender> getBuilder = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -33,7 +33,7 @@ public class CmdGet implements Cmd {
     }
 
     private void handle(CommandContext<Sender> context, String key, Function<Faction, String> function) {
-        var tl = FactionsPlugin.instance().tl().commands().admin().get();
+        var tl = Confs.tl().commands().admin().get();
         Faction faction = context.get("faction");
         context.sender().sendRichMessage(tl.getOutput(),
                 FactionResolver.of(faction),

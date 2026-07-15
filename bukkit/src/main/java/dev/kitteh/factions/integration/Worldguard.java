@@ -14,7 +14,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -115,7 +115,7 @@ public class Worldguard {
         ProtectedRegion region = new ProtectedCuboidRegion("wgregionflagcheckforfactions", min, max);
         ApplicableRegionSet set = regions.getApplicableRegions(region);
 
-        if (FactionsPlugin.instance().conf().plugins().worldGuard().isChecking()) {
+        if (Confs.main().plugins().worldGuard().isChecking()) {
             return set.size() > 0;
         }
         if (FLAG_CLAIM == null) {

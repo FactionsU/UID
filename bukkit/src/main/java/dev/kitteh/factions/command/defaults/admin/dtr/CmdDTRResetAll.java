@@ -5,20 +5,20 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.landraidcontrol.DTRControl;
 import dev.kitteh.factions.util.Permission;
+import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
-
-import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 public class CmdDTRResetAll implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, _) -> {
-            var tl = FactionsPlugin.instance().tl().commands().admin().dtr().resetAll();
+            var tl = Confs.tl().commands().admin().dtr().resetAll();
             manager.command(
                     builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                             .commandDescription(Cloudy.desc(tl.getDescription()))
@@ -31,6 +31,6 @@ public class CmdDTRResetAll implements Cmd {
     private void handle(CommandContext<Sender> context) {
         DTRControl dtr = (DTRControl) FactionsPlugin.instance().landRaidControl();
         Factions.factions().all().forEach(target -> target.dtr(dtr.getMaxDTR(target)));
-        context.sender().sendRichMessage(FactionsPlugin.instance().tl().commands().admin().dtr().resetAll().getSuccess());
+        context.sender().sendRichMessage(Confs.tl().commands().admin().dtr().resetAll().getSuccess());
     }
 }

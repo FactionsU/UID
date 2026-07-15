@@ -8,7 +8,7 @@ import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tagresolver.FactionResolver;
@@ -96,7 +96,7 @@ public abstract class MemoryBoard implements Board {
                     }
                     if (fPlayer.warmingUp()) {
                         fPlayer.cancelWarmup();
-                        fPlayer.sendRichMessage(FactionsPlugin.instance().tl().commands().generic().getWarmupCancelled());
+                        fPlayer.sendRichMessage(Confs.tl().commands().generic().getWarmupCancelled());
                     }
                 }
             }
@@ -152,12 +152,12 @@ public abstract class MemoryBoard implements Board {
         List<FLocation> locations = this.worldTrackers.values().stream().flatMap(wt -> wt.allClaims(faction.id()).stream()).toList();
         for (FPlayer fPlayer : FPlayers.fPlayers().online()) {
             if (locations.contains(fPlayer.lastStoodAt())) {
-                if (FactionsPlugin.instance().conf().commands().fly().isEnable() && !fPlayer.adminBypass() && fPlayer.flying()) {
+                if (Confs.main().commands().fly().isEnable() && !fPlayer.adminBypass() && fPlayer.flying()) {
                     fPlayer.flying(false);
                 }
                 if (fPlayer.warmingUp()) {
                     fPlayer.cancelWarmup();
-                    fPlayer.sendRichMessage(FactionsPlugin.instance().tl().commands().generic().getWarmupCancelled());
+                    fPlayer.sendRichMessage(Confs.tl().commands().generic().getWarmupCancelled());
                 }
             }
         }
@@ -205,7 +205,7 @@ public abstract class MemoryBoard implements Board {
         ArrayList<Component> ret = new ArrayList<>();
         Faction factionLoc = factionAt(fLocation);
 
-        var tl = FactionsPlugin.instance().tl().commands().map();
+        var tl = Confs.tl().commands().map();
 
         char[] mapChars = tl.getMapOutputFactionCharacters().toCharArray();
         if (mapChars.length == 0) {
@@ -228,14 +228,14 @@ public abstract class MemoryBoard implements Board {
         // Get the compass
         List<Component> asciiCompass = AsciiCompass.of(inDegrees, "<" + tl.getCompassColorActive() + ">", "<" + tl.getCompassColorDefault() + ">");
 
-        int halfWidth = FactionsPlugin.instance().conf().map().getWidth() / 2;
+        int halfWidth = Confs.main().map().getWidth() / 2;
         // Use player's value for height
         int halfHeight = fPlayer.mapHeight() / 2;
         FLocation topLeft = fLocation.relative(-halfWidth, -halfHeight);
         int width = halfWidth * 2 + 1;
         int height = halfHeight * 2 + 1;
 
-        if (FactionsPlugin.instance().conf().map().isShowFactionKey()) {
+        if (Confs.main().map().isShowFactionKey()) {
             height--;
         }
 
@@ -252,7 +252,7 @@ public abstract class MemoryBoard implements Board {
             }
             for (int dx = (dz < 3 ? 6 : 3); dx < width; dx++) {
                 if (dx == halfWidth && dz == halfHeight) {
-                    builder.append(Component.text().content("+").color(FactionsPlugin.instance().conf().map().getSelfColor()).hoverEvent(HoverEvent.showText(Mini.parse(FactionsPlugin.instance().tl().claiming().claim().getYouAreHere()))));
+                    builder.append(Component.text().content("+").color(Confs.main().map().getSelfColor()).hoverEvent(HoverEvent.showText(Mini.parse(Confs.tl().claiming().claim().getYouAreHere()))));
                 } else {
                     FLocation fLocationHere = topLeft.relative(dx, dz);
                     Faction factionHere = factionAt(fLocationHere);
@@ -264,9 +264,9 @@ public abstract class MemoryBoard implements Board {
                     } else if (factionHere.isWarZone()) {
                         builder.append(warzone);
                     } else if (factionHere == playerFaction || factionHere == factionLoc || relation.isAtLeast(Relation.ALLY) ||
-                            (FactionsPlugin.instance().conf().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
-                            (FactionsPlugin.instance().conf().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
-                            FactionsPlugin.instance().conf().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
+                            (Confs.main().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
+                            (Confs.main().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
+                            Confs.main().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
                         if (!fList.containsKey(factionHere)) {
                             fList.put(factionHere, Component.text().content(String.valueOf(mapChars[Math.min(chrIdx++, mapChars.length - 1)])).color(factionHere.textColorTo(playerFaction)).build());
                         }
@@ -280,7 +280,7 @@ public abstract class MemoryBoard implements Board {
         }
 
         // Add the faction key
-        if (FactionsPlugin.instance().conf().map().isShowFactionKey()) {
+        if (Confs.main().map().isShowFactionKey()) {
             TextComponent.Builder builder = Component.text();
             fList.forEach((fac, label) ->
                     builder.append(Mini.parse(tl.getMapOutputKeyItem(), fPlayer,
@@ -318,8 +318,8 @@ public abstract class MemoryBoard implements Board {
         ArrayList<Component> ret = new ArrayList<>();
         Faction factionLoc = factionAt(flocation);
 
-        int halfWidth = FactionsPlugin.instance().conf().map().getScoreboardWidth() / 2;
-        int halfHeight = FactionsPlugin.instance().conf().map().getScoreboardHeight() / 2;
+        int halfWidth = Confs.main().map().getScoreboardWidth() / 2;
+        int halfHeight = Confs.main().map().getScoreboardHeight() / 2;
         int width = halfWidth * 2 + 1;
         int height = halfHeight * 2 + 1;
         double degrees = (player.getLocation().getYaw() - 180) % 360;
@@ -351,7 +351,7 @@ public abstract class MemoryBoard implements Board {
 
             for (int c = 0; c < width; c++) {
                 if (c == halfWidth && r == halfHeight) {
-                    builder.append(Component.text().content("⬛").color(FactionsPlugin.instance().conf().map().getSelfColor()));
+                    builder.append(Component.text().content("⬛").color(Confs.main().map().getSelfColor()));
                 } else {
                     FLocation flocationHere = switch (dir) {
                         case N -> topLeft.relative(c, r);
@@ -362,15 +362,15 @@ public abstract class MemoryBoard implements Board {
                     Faction factionHere = factionAt(flocationHere);
                     Relation relation = fplayer.relationTo(factionHere);
                     if (factionHere.isWilderness()) {
-                        builder.append(Component.text().content("⬛").color(FactionsPlugin.instance().conf().colors().factions().getWilderness()));
+                        builder.append(Component.text().content("⬛").color(Confs.main().colors().factions().getWilderness()));
                     } else if (factionHere.isSafeZone()) {
-                        builder.append(Component.text().content("⬛").color(FactionsPlugin.instance().conf().colors().factions().getSafezone()));
+                        builder.append(Component.text().content("⬛").color(Confs.main().colors().factions().getSafezone()));
                     } else if (factionHere.isWarZone()) {
-                        builder.append(Component.text().content("⬛").color(FactionsPlugin.instance().conf().colors().factions().getWarzone()));
+                        builder.append(Component.text().content("⬛").color(Confs.main().colors().factions().getWarzone()));
                     } else if (factionHere == faction || factionHere == factionLoc || relation.isAtLeast(Relation.ALLY) ||
-                            (FactionsPlugin.instance().conf().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
-                            (FactionsPlugin.instance().conf().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
-                            FactionsPlugin.instance().conf().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
+                            (Confs.main().map().isShowNeutralFactionsOnMap() && relation.equals(Relation.NEUTRAL)) ||
+                            (Confs.main().map().isShowEnemyFactions() && relation.equals(Relation.ENEMY)) ||
+                            Confs.main().map().isShowTruceFactions() && relation.equals(Relation.TRUCE)) {
                         builder.append(Component.text().content("⬛").color(factionHere.textColorTo(faction)));
                     } else {
                         builder.append(Component.text().content("⬛").color(NamedTextColor.GRAY));

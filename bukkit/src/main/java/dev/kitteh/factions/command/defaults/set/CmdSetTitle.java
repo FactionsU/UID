@@ -2,11 +2,11 @@ package dev.kitteh.factions.command.defaults.set;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.FPlayerParser;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.util.Mini;
@@ -25,7 +25,7 @@ public class CmdSetTitle implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
         return (manager, builder, help) -> {
-            var tl = FactionsPlugin.instance().tl().commands().set().title();
+            var tl = Confs.tl().commands().set().title();
             Command.Builder<Sender> build = builder.literal(tl.getFirstAlias(), tl.getSecondaryAliases())
                     .commandDescription(Cloudy.desc(tl.getDescription()))
                     .permission(builder.commandPermission().and(Cloudy.hasPermission(Permission.TITLE).and(Cloudy.isAtLeastRole(Role.MODERATOR))));
@@ -37,7 +37,7 @@ public class CmdSetTitle implements Cmd {
             );
 
             manager.command(build.meta(HIDE_IN_HELP, true).handler(ctx ->
-                    help.queryCommands(Cmd.rootCommand() + " " + FactionsPlugin.instance().tl().commands().set().getFirstAlias() + " " + tl.getFirstAlias() + " <player> [title]", ctx.sender())));
+                    help.queryCommands(Cmd.rootCommand() + " " + Confs.tl().commands().set().getFirstAlias() + " " + tl.getFirstAlias() + " <player> [title]", ctx.sender())));
         };
     }
 
@@ -46,7 +46,7 @@ public class CmdSetTitle implements Cmd {
         FPlayer target = context.get("player");
         Faction faction = sender.faction();
 
-        var tl = FactionsPlugin.instance().tl().commands().set().title();
+        var tl = Confs.tl().commands().set().title();
 
         if (sender.faction() != target.faction() || (sender.role() != Role.ADMIN && sender.role().value() <= target.role().value())) {
             sender.sendRichMessage(tl.getCannotChange());
@@ -62,15 +62,15 @@ public class CmdSetTitle implements Cmd {
             titleComponent = Component.text(title);
         }
 
-        int limit = FactionsPlugin.instance().conf().factions().other().getTitleLengthMax();
+        int limit = Confs.main().factions().other().getTitleLengthMax();
         if (PlainTextComponentSerializer.plainText().serialize(titleComponent).length() > limit) {
             sender.sendRichMessage(tl.getLimit(), Placeholder.unparsed("limit", String.valueOf(limit)));
             return;
         }
 
         // if economy is enabled, they're not on the bypass list, and this command has a cost set, make 'em pay
-        var econ = FactionsPlugin.instance().conf().economy();
-        var econTl = FactionsPlugin.instance().tl().economy().actions();
+        var econ = Confs.main().economy();
+        var econTl = Confs.tl().economy().actions();
         if (!context.sender().payForCommand(econ.getCostTitle(), econTl.getTitleTo(), econTl.getTitleFor())) {
             return;
         }

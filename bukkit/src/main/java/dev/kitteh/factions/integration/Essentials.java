@@ -4,7 +4,7 @@ import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.User;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.Faction;
-import dev.kitteh.factions.FactionsPlugin;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.ComponentDispatcher;
@@ -35,14 +35,14 @@ public class Essentials {
         ExternalChecks.registerIgnored(ess, (viewer, chatter) -> essentials.getUser(viewer).isIgnoredPlayer(essentials.getUser(chatter)));
         ExternalChecks.registerMuted(ess, player -> essentials.getUser(player).isMuted());
         ExternalChecks.registerVanished(ess, player -> essentials.getUser(player).isVanished());
-        if (FactionsPlugin.instance().conf().factions().homes().isTeleportCommandEssentialsIntegration()) {
+        if (Confs.main().factions().homes().isTeleportCommandEssentialsIntegration()) {
             ExternalChecks.registerTeleport(ess, Essentials::handleTeleport);
         }
-        if (plugin.conf().factions().other().isDeleteEssentialsHomes()) {
+        if (Confs.main().factions().other().isDeleteEssentialsHomes()) {
             plugin.getLogger().info("Based on main.conf will delete Essentials player homes in their old faction when they leave");
             plugin.getServer().getPluginManager().registerEvents(new EssentialsListener(essentials), plugin);
         }
-        if (plugin.conf().factions().homes().isTeleportCommandEssentialsIntegration()) {
+        if (Confs.main().factions().homes().isTeleportCommandEssentialsIntegration()) {
             plugin.getLogger().info("Using Essentials for teleportation");
         }
         return true;

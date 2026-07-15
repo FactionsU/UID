@@ -2,6 +2,7 @@ package dev.kitteh.factions;
 
 import com.google.gson.Gson;
 import dev.kitteh.factions.config.ConfigManager;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.integration.IntegrationManager;
@@ -19,25 +20,35 @@ public interface FactionsPlugin {
         return AbstractFactionsPlugin.instance();
     }
 
+    boolean autoSave();
+
+    LandRaidControl landRaidControl();
+
+    @Deprecated(forRemoval = true, since = "4.3.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
+    IntegrationManager integrationManager();
+
     @Deprecated(forRemoval = true, since = "4.3.0")
     @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     Gson gson();
 
+    @Deprecated(forRemoval = true, since = "4.7.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     SeeChunkUtil seeChunkUtil();
 
-    boolean autoSave();
-
+    @Deprecated(forRemoval = true, since = "4.7.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     ConfigManager configManager();
 
+    @Deprecated(forRemoval = true, since = "4.7.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default MainConfig conf() {
-        return this.configManager().mainConfig();
+        return Confs.main();
     }
 
+    @Deprecated(forRemoval = true, since = "4.7.0")
+    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     default TranslationsConfig tl() {
-        return this.configManager().translationsConfig();
+        return Confs.tl();
     }
-
-    LandRaidControl landRaidControl();
-
-    IntegrationManager integrationManager();
 }
