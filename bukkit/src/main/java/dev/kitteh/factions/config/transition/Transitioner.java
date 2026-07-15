@@ -63,7 +63,7 @@ public class Transitioner {
                 transitioner.migrateV2(rootNode);
             }
             if (version < 4) {
-                transitioner.migrateV3(rootNode);
+                transitioner.migrateV3();
             }
             if (version < 5) {
                 transitioner.migrateV4(rootNode);
@@ -111,17 +111,12 @@ public class Transitioner {
         node.getNode("factions", "enterTitles", "title").setValue("");
         node.getNode("factions", "enterTitles", "subtitle").setValue("{faction-relation-color}{faction}");
         node.getNode("scoreboard", "constant", "factionlessTitle").setValue(node.getNode("scoreboard", "constant", "title").getString());
-
-        this.plugin.getLogger().info("Detected a config from before 0.5.7");
-        this.plugin.getLogger().info("  Setting default enterTitles settings based on old style. Visit main.conf to edit.");
-        this.plugin.getLogger().info("  Setting default constant scoreboard factionlessTitle settings based on normal title. Visit main.conf to edit.");
     }
 
-    private void migrateV3(CommentedConfigurationNode node) {
+    private void migrateV3() {
         this.plugin.getLogger().info("Detected a config from before 0.5.14");
-        this.plugin.getLogger().info("  1. Be aware that \"warZonePreventMonsterSpawns\" has been removed entirely, and there is");
+        this.plugin.getLogger().info("  Be aware that \"warZonePreventMonsterSpawns\" has been removed entirely, and there is");
         this.plugin.getLogger().info("     now a new spawning control system added.");
-        this.plugin.getLogger().info("  2. The perms gui hover text can now be customized in config");
     }
 
     private void migrateV4(CommentedConfigurationNode node) {
