@@ -1,6 +1,7 @@
 package dev.kitteh.factions.config.file;
 
 import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.annotation.NoFinalFields;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.permissible.Relation;
@@ -26,11 +27,14 @@ import java.util.Map;
 import java.util.Set;
 
 @ApiStatus.Internal
-@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "InnerClassMayBeStatic", "BooleanMethodIsAlwaysInverted", "MismatchedQueryAndUpdateOfCollection"})
+@NoFinalFields
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "BooleanMethodIsAlwaysInverted", "MismatchedQueryAndUpdateOfCollection"})
 public class MainConfig {
     public static class AVeryFriendlyFactionsConfig {
         @SuppressWarnings("unused")
-        @Comment("This is the config version, used for migrating on plugin updates. Don't change this value yourself, unless you WANT a broken config!")
+        @Comment("""
+                This is the config version, used for migrating on plugin updates.
+                Don't change this value yourself, or you could damage all configs!""")
         private int version = 12;
 
         @Comment("""
@@ -59,8 +63,8 @@ public class MainConfig {
         return ret == null ? defaultColor : ret;
     }
 
-    public class Colors {
-        public class Relations {
+    public static class Colors {
+        public static class Relations {
             private String member = "#8ad6b7";
             @WipeOnReload
             private transient TextColor memberColor;
@@ -105,7 +109,7 @@ public class MainConfig {
             }
         }
 
-        public class Factions {
+        public static class Factions {
             private String wilderness = "#91d689";
             @WipeOnReload
             private transient TextColor wildernessColor;
@@ -141,8 +145,8 @@ public class MainConfig {
         }
     }
 
-    public class Commands {
-        public class Description {
+    public static class Commands {
+        public static class Description {
             @Comment("If -1, no limit.")
             private int maxLength = -1;
 
@@ -151,7 +155,7 @@ public class MainConfig {
             }
         }
 
-        public class Kick {
+        public static class Kick {
             @Comment("If true, players can be kicked while standing in enemy territory")
             private boolean allowKickInEnemyTerritory = false;
 
@@ -160,8 +164,8 @@ public class MainConfig {
             }
         }
 
-        public class Fly {
-            public class Particles {
+        public static class Fly {
+            public static class Particles {
                 @Comment("Speed of the particles, can be decimal value")
                 private double speed = 0.02;
                 @Comment("Amount spawned")
@@ -281,7 +285,7 @@ public class MainConfig {
             }
         }
 
-        public class Home {
+        public static class Home {
             @Comment("Warmup seconds before command executes. Set to 0 for no warmup.")
             private int delay = 0;
 
@@ -290,7 +294,7 @@ public class MainConfig {
             }
         }
 
-        public class Invite {
+        public static class Invite {
             @Comment("How long, in minutes, before an invite expires. Set to 0 or -1 for no expiration.")
             private int expiry = -1;
 
@@ -299,7 +303,7 @@ public class MainConfig {
             }
         }
 
-        public class Link {
+        public static class Link {
             @Comment("Default URL")
             private String defaultURL = "No link set";
 
@@ -308,7 +312,8 @@ public class MainConfig {
             }
         }
 
-        public class ListCmd {
+        @SuppressWarnings("unused")
+        public static class ListCmd {
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
             private String header = "";
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
@@ -319,7 +324,7 @@ public class MainConfig {
             private String entry = "";
         }
 
-        public class MapCmd {
+        public static class MapCmd {
             @Comment("""
                     This will help limit how many times a player can be sent a map of factions.
                     Set this to the cooldown you want, in milliseconds, for a map to be shown to a player.
@@ -333,7 +338,7 @@ public class MainConfig {
             }
         }
 
-        public class Near {
+        public static class Near {
             @Comment("""
                     Making this radius larger increases lag, do so at your own risk
                     If on a high radius it is advised to add a cooldown to the command
@@ -345,7 +350,7 @@ public class MainConfig {
             }
         }
 
-        public class SeeChunk {
+        public static class SeeChunk {
             @Comment("Get a list of particle names here: https://factions.support/particles/")
             private String particleName = "DUST";
             @Comment("If the chosen particle is compatible with coloring we will color\n" +
@@ -367,8 +372,9 @@ public class MainConfig {
             }
         }
 
-        public class Show {
+        public static class Show {
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            @SuppressWarnings("unused")
             private List<String> format = new ArrayList<>();
             @Comment("Factions that should be exempt from /f show, case sensitive, useful for a server-team faction")
             private List<String> exempt = new ArrayList<>() {
@@ -382,7 +388,7 @@ public class MainConfig {
             }
         }
 
-        public class Stuck {
+        public static class Stuck {
             @Comment("Warmup seconds before command executes. Set to 0 for no warmup.")
             private int delay = 30;
             @Comment("""
@@ -406,7 +412,7 @@ public class MainConfig {
             }
         }
 
-        public class TNT {
+        public static class TNT {
             private int maxRadius = 5;
 
             public int getMaxRadius() {
@@ -421,6 +427,7 @@ public class MainConfig {
 
             @Deprecated(forRemoval = true, since = "4.1.0")
             @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
+            @SuppressWarnings("unused")
             public boolean isAboveMaxStorage(int amount) {
                 return true;
             }
@@ -432,7 +439,7 @@ public class MainConfig {
             }
         }
 
-        public class Warp {
+        public static class Warp {
             @Comment("Warmup seconds before command executes. Set to 0 for no warmup.")
             private int delay = 0;
             @Comment("Outdated - use the upgrade now. Kept in the short term for lazy config migration.")
@@ -447,7 +454,7 @@ public class MainConfig {
             }
         }
 
-        public class ToolTips {
+        public static class ToolTips {
             @Comment("Outdated tooltips - left as reference - removing in a future version")
             private List<String> faction = new ArrayList<>() {
                 {
@@ -547,6 +554,7 @@ public class MainConfig {
             return tnt;
         }
 
+        @SuppressWarnings("unused")
         public ToolTips toolTips() {
             return toolTips;
         }
@@ -556,9 +564,9 @@ public class MainConfig {
         }
     }
 
-    public class Factions {
-        public class LandRaidControl {
-            public class DTR {
+    public static class Factions {
+        public static class LandRaidControl {
+            public static class DTR {
                 private double startingDTR = 2.0;
                 private double maxDTR = 10.0;
                 private double minDTR = -3.0;
@@ -683,7 +691,7 @@ public class MainConfig {
                 }
             }
 
-            public class Power {
+            public static class Power {
                 private double playerMin = -10.0D;
                 private double playerMax = 10.0D;
                 private double playerStarting = 0.0D;
@@ -859,7 +867,7 @@ public class MainConfig {
             }
         }
 
-        public class Prefix {
+        public static class Prefix {
             private String admin = "***";
             private String coleader = "**";
             private String mod = "*";
@@ -887,8 +895,8 @@ public class MainConfig {
             }
         }
 
-        public class Chat {
-            public class InternalChat {
+        public static class Chat {
+            public static class InternalChat {
                 @Comment("Chatting with faction members")
                 private boolean factionMemberChatEnabled = true;
                 @Comment("Chatting with all members at or above a role")
@@ -948,7 +956,7 @@ public class MainConfig {
                 }
             }
 
-            public class Paper {
+            public static class Paper {
                 @Comment("If true, enables this plugin setting public chat formatting as specified in this section.\n" +
                         "If false, this plugin does not touch public chat.")
                 private boolean enabled = true;
@@ -974,7 +982,7 @@ public class MainConfig {
                 }
             }
 
-            public class Spigot {
+            public static class Spigot {
                 @Comment("If true, disables adding of faction tag so another plugin can manage this")
                 private boolean tagHandledByAnotherPlugin = false;
                 private boolean tagRelationColored = true;
@@ -1064,7 +1072,7 @@ public class MainConfig {
             }
         }
 
-        public class Homes {
+        public static class Homes {
             private boolean enabled = true;
             private boolean mustBeInClaimedTerritory = true;
             private boolean teleportToOnDeath = true;
@@ -1127,7 +1135,7 @@ public class MainConfig {
             }
         }
 
-        public class MaxRelations {
+        public static class MaxRelations {
             private boolean enabled = false;
             private int ally = 10;
             private int truce = 10;
@@ -1155,7 +1163,7 @@ public class MainConfig {
             }
         }
 
-        public class PVP {
+        public static class PVP {
             private boolean disablePVPBetweenNeutralFactions = false;
             private boolean disablePVPForFactionlessPlayers = false;
             private boolean enablePVPAgainstFactionlessInAttackersLand = false;
@@ -1198,7 +1206,7 @@ public class MainConfig {
             }
         }
 
-        public class SpecialCase {
+        public static class SpecialCase {
             private boolean peacefulTerritoryDisablePVP = true;
             private boolean peacefulTerritoryDisableMonsters = false;
             private boolean peacefulTerritoryDisableBoom = false;
@@ -1236,7 +1244,7 @@ public class MainConfig {
             }
         }
 
-        public class Portals {
+        public static class Portals {
             @Comment("If true, portals will be limited to the minimum relation below")
             private boolean limit = false;
             @Comment("""
@@ -1261,7 +1269,7 @@ public class MainConfig {
             }
         }
 
-        public class Claims {
+        public static class Claims {
             private boolean mustBeConnected = false;
             private boolean canBeUnconnectedIfOwnedByOtherFaction = true;
             private int requireMinFactionMembers = 1;
@@ -1365,8 +1373,8 @@ public class MainConfig {
             }
         }
 
-        public class Protection {
-            public class TerritoryTeleport {
+        public static class Protection {
+            public static class TerritoryTeleport {
                 private boolean enable = false;
 
                 @Comment("Time, in seconds, since last on the server to trigger this feature.")
@@ -1886,7 +1894,7 @@ public class MainConfig {
             }
         }
 
-        public class Spawning {
+        public static class Spawning {
             private Set<String> preventSpawningInSafezone = new HashSet<>() {
                 {
                     this.add("BREEDING");
@@ -2042,7 +2050,7 @@ public class MainConfig {
             }
         }
 
-        public class Other {
+        public static class Other {
             private boolean allowMultipleColeaders = false;
 
             @Comment("Minimum faction tag length")
@@ -2112,9 +2120,6 @@ public class MainConfig {
                 }
             };
 
-            @Comment("Minimum time, in seconds, to display in last seen placeholder (such as in the tooltip).")
-            private int minimumLastSeenTime = 3600;
-
             @Comment("Default greeting for zones. The <tag> tag auto-updates the faction tag.")
             private String defaultGreeting = "<tag> welcomes you!";
 
@@ -2122,8 +2127,9 @@ public class MainConfig {
                 return defaultGreeting;
             }
 
+            @Deprecated(forRemoval = true, since = "4.7.0")
             public int getMinimumLastSeenTime() {
-                return minimumLastSeenTime;
+                return 0;
             }
 
             public List<String> getNameBlacklist() {
@@ -2243,15 +2249,17 @@ public class MainConfig {
             }
         }
 
-        public class EnterTitles {
+        public static class EnterTitles {
             private boolean enabled = true;
             private int fadeIn = 10;
             private int stay = 70;
             private int fadeOut = 20;
             private boolean alsoShowChat = false;
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            @SuppressWarnings("unused")
             private String title = "";
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            @SuppressWarnings("unused")
             private String subtitle = "";
 
             public boolean isEnabled() {
@@ -2359,7 +2367,7 @@ public class MainConfig {
         }
     }
 
-    public class Logging {
+    public static class Logging {
         private boolean factionCreate = true;
         private boolean factionDisband = true;
         private boolean factionJoin = true;
@@ -2408,7 +2416,7 @@ public class MainConfig {
         }
     }
 
-    public class Exploits {
+    public static class Exploits {
         private boolean enderPearlClipping = true;
         private boolean interactionSpam = false;
         private boolean tntWaterlog = false;
@@ -2432,7 +2440,7 @@ public class MainConfig {
         }
     }
 
-    public class Economy {
+    public static class Economy {
         @Comment("""
                 
                 ******************
@@ -2686,7 +2694,7 @@ public class MainConfig {
         }
     }
 
-    public class MapSettings {
+    public static class MapSettings {
         private int height = 17;
         private int width = 49;
         private int scoreboardHeight = 7;
@@ -2736,8 +2744,8 @@ public class MainConfig {
         }
     }
 
-    public class Data {
-        public class Json {
+    public static class Data {
+        public static class Json {
             @Comment("If true, data files will be stored without extra whitespace and linebreaks.\n" +
                     "This becomes less readable, but can cut storage use in half.")
             private boolean efficientStorage = false;
@@ -2763,7 +2771,7 @@ public class MainConfig {
         }
     }
 
-    public class RestrictWorlds {
+    public static class RestrictWorlds {
         @Comment("If true, Factions will only function on certain worlds")
         private boolean restrictWorlds = false;
         @Comment("If restrictWorlds is true, this setting determines if the world list below is a whitelist or blacklist.\n" +
@@ -2788,29 +2796,35 @@ public class MainConfig {
         }
     }
 
-    public class Scoreboard {
-        public class Constant {
+    public static class Scoreboard {
+        public static class Constant {
             private boolean enabled = false;
 
             @Comment("If true, show configured prefixes on nametags and in tab list if this scoreboard is enabled")
             private boolean prefixes = true;
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            @SuppressWarnings("unused")
             private String prefixTemplate = "";
 
             @Comment("If true, show configured suffixes on nametags and in tab list if this scoreboard is enabled")
             private boolean suffixes = false;
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            @SuppressWarnings("unused")
             private String suffixTemplate = "";
 
             private boolean factionlessEnabled = false;
 
-
+            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            @SuppressWarnings("unused")
             private String title = "Faction Status";
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            @SuppressWarnings("unused")
             private List<String> content = new ArrayList<>();
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            @SuppressWarnings("unused")
             private List<String> factionlessContent = new ArrayList<>();
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            @SuppressWarnings("unused")
             private String factionlessTitle = "Status";
 
             public boolean isEnabled() {
@@ -2830,15 +2844,17 @@ public class MainConfig {
             }
         }
 
-        public class Info {
+        public static class Info {
             @Comment("Send faction change message as well when scoreboard is up?")
             private boolean alsoSendChat = true;
             @Comment("How long do we want scoreboards to stay")
             private int expiration = 7;
             private boolean enabled = false;
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            @SuppressWarnings("unused")
             private List<String> content = new ArrayList<>();
             @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
+            @SuppressWarnings("unused")
             private String title = "";
 
             public boolean isAlsoSendChat() {
@@ -2870,8 +2886,8 @@ public class MainConfig {
         }
     }
 
-    public class Plugins {
-        public class General {
+    public static class Plugins {
+        public static class General {
             @Comment("""
                     If true, prevents regeneration of dtr/power while marked as AFK.
                     By default, EssX support is added, but other plugins can add support for this.
@@ -2883,7 +2899,7 @@ public class MainConfig {
             }
         }
 
-        public class Graves {
+        public static class Graves {
             @Comment("If true, will allow any Graves plugin graves to be opened by anyone, regardless of permissions")
             private boolean allowAnyoneToOpenGraves = false;
             private boolean preventGravesInSafezone = false;
@@ -2902,7 +2918,7 @@ public class MainConfig {
             }
         }
 
-        public class Magic {
+        public static class Magic {
             @Comment("If true, magic mobs will follow whatever pvp allowed/disallowed setting is present for the territory they're attacking into.")
             private boolean usePVPSettingForMagicMobs = false;
 
@@ -2911,7 +2927,7 @@ public class MainConfig {
             }
         }
 
-        public class PlayerVaults {
+        public static class PlayerVaults {
             @Comment("The %s is for the faction id")
             private String vaultPrefix = "faction-%s";
 
@@ -2920,7 +2936,7 @@ public class MainConfig {
             }
         }
 
-        public class WorldGuard {
+        public static class WorldGuard {
             @Comment("If true, disallows claiming a chunk if any WG region is at least partially inside the chunk")
             private boolean checking = false;
             @Comment("If true, disallows claiming a chunk if any WG region with the flag 'fuuid-claim' denied for the claiming player is at least partially inside the chunk")
@@ -2990,7 +3006,7 @@ public class MainConfig {
         }
     }
 
-    public class WorldBorder {
+    public static class WorldBorder {
         @Comment("""
                 WorldBorder support
                 This is for Minecraft's built-in command. To get your current border: /minecraft:worldborder get

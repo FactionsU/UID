@@ -1,6 +1,7 @@
 package dev.kitteh.factions.config.file;
 
 import com.google.common.collect.ImmutableMap;
+import dev.kitteh.factions.annotation.NoFinalFields;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.permissible.PermSelector;
@@ -21,11 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 @ApiStatus.Internal
-@SuppressWarnings({"FieldMayBeFinal", "unused", "MismatchedQueryAndUpdateOfCollection"})
+@NoFinalFields
+@SuppressWarnings({"FieldMayBeFinal", "MismatchedQueryAndUpdateOfCollection"})
 public class PermissionsConfig {
     @Comment("""
             Actions (like BUILD or DOOR) and selectors (like role-atleast:moderator) available on the documentation site:
             https://factions.support/permissions/""")
+    @SuppressWarnings("unused")
     private boolean availableActionsAndSelectorsOnDocs = true;
 
     @Comment("List actions here to hide from visibility. Comma separated, in quotes.\n" +

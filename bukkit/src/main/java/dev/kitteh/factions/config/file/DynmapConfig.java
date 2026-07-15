@@ -2,6 +2,7 @@ package dev.kitteh.factions.config.file;
 
 import com.google.common.reflect.TypeToken;
 import dev.kitteh.factions.Factions;
+import dev.kitteh.factions.annotation.NoFinalFields;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.DefinedType;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
@@ -17,7 +18,8 @@ import java.util.Map;
 import java.util.Set;
 
 @ApiStatus.Internal
-@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "InnerClassMayBeStatic"})
+@NoFinalFields
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
 public class DynmapConfig {
     public class Dynmap {
         @Comment("Should the dynmap integration be used?")
@@ -36,6 +38,7 @@ public class DynmapConfig {
         private int layerMinimumZoom = 0;
 
         @Comment("UNUSED: Former description, if any. Use for reference in migration. Will be deleted in the future.")
+        @SuppressWarnings("unused")
         private String description ="";
 
         @Comment("Format for popup")
@@ -145,8 +148,8 @@ public class DynmapConfig {
         @DefinedType
         private Map<String, Style> factionStyles = new HashMap<>() {
             {
-                this.put(Factions.ID_SAFEZONE + "", new DynmapConfig.Style("#FF00FF", "#FF00FF"));
-                this.put(Factions.ID_WARZONE + "", new DynmapConfig.Style("#FF0000", "#FF0000"));
+                this.put(Factions.ID_SAFEZONE + "", new Style("#FF00FF", "#FF00FF"));
+                this.put(Factions.ID_WARZONE + "", new Style("#FF0000", "#FF0000"));
             }
         };
 
@@ -221,7 +224,7 @@ public class DynmapConfig {
     }
 
     @ConfigSerializable
-    public class Style {
+    public static class Style {
         // Region Style
         @Setting
         private String lineColor = DynmapStyle.DEFAULT_LINE_COLOR;

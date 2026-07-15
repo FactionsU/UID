@@ -1,5 +1,6 @@
 package dev.kitteh.factions.config.file;
 
+import dev.kitteh.factions.annotation.NoFinalFields;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
@@ -20,18 +21,39 @@ import java.util.Map;
 import java.util.logging.Level;
 
 @ApiStatus.Internal
+@NoFinalFields
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
 public class TranslationsConfig {
     public static class AColorfulMessage {
+        @Comment("""
+                Custom color names so you can more easily re-style.
+                Here are the defaults:
+                
+                info: Normal info
+                focus: Gently highlight items within an info message.
+                
+                deny: Rejection
+                denyfocus: Gently highlight items within a deny message.
+                
+                positive: Positive
+                currently used for a few enabled statuses
+                
+                negative: Not rejection but still a negative thing
+                negativefocus: Gently highlight within a negative message
+                note that these are the same color as deny by default
+                
+                golden: A gold that fits with the others
+                goldenfocus: Gently highlight within a golden message
+                
+                titling: A color used in the title for <title>
+                """)
         private Map<String, String> colors = new HashMap<>() {
             {
                 this.put("info", "#85d2e7");
                 this.put("focus", "#acedff");
                 this.put("deny", "#ffb4ab");
                 this.put("negative", "#ffb4ab");
-                this.put("fail", "#ffb4ab");
                 this.put("denyfocus", "#ffdad6");
-                this.put("failfocus", "#ffdad6");
                 this.put("negativefocus", "#ffdad6");
                 this.put("positive", "#8ad6b7");
                 this.put("golden", "#e6c36c");
@@ -96,9 +118,9 @@ public class TranslationsConfig {
             private AbsCommand commandAdminRoot = new AbsCommand("Root command for all administrative factions commands", "fa");
 
             @Comment("Supports <input>")
-            private String noFactionFound = "<fail>No faction found for input '<input>'.";
+            private String noFactionFound = "<deny>No faction found for input '<input>'.";
             @Comment("Supports <input>")
-            private String noPlayerFound = "<fail>No player found for input '<input>'.";
+            private String noPlayerFound = "<deny>No player found for input '<input>'.";
             private String warmupCancelled = "<deny>You have cancelled your pending action!";
 
             public static class CommandDeny {
@@ -663,7 +685,7 @@ public class TranslationsConfig {
                 private String set = "<info>Set <faction> bank to <amount>.";
                 @Comment("Supports <faction>, <amount>")
                 private String setNotify = "<info>Modified <faction> bank by <amount>.";
-                private String fail = "<fail>Failed to modify!";
+                private String fail = "<deny>Failed to modify!";
                 private String subCmdModify = "modify";
                 private String subCmdSet = "set";
 
@@ -1569,9 +1591,9 @@ public class TranslationsConfig {
 
             @Comment("Supports <faction>, <url>")
             private String show = "<info><faction> link: <url>";
-            private String invalidUrl = "<fail>Invalid URL!";
+            private String invalidUrl = "<deny>Invalid URL!";
             @Comment("Supports <player>")
-            private String changed = "<player><info> changed their link to:";
+            private String changed = "<info><player> changed their link to:";
             private String youMustBeModerator = "<deny>You must be <denyfocus>Moderator</denyfocus>.";
 
             public String getShow() {
@@ -1626,9 +1648,9 @@ public class TranslationsConfig {
                 }
 
                 @Comment("Supports <world>")
-                private String invalidWorld = "<fail>Invalid world name <failfocus><world></failfocus>.";
+                private String invalidWorld = "<deny>Invalid world name <denyfocus><world></denyfocus>.";
                 @Comment("Supports <faction>, <world>")
-                private String noClaims = "<fail>No claims by <faction> in world <failfocus><world><failfocus>.";
+                private String noClaims = "<deny>No claims by <faction> in world <denyfocus><world><denyfocus>.";
                 @Comment("Supports <faction>, <world>")
                 private String message = "<info>Claims by <faction> in <world>:";
 
@@ -1758,8 +1780,8 @@ public class TranslationsConfig {
 
             @Comment("Supports <lines>")
             private String heightSet = "<info>Set /f map lines to <focus><lines></focus>.";
-            private String updateEnabled = "<info>Map auto update <positive>ENABLED</positive>.";
-            private String updateDisabled = "<info>Map auto update <negative>DISABLED</negative>.";
+            private String updateEnabled = "<info>Map auto update <positive>enabled</positive>.";
+            private String updateDisabled = "<info>Map auto update <negative>disabled</negative>.";
 
             public String getHeightSet() {
                 return heightSet;
@@ -1855,9 +1877,9 @@ public class TranslationsConfig {
             private String notAdmin = "<deny>You are not the faction admin.";
             private String targetSelf = "<deny>The target player mustn't be yourself.";
             @Comment("Supports <player>")
-            private String notMember = "<player><info> is not a member in your faction.";
+            private String notMember = "<deny><player> is not a member in your faction.";
             @Comment("Supports <player>, <target>, <faction>")
-            private String promoted = "<player><info> gave <target><info> the leadership of <faction><info>.";
+            private String promoted = "<info><player> gave <target><info> the leadership of <faction>.";
 
             public String getWrongFaction() {
                 return wrongFaction;
@@ -1904,7 +1926,7 @@ public class TranslationsConfig {
 
                 private String peacefulOnly = "<deny>This command is only usable by factions which are specifically designated as peaceful.";
                 @Comment("Supports <player>, <state>")
-                private String enabled = "<player><info> has <state> explosions in your faction's territory.";
+                private String enabled = "<info><player> has <state> explosions in your faction's territory.";
 
                 public String getPeacefulOnly() {
                     return peacefulOnly;
@@ -1921,7 +1943,7 @@ public class TranslationsConfig {
                 }
 
                 @Comment("Supports <role>")
-                private String invalidRole = "<fail>Couldn't find matching role for <failfocus><role></failfocus>.";
+                private String invalidRole = "<deny>Couldn't find matching role for <denyfocus><role></denyfocus>.";
                 private String notThatRole = "<deny>You cannot set the default to admin.";
                 @Comment("Supports <role>")
                 private String success = "<info>Set default role of your faction to <role>.";
@@ -1949,7 +1971,7 @@ public class TranslationsConfig {
                 @Comment("Supports <faction>")
                 private String changed = "<info>The faction <faction> changed their description to:";
                 @Comment("Supports <faction>")
-                private String changes = "<info>You have changed the description for <faction><info> to:";
+                private String changes = "<info>You have changed the description for <faction> to:";
 
                 public String getToolong() {
                     return toolong;
@@ -1971,11 +1993,11 @@ public class TranslationsConfig {
 
                 private String notClaimed = "<deny>Your faction home can only be set inside your own claimed territory.";
                 @Comment("Supports <player>")
-                private String set = "<player><info> set the home for your faction. You can now use:";
+                private String set = "<info><player> set the home for your faction. You can now use:";
                 private String noHome = "<negative>Your faction does not have a home.";
                 private String warpsRemain = "<deny>Cannot delete home while the faction has warps!";
                 @Comment("Supports <player>")
-                private String del = "<player><info> unset the home for your faction.";
+                private String del = "<info><player> unset the home for your faction.";
 
                 public String getNotClaimed() {
                     return notClaimed;
@@ -2239,7 +2261,7 @@ public class TranslationsConfig {
                 return Collections.unmodifiableList(warzoneFormat);
             }
 
-            private String noFactionOther = "<fail>That's not a faction.";
+            private String noFactionOther = "<deny>That's not a faction.";
             private String exempt = "<deny>This faction cannot be seen.";
 
             public String getNoFactionOther() {
@@ -2263,7 +2285,7 @@ public class TranslationsConfig {
 
                 private String selectorNotFound = "<negative>No selector available with that name.";
                 @Comment("Supports <error>")
-                private String selectorCreateFail = "<fail>Could not create selector:</fail> <error>";
+                private String selectorCreateFail = "<deny>Could not create selector:</deny> <error>";
                 private String selectorOptionHere = "OPTIONHERE";
                 private String selectorOptionsIntro = "Available: ";
                 @Comment("Supports <command>, <display>")
@@ -2274,9 +2296,9 @@ public class TranslationsConfig {
                 private String actionOptionsItem = "<hover:show_text:\"<description>\"><action></hover>" +
                         "<click:run_command:\"<commandtrue>\"><color:#66ffb0>+</color:#66ffb0></click>" +
                         "<click:run_command:\"<commandfalse>\"><color:#ff6666>-</color:#ff6666></click>  ";
-                private String actionNotFound = "<fail>No action available with that name.";
+                private String actionNotFound = "<deny>No action available with that name.";
                 @Comment("Supports <allow>, <deny>")
-                private String actionAllowDenyOptions = "<fail>Unrecognized choice. What about </fail><allow> <fail>or</fail> <deny><fail>?</fail>";
+                private String actionAllowDenyOptions = "<deny>Unrecognized choice. What about </deny><allow> <deny>or</deny> <deny><deny>?</deny>";
 
                 private List<String> actionAllowAlias = new ArrayList<>() {
                     {
@@ -2413,10 +2435,10 @@ public class TranslationsConfig {
                     }
                 };
                 @Comment("Supports <up>, <down>")
-                private String errorOptions = "<fail>Unrecognized choice. What about </fail><up> <fail>or</fail> <down><fail>?</fail>";
-                private String errorHighest = "<fail>Cannot move highest selector any higher!</fail>";
-                private String errorLowest = "<fail>Cannot move lowest selector any lower!</fail>";
-                private String errorInvalidPositon = "<fail>Cannot move invalid position!</fail>";
+                private String errorOptions = "<deny>Unrecognized choice. What about </deny><up> <deny>or</deny> <down><deny>?</deny>";
+                private String errorHighest = "<deny>Cannot move highest selector any higher!</deny>";
+                private String errorLowest = "<deny>Cannot move lowest selector any lower!</deny>";
+                private String errorInvalidPositon = "<deny>Cannot move invalid position!</deny>";
 
                 public SubCmdMove() {
                     super("Unused description", "move");
@@ -2486,7 +2508,7 @@ public class TranslationsConfig {
                 private String item = "<hover:show_text:\"<color:#ff6666>Remove\"><click:run_command:\"<commandremove>\"><color:#ff6666>X</color:#ff6666></click></hover> " +
                         "<hover:show_text:\"<desc>\"><color:#66ebff><shortdesc></color:#66ebff></hover>: <color:#66ffb0><state>";
 
-                private String selectorNotFound = "<fail>No selector available with that name.";
+                private String selectorNotFound = "<deny>No selector available with that name.";
 
                 public SubCmdShow() {
                     super("Unused description", "show");
@@ -2516,7 +2538,7 @@ public class TranslationsConfig {
                 @Comment("Supports <desc>, <shortdesc>, <state>")
                 private String item = "<hover:show_text:\"<desc>\"><color:#66ebff><shortdesc></color:#66ebff></hover>:<color:#66ffb0><state>";
 
-                private String selectorNotFound = "<fail>No override selector available with that name</fail>.";
+                private String selectorNotFound = "<deny>No override selector available with that name.";
 
                 public SubCmdShowOverride() {
                     super("Unused description", "showoverride");
@@ -3164,7 +3186,7 @@ public class TranslationsConfig {
             @Comment("Supports <warp>")
             private String warped = "<info>Warped to <focus><warp></focus>.";
             @Comment("Supports <warp>")
-            private String invalidWarp = "<fail>Couldn't find warp <failfocus><warp></failfocus>.";
+            private String invalidWarp = "<deny>Couldn't find warp <denyfocus><warp></denyfocus>.";
             @Comment("Supports <warp>, <seconds>")
             private String warmup = "<info>You will teleport to <focus><warp></focus> in <focus><seconds></focus> seconds.";
             @Comment("Supports <faction>")
@@ -3251,7 +3273,7 @@ public class TranslationsConfig {
         public static class Zone extends AbsCommand {
             public static class Claim extends AbsCommand {
                 @Comment("Supports <name>")
-                private String zoneNotFound = "<fail>Zone named '<name>' not found.";
+                private String zoneNotFound = "<deny>Zone named '<name>' not found.";
 
                 private String notInTerritory = "<deny>Not standing in faction territory.";
                 @Comment("Supports <zone>")
@@ -3324,7 +3346,7 @@ public class TranslationsConfig {
 
             public static class Delete extends AbsCommand {
                 @Comment("Supports <name>")
-                private String zoneNotFound = "<fail>Zone named '<name>' not found.";
+                private String zoneNotFound = "<deny>Zone named '<name>' not found.";
                 @Comment("Supports <name>")
                 private String success = "<info>Deleted zone '<name>'.";
                 @Comment("Supports <name>, <command>")
@@ -3349,7 +3371,7 @@ public class TranslationsConfig {
 
             public static class Perms {
                 @Comment("Supports <name>")
-                private String zoneNotFound = "<fail>Zone named '<name>' not found.";
+                private String zoneNotFound = "<deny>Zone named '<name>' not found.";
 
                 public String getZoneNotFound() {
                     return zoneNotFound;
@@ -3361,7 +3383,7 @@ public class TranslationsConfig {
                     @Comment("Supports <name>, <greeting>")
                     private String success = "<info>Set zone '<name>' greeting to '<greeting>'.";
                     @Comment("Supports <name>")
-                    private String zoneNotFound = "<fail>Zone '<name>' not found.";
+                    private String zoneNotFound = "<deny>Zone '<name>' not found.";
 
                     protected Greeting() {
                         super("Unused description", "greeting");
@@ -3382,7 +3404,7 @@ public class TranslationsConfig {
                     @Comment("Supports <oldname>, <newname>")
                     private String success = "<info>Set zone '<oldname>' name to '<newname>'.";
                     @Comment("Supports <name>")
-                    private String zoneNotFound = "<fail>Zone '<name>' not found.";
+                    private String zoneNotFound = "<deny>Zone '<name>' not found.";
 
                     protected Name() {
                         super("Unused description", "name");
@@ -3518,7 +3540,7 @@ public class TranslationsConfig {
             @Comment("Supports <faction>, <count>")
             private String fillNotEnoughLand = "<deny><faction> does not have enough land left to make <count> claims.";
             @Comment("Supports <count>")
-            private String fillTooMuchFail = "<fail>Aborting claim fill after <count> failures.";
+            private String fillTooMuchFail = "<deny>Aborting claim fill after <count> failures.";
             @Comment("Supports <faction>")
             private String cantClaim = "<deny>You can't claim land for <faction>.";
             @Comment("Supports <faction>")
@@ -3711,7 +3733,7 @@ public class TranslationsConfig {
             private String auto = "<info>Faction auto flight <focus><state></focus>.";
             @Comment("Supports <state>")
             private String trailsChange = "<info>Faction flight trail <focus><state></focus>.";
-            private String trailsParticleInvalid = "<fail>Invalid particle effect.";
+            private String trailsParticleInvalid = "<deny>Invalid particle effect.";
             @Comment("Supports <particle>")
             private String trailsParticlePerms = "<deny>Insufficient permission to use <denyfocus><particle></denyfocus>.";
             @Comment("Supports <particle>")
@@ -4102,7 +4124,7 @@ public class TranslationsConfig {
             private String outside = "<deny>Teleport cancelled because you left <denyfocus><range></denyfocus> block radius.";
             @Comment("Supports <x>, <y>, <z>")
             private String teleport = "<info>Teleported safely to <focus><x></focus>, <focus><y></focus>, <focus><z></focus>.";
-            private String failed = "<fail>Failed to find a safe place to get you out.";
+            private String failed = "<deny>Failed to find a safe place to get you out.";
             @Comment("Supports <seconds>")
             private String warmup = "<info>You will find a safe place to become unstuck in <focus><seconds></focus> seconds.";
 
@@ -4136,31 +4158,31 @@ public class TranslationsConfig {
             private String message = "<info>Your faction has <count> TNT.";
             private String territoryOnly = "<deny>Command can only be run from your faction's territory!";
             private String depositDescription = "Add to your faction's TNT bank";
-            private String depositFailFull = "<fail>Faction bank already at maximum!";
-            private String depositFailPositive = "<fail>Must deposit at least one!";
+            private String depositFailFull = "<deny>Faction bank already at maximum!";
+            private String depositFailPositive = "<deny>Must deposit at least one!";
             @Comment("Supports <count>")
             private String depositSuccess = "<info>Your faction now has <count> TNT.";
             private String fillDescription = "Fill TNT into nearby dispensers";
             @Comment("Supports <count>, <dispensers>, <remaining>")
             private String fillMessage = "<info>Filled <count> TNT into <dispensers> dispensers. <remaining> left in the faction bank.";
             @Comment("Supports <value>, <max>")
-            private String fillFailMaxRadius = "<fail><value> is bigger than the maximum radius of <max>.";
+            private String fillFailMaxRadius = "<deny><value> is bigger than the maximum radius of <max>.";
             @Comment("Supports <count>")
-            private String fillFailNotEnough = "<fail>The faction bank does not have <count> TNT!";
-            private String fillFailPositive = "<fail>Positive values only!";
+            private String fillFailNotEnough = "<deny>The faction bank does not have <count> TNT!";
+            private String fillFailPositive = "<deny>Positive values only!";
             private String siphonDescription = "Take TNT from nearby dispensers";
             @Comment("Supports <count>, <total>")
             private String siphonMessage = "<info>Acquired <count> TNT, for a total of <total> in the faction bank.";
-            private String siphonFailPositive = "<fail>Positive values only!";
-            private String siphonFailFull = "<fail>Faction bank already at maximum!";
+            private String siphonFailPositive = "<deny>Positive values only!";
+            private String siphonFailFull = "<deny>Faction bank already at maximum!";
             @Comment("Supports <value>, <max>")
-            private String siphonFailMaxRadius = "<fail><value> is bigger than the maximum radius of <max>.";
+            private String siphonFailMaxRadius = "<deny><value> is bigger than the maximum radius of <max>.";
             private String withdrawDescription = "Withdraw TNT from the faction bank";
             @Comment("Supports <count>, <remaining>")
             private String withdrawMessage = "<info>Withdrew <count> TNT. <remaining> left in the faction bank.";
             @Comment("Supports <count>")
-            private String withdrawFailNotEnough = "<fail>The faction bank does not have <count> TNT!";
-            private String withdrawFailPositive = "<fail>Positive values only!";
+            private String withdrawFailNotEnough = "<deny>The faction bank does not have <count> TNT!";
+            private String withdrawFailPositive = "<deny>Positive values only!";
 
             private String subCmdDeposit = "deposit";
             private String subCmdFill = "fill";
@@ -4346,13 +4368,13 @@ public class TranslationsConfig {
             @Comment("Supports <faction>")
             private String cantUnclaim = "<deny>You can't unclaim land for <faction>.";
             @Comment("Supports <max>")
-            private String fillAboveMax = "<fail>The maximum limit for unclaim fill is <max>.";
+            private String fillAboveMax = "<deny>The maximum limit for unclaim fill is <max>.";
             private String fillNotClaimed = "<deny>Cannot unclaim fill using non-claimed land!";
             @Comment("Supports <max>")
-            private String fillTooFar = "<fail>This unclaim would exceed the maximum distance of <max>.";
-            private String fillPastLimit = "<fail>This unclaim would exceed the limit!";
+            private String fillTooFar = "<deny>This unclaim would exceed the maximum distance of <max>.";
+            private String fillPastLimit = "<deny>This unclaim would exceed the limit!";
             @Comment("Supports <count>")
-            private String fillTooMuchFail = "<fail>Aborting unclaim fill after <count> failures.";
+            private String fillTooMuchFail = "<deny>Aborting unclaim fill after <count> failures.";
             @Comment("Supports <player>, <count>, <location>")
             private String fillUnclaimed = "<info><player> unclaimed <count> claims of your faction's land around <location>.";
             @Comment("Supports <count>")
@@ -4360,7 +4382,7 @@ public class TranslationsConfig {
             @Comment("Supports <faction>, <command>")
             private String unclaimAllConfirm = "<info>Are you sure you want to unclaim ALL <faction> territory? If so, run /<command>";
             @Comment("Supports <player>")
-            private String unclaimAllUnclaimed = "<player><info> unclaimed ALL of your faction's land.";
+            private String unclaimAllUnclaimed = "<info><player> unclaimed ALL of your faction's land.";
 
             public String getAutoUnclaimEnabled() {
                 return autoUnclaimEnabled;
@@ -4421,7 +4443,7 @@ public class TranslationsConfig {
             }
 
             @Comment("Supports <player>")
-            private String notBanned = "<fail><player> <negative>isn't banned. Not doing anything.";
+            private String notBanned = "<deny><player> <negative>isn't banned. Not doing anything.";
             @Comment("Supports <player>, <target>")
             private String unbanned = "<info><player> <negative>unbanned <target>.";
             @Comment("Supports <faction>")
@@ -5233,11 +5255,11 @@ public class TranslationsConfig {
             private String noPerm = "<deny><you> lacks permission to control <target>'s money.";
             private String disabled = "Faction econ is disabled.";
             @Comment("Supports <from>, <amount>, <to>")
-            private String cantAffordTransfer = "<fail><from> can't afford to transfer <failfocus><amount></failfocus> to <to>.";
+            private String cantAffordTransfer = "<deny><from> can't afford to transfer <denyfocus><amount></denyfocus> to <to>.";
             @Comment("Supports <amount>")
-            private String overBalCap = "<fail>The amount <failfocus><amount></failfocus> is over Essentials' balance cap.";
+            private String overBalCap = "<deny>The amount <denyfocus><amount></denyfocus> is over Essentials' balance cap.";
             @Comment("Supports <amount>, <to>, <from>")
-            private String transferUnable = "<fail>Unable to transfer <failfocus><amount></failfocus> to <failfocus><to></failfocus> from <from>.";
+            private String transferUnable = "<deny>Unable to transfer <denyfocus><amount></denyfocus> to <denyfocus><to></denyfocus> from <from>.";
             @Comment("Supports <from>, <amount>, <to>")
             private String transferGave = "<info><from> gave <focus><amount></focus> to <to>.";
             @Comment("Supports <to>, <amount>, <from>")
@@ -5598,7 +5620,7 @@ public class TranslationsConfig {
 
             @Comment("Supports <duration>")
             private String olderText = "<negative><duration> ago";
-            private String unknownText = "<fail>Unknown";
+            private String unknownText = "<deny>Unknown";
 
             @Comment("""
                     Round down to a number of seconds. Ideally, put in the following:
@@ -6632,7 +6654,7 @@ public class TranslationsConfig {
             @Comment("Supports <faction>")
             private String cantUnclaim = "<deny>You can't unclaim land for <faction>.";
             @Comment("Supports <faction>")
-            private String alreadyOwn = "<faction><info> already own this land.";
+            private String alreadyOwn = "<deny><faction> already own this land.";
             @Comment("Supports <count>")
             private String members = "<deny>Factions must have at least <denyfocus><count></denyfocus> members to claim land.";
             private String safeZone = "<deny>You can not claim a safe zone.";
@@ -6648,11 +6670,11 @@ public class TranslationsConfig {
             @Comment("Supports <count> (the maximum X or Z distance, in chunks, allowed across a connected claim)")
             private String contiguousDistance = "<deny>Your connected claim can't span more than <denyfocus><count></denyfocus> chunks!";
             @Comment("Supports <faction> (the faction that owns the land)")
-            private String peaceful = "<faction><info> owns this land. Your faction is peaceful, so you cannot claim land from other factions.";
+            private String peaceful = "<deny><faction> owns this land. Your faction is peaceful, so you cannot claim land from other factions.";
             @Comment("Supports <faction> (the faction that owns the land)")
-            private String peacefulTarget = "<faction><info> owns this land, and is a peaceful faction. You cannot claim land from them.";
+            private String peacefulTarget = "<deny><faction> owns this land, and is a peaceful faction. You cannot claim land from them.";
             @Comment("Supports <faction> (the faction that owns the land)")
-            private String thisIsSparta = "<faction><info> owns this land and is strong enough to keep it.";
+            private String thisIsSparta = "<deny><faction> owns this land and is strong enough to keep it.";
             private String border = "<deny>You must start claiming land at the border of the territory.";
             private String overclaimDisabled = "<info>Over claiming is disabled on this server.";
             @Comment("Supports <count>")
@@ -6776,7 +6798,7 @@ public class TranslationsConfig {
             private String warZoneSuccess = "<info>War zone was unclaimed.";
             private String warZoneNoPerm = "<deny>This is a war zone. You lack permissions to unclaim.";
             @Comment("Supports <player> (who unclaimed)")
-            private String unclaimed = "<player><info> unclaimed some of your land.";
+            private String unclaimed = "<info><player> unclaimed some of your land.";
             private String unclaims = "<info>You unclaimed this land.";
             private String notAMember = "<deny>You are not a member of any faction.";
             private String wrongFaction = "<deny>You don't own this land.";
@@ -6848,7 +6870,7 @@ public class TranslationsConfig {
             @Comment("Supports <power>, <maxpower>")
             private String powerNow = "<info>Your power is now <focus><power> / <maxpower></focus>.";
             @Comment("Supports <amount>, <player>, <power>, <maxpower>")
-            private String vampirismGain = "<info>Stole <focus><amount></focus> power from <player><info>. Your power is now <focus><power> / <maxpower></focus>.";
+            private String vampirismGain = "<info>Stole <focus><amount></focus> power from <player>. Your power is now <focus><power> / <maxpower></focus>.";
 
             public String getNoPowerLossRegion() {
                 return noPowerLossRegion;
@@ -6887,7 +6909,7 @@ public class TranslationsConfig {
             private String cannotFrozen = "<deny>Action denied due to frozen DTR.";
             private String kickPenalty = "<negative>Penalty DTR lost due to kicking with frozen DTR.";
             @Comment("Supports <amount>, <player>, <dtr>")
-            private String vampirismGain = "<info>Stole <focus><amount></focus> DTR from <player><info>. Your DTR is now <focus><dtr></focus>.";
+            private String vampirismGain = "<info>Stole <focus><amount></focus> DTR from <player>. Your DTR is now <focus><dtr></focus>.";
 
             public String getCannotFrozen() {
                 return cannotFrozen;
