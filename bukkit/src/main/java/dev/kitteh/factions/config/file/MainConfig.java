@@ -34,7 +34,7 @@ public class MainConfig {
         @Comment("""
                 This is the config version, used for migrating on plugin updates.
                 Don't change this value yourself, or you could damage all configs!""")
-        private int version = 12;
+        private int version = 13;
 
         @Comment("""
                 Debug
@@ -311,18 +311,6 @@ public class MainConfig {
             }
         }
 
-        @SuppressWarnings("unused")
-        public static class ListCmd {
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            private String header = "";
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            private String footer = "";
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            private String factionlessEntry = "";
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            private String entry = "";
-        }
-
         public static class MapCmd {
             @Comment("""
                     This will help limit how many times a player can be sent a map of factions.
@@ -372,9 +360,6 @@ public class MainConfig {
         }
 
         public static class Show {
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            @SuppressWarnings("unused")
-            private List<String> format = new ArrayList<>();
             @Comment("Factions that should be exempt from /f show, case sensitive, useful for a server-team faction")
             private List<String> exempt = new ArrayList<>() {
                 {
@@ -490,7 +475,6 @@ public class MainConfig {
         private Home home = new Home();
         private Invite invite = new Invite();
         private Link link = new Link();
-        private ListCmd list = new ListCmd();
         private MapCmd map = new MapCmd();
         private Near near = new Near();
         private SeeChunk seeChunk = new SeeChunk();
@@ -523,10 +507,6 @@ public class MainConfig {
 
         public Link link() {
             return link;
-        }
-
-        public ListCmd list() {
-            return list;
         }
 
         public MapCmd map() {
@@ -2254,12 +2234,6 @@ public class MainConfig {
             private int stay = 70;
             private int fadeOut = 20;
             private boolean alsoShowChat = false;
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            @SuppressWarnings("unused")
-            private String title = "";
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            @SuppressWarnings("unused")
-            private String subtitle = "";
 
             public boolean isEnabled() {
                 return enabled;
@@ -2801,30 +2775,11 @@ public class MainConfig {
 
             @Comment("If true, show configured prefixes on nametags and in tab list if this scoreboard is enabled")
             private boolean prefixes = true;
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            @SuppressWarnings("unused")
-            private String prefixTemplate = "";
 
             @Comment("If true, show configured suffixes on nametags and in tab list if this scoreboard is enabled")
             private boolean suffixes = false;
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            @SuppressWarnings("unused")
-            private String suffixTemplate = "";
 
             private boolean factionlessEnabled = false;
-
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            @SuppressWarnings("unused")
-            private String title = "Faction Status";
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            @SuppressWarnings("unused")
-            private List<String> content = new ArrayList<>();
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            @SuppressWarnings("unused")
-            private List<String> factionlessContent = new ArrayList<>();
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            @SuppressWarnings("unused")
-            private String factionlessTitle = "Status";
 
             public boolean isEnabled() {
                 return enabled;
@@ -2849,12 +2804,6 @@ public class MainConfig {
             @Comment("How long do we want scoreboards to stay")
             private int expiration = 7;
             private boolean enabled = false;
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            @SuppressWarnings("unused")
-            private List<String> content = new ArrayList<>();
-            @Comment("UNUSED: See the translations file for the new data. This is kept only as reference for migrating.")
-            @SuppressWarnings("unused")
-            private String title = "";
 
             public boolean isAlsoSendChat() {
                 return alsoSendChat;

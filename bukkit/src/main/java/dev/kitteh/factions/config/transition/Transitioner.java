@@ -1,5 +1,6 @@
 package dev.kitteh.factions.config.transition;
 
+import com.typesafe.config.ConfigRenderOptions;
 import dev.kitteh.factions.config.Loader;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.adapter.PermSelectorAdapter;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -85,9 +87,12 @@ public class Transitioner {
             if (version < 12) {
                 transitioner.migrateV12(rootNode);
             }
+            if (version < 13) {
+                transitioner.migrateV13(rootNode);
+            }
 
             // Update the below when bumping version!
-            rootNode.getNode(A_VERY_FRIENDLY_FACTIONS_CONFIG, VERSION_STRING).setValue(12);
+            rootNode.getNode(A_VERY_FRIENDLY_FACTIONS_CONFIG, VERSION_STRING).setValue(13);
 
             loader.save(rootNode);
         } catch (IOException e) {
@@ -257,7 +262,7 @@ public class Transitioner {
         this.plugin.getLogger().info("  /f show, /f list factions, and the scoreboard functionality have");
         this.plugin.getLogger().info("    all changed to use MiniMessage and can be found in translations.conf");
         this.plugin.getLogger().info("  However, they could not be automatically migrated. You must do this");
-        this.plugin.getLogger().info("    yourself. Your old selections are still in main.conf for reference.");
+        this.plugin.getLogger().info("    yourself. Your old messages are preserved in a separate file for reference.");
         this.plugin.getLogger().info("");
         this.plugin.getLogger().info("  Also, note that the chiseled bookshelf and all the wood shelves have been");
         this.plugin.getLogger().info("    added to be treated as containers. Add them as container exceptions if");
@@ -293,6 +298,66 @@ public class Transitioner {
             try {
                 Files.move(langPath, newLangPath);
             } catch (IOException _) {
+            }
+        }
+    }
+
+    private void migrateV13(CommentedConfigurationNode node) {
+        HoconConfigurationLoader loader = HoconConfigurationLoader.builder()
+                .setPath(this.plugin.getDataFolder().toPath().resolve("outdated_translations_delete_when_unwanted.conf"))
+                .setRenderOptions(ConfigRenderOptions.defaults().setComments(true).setOriginComments(false).setJson(true))
+                .build();
+        // In through the out node
+        CommentedConfigurationNode outNode = loader.createEmptyNode();
+
+        boolean migrating = false;
+        String[][] unusedPaths = {
+                {"commands", "list", "header"},
+                {"commands", "list", "footer"},
+                {"commands", "list", "factionlessEntry"},
+                {"commands", "list", "entry"},
+                {"commands", "show", "format"},
+                {"factions", "enterTitles", "title"},
+                {"factions", "enterTitles", "subtitle"},
+                {"scoreboard", "constant", "prefixTemplate"},
+                {"scoreboard", "constant", "suffixTemplate"},
+                {"scoreboard", "constant", "title"},
+                {"scoreboard", "constant", "content"},
+                {"scoreboard", "constant", "factionlessContent"},
+                {"scoreboard", "constant", "factionlessTitle"},
+                {"scoreboard", "info", "content"},
+                {"scoreboard", "info", "title"},
+        };
+        for (String[] path : unusedPaths) {
+            CommentedConfigurationNode entry = node.getNode((Object[]) path);
+            if (entry.isVirtual()) {
+                continue;
+            }
+            Object value = entry.getValue();
+            if (switch (value) {
+                case null -> true;
+                case String s -> s.isEmpty();
+                case Collection<?> c -> c.isEmpty();
+                default -> false;
+            }) {
+                continue;
+            }
+            outNode.getNode((Object[]) path).setValue(value);
+            migrating = true;
+        }
+
+        if (migrating) {
+            outNode.getNode("ahHelloThere").setValue(true);
+            outNode.getNode("ahHelloThere").setComment("""
+                    This file contains outdated translations.
+                    You can use these as reference to update translations.conf and delete the file when done""");
+            try {
+                loader.save(outNode);
+                this.plugin.getLogger().info("");
+                this.plugin.getLogger().info("  Migrating outdated translation strings from main.conf to an outdated translations conf file for reference.");
+                this.plugin.getLogger().info("");
+            } catch (IOException e) {
+                this.plugin.getLogger().log(Level.SEVERE, "Failed to save outdated translations file!", e);
             }
         }
     }
