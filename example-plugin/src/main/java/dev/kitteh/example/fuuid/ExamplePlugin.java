@@ -19,7 +19,6 @@ import moss.factions.shade.org.incendo.cloud.context.CommandContext;
 import moss.factions.shade.org.incendo.cloud.description.Description;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
@@ -97,7 +96,7 @@ public final class ExamplePlugin extends JavaPlugin implements Listener {
                                         .permission(
                                                 // We're going to break this up to explain it all
                                                 builder.commandPermission() // Highly recommend inheriting the permission from above
-                                                        .and(Cloudy.isPlayer()) // Tests if they're a player. We don't need console trying this out!
+                                                        .and(Cloudy.hasUpgrade(this.meowUpgrade)) // Tests if they're a player in a faction with the upgrade
                                         )
                                         .handler(this::handle) // Direct to the handler method below. You could, of course, just write the code here.
                         )
@@ -113,8 +112,7 @@ public final class ExamplePlugin extends JavaPlugin implements Listener {
 
         if (!faction.isNormal()) { // Wilderness, safezone, warzone
             // Using the fPlayer instance so it works on Spigot, too.
-            fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>NO MEOW IN THIS TERRITORY :("));
-            // If on Paper this would work: player.sendRichMessage("<rainbow>NO MEOW IN THIS TERRITORY :(");
+            fPlayer.sendRichMessage("<rainbow>NO MEOW IN THIS TERRITORY :(");
             return;
         }
 
@@ -143,9 +141,9 @@ public final class ExamplePlugin extends JavaPlugin implements Listener {
                 }
             }.runTaskTimer(this, 10, 10);
 
-            fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>MEOW MEOW MEOW MEOW MEOW MEOW!")); // See above note about using fPlayer
+            fPlayer.sendRichMessage("<rainbow>MEOW MEOW MEOW MEOW MEOW MEOW!"); // See above note about using fPlayer
         } else {
-            fPlayer.sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>NO MEOW POSSIBLE RIGHT MEOW :(")); // See above note about using fPlayer
+            fPlayer.sendRichMessage("<rainbow>NO MEOW POSSIBLE RIGHT MEOW :("); // See above note about using fPlayer
         }
     }
 
@@ -160,8 +158,9 @@ public final class ExamplePlugin extends JavaPlugin implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onJoin(FPlayerJoinEvent event) {
+        // Checks if the faction has the upgrade at all
         if (event.getFaction().upgradeLevel(this.meowUpgrade) > 0) {
-            event.getFPlayer().sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>MEOW MEOW!"));
+            event.getFPlayer().sendRichMessage("<rainbow>MEOW MEOW!");
         }
     }
 }
