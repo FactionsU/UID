@@ -2,7 +2,7 @@
 apiversion = "26.1.2"
 minecraft = "26.1.2-R0.1-SNAPSHOT"
 minecraft-paper = "26.1.2.build.+"
-adventure = "4.25.0"
+adventure = "4.26.1"
 brigadier = "1.0.18"
 cloud = "2.0.0-beta.16" # Check the included patch before changing
 essentialsx = "2.21.1"
