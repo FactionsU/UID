@@ -226,7 +226,7 @@ public abstract class MemoryBoard implements Board {
         ret.add(title);
 
         // Get the compass
-        List<Component> asciiCompass = AsciiCompass.of(inDegrees, "<" + tl.getCompassColorActive() + ">", "<" + tl.getCompassColorDefault() + ">");
+        List<Component> asciiCompass = AsciiCompass.of(inDegrees);
 
         int halfWidth = Confs.main().map().getWidth() / 2;
         // Use player's value for height

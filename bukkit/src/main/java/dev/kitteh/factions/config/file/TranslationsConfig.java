@@ -1747,10 +1747,14 @@ public class TranslationsConfig {
             private String compassLetterSouth = "S";
             private String compassLetterEast = "E";
             private String compassLetterWest = "W";
-            @Comment("Takes MiniMessage color names or hex (with # in front, e.g. #abcdef)")
-            private String compassColorDefault = "#e6c36c";
-            @Comment("Takes MiniMessage color names or hex (with # in front, e.g. #abcdef)")
-            private String compassColorActive = "#ba1a1a";
+            @Comment("Takes color names or hex (with # in front, e.g. #abcdef)")
+            private String compassColorDefault = "golden";
+            @WipeOnReload
+            private transient TextColor compassColorDefaultColor;
+            @Comment("Takes color names or hex (with # in front, e.g. #abcdef)")
+            private String compassColorActive = "info";
+            @WipeOnReload
+            private transient TextColor compassColorActiveColor;
 
             public String getCompassLetterNorth() {
                 return compassLetterNorth;
@@ -1768,12 +1772,12 @@ public class TranslationsConfig {
                 return compassLetterWest;
             }
 
-            public String getCompassColorActive() {
-                return compassColorActive;
+            public TextColor getCompassColorActive() {
+                return compassColorActiveColor = MainConfig.getColor(compassColorActive, compassColorActiveColor, TextColor.fromHexString("#85d2e7"));
             }
 
-            public String getCompassColorDefault() {
-                return compassColorDefault;
+            public TextColor getCompassColorDefault() {
+                return compassColorDefaultColor = MainConfig.getColor(compassColorDefault, compassColorDefaultColor, TextColor.fromHexString("#e6c36c"));
             }
 
             @Comment("Supports <lines>")

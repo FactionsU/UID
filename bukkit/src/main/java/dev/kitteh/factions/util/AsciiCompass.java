@@ -2,6 +2,7 @@ package dev.kitteh.factions.util;
 
 import dev.kitteh.factions.config.Confs;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -30,7 +31,7 @@ public class AsciiCompass {
 
         @Override
         public String toString() {
-            return String.valueOf(this.asciiChar);
+            return this.getTranslation();
         }
 
         public String getTranslation() {
@@ -46,15 +47,11 @@ public class AsciiCompass {
             if (this == W) {
                 return Confs.tl().commands().map().getCompassLetterWest();
             }
-            return toString();
-        }
-
-        public String toString(boolean isActive, String colorActive, String colorDefault) {
-            return (isActive ? colorActive : colorDefault) + getTranslation();
+            return String.valueOf(this.asciiChar);
         }
     }
 
-    public static List<Component> of(double inDegrees, String colorActive, String colorDefault) {
+    public static List<Component> of(double inDegrees) {
         double degrees = (inDegrees - 180) % 360;
         if (degrees < 0) {
             degrees += 360;
@@ -84,27 +81,26 @@ public class AsciiCompass {
             point = AsciiCompass.Point.N; // yolo
         }
 
+        TextColor colorActive = Confs.tl().commands().map().getCompassColorActive();
+        TextColor colorDefault = Confs.tl().commands().map().getCompassColorDefault();
 
         ArrayList<Component> ret = new ArrayList<>();
-        String row;
 
-        row = "";
-        row += Point.NW.toString(Point.NW == point, colorActive, colorDefault);
-        row += Point.N.toString(Point.N == point, colorActive, colorDefault);
-        row += Point.NE.toString(Point.NE == point, colorActive, colorDefault);
-        ret.add(Mini.parse(row.replace("\\", "\\\\")));
-
-        row = "";
-        row += Point.W.toString(Point.W == point, colorActive, colorDefault);
-        row += colorDefault + "+";
-        row += Point.E.toString(Point.E == point, colorActive, colorDefault);
-        ret.add(Mini.parse(row.replace("\\", "\\\\")));
-
-        row = "";
-        row += Point.SW.toString(Point.SW == point, colorActive, colorDefault);
-        row += Point.S.toString(Point.S == point, colorActive, colorDefault);
-        row += Point.SE.toString(Point.SE == point, colorActive, colorDefault);
-        ret.add(Mini.parse(row.replace("\\", "\\\\")));
+        ret.add(Component.textOfChildren(
+                Component.text(Point.NW.getTranslation()).color(Point.NW == point ? colorActive: colorDefault),
+                Component.text(Point.N.getTranslation()).color(Point.N == point ? colorActive: colorDefault),
+                Component.text(Point.NE.getTranslation()).color(Point.NE == point ? colorActive: colorDefault)
+        ));
+        ret.add(Component.textOfChildren(
+                Component.text(Point.W.getTranslation()).color(Point.W == point ? colorActive: colorDefault),
+                Component.text("+").color(colorDefault),
+                Component.text(Point.E.getTranslation()).color(Point.E == point ? colorActive: colorDefault)
+        ));
+        ret.add(Component.textOfChildren(
+                Component.text(Point.SW.getTranslation()).color(Point.SW == point ? colorActive: colorDefault),
+                Component.text(Point.S.getTranslation()).color(Point.S == point ? colorActive: colorDefault),
+                Component.text(Point.SE.getTranslation()).color(Point.SE == point ? colorActive: colorDefault)
+        ));
 
         return ret;
     }
