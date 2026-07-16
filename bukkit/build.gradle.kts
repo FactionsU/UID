@@ -73,6 +73,10 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("-Xlint:-processing")
+}
+
 tasks.processResources {
     filesMatching("plugin.yml") {
         expand(

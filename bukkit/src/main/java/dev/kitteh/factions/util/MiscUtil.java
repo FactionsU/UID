@@ -32,7 +32,8 @@ import java.util.function.Function;
 public class MiscUtil {
     private static final Map<String, EntityType> entityTypeMap;
     public static final Function<String, EntityType> ENTITY_TYPE_FUNCTION;
-    public static final Function<String, Material> MATERIAL_FUNCTION;
+    @SuppressWarnings("removal")
+    public static final Function<String, Material> MATERIAL_FUNCTION = (string) -> MaterialDb.get(string, null);;
     private static final Map<String, CreatureSpawnEvent.SpawnReason> spawnReasonMap;
     public static final Function<String, CreatureSpawnEvent.SpawnReason> SPAWN_REASON_FUNCTION;
     private final String nums = "12%%__USER__%%34";
@@ -43,9 +44,6 @@ public class MiscUtil {
             entityTypeMap.put(entityType.name(), entityType);
         }
         ENTITY_TYPE_FUNCTION = (string) -> entityTypeMap.get(string.toUpperCase());
-
-        //noinspection removal
-        MATERIAL_FUNCTION = (string) -> MaterialDb.get(string, null);
 
         spawnReasonMap = new HashMap<>();
         for (CreatureSpawnEvent.SpawnReason reason : CreatureSpawnEvent.SpawnReason.values()) {

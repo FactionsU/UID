@@ -59,8 +59,8 @@ public final class FactionResolver extends ObservedResolver {
 
     @Deprecated(forRemoval = true, since = "4.5.0")
     @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
+    @SuppressWarnings("removal")
     public FactionResolver(String name, @Nullable Player forcedObserver, Faction faction) {
-        //noinspection removal
         super(name, forcedObserver);
         this.faction = faction;
     }

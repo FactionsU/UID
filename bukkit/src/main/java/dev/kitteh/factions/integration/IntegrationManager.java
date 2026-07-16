@@ -113,6 +113,7 @@ public class IntegrationManager implements Listener {
 
     private final Set<Integration> integrationsEnabled = new HashSet<>();
 
+    @SuppressWarnings("this-escape")
     public IntegrationManager() {
         for (Integrations integration : Integrations.values()) {
             this.add(integration);

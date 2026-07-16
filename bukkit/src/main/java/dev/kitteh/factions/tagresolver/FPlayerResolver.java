@@ -50,8 +50,8 @@ public final class FPlayerResolver extends ObservedResolver {
         this.observed = observed;
     }
 
+    @SuppressWarnings("removal")
     private FPlayerResolver(String name, @Nullable Player forcedObserver, FPlayer observed) {
-        //noinspection removal
         super(name, forcedObserver);
         this.observed = observed;
     }

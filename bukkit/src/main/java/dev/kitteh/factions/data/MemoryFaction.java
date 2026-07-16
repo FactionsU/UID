@@ -884,6 +884,7 @@ public abstract class MemoryFaction implements Faction {
         this.defaultRole = role;
     }
 
+    @SuppressWarnings("this-escape")
     public MemoryFaction(int id, String tag) {
         this.id = id;
         this.open = Confs.main().factions().other().isNewFactionsDefaultOpen();

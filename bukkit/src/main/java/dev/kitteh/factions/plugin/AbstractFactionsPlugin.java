@@ -334,8 +334,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         }
 
         // Load Material database - TODO remove in 5.0
-        //noinspection removal
-        dev.kitteh.factions.util.MaterialDb.load();
+        this.loadMaterialDB();
 
         // Hit all material lookups in config
         {
@@ -492,6 +491,11 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
                 }
             }
         }.runTaskTimerAsynchronously(this, 1, 20 /* ticks */ * 60 /* seconds in a minute */ * 60 /* minutes in an hour*/);
+    }
+
+    @SuppressWarnings("removal")
+    private void loadMaterialDB() {
+        dev.kitteh.factions.util.MaterialDb.load();
     }
 
     private void closeRegistries(Class<?>... classes) {
