@@ -6,12 +6,12 @@ import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -228,12 +228,12 @@ public class CmdTicketInfo implements Cmd {
                         public void run() {
                             if (response.success) {
                                 String url = response.message;
-                                context.sender().sendMessage(Component.text().color(NamedTextColor.YELLOW).content("Share this URL: " + url).clickEvent(ClickEvent.openUrl(url)));
+                                context.sender().sendMessage(Component.text().color(Confs.tl().colors().info()).content("Share this URL: " + url).clickEvent(ClickEvent.openUrl(url)));
                                 if (context.sender().isPlayer()) {
                                     AbstractFactionsPlugin.instance().getLogger().info("Share this URL: " + url);
                                 }
                             } else {
-                                context.sender().sendMessage(Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
+                                context.sender().sendMessage(Component.text().color(Confs.tl().colors().deny()).content("ERROR! Could not generate ticket info. See console for why."));
                                 AbstractFactionsPlugin.instance().getLogger().warning("Received: " + response.message);
                             }
                         }
@@ -243,12 +243,12 @@ public class CmdTicketInfo implements Cmd {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            context.sender().sendMessage(Component.text().color(NamedTextColor.RED).content("ERROR! Could not generate ticket info. See console for why."));
+                            context.sender().sendMessage(Component.text().color(Confs.tl().colors().deny()).content("ERROR! Could not generate ticket info. See console for why."));
                         }
                     }.runTask(AbstractFactionsPlugin.instance());
                 }
             }
         }.runTaskAsynchronously(AbstractFactionsPlugin.instance());
-        context.sender().sendMessage(Component.text().color(NamedTextColor.YELLOW).content("Now running..."));
+        context.sender().sendMessage(Component.text().color(Confs.tl().colors().info()).content("Now running..."));
     }
 }

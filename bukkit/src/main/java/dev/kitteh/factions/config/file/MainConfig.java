@@ -62,6 +62,14 @@ public class MainConfig {
         return ret == null ? defaultColor : ret;
     }
 
+    static TextColor getColor(String name, TextColor current, String defaultHexColor) {
+        if (current != null) {
+            return current;
+        }
+
+        return getColor(name, current, TextColor.fromHexString(defaultHexColor));
+    }
+
     public static class Colors {
         public static class Relations {
             private String member = "#8ad6b7";
@@ -84,27 +92,27 @@ public class MainConfig {
             private transient TextColor peacefulColor;
 
             public TextColor getMember() {
-                return memberColor = getColor(this.member, this.memberColor, TextColor.fromHexString("#8ad6b7"));
+                return memberColor = getColor(this.member, this.memberColor, "#8ad6b7");
             }
 
             public TextColor getAlly() {
-                return allyColor = getColor(this.ally, this.allyColor, TextColor.fromHexString("#f0b3e7"));
+                return allyColor = getColor(this.ally, this.allyColor, "#f0b3e7");
             }
 
             public TextColor getTruce() {
-                return truceColor = getColor(this.truce, this.truceColor, TextColor.fromHexString("#cebdfe"));
+                return truceColor = getColor(this.truce, this.truceColor, "#cebdfe");
             }
 
             public TextColor getNeutral() {
-                return neutralColor = getColor(this.neutral, this.neutralColor, TextColor.fromHexString("#dee3e5"));
+                return neutralColor = getColor(this.neutral, this.neutralColor, "#dee3e5");
             }
 
             public TextColor getEnemy() {
-                return enemyColor = getColor(this.enemy, this.enemyColor, TextColor.fromHexString("#ff8b81"));
+                return enemyColor = getColor(this.enemy, this.enemyColor, "#ff8b81");
             }
 
             public TextColor getPeaceful() {
-                return peacefulColor = getColor(this.peaceful, this.peacefulColor, TextColor.fromHexString("#ffdf95"));
+                return peacefulColor = getColor(this.peaceful, this.peacefulColor, "#ffdf95");
             }
         }
 
@@ -120,15 +128,15 @@ public class MainConfig {
             private transient TextColor warzoneColor;
 
             public TextColor getWilderness() {
-                return wildernessColor = getColor(this.wilderness, this.wildernessColor, TextColor.fromHexString("#91d689"));
+                return wildernessColor = getColor(this.wilderness, this.wildernessColor, "#91d689");
             }
 
             public TextColor getSafezone() {
-                return safezoneColor = getColor(this.safezone, this.safezoneColor, TextColor.fromHexString("#87e8de"));
+                return safezoneColor = getColor(this.safezone, this.safezoneColor, "#87e8de");
             }
 
             public TextColor getWarzone() {
-                return warzoneColor = getColor(this.warzone, this.warzoneColor, TextColor.fromHexString("#e6b46c"));
+                return warzoneColor = getColor(this.warzone, this.warzoneColor, "#e6b46c");
             }
         }
 
@@ -2681,7 +2689,7 @@ public class MainConfig {
         private transient TextColor selfColorColor; // Quality name, self.
 
         public TextColor getSelfColor() {
-            return selfColorColor = getColor(this.selfColor, this.selfColorColor, TextColor.fromHexString("#89d6d2"));
+            return selfColorColor = getColor(this.selfColor, this.selfColorColor, "#89d6d2");
         }
 
         public int getHeight() {

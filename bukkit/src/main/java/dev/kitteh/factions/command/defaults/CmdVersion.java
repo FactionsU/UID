@@ -7,7 +7,6 @@ import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.TriConsumer;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
@@ -24,7 +23,11 @@ public class CmdVersion implements Cmd {
         );
     }
 
-    private void handle(CommandContext<Sender> context) {
-        context.sender().sendMessage(Component.text().content(AbstractFactionsPlugin.instance().getDescription().getFullName()).color(NamedTextColor.GREEN));
+    protected void handle(CommandContext<Sender> context) {
+        context.sender().sendMessage(Component.textOfChildren(
+                Component.text(AbstractFactionsPlugin.instance().getDescription().getName(), Confs.tl().colors().info()),
+                Component.text(" "),
+                Component.text(AbstractFactionsPlugin.instance().getDescription().getVersion(), Confs.tl().colors().focus())
+        ));
     }
 }

@@ -40,7 +40,7 @@ public class ConfigColorResolver implements TagResolver {
     public static void update() {
         Map<String, Tag> newMap = new HashMap<>();
         Map<String, TextColor> newColors = new HashMap<>();
-        Confs.tl().aColorfulMessage().getColors().forEach((name, color) -> {
+        Confs.tl().colors().getColors().forEach((name, color) -> {
             TextColor textColor;
             if (color.startsWith("#")) {
                 textColor = TextColor.fromHexString(color);

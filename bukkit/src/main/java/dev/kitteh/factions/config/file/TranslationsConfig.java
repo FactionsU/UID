@@ -16,12 +16,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 
 @NoFinalFields
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
 public class TranslationsConfig {
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     public static class AColorfulMessage {
         @Comment("""
                 Custom color names so you can more easily re-style.
@@ -38,30 +40,76 @@ public class TranslationsConfig {
                 
                 negative: Not rejection but still a negative thing
                 negativefocus: Gently highlight within a negative message
-                note that these are the same color as deny by default
+                Note that these are the same color as deny by default
                 
                 golden: A gold that fits with the others
                 goldenfocus: Gently highlight within a golden message
                 
                 titling: A color used in the title for <title>
                 """)
-        private Map<String, String> colors = new HashMap<>() {
-            {
-                this.put("info", "#85d2e7");
-                this.put("focus", "#acedff");
-                this.put("deny", "#ffb4ab");
-                this.put("negative", "#ffb4ab");
-                this.put("denyfocus", "#ffdad6");
-                this.put("negativefocus", "#ffdad6");
-                this.put("positive", "#8ad6b7");
-                this.put("golden", "#e6c36c");
-                this.put("goldenfocus", "#ffdf95");
-                this.put("titling", "#6ce677");
-            }
-        };
+        private Colors colors = new Colors();
+        @Comment("Define your own custom names and colors here, to make them valid for MiniMessage strings in this plugin!\n" +
+                "Names must be lowercase and cannot be one of the other names")
+        private Map<String, String> customColors = new HashMap<>();
+
+        @WipeOnReload
+        private transient Map<String, String> allColors;
+
+        @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+        public static class Colors {
+            private String info = "#85d2e7";
+            private String focus = "#acedff";
+
+            private String deny = "#ffb4ab";
+            private String negative = "#ffb4ab";
+
+            private String denyfocus = "#ffdad6";
+            private String negativefocus = "#ffdad6";
+
+            private String positive = "#8ad6b7";
+
+            private String golden = "#e6c36c";
+            private String goldenfocus = "#ffdf95";
+
+            private String titling = "#6ce677";
+
+            @WipeOnReload
+            private transient TextColor infoColor;
+            @WipeOnReload
+            private transient TextColor focusColor;
+            @WipeOnReload
+            private transient TextColor denyColor;
+        }
+
+        public TextColor info() {
+            return colors.infoColor = MainConfig.getColor(colors.info, colors.infoColor, "#85d2e7");
+        }
+
+        public TextColor focus() {
+            return colors.focusColor = MainConfig.getColor(colors.focus, colors.focusColor, "#acedff");
+        }
+
+        public TextColor deny() {
+            return colors.denyColor = MainConfig.getColor(colors.deny, colors.denyColor, "#ffb4ab");
+        }
 
         public Map<String, String> getColors() {
-            return Collections.unmodifiableMap(this.colors);
+            if (this.allColors == null) {
+                Map<String, String> newMap = new HashMap<>();
+                this.customColors.forEach((key, value) -> newMap.put(key.toLowerCase(Locale.ROOT), value));
+                newMap.put("info", colors.info);
+                newMap.put("focus", colors.focus);
+                newMap.put("deny", colors.deny);
+                newMap.put("negative", colors.negative);
+                newMap.put("denyfocus", colors.denyfocus);
+                newMap.put("negativefocus", colors.negativefocus);
+                newMap.put("positive", colors.positive);
+                newMap.put("golden", colors.golden);
+                newMap.put("goldenfocus", colors.goldenfocus);
+                newMap.put("titling", colors.titling);
+                this.allColors = Collections.unmodifiableMap(newMap);
+            }
+            return this.allColors;
         }
     }
 
@@ -5602,11 +5650,11 @@ public class TranslationsConfig {
             }
 
             public TextColor getLeftColor() {
-                return this.leftColorColor = MainConfig.getColor(this.leftColor, this.leftColorColor, NamedTextColor.GOLD);
+                return this.leftColorColor = MainConfig.getColor(this.leftColor, this.leftColorColor, "#e6c36c");
             }
 
             public TextColor getRightColor() {
-                return this.rightColorColor = MainConfig.getColor(this.rightColor, this.rightColorColor, NamedTextColor.GOLD);
+                return this.rightColorColor = MainConfig.getColor(this.rightColor, this.rightColorColor, "#e6c36c");
             }
         }
 
@@ -6953,7 +7001,7 @@ public class TranslationsConfig {
     private Claiming claiming = new Claiming();
     private LandRaid landRaid = new LandRaid();
 
-    public AColorfulMessage aColorfulMessage() {
+    public AColorfulMessage colors() {
         return aColorfulMessage;
     }
 

@@ -10,7 +10,6 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.ComponentDispatcher;
 import net.ess3.api.IEssentials;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,7 +51,7 @@ public class Essentials {
         AsyncTeleport teleport = essentials.getUser(player).getAsyncTeleport();
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         future.exceptionally(e -> {
-            ComponentDispatcher.send(player, Component.text().color(NamedTextColor.RED).content(e.getMessage()));
+            ComponentDispatcher.send(player, Component.text().color(Confs.tl().colors().deny()).content(e.getMessage()));
             return false;
         });
         teleport.teleport(loc, null, PlayerTeleportEvent.TeleportCause.PLUGIN, future);
