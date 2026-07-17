@@ -955,6 +955,11 @@ public class MainConfig {
             private boolean enabled = true;
             private boolean mustBeInClaimedTerritory = true;
             private boolean teleportToOnDeath = true;
+            @Comment("""
+                    Seconds of invulnerability granted after respawning at the faction home following a death.
+                    Makes spawn-camping a bit harder.
+                    Set to 0 to disable.""")
+            private int respawnInvulnerabilitySeconds = 0;
             private boolean teleportCommandEnabled = true;
             private boolean teleportCommandEssentialsIntegration = false;
             private boolean teleportCommandSmokeEffectEnabled = true;
@@ -975,6 +980,10 @@ public class MainConfig {
 
             public boolean isTeleportToOnDeath() {
                 return teleportToOnDeath;
+            }
+
+            public int getRespawnInvulnerabilitySeconds() {
+                return respawnInvulnerabilitySeconds;
             }
 
             public boolean isTeleportCommandEnabled() {

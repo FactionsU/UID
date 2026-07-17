@@ -59,6 +59,11 @@ public class ListenDamage implements Listener {
             return;
         }
 
+        if (event.getEntity() instanceof Player plr && FPlayers.fPlayers().get(plr).respawnInvulnerable()) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (event.getEntity() instanceof Player plr && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
             Faction faction = FPlayers.fPlayers().get(plr).faction();
             int lvl = faction.upgradeLevel(Upgrades.FALL_DAMAGE_REDUCTION);
@@ -88,6 +93,25 @@ public class ListenDamage implements Listener {
 
     private boolean isPlayerInSafeZone(Entity damagee) {
         return damagee instanceof Player plr && new FLocation(plr.getLocation()).faction().isSafeZone();
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onRespawnInvulnerableAttack(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player) || !WorldUtil.isEnabled(event.getEntity())) {
+            return;
+        }
+
+        Entity damager = event.getDamager();
+        if (damager instanceof Projectile projectile && projectile.getShooter() instanceof Entity shooter) {
+            damager = shooter;
+        }
+        if (damager instanceof Player player) {
+            FPlayer fPlayer = FPlayers.fPlayers().get(player);
+            if (fPlayer.respawnInvulnerable()) {
+                fPlayer.sendRichMessage(Confs.tl().commands().home().getInvulnerableNoMore());
+                fPlayer.respawnInvulnerability(0);
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

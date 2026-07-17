@@ -3980,6 +3980,9 @@ public class TranslationsConfig {
             private String enemyNear = "<deny>You cannot teleport to your faction home while an enemy is within <range> blocks of you.";
             @Comment("Supports <seconds>")
             private String warmup = "<info>You will teleport home in <focus><seconds></focus> seconds.";
+            @Comment("Supports <seconds>")
+            private String invulnerable = "<info>You are invulnerable for <focus><seconds></focus> seconds.";
+            private String invulnerableNoMore = "<deny>You are no longer invulnerable due to damaging another player!";
 
             public String getDenied() {
                 return denied;
@@ -4003,6 +4006,14 @@ public class TranslationsConfig {
 
             public String getWarmup() {
                 return warmup;
+            }
+
+            public String getInvulnerable() {
+                return invulnerable;
+            }
+
+            public String getInvulnerableNoMore() {
+                return invulnerableNoMore;
             }
         }
 

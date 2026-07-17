@@ -117,6 +117,7 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected transient @Nullable String autoSetZone;
     protected transient @Nullable Faction autoUnclaimFor;
     protected transient boolean loginPvpDisabled;
+    protected transient long respawnInvulnerableUntil;
     protected transient long lastFrostwalkerMessage;
     protected transient boolean shouldTakeFallDamage = true;
     protected transient @Nullable OfflinePlayer offlinePlayer;
@@ -425,6 +426,23 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
         if (this.lastLoginTime + (Confs.main().factions().pvp().getNoPVPDamageToOthersForXSecondsAfterLogin() * 1000L) < System.currentTimeMillis()) {
             this.loginPvpDisabled = false;
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void respawnInvulnerability(int seconds) {
+        this.respawnInvulnerableUntil = seconds > 0 ? System.currentTimeMillis() + (seconds * 1000L) : 0;
+    }
+
+    @Override
+    public boolean respawnInvulnerable() {
+        if (this.respawnInvulnerableUntil == 0) {
+            return false;
+        }
+        if (this.respawnInvulnerableUntil < System.currentTimeMillis()) {
+            this.respawnInvulnerableUntil = 0;
             return false;
         }
         return true;

@@ -94,6 +94,9 @@ public class ListenEnterExit implements Listener {
                 home != null &&
                 (facConf.landRaidControl().power().isRespawnHomeFromNoPowerLossWorlds() || !facConf.landRaidControl().power().getWorldsNoPowerLoss().contains(event.getPlayer().getWorld().getName()))) {
             event.setRespawnLocation(home);
+            int seconds = facConf.homes().getRespawnInvulnerabilitySeconds();
+            me.respawnInvulnerability(seconds);
+            me.sendRichMessage(Confs.tl().commands().home().getInvulnerable(), Placeholder.unparsed("seconds", String.valueOf(seconds)));
         }
         new BukkitRunnable() {
             @Override

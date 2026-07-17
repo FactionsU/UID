@@ -112,6 +112,22 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
 
     boolean loginPVPDisabled();
 
+    /**
+     * Grants a window of invulnerability, e.g. after respawning at the faction home.
+     *
+     * @param seconds duration in seconds or zero or negative to remove it
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void respawnInvulnerability(int seconds);
+
+    /**
+     * Checks if this player is currently within a respawn invulnerability window.
+     *
+     * @return true if currently invulnerable
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    boolean respawnInvulnerable();
+
     FLocation lastStoodAt();
 
     void lastStoodAt(FLocation flocation);
