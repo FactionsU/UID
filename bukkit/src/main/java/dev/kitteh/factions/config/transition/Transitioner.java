@@ -2,6 +2,8 @@ package dev.kitteh.factions.config.transition;
 
 import com.typesafe.config.ConfigRenderOptions;
 import dev.kitteh.factions.config.Loader;
+import dev.kitteh.factions.config.file.MainConfig;
+import dev.kitteh.factions.config.file.TranslationsConfig;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.adapter.PermSelectorAdapter;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -366,6 +368,13 @@ public class Transitioner {
     }
 
     private void migrateV14(CommentedConfigurationNode node) {
+        CommentedConfigurationNode statusFormat = node.getNode("commands", "status", "format");
+        if (!statusFormat.isVirtual()) {
+            String string = statusFormat.getString(new TranslationsConfig.Commands.Status().getFormat());
+            string = string.replace("<power>", "<player:power>").replace("<last_seen>", "<player:last_seen>");
+            statusFormat.setValue(string);
+        }
+
         if (node.getNode("colors", "relations").isVirtual() && node.getNode("colors", "factions").isVirtual()) {
             return;
         }

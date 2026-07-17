@@ -4251,21 +4251,11 @@ public class TranslationsConfig {
                 super("Show the status of a player", "status");
             }
 
-            @Comment("Supports <player>, <power>, <last_seen>")
-            private String format = "<player> Power: <power> Last Seen: <last_seen>";
-            private String online = "<positive>Online";
-            private String agoSuffix = " ago.";
+            @Comment("Supports <player>")
+            private String format = "<info><player> Power: <focus><player:power></focus> Last Seen: <player:last_seen>";
 
             public String getFormat() {
                 return format;
-            }
-
-            public String getOnline() {
-                return online;
-            }
-
-            public String getAgoSuffix() {
-                return agoSuffix;
             }
         }
 
