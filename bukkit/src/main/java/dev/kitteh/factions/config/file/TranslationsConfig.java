@@ -4,6 +4,7 @@ import dev.kitteh.factions.annotation.NoFinalFields;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.tagresolver.ConfigColorResolver;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.jspecify.annotations.Nullable;
@@ -81,16 +82,96 @@ public class TranslationsConfig {
             private transient TextColor denyColor;
         }
 
+        public static class Relations {
+            private String member = "#8ad6b7";
+            @WipeOnReload
+            private transient TextColor memberColor;
+            private String ally = "#f0b3e7";
+            @WipeOnReload
+            private transient TextColor allyColor;
+            private String truce = "#cebdfe";
+            @WipeOnReload
+            private transient TextColor truceColor;
+            private String neutral = "#dee3e5";
+            @WipeOnReload
+            private transient TextColor neutralColor;
+            private String enemy = "#ff8b81";
+            @WipeOnReload
+            private transient TextColor enemyColor;
+            private String peaceful = "#ffdf95";
+            @WipeOnReload
+            private transient TextColor peacefulColor;
+
+            public TextColor getMember() {
+                return memberColor = getColor(this.member, this.memberColor, "#8ad6b7");
+            }
+
+            public TextColor getAlly() {
+                return allyColor = getColor(this.ally, this.allyColor, "#f0b3e7");
+            }
+
+            public TextColor getTruce() {
+                return truceColor = getColor(this.truce, this.truceColor, "#cebdfe");
+            }
+
+            public TextColor getNeutral() {
+                return neutralColor = getColor(this.neutral, this.neutralColor, "#dee3e5");
+            }
+
+            public TextColor getEnemy() {
+                return enemyColor = getColor(this.enemy, this.enemyColor, "#ff8b81");
+            }
+
+            public TextColor getPeaceful() {
+                return peacefulColor = getColor(this.peaceful, this.peacefulColor, "#ffdf95");
+            }
+        }
+
+        public static class Factions {
+            private String wilderness = "#91d689";
+            @WipeOnReload
+            private transient TextColor wildernessColor;
+            private String safezone = "#87e8de";
+            @WipeOnReload
+            private transient TextColor safezoneColor;
+            private String warzone = "#e6b46c";
+            @WipeOnReload
+            private transient TextColor warzoneColor;
+
+            public TextColor getWilderness() {
+                return wildernessColor = getColor(this.wilderness, this.wildernessColor, "#91d689");
+            }
+
+            public TextColor getSafezone() {
+                return safezoneColor = getColor(this.safezone, this.safezoneColor, "#87e8de");
+            }
+
+            public TextColor getWarzone() {
+                return warzoneColor = getColor(this.warzone, this.warzoneColor, "#e6b46c");
+            }
+        }
+
+        private Factions factions = new Factions();
+        private Relations relations = new Relations();
+
+        public Factions factions() {
+            return factions;
+        }
+
+        public Relations relations() {
+            return relations;
+        }
+
         public TextColor info() {
-            return colors.infoColor = MainConfig.getColor(colors.info, colors.infoColor, "#85d2e7");
+            return colors.infoColor = getColor(colors.info, colors.infoColor, "#85d2e7");
         }
 
         public TextColor focus() {
-            return colors.focusColor = MainConfig.getColor(colors.focus, colors.focusColor, "#acedff");
+            return colors.focusColor = getColor(colors.focus, colors.focusColor, "#acedff");
         }
 
         public TextColor deny() {
-            return colors.denyColor = MainConfig.getColor(colors.deny, colors.denyColor, "#ffb4ab");
+            return colors.denyColor = getColor(colors.deny, colors.denyColor, "#ffb4ab");
         }
 
         public Map<String, String> getColors() {
@@ -111,6 +192,30 @@ public class TranslationsConfig {
             }
             return this.allColors;
         }
+    }
+
+    static TextColor getColor(String name, TextColor current, TextColor defaultColor) {
+        if (current != null) {
+            return current;
+        }
+
+        TextColor ret;
+
+        if (name.startsWith("#")) {
+            ret = TextColor.fromHexString(name);
+        } else if ((ret = ConfigColorResolver.resolver().color(name)) == null) {
+            ret = NamedTextColor.NAMES.value(name.toLowerCase());
+        }
+
+        return ret == null ? defaultColor : ret;
+    }
+
+    static TextColor getColor(String name, TextColor current, String defaultHexColor) {
+        if (current != null) {
+            return current;
+        }
+
+        return getColor(name, current, TextColor.fromHexString(defaultHexColor));
     }
 
     public static class AbsCommand {
@@ -1821,11 +1926,11 @@ public class TranslationsConfig {
             }
 
             public TextColor getCompassColorActive() {
-                return compassColorActiveColor = MainConfig.getColor(compassColorActive, compassColorActiveColor, TextColor.fromHexString("#85d2e7"));
+                return compassColorActiveColor = getColor(compassColorActive, compassColorActiveColor, TextColor.fromHexString("#85d2e7"));
             }
 
             public TextColor getCompassColorDefault() {
-                return compassColorDefaultColor = MainConfig.getColor(compassColorDefault, compassColorDefaultColor, TextColor.fromHexString("#e6c36c"));
+                return compassColorDefaultColor = getColor(compassColorDefault, compassColorDefaultColor, TextColor.fromHexString("#e6c36c"));
             }
 
             @Comment("Supports <lines>")
@@ -5650,11 +5755,11 @@ public class TranslationsConfig {
             }
 
             public TextColor getLeftColor() {
-                return this.leftColorColor = MainConfig.getColor(this.leftColor, this.leftColorColor, "#e6c36c");
+                return this.leftColorColor = getColor(this.leftColor, this.leftColorColor, "#e6c36c");
             }
 
             public TextColor getRightColor() {
-                return this.rightColorColor = MainConfig.getColor(this.rightColor, this.rightColorColor, "#e6c36c");
+                return this.rightColorColor = getColor(this.rightColor, this.rightColorColor, "#e6c36c");
             }
         }
 

@@ -119,11 +119,11 @@ public enum Relation implements Permissible {
     @Override
     public TextColor color() {
         return switch (this) {
-            case MEMBER -> Confs.main().colors().relations().getMember();
-            case ALLY -> Confs.main().colors().relations().getAlly();
-            case NEUTRAL -> Confs.main().colors().relations().getNeutral();
-            case TRUCE -> Confs.main().colors().relations().getTruce();
-            case ENEMY -> Confs.main().colors().relations().getEnemy();
+            case MEMBER -> Confs.tl().colors().relations().getMember();
+            case ALLY -> Confs.tl().colors().relations().getAlly();
+            case NEUTRAL -> Confs.tl().colors().relations().getNeutral();
+            case TRUCE -> Confs.tl().colors().relations().getTruce();
+            case ENEMY -> Confs.tl().colors().relations().getEnemy();
         };
     }
 

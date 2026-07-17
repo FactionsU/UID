@@ -96,19 +96,19 @@ public sealed interface Participator permits FPlayer, Faction {
 
         if (thisFaction != thatFaction) {
             if (thisFaction.isPeaceful()) {
-                return Confs.main().colors().relations().getPeaceful();
+                return Confs.tl().colors().relations().getPeaceful();
             }
 
             if (thisFaction.isSafeZone()) {
-                return Confs.main().colors().factions().getSafezone();
+                return Confs.tl().colors().factions().getSafezone();
             }
 
             if (thisFaction.isWarZone()) {
-                return Confs.main().colors().factions().getWarzone();
+                return Confs.tl().colors().factions().getWarzone();
             }
 
             if (thisFaction.isWilderness()) {
-                return Confs.main().colors().factions().getWilderness();
+                return Confs.tl().colors().factions().getWilderness();
             }
         }
 

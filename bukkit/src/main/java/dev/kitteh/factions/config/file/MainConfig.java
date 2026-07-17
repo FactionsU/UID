@@ -7,9 +7,7 @@ import dev.kitteh.factions.config.annotation.WipeOnReload;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
-import dev.kitteh.factions.tagresolver.ConfigColorResolver;
 import dev.kitteh.factions.util.MiscUtil;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -34,7 +32,7 @@ public class MainConfig {
         @Comment("""
                 This is the config version, used for migrating on plugin updates.
                 Don't change this value yourself, or you could damage all configs!""")
-        private int version = 13;
+        private int version = 14;
 
         @Comment("""
                 Debug
@@ -43,112 +41,6 @@ public class MainConfig {
 
         public boolean isDebug() {
             return debug;
-        }
-    }
-
-    static TextColor getColor(String name, TextColor current, TextColor defaultColor) {
-        if (current != null) {
-            return current;
-        }
-
-        TextColor ret;
-
-        if (name.startsWith("#")) {
-            ret = TextColor.fromHexString(name);
-        } else if ((ret = ConfigColorResolver.resolver().color(name)) == null) {
-            ret = NamedTextColor.NAMES.value(name.toLowerCase());
-        }
-
-        return ret == null ? defaultColor : ret;
-    }
-
-    static TextColor getColor(String name, TextColor current, String defaultHexColor) {
-        if (current != null) {
-            return current;
-        }
-
-        return getColor(name, current, TextColor.fromHexString(defaultHexColor));
-    }
-
-    public static class Colors {
-        public static class Relations {
-            private String member = "#8ad6b7";
-            @WipeOnReload
-            private transient TextColor memberColor;
-            private String ally = "#f0b3e7";
-            @WipeOnReload
-            private transient TextColor allyColor;
-            private String truce = "#cebdfe";
-            @WipeOnReload
-            private transient TextColor truceColor;
-            private String neutral = "#dee3e5";
-            @WipeOnReload
-            private transient TextColor neutralColor;
-            private String enemy = "#ff8b81";
-            @WipeOnReload
-            private transient TextColor enemyColor;
-            private String peaceful = "#ffdf95";
-            @WipeOnReload
-            private transient TextColor peacefulColor;
-
-            public TextColor getMember() {
-                return memberColor = getColor(this.member, this.memberColor, "#8ad6b7");
-            }
-
-            public TextColor getAlly() {
-                return allyColor = getColor(this.ally, this.allyColor, "#f0b3e7");
-            }
-
-            public TextColor getTruce() {
-                return truceColor = getColor(this.truce, this.truceColor, "#cebdfe");
-            }
-
-            public TextColor getNeutral() {
-                return neutralColor = getColor(this.neutral, this.neutralColor, "#dee3e5");
-            }
-
-            public TextColor getEnemy() {
-                return enemyColor = getColor(this.enemy, this.enemyColor, "#ff8b81");
-            }
-
-            public TextColor getPeaceful() {
-                return peacefulColor = getColor(this.peaceful, this.peacefulColor, "#ffdf95");
-            }
-        }
-
-        public static class Factions {
-            private String wilderness = "#91d689";
-            @WipeOnReload
-            private transient TextColor wildernessColor;
-            private String safezone = "#87e8de";
-            @WipeOnReload
-            private transient TextColor safezoneColor;
-            private String warzone = "#e6b46c";
-            @WipeOnReload
-            private transient TextColor warzoneColor;
-
-            public TextColor getWilderness() {
-                return wildernessColor = getColor(this.wilderness, this.wildernessColor, "#91d689");
-            }
-
-            public TextColor getSafezone() {
-                return safezoneColor = getColor(this.safezone, this.safezoneColor, "#87e8de");
-            }
-
-            public TextColor getWarzone() {
-                return warzoneColor = getColor(this.warzone, this.warzoneColor, "#e6b46c");
-            }
-        }
-
-        private Factions factions = new Factions();
-        private Relations relations = new Relations();
-
-        public Factions factions() {
-            return factions;
-        }
-
-        public Relations relations() {
-            return relations;
         }
     }
 
@@ -2689,7 +2581,7 @@ public class MainConfig {
         private transient TextColor selfColorColor; // Quality name, self.
 
         public TextColor getSelfColor() {
-            return selfColorColor = getColor(this.selfColor, this.selfColorColor, "#89d6d2");
+            return selfColorColor = TranslationsConfig.getColor(this.selfColor, this.selfColorColor, "#89d6d2");
         }
 
         public int getHeight() {
@@ -2983,8 +2875,6 @@ public class MainConfig {
             Made with love <3""")
     private AVeryFriendlyFactionsConfig aVeryFriendlyFactionsConfig = new AVeryFriendlyFactionsConfig();
 
-    @Comment("Colors for relationships and default factions")
-    private Colors colors = new Colors();
     private Commands commands = new Commands();
     private Factions factions = new Factions();
     @Comment("What should be logged?")
@@ -3008,10 +2898,6 @@ public class MainConfig {
 
     public AVeryFriendlyFactionsConfig getaVeryFriendlyFactionsConfig() {
         return aVeryFriendlyFactionsConfig;
-    }
-
-    public Colors colors() {
-        return colors;
     }
 
     public Commands commands() {

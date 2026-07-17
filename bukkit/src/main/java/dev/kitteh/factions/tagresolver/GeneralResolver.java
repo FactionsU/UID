@@ -54,11 +54,11 @@ public final class GeneralResolver extends HelperResolver {
                             }
                         }
 
-                        case "peaceful" -> tag(Confs.main().colors().relations().getPeaceful());
+                        case "peaceful" -> tag(Confs.tl().colors().relations().getPeaceful());
 
-                        case "safezone" -> tag(Confs.main().colors().factions().getSafezone());
-                        case "warzone" -> tag(Confs.main().colors().factions().getWarzone());
-                        case "wilderness" -> tag(Confs.main().colors().factions().getWilderness());
+                        case "safezone" -> tag(Confs.tl().colors().factions().getSafezone());
+                        case "warzone" -> tag(Confs.tl().colors().factions().getWarzone());
+                        case "wilderness" -> tag(Confs.tl().colors().factions().getWilderness());
 
                         default -> empty();
                     };

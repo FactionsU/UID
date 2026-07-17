@@ -90,9 +90,12 @@ public class Transitioner {
             if (version < 13) {
                 transitioner.migrateV13(rootNode);
             }
+            if (version < 14) {
+                transitioner.migrateV14(rootNode);
+            }
 
             // Update the below when bumping version!
-            rootNode.getNode(A_VERY_FRIENDLY_FACTIONS_CONFIG, VERSION_STRING).setValue(13);
+            rootNode.getNode(A_VERY_FRIENDLY_FACTIONS_CONFIG, VERSION_STRING).setValue(14);
 
             loader.save(rootNode);
         } catch (IOException e) {
@@ -359,6 +362,45 @@ public class Transitioner {
             } catch (IOException e) {
                 this.plugin.getLogger().log(Level.SEVERE, "Failed to save outdated translations file!", e);
             }
+        }
+    }
+
+    private void migrateV14(CommentedConfigurationNode node) {
+        if (node.getNode("colors", "relations").isVirtual() && node.getNode("colors", "factions").isVirtual()) {
+            return;
+        }
+
+        HoconConfigurationLoader loader = Loader.getLoader("translations");
+        CommentedConfigurationNode translations;
+        try {
+            translations = loader.load();
+        } catch (IOException e) {
+            this.plugin.getLogger().log(Level.SEVERE, "Failed to load translations.conf to migrate the colors section of main.conf! Relation and faction colors will revert to defaults.", e);
+            return;
+        }
+
+        CommentedConfigurationNode colors = node.getNode("colors");
+        CommentedConfigurationNode colorful = translations.getNode("aColorfulMessage");
+        shiftPresent(colors.getNode("factions"), colorful.getNode("factions"), "wilderness", "safezone", "warzone");
+        shiftPresent(colors.getNode("relations"), colorful.getNode("relations"), "member", "ally", "truce", "neutral", "enemy", "peaceful");
+
+        try {
+            loader.save(translations);
+            this.plugin.getLogger().info("");
+            this.plugin.getLogger().info("  Migrated the colors section from main.conf to translations.conf to keep colors together");
+            this.plugin.getLogger().info("");
+        } catch (IOException e) {
+            this.plugin.getLogger().log(Level.SEVERE, "Failed to save translations.conf while migrating the colors section of main.conf! Relation and faction colors reverted to defaults.", e);
+        }
+    }
+
+    private static void shiftPresent(CommentedConfigurationNode from, CommentedConfigurationNode to, String... names) {
+        for (String name : names) {
+            CommentedConfigurationNode fromNode = from.getNode(name);
+            if (fromNode.isVirtual() || fromNode.getValue() == null) {
+                continue;
+            }
+            to.getNode(name).setValue(fromNode.getValue());
         }
     }
 

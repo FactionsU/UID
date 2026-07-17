@@ -172,7 +172,7 @@ public class PapiExpansion extends PlaceholderExpansion implements Relational {
             case "faction_claims" -> String.valueOf(faction.claims().size());
             case "faction_founded" -> Confs.tl().placeholders().datesAndTimes().formatFactionCreationDate(faction.founded());
             case "faction_joining" -> (faction.open() ? Confs.tl().placeholders().misc().getJoinOpen() : Confs.tl().placeholders().misc().getJoinInvite());
-            case "faction_peaceful" -> faction.isPeaceful() ? LegacyCruft.getLegacyString(Confs.main().colors().relations().getPeaceful()) + Confs.tl().placeholders().misc().getPeaceful() : "";
+            case "faction_peaceful" -> faction.isPeaceful() ? LegacyCruft.getLegacyString(Confs.tl().colors().relations().getPeaceful()) + Confs.tl().placeholders().misc().getPeaceful() : "";
             case "faction_powerboost" -> {
                 double powerBoost = faction.powerBoost();
                 var misc = Confs.tl().placeholders().misc();
