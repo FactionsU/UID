@@ -68,6 +68,16 @@ public record FLocation(String worldName, int x, int z) {
         return world().getChunkAt(x, z);
     }
 
+    @ApiStatus.AvailableSince("4.7.0")
+    public boolean loaded() {
+        return world().isChunkLoaded(x, z);
+    }
+
+    @ApiStatus.AvailableSince("4.7.0")
+    public long cachedInhabitedTime() {
+        return Board.board().cachedInhabitedTime(this);
+    }
+
     // bit-shifting is used because it's much faster than standard division and multiplication
     public static int blockToChunk(int blockVal) {    // 1 chunk is 16x16 blocks
         return blockVal >> 4;   // ">> 4" == "/ 16"

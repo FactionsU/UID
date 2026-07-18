@@ -63,8 +63,8 @@ public abstract class MemoryBoard implements Board {
     }
 
     @Override
-    public Faction factionAt(FLocation flocation) {
-        return Factions.factions().get(getIdAt(flocation)) instanceof Faction faction ? faction : Factions.factions().wilderness();
+    public Faction factionAt(FLocation location) {
+        return Factions.factions().get(getIdAt(location)) instanceof Faction faction ? faction : Factions.factions().wilderness();
     }
 
     private void setIdAt(int id, FLocation flocation) {
@@ -74,21 +74,21 @@ public abstract class MemoryBoard implements Board {
     }
 
     @Override
-    public void claim(FLocation flocation, Faction faction) {
+    public void claim(FLocation location, Faction faction) {
         if (faction.isWilderness()) {
-            this.unclaim(flocation);
+            this.unclaim(location);
         } else {
-            this.setIdAt(faction.id(), flocation);
+            this.setIdAt(faction.id(), location);
         }
     }
 
     @Override
-    public void unclaim(FLocation flocation) {
-        Objects.requireNonNull(flocation);
-        Faction faction = factionAt(flocation);
-        faction.warps().values().removeIf(flocation::contains);
-        if (flocation.world().isChunkLoaded(flocation.x(), flocation.z())) {
-            for (Entity entity : flocation.asChunk().getEntities()) {
+    public void unclaim(FLocation location) {
+        Objects.requireNonNull(location);
+        Faction faction = factionAt(location);
+        faction.warps().values().removeIf(location::contains);
+        if (location.world().isChunkLoaded(location.x(), location.z())) {
+            for (Entity entity : location.asChunk().getEntities()) {
                 if (entity instanceof Player) {
                     FPlayer fPlayer = FPlayers.fPlayers().get((Player) entity);
                     if (!fPlayer.adminBypass() && fPlayer.flying()) {
@@ -104,13 +104,13 @@ public abstract class MemoryBoard implements Board {
 
         // Clear zone
         if (faction.isNormal()) {
-            faction.zones().set(faction.zones().main(), flocation);
+            faction.zones().set(faction.zones().main(), location);
         }
 
-        WorldTracker tracker = worldTrackers.get(flocation.worldName());
+        WorldTracker tracker = worldTrackers.get(location.worldName());
         //noinspection ConstantValue
         if (tracker != null) {
-            tracker.removeClaim(flocation);
+            tracker.removeClaim(location);
         }
     }
 
@@ -190,6 +190,27 @@ public abstract class MemoryBoard implements Board {
         WorldTracker tracker = worldTrackers.get(world.getName());
         //noinspection ConstantValue
         return tracker == null ? 0 : tracker.countClaims(faction.id());
+    }
+
+    @Override
+    public long cachedInhabitedTime(FLocation location) {
+        if (location.loaded()) {
+            return location.asChunk().getInhabitedTime();
+        }
+        WorldTracker tracker = worldTrackers.get(location.worldName());
+        //noinspection ConstantValue
+        if (tracker != null) {
+            tracker.inhabited(location);
+        }
+        return -1L;
+    }
+
+    public void cachedInhabitedTime(FLocation location, long inhabitedTime) {
+        WorldTracker tracker = worldTrackers.get(location.worldName());
+        //noinspection ConstantValue
+        if (tracker != null) {
+            tracker.inhabited(location, inhabitedTime);
+        }
     }
 
     public int getTotalCount() {

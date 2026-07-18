@@ -1,5 +1,8 @@
 package dev.kitteh.factions.integration;
 
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.parser.ParseException;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.Factions;
@@ -86,6 +89,36 @@ public class Econ {
         return shouldBeUsed() && Confs.main().economy().isBankEnabled();
     }
 
+    @ApiStatus.AvailableSince("4.7.0")
+    public static boolean duesEnabled() {
+        return shouldBeUsedWithBanks() && Confs.main().economy().isDuesEnabled();
+    }
+
+    @ApiStatus.AvailableSince("4.7.0")
+    public static boolean rentEnabled() {
+        return shouldBeUsedWithBanks() && Confs.main().economy().isRentEnabled();
+    }
+
+    @ApiStatus.AvailableSince("4.7.0")
+    public static double calculateRent(Faction faction) {
+        if (!rentEnabled()) {
+            return 0d;
+        }
+        return calculateRent(faction.claimCount());
+    }
+
+    @ApiStatus.AvailableSince("4.7.0")
+    public static double calculateRent(int claims) {
+        String equation = Confs.main().economy().getRentEquation();
+        try {
+            double value = new Expression(equation).with("claims", claims).evaluate().getNumberValue().doubleValue();
+            return Math.max(0, value);
+        } catch (RuntimeException | EvaluationException | ParseException e) {
+            AbstractFactionsPlugin.instance().getLogger().warning("Invalid faction rent equation \"" + equation + "\": " + e.getMessage());
+            return 0d;
+        }
+    }
+
     public static boolean isSetup() {
         return econ != null;
     }
@@ -105,7 +138,7 @@ public class Econ {
 
         String universeAccount = Confs.main().economy().getUniverseAccount();
 
-        if (universeAccount == null || universeAccount.isEmpty()) {
+        if (universeAccount.isEmpty()) {
             return;
         }
         OfflinePlayer universe = getUniverseOfflinePlayer();
@@ -124,6 +157,34 @@ public class Econ {
             return getOfflinePlayerForName(universeAccount);
         }
         return AbstractFactionsPlugin.instance().getOfflinePlayer(universeAccount, UUID.fromString(universeUUID));
+    }
+
+    public static void modifyRentGatheringAccountMoney(double delta) {
+        if (!shouldBeUsed()) {
+            return;
+        }
+
+        String landlordAccount = Confs.main().economy().getUniverseAccount();
+
+        if (landlordAccount.isEmpty()) {
+            return;
+        }
+        OfflinePlayer landlord = getRentGatheringOfflinePlayer();
+        if (needsAccount(landlord)) {
+            return;
+        }
+
+        modifyBalance(landlord, delta);
+    }
+
+    private static OfflinePlayer getRentGatheringOfflinePlayer() {
+        String rentAccount = Confs.main().economy().getRentGatheringAccount();
+        String rentUUID = Confs.main().economy().getRentGatheringAccountUUID();
+
+        if (rentUUID == null) {
+            return getOfflinePlayerForName(rentAccount);
+        }
+        return AbstractFactionsPlugin.instance().getOfflinePlayer(rentAccount, UUID.fromString(rentUUID));
     }
 
     public static void sendBalanceInfo(FPlayer to, Participator about) {

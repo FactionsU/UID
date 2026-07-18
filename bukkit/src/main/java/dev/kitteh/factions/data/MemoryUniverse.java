@@ -13,9 +13,11 @@ import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.MiscUtil;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +38,10 @@ public abstract class MemoryUniverse implements Universe {
             private LocalTime lastRunShieldCheck = null;
         }
 
+        static class Dues {
+            private @Nullable LocalDate lastCollectionDate = null;
+        }
+
         static class Upgrades {
             private List<String> disabled = new ArrayList<>();
             private Map<String, UpgradeSettings> settings = new HashMap<>();
@@ -43,6 +49,7 @@ public abstract class MemoryUniverse implements Universe {
 
         private Grace grace = new Grace();
         private Shields shields = new Shields();
+        private Dues dues = new Dues();
         private Upgrades upgrades = new Upgrades();
     }
 
@@ -70,6 +77,16 @@ public abstract class MemoryUniverse implements Universe {
     public void shieldScheduleBumpNextTime() {
         LocalTime current = this.data.shields.lastRunShieldCheck;
         this.data.shields.lastRunShieldCheck = (current == null ? MiscUtil.floorToHalfHour(LocalTime.now()) : current).plusMinutes(30);
+    }
+
+    @Override
+    public @Nullable LocalDate lastDuesCollectionDate() {
+        return this.data.dues.lastCollectionDate;
+    }
+
+    @Override
+    public void lastDuesCollectionDate(LocalDate date) {
+        this.data.dues.lastCollectionDate = date;
     }
 
     @Override

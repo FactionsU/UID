@@ -15,6 +15,7 @@ import dev.kitteh.factions.command.defaults.set.CmdSetTitle;
 import dev.kitteh.factions.command.defaults.set.CmdSetWarp;
 import dev.kitteh.factions.command.defaults.set.CmdSetWarpProperty;
 import dev.kitteh.factions.config.Confs;
+import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.util.TriConsumer;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
@@ -30,6 +31,7 @@ public class CmdSet implements Cmd {
             new CmdSetBoom().consumer().accept(manager, setBuilder, help);
             new CmdSetDefaultRole().consumer().accept(manager, setBuilder, help);
             new CmdSetDescription().consumer().accept(manager, setBuilder, help);
+            AbstractFactionsPlugin.instance().setDuesCommand().consumer().accept(manager, setBuilder, help);
             new CmdSetHome().consumer().accept(manager, setBuilder, help);
             new CmdSetLink().consumer().accept(manager, setBuilder, help);
             new CmdSetOpen().consumer().accept(manager, setBuilder, help);

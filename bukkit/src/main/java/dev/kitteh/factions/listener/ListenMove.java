@@ -135,5 +135,8 @@ public class ListenMove implements Listener {
                 ComponentDispatcher.sendActionBar(player, newZone.greeting());
             }
         }
+
+        Instances.BOARD.cachedInhabitedTime(to, to.asChunk().getInhabitedTime());
+        Instances.BOARD.cachedInhabitedTime(from, from.asChunk().getInhabitedTime());
     }
 }

@@ -1,5 +1,6 @@
 package dev.kitteh.factions.data;
 
+import dev.kitteh.factions.policy.DuesFailurePolicy;
 import dev.kitteh.factions.FLocation;
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
@@ -54,6 +55,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -396,6 +398,12 @@ public abstract class MemoryFaction implements Faction {
     protected long lastDeath;
     protected @Nullable Integer maxVaults;
     protected Role defaultRole;
+    protected double dues;
+    protected Map<Role, Double> duesOverrides = new HashMap<>();
+    protected DuesFailurePolicy duesFailurePolicy = DuesFailurePolicy.DEFAULT;
+    protected double rentDebt;
+    protected List<LocalDate> missedRentDates = new ArrayList<>();
+    protected int consecutiveMissedRentDays;
     protected @Nullable LinkedHashMap<PermSelector, Map<String, Boolean>> permissions; // legacy importing, lazier this way
     protected Set<BanInfo> bans = new HashSet<>();
     protected double dtr;
@@ -461,6 +469,15 @@ public abstract class MemoryFaction implements Faction {
         this.zones.cleanupDeserialization(this); // Sets the transient helper main value.
         if (Transitioner.fixplosion()) {
             this.explosionsEnabled = true;
+        }
+        if (this.duesOverrides == null) {
+            this.duesOverrides = new HashMap<>();
+        }
+        if (this.duesFailurePolicy == null) {
+            this.duesFailurePolicy = DuesFailurePolicy.DEFAULT;
+        }
+        if (this.missedRentDates == null) {
+            this.missedRentDates = new ArrayList<>();
         }
     }
 
@@ -882,6 +899,84 @@ public abstract class MemoryFaction implements Faction {
     @Override
     public void defaultRole(Role role) {
         this.defaultRole = role;
+    }
+
+    @Override
+    public double dues() {
+        return this.dues;
+    }
+
+    @Override
+    public void dues(double amount) {
+        this.dues = Math.max(0, amount);
+    }
+
+    @Override
+    public Map<Role, Double> duesOverrides() {
+        return Map.copyOf(this.duesOverrides);
+    }
+
+    @Override
+    public void dues(Role role, @Nullable Double amount) {
+        if (amount == null) {
+            this.duesOverrides.remove(role);
+        } else {
+            this.duesOverrides.put(role, Math.max(0, amount));
+        }
+    }
+
+    @Override
+    public double dues(Role role) {
+        Double override = this.duesOverrides.get(role);
+        if (override != null) {
+            return override;
+        }
+        return role == Role.ADMIN ? 0 : this.dues;
+    }
+
+    @Override
+    public DuesFailurePolicy duesFailurePolicy() {
+        return this.duesFailurePolicy;
+    }
+
+    @Override
+    public void duesFailurePolicy(DuesFailurePolicy policy) {
+        this.duesFailurePolicy = policy;
+    }
+
+    @Override
+    public double rentDebt() {
+        return this.rentDebt;
+    }
+
+    @Override
+    public void rentDebt(double amount) {
+        this.rentDebt = Math.max(0, amount);
+    }
+
+    @Override
+    public List<LocalDate> missedRentDates() {
+        return List.copyOf(this.missedRentDates);
+    }
+
+    @Override
+    public void addMissedRentDate(LocalDate date) {
+        this.missedRentDates.add(date);
+    }
+
+    @Override
+    public void pruneMissedRentDatesBefore(LocalDate cutoff) {
+        this.missedRentDates.removeIf(date -> date.isBefore(cutoff));
+    }
+
+    @Override
+    public int consecutiveMissedRentDays() {
+        return this.consecutiveMissedRentDays;
+    }
+
+    @Override
+    public void consecutiveMissedRentDays(int days) {
+        this.consecutiveMissedRentDays = Math.max(0, days);
     }
 
     @SuppressWarnings("this-escape")

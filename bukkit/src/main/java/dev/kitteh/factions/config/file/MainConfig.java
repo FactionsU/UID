@@ -1,6 +1,7 @@
 package dev.kitteh.factions.config.file;
 
 import dev.kitteh.factions.Faction;
+import dev.kitteh.factions.policy.RentFailurePolicy;
 import dev.kitteh.factions.annotation.NoFinalFields;
 import dev.kitteh.factions.config.annotation.Comment;
 import dev.kitteh.factions.config.annotation.WipeOnReload;
@@ -21,8 +22,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 @NoFinalFields
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "BooleanMethodIsAlwaysInverted", "MismatchedQueryAndUpdateOfCollection"})
@@ -2391,6 +2394,43 @@ public class MainConfig {
                 "Set to false to keep the balance in an empty permanent faction")
         private boolean bankPermanentFactionSendBalanceToLastLeaver = true;
 
+        @Comment("""
+                Faction dues: each day at midnight, members are charged a daily payment that goes into their faction's bank.
+                Faction admins configure the amounts with "/f set dues".
+                This feature requires both economy ("enabled") and faction banks ("bankEnabled") to be turned on.""")
+        private boolean duesEnabled = true;
+
+        @Comment("""
+                Faction rent: each day, right after dues are collected, a faction owes rent paid from its bank based on how much land it has claimed.
+                Requires both economy ("enabled") and faction banks ("bankEnabled").""")
+        private boolean rentEnabled = false;
+        @Comment("""
+                The equation used to calculate a faction's daily rent, in the same style as upgrade equations.
+                Use 'claims' for the faction's claimed chunk count if you want it based on claims. Example: "10 * claims".""")
+        private String rentEquation = "10 * claims";
+        @Comment("""
+                What to do when a faction bank cannot afford its rent:
+                 UNCLAIM_UNTIL_AFFORD - unclaim chunks (starting with the one players have spent the least time in) until the rent is affordable
+                 UNCLAIM_ALL - unclaim all of the faction's land
+                 DISBAND - disband the faction
+                 DEBT - carry the unpaid rent forward as debt, collected in addition next time""")
+        private String rentFailurePolicy = RentFailurePolicy.DEBT.name();
+        @WipeOnReload
+        private transient RentFailurePolicy rentFailurePolicyPolicy;
+        @Comment("""
+                How many days into the past a faction's missed rent payments are kept and logged.
+                Older missed-payment records are discarded. Set to 0 to disable this logging entirely.""")
+        private int rentMissedPaymentLogDays = 30;
+        @Comment("""
+                Under the DEBT rent failure policy, how many days of missed rent in a row are allowed before the faction is disbanded.
+                Set to 0 to disable automatic disbanding for unpaid rent.""")
+        private int rentDisbandAfterConsecutiveMissedDays = 0;
+
+        @Comment("Rent gathering accounts are receivers of collected faction rent. Not commonly used.")
+        private String rentGatheringAccount = "";
+        @Comment("See the rent gathering account comment. If your economy plugin uses a UUID, add this too")
+        private String rentGatheringAccountUUID = "";
+
         @Comment("Locale, language_country, two characters each, must contain both or be rejected")
         private String locale = "en_US";
 
@@ -2569,6 +2609,46 @@ public class MainConfig {
 
         public boolean isBankFactionPaysLandCosts() {
             return bankFactionPaysLandCosts;
+        }
+
+        public boolean isDuesEnabled() {
+            return duesEnabled;
+        }
+
+        public boolean isRentEnabled() {
+            return rentEnabled;
+        }
+
+        public String getRentEquation() {
+            return rentEquation;
+        }
+
+        public RentFailurePolicy getRentFailurePolicy() {
+            if (this.rentFailurePolicyPolicy == null) {
+                try {
+                    this.rentFailurePolicyPolicy = RentFailurePolicy.valueOf(this.rentFailurePolicy.toUpperCase(Locale.ROOT));
+                } catch (IllegalArgumentException _) {
+                    AbstractFactionsPlugin.instance().log(Level.WARNING, "Invalid rent failure policy '"+this.rentFailurePolicy+"' - using default of DEBT");
+                    this.rentFailurePolicyPolicy = RentFailurePolicy.DEBT;
+                }
+            }
+            return rentFailurePolicyPolicy;
+        }
+
+        public int getRentMissedPaymentLogDays() {
+            return rentMissedPaymentLogDays;
+        }
+
+        public int getRentDisbandAfterConsecutiveMissedDays() {
+            return rentDisbandAfterConsecutiveMissedDays;
+        }
+
+        public String getRentGatheringAccount() {
+            return rentGatheringAccount;
+        }
+
+        public String getRentGatheringAccountUUID() {
+            return rentGatheringAccountUUID;
         }
 
         public boolean isBankPermanentFactionSendBalanceToLastLeaver() {

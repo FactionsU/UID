@@ -5,8 +5,10 @@ import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradeSettings;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
@@ -56,6 +58,23 @@ public interface Universe {
      */
     @ApiStatus.AvailableSince("4.6.0")
     LocalTime shieldScheduleLastTimeChecked();
+
+    /**
+     * Gets the last date on which daily faction dues were collected, used to
+     * avoid collecting more than once per calendar day.
+     *
+     * @return the last date dues were collected, or null if never collected
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    @Nullable LocalDate lastDuesCollectionDate();
+
+    /**
+     * Sets the last date on which daily faction dues were collected.
+     *
+     * @param date the last date dues were collected
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void lastDuesCollectionDate(LocalDate date);
 
     /**
      * Gets if a given upgrade is enabled.

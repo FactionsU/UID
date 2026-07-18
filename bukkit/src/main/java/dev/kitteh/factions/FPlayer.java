@@ -3,6 +3,7 @@ package dev.kitteh.factions;
 import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
+import dev.kitteh.factions.policy.DuesFailurePolicy;
 import dev.kitteh.factions.util.Mini;
 import dev.kitteh.factions.util.WarmUpUtil;
 import net.kyori.adventure.pointer.Pointered;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,6 +56,41 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
     Role role();
 
     void role(Role role);
+
+    /**
+     * Gets the outstanding dues this player owes their faction, accumulated under
+     * the {@link DuesFailurePolicy#DEBT debt} failure policy.
+     *
+     * @return the outstanding dues debt, or zero if none
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    double duesDebt();
+
+    /**
+     * Sets the outstanding dues this player owes their faction.
+     *
+     * @param amount the outstanding dues debt
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void duesDebt(double amount);
+
+    /**
+     * Gets the dates on which this player missed their dues, as tracked under the
+     * {@link DuesFailurePolicy#RECORD record} or {@link DuesFailurePolicy#DEBT debt}
+     * failure policy, in the order they were recorded.
+     *
+     * @return an immutable list of the dates dues were missed
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    List<LocalDate> missedDuesDates();
+
+    /**
+     * Records a date on which this player missed their dues.
+     *
+     * @param date the date dues were missed
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void addMissedDuesDate(LocalDate date);
 
     boolean takeFallDamage();
 

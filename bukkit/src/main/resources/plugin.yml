@@ -20,6 +20,7 @@ permissions:
       factions.kit.mod: true
       factions.autosave: true
       factions.reload: true
+      factions.rent: true
       factions.save: true
       factions.modifypower: true
       factions.ahome: true
@@ -75,6 +76,7 @@ permissions:
       factions.description: true
       factions.disband: true
       factions.dtr: true
+      factions.dues: true
       factions.grace.view: true
       factions.home: true
       factions.invite: true
@@ -140,6 +142,8 @@ permissions:
     description: disband a faction
   factions.disband.any:
     description: disband another faction
+  factions.dues:
+    description: configure daily faction dues
   factions.grace.view:
     description: view grace status
   factions.grace.set:
@@ -225,6 +229,8 @@ permissions:
     description: set relation wish to another faction
   factions.reload:
     description: reload data file(s) from disk
+  factions.rent:
+    description: view factions with outstanding rent debt
   factions.save:
     description: save all data to disk
   factions.sethome:

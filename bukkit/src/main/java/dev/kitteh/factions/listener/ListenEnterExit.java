@@ -7,10 +7,12 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.config.file.MainConfig;
 import dev.kitteh.factions.data.MemoryFPlayer;
+import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
+import dev.kitteh.factions.tagresolver.FactionResolver;
 import dev.kitteh.factions.util.Permission;
 import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -216,6 +218,24 @@ public class ListenEnterExit implements Listener {
             this.initFactionWorld(player, me);
         }
         player.updateCommands();
+
+        this.warnRentDebt(me);
+    }
+
+    private void warnRentDebt(FPlayer me) {
+        int maxMissed = Confs.main().economy().getRentDisbandAfterConsecutiveMissedDays();
+        if (maxMissed <= 0 || !Econ.rentEnabled()) {
+            return;
+        }
+        Faction faction = me.faction();
+        if (!faction.isNormal() || faction.rentDebt() <= 0) {
+            return;
+        }
+        int remaining = Math.max(0, maxMissed - faction.consecutiveMissedRentDays());
+        me.sendRichMessage(Confs.tl().factionEvents().getRentDebtWarning(),
+                FactionResolver.of(faction),
+                Placeholder.unparsed("amount", Econ.moneyString(faction.rentDebt())),
+                Placeholder.unparsed("days", String.valueOf(remaining)));
     }
 
     private void initFactionWorld(Player player, FPlayer me) {

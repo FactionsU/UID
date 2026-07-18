@@ -894,6 +894,40 @@ public class TranslationsConfig {
                 }
             }
 
+            public static class Rent extends AbsCommand {
+                public Rent() {
+                    super("List factions with outstanding rent debt", "rent");
+                }
+
+                private String header = "<info>Factions with outstanding rent debt:";
+                @Comment("Supports <faction>, <amount>")
+                private String entry = "<info>  <focus><faction></focus>: <focus><amount></focus>";
+                private String none = "<info>No factions have outstanding rent debt.";
+                private String missedHeader = "<info>Recent missed rent payments:";
+                @Comment("Supports <faction>, <count>, <date> (the most recent missed date)")
+                private String missedEntry = "<info>  <focus><faction></focus>: <focus><count></focus> missed, most recent <focus><date></focus>";
+
+                public String getHeader() {
+                    return header;
+                }
+
+                public String getEntry() {
+                    return entry;
+                }
+
+                public String getNone() {
+                    return none;
+                }
+
+                public String getMissedHeader() {
+                    return missedHeader;
+                }
+
+                public String getMissedEntry() {
+                    return missedEntry;
+                }
+            }
+
             public static class Upgrades extends AbsCommand {
                 public Upgrades() {
                     super("Manage faction upgrades", "upgrades");
@@ -1467,6 +1501,7 @@ public class TranslationsConfig {
             private Money money = new Money();
             private Reload reload = new Reload();
             private SaveAll saveAll = new SaveAll();
+            private Rent rent = new Rent();
             @Comment("""
                     The Paper-only command to manage upgrades using dialogs.
                     Each section represents a dialog page.""")
@@ -1514,6 +1549,10 @@ public class TranslationsConfig {
 
             public SaveAll saveAll() {
                 return saveAll;
+            }
+
+            public Rent rent() {
+                return rent;
             }
 
             public Upgrades upgrades() {
@@ -2141,6 +2180,233 @@ public class TranslationsConfig {
                 }
             }
 
+            public static class SetDues extends AbsCommand {
+                public SetDues() {
+                    super("Configure daily faction dues", "dues");
+                }
+
+                public static class SetDuesDefault extends AbsCommand {
+                    public SetDuesDefault() {
+                        super("Set the default daily dues for all roles", "default");
+                    }
+
+                    @Comment("Supports <amount>")
+                    private String set = "<info>Set the default daily dues to <focus><amount></focus>.";
+
+                    public String getSet() {
+                        return set;
+                    }
+                }
+
+                public static class SetDuesRole extends AbsCommand {
+                    public SetDuesRole() {
+                        super("Add or update a per-role dues override", "role");
+                    }
+
+                    @Comment("Supports <role>, <amount>")
+                    private String set = "<info>Set the daily dues for <focus><role></focus> to <focus><amount></focus>.";
+
+                    public String getSet() {
+                        return set;
+                    }
+                }
+
+                public static class SetDuesClear extends AbsCommand {
+                    public SetDuesClear() {
+                        super("Remove a per-role dues override so the role follows the default", "clear");
+                    }
+
+                    @Comment("Supports <role>, <amount>")
+                    private String cleared = "<info>Removed the dues override for <focus><role></focus>. It now follows the default of <focus><amount></focus>.";
+                    @Comment("Supports <role>")
+                    private String notSet = "<deny>There is no dues override set for <denyfocus><role></denyfocus>.";
+
+                    public String getCleared() {
+                        return cleared;
+                    }
+
+                    public String getNotSet() {
+                        return notSet;
+                    }
+                }
+
+                public static class SetDuesPolicy extends AbsCommand {
+                    public SetDuesPolicy() {
+                        super("Choose what happens when a member cannot afford their dues", "policy");
+                    }
+
+                    @Comment("Supports <policy>")
+                    private String invalid = "<deny>Unknown policy <denyfocus><policy></denyfocus>. Choose one of: record, demote, debt, dismiss.";
+                    @Comment("Supports <policy>")
+                    private String set = "<info>When a member cannot afford their dues, the faction will now <focus><policy></focus>.";
+
+                    public String getInvalid() {
+                        return invalid;
+                    }
+
+                    public String getSet() {
+                        return set;
+                    }
+                }
+
+                public static class Policies {
+                    private String record = "record the failure";
+                    private String demote = "demote the member";
+                    private String debt = "track the debt";
+                    private String dismiss = "dismiss the member";
+
+                    public String getRecord() {
+                        return record;
+                    }
+
+                    public String getDemote() {
+                        return demote;
+                    }
+
+                    public String getDebt() {
+                        return debt;
+                    }
+
+                    public String getDismiss() {
+                        return dismiss;
+                    }
+                }
+
+                private SetDuesDefault setDuesDefault = new SetDuesDefault();
+                private SetDuesRole setDuesRole = new SetDuesRole();
+                private SetDuesClear setDuesClear = new SetDuesClear();
+                private SetDuesPolicy setDuesPolicy = new SetDuesPolicy();
+                @Comment("Display names for the dues failure policies (what happens when a member cannot pay)")
+                private Policies policies = new Policies();
+
+                private String disabled = "<deny>Faction dues are unavailable. Economy and faction banks must both be enabled.";
+                @Comment("Supports <role>")
+                private String invalidRole = "<deny>Couldn't find matching role for <denyfocus><role></denyfocus>.";
+                private String notThatRole = "<deny>The admin role is exempt from dues and cannot be given an override.";
+                private String statusHeader = "<info>Daily faction dues:";
+                @Comment("Supports <amount>")
+                private String statusDefault = "<info>Default (all roles except admin): <focus><amount></focus>";
+                @Comment("Supports <role>, <amount>")
+                private String statusOverride = "<info>  <focus><role></focus>: <focus><amount></focus>";
+                @Comment("Supports <policy>")
+                private String statusPolicy = "<info>If a member cannot pay: <focus><policy></focus>";
+                private String statusNone = "<info>No dues are currently configured.";
+
+                public SetDuesDefault defaultDues() {
+                    return setDuesDefault;
+                }
+
+                public SetDuesRole role() {
+                    return setDuesRole;
+                }
+
+                public SetDuesClear clear() {
+                    return setDuesClear;
+                }
+
+                public SetDuesPolicy policy() {
+                    return setDuesPolicy;
+                }
+
+                public Policies policies() {
+                    return policies;
+                }
+
+                public String getDisabled() {
+                    return disabled;
+                }
+
+                public String getInvalidRole() {
+                    return invalidRole;
+                }
+
+                public String getNotThatRole() {
+                    return notThatRole;
+                }
+
+                public String getStatusHeader() {
+                    return statusHeader;
+                }
+
+                public String getStatusDefault() {
+                    return statusDefault;
+                }
+
+                public String getStatusOverride() {
+                    return statusOverride;
+                }
+
+                public String getStatusPolicy() {
+                    return statusPolicy;
+                }
+
+                public String getStatusNone() {
+                    return statusNone;
+                }
+
+                @Comment("Paper-only dialog for /f set dues")
+                private Paper paper = new Paper();
+
+                public Paper paper() {
+                    return paper;
+                }
+
+                public static class Paper {
+                    private String title = "Faction Dues";
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("Set the default daily dues charged to members. The admin role is always exempt.");
+                            this.add("Leave or set a role's override empty to follow the default.");
+                        }
+                    };
+                    private String defaultLabel = "Default dues";
+                    @Comment("Supports <role>")
+                    private String roleLabel = "<role> override";
+                    private String policyLabel = "If a member cannot pay";
+                    private String confirm = "Save";
+                    private String cancel = "Cancel";
+                    @Comment("Supports <label>")
+                    private String invalidNumber = "<deny>'<label>' must be a non-negative number. No changes were made.";
+                    private String saved = "<info>Faction dues updated.";
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return Collections.unmodifiableList(body);
+                    }
+
+                    public String getDefaultLabel() {
+                        return defaultLabel;
+                    }
+
+                    public String getRoleLabel() {
+                        return roleLabel;
+                    }
+
+                    public String getPolicyLabel() {
+                        return policyLabel;
+                    }
+
+                    public String getConfirm() {
+                        return confirm;
+                    }
+
+                    public String getCancel() {
+                        return cancel;
+                    }
+
+                    public String getInvalidNumber() {
+                        return invalidNumber;
+                    }
+
+                    public String getSaved() {
+                        return saved;
+                    }
+                }
+            }
+
             public static class SetHome extends AbsCommand {
                 public SetHome() {
                     super("Set the faction home", "home");
@@ -2326,6 +2592,7 @@ public class TranslationsConfig {
             private SetBoom setBoom = new SetBoom();
             private SetDefaultRole setDefaultRole = new SetDefaultRole();
             private SetDescription setDescription = new SetDescription();
+            private SetDues setDues = new SetDues();
             private SetHome setHome = new SetHome();
             private SetOpen setOpen = new SetOpen();
             private SetTag setTag = new SetTag();
@@ -2343,6 +2610,10 @@ public class TranslationsConfig {
 
             public SetDescription description() {
                 return setDescription;
+            }
+
+            public SetDues dues() {
+                return setDues;
             }
 
             public SetHome home() {
@@ -3879,6 +4150,66 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Dues extends AbsCommand {
+            public Dues() {
+                super("View your daily faction dues", "dues");
+            }
+
+            private String none = "<info>You have no daily faction dues to pay.";
+            @Comment("Supports <amount>, <role>")
+            private String amount = "<info>Your daily faction dues are <focus><amount></focus>.";
+            @Comment("Supports <time>")
+            private String collection = "<info>Dues are collected daily at midnight. Next collection in <focus><time></focus>.";
+            @Comment("Supports <amount>, <balance>")
+            private String cannotAfford = "<negative>Warning: you have only <negativefocus><balance></negativefocus> and cannot afford your dues!";
+            @Comment("Supports <amount> - shown when you carry unpaid dues under the debt policy")
+            private String debtOwn = "<negative>You also owe <negativefocus><amount></negativefocus> in unpaid dues from before.";
+            @Comment("Shown to the faction admin before the list of members who owe unpaid dues")
+            private String debtHeader = "<info>Members with unpaid dues:";
+            @Comment("Supports <player>, <amount>")
+            private String debtEntry = "<info>  <focus><player></focus>: <negativefocus><amount></negativefocus>";
+            @Comment("Shown to the faction admin before the list of members who have missed dues under the record policy")
+            private String missedHeader = "<info>Members with missed dues:";
+            @Comment("Supports <player>, <count>, <date> (the most recent missed date)")
+            private String missedEntry = "<info>  <focus><player></focus>: <negativefocus><count></negativefocus> missed, most recent <focus><date></focus>";
+
+            public String getNone() {
+                return none;
+            }
+
+            public String getAmount() {
+                return amount;
+            }
+
+            public String getCollection() {
+                return collection;
+            }
+
+            public String getCannotAfford() {
+                return cannotAfford;
+            }
+
+            public String getDebtOwn() {
+                return debtOwn;
+            }
+
+            public String getDebtHeader() {
+                return debtHeader;
+            }
+
+            public String getDebtEntry() {
+                return debtEntry;
+            }
+
+            public String getMissedHeader() {
+                return missedHeader;
+            }
+
+            public String getMissedEntry() {
+                return missedEntry;
+            }
+        }
+
         public static class Fly extends AbsCommand {
             public Fly() {
                 super("Enter or leave Faction flight mode", "fly");
@@ -4651,6 +4982,7 @@ public class TranslationsConfig {
         private Create create = new Create();
         private Disband disband = new Disband();
         private DTR dtr = new DTR();
+        private Dues dues = new Dues();
         private Fly fly = new Fly();
         private Grace grace = new Grace();
         private Help help = new Help();
@@ -4792,6 +5124,10 @@ public class TranslationsConfig {
 
         public DTR dtr() {
             return dtr;
+        }
+
+        public Dues dues() {
+            return dues;
         }
 
         public Fly fly() {
@@ -6750,7 +7086,13 @@ public class TranslationsConfig {
         private String raidableNow = "<negative><faction> is now raidable!";
         @Comment("Supports <faction> (the faction that is no longer raidable)")
         private String raidableNoLonger = "<negative><faction> is no longer raidable!";
+        @Comment("Shown on join when your faction owes rent and unpaid rent can lead to disbanding. Supports <faction>, <amount> (rent owed), <days> (days of missed rent still allowed)")
+        private String rentDebtWarning = "<negative>Your faction owes <negativefocus><amount></negativefocus> in unpaid rent. It will be disbanded after <negativefocus><days></negativefocus> more day(s) of missed rent.";
         private SpecialFactions specialFactions = new SpecialFactions();
+
+        public String getRentDebtWarning() {
+            return rentDebtWarning;
+        }
 
         public String getLogin() {
             return login;
@@ -7092,7 +7434,7 @@ public class TranslationsConfig {
         }
     }
 
-    @Comment("This config file will slowly become the location for all text content\n" +
+    @Comment("This config file is the location for all text content\n" +
             "All information here uses MiniMessage. https://docs.papermc.io/adventure/minimessage/")
     private AColorfulMessage aColorfulMessage = new AColorfulMessage();
     private Commands commands = new Commands();

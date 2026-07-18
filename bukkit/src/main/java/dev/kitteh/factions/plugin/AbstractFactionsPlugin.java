@@ -13,8 +13,11 @@ import dev.kitteh.factions.chat.ChatTarget;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.CommandsRoot;
 import dev.kitteh.factions.command.Sender;
+import dev.kitteh.factions.command.defaults.set.CmdSetDues;
 import dev.kitteh.factions.config.ConfigManager;
 import dev.kitteh.factions.config.Confs;
+import dev.kitteh.factions.listener.ListenChunks;
+import dev.kitteh.factions.util.DuesAndRentTask;
 import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.data.MemoryFaction;
 import dev.kitteh.factions.data.SaveTask;
@@ -65,6 +68,7 @@ import dev.kitteh.factions.util.adapter.ChatTargetAdapter;
 import dev.kitteh.factions.util.adapter.LazyLocationAdapter;
 import dev.kitteh.factions.util.adapter.LeveledValueProviderDeserializer;
 import dev.kitteh.factions.util.adapter.LeveledValueProviderEquationSerializer;
+import dev.kitteh.factions.util.adapter.LocalDateAdapter;
 import dev.kitteh.factions.util.adapter.LocalTimeAdapter;
 import dev.kitteh.factions.util.adapter.MapFLocToStringSetAdapter;
 import dev.kitteh.factions.util.adapter.PermSelectorAdapter;
@@ -110,6 +114,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -144,6 +149,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
     private Integer saveTask = null;
     private Integer tntFillTask = null;
+    private Integer duesTask = null;
     private boolean autoSave = true;
     private boolean loadSuccessful = false;
 
@@ -367,6 +373,10 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
             long minuteTicks = 20L * 60L;
             tntFillTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TNTFillTask(), minuteTicks, minuteTicks);
         }
+        if (duesTask == null) {
+            long minuteTicks = 20L * 60L;
+            duesTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new DuesAndRentTask(), minuteTicks, minuteTicks);
+        }
 
         int loadedPlayers = Instances.PLAYERS.load();
         int loadedFactions = Instances.FACTIONS.load();
@@ -409,6 +419,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
 
         // Register Event Handlers
         this.getServer().getPluginManager().registerEvents(new ListenBlock(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenChunks(), this);
         this.getServer().getPluginManager().registerEvents(new ListenCommandDeny(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenDamage(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenEnderPearl(this), this);
@@ -752,6 +763,7 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
                 .registerTypeAdapter(LazyLocation.class, new LazyLocationAdapter())
                 .registerTypeAdapter(mapFLocToStringSetType, new MapFLocToStringSetAdapter())
                 .registerTypeAdapter(ChatTarget.class, new ChatTargetAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
                 .registerTypeAdapter(UpgradeVariable.class, new UpgradeVariableAdapter())
                 .registerTypeAdapter(Upgrade.class, new UpgradeAdapter())
@@ -776,6 +788,10 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         if (tntFillTask != null) {
             this.getServer().getScheduler().cancelTask(tntFillTask);
             tntFillTask = null;
+        }
+        if (duesTask != null) {
+            this.getServer().getScheduler().cancelTask(duesTask);
+            duesTask = null;
         }
 
         // only save data if plugin actually loaded successfully
@@ -928,6 +944,10 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
     public abstract CompletableFuture<Boolean> teleport(Player player, Location location);
 
     public abstract void addCommands(BiConsumer<String, Cmd> reg, BiConsumer<String, Cmd> regAdmin, Consumer<Supplier<CommandManager<Sender>>> commandManager);
+
+    public Cmd setDuesCommand() {
+        return new CmdSetDues();
+    }
 
     protected abstract String getPluginName();
 }

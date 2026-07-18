@@ -19,9 +19,11 @@ import java.util.logging.Level;
 @NullMarked
 public final class JSONBoard extends MemoryBoard {
     private final Path boardPath;
+    private final Path cachePath;
 
     public JSONBoard() {
         this.boardPath = AbstractFactionsPlugin.instance().getDataFolder().toPath().resolve("data/board.json");
+        this.cachePath = AbstractFactionsPlugin.instance().getDataFolder().toPath().resolve("data/boardinhabited.json");
     }
 
     private Map<String, Map<String, String>> dumpAsSaveFormat() {
@@ -35,6 +37,18 @@ public final class JSONBoard extends MemoryBoard {
                 int z = Morton.getZ(chunk);
                 worldMap.put(x + "," + z, String.valueOf(faction));
             });
+        });
+
+        return worldCoordIds;
+    }
+
+    private Map<String, Map<Long, Long>> dumpCacheAsSaveFormat() {
+        Map<String, Map<Long, Long>> worldCoordIds = new HashMap<>();
+
+        this.worldTrackers.forEach((world, tracker) -> {
+            Map<Long, Long> worldMap = new TreeMap<>();
+            worldCoordIds.put(world, worldMap);
+            worldMap.putAll(tracker.inhabitedMapForSave());
         });
 
         return worldCoordIds;
@@ -67,10 +81,23 @@ public final class JSONBoard extends MemoryBoard {
         }
     }
 
+    private void loadCacheFromSaveFormat(Map<String, Map<Long, Long>> cache) {
+        for (Entry<String, Map<Long, Long>> entry : cache.entrySet()) {
+            WorldTracker tracker = this.worldTrackers.get(entry.getKey());
+            //noinspection ConstantValue
+            if (tracker == null) {
+                continue;
+            }
+            entry.getValue().forEach(tracker::inhabited);
+        }
+    }
+
     @Override
     public void forceSave(boolean sync) {
         Map<String, Map<String, String>> map = dumpAsSaveFormat();
         JsonSaver.write(boardPath, () -> AbstractFactionsPlugin.instance().gson().toJson(map), sync);
+        Map<String, Map<Long, Long>> inhabitedMap = dumpCacheAsSaveFormat();
+        JsonSaver.write(cachePath, () -> AbstractFactionsPlugin.instance().gson().toJson(inhabitedMap), sync);
     }
 
     @Override
@@ -89,6 +116,17 @@ public final class JSONBoard extends MemoryBoard {
         } catch (Exception e) {
             AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to load the board from disk.", e);
             return 0;
+        }
+
+        if (Files.exists(cachePath)) {
+            try {
+                Type type = new TypeToken<Map<String, Map<Long, Long>>>() {
+                }.getType();
+                Map<String, Map<Long, Long>> cache = AbstractFactionsPlugin.instance().gson().fromJson(Files.newBufferedReader(cachePath), type);
+                loadCacheFromSaveFormat(cache);
+            } catch (Exception e) {
+                AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to load the board inhabited cache from disk.", e);
+            }
         }
 
         return this.getTotalCount();

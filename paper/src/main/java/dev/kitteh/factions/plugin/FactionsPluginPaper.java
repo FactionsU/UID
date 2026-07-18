@@ -6,6 +6,7 @@ import dev.kitteh.factions.Faction;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.command.paper.CmdAdminUpgrades;
+import dev.kitteh.factions.command.paper.CmdSetDues;
 import dev.kitteh.factions.command.paper.CmdShield;
 import dev.kitteh.factions.command.paper.CmdUpgrades;
 import dev.kitteh.factions.command.paper.CmdVersion;
@@ -102,6 +103,11 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
                         )).executionCoordinator(ExecutionCoordinator.simpleCoordinator())
                         .buildOnEnable(FactionsPluginPaper.this));
 
+    }
+
+    @Override
+    public Cmd setDuesCommand() {
+        return new CmdSetDues();
     }
 
     @Override

@@ -55,7 +55,9 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
@@ -102,6 +104,8 @@ public abstract class MemoryFPlayer implements FPlayer {
     protected int warmupTask;
     protected boolean isAdminBypassing = false;
     protected int kills, deaths;
+    protected double duesDebt;
+    protected List<LocalDate> missedDuesDates = new ArrayList<>();
     protected boolean willAutoLeave = true;
     protected int mapHeight; // default to old value
     protected boolean isFlying = false;
@@ -135,6 +139,10 @@ public abstract class MemoryFPlayer implements FPlayer {
         for (Faction faction : Factions.factions().all()) {
             if (!faction.isBanned(this)) continue;
             this.bannedBy.add(String.valueOf(faction.id()));
+        }
+        //noinspection ConstantValue
+        if (this.missedDuesDates == null) {
+            this.missedDuesDates = new ArrayList<>();
         }
     }
 
@@ -196,6 +204,26 @@ public abstract class MemoryFPlayer implements FPlayer {
     @Override
     public void role(Role role) {
         this.role = Objects.requireNonNull(role);
+    }
+
+    @Override
+    public double duesDebt() {
+        return this.duesDebt;
+    }
+
+    @Override
+    public void duesDebt(double amount) {
+        this.duesDebt = Math.max(0, amount);
+    }
+
+    @Override
+    public List<LocalDate> missedDuesDates() {
+        return List.copyOf(this.missedDuesDates);
+    }
+
+    @Override
+    public void addMissedDuesDate(LocalDate date) {
+        this.missedDuesDates.add(date);
     }
 
     @Override
@@ -393,6 +421,8 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         this.factionId = Factions.ID_WILDERNESS; // The default neutral faction
         this.role = Role.NORMAL;
+        this.duesDebt = 0; // World's best debt forgiveness system
+        this.missedDuesDates.clear();
         this.titleMM = "";
         this.titleComponent = null;
         this.autoClaimFor = null;
@@ -616,7 +646,7 @@ public abstract class MemoryFPlayer implements FPlayer {
             }
         } else if (hasFaction() && faction().isPowerFrozen()) {
             return; // Don't let power regen if faction power is frozen.
-        } else if (Confs.main().plugins().general().isPreventRegenWhileAfk() && ExternalChecks.isAfk(this.asPlayer())) {
+        } else if (Confs.main().plugins().general().isPreventRegenWhileAfk() && this.asPlayer() instanceof Player plr && ExternalChecks.isAfk(plr)) {
             return;
         }
         long now = System.currentTimeMillis();

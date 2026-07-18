@@ -7,6 +7,8 @@ import dev.kitteh.factions.permissible.PermissibleAction;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.permissible.Selectable;
+import dev.kitteh.factions.policy.DuesFailurePolicy;
+import dev.kitteh.factions.policy.RentFailurePolicy;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.Upgrades;
 import dev.kitteh.factions.util.BanInfo;
@@ -24,6 +26,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
@@ -620,6 +623,124 @@ public non-sealed interface Faction extends Participator, Selectable {
     Role defaultRole();
 
     void defaultRole(Role role);
+
+    /**
+     * Gets the default daily dues charged to members.
+     *
+     * @return the default daily dues, or zero for none
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    double dues();
+
+    /**
+     * Sets the default daily dues charged to members.
+     *
+     * @param amount the default daily dues, or zero for none
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void dues(double amount);
+
+    /**
+     * Gets an immutable map of the per-role dues overrides. A role present in the
+     * map is charged its mapped amount rather than the {@link #dues() default}.
+     *
+     * @return the per-role dues overrides
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    Map<Role, Double> duesOverrides();
+
+    /**
+     * Sets or clears the dues override for a role.
+     *
+     * @param role   the role to override
+     * @param amount the amount to charge that role, or null to remove the override
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void dues(Role role, @Nullable Double amount);
+
+    /**
+     * Gets the daily dues amount that would be charged to a member of the given role.
+     *
+     * @param role the role to resolve dues for
+     * @return the daily dues for that role, or zero for none
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    double dues(Role role);
+
+    /**
+     * Gets the policy applied to a member who cannot afford their dues.
+     *
+     * @return the dues failure policy
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    DuesFailurePolicy duesFailurePolicy();
+
+    /**
+     * Sets the policy applied to a member who cannot afford their dues.
+     *
+     * @param policy the dues failure policy
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void duesFailurePolicy(DuesFailurePolicy policy);
+
+    /**
+     * Gets the outstanding rent this faction owes, accumulated under the
+     * {@link RentFailurePolicy#DEBT debt} rent failure policy.
+     *
+     * @return the outstanding rent debt, or zero if none
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    double rentDebt();
+
+    /**
+     * Sets the outstanding rent this faction owes.
+     *
+     * @param amount the outstanding rent debt
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void rentDebt(double amount);
+
+    /**
+     * Gets the dates on which this faction missed a rent payment, within the
+     * configured logging window, in the order they were recorded.
+     *
+     * @return an immutable list of the dates rent was missed
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    List<LocalDate> missedRentDates();
+
+    /**
+     * Records a date on which this faction missed a rent payment.
+     *
+     * @param date the date rent was missed
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void addMissedRentDate(LocalDate date);
+
+    /**
+     * Removes logged missed-rent dates that fall before the given cutoff.
+     *
+     * @param cutoff the earliest date to keep; earlier dates are discarded
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void pruneMissedRentDatesBefore(LocalDate cutoff);
+
+    /**
+     * Gets the number of consecutive days this faction has missed rent under the
+     * {@link RentFailurePolicy#DEBT debt} policy. Reset to zero once rent is paid.
+     *
+     * @return the consecutive missed-rent day count
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    int consecutiveMissedRentDays();
+
+    /**
+     * Sets the number of consecutive days this faction has missed rent.
+     *
+     * @param days the consecutive missed-rent day count
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void consecutiveMissedRentDays(int days);
 
     @Override
     default Component describeTo(@Nullable Participator that) {

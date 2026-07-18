@@ -7,6 +7,8 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.longs.Long2IntMap;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2LongMap;
+import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongArraySet;
 import it.unimi.dsi.fastutil.longs.LongList;
@@ -24,6 +26,7 @@ public class WorldTracker {
     private final String worldName;
     private final Long2IntMap chunkToID = new Long2IntOpenHashMap();
     private final Int2ObjectMap<LongSet> IDToChunk = new Int2ObjectOpenHashMap<>();
+    private final Long2LongMap chunkToInhabitated = new Long2LongOpenHashMap();
 
     public WorldTracker(String worldName) {
         chunkToID.defaultReturnValue(NO_MATCH);
@@ -51,6 +54,9 @@ public class WorldTracker {
         removeClaim(location);
         if (id != 0) {
             chunkToID.put(mort, id);
+            if (location.loaded()) {
+                chunkToInhabitated.put(mort, location.asChunk().getInhabitedTime());
+            }
             getOrCreateClaims(id).add(mort);
         }
     }
@@ -64,6 +70,7 @@ public class WorldTracker {
     public void removeClaim(FLocation location) {
         long mort = Morton.of(location);
         int formerOwner = chunkToID.remove(mort);
+        chunkToInhabitated.remove(mort);
         if (formerOwner != NO_MATCH) {
             LongSet set = IDToChunk.get(formerOwner);
             //noinspection ConstantValue
@@ -78,6 +85,7 @@ public class WorldTracker {
         //noinspection ConstantValue
         if (claims != null) {
             claims.forEach(chunkToID::remove);
+            claims.forEach(chunkToInhabitated::remove);
         }
     }
 
@@ -96,6 +104,11 @@ public class WorldTracker {
 
     public Long2IntMap chunkIdMapForSave() {
         return chunkToID;
+    }
+
+    @ApiStatus.AvailableSince("4.7.0")
+    public Long2LongMap inhabitedMapForSave() {
+        return chunkToInhabitated;
     }
 
     public Int2ObjectMap<LongList> allClaimsForDynmap() {
@@ -118,5 +131,25 @@ public class WorldTracker {
 
     public IntList ids() {
         return new IntArrayList(this.IDToChunk.keySet());
+    }
+
+    @ApiStatus.AvailableSince("4.7.0")
+    public long inhabited(FLocation location) {
+        return this.chunkToInhabitated.getOrDefault(Morton.of(location), -1L);
+    }
+
+    @ApiStatus.AvailableSince("4.7.0")
+    public void inhabited(FLocation location, long inhabited) {
+        long mort = Morton.of(location);
+        if (this.chunkToID.containsKey(mort)) {
+            this.chunkToInhabitated.put(mort, inhabited);
+        }
+    }
+
+    @ApiStatus.AvailableSince("4.7.0")
+    public void inhabited(long morton, long inhabited) {
+        if (this.chunkToID.containsKey(morton)) {
+            this.chunkToInhabitated.put(morton, inhabited);
+        }
     }
 }
