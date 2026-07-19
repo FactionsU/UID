@@ -129,4 +129,9 @@ public class FactionsPluginPaper extends AbstractFactionsPlugin {
     protected String getPluginName() {
         return this.getPluginMeta().getName();
     }
+
+    @Override
+    public double averageTickTimeMillis() {
+        return this.getServer().getAverageTickTime();
+    }
 }
