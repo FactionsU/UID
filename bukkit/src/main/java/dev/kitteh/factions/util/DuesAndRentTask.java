@@ -83,6 +83,7 @@ public class DuesAndRentTask implements Runnable {
             if (this.collectUntil(System.nanoTime() + budgetNanos())) {
                 Instances.PLAYERS.forceSave(false);
                 Instances.FACTIONS.forceSave(false);
+                Instances.BOARD.forceSave(false);
                 Instances.UNIVERSE.forceSave(false);
                 this.stop();
             }
