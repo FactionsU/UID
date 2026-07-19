@@ -2,8 +2,11 @@ package dev.kitteh.factions.tagresolver;
 
 import dev.kitteh.factions.FPlayer;
 import dev.kitteh.factions.FPlayers;
+import dev.kitteh.factions.FactionsPlugin;
 import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.integration.Econ;
+import dev.kitteh.factions.landraidcontrol.DTRControl;
+import dev.kitteh.factions.landraidcontrol.PowerControl;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.TextUtil;
@@ -76,6 +79,8 @@ public final class GeneralResolver extends HelperResolver {
 
             case "if_economy" -> tagToggle(Econ.shouldBeUsed(), arguments);
             case "if_banks" -> tagToggle(Econ.shouldBeUsedWithBanks(), arguments);
+            case "if_power" -> tagToggle(FactionsPlugin.instance().landRaidControl() instanceof PowerControl, arguments);
+            case "if_dtr" -> tagToggle(FactionsPlugin.instance().landRaidControl() instanceof DTRControl, arguments);
             case "if_perm" -> {
                 if (arguments.hasNext()) {
                     String perm = arguments.pop().value();

@@ -2657,7 +2657,7 @@ public class MainConfig {
     }
 
     public static class MapSettings {
-        private int height = 17;
+        private int height = 7;
         private int width = 49;
         private int scoreboardHeight = 7;
         private int scoreboardWidth = 7;

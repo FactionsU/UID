@@ -112,8 +112,9 @@ public final class FPlayerResolver extends ObservedResolver {
                     OptionalInt index = arguments.pop().asInt();
                     if (index.isPresent()) {
                         List<Component> board = Instances.BOARD.getScoreboardMap(observed);
-                        if (index.getAsInt() < board.size()) {
-                            yield tag(board.get(index.getAsInt()));
+                        int row = index.getAsInt();
+                        if (row >= 1 && row <= board.size()) {
+                            yield tag(board.get(row - 1));
                         }
                     }
                 }

@@ -83,7 +83,7 @@ public class TranslationsConfig {
         }
 
         public static class Relations {
-            private String member = "#8ad6b7";
+            private String member = "#6ce677";
             @WipeOnReload
             private transient TextColor memberColor;
             private String ally = "#f0b3e7";
@@ -103,7 +103,7 @@ public class TranslationsConfig {
             private transient TextColor peacefulColor;
 
             public TextColor getMember() {
-                return memberColor = getColor(this.member, this.memberColor, "#8ad6b7");
+                return memberColor = getColor(this.member, this.memberColor, "#6ce677");
             }
 
             public TextColor getAlly() {
@@ -357,7 +357,7 @@ public class TranslationsConfig {
                         super("Modify faction DTR", "modify");
                     }
 
-                    @Comment("Supports <faction>, <faction:dtr_rounded>")
+                    @Comment("Supports <faction>")
                     private String success = "<info>Set DTR for <faction> to <faction:dtr_rounded>.";
 
                     public String getSuccess() {
@@ -382,7 +382,7 @@ public class TranslationsConfig {
                         super("Set faction DTR", "set");
                     }
 
-                    @Comment("Supports <faction>, <faction:dtr_rounded>")
+                    @Comment("Supports <faction>")
                     private String success = "<info>Set DTR for <faction> to <faction:dtr_rounded>.";
 
                     public String getSuccess() {
@@ -1867,7 +1867,7 @@ public class TranslationsConfig {
                 @Comment("You can use per-faction <faction:thing> placeholders here")
                 private String factionlessEntry = "<info>Factionless <faction:members_online_count> online";
                 @Comment("You can use per-faction <faction:thing> placeholders here")
-                private String entry = "<info><faction> <faction:members_online_count>/<faction:members_total_count> online, Land/Power/Max Power: <focus><faction:claims_count></focus>/<focus><faction:power></focus>/<focus><faction:power_max>";
+                private String entry = "<info><faction> <faction:members_online_count>/<faction:members_total_count> online, <fuuid:if_power>Land / Power / Max Power: <focus><faction:claims_count></focus>/<focus><faction:power></focus>/<focus><faction:power_max></fuuid:if_power><fuuid:if_dtr>Land / DTR / Max DTR: <focus><faction:claims_count></focus>/<focus><faction:dtr></focus>/<focus><faction:dtr_max></fuuid:if_dtr>";
 
                 public String getHeader() {
                     return header;
@@ -2652,7 +2652,8 @@ public class TranslationsConfig {
                     this.add("<fuuid:title><faction>");
                     this.add("<info>Description: <focus><faction:description>");
                     this.add("<info><faction:if_open>No invitation required</faction:if_open><faction:if_open:else>Invitation required</faction:if_open:else><faction:if_peaceful>.    <fuuid:color:peaceful>Peaceful");
-                    this.add("<info>Land / Power / Max Power: <focus><faction:claims_count></focus> / <focus><faction:power></focus> / <focus><faction:power_max>");
+                    this.add("<fuuid:if_power><info>Land / Power / Max Power: <focus><faction:claims_count></focus> / <focus><faction:power></focus> / <focus><faction:power_max>");
+                    this.add("<fuuid:if_dtr><info>Land / DTR / Max DTR: <focus><faction:claims_count></focus> / <focus><faction:dtr></focus> / <focus><faction:dtr_max>");
                     this.add("<info>Raidable: <faction:if_raidable><positive>Yes</faction:if_raidable><faction:if_raidable:else><negative>No");
                     this.add("<info>Founded: <focus><faction:creation_date>");
                     this.add("<faction:if_permanent><focus>This faction is permanent, remaining even with no members.");
@@ -4571,7 +4572,7 @@ public class TranslationsConfig {
             }
 
             @Comment("Supports <player>, <power>, <power_max>, <bonus_penalty>")
-            private String power = "<info><player> - Power / maxpower: <focus><power></focus> / <focus><power_max><bonus_penalty></focus>";
+            private String power = "<info><player> - Power / Max Power: <focus><power></focus> / <focus><power_max><bonus_penalty></focus>";
             private String bonus = " (bonus: ";
             private String penalty = " (penalty: ";
 
@@ -6161,7 +6162,7 @@ public class TranslationsConfig {
             private List<String> faction = new ArrayList<>() {
                 {
                     this.add("<faction:if_leader><info>Leader: <faction:leader>");
-                    this.add("<info>Land / Power / Max Power: <focus><faction:claims_count></focus> / <focus><faction:power></focus> / <focus><faction:power_max>");
+                    this.add("<info><fuuid:if_power>Land / Power / Max Power: <focus><faction:claims_count></focus>/<focus><faction:power></focus>/<focus><faction:power_max></fuuid:if_power><fuuid:if_dtr>Land / DTR / Max DTR: <focus><faction:claims_count></focus>/<focus><faction:dtr></focus>/<focus><faction:dtr_max></fuuid:if_dtr>");
                     this.add("<info>Raidable: <faction:if_raidable><positive>Yes</faction:if_raidable><faction:if_raidable:else><negative>No");
                     this.add("<info>Online: <focus><faction:members_online_count></focus>/<focus><faction:members_total_count></focus>");
                 }
@@ -6759,15 +6760,24 @@ public class TranslationsConfig {
 
             private List<String> normalContent = new ArrayList<>() {
                 {
-                    this.add("<golden>Your Faction");
                     this.add("<fuuid:color:relation:member><faction:name>");
-                    this.add("<info>Your Power");
-                    this.add("<focus><player:power>");
+                    this.add("<info>Role: <focus><player:role_name>");
+                    this.add("");
+                    this.add("<info><fuuid:if_power>Your Power: <focus><player:power></fuuid:if_power><fuuid:if_dtr>DTR: <focus><faction:dtr></focus>/<focus><faction:dtr_max></focus></fuuid:if_dtr>");
+                    this.add("");
+                    this.add("<golden>    Map");
+                    this.add("<player:scoreboard_map:1>");
+                    this.add("<player:scoreboard_map:2>");
+                    this.add("<player:scoreboard_map:3>");
+                    this.add("<player:scoreboard_map:4>");
+                    this.add("<player:scoreboard_map:5>");
+                    this.add("<player:scoreboard_map:6>");
+                    this.add("<player:scoreboard_map:7>");
                 }
             };
 
             @Comment("Can use any placeholders, but does not update once set")
-            private String normalTitle = "Faction Status";
+            private String normalTitle = "<golden>Your Faction";
 
             private List<String> factionlessContent = new ArrayList<>() {
                 {

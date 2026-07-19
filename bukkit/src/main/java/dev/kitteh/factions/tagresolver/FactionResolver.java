@@ -124,7 +124,7 @@ public final class FactionResolver extends ObservedResolver {
                     yield tag(faction.powerMax() / Confs.main().factions().landRaidControl().power().getLossPerDeath());
                 }
             }
-            case "dtr_max_rounded" -> {
+            case "dtr_max_rounded", "dtr_max" -> {
                 if (FactionsPlugin.instance().landRaidControl() instanceof DTRControl dtrControl) {
                     yield tag(DTRControl.round(dtrControl.getMaxDTR(faction)));
                 } else {

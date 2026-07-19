@@ -383,7 +383,7 @@ public abstract class MemoryBoard implements Board {
                     Faction factionHere = factionAt(flocationHere);
                     Relation relation = fplayer.relationTo(factionHere);
                     if (factionHere.isWilderness()) {
-                        builder.append(Component.text().content("⬛").color(Confs.tl().colors().factions().getWilderness()));
+                        builder.append(Component.text().content("⬛").color(NamedTextColor.GRAY));
                     } else if (factionHere.isSafeZone()) {
                         builder.append(Component.text().content("⬛").color(Confs.tl().colors().factions().getSafezone()));
                     } else if (factionHere.isWarZone()) {
