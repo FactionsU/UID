@@ -7,6 +7,7 @@ import dev.kitteh.factions.command.defaults.admin.set.CmdSetBoom;
 import dev.kitteh.factions.command.defaults.admin.set.CmdSetGrace;
 import dev.kitteh.factions.command.defaults.admin.set.CmdSetPeaceful;
 import dev.kitteh.factions.command.defaults.admin.set.CmdSetPermanent;
+import dev.kitteh.factions.command.defaults.admin.set.CmdSetRentExempt;
 import dev.kitteh.factions.command.defaults.admin.set.CmdSetTag;
 import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.util.TriConsumer;
@@ -26,6 +27,7 @@ public class CmdAdminSet implements Cmd {
             new CmdSetGrace().consumer().accept(manager, setBuilder, help);
             new CmdSetPeaceful().consumer().accept(manager, setBuilder, help);
             new CmdSetPermanent().consumer().accept(manager, setBuilder, help);
+            new CmdSetRentExempt().consumer().accept(manager, setBuilder, help);
             new CmdSetTag().consumer().accept(manager, setBuilder, help);
         };
     }

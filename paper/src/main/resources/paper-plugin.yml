@@ -76,6 +76,7 @@ permissions:
       factions.setpeaceful: true
       factions.setpermanent: true
       factions.setpermanentpower: true
+      factions.setrentexempt: true
       factions.admin.set.explosions: true
       factions.powerboost: true
       factions.money.*: true
@@ -254,6 +255,8 @@ permissions:
     description: designate a faction as permanent
   factions.setpermanentpower:
     description: set permanent power for a faction
+  factions.setrentexempt:
+    description: designate a faction as exempt from rent
   factions.stuck:
     description: teleports player outside a faction
   factions.power:

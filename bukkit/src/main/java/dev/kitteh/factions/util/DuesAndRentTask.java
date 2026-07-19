@@ -106,7 +106,7 @@ public class DuesAndRentTask implements Runnable {
                     this.collectDues(faction);
                 }
                 // May need dues to pay rent!
-                if (this.rent) {
+                if (this.rent && !faction.rentExempt()) {
                     this.collectRent(faction);
                 }
 

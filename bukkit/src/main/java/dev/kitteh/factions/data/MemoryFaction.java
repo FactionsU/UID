@@ -404,6 +404,7 @@ public abstract class MemoryFaction implements Faction {
     protected double rentDebt;
     protected List<LocalDate> missedRentDates = new ArrayList<>();
     protected int consecutiveMissedRentDays;
+    protected boolean rentExempt;
     protected @Nullable LinkedHashMap<PermSelector, Map<String, Boolean>> permissions; // legacy importing, lazier this way
     protected Set<BanInfo> bans = new HashSet<>();
     protected double dtr;
@@ -977,6 +978,16 @@ public abstract class MemoryFaction implements Faction {
     @Override
     public void consecutiveMissedRentDays(int days) {
         this.consecutiveMissedRentDays = Math.max(0, days);
+    }
+
+    @Override
+    public boolean rentExempt() {
+        return this.rentExempt;
+    }
+
+    @Override
+    public void rentExempt(boolean exempt) {
+        this.rentExempt = exempt;
     }
 
     @SuppressWarnings("this-escape")

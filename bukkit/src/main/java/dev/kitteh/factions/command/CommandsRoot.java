@@ -26,6 +26,7 @@ import dev.kitteh.factions.command.defaults.CmdMoney;
 import dev.kitteh.factions.command.defaults.CmdNear;
 import dev.kitteh.factions.command.defaults.CmdPower;
 import dev.kitteh.factions.command.defaults.CmdRelation;
+import dev.kitteh.factions.command.defaults.CmdRent;
 import dev.kitteh.factions.command.defaults.CmdRole;
 import dev.kitteh.factions.command.defaults.CmdSet;
 import dev.kitteh.factions.command.defaults.CmdShield;
@@ -235,6 +236,7 @@ public class CommandsRoot {
         registerInternal("near", new CmdNear());
         registerInternal("power", new CmdPower());
         registerInternal("relation", new CmdRelation());
+        registerInternal("rent", new CmdRent());
         registerInternal("role", new CmdRole());
         registerInternal("set", new CmdSet());
         registerInternal("shield", new CmdShield());

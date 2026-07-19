@@ -704,6 +704,35 @@ public class TranslationsConfig {
                     }
                 }
 
+                public static class RentExempt extends AbsCommand {
+                    public RentExempt() {
+                        super("Toggles a faction's rent exemption", "rent-exempt");
+                    }
+
+                    private String grant = "granted rent exemption to";
+                    private String revoke = "removed rent exemption from";
+                    @Comment("Supports <player>, <change>")
+                    private String yours = "<info><player> has <change> your faction.";
+                    @Comment("Supports <player>, <change>, <faction>")
+                    private String other = "<info><player> has <change> the faction '<faction>'.";
+
+                    public String getGrant() {
+                        return grant;
+                    }
+
+                    public String getRevoke() {
+                        return revoke;
+                    }
+
+                    public String getYours() {
+                        return yours;
+                    }
+
+                    public String getOther() {
+                        return other;
+                    }
+                }
+
                 public static class AutoSave extends AbsCommand {
                     public AutoSave() {
                         super("Control autosaving", "autosave");
@@ -742,6 +771,7 @@ public class TranslationsConfig {
                 private Boom boom = new Boom();
                 private Peaceful peaceful = new Peaceful();
                 private Permanent permanent = new Permanent();
+                private RentExempt rentExempt = new RentExempt();
                 private AutoSave autoSave = new AutoSave();
                 private Grace grace = new Grace();
 
@@ -755,6 +785,10 @@ public class TranslationsConfig {
 
                 public Permanent permanent() {
                     return permanent;
+                }
+
+                public RentExempt rentExempt() {
+                    return rentExempt;
                 }
 
                 public AutoSave autoSave() {
@@ -4589,6 +4623,58 @@ public class TranslationsConfig {
             }
         }
 
+        public static class Rent extends AbsCommand {
+            public Rent() {
+                super("View your faction's daily rent", "rent");
+            }
+
+            private String disabled = "<deny>Faction rent is unavailable. Economy and faction banks must both be enabled.";
+            private String none = "<info>Your faction has no daily rent to pay.";
+            private String exempt = "<info>Your faction is exempt from rent.";
+            @Comment("Supports <amount>, <claims>")
+            private String amount = "<info>Your faction's daily rent is <focus><amount></focus> for <focus><claims></focus> claimed chunk(s).";
+            @Comment("Supports <time>")
+            private String collection = "<info>Rent is collected daily at midnight. Next collection in <focus><time></focus>.";
+            @Comment("Supports <amount>, <balance>")
+            private String cannotAfford = "<negative>Warning: the faction bank has only <negativefocus><balance></negativefocus> and cannot afford the rent!";
+            @Comment("Supports <amount> - shown when the faction carries unpaid rent under the debt policy")
+            private String debtOwn = "<negative>Your faction also owes <negativefocus><amount></negativefocus> in unpaid rent from before.";
+            @Comment("Supports <count>, <date> (the most recent missed date) - shown to the faction admin when rent payments have been missed")
+            private String missed = "<info>Missed rent payments: <negativefocus><count></negativefocus>, most recent <focus><date></focus>";
+
+            public String getDisabled() {
+                return disabled;
+            }
+
+            public String getNone() {
+                return none;
+            }
+
+            public String getExempt() {
+                return exempt;
+            }
+
+            public String getAmount() {
+                return amount;
+            }
+
+            public String getCollection() {
+                return collection;
+            }
+
+            public String getCannotAfford() {
+                return cannotAfford;
+            }
+
+            public String getDebtOwn() {
+                return debtOwn;
+            }
+
+            public String getMissed() {
+                return missed;
+            }
+        }
+
         public static class Status extends AbsCommand {
             public Status() {
                 super("Show the status of a player", "status");
@@ -5003,6 +5089,7 @@ public class TranslationsConfig {
         private Show show = new Show();
         private Permissions permissions = new Permissions();
         private Relation relation = new Relation();
+        private Rent rent = new Rent();
         private Shield shield = new Shield();
         private Status status = new Status();
         private Upgrades upgrades = new Upgrades();
@@ -5161,6 +5248,10 @@ public class TranslationsConfig {
 
         public Power power() {
             return power;
+        }
+
+        public Rent rent() {
+            return rent;
         }
 
         public Status status() {

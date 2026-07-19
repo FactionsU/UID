@@ -78,6 +78,7 @@ public enum Permission {
     SET_PEACEFUL("setpeaceful"),
     SET_PERMANENT("setpermanent"),
     SET_PERMANENTPOWER("setpermanentpower"),
+    SET_RENT_EXEMPT("setrentexempt"),
     SHOW_INVITES("showinvites"),
     PERMISSIONS("permissions"),
     POWERBOOST("powerboost"),

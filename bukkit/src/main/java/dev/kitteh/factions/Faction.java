@@ -742,6 +742,22 @@ public non-sealed interface Faction extends Participator, Selectable {
     @ApiStatus.AvailableSince("4.7.0")
     void consecutiveMissedRentDays(int days);
 
+    /**
+     * Gets whether this faction is exempt from rent collection.
+     *
+     * @return true if exempt from rent
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    boolean rentExempt();
+
+    /**
+     * Sets whether this faction is exempt from rent collection.
+     *
+     * @param exempt true to exempt this faction from rent
+     */
+    @ApiStatus.AvailableSince("4.7.0")
+    void rentExempt(boolean exempt);
+
     @Override
     default Component describeTo(@Nullable Participator that) {
         return Component.text().content(this.tag()).color(this.textColorTo(that)).build();
