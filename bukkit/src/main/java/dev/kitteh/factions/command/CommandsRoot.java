@@ -161,6 +161,7 @@ public class CommandsRoot {
                 })
                 .commandPrefix("/" + main.getFirstAlias() + " " + helpTl.getFirstAlias())
                 .commandFilter(command -> !command.commandMeta().contains(Cmd.HIDE_IN_HELP))
+                .colors(Confs.tl().colors().help().helpColors())
                 .build();
 
         Command.Builder<Sender> builder = manager.commandBuilder(main.getFirstAlias(), main.getSecondaryAliases())

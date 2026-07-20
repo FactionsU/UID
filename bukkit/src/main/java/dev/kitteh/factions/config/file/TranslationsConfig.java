@@ -7,6 +7,8 @@ import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.tagresolver.ConfigColorResolver;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.time.ZoneId;
@@ -82,6 +84,74 @@ public class TranslationsConfig {
             private transient TextColor denyColor;
         }
 
+        public static class Help {
+            private String primary = "golden";
+            private String highlight = "titling";
+            private String alternateHighlight = "#91d689";
+            private String text = "goldenfocus";
+            private String accent = "dark_gray";
+
+            @WipeOnReload
+            private transient TextColor primaryColor;
+            @WipeOnReload
+            private transient TextColor highlightColor;
+            @WipeOnReload
+            private transient TextColor alternateHighlightColor;
+            @WipeOnReload
+            private transient TextColor textColor;
+            @WipeOnReload
+            private transient TextColor accentColor;
+
+            public TextColor getPrimary() {
+                return primaryColor = getColor(this.primary, this.primaryColor, "#e6c36c");
+            }
+
+            public TextColor getHighlight() {
+                return highlightColor = getColor(this.highlight, this.highlightColor, "#6ce677");
+            }
+
+            public TextColor getAlternateHighlight() {
+                return alternateHighlightColor = getColor(this.alternateHighlight, this.alternateHighlightColor, "#91d689");
+            }
+
+            public TextColor getText() {
+                return textColor = getColor(this.text, this.textColor, "#ffdf95");
+            }
+
+            public TextColor getAccent() {
+                return accentColor = getColor(this.accent, this.accentColor, "#6ce677");
+            }
+
+            public MinecraftHelp.HelpColors helpColors() {
+                return new MinecraftHelp.HelpColors() {
+                    @Override
+                    public @NonNull TextColor primary() {
+                        return getPrimary();
+                    }
+
+                    @Override
+                    public @NonNull TextColor highlight() {
+                        return getHighlight();
+                    }
+
+                    @Override
+                    public @NonNull TextColor alternateHighlight() {
+                        return getAlternateHighlight();
+                    }
+
+                    @Override
+                    public @NonNull TextColor text() {
+                        return getText();
+                    }
+
+                    @Override
+                    public @NonNull TextColor accent() {
+                        return getAccent();
+                    }
+                };
+            }
+        }
+
         public static class Relations {
             private String member = "#6ce677";
             @WipeOnReload
@@ -153,6 +223,7 @@ public class TranslationsConfig {
 
         private Factions factions = new Factions();
         private Relations relations = new Relations();
+        private Help help = new Help();
 
         public Factions factions() {
             return factions;
@@ -160,6 +231,10 @@ public class TranslationsConfig {
 
         public Relations relations() {
             return relations;
+        }
+
+        public Help help() {
+            return help;
         }
 
         public TextColor info() {
