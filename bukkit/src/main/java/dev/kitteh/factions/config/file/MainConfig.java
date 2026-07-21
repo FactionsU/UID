@@ -1969,7 +1969,7 @@ public class MainConfig {
 
             @Comment("If anything greater than 0 (can be decimal values like 0.1), players will automatically leave their faction\n" +
                     "after being inactive for this many days.")
-            private double autoLeaveAfterDaysOfInactivity = 10.0;
+            private double autoLeaveAfterDaysOfInactivity = 0;
             @Comment("If true, autoleave only processes on players if all faction members meet the inactivity criteria.")
             private boolean autoLeaveOnlyEntireFactionInactive = false;
             private double autoLeaveRoutineRunsEveryXMinutes = 5.0;
