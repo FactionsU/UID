@@ -79,6 +79,7 @@ public final class GeneralResolver extends HelperResolver {
 
             case "if_economy" -> tagToggle(Econ.shouldBeUsed(), arguments);
             case "if_banks" -> tagToggle(Econ.shouldBeUsedWithBanks(), arguments);
+            case "if_rent" -> tagToggle(Econ.rentEnabled(), arguments);
             case "if_power" -> tagToggle(FactionsPlugin.instance().landRaidControl() instanceof PowerControl, arguments);
             case "if_dtr" -> tagToggle(FactionsPlugin.instance().landRaidControl() instanceof DTRControl, arguments);
             case "if_perm" -> {

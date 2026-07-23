@@ -148,7 +148,13 @@ public final class FactionResolver extends ObservedResolver {
                 if (Econ.shouldBeUsedWithBanks()) {
                     yield tag(Econ.moneyString(Econ.getBalance(faction)));
                 }
-                yield tag(0);
+                yield tag(Econ.moneyString(0));
+            }
+            case "rent" -> {
+                if (Econ.rentEnabled()) {
+                    yield tag(Econ.moneyString(Econ.calculateRent(faction)));
+                }
+                yield tag(Econ.moneyString(0));
             }
 
             case "tnt_bank_balance" -> tag(faction.tntBank());

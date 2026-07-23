@@ -7358,6 +7358,8 @@ public class TranslationsConfig {
             private String outsideBorderBuffer = "<info>Your claim is outside the border. <count> chunks away from world edge required.";
             @Comment("Supports <player> (claimant), <faction> (claimed for), <fromfaction> (claimed from)")
             private String claimed = "<info><player> claimed land for <focus><faction></focus> from <focus><fromfaction></focus>.";
+            @Comment("Supports <faction>")
+            private String claimedRent = "<fuuid:if_rent><info>Next rent will be <focus><faction:rent></focus>.";
             private String youAreHere = "You are here";
 
             public String getProtectedLand() {
@@ -7460,6 +7462,10 @@ public class TranslationsConfig {
                 return claimed;
             }
 
+            public String getClaimedRent() {
+                return claimedRent;
+            }
+
             public String getYouAreHere() {
                 return youAreHere;
             }
@@ -7478,6 +7484,7 @@ public class TranslationsConfig {
             private String wrongFaction = "<deny>You don't own this land.";
             @Comment("Supports <player> (who unclaimed)")
             private String factionUnclaimed = "<info><player> unclaimed some land.";
+            private String factionUnclaimedRent = "<fuuid:if_rent><info>Next rent will be <focus><faction:rent></focus>.";
 
             public String getWrongFactionOther() {
                 return wrongFactionOther;
@@ -7517,6 +7524,10 @@ public class TranslationsConfig {
 
             public String getFactionUnclaimed() {
                 return factionUnclaimed;
+            }
+
+            public String getFactionUnclaimedRent() {
+                return factionUnclaimedRent;
             }
         }
 

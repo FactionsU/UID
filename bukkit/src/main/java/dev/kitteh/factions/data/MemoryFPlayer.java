@@ -1096,7 +1096,10 @@ public abstract class MemoryFPlayer implements FPlayer {
                     FactionResolver.of("fromfaction", currentFaction)));
         }
 
+
         Board.board().claim(flocation, forFaction);
+
+        forFaction.sendRichMessage(Confs.tl().claiming().claim().getClaimedRent(), FactionResolver.of(forFaction));
 
         if (Confs.main().logging().isLandClaims()) {
             AbstractFactionsPlugin.instance().log(this.name() + " claimed land at (" + flocation.asCoordString() + ") for the faction: " + forFaction.tag());
@@ -1165,6 +1168,7 @@ public abstract class MemoryFPlayer implements FPlayer {
 
             targetFaction.sendRichMessage(unclaimTl.getUnclaimed(),
                     FPlayerResolver.of("player", this));
+            targetFaction.sendRichMessage(unclaimTl.getFactionUnclaimedRent(), FactionResolver.of(targetFaction));
             this.sendRichMessage(unclaimTl.getUnclaims());
 
             if (Confs.main().logging().isLandUnclaims()) {
@@ -1217,8 +1221,9 @@ public abstract class MemoryFPlayer implements FPlayer {
         }
 
         Board.board().unclaim(flocation);
-        this.faction().sendRichMessage(unclaimTl.getFactionUnclaimed(),
+        targetFaction.sendRichMessage(unclaimTl.getFactionUnclaimed(),
                 FPlayerResolver.of("player", this));
+        targetFaction.sendRichMessage(unclaimTl.getFactionUnclaimedRent(), FactionResolver.of(targetFaction));
 
         if (Confs.main().logging().isLandUnclaims()) {
             AbstractFactionsPlugin.instance().log(this.name() + " unclaimed land at (" + flocation.asCoordString() + ") from the faction: " + targetFaction.tag());
