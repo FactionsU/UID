@@ -10,9 +10,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 
-/**
- * Default permissible actions.
- */
+/// Default permissible actions.
 @SuppressWarnings("Convert2MethodRef")
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked

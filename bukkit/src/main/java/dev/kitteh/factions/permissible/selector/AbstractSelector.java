@@ -11,10 +11,8 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-/**
- * Default, abstract implementations of basics that all built-in
- * PermSelectors utilize.
- */
+/// Default, abstract implementations of basics that all built-in
+/// PermSelectors utilize.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public abstract class AbstractSelector implements PermSelector {

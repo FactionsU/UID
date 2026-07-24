@@ -18,9 +18,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * Default FactionsUUID contexts.
- */
+/// Default FactionsUUID contexts.
 @ApiStatus.Internal
 @NullMarked
 public enum Contexts implements Context {
@@ -67,9 +65,7 @@ public enum Contexts implements Context {
     ;
 
 
-    /**
-     * The FactionsUUID namespace. Should not be used by another plugin.
-     */
+    /// The FactionsUUID namespace. Should not be used by another plugin.
     public static final String FACTIONSUUID_NAMESPACE = "factionsuuid";
 
     private final Function<Player, Set<String>> function;

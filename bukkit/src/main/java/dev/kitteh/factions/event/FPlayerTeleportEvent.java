@@ -26,20 +26,16 @@ public class FPlayerTeleportEvent extends FactionPlayerEvent implements Cancella
         this.location = location;
     }
 
-    /**
-     * Get the reason the player is teleporting.
-     *
-     * @return reason player is teleporting.
-     */
+    /// Get the reason the player is teleporting.
+    ///
+    /// @return reason player is teleporting.
     public Reason getReason() {
         return reason;
     }
 
-    /**
-     * Gets the destination, if known before starting to teleport.
-     *
-     * @return destination unless STUCK
-     */
+    /// Gets the destination, if known before starting to teleport.
+    ///
+    /// @return destination unless STUCK
     public @Nullable Location getDestination() {
         return location;
     }

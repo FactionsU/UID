@@ -5,9 +5,7 @@ import dev.kitteh.factions.Faction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Represents an event involving a Faction and a FPlayer.
- */
+/// Represents an event involving a Faction and a FPlayer.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FactionPlayerEvent extends FactionEvent {

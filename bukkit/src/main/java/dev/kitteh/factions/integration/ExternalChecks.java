@@ -30,53 +30,43 @@ public final class ExternalChecks {
     private static final List<SingleCheck> vanished = new ArrayList<>();
     private static @Nullable DoubleCheck<Location> teleport;
 
-    /**
-     * Registers a function for testing if a player is AFK.
-     *
-     * @param plugin plugin registering
-     * @param function function testing the player
-     */
+    /// Registers a function for testing if a player is AFK.
+    ///
+    /// @param plugin plugin registering
+    /// @param function function testing the player
     public static void registerAfk(Plugin plugin, Predicate<Player> function) {
         afk.add(new SingleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
 
-    /**
-     * Registers a function for testing if a player is AFK.
-     *
-     * @param plugin plugin registering
-     * @param function function testing if, respectively, the viewer is ignoring the chatter
-     */
+    /// Registers a function for testing if a player is AFK.
+    ///
+    /// @param plugin plugin registering
+    /// @param function function testing if, respectively, the viewer is ignoring the chatter
     public static void registerIgnored(Plugin plugin, BiPredicate<Player, Player> function) {
         ignored.add(new DoubleCheck<>(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
 
-    /**
-     * Registers a function for testing if a player is muted.
-     *
-     * @param plugin plugin registering
-     * @param function function testing the player
-     */
+    /// Registers a function for testing if a player is muted.
+    ///
+    /// @param plugin plugin registering
+    /// @param function function testing the player
     @ApiStatus.AvailableSince("4.2.0")
     public static void registerMuted(Plugin plugin, Predicate<Player> function) {
         muted.add(new SingleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
 
-    /**
-     * Registers a function for testing if a player is vanished.
-     *
-     * @param plugin plugin registering
-     * @param function function testing the player
-     */
+    /// Registers a function for testing if a player is vanished.
+    ///
+    /// @param plugin plugin registering
+    /// @param function function testing the player
     public static void registerVanished(Plugin plugin, Predicate<Player> function) {
         vanished.add(new SingleCheck(Objects.requireNonNull(plugin), Objects.requireNonNull(function)));
     }
 
-    /**
-     * Registers a function for teleporting a player, replacing any previously registered teleportation function.
-     *
-     * @param plugin   plugin registering
-     * @param function function for teleporting the player, returning true if successful
-     */
+    /// Registers a function for teleporting a player, replacing any previously registered teleportation function.
+    ///
+    /// @param plugin   plugin registering
+    /// @param function function for teleporting the player, returning true if successful
     @ApiStatus.AvailableSince("4.4.0")
     public static void registerTeleport(Plugin plugin, BiPredicate<Player, Location> function) {
         teleport = new DoubleCheck<>(Objects.requireNonNull(plugin), Objects.requireNonNull(function));

@@ -4,9 +4,7 @@ import dev.kitteh.factions.FLocation;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Simple two-ints-in-a-long Morton code.
- */
+/// Simple two-ints-in-a-long Morton code.
 @NullMarked
 @ApiStatus.AvailableSince("4.0.0")
 public final class Morton {
@@ -14,33 +12,27 @@ public final class Morton {
         return Morton.of(location.x(), location.z());
     }
 
-    /**
-     * Gets a Morton code for the given coordinates.
-     *
-     * @param x x coordinate
-     * @param z z coordinate
-     * @return Morton code for the coordinates
-     */
+    /// Gets a Morton code for the given coordinates.
+    ///
+    /// @param x x coordinate
+    /// @param z z coordinate
+    /// @return Morton code for the coordinates
     public static long of(int x, int z) {
         return (Morton.spreadOut(z) << 1) + Morton.spreadOut(x);
     }
 
-    /**
-     * Gets the X value from a given Morton code.
-     *
-     * @param mortonCode Morton code
-     * @return x coordinate
-     */
+    /// Gets the X value from a given Morton code.
+    ///
+    /// @param mortonCode Morton code
+    /// @return x coordinate
     public static int getX(long mortonCode) {
         return Morton.comeTogether(mortonCode);
     }
 
-    /**
-     * Gets the Z value from a given Morton code.
-     *
-     * @param mortonCode Morton code
-     * @return z coordinate
-     */
+    /// Gets the Z value from a given Morton code.
+    ///
+    /// @param mortonCode Morton code
+    /// @return z coordinate
     public static int getZ(long mortonCode) {
         return Morton.comeTogether(mortonCode >> 1);
     }

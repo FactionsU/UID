@@ -40,233 +40,173 @@ import java.util.UUID;
 public non-sealed interface Faction extends Participator, Selectable {
     interface Permissions {
         interface SelectorPerms {
-            /**
-             * Gets this selector's permission state for the given action.
-             *
-             * @param action action
-             * @return perm state
-             */
+            /// Gets this selector's permission state for the given action.
+            ///
+            /// @param action action
+            /// @return perm state
             default PermState get(PermissibleAction action) {
                 return this.get(action.name());
             }
 
-            /**
-             * Gets this selector's permission state for the given action name.
-             *
-             * @param action action name, case-insensitive
-             * @return perm state
-             */
+            /// Gets this selector's permission state for the given action name.
+            ///
+            /// @param action action name, case-insensitive
+            /// @return perm state
             PermState get(String action);
 
-            /**
-             * Sets this selector's permission state for the given action.
-             *
-             * @param action action
-             * @param state  perm state
-             */
+            /// Sets this selector's permission state for the given action.
+            ///
+            /// @param action action
+            /// @param state  perm state
             default void set(PermissibleAction action, PermState state) {
                 this.set(action.name(), state);
             }
 
-            /**
-             * Sets this selector's permission state for the given action name.
-             *
-             * @param action action, case-insensitive
-             * @param state  perm state
-             */
+            /// Sets this selector's permission state for the given action name.
+            ///
+            /// @param action action, case-insensitive
+            /// @param state  perm state
             void set(String action, PermState state);
 
-            /**
-             * Gets all action names with set permission states.
-             * May include names not presently registered with the plugin.
-             *
-             * @return actions
-             */
+            /// Gets all action names with set permission states.
+            /// May include names not presently registered with the plugin.
+            ///
+            /// @return actions
             Collection<String> actions();
         }
 
-        /**
-         * Gets an immutable, ordered list of the selectors tracked.
-         *
-         * @return the selectors
-         */
+        /// Gets an immutable, ordered list of the selectors tracked.
+        ///
+        /// @return the selectors
         List<PermSelector> selectors();
 
-        /**
-         * Moves the given selector up in the order.
-         *
-         * @param selector selector to move up
-         */
+        /// Moves the given selector up in the order.
+        ///
+        /// @param selector selector to move up
         void moveSelectorUp(PermSelector selector);
 
-        /**
-         * Moves the given selector down in the order.
-         *
-         * @param selector selector to move down
-         */
+        /// Moves the given selector down in the order.
+        ///
+        /// @param selector selector to move down
         void moveSelectorDown(PermSelector selector);
 
-        /**
-         * Gets a selector's perms.
-         *
-         * @param selector selector to get
-         * @return perms
-         * @throws IllegalArgumentException if this selector is not tracked
-         */
+        /// Gets a selector's perms.
+        ///
+        /// @param selector selector to get
+        /// @return perms
+        /// @throws IllegalArgumentException if this selector is not tracked
         SelectorPerms get(PermSelector selector);
 
-        /**
-         * Gets if a given selector is tracked.
-         *
-         * @param selector selector
-         * @return true if tracked
-         */
+        /// Gets if a given selector is tracked.
+        ///
+        /// @param selector selector
+        /// @return true if tracked
         boolean has(PermSelector selector);
 
-        /**
-         * Adds a selector. If an already added selector is provided, functions the same as {@link #get(PermSelector)}.
-         *
-         * @param selector selector
-         * @return the selector perms for immediate editing
-         */
+        /// Adds a selector. If an already added selector is provided, functions the same as {@link #get(PermSelector)}.
+        ///
+        /// @param selector selector
+        /// @return the selector perms for immediate editing
         SelectorPerms add(PermSelector selector);
 
-        /**
-         * Removes a selector.
-         *
-         * @param selector selector to remove
-         */
+        /// Removes a selector.
+        ///
+        /// @param selector selector to remove
         void remove(PermSelector selector);
 
-        /**
-         * Clears everything.
-         */
+        /// Clears everything.
         void clear();
     }
 
-    /**
-     * Controller for the faction's zones.
-     */
+    /// Controller for the faction's zones.
     interface Zones {
-        /**
-         * Creates a zone.
-         *
-         * @param name zone name
-         * @return new zone
-         * @throws IllegalArgumentException if the name is already in use
-         */
+        /// Creates a zone.
+        ///
+        /// @param name zone name
+        /// @return new zone
+        /// @throws IllegalArgumentException if the name is already in use
         Zone create(String name);
 
-        /**
-         * Deletes a zone.
-         *
-         * @param name named zone
-         */
+        /// Deletes a zone.
+        ///
+        /// @param name named zone
         void delete(String name);
 
-        /**
-         * Gets the zone at a given location.
-         *
-         * @param fLocation location
-         * @return zone or default zone if not this faction's territory
-         */
+        /// Gets the zone at a given location.
+        ///
+        /// @param fLocation location
+        /// @return zone or default zone if not this faction's territory
         Zone get(FLocation fLocation);
 
-        /**
-         * Gets a zone by name.
-         *
-         * @param name zone name
-         * @return matching zone or null for no match
-         */
+        /// Gets a zone by name.
+        ///
+        /// @param name zone name
+        /// @return matching zone or null for no match
         @Nullable
         Zone get(String name);
 
-        /**
-         * Gets an immutable list of all zones.
-         *
-         * @return zones
-         */
+        /// Gets an immutable list of all zones.
+        ///
+        /// @return zones
         List<Zone> get();
 
-        /**
-         * Gets the main, default zone.
-         *
-         * @return main zone
-         */
+        /// Gets the main, default zone.
+        ///
+        /// @return main zone
         Zone main();
 
-        /**
-         * Sets the zone for a given location
-         *
-         * @param zone      zone
-         * @param fLocation location
-         * @throws IllegalArgumentException if the zone is not an active zone for this faction or if the location is not owned by the faction
-         */
+        /// Sets the zone for a given location
+        ///
+        /// @param zone      zone
+        /// @param fLocation location
+        /// @throws IllegalArgumentException if the zone is not an active zone for this faction or if the location is not owned by the faction
         void set(Zone zone, FLocation fLocation);
     }
 
-    /**
-     * An individual zone.
-     */
+    /// An individual zone.
     interface Zone {
-        /**
-         * Gets the zone's internal ID.
-         *
-         * @return zone id
-         */
+        /// Gets the zone's internal ID.
+        ///
+        /// @return zone id
         int id();
 
-        /**
-         * Gets the zone's name.
-         *
-         * @return zone name
-         */
+        /// Gets the zone's name.
+        ///
+        /// @return zone name
         String name();
 
-        /**
-         * Sets the zone's name.
-         *
-         * @param name new name
-         */
+        /// Sets the zone's name.
+        ///
+        /// @param name new name
         void name(String name);
 
-        /**
-         * Gets the zone's greeting.
-         *
-         * @return greeting
-         */
+        /// Gets the zone's greeting.
+        ///
+        /// @return greeting
         Component greeting();
 
-        /**
-         * Gets the zone's raw MiniMessage greeting.
-         *
-         * @return MiniMessage greeting or null if the zone uses the main zone's greeting
-         */
+        /// Gets the zone's raw MiniMessage greeting.
+        ///
+        /// @return MiniMessage greeting or null if the zone uses the main zone's greeting
         @Nullable
         String greetingString();
 
-        /**
-         * Sets the zone's greeting in MiniMessage format. Takes the 'tag' placeholder to inject the faction tag.
-         * If null, will default to the main zone's greeting.
-         *
-         * @param greeting new greeting
-         * @throws IllegalArgumentException if sending null for the main zone
-         */
+        /// Sets the zone's greeting in MiniMessage format. Takes the 'tag' placeholder to inject the faction tag.
+        /// If null, will default to the main zone's greeting.
+        ///
+        /// @param greeting new greeting
+        /// @throws IllegalArgumentException if sending null for the main zone
         void greeting(@Nullable String greeting);
 
-        /**
-         * Gets the zone's permissions.
-         *
-         * @return zone permissions
-         */
+        /// Gets the zone's permissions.
+        ///
+        /// @return zone permissions
         Permissions permissions();
 
-        /**
-         * Gets if the given player can manage this zone, meaning they have the ZONE permission for specifically this zone (if not overridden).
-         *
-         * @param fPlayer player
-         * @return true if can manage
-         */
+        /// Gets if the given player can manage this zone, meaning they have the ZONE permission for specifically this zone (if not overridden).
+        ///
+        /// @param fPlayer player
+        /// @return true if can manage
         boolean canPlayerManage(FPlayer fPlayer);
     }
 
@@ -443,14 +383,12 @@ public non-sealed interface Faction extends Participator, Selectable {
         return members().stream().mapToInt(FPlayer::deaths).sum();
     }
 
-    /**
-     * Get the access of a selectable for a given chunk.
-     *
-     * @param selectable        selectable
-     * @param permissibleAction permissible
-     * @param location          location
-     * @return player's access
-     */
+    /// Get the access of a selectable for a given chunk.
+    ///
+    /// @param selectable        selectable
+    /// @param permissibleAction permissible
+    /// @param location          location
+    /// @return player's access
     boolean hasAccess(Selectable selectable, PermissibleAction permissibleAction, @Nullable FLocation location);
 
     Permissions permissions();
@@ -477,14 +415,12 @@ public non-sealed interface Faction extends Participator, Selectable {
     @ApiStatus.AvailableSince("4.6.0")
     @Nullable LocalTime shieldDailyScheduledTime();
 
-    /**
-     * Sets the daily scheduled start time for this faction's shield, or {@code null} to clear it.
-     * <p>
-     * Shield scheduling operates on 30-minute blocks, so the provided time is floored to the
-     * start of its block (:00 or :30) before being stored.
-     *
-     * @param time daily start time, floored to the half-hour, or {@code null} to clear
-     */
+    /// Sets the daily scheduled start time for this faction's shield, or `null` to clear it.
+    ///
+    /// Shield scheduling operates on 30-minute blocks, so the provided time is floored to the
+    /// start of its block (:00 or :30) before being stored.
+    ///
+    /// @param time daily start time, floored to the half-hour, or `null` to clear
     @ApiStatus.AvailableSince("4.6.0")
     void shieldDailyScheduledTime(@Nullable LocalTime time);
 
@@ -513,12 +449,10 @@ public non-sealed interface Faction extends Participator, Selectable {
         return count;
     }
 
-    /**
-     * Gets if the faction is raidable.
-     *
-     * @return true if raidable
-     * @see dev.kitteh.factions.landraidcontrol.LandRaidControl#isRaidable(Faction)
-     */
+    /// Gets if the faction is raidable.
+    ///
+    /// @return true if raidable
+    /// @see dev.kitteh.factions.landraidcontrol.LandRaidControl#isRaidable(Faction)
     @ApiStatus.AvailableSince("4.3.0")
     default boolean isRaidable() {
         return FactionsPlugin.instance().landRaidControl().isRaidable(this);
@@ -540,25 +474,19 @@ public non-sealed interface Faction extends Participator, Selectable {
         return System.currentTimeMillis() < this.dtrFrozenUntil();
     }
 
-    /**
-     * Gets the exact faction power, which is not used for claim/raidability calculations
-     *
-     * @return exact power
-     */
+    /// Gets the exact faction power, which is not used for claim/raidability calculations
+    ///
+    /// @return exact power
     double powerExact();
 
-    /**
-     * Gets the exact faction max power
-     *
-     * @return exactmax power
-     */
+    /// Gets the exact faction max power
+    ///
+    /// @return exactmax power
     double powerMaxExact();
 
-    /**
-     * Gets the faction power, as used for claims/raidability calculations
-     *
-     * @return power
-     */
+    /// Gets the faction power, as used for claims/raidability calculations
+    ///
+    /// @return power
     default int power() {
         return (int) Math.round(this.powerExact());
     }
@@ -624,137 +552,105 @@ public non-sealed interface Faction extends Participator, Selectable {
 
     void defaultRole(Role role);
 
-    /**
-     * Gets the default daily dues charged to members.
-     *
-     * @return the default daily dues, or zero for none
-     */
+    /// Gets the default daily dues charged to members.
+    ///
+    /// @return the default daily dues, or zero for none
     @ApiStatus.AvailableSince("4.7.0")
     double dues();
 
-    /**
-     * Sets the default daily dues charged to members.
-     *
-     * @param amount the default daily dues, or zero for none
-     */
+    /// Sets the default daily dues charged to members.
+    ///
+    /// @param amount the default daily dues, or zero for none
     @ApiStatus.AvailableSince("4.7.0")
     void dues(double amount);
 
-    /**
-     * Gets an immutable map of the per-role dues overrides. A role present in the
-     * map is charged its mapped amount rather than the {@link #dues() default}.
-     *
-     * @return the per-role dues overrides
-     */
+    /// Gets an immutable map of the per-role dues overrides. A role present in the
+    /// map is charged its mapped amount rather than the {@link #dues() default}.
+    ///
+    /// @return the per-role dues overrides
     @ApiStatus.AvailableSince("4.7.0")
     Map<Role, Double> duesOverrides();
 
-    /**
-     * Sets or clears the dues override for a role.
-     *
-     * @param role   the role to override
-     * @param amount the amount to charge that role, or null to remove the override
-     */
+    /// Sets or clears the dues override for a role.
+    ///
+    /// @param role   the role to override
+    /// @param amount the amount to charge that role, or null to remove the override
     @ApiStatus.AvailableSince("4.7.0")
     void dues(Role role, @Nullable Double amount);
 
-    /**
-     * Gets the daily dues amount that would be charged to a member of the given role.
-     *
-     * @param role the role to resolve dues for
-     * @return the daily dues for that role, or zero for none
-     */
+    /// Gets the daily dues amount that would be charged to a member of the given role.
+    ///
+    /// @param role the role to resolve dues for
+    /// @return the daily dues for that role, or zero for none
     @ApiStatus.AvailableSince("4.7.0")
     double dues(Role role);
 
-    /**
-     * Gets the policy applied to a member who cannot afford their dues.
-     *
-     * @return the dues failure policy
-     */
+    /// Gets the policy applied to a member who cannot afford their dues.
+    ///
+    /// @return the dues failure policy
     @ApiStatus.AvailableSince("4.7.0")
     DuesFailurePolicy duesFailurePolicy();
 
-    /**
-     * Sets the policy applied to a member who cannot afford their dues.
-     *
-     * @param policy the dues failure policy
-     */
+    /// Sets the policy applied to a member who cannot afford their dues.
+    ///
+    /// @param policy the dues failure policy
     @ApiStatus.AvailableSince("4.7.0")
     void duesFailurePolicy(DuesFailurePolicy policy);
 
-    /**
-     * Gets the outstanding rent this faction owes, accumulated under the
-     * {@link RentFailurePolicy#DEBT debt} rent failure policy.
-     *
-     * @return the outstanding rent debt, or zero if none
-     */
+    /// Gets the outstanding rent this faction owes, accumulated under the
+    /// {@link RentFailurePolicy#DEBT debt} rent failure policy.
+    ///
+    /// @return the outstanding rent debt, or zero if none
     @ApiStatus.AvailableSince("4.7.0")
     double rentDebt();
 
-    /**
-     * Sets the outstanding rent this faction owes.
-     *
-     * @param amount the outstanding rent debt
-     */
+    /// Sets the outstanding rent this faction owes.
+    ///
+    /// @param amount the outstanding rent debt
     @ApiStatus.AvailableSince("4.7.0")
     void rentDebt(double amount);
 
-    /**
-     * Gets the dates on which this faction missed a rent payment, within the
-     * configured logging window, in the order they were recorded.
-     *
-     * @return an immutable list of the dates rent was missed
-     */
+    /// Gets the dates on which this faction missed a rent payment, within the
+    /// configured logging window, in the order they were recorded.
+    ///
+    /// @return an immutable list of the dates rent was missed
     @ApiStatus.AvailableSince("4.7.0")
     List<LocalDate> missedRentDates();
 
-    /**
-     * Records a date on which this faction missed a rent payment.
-     *
-     * @param date the date rent was missed
-     */
+    /// Records a date on which this faction missed a rent payment.
+    ///
+    /// @param date the date rent was missed
     @ApiStatus.AvailableSince("4.7.0")
     void addMissedRentDate(LocalDate date);
 
-    /**
-     * Removes logged missed-rent dates that fall before the given cutoff.
-     *
-     * @param cutoff the earliest date to keep; earlier dates are discarded
-     */
+    /// Removes logged missed-rent dates that fall before the given cutoff.
+    ///
+    /// @param cutoff the earliest date to keep; earlier dates are discarded
     @ApiStatus.AvailableSince("4.7.0")
     void pruneMissedRentDatesBefore(LocalDate cutoff);
 
-    /**
-     * Gets the number of consecutive days this faction has missed rent under the
-     * {@link RentFailurePolicy#DEBT debt} policy. Reset to zero once rent is paid.
-     *
-     * @return the consecutive missed-rent day count
-     */
+    /// Gets the number of consecutive days this faction has missed rent under the
+    /// {@link RentFailurePolicy#DEBT debt} policy. Reset to zero once rent is paid.
+    ///
+    /// @return the consecutive missed-rent day count
     @ApiStatus.AvailableSince("4.7.0")
     int consecutiveMissedRentDays();
 
-    /**
-     * Sets the number of consecutive days this faction has missed rent.
-     *
-     * @param days the consecutive missed-rent day count
-     */
+    /// Sets the number of consecutive days this faction has missed rent.
+    ///
+    /// @param days the consecutive missed-rent day count
     @ApiStatus.AvailableSince("4.7.0")
     void consecutiveMissedRentDays(int days);
 
-    /**
-     * Gets whether this faction is exempt from rent collection.
-     *
-     * @return true if exempt from rent
-     */
+    /// Gets whether this faction is exempt from rent collection.
+    ///
+    /// @return true if exempt from rent
     @ApiStatus.AvailableSince("4.7.0")
     boolean rentExempt();
 
-    /**
-     * Sets whether this faction is exempt from rent collection.
-     *
-     * @param exempt true to exempt this faction from rent
-     */
+    /// Sets whether this faction is exempt from rent collection.
+    ///
+    /// @param exempt true to exempt this faction from rent
     @ApiStatus.AvailableSince("4.7.0")
     void rentExempt(boolean exempt);
 
@@ -799,11 +695,9 @@ public non-sealed interface Faction extends Participator, Selectable {
         return Board.board().claimCount(this, world);
     }
 
-    /**
-     * Gets the faction's zone controller.
-     *
-     * @return zones
-     */
+    /// Gets the faction's zone controller.
+    ///
+    /// @return zones
     Zones zones();
 
     @Override

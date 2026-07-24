@@ -150,12 +150,10 @@ public enum Relation implements Permissible {
         }
     }
 
-    /**
-     * Gets this enum name, in lower case, for fastest possible access for
-     * {@link Contexts#TERRITORY_RELATION}
-     *
-     * @return an immutable set of just this name
-     */
+    /// Gets this enum name, in lower case, for fastest possible access for
+    /// {@link Contexts#TERRITORY_RELATION}
+    ///
+    /// @return an immutable set of just this name
     public Set<String> getNameInASet() {
         return this.justMyNameInASet;
     }

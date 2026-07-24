@@ -16,11 +16,9 @@ public class FactionRenameEvent extends FactionPlayerEvent implements Cancellabl
         tag = newTag;
     }
 
-    /**
-     * Get the new faction tag.
-     *
-     * @return new faction tag as String.
-     */
+    /// Get the new faction tag.
+    ///
+    /// @return new faction tag as String.
     public String getFactionTag() {
         return tag;
     }

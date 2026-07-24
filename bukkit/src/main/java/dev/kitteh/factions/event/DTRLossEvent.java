@@ -6,9 +6,7 @@ import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Event called when a player loses dtr.
- */
+/// Event called when a player loses dtr.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class DTRLossEvent extends FactionPlayerEvent implements Cancellable {

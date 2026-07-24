@@ -18,19 +18,15 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * Plugin-agnostic registration of contexts. Other plugins can hook into this.
- */
+/// Plugin-agnostic registration of contexts. Other plugins can hook into this.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class ContextManager implements Listener {
     private static @Nullable Multimap<String, Context> registeredContexts;
 
-    /**
-     * Should be called by FactionsUUID only.
-     *
-     * @param plugin the plugin
-     */
+    /// Should be called by FactionsUUID only.
+    ///
+    /// @param plugin the plugin
     @ApiStatus.Internal
     public static void init(AbstractFactionsPlugin plugin) {
         registeredContexts = Multimaps.synchronizedMultimap(ArrayListMultimap.create());
@@ -38,19 +34,15 @@ public class ContextManager implements Listener {
         plugin.getServer().getPluginManager().registerEvents(new ContextManager(), plugin);
     }
 
-    /**
-     * Should be called by FactionsUUID only.
-     */
+    /// Should be called by FactionsUUID only.
     @ApiStatus.Internal
     public static void shutdown() {
         registeredContexts = null;
     }
 
-    /**
-     * Gets currently registered contexts.
-     *
-     * @return immutable set of registered contexts
-     */
+    /// Gets currently registered contexts.
+    ///
+    /// @return immutable set of registered contexts
     public static Set<Context> getContexts() {
         if (registeredContexts == null) {
             return Collections.emptySet();
@@ -58,12 +50,10 @@ public class ContextManager implements Listener {
         return Set.copyOf(registeredContexts.values());
     }
 
-    /**
-     * Registers a context. Should be called after FactionsUUID is loaded or
-     * reloaded. Easiest strategy is to run in onEnable and on {@code PluginEnableEvent}.
-     *
-     * @param context context
-     */
+    /// Registers a context. Should be called after FactionsUUID is loaded or
+    /// reloaded. Easiest strategy is to run in onEnable and on `PluginEnableEvent`.
+    ///
+    /// @param context context
     public static void registerContext(Context context) {
         if (registeredContexts == null) {
             throw new IllegalStateException("Cannot register contexts before FactionsUUID finishes loading!");

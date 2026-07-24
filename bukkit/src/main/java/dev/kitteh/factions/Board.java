@@ -7,10 +7,14 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
 
+/// The 'board' tracks and controls faction claimed territory.
 @ApiStatus.AvailableSince("4.0.0")
 @ApiStatus.NonExtendable
 @NullMarked
 public interface Board {
+    /// Gets the board instance.
+    ///
+    /// @return the board instance
     static Board board() {
         return Instances.BOARD;
     }
@@ -54,15 +58,13 @@ public interface Board {
         return faction != factionAt(a) && faction != factionAt(b) && faction != factionAt(c) && faction != factionAt(d);
     }
 
-    /**
-     * Checks if there is another faction within a given radius other than Wilderness. Used for HCF feature that
-     * requires a 'buffer' between factions.
-     *
-     * @param location - center location.
-     * @param faction   - faction checking for.
-     * @param radius    - chunk radius to check.
-     * @return true if another Faction is within the radius, otherwise false.
-     */
+    /// Checks if there is another faction within a given radius other than Wilderness. Used for HCF feature that
+    /// requires a 'buffer' between factions.
+    ///
+    /// @param location center location.
+    /// @param faction  faction checking for.
+    /// @param radius   chunk radius to check.
+    /// @return true if another Faction is within the radius, otherwise false.
     default boolean hasFactionWithin(FLocation location, Faction faction, int radius) {
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {

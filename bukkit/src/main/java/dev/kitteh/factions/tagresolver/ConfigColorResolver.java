@@ -17,26 +17,20 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * A resolver for extra colors from the config.
- */
+/// A resolver for extra colors from the config.
 @ApiStatus.AvailableSince("4.7.0")
 @NullMarked
 public class ConfigColorResolver implements TagResolver {
     private static final ConfigColorResolver INSTANCE = new ConfigColorResolver();
 
-    /**
-     * Gets this resolver, single-instance, and can be called before config is loaded as it will auto update on config (re)load.
-     *
-     * @return the resolver
-     */
+    /// Gets this resolver, single-instance, and can be called before config is loaded as it will auto update on config (re)load.
+    ///
+    /// @return the resolver
     public static ConfigColorResolver resolver() {
         return INSTANCE;
     }
 
-    /**
-     * Updates from config. You do not need to call this.
-     */
+    /// Updates from config. You do not need to call this.
     public static void update() {
         Map<String, Tag> newMap = new HashMap<>();
         Map<String, TextColor> newColors = new HashMap<>();

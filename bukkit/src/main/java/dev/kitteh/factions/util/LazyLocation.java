@@ -5,10 +5,8 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * This class provides a lazy-load Location, so that World doesn't need to be initialized
- * yet when an object of this class is created, only when the Location is first accessed.
- */
+/// This class provides a lazy-load Location, so that World doesn't need to be initialized
+/// yet when an object of this class is created, only when the Location is first accessed.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public record LazyLocation(

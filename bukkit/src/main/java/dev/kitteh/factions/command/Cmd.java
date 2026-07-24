@@ -15,20 +15,16 @@ public interface Cmd {
 
     TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer();
 
-    /**
-     * Helper method for getting the primary root command string, by default 'f'.
-     *
-     * @return primary root command
-     */
+    /// Helper method for getting the primary root command string, by default 'f'.
+    ///
+    /// @return primary root command
     static String rootCommand() {
         return Confs.tl().commands().generic().getCommandRoot().getFirstAlias();
     }
 
-    /**
-     * Helper method for getting the primary root admin command string, by default 'f'.
-     *
-     * @return primary root admin command
-     */
+    /// Helper method for getting the primary root admin command string, by default 'f'.
+    ///
+    /// @return primary root admin command
     static String rootAdminCommand() {
         return Confs.tl().commands().generic().getCommandAdminRoot().getFirstAlias();
     }

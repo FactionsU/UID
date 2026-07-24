@@ -106,12 +106,10 @@ public enum Role implements Permissible {
         return Relation.MEMBER.color();
     }
 
-    /**
-     * Gets this role name and roles above it in priority. These names are
-     * not localized and will always match the enum values.
-     *
-     * @return an immutable set of role names
-     */
+    /// Gets this role name and roles above it in priority. These names are
+    /// not localized and will always match the enum values.
+    ///
+    /// @return an immutable set of role names
     public Set<String> getRoleNamesAtOrAbove() {
         if (this.roleNamesAtOrAbove == null) {
             Set<String> set = new HashSet<>();
@@ -125,12 +123,10 @@ public enum Role implements Permissible {
         return this.roleNamesAtOrAbove;
     }
 
-    /**
-     * Gets this role name and roles below it in priority. These names are
-     * not localized and will always match the enum values.
-     *
-     * @return an immutable set of role names
-     */
+    /// Gets this role name and roles below it in priority. These names are
+    /// not localized and will always match the enum values.
+    ///
+    /// @return an immutable set of role names
     public Set<String> getRoleNamesAtOrBelow() {
         if (this.roleNamesAtOrBelow == null) {
             Set<String> set = new HashSet<>();

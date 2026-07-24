@@ -7,9 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Event called when a player loses power.
- */
+/// Event called when a player loses power.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class PowerLossEvent extends FactionPlayerEvent implements Cancellable {
@@ -20,20 +18,16 @@ public class PowerLossEvent extends FactionPlayerEvent implements Cancellable {
         super(f, p);
     }
 
-    /**
-     * Get the power loss message.
-     *
-     * @return power loss message as String.
-     */
+    /// Get the power loss message.
+    ///
+    /// @return power loss message as String.
     public @Nullable String getMessage() {
         return message;
     }
 
-    /**
-     * Set the power loss message.
-     *
-     * @param message message
-     */
+    /// Set the power loss message.
+    ///
+    /// @param message message
     public void setMessage(@Nullable String message) {
         this.message = message;
     }

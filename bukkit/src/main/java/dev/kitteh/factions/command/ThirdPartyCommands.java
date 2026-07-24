@@ -8,39 +8,33 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * For the registry of /f and /fa commands from other plugins.
- */
+/// For the registry of /f and /fa commands from other plugins.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public final class ThirdPartyCommands {
     private ThirdPartyCommands() {
     }
 
-    /**
-     * Registers a command for the main faction command, to be called during load.
-     *
-     * @param providingPlugin your plugin, for tracking in exceptions
-     * @param command         command name, for tracking in exceptions
-     * @param consumer        a consumer of the command manager and the builder for the faction command, to build from. The
-     *                        consumer will be called during FactionsUUID's onEnable
-     * @throws IllegalArgumentException for not using your plugin
-     * @throws IllegalStateException    if attempting after registration has closed
-     */
+    /// Registers a command for the main faction command, to be called during load.
+    ///
+    /// @param providingPlugin your plugin, for tracking in exceptions
+    /// @param command         command name, for tracking in exceptions
+    /// @param consumer        a consumer of the command manager and the builder for the faction command, to build from. The
+    /// consumer will be called during FactionsUUID's onEnable
+    /// @throws IllegalArgumentException for not using your plugin
+    /// @throws IllegalStateException    if attempting after registration has closed
     public static void register(Plugin providingPlugin, String command, TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer) {
         CommandsRoot.register(providingPlugin, command, consumer);
     }
 
-    /**
-     * Registers a command for the faction admin command, to be called during load.
-     *
-     * @param providingPlugin your plugin, for tracking in exceptions
-     * @param command         command name, for tracking in exceptions
-     * @param consumer        a consumer of the command manager and the builder for the faction admin command, to build from. The
-     *                        consumer will be called during FactionsUUID's onEnable
-     * @throws IllegalArgumentException for not using your plugin
-     * @throws IllegalStateException    if attempting after registration has closed
-     */
+    /// Registers a command for the faction admin command, to be called during load.
+    ///
+    /// @param providingPlugin your plugin, for tracking in exceptions
+    /// @param command         command name, for tracking in exceptions
+    /// @param consumer        a consumer of the command manager and the builder for the faction admin command, to build from. The
+    /// consumer will be called during FactionsUUID's onEnable
+    /// @throws IllegalArgumentException for not using your plugin
+    /// @throws IllegalStateException    if attempting after registration has closed
     public static void registerAdmin(Plugin providingPlugin, String command, TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer) {
         CommandsRoot.registerAdmin(providingPlugin, command, consumer);
     }

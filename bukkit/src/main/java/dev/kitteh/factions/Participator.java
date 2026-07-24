@@ -12,34 +12,26 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Describes an entity participating in Factions, i.e. a player or faction.
- */
+/// Describes an entity participating in Factions, i.e. a player or faction.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public sealed interface Participator permits FPlayer, Faction {
-    /**
-     * Gets an OfflinePlayer for the given participator.
-     *
-     * @return offline player representation
-     */
+    /// Gets an OfflinePlayer for the given participator.
+    ///
+    /// @return offline player representation
     OfflinePlayer asOfflinePlayer();
 
-    /**
-     * Sends a String.format-able message.
-     *
-     * @param str string
-     * @param args args
-     */
+    /// Sends a String.format-able message.
+    ///
+    /// @param str string
+    /// @param args args
     @Deprecated(forRemoval = true, since = "4.0.0")
     @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     void msgLegacy(String str, Object... args);
 
-    /**
-     * Sends a component.
-     *
-     * @param component component
-     */
+    /// Sends a component.
+    ///
+    /// @param component component
     void sendMessage(Component component);
 
     void sendRichMessage(String miniMessage, TagResolver... resolvers);

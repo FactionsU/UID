@@ -6,9 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Asserts, at compile time, that the annotated type declares no {@code final} fields.
- */
+/// Asserts, at compile time, that the annotated type declares no `final` fields.
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)

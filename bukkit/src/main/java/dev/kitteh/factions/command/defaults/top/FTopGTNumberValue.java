@@ -1,11 +1,9 @@
 package dev.kitteh.factions.command.defaults.top;
 
-/**
- * Implementation of FTopValue which sorts itself by virtue of value being greater than another FTopGTNumberValue.
- *
- * @param <T> derived class
- * @param <N> value type
- */
+/// Implementation of FTopValue which sorts itself by virtue of value being greater than another FTopGTNumberValue.
+///
+/// @param <T> derived class
+/// @param <N> value type
 public abstract class FTopGTNumberValue<T extends FTopGTNumberValue<T, N>, N extends Comparable<N>> implements FTopValue<T> {
     public FTopGTNumberValue(N value) {
         this.value = value;

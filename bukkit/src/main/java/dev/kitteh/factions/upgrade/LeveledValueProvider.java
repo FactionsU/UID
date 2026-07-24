@@ -11,44 +11,34 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-/**
- * Provider of per-level values for upgrade variables and costs.
- */
+/// Provider of per-level values for upgrade variables and costs.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public sealed interface LeveledValueProvider permits LeveledValueProvider.Equation, LeveledValueProvider.LevelMap {
-    /**
-     * Expression-based calculator of value.
-     *
-     * @param expression expression to calculate the value, using 'level' as the level.
-     */
+    /// Expression-based calculator of value.
+    ///
+    /// @param expression expression to calculate the value, using 'level' as the level.
     record Equation(Expression expression) implements LeveledValueProvider {
-        /**
-         * Creates a value provider using an expression.
-         *
-         * @param expression expression to calculate the value, using 'level' as the level.
-         * @return new value provider
-         */
+        /// Creates a value provider using an expression.
+        ///
+        /// @param expression expression to calculate the value, using 'level' as the level.
+        /// @return new value provider
         public static Equation of(String expression) {
             return new Equation(new Expression(expression));
         }
 
-        /**
-         * Gets the raw expression string backing this equation.
-         *
-         * @return expression string
-         */
+        /// Gets the raw expression string backing this equation.
+        ///
+        /// @return expression string
         @ApiStatus.AvailableSince("4.6.0")
         public String expressionString() {
             return this.expression.getExpressionString();
         }
 
-        /**
-         * Tests if a given expression string can be parsed and evaluated.
-         *
-         * @param expression expression to test, using 'level' as the level
-         * @return true if the expression is valid
-         */
+        /// Tests if a given expression string can be parsed and evaluated.
+        ///
+        /// @param expression expression to test, using 'level' as the level
+        /// @return true if the expression is valid
         @ApiStatus.AvailableSince("4.6.0")
         public static boolean isValidExpression(String expression) {
             try {
@@ -71,18 +61,14 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
         }
     }
 
-    /**
-     * Map-based value provider.
-     *
-     * @param levels levels available
-     */
+    /// Map-based value provider.
+    ///
+    /// @param levels levels available
     record LevelMap(Int2ObjectArrayMap<BigDecimal> levels) implements LeveledValueProvider {
-        /**
-         * Helper to create a provider from a map of level to value.
-         *
-         * @param levels map of level number to value at that level
-         * @return new value provider
-         */
+        /// Helper to create a provider from a map of level to value.
+        ///
+        /// @param levels map of level number to value at that level
+        /// @return new value provider
         @ApiStatus.AvailableSince("4.6.0")
         public static LevelMap of(Map<Integer, BigDecimal> levels) {
             Int2ObjectArrayMap<BigDecimal> map = new Int2ObjectArrayMap<>();
@@ -98,12 +84,10 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
             return new LevelMap(levels);
         }
 
-        /**
-         * Helper to create a single-level provider.
-         *
-         * @param val1 value at level 1
-         * @return new value provider
-         */
+        /// Helper to create a single-level provider.
+        ///
+        /// @param val1 value at level 1
+        /// @return new value provider
         public static LevelMap of(BigDecimal val1) {
             Int2ObjectArrayMap<BigDecimal> levels = new Int2ObjectArrayMap<>();
             levels.put(1, val1);
@@ -119,13 +103,11 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
             return new LevelMap(levels);
         }
 
-        /**
-         * Helper to create a two-level provider.
-         *
-         * @param val1 value at level 1
-         * @param val2 value at level 2
-         * @return new value provider
-         */
+        /// Helper to create a two-level provider.
+        ///
+        /// @param val1 value at level 1
+        /// @param val2 value at level 2
+        /// @return new value provider
         public static LevelMap of(BigDecimal val1, BigDecimal val2) {
             Int2ObjectArrayMap<BigDecimal> levels = new Int2ObjectArrayMap<>();
             levels.put(1, val1);
@@ -143,14 +125,12 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
             return new LevelMap(levels);
         }
 
-        /**
-         * Helper to create a three-level provider.
-         *
-         * @param val1 value at level 1
-         * @param val2 value at level 2
-         * @param val3 value at level 3
-         * @return new value provider
-         */
+        /// Helper to create a three-level provider.
+        ///
+        /// @param val1 value at level 1
+        /// @param val2 value at level 2
+        /// @param val3 value at level 3
+        /// @return new value provider
         public static LevelMap of(BigDecimal val1, BigDecimal val2, BigDecimal val3) {
             Int2ObjectArrayMap<BigDecimal> levels = new Int2ObjectArrayMap<>();
             levels.put(1, val1);
@@ -170,15 +150,13 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
             return new LevelMap(levels);
         }
 
-        /**
-         * Helper to create a four-level provider.
-         *
-         * @param val1 value at level 1
-         * @param val2 value at level 2
-         * @param val3 value at level 3
-         * @param val4 value at level 4
-         * @return new value provider
-         */
+        /// Helper to create a four-level provider.
+        ///
+        /// @param val1 value at level 1
+        /// @param val2 value at level 2
+        /// @param val3 value at level 3
+        /// @param val4 value at level 4
+        /// @return new value provider
         public static LevelMap of(BigDecimal val1, BigDecimal val2, BigDecimal val3, BigDecimal val4) {
             Int2ObjectArrayMap<BigDecimal> levels = new Int2ObjectArrayMap<>();
             levels.put(1, val1);
@@ -199,20 +177,16 @@ public sealed interface LeveledValueProvider permits LeveledValueProvider.Equati
         }
     }
 
-    /**
-     * Gets the value at the given level.
-     *
-     * @param level level for which to get the value
-     * @return value at the given level
-     */
+    /// Gets the value at the given level.
+    ///
+    /// @param level level for which to get the value
+    /// @return value at the given level
     BigDecimal get(int level);
 
-    /**
-     * Gets if the upgrade supports the given level (and all levels up to it).
-     *
-     * @param level level to test
-     * @return true if this provider supports all levels up to and including the given level
-     */
+    /// Gets if the upgrade supports the given level (and all levels up to it).
+    ///
+    /// @param level level to test
+    /// @return true if this provider supports all levels up to and including the given level
     default boolean supportsUpToLevel(int level) {
         return true;
     }

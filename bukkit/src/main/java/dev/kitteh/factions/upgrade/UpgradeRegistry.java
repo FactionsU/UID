@@ -14,9 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
-/**
- * Upgrade registry.
- */
+/// Upgrade registry.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class UpgradeRegistry {
@@ -43,46 +41,38 @@ public class UpgradeRegistry {
         }
     }
 
-    /**
-     * Gets a registered upgrade.
-     *
-     * @param name upgrade name
-     * @return upgrade or null if none registered
-     */
+    /// Gets a registered upgrade.
+    ///
+    /// @param name upgrade name
+    /// @return upgrade or null if none registered
     public static @Nullable Upgrade getUpgrade(String name) {
         return upgradeRegistry.get(name.toLowerCase());
     }
 
-    /**
-     * Gets a registered upgrade variable.
-     *
-     * @param name upgrade variable name
-     * @return upgrade variable or null if none registered
-     */
+    /// Gets a registered upgrade variable.
+    ///
+    /// @param name upgrade variable name
+    /// @return upgrade variable or null if none registered
     public static @Nullable UpgradeVariable getVariable(String name) {
         return variableRegistry.get(name.toLowerCase());
     }
 
-    /**
-     * Gets all registered upgrades.
-     *
-     * @return collection of upgrades registered
-     */
+    /// Gets all registered upgrades.
+    ///
+    /// @return collection of upgrades registered
     public static Collection<? extends Upgrade> getUpgrades() {
         return new HashSet<>(upgradeRegistry.values());
     }
 
-    /**
-     * Registers an upgrade.
-     *
-     * @param upgrade upgrade to register
-     * @param settings upgrade settings
-     * @param defaultDisabled if the upgrade should be disabled by default
-     * @throws IllegalStateException if called after load time
-     * @throws IllegalArgumentException if upgrade name is already registered
-     * @throws IllegalArgumentException if upgrade settings does not match upgrade
-     * @throws IllegalArgumentException if upgrade variables present are not registered
-     */
+    /// Registers an upgrade.
+    ///
+    /// @param upgrade upgrade to register
+    /// @param settings upgrade settings
+    /// @param defaultDisabled if the upgrade should be disabled by default
+    /// @throws IllegalStateException if called after load time
+    /// @throws IllegalArgumentException if upgrade name is already registered
+    /// @throws IllegalArgumentException if upgrade settings does not match upgrade
+    /// @throws IllegalArgumentException if upgrade variables present are not registered
     public static void registerUpgrade(Upgrade upgrade, UpgradeSettings settings, boolean defaultDisabled) {
         if (closed) {
             throw new IllegalStateException("Cannot register upgrade. Must be completed during load.");
@@ -106,13 +96,11 @@ public class UpgradeRegistry {
         upgradeDefaultRunners.add(u -> u.addDefaultsIfNotPresent(settings, defaultDisabled));
     }
 
-    /**
-     * Registers an upgrade variable.
-     *
-     * @param variable variable to register
-     * @throws IllegalStateException if called after load time
-     * @throws IllegalArgumentException if variable name already registered
-     */
+    /// Registers an upgrade variable.
+    ///
+    /// @param variable variable to register
+    /// @throws IllegalStateException if called after load time
+    /// @throws IllegalArgumentException if variable name already registered
     public static void registerVariable(UpgradeVariable variable) {
         if (closed) {
             throw new IllegalStateException("Cannot register upgrade variable. Must be completed during load.");

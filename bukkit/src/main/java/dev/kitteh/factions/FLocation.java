@@ -55,11 +55,9 @@ public record FLocation(String worldName, int x, int z) {
         return Board.board().factionAt(this).zones().get(this);
     }
 
-    /**
-     * Returns the chunk x value, a comma, and the chunk z value, without spaces.
-     *
-     * @return coordinate string
-     */
+    /// Returns the chunk x value, a comma, and the chunk z value, without spaces.
+    ///
+    /// @return coordinate string
     public String asCoordString() {
         return x + "," + z;
     }
@@ -99,12 +97,10 @@ public record FLocation(String worldName, int x, int z) {
         return loc.worldName().equalsIgnoreCase(worldName()) && blockToChunk(NumberConversions.floor(loc.x())) == x && blockToChunk(NumberConversions.floor(loc.z())) == z;
     }
 
-    /**
-     * Checks if the chunk represented by this FLocation is outside the world border
-     *
-     * @param buffer the number of chunks from the border that will be treated as "outside"
-     * @return whether this location is outside the border
-     */
+    /// Checks if the chunk represented by this FLocation is outside the world border
+    ///
+    /// @param buffer the number of chunks from the border that will be treated as "outside"
+    /// @return whether this location is outside the border
     public boolean isOutsideWorldBorder(int buffer) {
         WorldBorder border = world().getWorldBorder();
 

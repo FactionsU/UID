@@ -217,10 +217,8 @@ public abstract class MemoryBoard implements Board {
         return this.worldTrackers.values().stream().mapToInt(WorldTracker::countClaims).sum();
     }
 
-    /**
-     * The map is relative to a coord and a faction north is in the direction of decreasing x east is in the direction
-     * of decreasing z
-     */
+    /// The map is relative to a coord and a faction north is in the direction of decreasing x east is in the direction
+    /// of decreasing z
     public List<Component> getMap(FPlayer fPlayer, FLocation fLocation, double inDegrees) {
         Faction playerFaction = fPlayer.faction();
         ArrayList<Component> ret = new ArrayList<>();

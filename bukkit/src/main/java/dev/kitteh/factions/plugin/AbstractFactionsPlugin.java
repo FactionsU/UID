@@ -950,11 +950,9 @@ public abstract class AbstractFactionsPlugin extends JavaPlugin implements Facti
         return new CmdSetDues();
     }
 
-    /**
-     * Gets the server's recent average tick time in milliseconds, if available.
-     *
-     * @return average tick time in milliseconds, or -1 if unavailable
-     */
+    /// Gets the server's recent average tick time in milliseconds, if available.
+    ///
+    /// @return average tick time in milliseconds, or -1 if unavailable
     public double averageTickTimeMillis() {
         return -1;
     }

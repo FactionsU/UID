@@ -36,11 +36,9 @@ public class FPlayerLeaveEvent extends FactionPlayerEvent implements Cancellable
         return this.reason.cancellable;
     }
 
-    /**
-     * Get the reason the player left the faction.
-     *
-     * @return reason player left the faction.
-     */
+    /// Get the reason the player left the faction.
+    ///
+    /// @return reason player left the faction.
     public Reason getReason() {
         return reason;
     }

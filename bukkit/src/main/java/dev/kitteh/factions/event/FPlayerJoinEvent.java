@@ -6,9 +6,7 @@ import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Event called when an FPlayer joins a Faction.
- */
+/// Event called when an FPlayer joins a Faction.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FPlayerJoinEvent extends FactionPlayerEvent implements Cancellable {
@@ -41,11 +39,9 @@ public class FPlayerJoinEvent extends FactionPlayerEvent implements Cancellable 
         return this.reason.cancellable;
     }
 
-    /**
-     * Get the reason the player joined the faction.
-     *
-     * @return reason player joined the faction.
-     */
+    /// Get the reason the player joined the faction.
+    ///
+    /// @return reason player joined the faction.
     public Reason getReason() {
         return reason;
     }

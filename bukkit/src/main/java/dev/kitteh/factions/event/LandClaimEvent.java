@@ -7,9 +7,7 @@ import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Event called when an FPlayer claims land for a Faction.
- */
+/// Event called when an FPlayer claims land for a Faction.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class LandClaimEvent extends FactionPlayerEvent implements Cancellable {
@@ -22,11 +20,9 @@ public class LandClaimEvent extends FactionPlayerEvent implements Cancellable {
         location = loc;
     }
 
-    /**
-     * Get the FLocation involved in this event.
-     *
-     * @return the FLocation (also a chunk) involved in this event.
-     */
+    /// Get the FLocation involved in this event.
+    ///
+    /// @return the FLocation (also a chunk) involved in this event.
     public FLocation getLocation() {
         return this.location;
     }

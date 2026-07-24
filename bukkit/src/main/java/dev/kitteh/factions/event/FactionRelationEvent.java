@@ -5,9 +5,7 @@ import dev.kitteh.factions.permissible.Relation;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Event called when a Faction relation is called.
- */
+/// Event called when a Faction relation is called.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FactionRelationEvent extends FactionEvent {

@@ -1,16 +1,12 @@
 package dev.kitteh.factions.command.defaults.top;
 
-/**
- * FTopValue is a quickly-comparable derived value of a faction with the purpose of being compared against other
- * FTopValues to determine Faction ranking.
- *
- * @param <T> derived class
- */
+/// FTopValue is a quickly-comparable derived value of a faction with the purpose of being compared against other
+/// FTopValues to determine Faction ranking.
+///
+/// @param <T> derived class
 public interface FTopValue<T extends FTopValue<T>> extends Comparable<T> {
-    /**
-     * Returns a string which is suitable to display to the user
-     *
-     * @return display string
-     */
+    /// Returns a string which is suitable to display to the user
+    ///
+    /// @return display string
     String getDisplayString();
 }

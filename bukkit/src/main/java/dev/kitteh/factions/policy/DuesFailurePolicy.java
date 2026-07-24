@@ -8,28 +8,18 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 
-/**
- * The action a faction takes against a member who cannot afford their daily
- * {@link Faction#dues() dues} when collection runs.
- */
+/// The action a faction takes against a member who cannot afford their daily
+/// {@link Faction#dues() dues} when collection runs.
 @ApiStatus.AvailableSince("4.7.0")
 @NullMarked
 public enum DuesFailurePolicy {
-    /**
-     * Record the failure and take no further immediate action.
-     */
+    /// Record the failure and take no further immediate action.
     RECORD,
-    /**
-     * Move the member down one role, or leave them at the lowest role.
-     */
+    /// Move the member down one role, or leave them at the lowest role.
     DEMOTE,
-    /**
-     * Carry the unpaid amount forward to owe more the next time.
-     */
+    /// Carry the unpaid amount forward to owe more the next time.
     DEBT,
-    /**
-     * Remove the member from the faction.
-     */
+    /// Remove the member from the faction.
     DISMISS;
 
     public static final DuesFailurePolicy DEFAULT = RECORD;

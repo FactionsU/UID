@@ -546,12 +546,10 @@ public class MainConfig {
                     return startingDTR;
                 }
 
-                /**
-                 * Not used directly by the plugin, as it uses the helper method.
-                 *
-                 * @return loss per death
-                 * @see #getLossPerDeath(World)
-                 */
+                /// Not used directly by the plugin, as it uses the helper method.
+                ///
+                /// @return loss per death
+                /// @see #getLossPerDeath(World)
                 @SuppressWarnings("unused")
                 public double getLossPerDeathBase() {
                     return this.lossPerDeath;

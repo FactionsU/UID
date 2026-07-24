@@ -6,9 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Represents an event involving a Faction.
- */
+/// Represents an event involving a Faction.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class FactionEvent extends Event {
@@ -19,11 +17,9 @@ public class FactionEvent extends Event {
         this.faction = faction;
     }
 
-    /**
-     * Get the Faction involved in the event.
-     *
-     * @return faction involved in the event.
-     */
+    /// Get the Faction involved in the event.
+    ///
+    /// @return faction involved in the event.
     public Faction getFaction() {
         return this.faction;
     }

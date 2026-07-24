@@ -11,9 +11,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Predicate;
 
-/**
- * Helper methods for cloud.
- */
+/// Helper methods for cloud.
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public final class Cloudy {
