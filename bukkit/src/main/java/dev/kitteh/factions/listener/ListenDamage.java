@@ -60,8 +60,15 @@ public class ListenDamage implements Listener {
         }
 
         if (event.getEntity() instanceof Player plr && FPlayers.fPlayers().get(plr).respawnInvulnerable()) {
-            event.setCancelled(true);
-            return;
+            switch (event.getCause()) {
+                case KILL, SUICIDE, VOID -> {
+                    // Probably should let that happen...
+                }
+                default -> {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
         }
 
         if (event.getEntity() instanceof Player plr && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
@@ -95,7 +102,7 @@ public class ListenDamage implements Listener {
         return damagee instanceof Player plr && new FLocation(plr.getLocation()).faction().isSafeZone();
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRespawnInvulnerableAttack(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player) || !WorldUtil.isEnabled(event.getEntity())) {
             return;

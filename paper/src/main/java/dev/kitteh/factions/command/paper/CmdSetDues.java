@@ -92,6 +92,11 @@ public class CmdSetDues implements Cmd {
                 .type(DialogType.confirmation(
                         ActionButton.builder(Mini.parse(tl.getConfirm(), sender))
                                 .action(DialogAction.customClick((response, audience) -> {
+                                    if (!Econ.duesEnabled() || sender.faction() != faction || sender.role() != Role.ADMIN) {
+                                        audience.sendMessage(Mini.parse(tl.getNoLongerAllowed(), sender));
+                                        return;
+                                    }
+
                                     Parsed defaultValue = parse(response.getText("default"));
                                     if (!defaultValue.valid()) {
                                         audience.sendMessage(Mini.parse(tl.getInvalidNumber(), sender, Placeholder.unparsed("label", tl.getDefaultLabel())));

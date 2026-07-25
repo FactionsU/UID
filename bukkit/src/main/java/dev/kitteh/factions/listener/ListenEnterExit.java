@@ -10,6 +10,7 @@ import dev.kitteh.factions.data.MemoryFPlayer;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.Relation;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
+import dev.kitteh.factions.policy.RentFailurePolicy;
 import dev.kitteh.factions.scoreboard.FScoreboard;
 import dev.kitteh.factions.tagresolver.FPlayerResolver;
 import dev.kitteh.factions.tagresolver.FactionResolver;
@@ -98,7 +99,9 @@ public class ListenEnterExit implements Listener {
             event.setRespawnLocation(home);
             int seconds = facConf.homes().getRespawnInvulnerabilitySeconds();
             me.respawnInvulnerability(seconds);
-            me.sendRichMessage(Confs.tl().commands().home().getInvulnerable(), Placeholder.unparsed("seconds", String.valueOf(seconds)));
+            if (seconds > 0) {
+                me.sendRichMessage(Confs.tl().commands().home().getInvulnerable(), Placeholder.unparsed("seconds", String.valueOf(seconds)));
+            }
         }
         new BukkitRunnable() {
             @Override
@@ -224,7 +227,7 @@ public class ListenEnterExit implements Listener {
 
     private void warnRentDebt(FPlayer me) {
         int maxMissed = Confs.main().economy().getRentDisbandAfterConsecutiveMissedDays();
-        if (maxMissed <= 0 || !Econ.rentEnabled()) {
+        if (maxMissed <= 0 || !Econ.rentEnabled() || Confs.main().economy().getRentFailurePolicy() != RentFailurePolicy.DEBT) {
             return;
         }
         Faction faction = me.faction();

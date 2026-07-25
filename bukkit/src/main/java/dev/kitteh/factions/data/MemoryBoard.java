@@ -200,7 +200,7 @@ public abstract class MemoryBoard implements Board {
         WorldTracker tracker = worldTrackers.get(location.worldName());
         //noinspection ConstantValue
         if (tracker != null) {
-            tracker.inhabited(location);
+            return tracker.inhabited(location);
         }
         return -1L;
     }

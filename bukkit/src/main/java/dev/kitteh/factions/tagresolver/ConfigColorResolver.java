@@ -39,7 +39,7 @@ public class ConfigColorResolver implements TagResolver {
             if (color.startsWith("#")) {
                 textColor = TextColor.fromHexString(color);
             } else {
-                textColor = NamedTextColor.NAMES.value(color.toLowerCase());
+                textColor = NamedTextColor.NAMES.value(color.toLowerCase(Locale.ROOT));
             }
             if (textColor == null) {
                 AbstractFactionsPlugin.instance().getLogger().warning("Invalid color for name \"" + name + "\": \"" + color + "\" - Using white until fixed. Can be updated with the command: fa reload");

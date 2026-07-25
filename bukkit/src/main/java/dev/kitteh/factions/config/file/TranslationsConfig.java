@@ -119,7 +119,7 @@ public class TranslationsConfig {
             }
 
             public TextColor getAccent() {
-                return accentColor = getColor(this.accent, this.accentColor, "#6ce677");
+                return accentColor = getColor(this.accent, this.accentColor, NamedTextColor.DARK_GRAY);
             }
 
             public MinecraftHelp.HelpColors helpColors() {
@@ -279,7 +279,7 @@ public class TranslationsConfig {
         if (name.startsWith("#")) {
             ret = TextColor.fromHexString(name);
         } else if ((ret = ConfigColorResolver.resolver().color(name)) == null) {
-            ret = NamedTextColor.NAMES.value(name.toLowerCase());
+            ret = NamedTextColor.NAMES.value(name.toLowerCase(Locale.ROOT));
         }
 
         return ret == null ? defaultColor : ret;
@@ -2476,6 +2476,8 @@ public class TranslationsConfig {
                     private String cancel = "Cancel";
                     @Comment("Supports <label>")
                     private String invalidNumber = "<deny>'<label>' must be a non-negative number. No changes were made.";
+                    @Comment("Shown if the dialog is submitted after the player is no longer able to set the dues")
+                    private String noLongerAllowed = "<deny>You can no longer set the dues for that faction. No changes were made.";
                     private String saved = "<info>Faction dues updated.";
 
                     public String getTitle() {
@@ -2508,6 +2510,10 @@ public class TranslationsConfig {
 
                     public String getInvalidNumber() {
                         return invalidNumber;
+                    }
+
+                    public String getNoLongerAllowed() {
+                        return noLongerAllowed;
                     }
 
                     public String getSaved() {

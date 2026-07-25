@@ -70,7 +70,7 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
 
     /// Gets the dates on which this player missed their dues, as tracked under the
     /// {@link DuesFailurePolicy#RECORD record} or {@link DuesFailurePolicy#DEBT debt}
-    /// failure policy, in the order they were recorded.
+    /// failure policy, within the configured logging window, in the order they were recorded.
     ///
     /// @return an immutable list of the dates dues were missed
     @ApiStatus.AvailableSince("4.7.0")
@@ -81,6 +81,12 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
     /// @param date the date dues were missed
     @ApiStatus.AvailableSince("4.7.0")
     void addMissedDuesDate(LocalDate date);
+
+    /// Removes logged missed-dues dates that fall before the given cutoff.
+    ///
+    /// @param cutoff the earliest date to keep; earlier dates are discarded
+    @ApiStatus.AvailableSince("4.7.0")
+    void pruneMissedDuesDatesBefore(LocalDate cutoff);
 
     boolean takeFallDamage();
 

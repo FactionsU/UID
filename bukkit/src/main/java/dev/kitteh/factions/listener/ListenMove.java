@@ -136,7 +136,11 @@ public class ListenMove implements Listener {
             }
         }
 
-        Instances.BOARD.cachedInhabitedTime(to, to.asChunk().getInhabitedTime());
-        Instances.BOARD.cachedInhabitedTime(from, from.asChunk().getInhabitedTime());
+        if (to.loaded()) {
+            Instances.BOARD.cachedInhabitedTime(to, to.asChunk().getInhabitedTime());
+        }
+        if (from.loaded()) {
+            Instances.BOARD.cachedInhabitedTime(from, from.asChunk().getInhabitedTime());
+        }
     }
 }

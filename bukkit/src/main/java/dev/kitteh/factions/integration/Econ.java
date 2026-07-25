@@ -41,6 +41,9 @@ import java.util.regex.Pattern;
 public class Econ {
     private static @Nullable Economy econ = null;
     private static final Pattern FACTION_PATTERN = Pattern.compile("^faction-(\\d+)$");
+    private static @Nullable Expression rentExpression;
+    private static String currentRentEquation = "";
+    private static @Nullable String lastWarnedRentEquation;
 
     public static void setup() {
         if (isSetup()) {
@@ -104,6 +107,9 @@ public class Econ {
         if (!rentEnabled()) {
             return 0d;
         }
+        if (faction.rentExempt()) {
+            return 0d;
+        }
         return calculateRent(faction.claimCount());
     }
 
@@ -111,10 +117,21 @@ public class Econ {
     public static double calculateRent(int claims) {
         String equation = Confs.main().economy().getRentEquation();
         try {
-            double value = new Expression(equation).with("claims", claims).evaluate().getNumberValue().doubleValue();
+            Expression expression = rentExpression;
+            if (expression == null || !equation.equals(currentRentEquation)) {
+                expression = new Expression(equation);
+                expression.validate();
+                rentExpression = expression;
+                currentRentEquation = equation;
+                lastWarnedRentEquation = null;
+            }
+            double value = expression.copy().with("claims", claims).evaluate().getNumberValue().doubleValue();
             return Math.max(0, value);
         } catch (RuntimeException | EvaluationException | ParseException e) {
-            AbstractFactionsPlugin.instance().getLogger().warning("Invalid faction rent equation \"" + equation + "\": " + e.getMessage());
+            if (!equation.equals(lastWarnedRentEquation)) {
+                lastWarnedRentEquation = equation;
+                AbstractFactionsPlugin.instance().getLogger().warning("Invalid faction rent equation \"" + equation + "\": " + e.getMessage());
+            }
             return 0d;
         }
     }
@@ -138,7 +155,7 @@ public class Econ {
 
         String universeAccount = Confs.main().economy().getUniverseAccount();
 
-        if (universeAccount.isEmpty()) {
+        if (universeAccount.isBlank()) {
             return;
         }
         OfflinePlayer universe = getUniverseOfflinePlayer();
@@ -153,7 +170,7 @@ public class Econ {
         String universeAccount = Confs.main().economy().getUniverseAccount();
         String universeUUID = Confs.main().economy().getUniverseAccountUUID();
 
-        if (universeUUID == null) {
+        if (universeUUID.isBlank()) {
             return getOfflinePlayerForName(universeAccount);
         }
         return AbstractFactionsPlugin.instance().getOfflinePlayer(universeAccount, UUID.fromString(universeUUID));
@@ -164,9 +181,9 @@ public class Econ {
             return;
         }
 
-        String landlordAccount = Confs.main().economy().getUniverseAccount();
+        String landlordAccount = Confs.main().economy().getRentGatheringAccount();
 
-        if (landlordAccount.isEmpty()) {
+        if (landlordAccount.isBlank()) {
             return;
         }
         OfflinePlayer landlord = getRentGatheringOfflinePlayer();
@@ -181,7 +198,7 @@ public class Econ {
         String rentAccount = Confs.main().economy().getRentGatheringAccount();
         String rentUUID = Confs.main().economy().getRentGatheringAccountUUID();
 
-        if (rentUUID == null) {
+        if (rentUUID.isBlank()) {
             return getOfflinePlayerForName(rentAccount);
         }
         return AbstractFactionsPlugin.instance().getOfflinePlayer(rentAccount, UUID.fromString(rentUUID));
@@ -485,7 +502,6 @@ public class Econ {
     public static double calculateTotalLandRefund(int ownedLand) {
         return calculateTotalLandValue(ownedLand) * Confs.main().economy().getClaimRefundMultiplier();
     }
-
 
     @SuppressWarnings({"DataFlowIssue", "deprecation"})
     private static OfflinePlayer getOfflinePlayerForName(String name) {

@@ -33,7 +33,7 @@ public class MiscUtil {
     private static final Map<String, EntityType> entityTypeMap;
     public static final Function<String, EntityType> ENTITY_TYPE_FUNCTION;
     @SuppressWarnings("removal")
-    public static final Function<String, Material> MATERIAL_FUNCTION = (string) -> MaterialDb.get(string, null);;
+    public static final Function<String, Material> MATERIAL_FUNCTION = (string) -> MaterialDb.get(string, null);
     private static final Map<String, CreatureSpawnEvent.SpawnReason> spawnReasonMap;
     public static final Function<String, CreatureSpawnEvent.SpawnReason> SPAWN_REASON_FUNCTION;
     private final String nums = "12%%__USER__%%34";

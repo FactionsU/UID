@@ -225,6 +225,11 @@ public abstract class MemoryFPlayer implements FPlayer {
     }
 
     @Override
+    public void pruneMissedDuesDatesBefore(LocalDate cutoff) {
+        this.missedDuesDates.removeIf(date -> date.isBefore(cutoff));
+    }
+
+    @Override
     public double powerBoost() {
         return this.powerBoost;
     }
@@ -1095,7 +1100,9 @@ public abstract class MemoryFPlayer implements FPlayer {
 
         Board.board().claim(flocation, forFaction);
 
-        forFaction.sendRichMessage(Confs.tl().claiming().claim().getClaimedRent(), FactionResolver.of(forFaction));
+        if (!forFaction.rentExempt()) {
+            forFaction.sendRichMessage(Confs.tl().claiming().claim().getClaimedRent(), FactionResolver.of(forFaction));
+        }
 
         if (Confs.main().logging().isLandClaims()) {
             AbstractFactionsPlugin.instance().log(this.name() + " claimed land at (" + flocation.asCoordString() + ") for the faction: " + forFaction.tag());
@@ -1164,7 +1171,9 @@ public abstract class MemoryFPlayer implements FPlayer {
 
             targetFaction.sendRichMessage(unclaimTl.getUnclaimed(),
                     FPlayerResolver.of("player", this));
-            targetFaction.sendRichMessage(unclaimTl.getFactionUnclaimedRent(), FactionResolver.of(targetFaction));
+            if (!targetFaction.rentExempt()) {
+                targetFaction.sendRichMessage(unclaimTl.getFactionUnclaimedRent(), FactionResolver.of(targetFaction));
+            }
             this.sendRichMessage(unclaimTl.getUnclaims());
 
             if (Confs.main().logging().isLandUnclaims()) {
@@ -1219,7 +1228,9 @@ public abstract class MemoryFPlayer implements FPlayer {
         Board.board().unclaim(flocation);
         targetFaction.sendRichMessage(unclaimTl.getFactionUnclaimed(),
                 FPlayerResolver.of("player", this));
-        targetFaction.sendRichMessage(unclaimTl.getFactionUnclaimedRent(), FactionResolver.of(targetFaction));
+        if (!targetFaction.rentExempt()) {
+            targetFaction.sendRichMessage(unclaimTl.getFactionUnclaimedRent(), FactionResolver.of(targetFaction));
+        }
 
         if (Confs.main().logging().isLandUnclaims()) {
             AbstractFactionsPlugin.instance().log(this.name() + " unclaimed land at (" + flocation.asCoordString() + ") from the faction: " + targetFaction.tag());

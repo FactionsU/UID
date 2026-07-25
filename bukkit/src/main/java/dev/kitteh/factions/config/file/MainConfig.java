@@ -2397,6 +2397,11 @@ public class MainConfig {
                 Faction admins configure the amounts with "/f set dues".
                 This feature requires both economy ("enabled") and faction banks ("bankEnabled") to be turned on.""")
         private boolean duesEnabled = true;
+        @Comment("""
+                How many days into the past a member's missed dues payments are kept and logged, shown by "/f dues".
+                Older missed-payment records are discarded. Set to 0 to disable this logging entirely,
+                which also makes the RECORD dues failure policy have no lasting effect.""")
+        private int duesMissedPaymentLogDays = 30;
 
         @Comment("""
                 Faction rent: each day, right after dues are collected, a faction owes rent paid from its bank based on how much land it has claimed.
@@ -2611,6 +2616,10 @@ public class MainConfig {
 
         public boolean isDuesEnabled() {
             return duesEnabled;
+        }
+
+        public int getDuesMissedPaymentLogDays() {
+            return duesMissedPaymentLogDays;
         }
 
         public boolean isRentEnabled() {

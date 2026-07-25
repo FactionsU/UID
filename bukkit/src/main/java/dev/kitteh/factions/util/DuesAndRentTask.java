@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Queue;
+import java.util.logging.Level;
 
 @ApiStatus.Internal
 public class DuesAndRentTask implements Runnable {
@@ -134,9 +135,12 @@ public class DuesAndRentTask implements Runnable {
 
         private void collectDues(Faction faction) {
             DuesFailurePolicy policy = faction.duesFailurePolicy();
+            int logDays = Confs.main().economy().getDuesMissedPaymentLogDays();
+            LocalDate cutoff = logDays > 0 ? this.today.minusDays(Math.min(logDays, 3000)) : LocalDate.MAX;
             List<FPlayer> toDismiss = new ArrayList<>();
 
             for (FPlayer member : new ArrayList<>(faction.members())) {
+                member.pruneMissedDuesDatesBefore(cutoff);
                 double owed = faction.dues(member.role()) + member.duesDebt();
                 if (owed <= 0) {
                     continue;
@@ -153,28 +157,42 @@ public class DuesAndRentTask implements Runnable {
                 // Uh oh, couldn't pay it!
 
                 if (Econ.has(member, owed)) {
-                    member.addMissedDuesDate(this.today);
+                    if (logDays > 0) {
+                        member.addMissedDuesDate(this.today);
+                    }
                     member.duesDebt(owed);
                     AbstractFactionsPlugin.instance().log(String.format("%s could not afford %s in daily dues for faction %s, but they could pay. Adding debt, assumed plugin error.", member.name(), Econ.moneyString(owed), faction.tag()));
                     continue;
                 }
 
                 switch (policy) {
-                    case RECORD -> member.addMissedDuesDate(this.today);
+                    case RECORD -> {
+                        if (logDays > 0) {
+                            member.addMissedDuesDate(this.today);
+                        }
+                    }
                     case DEMOTE -> {
-                        Role demoted = Role.getRelative(member.role(), -1);
-                        if (demoted != null) {
-                            member.role(demoted);
-                            if (member.asPlayer() instanceof Player player) {
-                                player.updateCommands();
+                        if (member.role() != Role.ADMIN) {
+                            Role demoted = Role.getRelative(member.role(), -1);
+                            if (demoted != null) {
+                                member.role(demoted);
+                                if (member.asPlayer() instanceof Player player) {
+                                    player.updateCommands();
+                                }
                             }
                         }
                     }
                     case DEBT -> {
-                        member.addMissedDuesDate(this.today);
+                        if (logDays > 0) {
+                            member.addMissedDuesDate(this.today);
+                        }
                         member.duesDebt(owed);
                     }
-                    case DISMISS -> toDismiss.add(member);
+                    case DISMISS -> {
+                        if (member.role() != Role.ADMIN) {
+                            toDismiss.add(member);
+                        }
+                    }
                 }
 
                 if (this.log) {
@@ -197,7 +215,7 @@ public class DuesAndRentTask implements Runnable {
             }
 
             if (Econ.has(faction, owed)) {
-                Econ.modifyMoney(faction, -owed);
+                Econ.modifyBalance(faction, -owed);
                 Econ.modifyRentGatheringAccountMoney(owed);
                 faction.rentDebt(0);
                 faction.consecutiveMissedRentDays(0); // C-C-C-Combo breaker
@@ -218,7 +236,7 @@ public class DuesAndRentTask implements Runnable {
                     int streak = faction.consecutiveMissedRentDays() + 1;
                     faction.consecutiveMissedRentDays(streak);
                     int maxMissed = Confs.main().economy().getRentDisbandAfterConsecutiveMissedDays();
-                    if (maxMissed > 0 && streak >= maxMissed) {
+                    if (maxMissed > 0 && streak >= maxMissed && !faction.isPermanent()) {
                         if (this.log) {
                             AbstractFactionsPlugin.instance().log(String.format("Faction %s disbanded after missing rent %d days in a row.", faction.tag(), streak));
                         }
@@ -232,7 +250,11 @@ public class DuesAndRentTask implements Runnable {
                     faction.consecutiveMissedRentDays(0);
                 }
                 case UNCLAIM_UNTIL_AFFORD -> unclaimUntilAfford(faction);
-                case DISBAND -> disband(faction);
+                case DISBAND -> {
+                    if (!faction.isPermanent()) {
+                        disband(faction);
+                    }
+                }
             }
 
             if (this.log) {
@@ -244,23 +266,47 @@ public class DuesAndRentTask implements Runnable {
             List<FLocation> claims = new ArrayList<>(faction.claims());
             claims.sort(Comparator.comparingLong(LandLord::inhabitedTime));
 
-            int index = 0;
-            double owed = Econ.calculateRent(faction) + faction.rentDebt();
-            while (owed > 0 && !Econ.has(faction, owed) && index < claims.size()) {
-                Board.board().unclaim(claims.get(index));
-                index++;
-                owed = Econ.calculateRent(faction) + faction.rentDebt();
+            double balance = Econ.getBalance(faction);
+            int originalClaimCount = faction.claimCount();
+            int claimCount = originalClaimCount;
+            double refund = 0;
+            double due = Econ.calculateRent(claimCount) + faction.rentDebt();
+
+            while (claimCount > 0) {
+                refund += Econ.calculateClaimRefund(claimCount);
+                claimCount--;
+                if ((due = (Econ.calculateRent(claimCount) + faction.rentDebt())) <= (balance + refund)) {
+                    break;
+                }
             }
 
-            if (owed <= 0 || Econ.has(faction, owed)) {
-                if (owed > 0) {
-                    Econ.modifyMoney(faction, -owed);
-                    Econ.modifyRentGatheringAccountMoney(owed);
+            if (originalClaimCount > 0) {
+                if (claimCount == 0) {
+                    Board.board().unclaimAll(faction);
+                } else {
+                    int toRemove = originalClaimCount - claimCount;
+                    for (int i = 0; i < toRemove; i++) {
+                        Board.board().unclaim(claims.get(i));
+                    }
                 }
+            }
+
+            if (refund > 0 && !Econ.modifyMoney(faction, refund)) {
+                AbstractFactionsPlugin.instance().log(Level.WARNING, String.format("Failed to pay %s of unclaim refund to faction %s while collecting unpaid rent.", Econ.moneyString(refund), faction.tag()));
+            }
+            if (due > 0) {
+                if (Econ.has(faction, due)) {
+                    Econ.modifyBalance(faction, -due);
+                    Econ.modifyRentGatheringAccountMoney(due);
+                    faction.rentDebt(0);
+                    faction.consecutiveMissedRentDays(0);
+                } else {
+                    faction.rentDebt(due);
+                    faction.consecutiveMissedRentDays(faction.consecutiveMissedRentDays() + 1);
+                }
+            } else {
                 faction.rentDebt(0);
                 faction.consecutiveMissedRentDays(0);
-            } else {
-                faction.rentDebt(owed);
             }
         }
 
