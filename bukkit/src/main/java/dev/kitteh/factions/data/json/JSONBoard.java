@@ -7,6 +7,7 @@ import dev.kitteh.factions.util.Morton;
 import dev.kitteh.factions.util.WorldTracker;
 import org.jspecify.annotations.NullMarked;
 
+import java.io.BufferedReader;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -111,8 +112,11 @@ public final class JSONBoard extends MemoryBoard {
         try {
             Type type = new TypeToken<Map<String, Map<String, String>>>() {
             }.getType();
-            Map<String, Map<String, String>> worldCoordIds = AbstractFactionsPlugin.instance().gson().fromJson(Files.newBufferedReader(boardPath), type);
-            loadFromSaveFormat(worldCoordIds);
+            try (BufferedReader reader = Files.newBufferedReader(boardPath)) {
+                Map<String, Map<String, String>> worldCoordIds = AbstractFactionsPlugin.instance().gson().fromJson(reader, type);
+                loadFromSaveFormat(worldCoordIds);
+            }
+
         } catch (Exception e) {
             AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to load the board from disk.", e);
             return 0;
@@ -122,8 +126,10 @@ public final class JSONBoard extends MemoryBoard {
             try {
                 Type type = new TypeToken<Map<String, Map<Long, Long>>>() {
                 }.getType();
-                Map<String, Map<Long, Long>> cache = AbstractFactionsPlugin.instance().gson().fromJson(Files.newBufferedReader(cachePath), type);
-                loadCacheFromSaveFormat(cache);
+                try (BufferedReader reader = Files.newBufferedReader(cachePath)) {
+                    Map<String, Map<Long, Long>> cache = AbstractFactionsPlugin.instance().gson().fromJson(reader, type);
+                    loadCacheFromSaveFormat(cache);
+                }
             } catch (Exception e) {
                 AbstractFactionsPlugin.instance().getLogger().log(Level.SEVERE, "Failed to load the board inhabited cache from disk.", e);
             }

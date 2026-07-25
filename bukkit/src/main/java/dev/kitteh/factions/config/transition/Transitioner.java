@@ -368,17 +368,6 @@ public class Transitioner {
     }
 
     private void migrateV14(CommentedConfigurationNode node) {
-        CommentedConfigurationNode statusFormat = node.getNode("commands", "status", "format");
-        if (!statusFormat.isVirtual()) {
-            String string = statusFormat.getString(new TranslationsConfig.Commands.Status().getFormat());
-            string = string.replace("<power>", "<player:power>").replace("<last_seen>", "<player:last_seen>");
-            statusFormat.setValue(string);
-        }
-
-        if (node.getNode("colors", "relations").isVirtual() && node.getNode("colors", "factions").isVirtual()) {
-            return;
-        }
-
         HoconConfigurationLoader loader = Loader.getLoader("translations");
         CommentedConfigurationNode translations;
         try {
@@ -388,15 +377,25 @@ public class Transitioner {
             return;
         }
 
-        CommentedConfigurationNode colors = node.getNode("colors");
-        CommentedConfigurationNode colorful = translations.getNode("aColorfulMessage");
-        shiftPresent(colors.getNode("factions"), colorful.getNode("factions"), "wilderness", "safezone", "warzone");
-        shiftPresent(colors.getNode("relations"), colorful.getNode("relations"), "member", "ally", "truce", "neutral", "enemy", "peaceful");
+        CommentedConfigurationNode statusFormat = translations.getNode("commands", "status", "format");
+        if (!statusFormat.isVirtual()) {
+            String string = statusFormat.getString(new TranslationsConfig.Commands.Status().getFormat());
+            string = string.replace("<power>", "<player:power>").replace("<last_seen>", "<player:last_seen>");
+            statusFormat.setValue(string);
+        }
+
+        if (!node.getNode("colors", "relations").isVirtual() || !node.getNode("colors", "factions").isVirtual()) {
+            CommentedConfigurationNode colors = node.getNode("colors");
+            CommentedConfigurationNode colorful = translations.getNode("aColorfulMessage");
+            shiftPresent(colors.getNode("factions"), colorful.getNode("factions"), "wilderness", "safezone", "warzone");
+            shiftPresent(colors.getNode("relations"), colorful.getNode("relations"), "member", "ally", "truce", "neutral", "enemy", "peaceful");
+        }
 
         try {
             loader.save(translations);
             this.plugin.getLogger().info("");
-            this.plugin.getLogger().info("  Migrated the colors section from main.conf to translations.conf to keep colors together");
+            this.plugin.getLogger().info("  Migrated the colors section from main.conf to translations.conf to keep colors together.");
+            this.plugin.getLogger().info("  Fixed a mistake in the format for the status command.");
             this.plugin.getLogger().info("");
         } catch (IOException e) {
             this.plugin.getLogger().log(Level.SEVERE, "Failed to save translations.conf while migrating the colors section of main.conf! Relation and faction colors reverted to defaults.", e);

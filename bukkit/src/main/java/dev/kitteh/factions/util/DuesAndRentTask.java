@@ -11,12 +11,16 @@ import dev.kitteh.factions.Universe;
 import dev.kitteh.factions.config.Confs;
 import dev.kitteh.factions.event.FPlayerLeaveEvent;
 import dev.kitteh.factions.event.FactionAutoDisbandEvent;
+import dev.kitteh.factions.event.FactionAutoUnclaimAllEvent;
+import dev.kitteh.factions.event.FactionAutoUnclaimEvent;
+import dev.kitteh.factions.event.FactionEvent;
 import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.plugin.AbstractFactionsPlugin;
 import dev.kitteh.factions.plugin.Instances;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
@@ -172,6 +176,10 @@ public class DuesAndRentTask implements Runnable {
                         }
                     }
                     case DEMOTE -> {
+                        // Recorded as well, as there's nothing left to demote once at the lowest role.
+                        if (logDays > 0) {
+                            member.addMissedDuesDate(this.today);
+                        }
                         if (member.role() != Role.ADMIN) {
                             Role demoted = Role.getRelative(member.role(), -1);
                             if (demoted != null) {
@@ -225,16 +233,16 @@ public class DuesAndRentTask implements Runnable {
                 return;
             }
 
-            if (logDays > 0) {
-                faction.addMissedRentDate(this.today);
-            }
+            int streak = faction.consecutiveMissedRentDays() + 1;
 
             RentFailurePolicy policy = Confs.main().economy().getRentFailurePolicy();
             switch (policy) {
                 case DEBT -> {
                     faction.rentDebt(owed);
-                    int streak = faction.consecutiveMissedRentDays() + 1;
                     faction.consecutiveMissedRentDays(streak);
+                    if (logDays > 0) {
+                        faction.addMissedRentDate(this.today);
+                    }
                     int maxMissed = Confs.main().economy().getRentDisbandAfterConsecutiveMissedDays();
                     if (maxMissed > 0 && streak >= maxMissed && !faction.isPermanent()) {
                         if (this.log) {
@@ -245,9 +253,17 @@ public class DuesAndRentTask implements Runnable {
                     }
                 }
                 case UNCLAIM_ALL -> {
-                    Board.board().unclaimAll(faction);
-                    faction.rentDebt(0);
-                    faction.consecutiveMissedRentDays(0);
+                    if (notCancelled(new FactionAutoUnclaimAllEvent(faction))) {
+                        Board.board().unclaimAll(faction);
+                        faction.rentDebt(0);
+                        faction.consecutiveMissedRentDays(0);
+                    } else {
+                        faction.rentDebt(owed);
+                        faction.consecutiveMissedRentDays(streak);
+                        if (logDays > 0) {
+                            faction.addMissedRentDate(this.today);
+                        }
+                    }
                 }
                 case UNCLAIM_UNTIL_AFFORD -> unclaimUntilAfford(faction);
                 case DISBAND -> {
@@ -269,24 +285,32 @@ public class DuesAndRentTask implements Runnable {
             double balance = Econ.getBalance(faction);
             int originalClaimCount = faction.claimCount();
             int claimCount = originalClaimCount;
-            double refund = 0;
-            double due = Econ.calculateRent(claimCount) + faction.rentDebt();
+            double projectedRefund = 0;
 
             while (claimCount > 0) {
-                refund += Econ.calculateClaimRefund(claimCount);
+                projectedRefund += Econ.calculateClaimRefund(claimCount);
                 claimCount--;
-                if ((due = (Econ.calculateRent(claimCount) + faction.rentDebt())) <= (balance + refund)) {
+                if ((Econ.calculateRent(claimCount) + faction.rentDebt()) <= (balance + projectedRefund)) {
                     break;
                 }
             }
 
+            double refund = 0;
             if (originalClaimCount > 0) {
                 if (claimCount == 0) {
-                    Board.board().unclaimAll(faction);
+                    if (notCancelled(new FactionAutoUnclaimAllEvent(faction))) {
+                        refund = projectedRefund;
+                        Board.board().unclaimAll(faction);
+                    }
                 } else {
                     int toRemove = originalClaimCount - claimCount;
                     for (int i = 0; i < toRemove; i++) {
-                        Board.board().unclaim(claims.get(i));
+                        FLocation claim = claims.get(i);
+                        if (!notCancelled(new FactionAutoUnclaimEvent(claim, faction))) {
+                            continue;
+                        }
+                        refund += Econ.calculateClaimRefund(faction.claimCount());
+                        Board.board().unclaim(claim);
                     }
                 }
             }
@@ -294,16 +318,17 @@ public class DuesAndRentTask implements Runnable {
             if (refund > 0 && !Econ.modifyMoney(faction, refund)) {
                 AbstractFactionsPlugin.instance().log(Level.WARNING, String.format("Failed to pay %s of unclaim refund to faction %s while collecting unpaid rent.", Econ.moneyString(refund), faction.tag()));
             }
-            if (due > 0) {
-                if (Econ.has(faction, due)) {
-                    Econ.modifyBalance(faction, -due);
-                    Econ.modifyRentGatheringAccountMoney(due);
-                    faction.rentDebt(0);
-                    faction.consecutiveMissedRentDays(0);
-                } else {
-                    faction.rentDebt(due);
-                    faction.consecutiveMissedRentDays(faction.consecutiveMissedRentDays() + 1);
-                }
+
+            double due = Econ.calculateRent(faction) + faction.rentDebt();
+            if (due > 0 && Econ.has(faction, due)) {
+                Econ.modifyBalance(faction, -due);
+                Econ.modifyRentGatheringAccountMoney(due);
+                faction.rentDebt(0);
+                faction.consecutiveMissedRentDays(0);
+            } else if (due > 0) {
+                faction.rentDebt(due);
+                faction.addMissedRentDate(this.today);
+                faction.consecutiveMissedRentDays(faction.consecutiveMissedRentDays() + 1);
             } else {
                 faction.rentDebt(0);
                 faction.consecutiveMissedRentDays(0);
@@ -321,6 +346,11 @@ public class DuesAndRentTask implements Runnable {
         private static long inhabitedTime(FLocation location) {
             long time = location.cachedInhabitedTime();
             return time == -1L ? Long.MAX_VALUE : time;
+        }
+
+        private static <T extends FactionEvent & Cancellable> boolean notCancelled(T event) {
+            Bukkit.getServer().getPluginManager().callEvent(event);
+            return !event.isCancelled();
         }
     }
 }
