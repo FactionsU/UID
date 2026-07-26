@@ -31,6 +31,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Locale;
 import java.util.logging.Level;
 
 public class ListenEnterExit implements Listener {
@@ -172,7 +173,7 @@ public class ListenEnterExit implements Listener {
                 if (terry.isRelationToTeleportOut(relation, standingFaction)) {
                     Location target = null;
                     for (String destination : terry.getDestination().split(",")) {
-                        switch (destination.trim().toLowerCase()) {
+                        switch (destination.trim().toLowerCase(Locale.ROOT)) {
                             case "spawn":
                                 World world = this.plugin.getServer().getWorld(terry.getDestinationSpawnWorld());
                                 if (world != null) {

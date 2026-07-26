@@ -99,7 +99,8 @@ public class WorldTracker {
     }
 
     public LongSet allClaimsAsLong(int id) {
-        return new LongArraySet(this.IDToChunk.get(id));
+        //noinspection ConstantValue
+        return this.IDToChunk.get(id) instanceof LongSet ls ? new LongArraySet(ls) : new LongArraySet();
     }
 
     public Long2IntMap chunkIdMapForSave() {

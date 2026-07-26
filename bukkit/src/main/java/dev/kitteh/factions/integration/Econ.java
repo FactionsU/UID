@@ -268,7 +268,9 @@ public class Econ {
 
     public static boolean transferMoney(Participator invoker, Participator from, Participator to, double amount, boolean notify) {
         if (!shouldBeUsed()) {
-            invoker.sendRichMessage(Confs.tl().economy().transfer().getDisabled());
+            if (notify) {
+                invoker.sendRichMessage(Confs.tl().economy().transfer().getDisabled());
+            }
             return false;
         }
 
@@ -304,8 +306,10 @@ public class Econ {
 
         // Check if the new balance is over Essential's money cap.
         if (AbstractFactionsPlugin.instance().integrationManager().isEnabled(IntegrationManager.Integrations.ESS) && Essentials.isOverBalCap(getBalance(toAcc) + amount)) {
-            invoker.sendRichMessage(Confs.tl().economy().transfer().getOverBalCap(),
-                    Placeholder.unparsed("amount", moneyString(amount)));
+            if (notify) {
+                invoker.sendRichMessage(Confs.tl().economy().transfer().getOverBalCap(),
+                        Placeholder.unparsed("amount", moneyString(amount)));
+            }
             return false;
         }
 

@@ -9,6 +9,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -25,11 +26,11 @@ public class UpgradeRegistry {
 
     static {
         for (UpgradeVariable variable : Upgrades.VARIABLES) {
-            variableRegistry.put(variable.name().toLowerCase(), variable);
+            variableRegistry.put(variable.name().toLowerCase(Locale.ROOT), variable);
         }
 
         for (Upgrade upgrade : Upgrades.UPGRADES) {
-            upgradeRegistry.put(upgrade.name().toLowerCase(), upgrade);
+            upgradeRegistry.put(upgrade.name().toLowerCase(Locale.ROOT), upgrade);
         }
     }
 
@@ -46,7 +47,7 @@ public class UpgradeRegistry {
     /// @param name upgrade name
     /// @return upgrade or null if none registered
     public static @Nullable Upgrade getUpgrade(String name) {
-        return upgradeRegistry.get(name.toLowerCase());
+        return upgradeRegistry.get(name.toLowerCase(Locale.ROOT));
     }
 
     /// Gets a registered upgrade variable.
@@ -54,7 +55,7 @@ public class UpgradeRegistry {
     /// @param name upgrade variable name
     /// @return upgrade variable or null if none registered
     public static @Nullable UpgradeVariable getVariable(String name) {
-        return variableRegistry.get(name.toLowerCase());
+        return variableRegistry.get(name.toLowerCase(Locale.ROOT));
     }
 
     /// Gets all registered upgrades.
@@ -77,7 +78,7 @@ public class UpgradeRegistry {
         if (closed) {
             throw new IllegalStateException("Cannot register upgrade. Must be completed during load.");
         }
-        if (upgradeRegistry.containsKey(upgrade.name().toLowerCase())) {
+        if (upgradeRegistry.containsKey(upgrade.name().toLowerCase(Locale.ROOT))) {
             throw new IllegalArgumentException("Upgrade with name '" + upgrade.name() + "' already registered");
         }
         if (upgrade != settings.upgrade()) {
@@ -92,7 +93,7 @@ public class UpgradeRegistry {
                 throw new IllegalArgumentException("Variable with name '" + variable.name() + "' already registered but does not match this upgrade's variable");
             }
         }
-        upgradeRegistry.put(upgrade.name().toLowerCase(), upgrade);
+        upgradeRegistry.put(upgrade.name().toLowerCase(Locale.ROOT), upgrade);
         upgradeDefaultRunners.add(u -> u.addDefaultsIfNotPresent(settings, defaultDisabled));
     }
 
@@ -105,9 +106,9 @@ public class UpgradeRegistry {
         if (closed) {
             throw new IllegalStateException("Cannot register upgrade variable. Must be completed during load.");
         }
-        if (variableRegistry.containsKey(variable.name().toLowerCase())) {
+        if (variableRegistry.containsKey(variable.name().toLowerCase(Locale.ROOT))) {
             throw new IllegalArgumentException("Upgrade variable with name '" + variable.name() + "' already registered");
         }
-        variableRegistry.put(variable.name().toLowerCase(), variable);
+        variableRegistry.put(variable.name().toLowerCase(Locale.ROOT), variable);
     }
 }

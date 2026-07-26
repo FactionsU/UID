@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -69,7 +70,7 @@ public class MiscUtil {
         StringBuilder ret = new StringBuilder();
 
         str = ChatColor.stripColor(str);
-        str = str.toLowerCase();
+        str = str.toLowerCase(Locale.ROOT);
 
         MainConfig.Factions.Other conf = Confs.main().factions().other();
         for (char c : str.toCharArray()) {
@@ -77,7 +78,7 @@ public class MiscUtil {
                 ret.append(c);
             }
         }
-        return ret.toString().toLowerCase();
+        return ret.toString().toLowerCase(Locale.ROOT);
     }
 
     public static List<Component> validateTag(String str) {
@@ -86,7 +87,7 @@ public class MiscUtil {
         ArrayList<Component> errors = new ArrayList<>();
 
         for (String blacklistItem : conf.getNameBlacklist()) {
-            if (str.toLowerCase().contains(blacklistItem.toLowerCase())) {
+            if (str.toLowerCase(Locale.ROOT).contains(blacklistItem.toLowerCase(Locale.ROOT))) {
                 errors.add(Mini.parse(tl.getBlacklisted()));
                 break;
             }

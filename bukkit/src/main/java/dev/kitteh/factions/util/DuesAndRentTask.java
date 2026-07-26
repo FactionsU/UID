@@ -110,6 +110,10 @@ public class DuesAndRentTask implements Runnable {
                 if (this.dues) {
                     this.collectDues(faction);
                 }
+                faction = Factions.factions().get(id);
+                if (faction == null) {
+                    continue; // Just in case of quirky disband scenario
+                }
                 // May need dues to pay rent!
                 if (this.rent && !faction.rentExempt()) {
                     this.collectRent(faction);
@@ -327,7 +331,9 @@ public class DuesAndRentTask implements Runnable {
                 faction.consecutiveMissedRentDays(0);
             } else if (due > 0) {
                 faction.rentDebt(due);
-                faction.addMissedRentDate(this.today);
+                if (Confs.main().economy().getRentMissedPaymentLogDays() > 0) {
+                    faction.addMissedRentDate(this.today);
+                }
                 faction.consecutiveMissedRentDays(faction.consecutiveMissedRentDays() + 1);
             } else {
                 faction.rentDebt(0);

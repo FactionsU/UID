@@ -7,6 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Set;
 
 @ApiStatus.AvailableSince("4.0.0")
@@ -29,7 +30,7 @@ public enum Relation implements Permissible {
     Relation(final int value) {
         this.value = value;
         this.nicename = this.name();
-        this.justMyNameInASet = Collections.singleton(this.name().toLowerCase());
+        this.justMyNameInASet = Collections.singleton(this.name().toLowerCase(Locale.ROOT));
     }
 
     public static Relation fromString(String s) {

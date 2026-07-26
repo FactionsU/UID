@@ -27,6 +27,8 @@ import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.BlockingSuggestionProvider;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 
+import java.util.Locale;
+
 public class CmdZone implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
@@ -105,7 +107,7 @@ public class CmdZone implements Cmd {
     static final BlockingSuggestionProvider.@NonNull Strings<Sender> zoneSuggester = (c, i) ->
             c.sender().fPlayerOrNull().faction().zones().get().stream()
                     .map(Faction.Zone::name)
-                    .filter(s -> s.toLowerCase().startsWith(i.peekString().toLowerCase()))
+                    .filter(s -> s.toLowerCase(Locale.ROOT).startsWith(i.peekString().toLowerCase(Locale.ROOT)))
                     .toList();
 
     private void create(CommandContext<Sender> context) {

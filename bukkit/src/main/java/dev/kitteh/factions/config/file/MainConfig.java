@@ -825,14 +825,14 @@ public class MainConfig {
                     if (triggerPublicChatLowerCased == null) {
                         triggerPublicChatLowerCased = new ArrayList<>();
                         if (triggerPublicChatOnCommand != null) {
-                            triggerPublicChatOnCommand.forEach(c -> triggerPublicChatLowerCased.add(c.toLowerCase()));
+                            triggerPublicChatOnCommand.forEach(c -> triggerPublicChatLowerCased.add(c.toLowerCase(Locale.ROOT)));
                         }
                     }
                     return triggerPublicChatLowerCased;
                 }
 
                 public boolean isTriggerPublicChat(String command) {
-                    return getTriggerPublicChatOnCommand().contains(command.toLowerCase());
+                    return getTriggerPublicChatOnCommand().contains(command.toLowerCase(Locale.ROOT));
                 }
             }
 

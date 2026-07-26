@@ -65,6 +65,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -522,28 +523,28 @@ public abstract class MemoryFaction implements Faction {
 
     @Override
     public boolean removeWarp(String name) {
-        warpPasswords.remove(name.toLowerCase()); // remove password no matter what.
+        warpPasswords.remove(name.toLowerCase(Locale.ROOT)); // remove password no matter what.
         return warps.remove(name) != null;
     }
 
     @Override
     public boolean isWarpPassword(String warp, String password) {
-        return hasWarpPassword(warp) && warpPasswords.get(warp.toLowerCase()).equals(password);
+        return hasWarpPassword(warp) && warpPasswords.get(warp.toLowerCase(Locale.ROOT)).equals(password);
     }
 
     @Override
     public boolean hasWarpPassword(String warp) {
-        return warpPasswords.containsKey(warp.toLowerCase());
+        return warpPasswords.containsKey(warp.toLowerCase(Locale.ROOT));
     }
 
     @Override
     public void setWarpPassword(String warp, String password) {
-        warpPasswords.put(warp.toLowerCase(), password);
+        warpPasswords.put(warp.toLowerCase(Locale.ROOT), password);
     }
 
     @Override
     public void removeWarpPassword(String warp) {
-        warpPasswords.remove(warp.toLowerCase());
+        warpPasswords.remove(warp.toLowerCase(Locale.ROOT));
     }
 
     @Override

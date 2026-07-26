@@ -14,6 +14,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public enum Contexts implements Context {
     }, Set.of("true", "false")),
     TERRITORY_RELATION((player) ->
             FPlayers.fPlayers().get(player).relationTo(Board.board().factionAt(new FLocation(player.getLocation()))).getNameInASet(),
-            Arrays.stream(Relation.values()).map(relation -> relation.name().toLowerCase()).collect(Collectors.toSet())),
+            Arrays.stream(Relation.values()).map(relation -> relation.name().toLowerCase(Locale.ROOT)).collect(Collectors.toSet())),
     TERRITORY_IS_SAFEZONE((player) ->
             Set.of(Boolean.toString(new FLocation(player).faction().isSafeZone())),
             Set.of("true", "false")),
@@ -54,13 +55,13 @@ public enum Contexts implements Context {
         FPlayer p = FPlayers.fPlayers().get(player);
         return p.hasFaction() ? p.role().getRoleNamesAtOrBelow() : Collections.emptySet();
     },
-            Arrays.stream(Role.values()).map(role -> role.name().toLowerCase()).collect(Collectors.toSet())),
+            Arrays.stream(Role.values()).map(role -> role.name().toLowerCase(Locale.ROOT)).collect(Collectors.toSet())),
     ROLE_AT_MOST((player) ->
     {
         FPlayer p = FPlayers.fPlayers().get(player);
         return p.hasFaction() ? p.role().getRoleNamesAtOrAbove() : Collections.emptySet();
     },
-            Arrays.stream(Role.values()).map(role -> role.name().toLowerCase()).collect(Collectors.toSet())),
+            Arrays.stream(Role.values()).map(role -> role.name().toLowerCase(Locale.ROOT)).collect(Collectors.toSet())),
     BANNED_BY((player) -> ((MemoryFPlayer) FPlayers.fPlayers().get(player.getUniqueId())).bannedBy(), Set.of("0")),
     ;
 
@@ -74,7 +75,7 @@ public enum Contexts implements Context {
 
     Contexts(Function<Player, Set<String>> function, Set<String> possibilities) {
         this.function = function;
-        this.name = this.name().toLowerCase().replace('_', '-');
+        this.name = this.name().toLowerCase(Locale.ROOT).replace('_', '-');
         this.possibilities = Collections.unmodifiableSet(possibilities);
     }
 

@@ -15,6 +15,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Locale;
+
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public class TextUtil {
@@ -83,7 +85,7 @@ public class TextUtil {
     @Deprecated(forRemoval = true, since = "4.5.0")
     @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
     public static String getMaterialName(Material material) {
-        return material.toString().replace('_', ' ').toLowerCase();
+        return material.toString().replace('_', ' ').toLowerCase(Locale.ROOT);
     }
 
     @Deprecated(forRemoval = true, since = "4.3.0")

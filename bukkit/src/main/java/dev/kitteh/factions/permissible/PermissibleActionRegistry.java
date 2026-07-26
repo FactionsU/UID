@@ -6,6 +6,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,7 +28,7 @@ public class PermissibleActionRegistry {
     }
 
     public static @Nullable PermissibleAction get(String name) {
-        return registry.get(name.toLowerCase());
+        return registry.get(name.toLowerCase(Locale.ROOT));
     }
 
     public static Collection<? extends PermissibleAction> getActions() {
@@ -38,9 +39,9 @@ public class PermissibleActionRegistry {
         if (closed) {
             throw new IllegalStateException("Cannot register PermissibleActions. Must be done during onLoad().");
         }
-        if (registry.containsKey(action.name().toLowerCase())) {
+        if (registry.containsKey(action.name().toLowerCase(Locale.ROOT))) {
             throw new IllegalArgumentException("Permissible action with name " + action.name() + " already registered");
         }
-        registry.put(action.name().toLowerCase(), action);
+        registry.put(action.name().toLowerCase(Locale.ROOT), action);
     }
 }

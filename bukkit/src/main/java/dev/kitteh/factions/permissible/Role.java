@@ -115,7 +115,7 @@ public enum Role implements Permissible {
             Set<String> set = new HashSet<>();
             for (Role role : values()) {
                 if (this.isAtMost(role)) {
-                    set.add(role.name().toLowerCase());
+                    set.add(role.name().toLowerCase(Locale.ROOT));
                 }
             }
             this.roleNamesAtOrAbove = Collections.unmodifiableSet(set);
@@ -132,7 +132,7 @@ public enum Role implements Permissible {
             Set<String> set = new HashSet<>();
             for (Role role : values()) {
                 if (this.isAtLeast(role)) {
-                    set.add(role.name().toLowerCase());
+                    set.add(role.name().toLowerCase(Locale.ROOT));
                 }
             }
             this.roleNamesAtOrBelow = Collections.unmodifiableSet(set);

@@ -35,7 +35,7 @@ public class CmdSetDefaultRole implements Cmd {
         var tl = Confs.tl().commands().set().defaultRole();
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         String roleString = context.get("role");
-        Role target = Role.fromString(roleString.toUpperCase());
+        Role target = Role.fromString(roleString);
         if (target == null) {
             sender.sendRichMessage(tl.getInvalidRole(), Placeholder.unparsed("role", roleString));
             return;

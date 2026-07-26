@@ -10,13 +10,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Locale;
 import java.util.stream.Stream;
 
 @ApiStatus.AvailableSince("4.0.0")
 @NullMarked
 public sealed interface LandRaidControl permits DTRControl, PowerControl {
     static LandRaidControl getByName(String name) {
-        return switch (name.toLowerCase()) {
+        return switch (name.toLowerCase(Locale.ROOT)) {
             case "dtr" -> new DTRControl();
             default -> new PowerControl();
         };

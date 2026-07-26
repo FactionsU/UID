@@ -17,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import java.util.Locale;
 import java.util.Set;
 
 public class ListenCommandDeny implements Listener {
@@ -61,7 +62,7 @@ public class ListenCommandDeny implements Listener {
             return false;
         }
 
-        fullCmd = fullCmd.toLowerCase();
+        fullCmd = fullCmd.toLowerCase(Locale.ROOT);
 
         FPlayer me = FPlayers.fPlayers().get(player);
 
@@ -123,7 +124,7 @@ public class ListenCommandDeny implements Listener {
             if (string == null || string.isEmpty()) {
                 continue;
             }
-            string = string.toLowerCase();
+            string = string.toLowerCase(Locale.ROOT);
             if (fullCmd.startsWith(string) || shortCmd.startsWith(string)) {
                 return true;
             }

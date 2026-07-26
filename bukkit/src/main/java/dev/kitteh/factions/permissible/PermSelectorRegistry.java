@@ -15,6 +15,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,7 +73,7 @@ public class PermSelectorRegistry {
     }
 
     public static PermSelector.@Nullable Descriptor getDescriptor(String name) {
-        return registry.get(name.toLowerCase());
+        return registry.get(name.toLowerCase(Locale.ROOT));
     }
 
     public static void register(PermSelector.Descriptor descriptor) {
@@ -80,9 +81,9 @@ public class PermSelectorRegistry {
             throw new IllegalStateException("Cannot register PermSelectors. Must be done during onLoad().");
         }
         String name = descriptor.name();
-        if (registry.containsKey(name.toLowerCase())) {
+        if (registry.containsKey(name.toLowerCase(Locale.ROOT))) {
             throw new IllegalArgumentException("PermSelector with name " + name + " already registered");
         }
-        registry.put(name.toLowerCase(), descriptor);
+        registry.put(name.toLowerCase(Locale.ROOT), descriptor);
     }
 }

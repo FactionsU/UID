@@ -27,6 +27,7 @@ import org.incendo.cloud.suggestion.SuggestionProvider;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -68,7 +69,7 @@ public class CmdTop implements Cmd {
         // Get all Factions and remove non player ones.
 
         String criteria = context.get("criteria");
-        criteria = criteria.toLowerCase();
+        criteria = criteria.toLowerCase(Locale.ROOT);
 
         Function<Faction, FTopValue<?>> ftopGenerator = topValueGenerators.get(criteria);
         var tl = Confs.tl().commands().top();
