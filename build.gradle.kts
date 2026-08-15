@@ -64,6 +64,7 @@ allprojects {
                 includeGroup("com.sk89q.worldedit")
                 includeGroup("com.sk89q.worldedit.worldedit-libs")
                 includeGroup("com.sk89q.worldguard")
+                includeGroup("org.enginehub.lin-bus")
             }
         }
 

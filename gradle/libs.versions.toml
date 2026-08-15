@@ -1,14 +1,14 @@
 [versions]
-apiversion = "26.1.2"
-minecraft = "26.1.2-R0.1-SNAPSHOT"
-minecraft-paper = "26.1.2.build.+"
-adventure = "4.26.1"
-brigadier = "1.0.18"
-cloud = "2.0.0-beta.16" # Check the included patch before changing
-essentialsx = "2.21.1"
-indra = "3.1.3"
-worldedit = "7.3.14"
-worldguard = "7.0.13"
+apiversion = "26.2"
+minecraft = "26.2-R0.1-SNAPSHOT"
+minecraft-paper = "26.2.build.+"
+adventure = "5.2.0"
+brigadier = "1.3.10"
+cloud = "2.0.0" # Check the included patch before changing
+essentialsx = "2.21.2"
+indra = "4.1.0"
+worldedit = "7.4.5"
+worldguard = "7.0.18"
 
 [plugins]
 indra = { id = "net.kyori.indra", version.ref = "indra" }
@@ -20,12 +20,12 @@ adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", 
 adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure" }
 adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure" }
 apiguardian = { module = "org.apiguardian:apiguardian-api", version = "1.1.2" }
-authlib = { module = "com.mojang:authlib", version = "6.0.54" }
+authlib = { module = "com.mojang:authlib", version = "9.0.75" }
 brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
 citizens = { module = "net.citizensnpcs:citizens-main", version = "2.0.38-SNAPSHOT" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud" }
 cloud-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud" }
-commons-lang3 = { module = "org.apache.commons:commons-lang3", version = "3.14.0" }
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version = "3.20.0" }
 configurate-hocon = { module = "org.spongepowered:configurate-hocon", version = "3.7.3" }
 denizen = { module = "com.denizenscript:denizen", version = "1.3.1-SNAPSHOT" }
 depenizen = { module = "com.denizenscript:depenizen", version = "2.0.0" }
@@ -38,7 +38,7 @@ graves = { module = "com.ranull:GravesX", version = "2026.4.9.1-api" }
 ifchestonly = { module = "dev.kitteh.forkedproject:IF-ChestOnly", version = "0.10.19" }
 immutables-value-annotations = { module = "org.immutables:value-annotations", version = "2.12.2" }
 jetbrains = { module = "org.jetbrains:annotations", version = "26.0.2" }
-jspecify = { module = "org.jspecify:jspecify", version = "0.3.0" }
+jspecify = { module = "org.jspecify:jspecify", version = "1.0.1" }
 luckperms-api = { module = "net.luckperms:api", version = "5.0" }
 magic-api = { module = "com.elmakers.mine.bukkit:MagicAPI", version = "10.2" }
 paper = { module = "io.papermc.paper:paper-api", version.ref = "minecraft-paper" }
