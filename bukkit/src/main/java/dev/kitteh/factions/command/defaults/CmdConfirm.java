@@ -17,15 +17,16 @@ import org.incendo.cloud.parser.standard.StringParser;
 import org.jspecify.annotations.NullMarked;
 
 import java.text.DecimalFormat;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @NullMarked
 public class CmdConfirm implements Cmd {
     private static final Cache<UUID, Conf> cache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .expireAfterWrite(Duration.of(1, ChronoUnit.MINUTES))
             .build();
 
     private record Conf(String code, Consumer<FPlayer> consumer) {

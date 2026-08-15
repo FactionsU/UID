@@ -33,6 +33,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -317,7 +319,7 @@ public abstract class MemoryBoard implements Board {
     }
 
     private final Cache<FPlayer, List<Component>> mapCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(500, TimeUnit.MILLISECONDS).build();
+            .expireAfterWrite(Duration.of(500, ChronoUnit.MILLIS)).build();
 
     public List<Component> getScoreboardMap(FPlayer fplayer) {
         try {

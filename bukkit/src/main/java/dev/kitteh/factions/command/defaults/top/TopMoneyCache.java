@@ -11,6 +11,8 @@ import dev.kitteh.factions.integration.Econ;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
@@ -53,7 +55,7 @@ public final class TopMoneyCache {
     }
 
     private static <K> Cache<K, Double> newBalanceCache(long expireSeconds) {
-        return CacheBuilder.newBuilder().expireAfterWrite(expireSeconds, TimeUnit.SECONDS).build();
+        return CacheBuilder.newBuilder().expireAfterWrite(Duration.of(expireSeconds, ChronoUnit.SECONDS)).build();
     }
 
     private Cache<UUID, Double> playerBalances = newBalanceCache(TimeUnit.HOURS.toSeconds(1));
