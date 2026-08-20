@@ -311,6 +311,11 @@ public non-sealed interface FPlayer extends Participator, Pointered, Selectable 
 
     void cancelWarmup();
 
+    /// Gets a component describing the player, using their title if describing to a faction member or the faction tag if not,
+    /// and a color based on the relation (neutral color if no second participator).
+    ///
+    /// @param that participator to compare with for relation color
+    /// @return colored component
     @Override
     default Component describeTo(@Nullable Participator that) {
         if (that instanceof FPlayer fp && fp.faction() == this.faction()) {

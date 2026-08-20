@@ -34,6 +34,10 @@ public sealed interface Participator permits FPlayer, Faction {
     /// @param component component
     void sendMessage(Component component);
 
+    /// Sends a MiniMessage message.
+    ///
+    /// @param miniMessage MiniMessage string
+    /// @param resolvers   tag resolvers
     void sendRichMessage(String miniMessage, TagResolver... resolvers);
 
     @Deprecated(forRemoval = true, since = "4.0.0")
@@ -48,13 +52,26 @@ public sealed interface Participator permits FPlayer, Faction {
         return Mini.toLegacy(this.describeTo(that));
     }
 
+    /// Gets a colored component describing this to that.
+    ///
+    /// @see Faction#describeTo(Participator)
+    /// @see FPlayer#describeTo(Participator)
     @ApiStatus.AvailableSince("4.6.0")
     Component describeTo(@Nullable Participator that);
 
+    /// Gets the relation between two participators.
+    ///
+    /// @param that second participator - if null, relationship is neutral
+    /// @return relationship
     default Relation relationTo(@Nullable Participator that) {
         return this.relationTo(that, false);
     }
 
+    /// Gets the relation between two participators.
+    ///
+    /// @param that second participator - if null, relationship is neutral
+    /// @param ignorePeaceful if false, return neutral if either faction is peaceful
+    /// @return relationship
     default Relation relationTo(@Nullable Participator that, boolean ignorePeaceful) {
         if (that == null) {
             return Relation.NEUTRAL;
@@ -82,6 +99,10 @@ public sealed interface Participator permits FPlayer, Faction {
         return thisFaction.relationWish(thatFaction);
     }
 
+    /// Gets the text color for the faction from the perspective of the observer.
+    ///
+    /// @param that observing participator
+    /// @return text color
     default TextColor textColorTo(@Nullable Participator that) {
         Faction thisFaction = this.faction();
         Faction thatFaction = that == null ? null : that.faction();
@@ -113,5 +134,8 @@ public sealed interface Participator permits FPlayer, Faction {
         return LegacyCruft.getLegacyString(this.textColorTo(that));
     }
 
+    /// Gets the faction of the participator, returning self if it is a faction.
+    ///
+    /// @return faction
     Faction faction();
 }

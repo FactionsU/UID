@@ -654,6 +654,10 @@ public non-sealed interface Faction extends Participator, Selectable {
     @ApiStatus.AvailableSince("4.7.0")
     void rentExempt(boolean exempt);
 
+    /// Gets a component of the faction tag colored by the relation color (or neutral if no one to compare the relation to).
+    ///
+    /// @param that participator to compare with for relation color
+    /// @return colored component
     @Override
     default Component describeTo(@Nullable Participator that) {
         return Component.text().content(this.tag()).color(this.textColorTo(that)).build();

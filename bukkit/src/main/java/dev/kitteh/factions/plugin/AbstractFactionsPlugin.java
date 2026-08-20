@@ -137,7 +137,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-@ApiStatus.Internal
 public abstract class AbstractFactionsPlugin extends JavaPlugin implements FactionsPlugin {
     private static AbstractFactionsPlugin instance;
 
