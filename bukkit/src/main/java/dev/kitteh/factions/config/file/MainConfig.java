@@ -794,6 +794,9 @@ public class MainConfig {
                 @Comment("Add items here (comma-separated) for commands to listen to that will auto-return the user to public chat")
                 private List<String> triggerPublicChatOnCommand = new ArrayList<>();
 
+                @Comment("If true, internal chat will be logged to the server console like normal chats.")
+                private boolean logInternalChat = true;
+
                 public boolean isFactionMemberChatEnabled() {
                     return factionMemberChatEnabled;
                 }
@@ -816,6 +819,10 @@ public class MainConfig {
 
                 public String getSpyingPrefix() {
                     return spyingPrefix;
+                }
+
+                public boolean isLogInternalChat() {
+                    return logInternalChat;
                 }
 
                 @WipeOnReload

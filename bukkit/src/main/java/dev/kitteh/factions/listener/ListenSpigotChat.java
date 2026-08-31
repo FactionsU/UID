@@ -18,7 +18,7 @@ import dev.kitteh.factions.util.WorldUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -41,7 +41,6 @@ public class ListenSpigotChat implements Listener {
 
         Faction faction = me.faction();
         MainConfig.Factions.Chat.InternalChat chatConf = Confs.main().factions().chat().internalChat();
-        LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
 
         TagResolver messagePlaceholder = Placeholder.component("message", message);
 
@@ -59,6 +58,15 @@ public class ListenSpigotChat implements Listener {
                             FactionResolver.of(faction)
                     );
                 }
+            }
+            if (chatConf.isLogInternalChat()) {
+                AbstractFactionsPlugin.instance().log(
+                        PlainTextComponentSerializer.plainText().serialize(Mini.parse(format,
+                                messagePlaceholder,
+                                Placeholder.unparsed("role", role.translation()),
+                                FPlayerResolver.of("sender", me),
+                                FactionResolver.of(faction)
+                        )));
             }
         } else if (chatTarget instanceof ChatTarget.Relation(Relation relation)) {
             String format = chatConf.getRelationChatFormat();
@@ -78,6 +86,15 @@ public class ListenSpigotChat implements Listener {
                             FactionResolver.of(faction)
                     );
                 }
+            }
+            if (chatConf.isLogInternalChat()) {
+                AbstractFactionsPlugin.instance().log(
+                        PlainTextComponentSerializer.plainText().serialize(Mini.parse(format,
+                                messagePlaceholder,
+                                Placeholder.unparsed("relation", relation.translation()),
+                                FPlayerResolver.of("sender", me),
+                                FactionResolver.of(faction)
+                        )));
             }
         }
     }
