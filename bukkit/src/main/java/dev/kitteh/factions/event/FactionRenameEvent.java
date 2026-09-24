@@ -1,6 +1,7 @@
 package dev.kitteh.factions.event;
 
 import dev.kitteh.factions.FPlayer;
+import dev.kitteh.factions.Faction;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -12,7 +13,13 @@ public class FactionRenameEvent extends FactionPlayerEvent implements Cancellabl
     private final String tag;
 
     public FactionRenameEvent(FPlayer sender, String newTag) {
-        super(sender.faction(), sender);
+        this(sender.faction(), sender, newTag);
+    }
+
+    // Administrative renames must identify the target, not the sender's faction.
+    // Upstream: https://github.com/FactionsU/UID/issues/57
+    public FactionRenameEvent(Faction faction, FPlayer sender, String newTag) {
+        super(faction, sender);
         tag = newTag;
     }
 

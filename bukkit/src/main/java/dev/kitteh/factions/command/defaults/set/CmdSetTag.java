@@ -68,7 +68,7 @@ public class CmdSetTag implements Cmd {
             return;
         }
 
-        FactionRenameEvent renameEvent = new FactionRenameEvent(sender, tag);
+        FactionRenameEvent renameEvent = new FactionRenameEvent(faction, sender, tag);
         Bukkit.getServer().getPluginManager().callEvent(renameEvent);
         if (renameEvent.isCancelled()) {
             return;
