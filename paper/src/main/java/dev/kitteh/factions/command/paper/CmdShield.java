@@ -24,7 +24,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("UnstableApiUsage")
 public class CmdShield extends dev.kitteh.factions.command.defaults.CmdShield {
     @Override
     protected void registerSchedule(CommandManager<Sender> manager, Command.Builder<Sender> shield) {
@@ -61,12 +60,12 @@ public class CmdShield extends dev.kitteh.factions.command.defaults.CmdShield {
 
         LocalTime scheduledTime = faction.shieldDailyScheduledTime();
         if (scheduledTime == null) {
-            dialogBody = Dialogue.body(tl.getScheduleMenuStatusBodyNotSet(),
+            dialogBody = Dialogue.body(tl.getScheduleMenuStatusBodyNotSet(), fPlayer,
                     factionResolver,
                     Placeholder.unparsed("currenttime", LocalTime.now().format(tl.getScheduleMenuTimeFormat()))
             );
         } else {
-            dialogBody = Dialogue.body(tl.getScheduleMenuStatusBodyCurrentlySet(),
+            dialogBody = Dialogue.body(tl.getScheduleMenuStatusBodyCurrentlySet(), fPlayer,
                     factionResolver,
                     Placeholder.unparsed("currenttime", LocalTime.now().format(tl.getScheduleMenuTimeFormat())),
                     Placeholder.unparsed("scheduledtime", scheduledTime.format(tl.getScheduleMenuTimeFormat()))
@@ -100,7 +99,7 @@ public class CmdShield extends dev.kitteh.factions.command.defaults.CmdShield {
 
         FactionResolver factionResolver = FactionResolver.of(faction);
 
-        List<DialogBody> dialogBody = Dialogue.body(tl.getScheduleMenuSetBody(),
+        List<DialogBody> dialogBody = Dialogue.body(tl.getScheduleMenuSetBody(), fPlayer,
                 factionResolver,
                 Placeholder.unparsed("currenttime", LocalTime.now().format(tl.getScheduleMenuTimeFormat()))
         );

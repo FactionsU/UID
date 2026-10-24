@@ -28,7 +28,6 @@ import org.incendo.cloud.parser.standard.StringParser;
 
 import java.util.List;
 
-@SuppressWarnings("UnstableApiUsage")
 public class CmdWarp implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {
@@ -70,7 +69,7 @@ public class CmdWarp implements Cmd {
                 .toList();
 
         return Dialog.create(b -> b.empty()
-                .base(DialogBase.builder(Mini.parse(tl.getMenuTitle(), sender.fPlayerOrNull(), factionResolver)).body(Dialogue.body(tl.getMenuBody(), factionResolver)).build())
+                .base(DialogBase.builder(Mini.parse(tl.getMenuTitle(), sender.fPlayerOrNull(), factionResolver)).body(Dialogue.body(tl.getMenuBody(), sender.fPlayerOrNull(), factionResolver)).build())
                 .type(DialogType.multiAction(
                         warps,
                         ActionButton.builder(Mini.parse(tl.getMenuCancel(), sender.fPlayerOrNull(), factionResolver)).build(),
@@ -83,7 +82,7 @@ public class CmdWarp implements Cmd {
         TagResolver warp = Placeholder.unparsed("warp", warpName);
         return Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(Mini.parse(tl.getMenuPassTitle(), sender.fPlayerOrNull(), warp, factionResolver))
-                        .body(Dialogue.body(tl.getMenuPassBody(), warp, factionResolver))
+                        .body(Dialogue.body(tl.getMenuPassBody(), sender.fPlayerOrNull(), warp, factionResolver))
                         .inputs(List.of(
                                 DialogInput.text("password", Mini.parse(tl.getMenuPassInputLabel(), sender.fPlayerOrNull()))
                                         .width(300)

@@ -30,7 +30,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("UnstableApiUsage")
 public class CmdSetDues implements Cmd {
     private static final List<Role> OVERRIDE_ROLES = List.of(Role.COLEADER, Role.MODERATOR, Role.NORMAL, Role.RECRUIT);
 
@@ -86,7 +85,7 @@ public class CmdSetDues implements Cmd {
 
         return Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(Mini.parse(tl.getTitle(), sender))
-                        .body(Dialogue.body(tl.getBody()))
+                        .body(Dialogue.body(tl.getBody(), sender))
                         .inputs(inputs)
                         .build())
                 .type(DialogType.confirmation(

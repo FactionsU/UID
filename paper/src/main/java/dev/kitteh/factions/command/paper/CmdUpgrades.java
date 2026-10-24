@@ -37,7 +37,6 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import java.util.Comparator;
 import java.util.List;
 
-@SuppressWarnings("UnstableApiUsage")
 public class CmdUpgrades implements Cmd {
     @Override
     public TriConsumer<CommandManager<Sender>, Command.Builder<Sender>, MinecraftHelp<Sender>> consumer() {

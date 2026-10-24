@@ -45,7 +45,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-@SuppressWarnings("UnstableApiUsage")
 public class CmdAdminUpgrades implements Cmd {
     // Should really be equation by this point...
     private static final int ARBITRARY_MAP_LIMIT = 50;

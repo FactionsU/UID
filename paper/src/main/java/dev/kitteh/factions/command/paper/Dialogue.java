@@ -12,8 +12,6 @@ import java.util.List;
 public final class Dialogue {
     public static final ClickCallback.Options CLICK_CALLBACK = ClickCallback.Options.builder().build();
 
-    @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
-    @Deprecated(forRemoval = true, since = "4.7.3")
     public static List<DialogBody> body(List<String> body, TagResolver... tagResolvers) {
         return List.of(DialogBody.plainMessage(Mini.parse(body, tagResolvers), 400));
     }
