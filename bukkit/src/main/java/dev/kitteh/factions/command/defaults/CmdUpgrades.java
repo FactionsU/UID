@@ -12,6 +12,7 @@ import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.config.Confs;
+import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.upgrade.Upgrade;
 import dev.kitteh.factions.upgrade.UpgradePrerequisite;
@@ -30,7 +31,9 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.jspecify.annotations.Nullable;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -52,7 +55,6 @@ public class CmdUpgrades implements Cmd {
     private void handle(CommandContext<Sender> context) {
         FPlayer sender = ((Sender.Player) context.sender()).fPlayer();
         Player player = ((Sender.Player) context.sender()).player();
-        Faction faction = sender.faction();
 
         ChestGui gui = new ChestGui(6, ComponentHolder.of(Component.text("Upgrades")));
 
@@ -64,22 +66,26 @@ public class CmdUpgrades implements Cmd {
                 .sorted(Comparator.comparing(Upgrade::name))
                 .filter(Universe.universe()::isUpgradeEnabled)
                 .map(upgrade -> {
-                    UpgradeSettings settings = Universe.universe().upgradeSettings(upgrade);
-
-
-                    ItemStack stack = buildStack(settings, sender);
+                    ItemStack stack = buildStack(Universe.universe().upgradeSettings(upgrade), sender, player);
 
                     GuiItem guiItem = new GuiItem(stack);
 
                     guiItem.setAction(e -> {
                         e.setCancelled(true);
-                        if (!sender.faction().hasAccess(sender, PermissibleActions.UPGRADE, null)) {
+                        if (!Econ.shouldBeUsed()) {
                             return;
                         }
 
+                        Faction faction = this.purchasingFaction(sender, player, upgrade);
+                        if (faction == null) {
+                            player.closeInventory();
+                            return;
+                        }
+
+                        UpgradeSettings settings = Universe.universe().upgradeSettings(upgrade);
                         int lvl = faction.upgradeLevel(upgrade);
 
-                        if (lvl == settings.maxLevel()) {
+                        if (lvl >= settings.maxLevel()) {
                             return;
                         }
 
@@ -96,22 +102,33 @@ public class CmdUpgrades implements Cmd {
 
                         ItemStack buy = new ItemStack(Material.GREEN_CONCRETE);
                         ItemMeta met = buy.getItemMeta();
-                        met.setDisplayName(ChatColor.GREEN + "Buy for " + settings.costAt(lvl + 1));
+                        BigDecimal cost = settings.costAt(lvl + 1);
+                        met.setDisplayName(ChatColor.GREEN + "Buy for " + cost);
                         buy.setItemMeta(met);
 
                         GuiItem buyItem = new GuiItem(buy);
                         buyItem.setAction(ee -> {
                             ee.setCancelled(true);
 
-                            if (!settings.prerequisitesMet(sender.faction())) {
+                            if (!Econ.shouldBeUsed() || this.purchasingFaction(sender, player, upgrade) != faction) {
+                                player.closeInventory();
+                                return;
+                            }
+
+                            UpgradeSettings currentSettings = Universe.universe().upgradeSettings(upgrade);
+                            if (faction.upgradeLevel(upgrade) != lvl
+                                    || lvl >= currentSettings.maxLevel()
+                                    || currentSettings.costAt(lvl + 1).compareTo(cost) != 0
+                                    || !currentSettings.prerequisitesMet(faction)) {
+                                guiItem.setItem(buildStack(currentSettings, sender, player));
                                 gui.show(player);
                                 return;
                             }
 
                             var econTl = Confs.tl().economy().actions();
-                            if (context.sender().payForCommand(settings.costAt(lvl + 1).doubleValue(), econTl.getUpgradeTo(), econTl.getUpgradeFor())) {
+                            if (context.sender().payForCommand(cost.doubleValue(), econTl.getUpgradeTo(), econTl.getUpgradeFor())) {
                                 faction.upgradeLevel(upgrade, lvl + 1);
-                                guiItem.setItem(buildStack(settings, sender));
+                                guiItem.setItem(buildStack(currentSettings, sender, player));
                                 gui.show(player);
                             } else {
                                 ItemStack nope = new ItemStack(Material.RED_CONCRETE);
@@ -190,14 +207,22 @@ public class CmdUpgrades implements Cmd {
         gui.show(player);
     }
 
-    private ItemStack buildStack(UpgradeSettings settings, FPlayer sender) {
+    private @Nullable Faction purchasingFaction(FPlayer sender, Player player, Upgrade upgrade) {
+        Faction faction = sender.faction();
+        if (faction.isNormal() && Permission.UPGRADES.has(player) && faction.hasAccess(sender, PermissibleActions.UPGRADE, null) && Universe.universe().isUpgradeEnabled(upgrade)) {
+            return faction;
+        }
+        return null;
+    }
+
+    private ItemStack buildStack(UpgradeSettings settings, FPlayer sender, Player player) {
         Upgrade upgrade = settings.upgrade();
 
         int lvl = sender.faction().upgradeLevel(upgrade);
 
         ItemStack stack = new ItemStack(Material.STONE);
         ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(Mini.toLegacy(upgrade.nameComponent()) + " " + (lvl < 1 || settings.maxLevel() == 1 ? "" : lvl));
+        meta.setDisplayName(Mini.toLegacy(upgrade.nameComponent()) + (lvl < 1 || settings.maxLevel() == 1 ? "" : " " + lvl));
 
         List<String> lore = new ArrayList<>();
 
@@ -208,13 +233,15 @@ public class CmdUpgrades implements Cmd {
         lore.add(" ");
         if (lvl < settings.maxLevel()) {
             if (settings.prerequisitesMet(sender.faction())) {
-                lore.add("Upgrade available: Costs " + settings.costAt(lvl + 1));
-                if (sender.faction().hasAccess(sender, PermissibleActions.UPGRADE, null)) {
-                    lore.add("  Click to purchase!");
-                } else {
-                    lore.add("  You lack permission to purchase upgrades");
+                if (Econ.shouldBeUsed()) {
+                    lore.add("Upgrade available: Costs " + settings.costAt(lvl + 1));
+                    if (Permission.UPGRADES.has(player) && sender.faction().hasAccess(sender, PermissibleActions.UPGRADE, null)) {
+                        lore.add("  Click to purchase!");
+                    } else {
+                        lore.add("  You lack permission to purchase upgrades");
+                    }
                 }
-                lore.add(Mini.toLegacy(upgrade.nameComponent()) + " " + (lvl + 1));
+                lore.add(Mini.toLegacy(upgrade.nameComponent()) + (settings.maxLevel() > 1 ? " " + (lvl + 1) : ""));
                 lore.add(Mini.toLegacy(upgrade.details(settings, lvl + 1)));
             } else {
                 lore.add(ChatColor.RED + "Locked - requires:");
@@ -228,6 +255,8 @@ public class CmdUpgrades implements Cmd {
                     }
                 }
             }
+        } else if (lvl == 1) {
+            lore.add("Unlocked");
         } else {
             lore.add("Max level!");
         }

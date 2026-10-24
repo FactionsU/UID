@@ -1,12 +1,10 @@
 package dev.kitteh.factions.command.defaults;
 
 import dev.kitteh.factions.FPlayer;
-import dev.kitteh.factions.Participator;
 import dev.kitteh.factions.command.Cloudy;
 import dev.kitteh.factions.command.Cmd;
 import dev.kitteh.factions.command.Sender;
 import dev.kitteh.factions.config.Confs;
-import dev.kitteh.factions.integration.Econ;
 import dev.kitteh.factions.permissible.PermissibleActions;
 import dev.kitteh.factions.permissible.Role;
 import dev.kitteh.factions.util.Permission;
@@ -100,20 +98,9 @@ public class CmdClear implements Cmd {
         var tl = Confs.tl().commands().clear();
         var econTl = Confs.tl().economy().actions();
         if (sender.asPlayer() instanceof Player p && Permission.SETWARP.has(p) && sender.faction().hasAccess(sender, PermissibleActions.SETWARP, sender.lastStoodAt())) {
-            double cost = Confs.main().economy().getCostDelWarp();
-            if (cost > 0D && Econ.shouldBeUsed()) {
-                Participator purchaser;
-                if (Confs.main().economy().isBankEnabled() && Confs.main().economy().isBankFactionPaysCosts()) {
-                    purchaser = sender.faction();
-                } else {
-                    purchaser = sender;
-                }
-
-                double fullCost = sender.faction().warps().size() * cost;
-
-                if (!Econ.modifyMoney(purchaser, -fullCost, econTl.getDelWarpTo(), econTl.getDelWarpFor())) {
-                    return;
-                }
+            double fullCost = sender.faction().warps().size() * Confs.main().economy().getCostDelWarp();
+            if (!new Sender.Player.Impl(p, p, sender, sender.faction()).payForCommand(fullCost, econTl.getDelWarpTo(), econTl.getDelWarpFor())) {
+                return;
             }
             sender.faction().clearWarps();
             sender.sendRichMessage(tl.getWarpsClearSuccess());

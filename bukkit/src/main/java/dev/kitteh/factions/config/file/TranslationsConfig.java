@@ -3578,6 +3578,23 @@ public class TranslationsConfig {
                     }
                 }
 
+                public static class NoLongerHaveAccess {
+                    private String title = "Access Denied";
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("You no longer have access to this functionality.");
+                        }
+                    };
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+                }
+
                 public static class CannotAfford {
                     private String title = "Can Not Purchase";
                     private List<String> body = new ArrayList<>() {
@@ -3600,6 +3617,24 @@ public class TranslationsConfig {
                     private List<String> body = new ArrayList<>() {
                         {
                             this.add("Upgrade changed level while you were in the menu!");
+                        }
+                    };
+
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    public List<String> getBody() {
+                        return body;
+                    }
+                }
+
+                public static class PriceChanged {
+                    private String title = "Price Changed";
+                    @Comment("Supports <upgrade>, <old-cost>, <cost>")
+                    private List<String> body = new ArrayList<>() {
+                        {
+                            this.add("The price of <upgrade> changed from <old-cost> to <cost> while you were in the menu!");
                         }
                     };
 
@@ -3654,7 +3689,9 @@ public class TranslationsConfig {
                 private CannotAfford cannotAfford = new CannotAfford();
                 private AlreadyMax alreadyMax = new AlreadyMax();
                 private NoLongerInFaction noLongerInFaction = new NoLongerInFaction();
+                private NoLongerHaveAccess noLongerHaveAccess = new NoLongerHaveAccess();
                 private NoLongerSameLevel noLongerSameLevel = new NoLongerSameLevel();
+                private PriceChanged priceChanged = new PriceChanged();
                 private PrerequisitesNotMet prerequisitesNotMet = new PrerequisitesNotMet();
 
                 public General general() {
@@ -3689,8 +3726,16 @@ public class TranslationsConfig {
                     return noLongerInFaction;
                 }
 
+                public NoLongerHaveAccess noLongerHaveAccess() {
+                    return noLongerHaveAccess;
+                }
+
                 public NoLongerSameLevel noLongerSameLevel() {
                     return noLongerSameLevel;
+                }
+
+                public PriceChanged priceChanged() {
+                    return priceChanged;
                 }
 
                 public PrerequisitesNotMet prerequisitesNotMet() {
